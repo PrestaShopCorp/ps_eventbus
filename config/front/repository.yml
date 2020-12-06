@@ -1,0 +1,94 @@
+services:
+  PrestaShop\Module\PsEventbus\Repository\CurrencyRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CurrencyRepository
+
+  PrestaShop\Module\PsEventbus\Repository\LanguageRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\LanguageRepository
+
+  PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository
+
+  PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository
+    arguments:
+      - '@ps_accounts.db'
+      - '@ps_accounts.context'
+
+  PrestaShop\Module\PsEventbus\Repository\CategoryRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CategoryRepository
+    arguments:
+      - '@ps_accounts.db'
+      - '@ps_accounts.context'
+
+  PrestaShop\Module\PsEventbus\Repository\ImageRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ImageRepository
+    arguments:
+      - '@ps_accounts.db'
+
+  PrestaShop\Module\PsEventbus\Repository\ModuleRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ModuleRepository
+    arguments:
+      - '@ps_accounts.db'
+
+  PrestaShop\Module\PsEventbus\Repository\ProductRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ProductRepository
+    arguments:
+      - '@ps_accounts.db'
+      - '@ps_accounts.context'
+      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
+
+  PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository
+    arguments:
+      - '@ps_accounts.context'
+      - '@ps_accounts.db'
+      - '@PrestaShop\Module\PsEventbus\Repository\CurrencyRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
+      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
+
+  PrestaShop\Module\PsEventbus\Repository\ThemeRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ThemeRepository
+    arguments:
+      - '@ps_accounts.context'
+      - '@ps_accounts.db'
+
+  PrestaShop\Module\PsEventbus\Repository\OrderRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\OrderRepository
+    arguments:
+      - '@ps_accounts.db'
+
+  PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository
+    arguments:
+      - '@ps_accounts.db'
+      - '@ps_accounts.context'
+
+  PrestaShop\Module\PsEventbus\Repository\CartRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CartRepository
+    arguments:
+      - '@ps_accounts.db'
+      - '@ps_accounts.context'
+
+  PrestaShop\Module\PsEventbus\Repository\CartProductRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CartProductRepository
+    arguments:
+      - '@ps_accounts.db'
+      - '@ps_accounts.context'
+
+  PrestaShop\Module\PsEventbus\Repository\GoogleTaxonomyRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\GoogleTaxonomyRepository
+    arguments:
+      - '@ps_accounts.db'
+
+  PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository
+    arguments:
+      - '@ps_accounts.db'
+      - '@ps_accounts.context'
+
+  PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository
+    arguments:
+      - '@ps_accounts.db'
+      - '@ps_accounts.context'
