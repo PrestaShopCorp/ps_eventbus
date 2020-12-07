@@ -23,6 +23,9 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
+use Symfony\Component\Dotenv\Dotenv;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -152,6 +155,18 @@ class Ps_eventbus extends Module
             $this->name,
             $this->getLocalPath()
         );
+        $this->loadEnv();
+    }
+
+    private function loadEnv()
+    {
+        $dotEnv = new Dotenv();
+
+        $dotEnv->load(_PS_MODULE_DIR_ . 'ps_eventbus/.env.dist');
+
+        if (file_exists(_PS_MODULE_DIR_ . 'ps_eventbus/.env')) {
+            $dotEnv->load(_PS_MODULE_DIR_ . 'ps_eventbus/.env');
+        }
     }
 
     /**
