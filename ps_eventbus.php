@@ -143,7 +143,7 @@ class Ps_eventbus extends Module
 
         parent::__construct();
 
-        $this->displayName = $this->l('PrestaShop Account');
+        $this->displayName = $this->l('PrestaShop Eventbus');
         $this->description = $this->l('Link your PrestaShop account to your online shop to activate & manage services on your back-office. Don\'t uninstall this module if you are already using a service, as it will prevent it from working.');
         $this->confirmUninstall = $this->l('This action will prevent immediately your PrestaShop services and Community services from working as they are using PrestaShop Accounts module for authentication.');
         $this->ps_versions_compliancy = ['min' => '1.6', 'max' => _PS_VERSION_];
@@ -189,13 +189,6 @@ class Ps_eventbus extends Module
      */
     public function install()
     {
-        // if ps version is 1.7.6 or above
-        if (version_compare(_PS_VERSION_, '1.7.6.0', '>=')) {
-            array_push($this->hookToInstall, 'actionMetaPageSave');
-        } else {
-            array_push($this->hookToInstall, 'displayBackOfficeHeader');
-        }
-
         $installer = new PrestaShop\Module\PsEventbus\Module\Install($this, Db::getInstance());
 
         return $installer->installInMenu()

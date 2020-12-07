@@ -4,7 +4,7 @@ use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Service\DeletedObjectsService;
 
-class ps_AccountsApiDeletedObjectsModuleFrontController extends AbstractApiController
+class ps_EventbusApiDeletedObjectsModuleFrontController extends AbstractApiController
 {
     public $type = 'deleted';
 

@@ -4,7 +4,7 @@ use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository;
 
-class ps_AccountsApiInfoModuleFrontController extends AbstractApiController
+class ps_EventbusApiInfoModuleFrontController extends AbstractApiController
 {
     public $type = 'shops';
 

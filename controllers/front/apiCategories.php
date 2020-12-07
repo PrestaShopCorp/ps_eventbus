@@ -3,7 +3,7 @@
 use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
 use PrestaShop\Module\PsEventbus\Provider\CategoryDataProvider;
 
-class ps_AccountsApiCategoriesModuleFrontController extends AbstractApiController
+class ps_EventbusApiCategoriesModuleFrontController extends AbstractApiController
 {
     public $type = 'categories';
 

@@ -2,7 +2,7 @@ services:
   PrestaShop\Module\PsEventbus\Decorator\ProductDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\ProductDecorator
     arguments:
-      - '@ps_accounts.context'
+      - '@ps_eventbus.context'
       - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\ProductRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\CategoryRepository'

@@ -3,7 +3,7 @@
 use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
 use PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository;
 
-class ps_AccountsApiHealthCheckModuleFrontController extends AbstractApiController
+class ps_EventbusApiHealthCheckModuleFrontController extends AbstractApiController
 {
     public $type = 'shops';
 

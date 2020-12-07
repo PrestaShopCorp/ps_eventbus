@@ -32,7 +32,7 @@ services:
   PrestaShop\Module\PsEventbus\Service\DeletedObjectsService:
     class: PrestaShop\Module\PsEventbus\Service\DeletedObjectsService
     arguments:
-      - '@ps_accounts.context'
+      - '@ps_eventbus.context'
       - '@PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository'
       - '@PrestaShop\Module\PsEventbus\Service\ProxyService'
 

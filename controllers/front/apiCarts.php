@@ -3,7 +3,7 @@
 use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
 use PrestaShop\Module\PsEventbus\Provider\CartDataProvider;
 
-class ps_AccountsApiCartsModuleFrontController extends AbstractApiController
+class ps_EventbusApiCartsModuleFrontController extends AbstractApiController
 {
     public $type = 'carts';
 

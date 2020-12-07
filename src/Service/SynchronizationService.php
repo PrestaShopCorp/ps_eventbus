@@ -13,7 +13,7 @@ class SynchronizationService
     /**
      * @var EventbusSyncRepository
      */
-    private $accountsSyncRepository;
+    private $eventbusSyncRepository;
     /**
      * @var IncrementalSyncRepository
      */
@@ -23,9 +23,9 @@ class SynchronizationService
      */
     private $proxyService;
 
-    public function __construct(EventbusSyncRepository $accountsSyncRepository, IncrementalSyncRepository $incrementalSyncRepository, ProxyService $proxyService)
+    public function __construct(EventbusSyncRepository $eventbusSyncRepository, IncrementalSyncRepository $incrementalSyncRepository, ProxyService $proxyService)
     {
-        $this->accountsSyncRepository = $accountsSyncRepository;
+        $this->eventbusSyncRepository = $eventbusSyncRepository;
         $this->incrementalSyncRepository = $incrementalSyncRepository;
         $this->proxyService = $proxyService;
     }
@@ -64,7 +64,7 @@ class SynchronizationService
             $offset = 0;
         }
 
-        $this->accountsSyncRepository->updateTypeSync($type, $offset, $dateNow, $remainingObjects == 0, $langIso);
+        $this->eventbusSyncRepository->updateTypeSync($type, $offset, $dateNow, $remainingObjects == 0, $langIso);
 
         return array_merge([
             'total_objects' => count($data),

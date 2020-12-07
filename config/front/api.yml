@@ -1,16 +1,11 @@
 services:
-  PrestaShop\Module\PsEventbus\Api\AccountsClient:
-    class: PrestaShop\Module\PsEventbus\Api\AccountsClient
-    arguments:
-      - '@ps_accounts.link'
-
   PrestaShop\Module\PsEventbus\Api\EventBusSyncClient:
     class: PrestaShop\Module\PsEventbus\Api\EventBusSyncClient
     arguments:
-      - '@ps_accounts.link'
+      - '@ps_eventbus.link'
 
   PrestaShop\Module\PsEventbus\Api\EventBusProxyClient:
     class: PrestaShop\Module\PsEventbus\Api\EventBusProxyClient
     arguments:
-      - '@ps_accounts.link'
+      - '@ps_eventbus.link'
 

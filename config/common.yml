@@ -1,12 +1,12 @@
 services:
-  ps_accounts.db:
+  ps_eventbus.db:
     class: Db
     factory: [ 'Db', 'getInstance' ]
 
-  ps_accounts.context:
+  ps_eventbus.context:
     class: Context
     factory: [ 'Context', 'getContext' ]
 
-  ps_accounts.link:
+  ps_eventbus.link:
     class: Link
     factory: [ 'PrestaShop\Module\PsEventbus\Factory\Link', 'get' ]

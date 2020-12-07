@@ -3,7 +3,7 @@
 use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
 use PrestaShop\Module\PsEventbus\Provider\ProductDataProvider;
 
-class ps_accountsApiProductsModuleFrontController extends AbstractApiController
+class ps_EventbusApiProductsModuleFrontController extends AbstractApiController
 {
     public $type = 'products';
 

@@ -22,7 +22,7 @@ services:
   PrestaShop\Module\PsEventbus\Provider\OrderDataProvider:
     class: PrestaShop\Module\PsEventbus\Provider\OrderDataProvider
     arguments:
-      - '@ps_accounts.context'
+      - '@ps_eventbus.context'
       - '@PrestaShop\Module\PsEventbus\Repository\OrderRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
@@ -38,4 +38,4 @@ services:
     class: PrestaShop\Module\PsEventbus\Provider\GoogleTaxonomyDataProvider
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\GoogleTaxonomyRepository'
-      - '@ps_accounts.context'
+      - '@ps_eventbus.context'
