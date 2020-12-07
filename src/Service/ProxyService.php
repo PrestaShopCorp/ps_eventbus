@@ -67,14 +67,10 @@ class ProxyService
      */
     public function delete($jobId, $data)
     {
-        try {
-            $compressedData = $this->compressionService->gzipCompressData($data);
-        } catch (Exception $exception) {
-            return ['error' => $exception->getMessage()];
-        }
+        $dataJson = $this->jsonFormatter->formatNewlineJsonString($data);
 
         try {
-            $response = $this->eventBusProxyClient->delete($jobId, $compressedData);
+            $response = $this->eventBusProxyClient->delete($jobId, $dataJson);
         } catch (ClientException $exception) {
             return ['error' => $exception->getMessage()];
         }
