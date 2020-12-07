@@ -7,6 +7,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Ring\Exception\ConnectException;
 use PrestaShop\Module\PsEventbus\Api\EventBusProxyClient;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
+use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
 
 class ProxyService
 {
@@ -18,11 +19,19 @@ class ProxyService
      * @var CompressionService
      */
     private $compressionService;
+    /**
+     * @var JsonFormatter
+     */
+    private $jsonFormatter;
 
-    public function __construct(EventBusProxyClient $eventBusProxyClient, CompressionService $compressionService)
-    {
+    public function __construct(
+        EventBusProxyClient $eventBusProxyClient,
+        CompressionService $compressionService,
+        JsonFormatter $jsonFormatter
+    ) {
         $this->eventBusProxyClient = $eventBusProxyClient;
         $this->compressionService = $compressionService;
+        $this->jsonFormatter = $jsonFormatter;
     }
 
     /**
@@ -35,14 +44,10 @@ class ProxyService
      */
     public function upload($jobId, $data)
     {
-        try {
-            $compressedData = $this->compressionService->gzipCompressData($data);
-        } catch (Exception $exception) {
-            return ['error' => $exception->getMessage()];
-        }
+        $dataJson = $this->jsonFormatter->formatNewlineJsonString($data);
 
         try {
-            $response = $this->eventBusProxyClient->upload($jobId, $compressedData);
+            $response = $this->eventBusProxyClient->upload($jobId, $dataJson);
         } catch (ClientException $exception) {
             return ['error' => $exception->getMessage()];
         } catch (ConnectException $exception) {

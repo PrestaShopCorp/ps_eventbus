@@ -22,6 +22,7 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Api\EventBusProxyClient'
       - '@PrestaShop\Module\PsEventbus\Service\CompressionService'
+      - '@PrestaShop\Module\PsEventbus\Formatter\JsonFormatter'
 
   PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService:
     class: PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService
