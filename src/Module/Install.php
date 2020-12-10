@@ -20,6 +20,10 @@
 
 namespace PrestaShop\Module\PsEventbus\Module;
 
+use Db;
+use Language;
+use Ps_eventbus;
+use Tab;
 use Tools;
 
 class Install
@@ -28,15 +32,15 @@ class Install
     const TAB_ACTIVE = 0;
 
     /**
-     * @var \Ps_eventbus
+     * @var Ps_eventbus
      */
     private $module;
     /**
-     * @var \Db
+     * @var Db
      */
     private $db;
 
-    public function __construct(\Ps_eventbus $module, \Db $db)
+    public function __construct(Ps_eventbus $module, Db $db)
     {
         $this->module = $module;
         $this->db = $db;
@@ -50,22 +54,22 @@ class Install
     public function installInMenu()
     {
         foreach ($this->module->adminControllers as $controllerName) {
-            $tabId = (int) \Tab::getIdFromClassName($controllerName);
+            $tabId = (int) Tab::getIdFromClassName($controllerName);
 
             if (!$tabId) {
                 $tabId = null;
             }
 
-            $tab = new \Tab($tabId);
+            $tab = new Tab($tabId);
             $tab->active = (bool) self::TAB_ACTIVE;
             $tab->class_name = $controllerName;
             $tab->name = [];
 
-            foreach (\Language::getLanguages(true) as $lang) {
+            foreach (Language::getLanguages(true) as $lang) {
                 $tab->name[$lang['id_lang']] = $this->module->displayName;
             }
 
-            $tab->id_parent = -1 == self::PARENT_TAB_NAME ? (int) \Tab::getIdFromClassName((string) self::PARENT_TAB_NAME) : -1;
+            $tab->id_parent = -1 == self::PARENT_TAB_NAME ? (int) Tab::getIdFromClassName((string) self::PARENT_TAB_NAME) : -1;
             $tab->module = $this->module->name;
 
             $tab->save();
@@ -104,6 +108,35 @@ class Install
             }
         }
 
+        $this->copyDataFromPsAccounts();
+
         return true;
+    }
+
+    /**
+     * @return void
+     */
+    private function copyDataFromPsAccounts()
+    {
+        $dbInstallFile = "{$this->module->getLocalPath()}/sql/migrate.sql";
+
+        if (!file_exists($dbInstallFile)) {
+            return;
+        }
+
+        $sql = Tools::file_get_contents($dbInstallFile);
+
+        if (empty($sql) || !is_string($sql)) {
+            return;
+        }
+
+        $sql = str_replace(['PREFIX_', 'ENGINE_TYPE'], [_DB_PREFIX_, _MYSQL_ENGINE_], $sql);
+        $sql = preg_split("/;\s*[\r\n]+/", trim($sql));
+
+        if (!empty($sql)) {
+            foreach ($sql as $query) {
+                $this->db->execute($query);
+            }
+        }
     }
 }
