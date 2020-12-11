@@ -2,6 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Controller;
 
+use Country;
 use DateTime;
 use Exception;
 use ModuleFrontController;
@@ -248,5 +249,26 @@ abstract class AbstractApiController extends ModuleFrontController
 
         echo json_encode($response, JSON_UNESCAPED_SLASHES);
         die;
+    }
+
+    /**
+     * Override displayMaintenancePage to prevent the maintenance page to be displayed
+     *
+     * @return void
+     */
+    protected function displayMaintenancePage()
+    {
+    }
+
+    /**
+     * Override geolocationManagement to prevent country GEOIP blocking
+     *
+     * @param Country $defaultCountry
+     *
+     * @return false
+     */
+    protected function geolocationManagement($defaultCountry)
+    {
+        return false;
     }
 }
