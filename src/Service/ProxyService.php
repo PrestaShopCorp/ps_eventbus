@@ -39,17 +39,19 @@ class ProxyService
     /**
      * @param string $jobId
      * @param array $data
+     * @param int $scriptStartTime
      *
      * @return array
      *
-     * @throws EnvVarException|ApiException
+     * @throws ApiException
+     * @throws EnvVarException
      */
-    public function upload($jobId, $data)
+    public function upload($jobId, $data, $scriptStartTime)
     {
         $dataJson = $this->jsonFormatter->formatNewlineJsonString($data);
 
         try {
-            $response = $this->eventBusProxyClient->upload($jobId, $dataJson);
+            $response = $this->eventBusProxyClient->upload($jobId, $dataJson, $scriptStartTime);
         } catch (ClientException $exception) {
             throw new ApiException($exception->getMessage(), $exception->getCode());
         } catch (ConnectException $exception) {

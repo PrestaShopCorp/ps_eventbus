@@ -32,6 +32,12 @@ abstract class AbstractApiController extends ModuleFrontController
      */
     public $type = '';
     /**
+     * Timestamp when script started
+     *
+     * @var int
+     */
+    public $startTime;
+    /**
      * @var ApiAuthorizationService
      */
     protected $authorizationService;
@@ -83,6 +89,8 @@ abstract class AbstractApiController extends ModuleFrontController
      */
     public function init()
     {
+        $this->startTime = time();
+
         try {
             $this->authorize();
         } catch (PrestaShopDatabaseException $exception) {
@@ -152,9 +160,9 @@ abstract class AbstractApiController extends ModuleFrontController
             }
 
             if ($incrementalSync) {
-                $response = $this->synchronizationService->handleIncrementalSync($dataProvider, $this->type, $jobId, $limit, $langIso);
+                $response = $this->synchronizationService->handleIncrementalSync($dataProvider, $this->type, $jobId, $limit, $langIso, $this->startTime);
             } else {
-                $response = $this->synchronizationService->handleFullSync($dataProvider, $this->type, $jobId, $langIso, $offset, $limit, $dateNow);
+                $response = $this->synchronizationService->handleFullSync($dataProvider, $this->type, $jobId, $langIso, $offset, $limit, $dateNow, $this->startTime);
             }
 
             return array_merge(

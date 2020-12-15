@@ -39,19 +39,22 @@ class SynchronizationService
      * @param int $offset
      * @param int $limit
      * @param string $dateNow
+     * @param int $scriptStartTime
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException|EnvVarException|ApiException
+     * @throws ApiException
+     * @throws EnvVarException
+     * @throws PrestaShopDatabaseException
      */
-    public function handleFullSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $langIso, $offset, $limit, $dateNow)
+    public function handleFullSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $langIso, $offset, $limit, $dateNow, $scriptStartTime)
     {
         $response = [];
 
         $data = $dataProvider->getFormattedData($offset, $limit, $langIso);
 
         if (!empty($data)) {
-            $response = $this->proxyService->upload($jobId, $data);
+            $response = $this->proxyService->upload($jobId, $data, $scriptStartTime);
 
             if ($response['httpCode'] == 201) {
                 $offset += $limit;
@@ -80,12 +83,15 @@ class SynchronizationService
      * @param string $jobId
      * @param int $limit
      * @param string $langIso
+     * @param int $scriptStartTime
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException|EnvVarException
+     * @throws ApiException
+     * @throws EnvVarException
+     * @throws PrestaShopDatabaseException
      */
-    public function handleIncrementalSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $limit, $langIso)
+    public function handleIncrementalSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $limit, $langIso, $scriptStartTime)
     {
         $response = [];
 

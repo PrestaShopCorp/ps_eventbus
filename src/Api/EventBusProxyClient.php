@@ -67,16 +67,19 @@ class EventBusProxyClient extends GenericClient
     /**
      * @param string $jobId
      * @param string $data
+     * @param int $scriptStartTime
      *
      * @return array
      *
-     * @throws EnvVarException|ConnectException
+     * @throws EnvVarException
      */
-    public function upload($jobId, $data)
+    public function upload($jobId, $data, $scriptStartTime)
     {
         if (!isset($_ENV['EVENT_BUS_PROXY_API_URL'])) {
             throw new EnvVarException('EVENT_BUS_PROXY_API_URL is not defined');
         }
+
+        $timeout = Config::PROXY_TIMEOUT - (time() - $scriptStartTime);
 
         $route = $_ENV['EVENT_BUS_PROXY_API_URL'] . "/upload/$jobId";
 
@@ -95,7 +98,7 @@ class EventBusProxyClient extends GenericClient
             'body' => [
                 'file' => $file,
             ],
-            'timeout' => Config::PROXY_TIMEOUT,
+            'timeout' => $timeout,
         ]);
 
         if (is_array($response)) {
