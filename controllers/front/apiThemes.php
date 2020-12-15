@@ -1,6 +1,7 @@
 <?php
 
 use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
+use PrestaShop\Module\PsEventbus\Exception\ApiException;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Repository\ThemeRepository;
 
@@ -24,6 +25,8 @@ class ps_EventbusApiThemesModuleFrontController extends AbstractApiController
         try {
             $response = $this->proxyService->upload($jobId, $themeInfo);
         } catch (EnvVarException $exception) {
+            $this->exitWithExceptionMessage($exception);
+        } catch (ApiException $exception) {
             $this->exitWithExceptionMessage($exception);
         }
 

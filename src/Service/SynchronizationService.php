@@ -2,6 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
+use PrestaShop\Module\PsEventbus\Exception\ApiException;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
@@ -41,7 +42,7 @@ class SynchronizationService
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException|EnvVarException
+     * @throws PrestaShopDatabaseException|EnvVarException|ApiException
      */
     public function handleFullSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $langIso, $offset, $limit, $dateNow)
     {

@@ -8,6 +8,7 @@ use Exception;
 use ModuleFrontController;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Exception\ApiException;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
@@ -167,6 +168,8 @@ abstract class AbstractApiController extends ModuleFrontController
             $this->exitWithExceptionMessage($exception);
         } catch (EnvVarException $exception) {
             $this->exitWithExceptionMessage($exception);
+        } catch (ApiException $exception) {
+            $this->exitWithExceptionMessage($exception);
         }
 
         return $response;
@@ -213,6 +216,8 @@ abstract class AbstractApiController extends ModuleFrontController
             $code = Config::ENV_MISCONFIGURED_ERROR_CODE;
         } elseif ($exception instanceof FirebaseException) {
             $code = Config::REFRESH_TOKEN_ERROR_CODE;
+        } elseif ($exception instanceof ApiException) {
+            $code = Config::PROXY_DID_NOT_RESPOND;
         }
 
         $response = [

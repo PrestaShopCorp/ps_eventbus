@@ -6,6 +6,8 @@ use Exception;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Ring\Exception\ConnectException;
 use PrestaShop\Module\PsEventbus\Api\EventBusProxyClient;
+use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Exception\ApiException;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
 
@@ -40,7 +42,7 @@ class ProxyService
      *
      * @return array
      *
-     * @throws EnvVarException
+     * @throws EnvVarException|ApiException
      */
     public function upload($jobId, $data)
     {
@@ -49,9 +51,9 @@ class ProxyService
         try {
             $response = $this->eventBusProxyClient->upload($jobId, $dataJson);
         } catch (ClientException $exception) {
-            return ['error' => $exception->getMessage()];
+            throw new ApiException($exception->getMessage(), $exception->getCode());
         } catch (ConnectException $exception) {
-            return ['error' => $exception->getMessage()];
+            throw new ApiException($exception->getMessage(), Config::PROXY_DID_NOT_RESPOND);
         }
 
         return $response;

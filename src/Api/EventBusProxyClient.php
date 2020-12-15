@@ -23,9 +23,11 @@ namespace PrestaShop\Module\PsEventbus\Api;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Post\PostFile;
+use GuzzleHttp\Ring\Exception\ConnectException;
 use Link;
 use PrestaShop\AccountsAuth\Api\Client\GenericClient;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
 
@@ -68,7 +70,7 @@ class EventBusProxyClient extends GenericClient
      *
      * @return array
      *
-     * @throws EnvVarException
+     * @throws EnvVarException|ConnectException
      */
     public function upload($jobId, $data)
     {
@@ -93,6 +95,7 @@ class EventBusProxyClient extends GenericClient
             'body' => [
                 'file' => $file,
             ],
+            'timeout' => Config::PROXY_TIMEOUT,
         ]);
 
         if (is_array($response)) {
