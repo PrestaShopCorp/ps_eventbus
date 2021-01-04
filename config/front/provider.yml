@@ -1,0 +1,41 @@
+services:
+  PrestaShop\Module\PsEventbus\Provider\ModuleDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\ModuleDataProvider
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\ModuleRepository'
+
+  PrestaShop\Module\PsEventbus\Provider\ProductDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\ProductDataProvider
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\ProductRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\ProductDecorator'
+      - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
+      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
+
+  PrestaShop\Module\PsEventbus\Provider\CategoryDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\CategoryDataProvider
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\CategoryRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\CategoryDecorator'
+      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
+
+  PrestaShop\Module\PsEventbus\Provider\OrderDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\OrderDataProvider
+    arguments:
+      - '@ps_eventbus.context'
+      - '@PrestaShop\Module\PsEventbus\Repository\OrderRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository'
+      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
+
+  PrestaShop\Module\PsEventbus\Provider\CartDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\CartDataProvider
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\CartRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\CartProductRepository'
+      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
+
+  PrestaShop\Module\PsEventbus\Provider\GoogleTaxonomyDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\GoogleTaxonomyDataProvider
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\GoogleTaxonomyRepository'
+      - '@ps_eventbus.context'

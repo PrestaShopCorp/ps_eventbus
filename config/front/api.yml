@@ -1,0 +1,11 @@
+services:
+  PrestaShop\Module\PsEventbus\Api\EventBusSyncClient:
+    class: PrestaShop\Module\PsEventbus\Api\EventBusSyncClient
+    arguments:
+      - '@ps_eventbus.link'
+
+  PrestaShop\Module\PsEventbus\Api\EventBusProxyClient:
+    class: PrestaShop\Module\PsEventbus\Api\EventBusProxyClient
+    arguments:
+      - '@ps_eventbus.link'
+
