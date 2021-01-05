@@ -142,13 +142,13 @@ class Ps_eventbus extends Module
         $this->need_instance = 0;
         $this->bootstrap = true;
         $this->version = self::VERSION;
-        $this->module_key = 'abf2cd758b4d629b2944d3922ef9db73';
+        $this->module_key = '7d76e08a13331c6c393755886ec8d5ce';
 
         parent::__construct();
 
         $this->displayName = $this->l('PrestaShop Eventbus');
-        $this->description = $this->l('Link your PrestaShop account to your online shop to activate & manage services on your back-office. Don\'t uninstall this module if you are already using a service, as it will prevent it from working.');
-        $this->confirmUninstall = $this->l('This action will prevent immediately your PrestaShop services and Community services from working as they are using PrestaShop Accounts module for authentication.');
+        $this->description = $this->l('Link your PrestaShop account to synchronize your shop\'s data to the partners you want . Don&#039;t uninstall this module if you are already using a service, as it will prevent it from working.');
+        $this->confirmUninstall = $this->l('This action will prevent immediately your PrestaShop services and Community services from working as they are using PrestaShop Eventbus module for syncing.');
         $this->ps_versions_compliancy = ['min' => '1.6', 'max' => _PS_VERSION_];
         $this->adminControllers = [];
         $this->serviceContainer = new \PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer(
