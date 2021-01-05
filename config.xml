@@ -2,7 +2,7 @@
 <module>
     <name>ps_eventbus</name>
     <displayName><![CDATA[PrestaShop Eventbus]]></displayName>
-    <version><![CDATA[3.0.0]]></version>
+    <version><![CDATA[1.0.0]]></version>
     <description><![CDATA[Link your PrestaShop account to synchronize your shop&#039;s data to the partners you want . Don&#039;t uninstall this module if you are already using a service, as it will prevent it from working.]]></description>
     <author><![CDATA[PrestaShop]]></author>
     <tab><![CDATA[administration]]></tab>

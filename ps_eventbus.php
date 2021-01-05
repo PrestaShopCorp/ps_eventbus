@@ -82,7 +82,7 @@ class Ps_eventbus extends Module
      * @var string
      */
     public $tab;
-
+    
     /**
      * @var string
      */
@@ -141,7 +141,7 @@ class Ps_eventbus extends Module
         $this->author = 'PrestaShop';
         $this->need_instance = 0;
         $this->bootstrap = true;
-        $this->version = self::VERSION;
+        $this->version = '1.0.0';
         $this->module_key = '7d76e08a13331c6c393755886ec8d5ce';
 
         parent::__construct();
