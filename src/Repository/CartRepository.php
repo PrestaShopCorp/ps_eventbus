@@ -82,8 +82,9 @@ class CartRepository
     {
         $query = $this->getBaseQuery();
 
-        $query->innerJoin(
-            'eventbus_incremental_sync',
+        $query->select('c.id_cart, date_add as created_at, date_upd as updated_at')
+            ->innerJoin(
+            'accounts_incremental_sync',
             'aic',
             'aic.id_object = c.id_cart AND aic.id_shop = c.id_shop AND aic.type = "carts"'
         )
