@@ -23,13 +23,10 @@ namespace PrestaShop\Module\PsEventbus\Api;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Post\PostFile;
-use GuzzleHttp\Ring\Exception\ConnectException;
 use Link;
 use PrestaShop\AccountsAuth\Api\Client\GenericClient;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
-use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
-use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
 
 /**
  * Construct the client used to make call to Segment API
@@ -43,10 +40,6 @@ class EventBusProxyClient extends GenericClient
         $this->setLink($link);
         $psAccountsService = new PsAccountsService();
         $token = $psAccountsService->getOrRefreshToken();
-
-        if (!$token) {
-            throw new FirebaseException('you must have admin token', 500);
-        }
 
         if (null === $client) {
             $client = new Client([
@@ -66,20 +59,17 @@ class EventBusProxyClient extends GenericClient
 
     /**
      * @param string $jobId
-     * @param string $data
-     * @param int $scriptStartTime
+     * @param string $compressedData
      *
      * @return array
      *
      * @throws EnvVarException
      */
-    public function upload($jobId, $data, $scriptStartTime)
+    public function upload($jobId, $compressedData)
     {
         if (!isset($_ENV['EVENT_BUS_PROXY_API_URL'])) {
             throw new EnvVarException('EVENT_BUS_PROXY_API_URL is not defined');
         }
-
-        $timeout = Config::PROXY_TIMEOUT - (time() - $scriptStartTime);
 
         $route = $_ENV['EVENT_BUS_PROXY_API_URL'] . "/upload/$jobId";
 
@@ -87,8 +77,8 @@ class EventBusProxyClient extends GenericClient
 
         $file = new PostFile(
             'file',
-            $data,
-            'file'
+            $compressedData,
+            'file.gz'
         );
 
         $response = $this->post([
@@ -98,7 +88,6 @@ class EventBusProxyClient extends GenericClient
             'body' => [
                 'file' => $file,
             ],
-            'timeout' => $timeout,
         ]);
 
         if (is_array($response)) {
@@ -110,13 +99,13 @@ class EventBusProxyClient extends GenericClient
 
     /**
      * @param string $jobId
-     * @param string $data
+     * @param string $compressedData
      *
      * @return array
      *
      * @throws EnvVarException
      */
-    public function delete($jobId, $data)
+    public function delete($jobId, $compressedData)
     {
         if (!isset($_ENV['EVENT_BUS_PROXY_API_URL'])) {
             throw new EnvVarException('EVENT_BUS_PROXY_API_URL is not defined');
@@ -128,8 +117,8 @@ class EventBusProxyClient extends GenericClient
 
         $file = new PostFile(
             'file',
-            $data,
-            'file'
+            $compressedData,
+            'file.gz'
         );
 
         $response = $this->post([
