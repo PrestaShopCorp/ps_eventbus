@@ -45,9 +45,8 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\CurrencyRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
-      - '@?'
+      - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
-
 
   PrestaShop\Module\PsEventbus\Repository\ThemeRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ThemeRepository

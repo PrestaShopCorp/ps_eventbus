@@ -104,6 +104,37 @@ class Install
             }
         }
 
+        $this->copyDataFromPsAccounts();
+
         return true;
+    }
+
+    /**
+     * @return void
+     */
+    private function copyDataFromPsAccounts()
+    {
+        $dbInstallFile = "{$this->module->getLocalPath()}/sql/migrate.sql";
+
+        if (!file_exists($dbInstallFile)) {
+            return;
+        }
+
+        $sql = Tools::file_get_contents($dbInstallFile);
+
+        if (empty($sql) || !is_string($sql)) {
+            return;
+        }
+
+        $sql = str_replace(['PREFIX_', 'ENGINE_TYPE'], [_DB_PREFIX_, _MYSQL_ENGINE_], $sql);
+        $sql = preg_split("/;\s*[\r\n]+/", trim($sql));
+
+        if (!empty($sql)) {
+            foreach ($sql as $query) {
+                try {
+                    $this->db->execute($query);
+                } catch (\Exception $exception) {}
+            }
+        }
     }
 }
