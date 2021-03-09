@@ -66,7 +66,7 @@ class EventbusSyncRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function insertSync($jobId, $date)
+    public function insertJob($jobId, $date)
     {
         return $this->db->insert(
             self::JOB_TABLE_NAME,

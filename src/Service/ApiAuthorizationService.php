@@ -46,7 +46,7 @@ class ApiAuthorizationService
         $jobValidationResponse = $this->eventBusSyncClient->validateJobId($jobId);
 
         if (is_array($jobValidationResponse) && (int) $jobValidationResponse['httpCode'] === 201) {
-            return $this->eventbusSyncStateRepository->insertSync($jobId, date(DATE_ATOM));
+            return $this->eventbusSyncStateRepository->insertJob($jobId, date(DATE_ATOM));
         }
 
         return $jobValidationResponse;

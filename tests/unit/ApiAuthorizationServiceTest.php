@@ -41,7 +41,7 @@ class ApiAuthorizationServiceTest extends TestCase
             ->method('findJobById')
             ->with($jobId)
             ->willReturn(['job_id' => '12345']);
-        $this->eventBusSyncClient->method('validateJobId')->willReturn(true);
+        $this->eventBusSyncClient->expects($this->at(-1))->method('validateJobId')->willReturn(true);
 
         $this->assertTrue($this->apiAuthorizationService->authorizeCall($jobId));
 
@@ -50,11 +50,11 @@ class ApiAuthorizationServiceTest extends TestCase
             ->method('findJobById')
             ->with($jobId)
             ->willReturn(false);
-        $this->eventBusSyncClient->method('validateJobId')->willReturn(true);
+        $this->eventBusSyncClient->expects($this->at(0))->method('validateJobId')->willReturn(['httpCode' => 201]);
 
         $this->eventbusSyncRepository
             ->expects($this->atLeastOnce())
-            ->method('insertSync')
+            ->method('insertJob')
             ->willReturn(true);
 
         $this->assertTrue($this->apiAuthorizationService->authorizeCall($jobId));
@@ -72,10 +72,10 @@ class ApiAuthorizationServiceTest extends TestCase
 
         $this->eventbusSyncRepository
             ->expects($this->atLeastOnce())
-            ->method('insertSync')
+            ->method('insertJob')
             ->willReturn(false);
 
-        $this->eventBusSyncClient->method('validateJobId')->willReturn(true);
+        $this->eventBusSyncClient->method('validateJobId')->willReturn(['httpCode' => 201]);
 
         $this->assertFalse($this->apiAuthorizationService->authorizeCall($jobId));
     }

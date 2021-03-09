@@ -122,6 +122,8 @@ class ProductDecoratorTest extends TestCase
         $languageRepository = $this->createMock(LanguageRepository::class);
         $languageRepository->method('getLanguageIdByIsoCode')->willReturn(1);
         $productRepository = $this->createMock(ProductRepository::class);
+        $productRepository->method('getProductImages')->willReturn([]);
+        $productRepository->method('getAttributeImages')->willReturn([]);
         $categoryRepository = $this->createMock(CategoryRepository::class);
         $categoryRepository->method('getCategoryPaths')->willReturn($categories);
 
