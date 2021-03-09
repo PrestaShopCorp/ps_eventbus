@@ -128,7 +128,7 @@ class ProductDecoratorTest extends TestCase
         $arrayFormatter = new ArrayFormatter();
 
         $productDecorator = new ProductDecorator($contextMock, $languageRepository, $productRepository, $categoryRepository, $arrayFormatter);
-        $productDecorator->decorateProducts($products);
+        $productDecorator->decorateProducts($products, 'en', 1);
 
         $this->assertInternalType('int', $products[0]['id_product']);
         $this->assertInternalType('int', $products[0]['id_category_default']);
