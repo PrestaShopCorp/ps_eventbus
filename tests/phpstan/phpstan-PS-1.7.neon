@@ -15,6 +15,7 @@ parameters:
 		- '#Parameter \#4 \$ssl of method LinkCore::getModuleLink\(\) expects null, true given.#'
 		- '#Parameter \#6 \$idShop of method LinkCore::getModuleLink\(\) expects null, int given.#'
 		- '#Parameter \#1 \$json of function json_decode expects string, string\|false given.#'
+		- '#Parameter \#2 \$message of method PrestaShop\\Module\\PsEventbus\\WebHook\\Validator::getError\(\) expects string, string\|false given.#'
 		- '#Parameter \#1 \$hook_name of method ModuleCore::registerHook\(\) expects string, array given.#'
 		- '#Access to an undefined property AdminController\|FrontController::\$controller_name.#'
 		- '#Call to static method getAvailable\(\) on an unknown class Theme.#'
@@ -26,8 +27,8 @@ parameters:
 		- '#Instantiated class PrestaShop\\PrestaShop\\Core\\Addon\\Theme\\ThemeManagerBuilder not found.#'
 		- '#Class Theme not found.#'
 		- '#Access to property \$id on an unknown class Theme.#'
-		- '#Property Ps_eventbus::\$serviceContainer has unknown class PrestaShop\\ModuleLibServiceContainer\\DependencyInjection\\ServiceContainer as its type.#'
 		- '#Instantiated class PrestaShop\\ModuleLibServiceContainer\\DependencyInjection\\ServiceContainer not found.#'
 		- '#Call to method getService\(\) on an unknown class PrestaShop\\ModuleLibServiceContainer\\DependencyInjection\\ServiceContainer.#'
+		- '#Cannot access property \$id on Module\|false.#'
 
 	level: 7

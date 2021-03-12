@@ -2,12 +2,9 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use Exception;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Ring\Exception\ConnectException;
 use PrestaShop\Module\PsEventbus\Api\EventBusProxyClient;
-use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Exception\ApiException;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
 
@@ -18,44 +15,34 @@ class ProxyService
      */
     private $eventBusProxyClient;
     /**
-     * @var CompressionService
-     */
-    private $compressionService;
-    /**
      * @var JsonFormatter
      */
     private $jsonFormatter;
 
-    public function __construct(
-        EventBusProxyClient $eventBusProxyClient,
-        CompressionService $compressionService,
-        JsonFormatter $jsonFormatter
-    ) {
+    public function __construct(EventBusProxyClient $eventBusProxyClient, JsonFormatter $jsonFormatter)
+    {
         $this->eventBusProxyClient = $eventBusProxyClient;
-        $this->compressionService = $compressionService;
         $this->jsonFormatter = $jsonFormatter;
     }
 
     /**
      * @param string $jobId
      * @param array $data
-     * @param int $scriptStartTime
      *
      * @return array
      *
-     * @throws ApiException
      * @throws EnvVarException
      */
-    public function upload($jobId, $data, $scriptStartTime)
+    public function upload($jobId, $data)
     {
         $dataJson = $this->jsonFormatter->formatNewlineJsonString($data);
 
         try {
-            $response = $this->eventBusProxyClient->upload($jobId, $dataJson, $scriptStartTime);
+            $response = $this->eventBusProxyClient->upload($jobId, $dataJson);
         } catch (ClientException $exception) {
-            throw new ApiException($exception->getMessage(), $exception->getCode());
+            return ['error' => $exception->getMessage()];
         } catch (ConnectException $exception) {
-            throw new ApiException($exception->getMessage(), Config::PROXY_DID_NOT_RESPOND);
+            return ['error' => $exception->getMessage()];
         }
 
         return $response;

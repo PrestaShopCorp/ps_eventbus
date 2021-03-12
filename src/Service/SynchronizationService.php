@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use PrestaShop\Module\PsEventbus\Exception\ApiException;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
@@ -39,22 +38,19 @@ class SynchronizationService
      * @param int $offset
      * @param int $limit
      * @param string $dateNow
-     * @param int $scriptStartTime
      *
      * @return array
      *
-     * @throws ApiException
-     * @throws EnvVarException
-     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopDatabaseException|EnvVarException
      */
-    public function handleFullSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $langIso, $offset, $limit, $dateNow, $scriptStartTime)
+    public function handleFullSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $langIso, $offset, $limit, $dateNow)
     {
         $response = [];
 
         $data = $dataProvider->getFormattedData($offset, $limit, $langIso);
 
         if (!empty($data)) {
-            $response = $this->proxyService->upload($jobId, $data, $scriptStartTime);
+            $response = $this->proxyService->upload($jobId, $data);
 
             if ($response['httpCode'] == 201) {
                 $offset += $limit;
@@ -74,6 +70,7 @@ class SynchronizationService
             'total_objects' => count($data),
             'has_remaining_objects' => $remainingObjects > 0,
             'remaining_objects' => $remainingObjects,
+            'md5' => $this->getPayloadMd5($data),
         ], $response);
     }
 
@@ -83,15 +80,12 @@ class SynchronizationService
      * @param string $jobId
      * @param int $limit
      * @param string $langIso
-     * @param int $scriptStartTime
      *
      * @return array
      *
-     * @throws ApiException
-     * @throws EnvVarException
-     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopDatabaseException|EnvVarException
      */
-    public function handleIncrementalSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $limit, $langIso, $scriptStartTime)
+    public function handleIncrementalSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $limit, $langIso)
     {
         $response = [];
 
@@ -114,6 +108,21 @@ class SynchronizationService
             'total_objects' => count($data),
             'has_remaining_objects' => $remainingObjects > 0,
             'remaining_objects' => $remainingObjects,
+            'md5' => $this->getPayloadMd5($data),
         ], $response);
+    }
+
+    /**
+     * @param array $payload
+     *
+     * @return string
+     */
+    private function getPayloadMd5($payload)
+    {
+        return md5(
+            implode(' ', array_map(function ($payloadItem) {
+                return $payloadItem['id'];
+            }, $payload))
+        );
     }
 }

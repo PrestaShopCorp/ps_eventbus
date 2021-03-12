@@ -20,10 +20,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Module;
 
-use Db;
-use Language;
-use Ps_eventbus;
-use Tab;
 use Tools;
 
 class Install
@@ -32,15 +28,15 @@ class Install
     const TAB_ACTIVE = 0;
 
     /**
-     * @var Ps_eventbus
+     * @var \Ps_eventbus
      */
     private $module;
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
-    public function __construct(Ps_eventbus $module, Db $db)
+    public function __construct(\Ps_eventbus $module, \Db $db)
     {
         $this->module = $module;
         $this->db = $db;
@@ -54,22 +50,22 @@ class Install
     public function installInMenu()
     {
         foreach ($this->module->adminControllers as $controllerName) {
-            $tabId = (int) Tab::getIdFromClassName($controllerName);
+            $tabId = (int) \Tab::getIdFromClassName($controllerName);
 
             if (!$tabId) {
                 $tabId = null;
             }
 
-            $tab = new Tab($tabId);
+            $tab = new \Tab($tabId);
             $tab->active = (bool) self::TAB_ACTIVE;
             $tab->class_name = $controllerName;
             $tab->name = [];
 
-            foreach (Language::getLanguages(true) as $lang) {
+            foreach (\Language::getLanguages(true) as $lang) {
                 $tab->name[$lang['id_lang']] = $this->module->displayName;
             }
 
-            $tab->id_parent = -1 == self::PARENT_TAB_NAME ? (int) Tab::getIdFromClassName((string) self::PARENT_TAB_NAME) : -1;
+            $tab->id_parent = -1 == self::PARENT_TAB_NAME ? (int) \Tab::getIdFromClassName((string) self::PARENT_TAB_NAME) : -1;
             $tab->module = $this->module->name;
 
             $tab->save();
@@ -135,7 +131,9 @@ class Install
 
         if (!empty($sql)) {
             foreach ($sql as $query) {
-                $this->db->execute($query);
+                try {
+                    $this->db->execute($query);
+                } catch (\Exception $exception) {}
             }
         }
     }

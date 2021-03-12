@@ -2,15 +2,14 @@
 
 namespace PrestaShop\Module\PsEventbus\Controller;
 
-use Country;
 use DateTime;
 use Exception;
 use ModuleFrontController;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Exception\ApiException;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
+use PrestaShop\Module\PsEventbus\Exception\QueryParamsException;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
@@ -32,12 +31,6 @@ abstract class AbstractApiController extends ModuleFrontController
      */
     public $type = '';
     /**
-     * Timestamp when script started
-     *
-     * @var int
-     */
-    public $startTime;
-    /**
      * @var ApiAuthorizationService
      */
     protected $authorizationService;
@@ -48,7 +41,7 @@ abstract class AbstractApiController extends ModuleFrontController
     /**
      * @var EventbusSyncRepository
      */
-    protected $accountsSyncRepository;
+    protected $eventbusSyncRepository;
     /**
      * @var LanguageRepository
      */
@@ -77,7 +70,7 @@ abstract class AbstractApiController extends ModuleFrontController
         $this->controller_type = 'module';
         $this->proxyService = $this->module->getService(ProxyService::class);
         $this->authorizationService = $this->module->getService(ApiAuthorizationService::class);
-        $this->accountsSyncRepository = $this->module->getService(EventbusSyncRepository::class);
+        $this->eventbusSyncRepository = $this->module->getService(EventbusSyncRepository::class);
         $this->languageRepository = $this->module->getService(LanguageRepository::class);
         $this->psAccountsService = new PsAccountsService();
         $this->incrementalSyncRepository = $this->module->getService(IncrementalSyncRepository::class);
@@ -89,8 +82,6 @@ abstract class AbstractApiController extends ModuleFrontController
      */
     public function init()
     {
-        $this->startTime = time();
-
         try {
             $this->authorize();
         } catch (PrestaShopDatabaseException $exception) {
@@ -109,7 +100,7 @@ abstract class AbstractApiController extends ModuleFrontController
      */
     private function authorize()
     {
-        $jobId = Tools::getValue('job_id', '');
+        $jobId = Tools::getValue('job_id', 'empty_job_id');
 
         $authorizationResponse = $this->authorizationService->authorizeCall($jobId);
 
@@ -120,9 +111,13 @@ abstract class AbstractApiController extends ModuleFrontController
         }
 
         try {
-            $this->psAccountsService->getOrRefreshToken();
+            $token = $this->psAccountsService->getOrRefreshToken();
         } catch (Exception $exception) {
             throw new FirebaseException($exception->getMessage());
+        }
+
+        if (!$token) {
+            throw new FirebaseException('Invalid token');
         }
     }
 
@@ -136,6 +131,11 @@ abstract class AbstractApiController extends ModuleFrontController
         $jobId = Tools::getValue('job_id');
         $langIso = Tools::getValue('lang_iso', $this->languageRepository->getDefaultLanguageIsoCode());
         $limit = (int) Tools::getValue('limit', 50);
+
+        if ($limit < 0) {
+            $this->exitWithExceptionMessage(new QueryParamsException('Invalid URL Parameters', Config::INVALID_URL_QUERY));
+        }
+
         $initFullSync = (int) Tools::getValue('full', 0) == 1;
 
         $dateNow = (new DateTime())->format(DateTime::ATOM);
@@ -144,7 +144,7 @@ abstract class AbstractApiController extends ModuleFrontController
         $response = [];
 
         try {
-            $typeSync = $this->accountsSyncRepository->findTypeSync($this->type, $langIso);
+            $typeSync = $this->eventbusSyncRepository->findTypeSync($this->type, $langIso);
 
             if ($typeSync !== false && is_array($typeSync)) {
                 $offset = (int) $typeSync['offset'];
@@ -153,16 +153,16 @@ abstract class AbstractApiController extends ModuleFrontController
                     $incrementalSync = true;
                 } elseif ($initFullSync) {
                     $offset = 0;
-                    $this->accountsSyncRepository->updateTypeSync($this->type, $offset, $dateNow, false, $langIso);
+                    $this->eventbusSyncRepository->updateTypeSync($this->type, $offset, $dateNow, false, $langIso);
                 }
             } else {
-                $this->accountsSyncRepository->insertTypeSync($this->type, $offset, $dateNow, $langIso);
+                $this->eventbusSyncRepository->insertTypeSync($this->type, $offset, $dateNow, $langIso);
             }
 
             if ($incrementalSync) {
-                $response = $this->synchronizationService->handleIncrementalSync($dataProvider, $this->type, $jobId, $limit, $langIso, $this->startTime);
+                $response = $this->synchronizationService->handleIncrementalSync($dataProvider, $this->type, $jobId, $limit, $langIso);
             } else {
-                $response = $this->synchronizationService->handleFullSync($dataProvider, $this->type, $jobId, $langIso, $offset, $limit, $dateNow, $this->startTime);
+                $response = $this->synchronizationService->handleFullSync($dataProvider, $this->type, $jobId, $langIso, $offset, $limit, $dateNow);
             }
 
             return array_merge(
@@ -176,7 +176,7 @@ abstract class AbstractApiController extends ModuleFrontController
             $this->exitWithExceptionMessage($exception);
         } catch (EnvVarException $exception) {
             $this->exitWithExceptionMessage($exception);
-        } catch (ApiException $exception) {
+        } catch (FirebaseException $exception) {
             $this->exitWithExceptionMessage($exception);
         }
 
@@ -224,8 +224,8 @@ abstract class AbstractApiController extends ModuleFrontController
             $code = Config::ENV_MISCONFIGURED_ERROR_CODE;
         } elseif ($exception instanceof FirebaseException) {
             $code = Config::REFRESH_TOKEN_ERROR_CODE;
-        } elseif ($exception instanceof ApiException) {
-            $code = Config::PROXY_DID_NOT_RESPOND;
+        } elseif ($exception instanceof QueryParamsException) {
+            $code = Config::INVALID_URL_QUERY;
         }
 
         $response = [
@@ -235,7 +235,7 @@ abstract class AbstractApiController extends ModuleFrontController
             'message' => $exception->getMessage(),
         ];
 
-        $this->dieWithResponse($response, (int) $exception->getCode());
+        $this->dieWithResponse($response, (int) $code);
     }
 
     /**
@@ -261,27 +261,7 @@ abstract class AbstractApiController extends ModuleFrontController
         header($httpStatusText);
 
         echo json_encode($response, JSON_UNESCAPED_SLASHES);
-        die;
-    }
 
-    /**
-     * Override displayMaintenancePage to prevent the maintenance page to be displayed
-     *
-     * @return void
-     */
-    protected function displayMaintenancePage()
-    {
-    }
-
-    /**
-     * Override geolocationManagement to prevent country GEOIP blocking
-     *
-     * @param Country $defaultCountry
-     *
-     * @return false
-     */
-    protected function geolocationManagement($defaultCountry)
-    {
-        return false;
+        exit;
     }
 }

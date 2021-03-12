@@ -2,6 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Factory;
 
+use Context;
+
 class Link
 {
     /**
@@ -9,6 +11,6 @@ class Link
      */
     public static function get()
     {
-        return \Context::getContext()->link;
+        return Context::getContext()->link;
     }
 }

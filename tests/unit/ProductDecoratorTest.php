@@ -122,13 +122,15 @@ class ProductDecoratorTest extends TestCase
         $languageRepository = $this->createMock(LanguageRepository::class);
         $languageRepository->method('getLanguageIdByIsoCode')->willReturn(1);
         $productRepository = $this->createMock(ProductRepository::class);
+        $productRepository->method('getProductImages')->willReturn([]);
+        $productRepository->method('getAttributeImages')->willReturn([]);
         $categoryRepository = $this->createMock(CategoryRepository::class);
         $categoryRepository->method('getCategoryPaths')->willReturn($categories);
 
         $arrayFormatter = new ArrayFormatter();
 
         $productDecorator = new ProductDecorator($contextMock, $languageRepository, $productRepository, $categoryRepository, $arrayFormatter);
-        $productDecorator->decorateProducts($products);
+        $productDecorator->decorateProducts($products, 'en', 1);
 
         $this->assertInternalType('int', $products[0]['id_product']);
         $this->assertInternalType('int', $products[0]['id_category_default']);
