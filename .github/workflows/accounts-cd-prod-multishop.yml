@@ -4,15 +4,15 @@ on:
     branches:
       - master
   pull_request:
-    types: [opened,edited,reopened,synchronize,labeled]
+    types: [opened, edited, reopened, synchronize, labeled]
 
 env:
-  MODULE_NAME: ps_accounts
+  MODULE_NAME: ps_eventbus
   GCLOUD_TOKEN_PATH: ./token.json
 
 jobs:
   build:
-    name: Prod - Build ps_accounts and ps_checkout
+    name: Prod - Build ps_eventbus and ps_checkout
     runs-on: ubuntu-latest
     timeout-minutes: 10
     if: contains(github.event.pull_request.labels.*.name, 'quality assurance needed') || github.ref == 'refs/heads/master'
@@ -27,7 +27,7 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v2
         with:
-          path: ps_accounts
+          path: ps_eventbus
 
       - name: Checkout ps checkout
         uses: actions/checkout@v2
@@ -42,7 +42,7 @@ jobs:
           gcloud auth activate-service-account --key-file=$GCLOUD_TOKEN_PATH
           gcloud container clusters get-credentials $GCLOUD_CLUSTER \
           --zone europe-west1-c --project $GCLOUD_PROJECT
-          gcloud beta secrets versions access latest --project=$GCLOUD_PROJECT --secret="accounts-module" > ps_accounts/.env
+          gcloud beta secrets versions access latest --project=$GCLOUD_PROJECT --secret="accounts-module" > ps_eventbus/.env
           gcloud beta secrets versions access latest --project=$GCLOUD_PROJECT --secret="checkout-module" > ps_checkout/.env
           rm $GCLOUD_TOKEN_PATH
         env:
@@ -59,12 +59,12 @@ jobs:
 
       - name: Write install file 1.6 accounts
         run: |
-          cat <<'EOF' > ps_accounts/install.php
-          <?php include(dirname(__FILE__)."/../../config/config.inc.php"); $module = Module::getInstanceByName('ps_accounts'); try{$module->uninstall();}catch(Exception $e){} $module->install();
+          cat <<'EOF' > ps_eventbus/install.php
+          <?php include(dirname(__FILE__)."/../../config/config.inc.php"); $module = Module::getInstanceByName('ps_eventbus'); try{$module->uninstall();}catch(Exception $e){} $module->install();
           EOF
 
       - name: Build ps accounts
-        working-directory: ps_accounts
+        working-directory: ps_eventbus
         run: |
           composer install
 
@@ -85,7 +85,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            sudo su -c 'rm -rf ${{ secrets.MULTISHOP_17_PATH }}/ps_accounts'
+            sudo su -c 'rm -rf ${{ secrets.MULTISHOP_17_PATH }}/ps_eventbus'
             sudo su -c 'rm -rf ${{ secrets.MULTISHOP_17_PATH }}/ps_checkout'
 
       - name: Delete old modules 1.6
@@ -96,7 +96,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            sudo su -c 'rm -rf ${{ secrets.MULTISHOP_16_PATH }}/ps_accounts'
+            sudo su -c 'rm -rf ${{ secrets.MULTISHOP_16_PATH }}/ps_eventbus'
             sudo su -c 'rm -rf ${{ secrets.MULTISHOP_16_PATH }}/ps_checkout'
 
       - name: Copy modules
@@ -113,7 +113,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-
       - name: Move modules
         uses: appleboy/ssh-action@master
         with:
@@ -121,8 +120,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            sudo su -c 'cp -R build-accounts//ps_accounts ${{ secrets.MULTISHOP_17_PATH }}'
-            sudo su -c 'chown -R www-data:www-data ${{ secrets.MULTISHOP_17_PATH }}/ps_accounts'
+            sudo su -c 'cp -R build-accounts//ps_eventbus ${{ secrets.MULTISHOP_17_PATH }}'
+            sudo su -c 'chown -R www-data:www-data ${{ secrets.MULTISHOP_17_PATH }}/ps_eventbus'
             sudo su -c 'cp -R build-accounts//ps_checkout ${{ secrets.MULTISHOP_17_PATH }}'
             sudo su -c 'chown -R www-data:www-data ${{ secrets.MULTISHOP_17_PATH }}/ps_checkout'
 
@@ -133,8 +132,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            sudo su -c 'docker exec $(docker ps -q -f "ancestor=prestashop/prestashop:1.7.6.7" -f "name=multishop") bin/console prestashop:module uninstall ps_accounts || true'
-            sudo su -c 'docker exec $(docker ps -q -f "ancestor=prestashop/prestashop:1.7.6.7" -f "name=multishop") bin/console prestashop:module install ps_accounts'
+            sudo su -c 'docker exec $(docker ps -q -f "ancestor=prestashop/prestashop:1.7.6.7" -f "name=multishop") bin/console prestashop:module uninstall ps_eventbus || true'
+            sudo su -c 'docker exec $(docker ps -q -f "ancestor=prestashop/prestashop:1.7.6.7" -f "name=multishop") bin/console prestashop:module install ps_eventbus'
             sudo su -c 'docker exec $(docker ps -q -f "ancestor=prestashop/prestashop:1.7.6.7" -f "name=multishop") cp modules/ps_checkout/.env modules/ps_checkout/_dev/.env'
             sudo su -c 'docker exec $(docker ps -q -f "ancestor=prestashop/prestashop:1.7.6.7" -f "name=multishop") bin/console prestashop:module uninstall ps_checkout || true'
             sudo su -c 'docker exec $(docker ps -q -f "ancestor=prestashop/prestashop:1.7.6.7" -f "name=multishop") bin/console prestashop:module install ps_checkout'
@@ -151,8 +150,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            sudo su -c 'cp -R build-accounts//ps_accounts ${{ secrets.MULTISHOP_16_PATH }}'
-            sudo su -c 'chown -R www-data:www-data ${{ secrets.MULTISHOP_16_PATH }}/ps_accounts'
+            sudo su -c 'cp -R build-accounts//ps_eventbus ${{ secrets.MULTISHOP_16_PATH }}'
+            sudo su -c 'chown -R www-data:www-data ${{ secrets.MULTISHOP_16_PATH }}/ps_eventbus'
             sudo su -c 'cp -R build-accounts//ps_checkout ${{ secrets.MULTISHOP_16_PATH }}'
             sudo su -c 'chown -R www-data:www-data ${{ secrets.MULTISHOP_16_PATH }}/ps_checkout'
 
@@ -163,7 +162,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            sudo su -c 'docker exec $(docker ps -q -f "ancestor=prestashop/prestashop:1.6" -f "name=multishop") php modules/ps_accounts/install.php'
+            sudo su -c 'docker exec $(docker ps -q -f "ancestor=prestashop/prestashop:1.6" -f "name=multishop") php modules/ps_eventbus/install.php'
             sudo su -c 'docker exec $(docker ps -q -f "ancestor=prestashop/prestashop:1.6" -f "name=multishop") cp modules/ps_checkout/.env modules/ps_checkout/_dev/.env'
             sudo su -c 'docker exec $(docker ps -q -f "ancestor=prestashop/prestashop:1.6" -f "name=multishop") php modules/ps_checkout/install.php'
 
@@ -174,7 +173,6 @@ jobs:
     needs:
       - install_1_6
     steps:
-
       - name: Clear cache
         uses: appleboy/ssh-action@master
         with:
@@ -195,4 +193,3 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: rm -rf build-accounts/
-

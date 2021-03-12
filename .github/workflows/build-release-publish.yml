@@ -70,7 +70,7 @@ jobs:
           echo "$ENV_FILE" > ${{ github.event.repository.name }}/.env
           zip -r ${{ github.event.repository.name }}_integration.zip ${{ github.event.repository.name }}  -x '*.git*'
         env:
-          ENV_FILE: ${{ secrets.PS_ACCOUNTS_ENV_INTE }}
+          ENV_FILE: ${{ secrets.ps_eventbus_ENV_INTE }}
 
       - name: Publish the integration zip
         uses: actions/upload-release-asset@v1.0.1
