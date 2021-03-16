@@ -4,6 +4,7 @@ namespace PrestaShop\Module\PsEventbus\Config;
 
 class Config
 {
+    const PROXY_TIMEOUT = 30;
     const REFRESH_TOKEN_ERROR_CODE = 452;
     const ENV_MISCONFIGURED_ERROR_CODE = 453;
     const DATABASE_QUERY_ERROR_CODE = 454;

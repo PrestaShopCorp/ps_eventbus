@@ -5,6 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Service;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Ring\Exception\ConnectException;
 use PrestaShop\Module\PsEventbus\Api\EventBusProxyClient;
+use PrestaShop\Module\PsEventbus\Exception\ApiException;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
 
@@ -28,17 +29,18 @@ class ProxyService
     /**
      * @param string $jobId
      * @param array $data
+     * @param int $scriptStartTime
      *
      * @return array
      *
      * @throws EnvVarException
      */
-    public function upload($jobId, $data)
+    public function upload($jobId, $data, $scriptStartTime)
     {
         $dataJson = $this->jsonFormatter->formatNewlineJsonString($data);
 
         try {
-            $response = $this->eventBusProxyClient->upload($jobId, $dataJson);
+            $response = $this->eventBusProxyClient->upload($jobId, $dataJson, $scriptStartTime);
         } catch (ClientException $exception) {
             return ['error' => $exception->getMessage()];
         } catch (ConnectException $exception) {
