@@ -1,4 +1,4 @@
-name: Accounts Quality Control PHP
+name: EventBus Quality Control PHP
 
 on: [pull_request]
 
