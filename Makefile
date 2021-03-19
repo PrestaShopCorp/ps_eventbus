@@ -37,9 +37,9 @@ dist:
 # target: version                                - Replace version in files
 version:
 	echo "...$(VERSION)..."
-	sed -i "" -e "s/\(VERSION = \).*/\1\'${SEM_VERSION}\';/" ps_eventbus.php
-	sed -i "" -e "s/\($this->version = \).*/\1\'${SEM_VERSION}\';/" ps_eventbus.php
-	sed -i "" -e "s|\(<version><!\[CDATA\[\)[0-9a-z.-]\{1,\}]]></version>|\1${SEM_VERSION}]]></version>|" config.xml
+	sed -i -e "s/\(VERSION = \).*/\1\'${SEM_VERSION}\';/" ps_eventbus.php
+	sed -i -e "s/\($this->version = \).*/\1\'${SEM_VERSION}\';/" ps_eventbus.php
+	sed -i -e "s|\(<version><!\[CDATA\[\)[0-9a-z.-]\{1,\}]]></version>|\1${SEM_VERSION}]]></version>|" config.xml
 
 # target: bundle-prod                            - Bundle a production zip
 bundle-prod: dist ./vendor
