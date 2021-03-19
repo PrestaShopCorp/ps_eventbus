@@ -1,4 +1,4 @@
-.PHONY: clean help build bundle zip version bundle-prod bundle-inte build-front build-back
+.PHONY: clean help build bundle zip version bundle-prod bundle-inte build-back
 PHP = $(shell which php 2> /dev/null)
 DOCKER = $(shell docker ps 2> /dev/null)
 NPM = $(shell which npm 2> /dev/null)
@@ -45,7 +45,6 @@ version:
 bundle-prod: dist ./vendor ./views/index.php
 	rm -f .env
 	cd .. && zip -r ${PACKAGE}.zip ${MODULE} -x '*.git*' \
-	  ${MODULE}/_dev/\* \
 	  ${MODULE}/dist/\* \
 	  ${MODULE}/composer.phar \
 	  ${MODULE}/Makefile
@@ -55,7 +54,6 @@ bundle-prod: dist ./vendor ./views/index.php
 bundle-inte: dist .env.inte ./vendor ./views/index.php
 	cp .env.inte .env
 	cd .. && zip -r ${PACKAGE}_inte.zip ${MODULE} -x '*.git*' \
-	  ${MODULE}/_dev/\* \
 	  ${MODULE}/dist/\* \
 	  ${MODULE}/composer.phar \
 	  ${MODULE}/Makefile
@@ -63,15 +61,7 @@ bundle-inte: dist .env.inte ./vendor ./views/index.php
 	rm -f .env
 
 # target: build                                  - Setup PHP & Node.js locally
-build: build-front build-back
-
-# target: build-front                            - Build front for prod locally
-build-front:
-ifndef YARN
-    $(error "YARN is unavailable on your system, try `npm i -g yarn`")
-endif
-	yarn --cwd ./_dev --frozen-lockfile 
-	yarn --cwd ./_dev build
+build: build-back
 
 # target: build-back                             - Build production dependencies
 build-back: composer.phar
@@ -86,8 +76,8 @@ endif
 	php composer-setup.php
 	php -r "unlink('composer-setup.php');"
 
-# target: tests                                  - Launch the tests/lints suite front and back
-tests: test-back test-front lint-back
+# target: tests                                  - Launch the tests/lints backend
+tests: test-back lint-back
 
 # target: test-back                              - Launch the tests back
 test-back: lint-back phpstan phpunit
@@ -133,14 +123,9 @@ endif
 vendor/phpunit/phpunit:
 	./composer.phar install
 
-# target: test-front                             - Launch the tests front (does not work linter is not configured)
-test-front:
-	npm --prefix=./_dev run lint
-
 # target: fix-lint                               - Launch php cs fixer and npm run lint
 fix-lint: vendor/bin/php-cs-fixer
 	vendor/bin/php-cs-fixer fix --using-cache=no
-	npm --prefix=./_dev run lint --fix
 
 vendor/bin/php-cs-fixer:
 	./composer.phar install
