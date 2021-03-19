@@ -65,11 +65,11 @@ build: build-back
 
 # target: build-back                             - Build production dependencies
 build-back: composer.phar
-	./composer.phar install --no-dev
+	./composer.phar install --no-dev -o
 
 composer.phar:
 ifndef PHP
-    $(error "PHP is unavailable on your system")
+	$(error "PHP is unavailable on your system")
 endif
 	php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 	php -r "if (hash_file('sha384', 'composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
@@ -89,7 +89,7 @@ lint-back:
 # target: phpstan                                - Start phpstan
 phpstan:
 ifndef DOCKER
-    $(error "DOCKER is unavailable on your system")
+	$(error "DOCKER is unavailable on your system")
 endif
 	docker pull phpstan/phpstan:${PHPSTAN_VERSION}
 	docker pull prestashop/prestashop:${PS_VERSION}
@@ -104,7 +104,7 @@ endif
 # target: phpunit                                - Start phpunit
 phpunit: vendor/phpunit/phpunit
 ifndef DOCKER
-    $(error "DOCKER is unavailable on your system")
+	$(error "DOCKER is unavailable on your system")
 endif
 	docker pull phpunit/phpunit:${PHPUNIT_VERSION}
 	docker pull prestashop/prestashop:${PS_VERSION}
