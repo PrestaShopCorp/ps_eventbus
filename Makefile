@@ -42,7 +42,7 @@ version:
 	sed -i "" -e "s|\(<version><!\[CDATA\[\)[0-9a-z.-]\{1,\}]]></version>|\1${SEM_VERSION}]]></version>|" config.xml
 
 # target: bundle-prod                            - Bundle a production zip
-bundle-prod: dist ./vendor ./views/index.php
+bundle-prod: dist ./vendor
 	rm -f .env
 	cd .. && zip -r ${PACKAGE}.zip ${MODULE} -x '*.git*' \
 	  ${MODULE}/dist/\* \
@@ -51,7 +51,7 @@ bundle-prod: dist ./vendor ./views/index.php
 	mv ../${PACKAGE}.zip ./dist
 
 # target: bundle-prod                            - Bundle an integration zip
-bundle-inte: dist .env.inte ./vendor ./views/index.php
+bundle-inte: dist .env.inte ./vendor
 	cp .env.inte .env
 	cd .. && zip -r ${PACKAGE}_inte.zip ${MODULE} -x '*.git*' \
 	  ${MODULE}/dist/\* \
