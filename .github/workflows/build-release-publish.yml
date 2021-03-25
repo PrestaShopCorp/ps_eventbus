@@ -27,6 +27,8 @@ jobs:
 
   clean-artifacts:
     name: Clean previous artifacts
+    runs-on: ubuntu-latest
+    steps:
       - name: Get release info
         id: release_info
         uses: toolmantim/release-drafter@v5
