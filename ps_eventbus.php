@@ -104,11 +104,6 @@ class Ps_eventbus extends Module
     public $version;
 
     /**
-     * @var \Monolog\Logger
-     */
-    private $logger;
-
-    /**
      * List of hook to install at the installation of the module
      *
      * @var array
@@ -158,6 +153,9 @@ class Ps_eventbus extends Module
         $this->loadEnv();
     }
 
+    /**
+     * @return void
+     */
     private function loadEnv()
     {
         $dotEnv = new Dotenv();
@@ -167,20 +165,6 @@ class Ps_eventbus extends Module
         if (file_exists(_PS_MODULE_DIR_ . 'ps_eventbus/.env')) {
             $dotEnv->load(_PS_MODULE_DIR_ . 'ps_eventbus/.env');
         }
-    }
-
-    /**
-     * @return \Monolog\Logger
-     */
-    public function getLogger()
-    {
-        if (null !== $this->logger) {
-            return $this->logger;
-        }
-
-        $this->logger = PrestaShop\Module\PsEventbus\Factory\PsEventbusLogger::create();
-
-        return $this->logger;
     }
 
     /**

@@ -18,7 +18,11 @@ jobs:
         uses: PrestaShopCorp/github-action-clean-before-deploy@v1.0
 
       - name: Bump version
-        run: make version
+        run: |
+          ls
+          cd ${{ github.event.repository.name }}
+          ls
+          make version
         env:
           VERSION: ${{ github.event.release.tag_name }}
 
@@ -70,7 +74,7 @@ jobs:
           echo "$ENV_FILE" > ${{ github.event.repository.name }}/.env
           zip -r ${{ github.event.repository.name }}_integration.zip ${{ github.event.repository.name }}  -x '*.git*'
         env:
-          ENV_FILE: ${{ secrets.ps_eventbus_ENV_INTE }}
+          ENV_FILE: ${{ secrets.PS_EVENTBUS_ENV_INTE }}
 
       - name: Publish the integration zip
         uses: actions/upload-release-asset@v1.0.1

@@ -57,5 +57,5 @@ jobs:
         with:
           upload_url: ${{ steps.release_info.outputs.upload_url }}
           asset_path: ./dist/${{ github.event.repository.name }}-${{ steps.tagger.outputs.tag }}.zip
-          asset_name: ${{ github.event.repository.name }}-${{ steps.tagger.outputs.tag }.zip
+          asset_name: ${{ github.event.repository.name }}-${{ steps.tagger.outputs.tag }}.zip
           asset_content_type: application/zip
