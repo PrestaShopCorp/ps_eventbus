@@ -27,9 +27,10 @@ clean:
 # target: version                                - Replace version in files
 version:
 	echo "...$(VERSION)..."
-	sed -i -e "s/\(VERSION = \).*/\1\'${SEM_VERSION}\';/" ps_eventbus.php
-	sed -i -e "s/\($this->version = \).*/\1\'${SEM_VERSION}\';/" ps_eventbus.php
-	sed -i -e "s|\(<version><!\[CDATA\[\)[0-9a-z.-]\{1,\}]]></version>|\1${SEM_VERSION}]]></version>|" config.xml
+	sed -i.bak -e "s/\(VERSION = \).*/\1\'${SEM_VERSION}\';/" ps_eventbus.php
+	sed -i.bak -e "s/\($this->version = \).*/\1\'${SEM_VERSION}\';/" ps_eventbus.php
+	sed -i.bak -e "s|\(<version><!\[CDATA\[\)[0-9a-z.-]\{1,\}]]></version>|\1${SEM_VERSION}]]></version>|" config.xml
+	rm -f ps_eventbus.php.bak config.xml.bak
 
 # target: dist                                   - A directory to save zip bundles
 dist:
@@ -58,10 +59,9 @@ zip-inte: dist .env.inte ./vendor
 	rm -f .env
 
 # target: build                                  - Setup PHP & Node.js locally
-build: build-back
+build: ./vendor
 
-# target: build-back                             - Build production dependencies
-build-back: composer.phar
+./vendor: composer.phar
 	./composer.phar install --no-dev -o
 
 composer.phar:
