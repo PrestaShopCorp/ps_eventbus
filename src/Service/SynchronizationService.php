@@ -2,6 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
+use PrestaShop\Module\PsEventbus\Exception\ApiException;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
@@ -38,19 +39,20 @@ class SynchronizationService
      * @param int $offset
      * @param int $limit
      * @param string $dateNow
+     * @param int $scriptStartTime
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException|EnvVarException
+     * @throws PrestaShopDatabaseException|EnvVarException|ApiException
      */
-    public function handleFullSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $langIso, $offset, $limit, $dateNow)
+    public function handleFullSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $langIso, $offset, $limit, $dateNow, $scriptStartTime)
     {
         $response = [];
 
         $data = $dataProvider->getFormattedData($offset, $limit, $langIso);
 
         if (!empty($data)) {
-            $response = $this->proxyService->upload($jobId, $data);
+            $response = $this->proxyService->upload($jobId, $data, $scriptStartTime);
 
             if ($response['httpCode'] == 201) {
                 $offset += $limit;
@@ -80,12 +82,13 @@ class SynchronizationService
      * @param string $jobId
      * @param int $limit
      * @param string $langIso
+     * @param int $scriptStartTime
      *
      * @return array
      *
      * @throws PrestaShopDatabaseException|EnvVarException
      */
-    public function handleIncrementalSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $limit, $langIso)
+    public function handleIncrementalSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $limit, $langIso, $scriptStartTime)
     {
         $response = [];
 
@@ -95,7 +98,7 @@ class SynchronizationService
         $data = $incrementalData['data'];
 
         if (!empty($data)) {
-            $response = $this->proxyService->upload($jobId, $data);
+            $response = $this->proxyService->upload($jobId, $data, $scriptStartTime);
 
             if ($response['httpCode'] == 201 && !empty($objectIds)) {
                 $this->incrementalSyncRepository->removeIncrementalSyncObjects($type, $objectIds, $langIso);

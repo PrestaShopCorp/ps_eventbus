@@ -26,6 +26,7 @@ use GuzzleHttp\Post\PostFile;
 use Link;
 use PrestaShop\AccountsAuth\Api\Client\GenericClient;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 
 /**
@@ -59,17 +60,20 @@ class EventBusProxyClient extends GenericClient
 
     /**
      * @param string $jobId
-     * @param string $compressedData
+     * @param string $data
+     * @param int $scriptStartTime
      *
      * @return array
      *
      * @throws EnvVarException
      */
-    public function upload($jobId, $compressedData)
+    public function upload($jobId, $data, $scriptStartTime)
     {
         if (!isset($_ENV['EVENT_BUS_PROXY_API_URL'])) {
             throw new EnvVarException('EVENT_BUS_PROXY_API_URL is not defined');
         }
+
+        $timeout = Config::PROXY_TIMEOUT - (time() - $scriptStartTime);
 
         $route = $_ENV['EVENT_BUS_PROXY_API_URL'] . "/upload/$jobId";
 
@@ -77,8 +81,8 @@ class EventBusProxyClient extends GenericClient
 
         $file = new PostFile(
             'file',
-            $compressedData,
-            'file.gz'
+            $data,
+            'file'
         );
 
         $response = $this->post([
@@ -88,6 +92,7 @@ class EventBusProxyClient extends GenericClient
             'body' => [
                 'file' => $file,
             ],
+            'timeout' => $timeout,
         ]);
 
         if (is_array($response)) {

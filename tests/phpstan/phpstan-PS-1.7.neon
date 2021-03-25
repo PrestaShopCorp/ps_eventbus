@@ -4,7 +4,7 @@ parameters:
 	checkMissingIterableValueType: false
 	reportUnmatchedIgnoredErrors: false
 	paths:
-		- ../../classes
+		- ../../src
 		- ../../controllers
 		- ../../ps_eventbus.php
 	dynamicConstantNames:
@@ -30,5 +30,6 @@ parameters:
 		- '#Instantiated class PrestaShop\\ModuleLibServiceContainer\\DependencyInjection\\ServiceContainer not found.#'
 		- '#Call to method getService\(\) on an unknown class PrestaShop\\ModuleLibServiceContainer\\DependencyInjection\\ServiceContainer.#'
 		- '#Cannot access property \$id on Module\|false.#'
+		- '#Class Theme not found.#'
 
 	level: 7
