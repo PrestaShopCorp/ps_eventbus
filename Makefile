@@ -48,14 +48,14 @@ zip-prod: dist ./vendor
 	  ${MODULE}/Makefile
 	mv ../${PACKAGE}.zip ./dist
 
-# target: zip-prod                               - Bundle a production zip
+# target: zip-inte                               - Bundle a integration zip
 zip-inte: dist .env.inte ./vendor
 	cp .env.inte .env
-	cd .. && zip -r ${PACKAGE}_inte.zip ${MODULE} -x '*.git*' \
+	cd .. && zip -r ${PACKAGE}_integration.zip ${MODULE} -x '*.git*' \
 	  ${MODULE}/dist/\* \
 	  ${MODULE}/composer.phar \
 	  ${MODULE}/Makefile
-	mv ../${PACKAGE}_inte.zip ./dist
+	mv ../${PACKAGE}_integration.zip ./dist
 	rm -f .env
 
 # target: build                                  - Setup PHP & Node.js locally
