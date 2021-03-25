@@ -117,7 +117,7 @@ endif
 	  --entrypoint /vendor/phpunit/phpunit/phpunit \
 	  phpunit/phpunit:${PHPUNIT_VERSION} \
 	  --configuration ./phpunit.xml \
-	  --bootstrap ./tests/bootstrap.php
+	  --bootstrap ./tests/unit/bootstrap.php
 	@echo phpunit passed
 
 vendor/phpunit/phpunit:
