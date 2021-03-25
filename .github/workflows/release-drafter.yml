@@ -43,12 +43,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Gets latest created release info
-        id: latest_release_info
-        uses: jossef/action-latest-release-info@v1.1.0
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
       - name: Bump version and build
         run: |
           make 
@@ -59,25 +53,21 @@ jobs:
       - name: Bundle the production zip
         run: |
           make zip-prod
-          pwd
-          ls -al dist
 
       - name: Publish the production zip
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.latest_release_info.outputs.upload_url }}
+          upload_url: ${{ steps.release_info.outputs.upload_url }}
           asset_path: ./dist/${{ github.event.repository.name }}-${{ env.full_tag }}.zip
           asset_name: ${{ github.event.repository.name }}.zip
           asset_content_type: application/zip
 
       - name: Bundle the integration zip
         run: |
-          echo "$ENV_FILE" > ${{ github.event.repository.name }}/.env.inte
+          echo "$ENV_FILE" > .env.inte
           make zip-inte
-          pwd
-          ls -al dist
         env:
           ENV_FILE: ${{ secrets.PS_EVENTBUS_ENV_INTE }}
 
@@ -86,7 +76,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.latest_release_info.outputs.upload_url }}
+          upload_url: ${{ steps.release_info.outputs.upload_url }}
           asset_path: ./dist/${{ github.event.repository.name }}-${{ env.full_tag }}_integration.zip
           asset_name: ${{ github.event.repository.name }}_integration.zip
           asset_content_type: application/zip

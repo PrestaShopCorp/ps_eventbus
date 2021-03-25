@@ -1,13 +1,22 @@
 name-template: v$NEXT_PATCH_VERSION
 tag-template: v$NEXT_PATCH_VERSION
 categories:
-  - title: 🔨 Improvements
-    label: enhancement
+  - title: 🚀 New Features
+    label: feature
   - title: 🐛 Bug Fixes
     label: bug
-  - title: 🚀 New Features
-    label: Feature
-change-template: '- #$NUMBER: $TITLE by @$AUTHOR'
+change-template: "- #$NUMBER: $TITLE by @$AUTHOR"
+autolabeler:
+  - label: "bug"
+    branch:
+      - '/fix\/.+/'
+    title:
+      - "/fix/i"
+  - label: "feature"
+    branch:
+      - '/feature\/.+/'
+    title:
+      - "/feature/i"
 template: |
   # Changes
   $CHANGES
