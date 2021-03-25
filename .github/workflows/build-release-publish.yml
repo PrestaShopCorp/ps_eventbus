@@ -36,9 +36,7 @@ jobs:
           name: ${{ github.event.repository.name }}
 
       - name: Bundle the production zip
-        run: |
-          cd ${{ github.event.repository.name }}
-          make zip-prod
+        run: make zip-prod
 
       - name: Publish the production zip
         uses: actions/upload-release-asset@v1.0.1
@@ -62,7 +60,6 @@ jobs:
 
       - name: Bundle the integration zip
         run: |
-          cd ${{ github.event.repository.name }}
           echo "$ENV_FILE" > ${{ github.event.repository.name }}/.env.inte
           make zip-inte
         env:
