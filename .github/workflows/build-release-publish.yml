@@ -64,7 +64,7 @@ jobs:
       - name: Prepare the integration zip
         run: |
           cd ${{ github.event.repository.name }}
-          echo "$ENV_FILE" > ${{ github.event.repository.name }}/.env
+          echo "$ENV_FILE" > ${{ github.event.repository.name }}/.env.inte
           make zip-inte
         env:
           ENV_FILE: ${{ secrets.PS_EVENTBUS_ENV_INTE }}
