@@ -25,10 +25,33 @@ jobs:
           name: ${{ github.event.repository.name }}
           path: ../
 
+  clean-artifacts:
+    name: Clean previous artifacts
+      - name: Get release info
+        id: release_info
+        uses: toolmantim/release-drafter@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          version: "${{ steps.tagger.outputs.tag }}"
+          name: "${{ steps.tagger.outputs.tag }}"
+
+      - name: Clean existing assets
+        shell: bash
+        run: |
+          curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s 2.14.1
+          assets=`bin/hub api -t repos/${{ github.repository }}/releases/${{ steps.release_info.outputs.id }}/assets | awk '/\].url/ { print $2 }'`
+          for asset in $assets
+          do
+            bin/hub api -X DELETE $asset
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   upload_release_asset_production:
     name: Upload the production zip asset to the release
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, clean-artifacts]
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v1
@@ -37,7 +60,9 @@ jobs:
 
       - name: Bundle the production zip
         run: |
+          ls -al
           cd ${{ github.event.repository.name }}
+          ls -al
           make zip-prod
 
       - name: Publish the production zip
