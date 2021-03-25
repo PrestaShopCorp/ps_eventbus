@@ -23,7 +23,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: ${{ github.event.repository.name }}
-          path: ../
+          path: ./
 
   clean-artifacts:
     name: Clean previous artifacts
@@ -80,7 +80,7 @@ jobs:
   upload_release_asset_integration:
     name: Upload the integration zip asset to the release
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, clean-artifacts]
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v1
