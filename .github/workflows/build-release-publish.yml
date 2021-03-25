@@ -62,9 +62,7 @@ jobs:
 
       - name: Bundle the production zip
         run: |
-          ls -al
           cd ${{ github.event.repository.name }}
-          ls -al
           make zip-prod
 
       - name: Publish the production zip
@@ -90,7 +88,7 @@ jobs:
       - name: Bundle the integration zip
         run: |
           cd ${{ github.event.repository.name }}
-          echo "$ENV_FILE" > ${{ github.event.repository.name }}/.env.inte
+          echo "$ENV_FILE" > .env.inte
           make zip-inte
         env:
           ENV_FILE: ${{ secrets.PS_EVENTBUS_ENV_INTE }}
