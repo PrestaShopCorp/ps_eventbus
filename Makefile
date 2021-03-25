@@ -3,9 +3,9 @@ PHP = $(shell which php 2> /dev/null)
 DOCKER = $(shell docker ps 2> /dev/null)
 NPM = $(shell which npm 2> /dev/null)
 YARN = $(shell which yarn 2> /dev/null)
-VERSION := $(shell git describe --tags)
+VERSION ?= $(shell git describe --tags)
 
-SEM_VERSION ?= $(shell git describe --tags | sed 's/^v//')
+SEM_VERSION ?= $(shell echo ${VERSION} | sed 's/^v//')
 MODULE ?= $(shell basename ${PWD})
 PACKAGE ?= "${MODULE}-${VERSION}"
 PHPSTAN_VERSION ?= 0.12
