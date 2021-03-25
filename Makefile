@@ -49,7 +49,7 @@ zip-prod: dist ./vendor
 	mv ../${PACKAGE}.zip ./dist
 
 # target: zip-inte                               - Bundle a integration zip
-zip-inte: dist .env.inte ./vendor
+zip-inte: dist ./vendor
 	cp .env.inte .env
 	cd .. && zip -r ${PACKAGE}_integration.zip ${MODULE} -x '*.git*' \
 	  ${MODULE}/dist/\* \
