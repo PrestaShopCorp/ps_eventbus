@@ -52,7 +52,10 @@ jobs:
           VERSION: ${{ steps.tagger.outputs.tag }}
 
       - name: Bundle the production zip
-        run: make zip-prod
+        run: |
+          make zip-prod
+          pwd
+          ls -al dist
 
       - name: Publish the production zip
         uses: actions/upload-release-asset@v1.0.1
@@ -60,7 +63,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.latest_release_info.outputs.upload_url }}
-          asset_path: ./${{ github.event.repository.name }}/dist/${{ github.event.repository.name }}-${{ steps.tagger.outputs.tag }}.zip
+          asset_path: ./dist/${{ github.event.repository.name }}-${{ steps.tagger.outputs.tag }}.zip
           asset_name: ${{ github.event.repository.name }}.zip
           asset_content_type: application/zip
 
@@ -68,6 +71,8 @@ jobs:
         run: |
           echo "$ENV_FILE" > ${{ github.event.repository.name }}/.env.inte
           make zip-inte
+          pwd
+          ls -al dist
         env:
           ENV_FILE: ${{ secrets.PS_EVENTBUS_ENV_INTE }}
 
@@ -77,6 +82,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.latest_release_info.outputs.upload_url }}
-          asset_path: ./${{ github.event.repository.name }}/dist/${{ github.event.repository.name }}-${{ steps.tagger.outputs.tag }}_integration.zip
+          asset_path: ./dist/${{ github.event.repository.name }}-${{ steps.tagger.outputs.tag }}_integration.zip
           asset_name: ${{ github.event.repository.name }}_integration.zip
           asset_content_type: application/zip
