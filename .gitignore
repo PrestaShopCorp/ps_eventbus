@@ -1,4 +1,5 @@
 dist/
+*.bak
 
 ### VUEJS BUILD ARTEFACT ###
 app.js

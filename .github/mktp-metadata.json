@@ -1,7 +1,7 @@
 {
-  "id_product": "49648",
+  "id_product": "50756",
   "technical_name": "ps_eventbus",
-  "display_name": "PrestaShop Account",
+  "display_name": "PrestaShop EventBus",
   "channel": "stable",
   "type_upgrade": "updatemin",
   "product_type": "module",

@@ -24,25 +24,23 @@ help:
 clean:
 	git -c core.excludesfile=/dev/null clean -X -d -f
 
-# target: bundle                                 - Bundle local sources into a ZIP file
-bundle: bundle-prod
-
-# target: zip                                    - Alias of target: bundle
-zip: bundle
+# target: version                                - Replace version in files
+version:
+	echo "...$(VERSION)..."
+	sed -i.bak -e "s/\(VERSION = \).*/\1\'${SEM_VERSION}\';/" ps_eventbus.php
+	sed -i.bak -e "s/\($this->version = \).*/\1\'${SEM_VERSION}\';/" ps_eventbus.php
+	sed -i.bak -e "s|\(<version><!\[CDATA\[\)[0-9a-z.-]\{1,\}]]></version>|\1${SEM_VERSION}]]></version>|" config.xml
+	rm -f ps_eventbus.php.bak config.xml.bak
 
 # target: dist                                   - A directory to save zip bundles
 dist:
 	mkdir -p ./dist
 
-# target: version                                - Replace version in files
-version:
-	echo "...$(VERSION)..."
-	sed -i -e "s/\(VERSION = \).*/\1\'${SEM_VERSION}\';/" ps_eventbus.php
-	sed -i -e "s/\($this->version = \).*/\1\'${SEM_VERSION}\';/" ps_eventbus.php
-	sed -i -e "s|\(<version><!\[CDATA\[\)[0-9a-z.-]\{1,\}]]></version>|\1${SEM_VERSION}]]></version>|" config.xml
+# target: zip                                    - Make zip bundles
+zip: zip-prod zip-inte
 
-# target: bundle-prod                            - Bundle a production zip
-bundle-prod: dist ./vendor
+# target: zip-prod                               - Bundle a production zip
+zip-prod: dist ./vendor
 	rm -f .env
 	cd .. && zip -r ${PACKAGE}.zip ${MODULE} -x '*.git*' \
 	  ${MODULE}/dist/\* \
@@ -50,8 +48,8 @@ bundle-prod: dist ./vendor
 	  ${MODULE}/Makefile
 	mv ../${PACKAGE}.zip ./dist
 
-# target: bundle-prod                            - Bundle an integration zip
-bundle-inte: dist .env.inte ./vendor
+# target: zip-prod                               - Bundle a production zip
+zip-inte: dist .env.inte ./vendor
 	cp .env.inte .env
 	cd .. && zip -r ${PACKAGE}_inte.zip ${MODULE} -x '*.git*' \
 	  ${MODULE}/dist/\* \
@@ -61,10 +59,9 @@ bundle-inte: dist .env.inte ./vendor
 	rm -f .env
 
 # target: build                                  - Setup PHP & Node.js locally
-build: build-back
+build: ./vendor
 
-# target: build-back                             - Build production dependencies
-build-back: composer.phar
+./vendor: composer.phar
 	./composer.phar install --no-dev -o
 
 composer.phar:
@@ -76,14 +73,11 @@ endif
 	php composer-setup.php
 	php -r "unlink('composer-setup.php');"
 
-# target: tests                                  - Launch the tests/lints backend
-tests: test-back lint-back
-
-# target: test-back                              - Launch the tests back
-test-back: lint-back phpstan phpunit
+# target: tests                                  - Launch the tests and linting
+tests: phpstan phpunit lint
 
 # target: lint-back                              - Launch the back linting
-lint-back:
+lint:
 	vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no --diff-format udiff
 
 # target: phpstan                                - Start phpstan
@@ -102,7 +96,7 @@ endif
 	  --configuration=/web/module/tests/phpstan/${NEON_FILE}
 
 # target: phpunit                                - Start phpunit
-phpunit: vendor/phpunit/phpunit
+phpunit:
 ifndef DOCKER
 	$(error "DOCKER is unavailable on your system")
 endif
@@ -117,11 +111,8 @@ endif
 	  --entrypoint /vendor/phpunit/phpunit/phpunit \
 	  phpunit/phpunit:${PHPUNIT_VERSION} \
 	  --configuration ./phpunit.xml \
-	  --bootstrap ./tests/bootstrap.php
+	  --bootstrap ./tests/unit/bootstrap.php
 	@echo phpunit passed
-
-vendor/phpunit/phpunit:
-	./composer.phar install
 
 # target: fix-lint                               - Launch php cs fixer and npm run lint
 fix-lint: vendor/bin/php-cs-fixer
