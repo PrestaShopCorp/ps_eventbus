@@ -18,7 +18,11 @@ jobs:
         uses: PrestaShopCorp/github-action-clean-before-deploy@v1.0
 
       - name: Bump version
-        run: make version
+        run: |
+          ls
+          cd ${{ github.event.repository.name }}
+          ls
+          make version
         env:
           VERSION: ${{ github.event.release.tag_name }}
 
