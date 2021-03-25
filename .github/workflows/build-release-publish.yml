@@ -35,10 +35,9 @@ jobs:
         with:
           name: ${{ github.event.repository.name }}
 
-      - name: Prepare the production zip
+      - name: Bundle the production zip
         run: |
           cd ${{ github.event.repository.name }}
-          export VERSION=$(echo "${{ github.event.release.tag_name }}" | sed 's/^v//')
           make zip-prod
 
       - name: Publish the production zip
@@ -61,7 +60,7 @@ jobs:
         with:
           name: ${{ github.event.repository.name }}
 
-      - name: Prepare the integration zip
+      - name: Bundle the integration zip
         run: |
           cd ${{ github.event.repository.name }}
           echo "$ENV_FILE" > ${{ github.event.repository.name }}/.env.inte
