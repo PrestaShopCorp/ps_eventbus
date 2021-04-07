@@ -24,11 +24,10 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-use Symfony\Component\Dotenv\Dotenv;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
+
 require_once __DIR__ . '/vendor/autoload.php';
 
 class Ps_eventbus extends Module
@@ -158,7 +157,7 @@ class Ps_eventbus extends Module
      */
     private function loadEnv()
     {
-        $dotEnv = new Dotenv();
+        $dotEnv = new Symfony\Component\Dotenv\Dotenv();
 
         $dotEnv->load(_PS_MODULE_DIR_ . 'ps_eventbus/.env.dist');
 
