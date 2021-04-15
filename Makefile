@@ -41,7 +41,7 @@ zip: zip-prod zip-inte
 
 # target: zip-prod                               - Bundle a production zip
 zip-prod: dist ./vendor
-	rm -f .env
+	cp .env.dist .env
 	cd .. && zip -r ${PACKAGE}.zip ${MODULE} -x '*.git*' \
 	  ${MODULE}/dist/\* \
 	  ${MODULE}/composer.phar \
