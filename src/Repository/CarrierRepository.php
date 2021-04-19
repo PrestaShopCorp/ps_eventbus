@@ -44,9 +44,9 @@ class CarrierRepository
         $rangeTable = $carrierObj->getRangeTable();
         switch ($rangeTable) {
             case 'range_weight':
-                return self::getCarrierByWeightRange($carrierObj, $rangeTable);
+                return self::getCarrierByWeightRange($carrierObj, 'range_weight');
             case 'range_price':
-                return self::getCarrierByPriceRange($carrierObj, $rangeTable);
+                return self::getCarrierByPriceRange($carrierObj, 'range_price');
             default:
                 return false;
         }
