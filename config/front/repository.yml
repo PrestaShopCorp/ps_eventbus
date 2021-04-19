@@ -100,6 +100,12 @@ services:
       - '@ps_eventbus.context'
       - '@ps_eventbus.db'
 
+  PrestaShop\Module\PsEventbus\Repository\TaxRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\TaxRepository
+    arguments:
+      - '@ps_eventbus.db'
+
+
   PrestaShop\Module\PsEventbus\Repository\CountryRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CountryRepository
     arguments:
