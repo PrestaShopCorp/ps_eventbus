@@ -41,11 +41,12 @@ class CarrierRepository
      */
     private function getDeliveryPriceByRange(Carrier $carrierObj)
     {
-        switch ($carrierObj->getRangeTable()) {
+        $rangeTable = $carrierObj->getRangeTable();
+        switch ($rangeTable) {
             case 'range_weight':
-                return self::getCarrierByWeightRange($carrierObj);
+                return self::getCarrierByWeightRange($carrierObj, $rangeTable);
             case 'range_price':
-                return self::getCarrierByPriceRange($carrierObj);
+                return self::getCarrierByPriceRange($carrierObj, $rangeTable);
             default:
                 return false;
         }
@@ -53,13 +54,15 @@ class CarrierRepository
 
     /**
      * @param Carrier $carrierObj
+     * @param string $rangeTable
      *
      * @return array
      */
     private function getCarrierByPriceRange(
-        Carrier $carrierObj
+        Carrier $carrierObj,
+        $rangeTable
     ) {
-        $deliveryPriceByRange = Carrier::getDeliveryPriceByRanges($carrierObj->getRangeTable(), (int)$carrierObj->id);
+        $deliveryPriceByRange = Carrier::getDeliveryPriceByRanges($rangeTable, (int)$carrierObj->id);
 
         $filteredRanges = [];
         foreach ($deliveryPriceByRange as $range) {
@@ -72,10 +75,17 @@ class CarrierRepository
         return $filteredRanges;
     }
 
+    /**
+     * @param Carrier $carrierObj
+     * @param string $rangeTable
+     *
+     * @return array
+     */
     private function getCarrierByWeightRange(
-        Carrier $carrierObj
+        Carrier $carrierObj,
+        $rangeTable
     ) {
-        $deliveryPriceByRange = Carrier::getDeliveryPriceByRanges($carrierObj->getRangeTable(), (int)$carrierObj->id);
+        $deliveryPriceByRange = Carrier::getDeliveryPriceByRanges($rangeTable, (int)$carrierObj->id);
 
         $filteredRanges = [];
         foreach ($deliveryPriceByRange as $range) {
