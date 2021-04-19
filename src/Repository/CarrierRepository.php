@@ -4,7 +4,6 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 
 use Carrier;
 use Db;
-use DbQuery;
 
 class CarrierRepository
 {
@@ -18,6 +17,11 @@ class CarrierRepository
         $this->db = $db;
     }
 
+    /**
+     * @param int $langId
+     *
+     * @return array
+     */
     public function getCarriers($langId)
     {
         $carriers = Carrier::getCarriers($langId);
@@ -30,6 +34,11 @@ class CarrierRepository
         return $carriers;
     }
 
+    /**
+     * @param Carrier $carrierObj
+     *
+     * @return array|false
+     */
     private function getDeliveryPriceByRange(Carrier $carrierObj)
     {
         switch ($carrierObj->getRangeTable()) {
@@ -42,6 +51,11 @@ class CarrierRepository
         }
     }
 
+    /**
+     * @param Carrier $carrierObj
+     *
+     * @return array
+     */
     private function getCarrierByPriceRange(
         Carrier $carrierObj
     ) {
