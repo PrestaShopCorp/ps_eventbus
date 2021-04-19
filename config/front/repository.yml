@@ -99,3 +99,8 @@ services:
     arguments:
       - '@ps_eventbus.context'
       - '@ps_eventbus.db'
+
+  PrestaShop\Module\PsEventbus\Repository\CarrierRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CarrierRepository
+    arguments:
+      - '@ps_eventbus.db'
