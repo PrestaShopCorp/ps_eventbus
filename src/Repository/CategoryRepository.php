@@ -2,14 +2,12 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Category;
 use Context;
 use Db;
 use DbQuery;
 use mysqli_result;
 use PDOStatement;
 use PrestaShopDatabaseException;
-use Shop;
 
 class CategoryRepository
 {

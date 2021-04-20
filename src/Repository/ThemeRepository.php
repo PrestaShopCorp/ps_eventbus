@@ -49,9 +49,11 @@ class ThemeRepository
                 ];
             }, array_keys($themes), $themes);
         } else {
+            /* @phpstan-ignore-next-line */
             $themes = Theme::getAvailable(false);
 
             return array_map(function ($theme) {
+                /* @phpstan-ignore-next-line */
                 $themeObj = Theme::getByDirectory($theme);
 
                 $themeData = [
@@ -60,7 +62,9 @@ class ThemeRepository
                     'properties' => [],
                 ];
 
+                /* @phpstan-ignore-next-line */
                 if ($themeObj instanceof Theme) {
+                    /* @phpstan-ignore-next-line */
                     $themeInfo = Theme::getThemeInfo($themeObj->id);
 
                     $themeData['properties'] = [
