@@ -106,7 +106,7 @@ endif
 	docker run --rm --volumes-from test-phpunit \
 	  -v ${PWD}:/app:ro \
 	  -v ${PWD}/vendor:/vendor:ro \
-	  -e _PS_ROOT_DIR_=/var/www/html \
+	  -e _PS_ROOT_DIR_=/var/www/html/ \
 	  --workdir /app \
 	  --entrypoint /vendor/phpunit/phpunit/phpunit \
 	  phpunit/phpunit:${PHPUNIT_VERSION} \
