@@ -6,7 +6,7 @@ use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository;
 use PrestaShop\Module\PsEventbus\Repository\TaxRepository;
 
-class ps_EventbusApiTaxModuleFrontController extends AbstractApiController
+class ps_EventbusApiTaxesModuleFrontController extends AbstractApiController
 {
     public $type = 'shops';
 
