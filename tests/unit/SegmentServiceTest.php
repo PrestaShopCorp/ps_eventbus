@@ -4,7 +4,6 @@ use GuzzleHttp\Exception\ClientException;
 use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\PsEventbus\Api\EventBusProxyClient;
 use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
-use PrestaShop\Module\PsEventbus\Service\CompressionService;
 use PrestaShop\Module\PsEventbus\Service\ProxyService;
 
 class ProxyServiceTest extends TestCase
@@ -47,18 +46,20 @@ class ProxyServiceTest extends TestCase
             'body' => 'success',
         ]);
 
-        $this->assertTrue(is_array($this->segmentService->upload($syncId, $data)));
-        $this->assertArrayHasKey('httpCode', $this->segmentService->upload($syncId, $data));
-        $this->assertEquals(201, $this->segmentService->upload($syncId, $data)['httpCode']);
+        $startDate = time();
+        $this->assertTrue(is_array($this->segmentService->upload($syncId, $data, $startDate)));
+        $this->assertArrayHasKey('httpCode', $this->segmentService->upload($syncId, $data, $startDate));
+        $this->assertEquals(201, $this->segmentService->upload($syncId, $data, $startDate)['httpCode']);
     }
 
     public function testInvalidUpload()
     {
         $data = ['important_server_data' => ':)'];
         $syncId = '12345';
+        $startDate = time();
 
         $clientException = $this->createMock(ClientException::class);
         $this->eventBusProxyClient->method('upload')->willThrowException($clientException);
-        $this->assertArrayHasKey('error', $this->segmentService->upload($syncId, $data));
+        $this->assertArrayHasKey('error', $this->segmentService->upload($syncId, $data, $startDate));
     }
 }

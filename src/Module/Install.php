@@ -133,7 +133,8 @@ class Install
             foreach ($sql as $query) {
                 try {
                     $this->db->execute($query);
-                } catch (\Exception $exception) {}
+                } catch (\Exception $exception) {
+                }
             }
         }
     }

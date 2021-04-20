@@ -44,6 +44,7 @@ class ProductDecoratorTest extends TestCase
                 'features' => 'Savybė:Trumpos rankovės;Sudėtis:Medvilnė',
                 'images' => '1:1;2:0',
                 'attribute_images' => '1;2;3',
+                'is_default_attribute' => '1',
             ],
             [
                 'id_product' => '2',
@@ -72,6 +73,7 @@ class ProductDecoratorTest extends TestCase
                 'features' => 'Savybė:Trumpos rankovės;Sudėtis:Medvilnė',
                 'images' => '1:1;2:0',
                 'attribute_images' => '1',
+                'is_default_attribute' => '1',
             ],
             [
                 'id_product' => '2',
@@ -100,6 +102,7 @@ class ProductDecoratorTest extends TestCase
                 'features' => 'Savybė:Trumpos rankovės;Sudėtis:Medvilnė',
                 'images' => '1:1;2:0',
                 'attribute_images' => '1',
+                'is_default_attribute' => '1',
             ],
         ];
 
