@@ -90,7 +90,7 @@ class OrderRepository
         $this->addSelectParameters($query);
 
         $query->innerJoin(
-            'accounts_incremental_sync',
+            IncrementalSyncRepository::INCREMENTAL_SYNC_TABLE,
             'aic',
             'aic.id_object = o.id_order AND aic.id_shop = o.id_shop AND aic.type = "orders"'
         )

@@ -85,7 +85,7 @@ class CartRepository
 
         $this->addSelectParameters($query);
         $query->innerJoin(
-            'accounts_incremental_sync',
+            IncrementalSyncRepository::INCREMENTAL_SYNC_TABLE,
             'aic',
             'aic.id_object = c.id_cart AND aic.id_shop = c.id_shop AND aic.type = "carts"'
         )

@@ -306,7 +306,10 @@ class ProductRepository
 
         $this->addSelectParameters($query);
 
-        $query->innerJoin('accounts_incremental_sync', 'aic', 'aic.id_object = p.id_product AND aic.id_shop = ps.id_shop AND aic.type = "products" and aic.lang_iso = "' . pSQL($langIso) . '"')
+        $query->innerJoin(IncrementalSyncRepository::INCREMENTAL_SYNC_TABLE,
+            'aic',
+            'aic.id_object = p.id_product AND aic.id_shop = ps.id_shop AND aic.type = "products" and aic.lang_iso = "' . pSQL($langIso) . '"'
+        )
             ->limit($limit);
 
         $result = $this->db->executeS($query);
