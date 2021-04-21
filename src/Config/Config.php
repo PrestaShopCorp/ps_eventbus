@@ -11,6 +11,7 @@ class Config
     const DATABASE_INSERT_ERROR_CODE = 455;
     const PS_FACEBOOK_NOT_INSTALLED = 456;
     const INVALID_URL_QUERY = 458;
+    const INVALID_PS_ACCOUNTS_VERSION = 459;
 
     const HTTP_STATUS_MESSAGES = [
         self::REFRESH_TOKEN_ERROR_CODE => 'Cannot refresh token',

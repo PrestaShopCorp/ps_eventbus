@@ -55,7 +55,7 @@ abstract class AbstractApiController extends ModuleFrontController
      */
     private $languageRepository;
     /**
-     * @var PsAcc
+     * @var PsAccountsService
      */
     private $psAccountsService;
     /**
@@ -80,18 +80,19 @@ abstract class AbstractApiController extends ModuleFrontController
         parent::__construct();
 
         $this->controller_type = 'module';
+
         try {
             $this->psAccountsService = $this->module->getService(PsAccounts::class)->getPsAccountsService();
             $this->proxyService = $this->module->getService(ProxyService::class);
             $this->authorizationService = $this->module->getService(ApiAuthorizationService::class);
+            $this->synchronizationService = $this->module->getService(SynchronizationService::class);
         } catch (ModuleVersionException $exception) {
-            $this->psAccountsInstalled = false;
+            $this->exitWithExceptionMessage($exception);
         }
 
         $this->eventbusSyncRepository = $this->module->getService(EventbusSyncRepository::class);
         $this->languageRepository = $this->module->getService(LanguageRepository::class);
         $this->incrementalSyncRepository = $this->module->getService(IncrementalSyncRepository::class);
-        $this->synchronizationService = $this->module->getService(SynchronizationService::class);
     }
 
     /**
@@ -100,10 +101,6 @@ abstract class AbstractApiController extends ModuleFrontController
     public function init()
     {
         $this->startTime = time();
-
-        if (!$this->psAccountsInstalled) {
-
-        }
 
         try {
             $this->authorize();
@@ -273,6 +270,8 @@ abstract class AbstractApiController extends ModuleFrontController
             $code = Config::REFRESH_TOKEN_ERROR_CODE;
         } elseif ($exception instanceof QueryParamsException) {
             $code = Config::INVALID_URL_QUERY;
+        } elseif ($exception instanceof ModuleVersionException) {
+            $code = Config::INVALID_PS_ACCOUNTS_VERSION;
         }
 
         $response = [

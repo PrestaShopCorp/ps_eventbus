@@ -47,6 +47,7 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
+      - '@PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
 
   PrestaShop\Module\PsEventbus\Repository\ThemeRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ThemeRepository

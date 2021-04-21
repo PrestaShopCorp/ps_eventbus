@@ -9,6 +9,8 @@ use Exception;
 use Language;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
+use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleVersionException;
+use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use PrestaShopDatabaseException;
 use Ps_eventbus;
 
@@ -42,6 +44,10 @@ class ServerInformationRepository
      * @var ShopRepository
      */
     private $shopRepository;
+    /**
+     * @var PsAccountsService
+     */
+    private $psAccountsService;
 
     public function __construct(
         Context $context,
@@ -50,7 +56,8 @@ class ServerInformationRepository
         LanguageRepository $languageRepository,
         ConfigurationRepository $configurationRepository,
         ShopRepository $shopRepository,
-        ArrayFormatter $arrayFormatter
+        ArrayFormatter $arrayFormatter,
+        PsAccounts $psAccounts
     ) {
         $this->currencyRepository = $currencyRepository;
         $this->languageRepository = $languageRepository;
@@ -59,6 +66,7 @@ class ServerInformationRepository
         $this->context = $context;
         $this->db = $db;
         $this->arrayFormatter = $arrayFormatter;
+        $this->psAccountsService = $psAccounts->getPsAccountsService();
     }
 
     /**
@@ -106,15 +114,15 @@ class ServerInformationRepository
         $allTablesInstalled = true;
         $phpVersion = '';
 
-        $psAccountsService = new PsAccountsService();
-
         try {
-            $token = $psAccountsService->getOrRefreshToken();
+            $token = $this->psAccountsService->getOrRefreshToken();
 
             if (!$token) {
                 $tokenValid = false;
             }
         } catch (Exception $e) {
+            $tokenValid = false;
+        } catch (ModuleVersionException $e) {
             $tokenValid = false;
         }
 
