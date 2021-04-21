@@ -69,8 +69,7 @@ class OrderRepository
 
         $query->select('(COUNT(o.id_order) - ' . (int) $offset . ') as count')
             ->from(self::ORDERS_TABLE, 'o')
-            ->where('o.id_shop = ' . (int) $shopId)
-            ->groupBy('o.id_order');
+            ->where('o.id_shop = ' . (int) $shopId);
 
         return (int) $this->db->getValue($query);
     }
@@ -101,6 +100,11 @@ class OrderRepository
         return is_array($result) ? $result : [];
     }
 
+    /**
+     * @param DbQuery $query
+     *
+     * @return void
+     */
     private function addSelectParameters(DbQuery $query)
     {
         $query->select('o.id_order, o.reference, o.id_customer, o.id_cart, o.current_state,
