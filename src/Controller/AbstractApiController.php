@@ -17,6 +17,8 @@ use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService;
 use PrestaShop\Module\PsEventbus\Service\ProxyService;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
+use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleVersionException;
+use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use PrestaShopDatabaseException;
 use PrestaShopException;
 use Ps_eventbus;
@@ -53,7 +55,7 @@ abstract class AbstractApiController extends ModuleFrontController
      */
     private $languageRepository;
     /**
-     * @var PsAccountsService
+     * @var PsAcc
      */
     private $psAccountsService;
     /**
@@ -68,17 +70,26 @@ abstract class AbstractApiController extends ModuleFrontController
      * @var Ps_eventbus
      */
     public $module;
+    /**
+     * @var bool
+     */
+    public $psAccountsInstalled = true;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->controller_type = 'module';
-        $this->proxyService = $this->module->getService(ProxyService::class);
-        $this->authorizationService = $this->module->getService(ApiAuthorizationService::class);
+        try {
+            $this->psAccountsService = $this->module->getService(PsAccounts::class)->getPsAccountsService();
+            $this->proxyService = $this->module->getService(ProxyService::class);
+            $this->authorizationService = $this->module->getService(ApiAuthorizationService::class);
+        } catch (ModuleVersionException $exception) {
+            $this->psAccountsInstalled = false;
+        }
+
         $this->eventbusSyncRepository = $this->module->getService(EventbusSyncRepository::class);
         $this->languageRepository = $this->module->getService(LanguageRepository::class);
-        $this->psAccountsService = new PsAccountsService();
         $this->incrementalSyncRepository = $this->module->getService(IncrementalSyncRepository::class);
         $this->synchronizationService = $this->module->getService(SynchronizationService::class);
     }
@@ -89,6 +100,10 @@ abstract class AbstractApiController extends ModuleFrontController
     public function init()
     {
         $this->startTime = time();
+
+        if (!$this->psAccountsInstalled) {
+
+        }
 
         try {
             $this->authorize();
