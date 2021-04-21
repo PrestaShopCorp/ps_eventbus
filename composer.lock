@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a6d37f3c9354634a6b2d634007b3fb1b",
+    "content-hash": "0fb0369900d38ab1e0a75825e905dc8d",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -603,6 +603,42 @@
             ],
             "description": "PrestaShop Accounts composer library",
             "time": "2020-12-03T13:43:03+00:00"
+        },
+        {
+            "name": "prestashop/prestashop-accounts-installer",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PrestaShopCorp/prestashop-accounts-installer.git",
+                "reference": "6381bcbf53a792b5634bfa4470f3bf9958521df8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PrestaShopCorp/prestashop-accounts-installer/zipball/6381bcbf53a792b5634bfa4470f3bf9958521df8",
+                "reference": "6381bcbf53a792b5634bfa4470f3bf9958521df8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.16",
+                "fzaninotto/faker": "^1.9",
+                "phpunit/phpunit": "^5.7",
+                "prestashop/php-dev-tools": "3.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PrestaShop\\PsAccountsInstaller\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Utility package to install `ps_accounts` module or present data to trigger manual install from psx configuration page.",
+            "time": "2021-03-10T17:42:09+00:00"
         },
         {
             "name": "psr/cache",
@@ -4045,12 +4081,12 @@
             "version": "1.9.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/webmozarts/assert.git",
+                "url": "https://github.com/webmozart/assert.git",
                 "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozarts/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389",
+                "url": "https://api.github.com/repos/webmozart/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389",
                 "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389",
                 "shasum": ""
             },
@@ -4092,7 +4128,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "prestashop/prestashop-accounts-installer": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

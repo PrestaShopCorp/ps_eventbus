@@ -24,38 +24,32 @@ namespace PrestaShop\Module\PsEventbus\Api;
 use GuzzleHttp\Client;
 use GuzzleHttp\Post\PostFile;
 use Link;
-use PrestaShop\AccountsAuth\Api\Client\GenericClient;
-use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
+use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 
 /**
  * Construct the client used to make call to Segment API
  */
 class EventBusProxyClient extends GenericClient
 {
-    public function __construct(Link $link, Client $client = null)
+    public function __construct(Link $link, PsAccounts $psAccountsService)
     {
-        parent::__construct();
-
         $this->setLink($link);
-        $psAccountsService = new PsAccountsService();
-        $token = $psAccountsService->getOrRefreshToken();
+        $token = $psAccountsService->getPsAccountsService()->getOrRefreshToken();
 
-        if (null === $client) {
-            $client = new Client([
-                'base_url' => $_ENV['EVENT_BUS_PROXY_API_URL'],
-                'defaults' => [
-                    'timeout' => 60,
-                    'exceptions' => $this->catchExceptions,
-                    'headers' => [
-                        'Authorization' => "Bearer $token",
-                    ],
+        $client = new Client([
+            'base_url' => $_ENV['EVENT_BUS_PROXY_API_URL'],
+            'defaults' => [
+                'timeout' => 60,
+                'exceptions' => $this->catchExceptions,
+                'headers' => [
+                    'Authorization' => "Bearer $token",
                 ],
-            ]);
-        }
+            ],
+        ]);
 
-        $this->setClient($client);
+        parent::__construct($client);
     }
 
     /**
@@ -110,7 +104,7 @@ class EventBusProxyClient extends GenericClient
      *
      * @throws EnvVarException
      */
-    public function delete($jobId, $compressedData)
+    public function uploadDelete($jobId, $compressedData)
     {
         if (!isset($_ENV['EVENT_BUS_PROXY_API_URL'])) {
             throw new EnvVarException('EVENT_BUS_PROXY_API_URL is not defined');

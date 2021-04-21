@@ -3,9 +3,11 @@ services:
     class: PrestaShop\Module\PsEventbus\Api\EventBusSyncClient
     arguments:
       - '@ps_eventbus.link'
+      - '@PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
 
   PrestaShop\Module\PsEventbus\Api\EventBusProxyClient:
     class: PrestaShop\Module\PsEventbus\Api\EventBusProxyClient
     arguments:
       - '@ps_eventbus.link'
+      - '@PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
 
