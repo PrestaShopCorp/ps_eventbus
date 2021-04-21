@@ -39,3 +39,6 @@ views/files/*
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Configuration for dependencies
+config/parameters.yml

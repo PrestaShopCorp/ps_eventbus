@@ -1,0 +1,10 @@
+parameters:
+  # In case you need to override with environment variables, you can follow this example :
+  # env(PS_ACCOUNTS_SENTRY_CREDENTIALS): 'https://4c7f6c8dd5aa405b8401a35f5cf26ada@o298402.ingest.sentry.io/5354585'
+  # sentry.credentials: '%env(string:PS_ACCOUNTS_SENTRY_CREDENTIALS)%'
+  #
+  # In order to manage multiple config files you can use PS_ACCOUNTS_ENV=[myenv] environment variable
+  # to load a specific services_[myenv].yml
+
+  ps_eventbus.proxy_api_url: 'https://eventbus-proxy.psessentials.net'
+  ps_eventbus.sync_api_url: 'https://eventbus-sync.psessentials.net'

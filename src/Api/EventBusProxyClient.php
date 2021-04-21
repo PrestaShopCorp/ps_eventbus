@@ -33,13 +33,16 @@ use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
  */
 class EventBusProxyClient extends GenericClient
 {
-    public function __construct(Link $link, PsAccounts $psAccountsService)
+    private $baseUrl;
+
+    public function __construct(Link $link, PsAccounts $psAccountsService, $baseUrl)
     {
+        $this->baseUrl = $baseUrl;
         $this->setLink($link);
         $token = $psAccountsService->getPsAccountsService()->getOrRefreshToken();
 
         $client = new Client([
-            'base_url' => $_ENV['EVENT_BUS_PROXY_API_URL'],
+            'base_url' => $this->baseUrl,
             'defaults' => [
                 'timeout' => 60,
                 'exceptions' => $this->catchExceptions,
@@ -58,18 +61,12 @@ class EventBusProxyClient extends GenericClient
      * @param int $scriptStartTime
      *
      * @return array
-     *
-     * @throws EnvVarException
      */
     public function upload($jobId, $data, $scriptStartTime)
     {
-        if (!isset($_ENV['EVENT_BUS_PROXY_API_URL'])) {
-            throw new EnvVarException('EVENT_BUS_PROXY_API_URL is not defined');
-        }
-
         $timeout = Config::PROXY_TIMEOUT - (time() - $scriptStartTime);
 
-        $route = $_ENV['EVENT_BUS_PROXY_API_URL'] . "/upload/$jobId";
+        $route = $this->baseUrl . "/upload/$jobId";
 
         $this->setRoute($route);
 
@@ -101,16 +98,10 @@ class EventBusProxyClient extends GenericClient
      * @param string $compressedData
      *
      * @return array
-     *
-     * @throws EnvVarException
      */
     public function uploadDelete($jobId, $compressedData)
     {
-        if (!isset($_ENV['EVENT_BUS_PROXY_API_URL'])) {
-            throw new EnvVarException('EVENT_BUS_PROXY_API_URL is not defined');
-        }
-
-        $route = $_ENV['EVENT_BUS_PROXY_API_URL'] . "/delete/$jobId";
+        $route = $this->baseUrl . "/delete/$jobId";
 
         $this->setRoute($route);
 

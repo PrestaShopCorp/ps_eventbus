@@ -1,3 +1,6 @@
+imports:
+  - { resource: ../parameters.yml }
+
 services:
   ps_eventbus.db:
     class: Db

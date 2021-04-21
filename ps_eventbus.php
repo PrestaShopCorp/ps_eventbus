@@ -122,21 +122,6 @@ class Ps_eventbus extends Module
             $this->name,
             $this->getLocalPath()
         );
-        $this->loadEnv();
-    }
-
-    /**
-     * @return void
-     */
-    private function loadEnv()
-    {
-        $dotEnv = new Symfony\Component\Dotenv\Dotenv();
-
-        $dotEnv->load(_PS_MODULE_DIR_ . 'ps_eventbus/.env.dist');
-
-        if (file_exists(_PS_MODULE_DIR_ . 'ps_eventbus/.env')) {
-            $dotEnv->load(_PS_MODULE_DIR_ . 'ps_eventbus/.env');
-        }
     }
 
     /**

@@ -9,13 +9,19 @@ use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 
 class EventBusSyncClient extends GenericClient
 {
-    public function __construct(Link $link, PsAccounts $psAccountsService)
+    /**
+     * @var string
+     */
+    private $baseUrl;
+
+    public function __construct(Link $link, PsAccounts $psAccountsService, $baseUrl)
     {
+        $this->baseUrl = $baseUrl;
         $this->setLink($link);
         $token = $psAccountsService->getPsAccountsService()->getOrRefreshToken();
 
         $client = new Client([
-            'base_url' => $_ENV['EVENT_BUS_SYNC_API_URL'],
+            'base_url' => $this->baseUrl,
             'defaults' => [
                 'timeout' => $this->timeout,
                 'exceptions' => $this->catchExceptions,
@@ -38,11 +44,7 @@ class EventBusSyncClient extends GenericClient
      */
     public function validateJobId($jobId)
     {
-        if (!isset($_ENV['EVENT_BUS_SYNC_API_URL'])) {
-            throw new EnvVarException('EVENT_BUS_SYNC_API_URL is not defined');
-        }
-
-        $this->setRoute($_ENV['EVENT_BUS_SYNC_API_URL'] . "/job/$jobId");
+        $this->setRoute($this->baseUrl . "/job/$jobId");
 
         return $this->get();
     }
