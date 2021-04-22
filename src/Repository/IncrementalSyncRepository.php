@@ -75,6 +75,37 @@ class IncrementalSyncRepository
 
     /**
      * @param string $type
+     * @param int $shopId
+     * @param string $langIso
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getIncrementalSyncObjectIds($type, $langIso, $limit)
+    {
+        $query = new DbQuery();
+
+        $query->select('id_object')
+            ->from(self::INCREMENTAL_SYNC_TABLE)
+            ->where('lang_iso = "' . pSQL($langIso) . '"')
+            ->where('id_shop = "' . $this->context->shop->id. '"')
+            ->where('type = "' . pSQL($type) . '"')
+            ->limit($limit);
+
+        $result = $this->db->executeS($query);
+
+        if (is_array($result) && !empty($result)) {
+            return array_map(function ($object) {
+                return $object['id_object'];
+            }, $result);
+        }
+
+        return [];
+    }
+
+    /**
+     * @param string $type
      * @param string $langIso
      * @param int $limit
      *
