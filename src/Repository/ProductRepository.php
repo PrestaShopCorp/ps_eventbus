@@ -300,16 +300,13 @@ class ProductRepository
      *
      * @throws PrestaShopDatabaseException
      */
-    public function getProductsIncremental($limit, $langIso, $langId)
+    public function getProductsIncremental($limit, $langId, $productIds)
     {
         $query = $this->getBaseQuery($this->context->shop->id, $langId);
 
         $this->addSelectParameters($query);
 
-        $query->innerJoin(IncrementalSyncRepository::INCREMENTAL_SYNC_TABLE,
-            'aic',
-            'aic.id_object = p.id_product AND aic.id_shop = ps.id_shop AND aic.type = "products" and aic.lang_iso = "' . pSQL($langIso) . '"'
-        )
+        $query->where('p.id_product IN(' . implode(array_map('intval', $productIds)) . ')')
             ->limit($limit);
 
         $result = $this->db->executeS($query);

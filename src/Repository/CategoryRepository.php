@@ -187,17 +187,13 @@ class CategoryRepository
      *
      * @throws PrestaShopDatabaseException
      */
-    public function getCategoriesIncremental($limit, $langIso)
+    public function getCategoriesIncremental($limit, $langIso, $categoryIds)
     {
         $query = $this->getBaseQuery($this->context->shop->id, $langIso);
 
         $this->addSelectParameters($query);
 
-        $query->innerJoin(
-            IncrementalSyncRepository::INCREMENTAL_SYNC_TABLE,
-            'aic',
-            'aic.id_object = cs.id_category AND aic.id_shop = cs.id_shop AND aic.type = "categories" and aic.lang_iso = "' . pSQL($langIso) . '"'
-        )
+        $query->where('c.id_category IN(' . implode(array_map('intval', $categoryIds)) . ')')
             ->limit($limit);
 
         return $this->db->executeS($query);

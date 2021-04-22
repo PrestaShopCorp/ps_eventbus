@@ -98,18 +98,22 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
         }
     }
 
-    public function getFormattedDataIncremental($limit, $langIso)
+    /**
+     * @param int $limit
+     * @param string $langIso
+     * @param array $objectIds
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
-        $carts = $this->cartRepository->getCartsIncremental($limit);
+        $carts = $this->cartRepository->getCartsIncremental($limit, $objectIds);
 
         if (!is_array($carts) || empty($carts)) {
-            return [
-                'ids' => [],
-                'data' => [],
-            ];
+            return [];
         }
-
-        $cartIds = $this->separateCartIds($carts);
 
         $cartProducts = $this->getCartProducts($carts);
 
@@ -123,10 +127,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
             ];
         }, $carts);
 
-        return [
-            'ids' => $cartIds,
-            'data' => array_merge($carts, $cartProducts),
-        ];
+        return array_merge($carts, $cartProducts);
     }
 
     /**
@@ -161,15 +162,5 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
         }
 
         return [];
-    }
-
-    /**
-     * @param array $carts
-     *
-     * @return array
-     */
-    private function separateCartIds(array $carts)
-    {
-        return $this->arrayFormatter->formatValueArray($carts, 'id_order', true);
     }
 }

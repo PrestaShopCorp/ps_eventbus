@@ -161,16 +161,38 @@ abstract class AbstractApiController extends ModuleFrontController
                     $incrementalSync = true;
                 } elseif ($initFullSync) {
                     $offset = 0;
-                    $this->eventbusSyncRepository->updateTypeSync($this->type, $offset, $dateNow, false, $langIso);
+                    $this->eventbusSyncRepository->updateTypeSync(
+                        $this->type,
+                        $offset,
+                        $dateNow,
+                        false,
+                        $langIso
+                    );
                 }
             } else {
                 $this->eventbusSyncRepository->insertTypeSync($this->type, $offset, $dateNow, $langIso);
             }
 
             if ($incrementalSync) {
-                $response = $this->synchronizationService->handleIncrementalSync($dataProvider, $this->type, $jobId, $limit, $langIso, $this->startTime);
+                $response = $this->synchronizationService->handleIncrementalSync(
+                    $dataProvider,
+                    $this->type,
+                    $jobId,
+                    $limit,
+                    $langIso,
+                    $this->startTime
+                );
             } else {
-                $response = $this->synchronizationService->handleFullSync($dataProvider, $this->type, $jobId, $langIso, $offset, $limit, $dateNow, $this->startTime);
+                $response = $this->synchronizationService->handleFullSync(
+                    $dataProvider,
+                    $this->type,
+                    $jobId,
+                    $langIso,
+                    $offset,
+                    $limit,
+                    $dateNow,
+                    $this->startTime
+                );
             }
 
             return array_merge(

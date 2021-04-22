@@ -24,8 +24,11 @@ class SynchronizationService
      */
     private $proxyService;
 
-    public function __construct(EventbusSyncRepository $eventbusSyncRepository, IncrementalSyncRepository $incrementalSyncRepository, ProxyService $proxyService)
-    {
+    public function __construct(
+        EventbusSyncRepository $eventbusSyncRepository,
+        IncrementalSyncRepository $incrementalSyncRepository,
+        ProxyService $proxyService
+    ) {
         $this->eventbusSyncRepository = $eventbusSyncRepository;
         $this->incrementalSyncRepository = $incrementalSyncRepository;
         $this->proxyService = $proxyService;
@@ -92,10 +95,9 @@ class SynchronizationService
     {
         $response = [];
 
-        $incrementalData = $dataProvider->getFormattedDataIncremental($limit, $langIso);
+        $objectIds = $this->incrementalSyncRepository->getIncrementalSyncObjectIds($type, $langIso, $limit);
 
-        $objectIds = $incrementalData['ids'];
-        $data = $incrementalData['data'];
+        $data = $dataProvider->getFormattedDataIncremental($limit, $langIso, $objectIds);
 
         if (!empty($data)) {
             $response = $this->proxyService->upload($jobId, $data, $scriptStartTime);

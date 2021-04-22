@@ -68,9 +68,40 @@ class IncrementalSyncRepository
             self::INCREMENTAL_SYNC_TABLE,
             'type = "' . pSQL($type) . '"
             AND id_shop = ' . $this->context->shop->id . '
-            AND id_object IN(' . implode(',', $objectIds) . ')
+            AND id_object IN(' . implode(',', array_map('intval', $objectIds)) . ')
             AND lang_iso = "' . pSQL($langIso) . '"'
         );
+    }
+
+    /**
+     * @param string $type
+     * @param int $shopId
+     * @param string $langIso
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getIncrementalSyncObjectIds($type, $langIso, $limit)
+    {
+        $query = new DbQuery();
+
+        $query->select('id_object')
+            ->from(self::INCREMENTAL_SYNC_TABLE)
+            ->where('lang_iso = "' . pSQL($langIso) . '"')
+            ->where('id_shop = "' . $this->context->shop->id. '"')
+            ->where('type = "' . pSQL($type) . '"')
+            ->limit($limit);
+
+        $result = $this->db->executeS($query);
+
+        if (is_array($result) && !empty($result)) {
+            return array_map(function ($object) {
+                return $object['id_object'];
+            }, $result);
+        }
+
+        return [];
     }
 
     /**
@@ -86,6 +117,7 @@ class IncrementalSyncRepository
         $query->select('COUNT(id_object) as count')
             ->from(self::INCREMENTAL_SYNC_TABLE)
             ->where('lang_iso = "' . pSQL($langIso) . '"')
+            ->where('id_shop = "' . $this->context->shop->id . '"')
             ->where('type = "' . pSQL($type) . '"');
 
         return (int) $this->db->getValue($query);

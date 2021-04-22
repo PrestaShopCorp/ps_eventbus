@@ -82,17 +82,13 @@ class OrderRepository
      *
      * @throws PrestaShopDatabaseException
      */
-    public function getOrdersIncremental($limit, $shopId)
+    public function getOrdersIncremental($limit, $shopId, $oderIds)
     {
         $query = $this->getBaseQuery($shopId);
 
         $this->addSelectParameters($query);
 
-        $query->innerJoin(
-            IncrementalSyncRepository::INCREMENTAL_SYNC_TABLE,
-            'aic',
-            'aic.id_object = o.id_order AND aic.id_shop = o.id_shop AND aic.type = "orders"'
-        )
+        $query->where('o.id_order IN(' . implode(array_map('intval', $oderIds)) . ')')
             ->limit($limit);
 
         $result = $this->db->executeS($query);
