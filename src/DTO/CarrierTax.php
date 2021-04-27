@@ -6,7 +6,6 @@ use JsonSerializable;
 
 class CarrierTax implements JsonSerializable
 {
-
     /**
      * @var string
      */
@@ -47,6 +46,7 @@ class CarrierTax implements JsonSerializable
 
     /**
      * @param string $collection
+     *
      * @return CarrierTax
      */
     public function setCollection($collection)
@@ -66,6 +66,7 @@ class CarrierTax implements JsonSerializable
 
     /**
      * @param int $carrierReference
+     *
      * @return CarrierTax
      */
     public function setCarrierReference($carrierReference)
@@ -85,6 +86,7 @@ class CarrierTax implements JsonSerializable
 
     /**
      * @param int $zoneId
+     *
      * @return CarrierTax
      */
     public function setZoneId($zoneId)
@@ -104,6 +106,7 @@ class CarrierTax implements JsonSerializable
 
     /**
      * @param string $countryIsoCode
+     *
      * @return CarrierTax
      */
     public function setCountryIsoCode($countryIsoCode)
@@ -123,6 +126,7 @@ class CarrierTax implements JsonSerializable
 
     /**
      * @param string $stateIsoCodes
+     *
      * @return CarrierTax
      */
     public function setStateIsoCodes($stateIsoCodes)
@@ -142,6 +146,7 @@ class CarrierTax implements JsonSerializable
 
     /**
      * @param float $taxRate
+     *
      * @return CarrierTax
      */
     public function setTaxRate($taxRate)
@@ -161,7 +166,7 @@ class CarrierTax implements JsonSerializable
                 'country_id' => (string) $this->getCountryIsoCode(),
                 'state_ids' => (string) $this->getStateIsoCodes(),
                 'tax_rate' => (float) $this->getTaxRate(),
-            ]
+            ],
         ];
     }
 }

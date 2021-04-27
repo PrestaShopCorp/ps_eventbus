@@ -46,24 +46,25 @@ class StateRepository
      * @param bool $active
      *
      * @return array|bool|mysqli_result|PDOStatement|resource|null
+     *
      * @throws PrestaShopDatabaseException
      */
     public function getStateIsoCodesByZoneId($zoneId, $active = true)
     {
-        $cacheKey = $zoneId . '-' . (int)$active;
+        $cacheKey = $zoneId . '-' . (int) $active;
 
         if (!isset($this->stateIsoCodeCache[$cacheKey])) {
             $query = $this->getBaseQuery();
 
             $query->select('s.iso_code');
             $query->innerJoin('country', 'c', 'c.id_country = s.id_country');
-            $query->where('s.id_zone = ' . (int)$zoneId);
-            $query->where('s.active = ' . (bool)$active);
-            $query->where('c.active = ' . (bool)$active);
+            $query->where('s.id_zone = ' . (int) $zoneId);
+            $query->where('s.active = ' . (bool) $active);
+            $query->where('c.active = ' . (bool) $active);
 
             $isoCodes = [];
             foreach ($this->db->executeS($query) as $state) {
-                $isoCodes[]  = $state['iso_code'];
+                $isoCodes[] = $state['iso_code'];
             }
             $this->stateIsoCodeCache[$cacheKey] = $isoCodes;
         }

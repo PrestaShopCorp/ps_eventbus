@@ -39,34 +39,34 @@ class CountryRepository
         $query->from('country', 'c')
             ->innerJoin('country_shop', 'cs', 'cs.id_country = c.id_country')
             ->innerJoin('country_lang', 'cl', 'cl.id_country = c.id_country')
-            ->where('cs.id_shop = ' . (int)$this->context->shop->id)
-            ->where('cl.id_lang = ' . (int)$this->context->language->id);
+            ->where('cs.id_shop = ' . (int) $this->context->shop->id)
+            ->where('cl.id_lang = ' . (int) $this->context->language->id);
 
         return $query;
     }
-
 
     /**
      * @param int $zoneId
      * @param bool $active
      *
      * @return array|bool|mysqli_result|PDOStatement|resource|null
+     *
      * @throws PrestaShopDatabaseException
      */
     public function getCountyIsoCodesByZoneId($zoneId, $active = true)
     {
-        $cacheKey = $zoneId . '-' . (int)$active;
+        $cacheKey = $zoneId . '-' . (int) $active;
 
         if (!isset($this->countryIsoCodeCache[$cacheKey])) {
             $query = $this->getBaseQuery();
 
             $query->select('iso_code');
-            $query->where('id_zone = ' . (int)$zoneId);
-            $query->where('active = ' . (bool)$active);
+            $query->where('id_zone = ' . (int) $zoneId);
+            $query->where('active = ' . (bool) $active);
 
             $isoCodes = [];
             foreach ($this->db->executeS($query) as $country) {
-                $isoCodes[]  = $country['iso_code'];
+                $isoCodes[] = $country['iso_code'];
             }
             $this->countryIsoCodeCache[$cacheKey] = $isoCodes;
         }

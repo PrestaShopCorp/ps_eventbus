@@ -83,6 +83,7 @@ class CarrierBuilder
      * @param string $weightUnit
      *
      * @return EventBusCarrier
+     *
      * @throws \PrestaShopDatabaseException
      * @throws \PrestaShopException
      */
@@ -156,6 +157,7 @@ class CarrierBuilder
      * @param array $deliveryPriceByRange
      *
      * @return false|RangeWeight|RangePrice
+     *
      * @throws \PrestaShopDatabaseException
      * @throws \PrestaShopException
      */
@@ -177,6 +179,7 @@ class CarrierBuilder
      * @param array $zone
      *
      * @return false|CarrierDetail
+     *
      * @throws \PrestaShopDatabaseException
      */
     private function buildCarrierDetails(Carrier $carrier, $rangeWeight, array $zone)
@@ -207,6 +210,7 @@ class CarrierBuilder
      * @param int $zoneId
      *
      * @return CarrierTax|null
+     *
      * @throws \PrestaShopDatabaseException
      */
     private function buildCarrierTaxes(Carrier $carrier, $zoneId)

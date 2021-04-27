@@ -43,7 +43,6 @@ class CarrierRepository
         foreach ($carriers as $key => $carrier) {
             $carrierObj = new Carrier($carrier['id_carrier']);
 
-
             $data[$key]['collection'] = 'carriers';
             $data[$key]['id'] = $carrierObj->id;
             $data[$key]['properties'] = $carrier;
@@ -87,7 +86,7 @@ class CarrierRepository
         Carrier $carrierObj,
         $rangeTable
     ) {
-        $deliveryPriceByRange = Carrier::getDeliveryPriceByRanges($rangeTable, (int)$carrierObj->id);
+        $deliveryPriceByRange = Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrierObj->id);
 
         $filteredRanges = [];
         foreach ($deliveryPriceByRange as $range) {
@@ -110,7 +109,7 @@ class CarrierRepository
         Carrier $carrierObj,
         $rangeTable
     ) {
-        $deliveryPriceByRange = Carrier::getDeliveryPriceByRanges($rangeTable, (int)$carrierObj->id);
+        $deliveryPriceByRange = Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrierObj->id);
 
         $filteredRanges = [];
         foreach ($deliveryPriceByRange as $range) {
