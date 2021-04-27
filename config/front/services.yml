@@ -4,6 +4,9 @@ imports:
   - { resource: decorator.yml }
   - { resource: provider.yml }
   - { resource: repository.yml }
+  - { resource: builder.yml }
+  - { resource: adapter.yml }
+  - { resource: context.yml }
 
 services:
   PrestaShop\Module\PsEventbus\Formatter\JsonFormatter:

@@ -1,6 +1,8 @@
 <?php
 
+use PrestaShop\Module\PsEventbus\Builder\CarrierBuilder;
 use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
+use PrestaShop\Module\PsEventbus\DTO\Carrier as EventBusCarrier;
 use PrestaShop\Module\PsEventbus\Exception\ApiException;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
@@ -19,18 +21,26 @@ class ps_EventbusApiShippingModuleFrontController extends AbstractApiController
     {
         $response = [];
 
-        $context = Context::getContext();
+        $language = new Language(Configuration::get('PS_LANG_DEFAULT'));
+        $currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+
         $jobId = Tools::getValue('job_id');
 
-        /** @var CarrierRepository $carrierRepository */
-        $carrierRepository = $this->module->getService(CarrierRepository::class);
+        /** @var CarrierBuilder $carrierBuilder */
+        $carrierBuilder = $this->module->getService(CarrierBuilder::class);
 
-        $carriers = $carrierRepository->getCarriers($context->language->id);
-        $countries = Country::getCountries($context->language->id, true);
-        // todo: need to get selected countries from google module
+        $carriers = Carrier::getCarriers($language->id);
+
+        /** @var EventBusCarrier[] $eventBusCarriers */
+        $eventBusCarriers = $carrierBuilder->buildCarriers(
+            $carriers,
+            $language,
+            $currency,
+            Configuration::get('PS_WEIGHT_UNIT')
+        );
 
         try {
-            $response = $this->proxyService->upload($jobId, $carriers, $this->startTime);
+            $response = $this->proxyService->upload($jobId, $eventBusCarriers, $this->startTime);
         } catch (EnvVarException $exception) {
             $this->exitWithExceptionMessage($exception);
         } catch (Exception $exception) {
