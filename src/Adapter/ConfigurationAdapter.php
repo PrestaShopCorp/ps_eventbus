@@ -3,12 +3,11 @@
 namespace PrestaShop\Module\PsEventbus\Adapter;
 
 use Configuration;
-use Shop;
 
 class ConfigurationAdapter
 {
     /**
-     * @var Shop
+     * @var int
      */
     private $shopId;
 
