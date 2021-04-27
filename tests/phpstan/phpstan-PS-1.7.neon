@@ -32,7 +32,7 @@ parameters:
 		- '#Cannot access property \$id on Module\|false.#'
 		- '#Class Theme not found.#'
 		- '#Parameter \#1 \$id of class Currency constructor expects null, string given.#'
-		- '#Parameter \#1 $id of class Language constructor expects int\|null, string given.#'
-		- '#Parameter \#1 $id of class Currency constructor expects int\|null, string given.#'
+		- '#Parameter \#1 \$id of class Language constructor expects int\|null, string given.#'
+		- '#Parameter \#1 \$id of class Currency constructor expects int\|null, string given.#'
 
 	level: 5
