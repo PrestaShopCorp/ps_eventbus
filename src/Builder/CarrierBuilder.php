@@ -3,6 +3,8 @@
 namespace PrestaShop\Module\PsEventbus\Builder;
 
 use Carrier;
+use Currency;
+use Language;
 use PrestaShop\Module\PsEventbus\DTO\Carrier as EventBusCarrier;
 use PrestaShop\Module\PsEventbus\DTO\CarrierDetail;
 use PrestaShop\Module\PsEventbus\DTO\CarrierTax;
@@ -55,7 +57,7 @@ class CarrierBuilder
         $this->configurationRepository = $configurationRepository;
     }
 
-    public function buildCarriers(array $carriers, \Language $lang, \Currency $currency, $weightUnit)
+    public function buildCarriers(array $carriers, Language $lang, Currency $currency, $weightUnit)
     {
         $eventBusCarriers = [];
         foreach ($carriers as $carrier) {
@@ -78,8 +80,8 @@ class CarrierBuilder
 
     /**
      * @param int $carrierId
-     * @param \Language $lang
-     * @param \Currency $currency
+     * @param Language $lang
+     * @param Currency $currency
      * @param string $weightUnit
      *
      * @return EventBusCarrier
@@ -87,7 +89,7 @@ class CarrierBuilder
      * @throws \PrestaShopDatabaseException
      * @throws \PrestaShopException
      */
-    public function build($carrierId, \Language $lang, \Currency $currency, $weightUnit)
+    public function build($carrierId, Language $lang, Currency $currency, $weightUnit)
     {
         $eventBusCarrier = new EventBusCarrier();
         $carrier = new Carrier($carrierId, $lang->id);

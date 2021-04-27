@@ -26,19 +26,6 @@ class CarrierRepository
     {
         $carriers = Carrier::getCarriers($langId);
 
-//        return array_map(function ($key, $carrier) use ($currentTheme) {
-//            return [
-//                'id' => md5((string) $key),
-//                'collection' => 'themes',
-//                'properties' => [
-//                    'theme_id' => md5((string) $key),
-//                    'name' => (string) $theme->getName(),
-//                    'theme_version' => (string) $theme->get('version'),
-//                    'active' => $theme->getName() == $currentTheme->getName(),
-//                ],
-//            ];
-//        }, array_keys($carriers), $carriers);
-
         $data = [];
         foreach ($carriers as $key => $carrier) {
             $carrierObj = new Carrier($carrier['id_carrier']);
