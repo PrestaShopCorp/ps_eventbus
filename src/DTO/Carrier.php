@@ -151,6 +151,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param string $collection
+     *
      * @return Carrier
      */
     public function setCollection($collection)
@@ -170,6 +171,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param int $idCarrier
+     *
      * @return Carrier
      */
     public function setIdCarrier($idCarrier)
@@ -189,6 +191,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param int $idReference
+     *
      * @return Carrier
      */
     public function setIdReference($idReference)
@@ -208,6 +211,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param int $taxesRatesGroupId
+     *
      * @return Carrier
      */
     public function setTaxesRatesGroupId($taxesRatesGroupId)
@@ -227,6 +231,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param string $name
+     *
      * @return Carrier
      */
     public function setName($name)
@@ -246,6 +251,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param string $url
+     *
      * @return Carrier
      */
     public function setUrl($url)
@@ -265,6 +271,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param bool $active
+     *
      * @return Carrier
      */
     public function setActive($active)
@@ -284,6 +291,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param bool $deleted
+     *
      * @return Carrier
      */
     public function setDeleted($deleted)
@@ -303,6 +311,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param float $shippingHandling
+     *
      * @return Carrier
      */
     public function setShippingHandling($shippingHandling)
@@ -322,6 +331,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param float $freeShippingStartsAtPrice
+     *
      * @return Carrier
      */
     public function setFreeShippingStartsAtPrice($freeShippingStartsAtPrice)
@@ -341,6 +351,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param float $freeShippingStartsAtWeight
+     *
      * @return Carrier
      */
     public function setFreeShippingStartsAtWeight($freeShippingStartsAtWeight)
@@ -360,6 +371,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param bool $disableCarrierWhenOutOfRange
+     *
      * @return Carrier
      */
     public function setDisableCarrierWhenOutOfRange($disableCarrierWhenOutOfRange)
@@ -379,6 +391,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param bool $isModule
+     *
      * @return Carrier
      */
     public function setIsModule($isModule)
@@ -398,6 +411,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param bool $isFree
+     *
      * @return Carrier
      */
     public function setIsFree($isFree)
@@ -417,6 +431,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param bool $shippingExternal
+     *
      * @return Carrier
      */
     public function setShippingExternal($shippingExternal)
@@ -436,6 +451,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param bool $needRange
+     *
      * @return Carrier
      */
     public function setNeedRange($needRange)
@@ -455,6 +471,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param string $externalModuleName
+     *
      * @return Carrier
      */
     public function setExternalModuleName($externalModuleName)
@@ -474,6 +491,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param float $maxWidth
+     *
      * @return Carrier
      */
     public function setMaxWidth($maxWidth)
@@ -493,6 +511,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param float $maxHeight
+     *
      * @return Carrier
      */
     public function setMaxHeight($maxHeight)
@@ -512,6 +531,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param float $maxDepth
+     *
      * @return Carrier
      */
     public function setMaxDepth($maxDepth)
@@ -531,6 +551,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param float $maxWeight
+     *
      * @return Carrier
      */
     public function setMaxWeight($maxWeight)
@@ -550,6 +571,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param int $grade
+     *
      * @return Carrier
      */
     public function setGrade($grade)
@@ -569,6 +591,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param string $delay
+     *
      * @return Carrier
      */
     public function setDelay($delay)
@@ -588,6 +611,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param string $currency
+     *
      * @return Carrier
      */
     public function setCurrency($currency)
@@ -607,6 +631,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param string $weightUnit
+     *
      * @return Carrier
      */
     public function setWeightUnit($weightUnit)
@@ -626,6 +651,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param CarrierDetail[] $carrierDetails
+     *
      * @return Carrier
      */
     public function setCarrierDetails($carrierDetails)
@@ -645,6 +671,7 @@ class Carrier implements JsonSerializable
 
     /**
      * @param CarrierTax[] $carrierTaxes
+     *
      * @return Carrier
      */
     public function setCarrierTaxes($carrierTaxes)
@@ -653,7 +680,6 @@ class Carrier implements JsonSerializable
 
         return $this;
     }
-
 
     public function jsonSerialize()
     {
@@ -687,7 +713,7 @@ class Carrier implements JsonSerializable
                 'delay' => (string) $this->getDelay(),
                 'currency' => (string) $this->getCurrency(),
                 'weight_unit' => (string) $this->getWeightUnit(),
-            ]
+            ],
         ];
 
         $carrierDetails = [];

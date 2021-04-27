@@ -6,7 +6,6 @@ use JsonSerializable;
 
 class CarrierDetail implements JsonSerializable
 {
-
     const RANGE_BY_WEIGHT = 0;
 
     const RANGE_BY_PRICE = 1;
@@ -87,6 +86,7 @@ class CarrierDetail implements JsonSerializable
 
     /**
      * @param string $shippingMethod
+     *
      * @return CarrierDetail
      */
     public function setShippingMethod($shippingMethod)
@@ -106,6 +106,7 @@ class CarrierDetail implements JsonSerializable
 
     /**
      * @param int $carrierReference
+     *
      * @return CarrierDetail
      */
     public function setCarrierReference($carrierReference)
@@ -125,6 +126,7 @@ class CarrierDetail implements JsonSerializable
 
     /**
      * @param int $zoneId
+     *
      * @return CarrierDetail
      */
     public function setZoneId($zoneId)
@@ -144,6 +146,7 @@ class CarrierDetail implements JsonSerializable
 
     /**
      * @param int $rangeId
+     *
      * @return CarrierDetail
      */
     public function setRangeId($rangeId)
@@ -163,6 +166,7 @@ class CarrierDetail implements JsonSerializable
 
     /**
      * @param float $delimiter1
+     *
      * @return CarrierDetail
      */
     public function setDelimiter1($delimiter1)
@@ -182,6 +186,7 @@ class CarrierDetail implements JsonSerializable
 
     /**
      * @param float $delimiter2
+     *
      * @return CarrierDetail
      */
     public function setDelimiter2($delimiter2)
@@ -221,6 +226,7 @@ class CarrierDetail implements JsonSerializable
 
     /**
      * @param array $stateIsoCodes
+     *
      * @return CarrierDetail
      */
     public function setStateIsoCodes($stateIsoCodes)
@@ -240,6 +246,7 @@ class CarrierDetail implements JsonSerializable
 
     /**
      * @param float $price
+     *
      * @return CarrierDetail
      */
     public function setPrice($price)
@@ -265,8 +272,8 @@ class CarrierDetail implements JsonSerializable
                 'delimiter2' => (float) $this->getDelimiter2(),
                 'country_ids' => (string) $countryIds,
                 'state_ids' => (string) $stateIds,
-                'price' => (float) $this->getPrice()
-            ]
+                'price' => (float) $this->getPrice(),
+            ],
         ];
     }
 }

@@ -3,10 +3,7 @@
 use PrestaShop\Module\PsEventbus\Builder\CarrierBuilder;
 use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
 use PrestaShop\Module\PsEventbus\DTO\Carrier as EventBusCarrier;
-use PrestaShop\Module\PsEventbus\Exception\ApiException;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
-use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
-use PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository;
 
 class ps_EventbusApiShippingModuleFrontController extends AbstractApiController
 {
