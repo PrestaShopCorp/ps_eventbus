@@ -31,5 +31,6 @@ parameters:
 		- '#Call to method getService\(\) on an unknown class PrestaShop\\ModuleLibServiceContainer\\DependencyInjection\\ServiceContainer.#'
 		- '#Cannot access property \$id on Module\|false.#'
 		- '#Class Theme not found.#'
+		- '#Parameter \#1 \$id of class Currency constructor expects null, string given.#'
 
-	level: 7
+	level: 5
