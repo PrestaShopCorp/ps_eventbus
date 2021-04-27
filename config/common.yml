@@ -10,3 +10,9 @@ services:
   ps_eventbus.link:
     class: Link
     factory: [ 'PrestaShop\Module\PsEventbus\Factory\Link', 'get' ]
+
+  ps_eventbus:
+    class: 'Ps_eventbus'
+    factory: ['Module', 'getInstanceByName']
+    arguments:
+      - 'ps_eventbus'

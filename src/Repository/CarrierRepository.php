@@ -25,13 +25,38 @@ class CarrierRepository
     public function getCarriers($langId)
     {
         $carriers = Carrier::getCarriers($langId);
+
+//        return array_map(function ($key, $carrier) use ($currentTheme) {
+//            return [
+//                'id' => md5((string) $key),
+//                'collection' => 'themes',
+//                'properties' => [
+//                    'theme_id' => md5((string) $key),
+//                    'name' => (string) $theme->getName(),
+//                    'theme_version' => (string) $theme->get('version'),
+//                    'active' => $theme->getName() == $currentTheme->getName(),
+//                ],
+//            ];
+//        }, array_keys($carriers), $carriers);
+
+        $data = [];
         foreach ($carriers as $key => $carrier) {
             $carrierObj = new Carrier($carrier['id_carrier']);
-            $deliveryPriceByRange = self::getDeliveryPriceByRange($carrierObj);
-            $carriers[$key]['deliveryPriceByRange'] = $deliveryPriceByRange;
+
+
+            $data[$key]['collection'] = 'carriers';
+            $data[$key]['id'] = $carrierObj->id;
+            $data[$key]['properties'] = $carrier;
+
+            $deliveryPriceByRanges = self::getDeliveryPriceByRange($carrierObj);
+            foreach ($deliveryPriceByRanges as $deliveryPriceByRange) {
+                $data[$key]['collection'] = 'carriers_details';
+                $data[$key]['id'] = $deliveryPriceByRange['id_range_weight'];
+                $data[$key]['properties'] = $deliveryPriceByRange;
+            }
         }
 
-        return $carriers;
+        return $data;
     }
 
     /**
@@ -39,7 +64,7 @@ class CarrierRepository
      *
      * @return array|false
      */
-    private function getDeliveryPriceByRange(Carrier $carrierObj)
+    public function getDeliveryPriceByRange(Carrier $carrierObj)
     {
         $rangeTable = $carrierObj->getRangeTable();
         switch ($rangeTable) {
@@ -68,8 +93,8 @@ class CarrierRepository
         foreach ($deliveryPriceByRange as $range) {
             $filteredRanges[$range['id_range_price']]['id_range_price'] = $range['id_range_price'];
             $filteredRanges[$range['id_range_price']]['id_carrier'] = $range['id_carrier'];
-            $filteredRanges[$range['id_range_price']]['zone'][$range['id_zone']]['id_zone'] = $range['id_zone'];
-            $filteredRanges[$range['id_range_price']]['zone'][$range['id_zone']]['price'] = $range['price'];
+            $filteredRanges[$range['id_range_price']]['zones'][$range['id_zone']]['id_zone'] = $range['id_zone'];
+            $filteredRanges[$range['id_range_price']]['zones'][$range['id_zone']]['price'] = $range['price'];
         }
 
         return $filteredRanges;
@@ -91,8 +116,8 @@ class CarrierRepository
         foreach ($deliveryPriceByRange as $range) {
             $filteredRanges[$range['id_range_weight']]['id_range_weight'] = $range['id_range_weight'];
             $filteredRanges[$range['id_range_weight']]['id_carrier'] = $range['id_carrier'];
-            $filteredRanges[$range['id_range_weight']]['zone'][$range['id_zone']]['id_zone'] = $range['id_zone'];
-            $filteredRanges[$range['id_range_weight']]['zone'][$range['id_zone']]['price'] = $range['price'];
+            $filteredRanges[$range['id_range_weight']]['zones'][$range['id_zone']]['id_zone'] = $range['id_zone'];
+            $filteredRanges[$range['id_range_weight']]['zones'][$range['id_zone']]['price'] = $range['price'];
         }
 
         return $filteredRanges;
