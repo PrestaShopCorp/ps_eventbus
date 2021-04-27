@@ -76,6 +76,16 @@ class CarrierBuilder
         return $formattedCarriers;
     }
 
+    /**
+     * @param int $carrierId
+     * @param \Language $lang
+     * @param \Currency $currency
+     * @param string $weightUnit
+     *
+     * @return EventBusCarrier
+     * @throws \PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     */
     public function build($carrierId, \Language $lang, \Currency $currency, $weightUnit)
     {
         $eventBusCarrier = new EventBusCarrier();
@@ -142,6 +152,13 @@ class CarrierBuilder
         return $eventBusCarrier;
     }
 
+    /**
+     * @param array $deliveryPriceByRange
+     *
+     * @return false|RangeWeight|RangePrice
+     * @throws \PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     */
     private function getCarrierRange(array $deliveryPriceByRange)
     {
         if (isset($deliveryPriceByRange['id_range_weight'])) {
@@ -158,6 +175,7 @@ class CarrierBuilder
      * @param Carrier $carrier
      * @param RangeWeight|RangePrice $rangeWeight
      * @param array $zone
+     *
      * @return false|CarrierDetail
      * @throws \PrestaShopDatabaseException
      */
@@ -184,6 +202,13 @@ class CarrierBuilder
         return $carrierDetail;
     }
 
+    /**
+     * @param Carrier $carrier
+     * @param int $zoneId
+     *
+     * @return CarrierTax|null
+     * @throws \PrestaShopDatabaseException
+     */
     private function buildCarrierTaxes(Carrier $carrier, $zoneId)
     {
         $carrierTaxesByZone = $this->taxRepository->getCarrierTaxesByZone($zoneId, $carrier->getIdTaxRulesGroup());
