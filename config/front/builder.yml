@@ -6,4 +6,4 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\CountryRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\StateRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\TaxRepository'
-      - '@PrestaShop\Module\PsEventbus\Adapter\ConfigurationAdapter'
+      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'

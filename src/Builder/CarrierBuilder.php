@@ -3,11 +3,11 @@
 namespace PrestaShop\Module\PsEventbus\Builder;
 
 use Carrier;
-use PrestaShop\Module\PsEventbus\Adapter\ConfigurationAdapter;
 use PrestaShop\Module\PsEventbus\DTO\Carrier as EventBusCarrier;
 use PrestaShop\Module\PsEventbus\DTO\CarrierDetail;
 use PrestaShop\Module\PsEventbus\DTO\CarrierTax;
 use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
+use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\CountryRepository;
 use PrestaShop\Module\PsEventbus\Repository\StateRepository;
 use PrestaShop\Module\PsEventbus\Repository\TaxRepository;
@@ -37,22 +37,22 @@ class CarrierBuilder
     private $taxRepository;
 
     /**
-     * @var ConfigurationAdapter
+     * @var ConfigurationRepository
      */
-    private $configurationAdapter;
+    private $configurationRepository;
 
     public function __construct(
         CarrierRepository $carrierRepository,
         CountryRepository $countryRepository,
         StateRepository $stateRepository,
         TaxRepository $taxRepository,
-        ConfigurationAdapter $configurationAdapter
+        ConfigurationRepository $configurationRepository
     ) {
         $this->carrierRepository = $carrierRepository;
         $this->countryRepository = $countryRepository;
         $this->stateRepository = $stateRepository;
         $this->taxRepository = $taxRepository;
-        $this->configurationAdapter = $configurationAdapter;
+        $this->configurationRepository = $configurationRepository;
     }
 
     public function buildCarriers(array $carriers, \Language $lang, \Currency $currency, $weightUnit)
@@ -91,8 +91,8 @@ class CarrierBuilder
     {
         $eventBusCarrier = new EventBusCarrier();
         $carrier = new Carrier($carrierId, $lang->id);
-        $freeShippingStartsAtPrice = (float) $this->configurationAdapter->get('PS_SHIPPING_FREE_PRICE');
-        $freeShippingStartsAtWeight = (float) $this->configurationAdapter->get('PS_SHIPPING_FREE_WEIGHT');
+        $freeShippingStartsAtPrice = (float) $this->configurationRepository->get('PS_SHIPPING_FREE_PRICE');
+        $freeShippingStartsAtWeight = (float) $this->configurationRepository->get('PS_SHIPPING_FREE_WEIGHT');
         $eventBusCarrier->setFreeShippingStartsAtPrice($freeShippingStartsAtPrice);
         $eventBusCarrier->setFreeShippingStartsAtWeight($freeShippingStartsAtWeight);
 
@@ -241,7 +241,7 @@ class CarrierBuilder
     private function getShippingHandlePrice($shippingHandling)
     {
         if ($shippingHandling) {
-            return (float) $this->configurationAdapter->get('PS_SHIPPING_HANDLING');
+            return (float) $this->configurationRepository->get('PS_SHIPPING_HANDLING');
         }
 
         return 0.0;
