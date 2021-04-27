@@ -28,5 +28,6 @@ parameters:
 		- '#Property Ps_eventbus::\$serviceContainer has unknown class PrestaShop\\ModuleLibServiceContainer\\DependencyInjection\\ServiceContainer as its type.#'
 		- '#Instantiated class PrestaShop\\ModuleLibServiceContainer\\DependencyInjection\\ServiceContainer not found.#'
 		- '#Call to method getService\(\) on an unknown class PrestaShop\\ModuleLibServiceContainer\\DependencyInjection\\ServiceContainer.#'
+		- '#Parameter \#1 \$id of class Currency constructor expects null, string given.#'
 
 	level: 7
