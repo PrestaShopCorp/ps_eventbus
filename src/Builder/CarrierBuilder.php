@@ -11,8 +11,8 @@ use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
 use PrestaShop\Module\PsEventbus\Repository\CountryRepository;
 use PrestaShop\Module\PsEventbus\Repository\StateRepository;
 use PrestaShop\Module\PsEventbus\Repository\TaxRepository;
-use PrestaShop\PrestaShop\Adapter\Entity\RangeWeight;
 use RangePrice;
+use RangeWeight;
 
 class CarrierBuilder
 {
@@ -102,11 +102,11 @@ class CarrierBuilder
             ->setIdCarrier((int) $carrier->id)
             ->setIdReference((int) $carrier->id_reference)
             ->setName($carrier->name)
-            ->setTaxesRatesGroupId($carrier->getTaxesRate())
+            ->setTaxesRatesGroupId((int) $carrier->getIdTaxRulesGroup())
             ->setUrl($carrier->url)
             ->setActive($carrier->active)
             ->setDeleted($carrier->deleted)
-            ->setDisableCarrierWhenOutOfRange($carrier->range_behavior)
+            ->setDisableCarrierWhenOutOfRange((bool) $carrier->range_behavior)
             ->setIsModule($carrier->is_module)
             ->setIsFree($carrier->is_free)
             ->setShippingExternal($carrier->shipping_external)
@@ -215,7 +215,7 @@ class CarrierBuilder
      */
     private function buildCarrierTaxes(Carrier $carrier, $zoneId)
     {
-        $carrierTaxesByZone = $this->taxRepository->getCarrierTaxesByZone($zoneId, $carrier->getIdTaxRulesGroup());
+        $carrierTaxesByZone = $this->taxRepository->getCarrierTaxesByZone($zoneId, (int) $carrier->getIdTaxRulesGroup());
 
         if (!$carrierTaxesByZone[0]['country_iso_code']) {
             return null;
