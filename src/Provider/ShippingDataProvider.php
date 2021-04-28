@@ -68,7 +68,7 @@ class ShippingDataProvider implements PaginatedApiDataProviderInterface
     {
         $categories = $this->carrierRepository->getShippingIncremental('shipping', $langIso);
 
-        if (!is_array($categories)) {
+        if (!$categories) {
             return [];
         }
 

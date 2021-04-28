@@ -94,8 +94,8 @@ class SynchronizationService
 
         $incrementalData = $dataProvider->getFormattedDataIncremental($limit, $langIso);
 
-        $objectIds = $incrementalData['ids'];
-        $data = $incrementalData['data'];
+        $objectIds = isset($incrementalData['ids']) ? $incrementalData['ids'] : null;
+        $data = isset($incrementalData['data']) ? $incrementalData['data'] : [];
 
         if (!empty($data)) {
             $response = $this->proxyService->upload($jobId, $data, $scriptStartTime);
