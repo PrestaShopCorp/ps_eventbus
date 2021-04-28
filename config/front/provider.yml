@@ -46,3 +46,10 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
       - '@PrestaShop\Module\PsEventbus\Builder\CarrierBuilder'
       - '@PrestaShop\Module\PsEventbus\Repository\CarrierRepository'
+
+  PrestaShop\Module\PsEventbus\Provider\TaxesDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\TaxesDataProvider
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\TaxRepository'
+

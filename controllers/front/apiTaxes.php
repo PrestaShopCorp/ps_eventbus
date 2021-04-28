@@ -1,14 +1,12 @@
 <?php
 
 use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
-use PrestaShop\Module\PsEventbus\Exception\ApiException;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
-use PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository;
 use PrestaShop\Module\PsEventbus\Repository\TaxRepository;
 
 class ps_EventbusApiTaxesModuleFrontController extends AbstractApiController
 {
-    public $type = 'shops';
+    public $type = 'taxes';
 
     /**
      * @throws PrestaShopException
@@ -17,6 +15,12 @@ class ps_EventbusApiTaxesModuleFrontController extends AbstractApiController
      */
     public function postProcess()
     {
+        $categoryDataProvider = $this->module->getService(\PrestaShop\Module\PsEventbus\Provider\TaxesDataProvider::class);
+
+        $response = $this->handleDataSync($categoryDataProvider);
+
+        $this->exitWithResponse($response);
+
         $response = [];
         $context = Context::getContext();
         $jobId = Tools::getValue('job_id');

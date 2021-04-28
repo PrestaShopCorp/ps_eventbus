@@ -78,4 +78,41 @@ class TaxRepository
 
         return $this->countryIsoCodeCache[$cacheKey];
     }
+
+    /**
+     * @param int $langId
+     *
+     * @return array
+     */
+    public function getTaxes($langId)
+    {
+        $taxRules = [];
+        $taxRulesGroups = \TaxRulesGroup::getTaxRulesGroups(true);
+        foreach ($taxRulesGroups as $rulesGroup) {
+            $taxRules[] = \TaxRule::getTaxRulesByGroupId($langId, $rulesGroup['id_tax_rules_group']);
+        }
+
+        return $taxRules;
+    }
+
+    /**
+     * @param string $type
+     * @param string $langIso
+     *
+     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getTaxesIncremental($type, $langIso)
+    {
+        $query = new DbQuery();
+        $query->from(IncrementalSyncRepository::INCREMENTAL_SYNC_TABLE, 'aic');
+        $query->leftJoin(EventbusSyncRepository::TYPE_SYNC_TABLE_NAME, 'ts', 'ts.type = aic.type');
+        $query->where('aic.type = "' . (string) $type . '"');
+        $query->where('ts.id_shop = ' . (string) $this->context->shop->id);
+        $query->where('ts.lang_iso = "' . (string) $langIso . '"');
+        $query->where('aic.created_at >= ts.last_sync_date');
+
+        return $this->db->executeS($query);
+    }
 }

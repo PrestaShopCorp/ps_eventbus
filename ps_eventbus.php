@@ -576,6 +576,13 @@ class Ps_eventbus extends Module
             date(DATE_ATOM),
             $this->context->shop->id
         );
+
+        $this->insertIncrementalSyncObject(
+            0,
+            'taxes',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
     }
 
     /**
@@ -586,6 +593,13 @@ class Ps_eventbus extends Module
         $this->insertIncrementalSyncObject(
             0,
             'shipping',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+
+        $this->insertIncrementalSyncObject(
+            0,
+            'taxes',
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -602,6 +616,13 @@ class Ps_eventbus extends Module
             date(DATE_ATOM),
             $this->context->shop->id
         );
+
+        $this->insertIncrementalSyncObject(
+            0,
+            'taxes',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
     }
 
     /**
@@ -612,6 +633,13 @@ class Ps_eventbus extends Module
         $this->insertIncrementalSyncObject(
             0,
             'shipping',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+
+        $this->insertIncrementalSyncObject(
+            0,
+            'taxes',
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -628,6 +656,13 @@ class Ps_eventbus extends Module
             date(DATE_ATOM),
             $this->context->shop->id
         );
+
+        $this->insertIncrementalSyncObject(
+            0,
+            'taxes',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
     }
 
     /**
@@ -638,6 +673,13 @@ class Ps_eventbus extends Module
         $this->insertIncrementalSyncObject(
             0,
             'shipping',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+
+        $this->insertIncrementalSyncObject(
+            0,
+            'taxes',
             date(DATE_ATOM),
             $this->context->shop->id
         );
