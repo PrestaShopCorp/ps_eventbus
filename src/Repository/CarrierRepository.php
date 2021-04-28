@@ -3,7 +3,9 @@
 namespace PrestaShop\Module\PsEventbus\Repository;
 
 use Carrier;
+use Context;
 use Db;
+use DbQuery;
 
 class CarrierRepository
 {
@@ -12,9 +14,15 @@ class CarrierRepository
      */
     private $db;
 
-    public function __construct(Db $db)
+    /**
+     * @var Context
+     */
+    private $context;
+
+    public function __construct(Db $db, Context $context)
     {
         $this->db = $db;
+        $this->context = $context;
     }
 
     /**
@@ -107,5 +115,26 @@ class CarrierRepository
         }
 
         return $filteredRanges;
+    }
+
+    /**
+     * @param string $type
+     * @param string $langIso
+     *
+     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getShippingIncremental($type, $langIso)
+    {
+        $query = new DbQuery();
+        $query->from(IncrementalSyncRepository::INCREMENTAL_SYNC_TABLE, 'aic');
+        $query->leftJoin(EventbusSyncRepository::TYPE_SYNC_TABLE_NAME, 'ts', 'ts.type = aic.type');
+        $query->where('aic.type = "' . (string) $type . '"');
+        $query->where('ts.id_shop = ' . (string) $this->context->shop->id);
+        $query->where('ts.lang_iso = "' . (string) $langIso . '"');
+        $query->where('aic.created_at >= ts.last_sync_date');
+
+        return $this->db->executeS($query);
     }
 }

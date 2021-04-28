@@ -39,3 +39,10 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\GoogleTaxonomyRepository'
       - '@ps_eventbus.context'
+
+  PrestaShop\Module\PsEventbus\Provider\ShippingDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\ShippingDataProvider
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
+      - '@PrestaShop\Module\PsEventbus\Builder\CarrierBuilder'
+      - '@PrestaShop\Module\PsEventbus\Repository\CarrierRepository'

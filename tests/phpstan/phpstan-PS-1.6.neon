@@ -30,5 +30,6 @@ parameters:
 		- '#Call to method getService\(\) on an unknown class PrestaShop\\ModuleLibServiceContainer\\DependencyInjection\\ServiceContainer.#'
 		- '#Parameter \#1 \$id of class Currency constructor expects null, string given.#'
 		- '#Static method ConfigurationCore::get\(\) invoked with 5 parameters, 1-4 required.#'
+		- '#Parameter \#1 \$id of class Currency constructor expects null, bool\|string given.#'
 
 	level: 5
