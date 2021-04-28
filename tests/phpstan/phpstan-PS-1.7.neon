@@ -34,5 +34,6 @@ parameters:
 		- '#Parameter \#1 \$id of class Currency constructor expects null, string given.#'
 		- '#Parameter \#1 \$id of class Language constructor expects int\|null, string given.#'
 		- '#Parameter \#1 \$id of class Currency constructor expects int\|null, string given.#'
+		- '#Parameter \#1 \$id of class Currency constructor expects null, bool\|string given.#'
 
 	level: 5

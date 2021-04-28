@@ -122,3 +122,4 @@ services:
     class: PrestaShop\Module\PsEventbus\Repository\CarrierRepository
     arguments:
       - '@ps_eventbus.db'
+      - '@ps_eventbus.context'

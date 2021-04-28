@@ -72,6 +72,25 @@ class Ps_eventbus extends Module
         'actionObjectOrderUpdateAfter',
         'actionObjectCartAddAfter',
         'actionObjectCartUpdateAfter',
+        'actionObjectCarrierAddAfter',
+        'actionObjectCarrierUpdateAfter',
+        'actionObjectCarrierDeleteAfter',
+        'actionObjectCountryAddAfter',
+        'actionObjectCountryUpdateAfter',
+        'actionObjectCountryDeleteAfter',
+        'actionObjectStateAddAfter',
+        'actionObjectStateUpdateAfter',
+        'actionObjectStateDeleteAfter',
+        'actionObjectZoneAddAfter',
+        'actionObjectZoneUpdateAfter',
+        'actionObjectZoneDeleteAfter',
+        'actionObjectTaxAddAfter',
+        'actionObjectTaxUpdateAfter',
+        'actionObjectTaxDeleteAfter',
+        'actionObjectTaxRulesGroupAddAfter',
+        'actionObjectTaxRulesGroupUpdateAfter',
+        'actionObjectTaxRulesGroupDeleteAfter',
+        'actionShippingPreferencesPageSave',
     ];
 
     /**
@@ -340,6 +359,253 @@ class Ps_eventbus extends Module
         $this->insertIncrementalSyncObject(
             $order->id,
             'orders',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionObjectCarrierAddAfter()
+    {
+        $this->insertIncrementalSyncObject(
+            0,
+            'shipping',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionObjectCarrierUpdateAfter()
+    {
+        $this->insertIncrementalSyncObject(
+            0,
+            'shipping',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionObjectCarrierDeleteAfter()
+    {
+        $this->insertIncrementalSyncObject(
+            0,
+            'shipping',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionObjectCountryAddAfter()
+    {
+        $this->insertIncrementalSyncObject(
+            0,
+            'shipping',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionObjectCountryUpdateAfter()
+    {
+        $this->insertIncrementalSyncObject(
+            0,
+            'shipping',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionObjectCountryDeleteAfter()
+    {
+        $this->insertIncrementalSyncObject(
+            0,
+            'shipping',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionObjectStateAddAfter()
+    {
+        $this->insertIncrementalSyncObject(
+            0,
+            'shipping',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionObjectStateUpdateAfter()
+    {
+        $this->insertIncrementalSyncObject(
+            0,
+            'shipping',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionObjectStateDeleteAfter()
+    {
+        $this->insertIncrementalSyncObject(
+            0,
+            'shipping',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionObjectZoneAddAfter()
+    {
+        $this->insertIncrementalSyncObject(
+            0,
+            'shipping',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionObjectZoneUpdateAfter()
+    {
+        $this->insertIncrementalSyncObject(
+            0,
+            'shipping',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionObjectZoneDeleteAfter()
+    {
+        $this->insertIncrementalSyncObject(
+            0,
+            'shipping',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionObjectTaxAddAfter()
+    {
+        $this->insertIncrementalSyncObject(
+            0,
+            'shipping',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionObjectTaxUpdateAfter()
+    {
+        $this->insertIncrementalSyncObject(
+            0,
+            'shipping',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionObjectTaxDeleteAfter()
+    {
+        $this->insertIncrementalSyncObject(
+            0,
+            'shipping',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionObjectTaxRulesGroupAddAfter()
+    {
+        $this->insertIncrementalSyncObject(
+            0,
+            'shipping',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionObjectTaxRulesGroupUpdateAfter()
+    {
+        $this->insertIncrementalSyncObject(
+            0,
+            'shipping',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionObjectTaxRulesGroupDeleteAfter()
+    {
+        $this->insertIncrementalSyncObject(
+            0,
+            'shipping',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionShippingPreferencesPageSave()
+    {
+        $this->insertIncrementalSyncObject(
+            0,
+            'shipping',
             date(DATE_ATOM),
             $this->context->shop->id
         );

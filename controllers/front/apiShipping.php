@@ -4,10 +4,11 @@ use PrestaShop\Module\PsEventbus\Builder\CarrierBuilder;
 use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
 use PrestaShop\Module\PsEventbus\DTO\Carrier as EventBusCarrier;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
+use PrestaShop\Module\PsEventbus\Provider\ShippingDataProvider;
 
 class ps_EventbusApiShippingModuleFrontController extends AbstractApiController
 {
-    public $type = 'shops';
+    public $type = 'shipping';
 
     /**
      * @throws PrestaShopException
@@ -16,6 +17,12 @@ class ps_EventbusApiShippingModuleFrontController extends AbstractApiController
      */
     public function postProcess()
     {
+        $categoryDataProvider = $this->module->getService(ShippingDataProvider::class);
+
+        $response = $this->handleDataSync($categoryDataProvider);
+
+        $this->exitWithResponse($response);
+
         $response = [];
 
         $language = new Language(Configuration::get('PS_LANG_DEFAULT'));
