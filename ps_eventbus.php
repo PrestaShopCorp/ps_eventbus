@@ -39,51 +39,6 @@ class Ps_eventbus extends Module
     /**
      * @var string
      */
-    public $author;
-
-    /**
-     * @var bool
-     */
-    public $bootstrap;
-
-    /**
-     * @var int
-     */
-    public $need_instance;
-
-    /**
-     * @var string
-     */
-    public $description;
-
-    /**
-     * @var string
-     */
-    public $confirmUninstall;
-
-    /**
-     * @var string
-     */
-    public $displayName;
-
-    /**
-     * @var string
-     */
-    public $name;
-
-    /**
-     * @var array
-     */
-    public $ps_versions_compliancy;
-
-    /**
-     * @var string
-     */
-    public $tab;
-
-    /**
-     * @var string
-     */
     const VERSION = 'x.y.z';
 
     /**
