@@ -10,3 +10,8 @@ services:
 
   PrestaShop\Module\PsEventbus\Decorator\CategoryDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\CategoryDecorator
+
+  PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator:
+    class: PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Formatter\DateFormatter'
