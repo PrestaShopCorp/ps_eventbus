@@ -119,6 +119,8 @@ class SynchronizationService
             if ($response['httpCode'] == 201) {
                 $this->incrementalSyncRepository->removeIncrementalSyncObjects($type, $objectIds, $langIso);
             }
+        } else {
+            $this->incrementalSyncRepository->removeIncrementalSyncObjects($type, $objectIds, $langIso);
         }
 
         $remainingObjects = $this->incrementalSyncRepository->getRemainingIncrementalObjects($type, $langIso);
