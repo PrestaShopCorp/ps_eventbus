@@ -82,13 +82,13 @@ class OrderRepository
      *
      * @throws PrestaShopDatabaseException
      */
-    public function getOrdersIncremental($limit, $shopId, $oderIds)
+    public function getOrdersIncremental($limit, $shopId, $orderIds)
     {
         $query = $this->getBaseQuery($shopId);
 
         $this->addSelectParameters($query);
 
-        $query->where('o.id_order IN(' . implode(array_map('intval', $oderIds)) . ')')
+        $query->where('o.id_order IN(' . implode(array_map('intval', $orderIds)) . ')')
             ->limit($limit);
 
         $result = $this->db->executeS($query);

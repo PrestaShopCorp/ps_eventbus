@@ -97,6 +97,14 @@ class SynchronizationService
 
         $objectIds = $this->incrementalSyncRepository->getIncrementalSyncObjectIds($type, $langIso, $limit);
 
+        if (empty($objectIds)) {
+            return [
+                'total_objects' => 0,
+                'has_remaining_objects' => false,
+                'remaining_objects' => 0,
+            ];
+        }
+
         $data = $dataProvider->getFormattedDataIncremental($limit, $langIso, $objectIds);
 
         if (!empty($data)) {
