@@ -116,7 +116,7 @@ class SynchronizationService
         if (!empty($data)) {
             $response = $this->proxyService->upload($jobId, $data, $scriptStartTime);
 
-            if ($response['httpCode'] == 201 && !empty($objectIds)) {
+            if ($response['httpCode'] == 201) {
                 $this->incrementalSyncRepository->removeIncrementalSyncObjects($type, $objectIds, $langIso);
             }
         }

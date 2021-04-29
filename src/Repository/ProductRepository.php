@@ -306,7 +306,7 @@ class ProductRepository
 
         $this->addSelectParameters($query);
 
-        $query->where('p.id_product IN(' . implode(array_map('intval', $productIds)) . ')')
+        $query->where('p.id_product IN(' . implode(',', array_map('intval', $productIds)) . ')')
             ->limit($limit);
 
         $result = $this->db->executeS($query);

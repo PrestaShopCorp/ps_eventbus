@@ -193,7 +193,7 @@ class CategoryRepository
 
         $this->addSelectParameters($query);
 
-        $query->where('c.id_category IN(' . implode(array_map('intval', $categoryIds)) . ')')
+        $query->where('c.id_category IN(' . implode(',', array_map('intval', $categoryIds)) . ')')
             ->limit($limit);
 
         return $this->db->executeS($query);

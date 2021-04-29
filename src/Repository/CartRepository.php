@@ -85,7 +85,7 @@ class CartRepository
 
         $this->addSelectParameters($query);
 
-        $query->where('c.id_cart IN(' . implode(array_map('intval', $cartIds)) . ')')
+        $query->where('c.id_cart IN(' . implode(',', array_map('intval', $cartIds)) . ')')
             ->limit($limit);
 
         $result = $this->db->executeS($query);

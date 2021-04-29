@@ -88,7 +88,7 @@ class OrderRepository
 
         $this->addSelectParameters($query);
 
-        $query->where('o.id_order IN(' . implode(array_map('intval', $orderIds)) . ')')
+        $query->where('o.id_order IN(' . implode(',', array_map('intval', $orderIds)) . ')')
             ->limit($limit);
 
         $result = $this->db->executeS($query);
