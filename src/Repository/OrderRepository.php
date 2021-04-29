@@ -77,6 +77,7 @@ class OrderRepository
     /**
      * @param int $limit
      * @param int $shopId
+     * @param array $orderIds
      *
      * @return array
      *

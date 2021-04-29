@@ -74,6 +74,7 @@ class CartRepository
 
     /**
      * @param int $limit
+     * @param array $cartIds
      *
      * @return array
      *

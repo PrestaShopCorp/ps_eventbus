@@ -293,8 +293,8 @@ class ProductRepository
 
     /**
      * @param int $limit
-     * @param string $langIso
      * @param int $langId
+     * @param array $productIds
      *
      * @return array
      *

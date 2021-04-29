@@ -182,6 +182,7 @@ class CategoryRepository
     /**
      * @param int $limit
      * @param string $langIso
+     * @param array $categoryIds
      *
      * @return array|bool|mysqli_result|PDOStatement|resource|null
      *

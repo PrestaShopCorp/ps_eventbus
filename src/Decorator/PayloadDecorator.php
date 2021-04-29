@@ -16,6 +16,11 @@ class PayloadDecorator
         $this->dateFormatter = $dateFormatter;
     }
 
+    /**
+     * @param array $payload
+     *
+     * @return void
+     */
     public function convertDateFormat(array &$payload)
     {
         foreach ($payload as &$payloadItem) {

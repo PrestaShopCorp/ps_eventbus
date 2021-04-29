@@ -75,8 +75,8 @@ class IncrementalSyncRepository
 
     /**
      * @param string $type
-     * @param int $shopId
      * @param string $langIso
+     * @param int $limit
      *
      * @return array
      *
@@ -89,7 +89,7 @@ class IncrementalSyncRepository
         $query->select('id_object')
             ->from(self::INCREMENTAL_SYNC_TABLE)
             ->where('lang_iso = "' . pSQL($langIso) . '"')
-            ->where('id_shop = "' . $this->context->shop->id. '"')
+            ->where('id_shop = "' . $this->context->shop->id . '"')
             ->where('type = "' . pSQL($type) . '"')
             ->limit($limit);
 
