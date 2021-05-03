@@ -64,7 +64,7 @@ class ShippingDataProvider implements PaginatedApiDataProviderInterface
         return $eventBusCarriers;
     }
 
-    public function getFormattedDataIncremental($limit, $langIso)
+    public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
         $shippingIncremental = $this->carrierRepository->getShippingIncremental('shipping', $langIso);
 
@@ -85,10 +85,7 @@ class ShippingDataProvider implements PaginatedApiDataProviderInterface
             $this->configurationRepository->get('PS_WEIGHT_UNIT')
         );
 
-        return [
-            'ids' => 0,
-            'data' => $eventBusCarriers,
-        ];
+        return $eventBusCarriers;
     }
 
     public function getRemainingObjectsCount($offset, $langIso)
