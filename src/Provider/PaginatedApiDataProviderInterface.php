@@ -30,10 +30,11 @@ interface PaginatedApiDataProviderInterface
     /**
      * @param int $limit
      * @param string $langIso
+     * @param array $objectIds
      *
      * @return array
      *
      * @throws PrestaShopDatabaseException
      */
-    public function getFormattedDataIncremental($limit, $langIso);
+    public function getFormattedDataIncremental($limit, $langIso, $objectIds);
 }

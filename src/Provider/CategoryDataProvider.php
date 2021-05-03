@@ -67,39 +67,31 @@ class CategoryDataProvider implements PaginatedApiDataProviderInterface
         return (int) $this->categoryRepository->getRemainingCategoriesCount($offset, $langIso);
     }
 
-    public function getFormattedDataIncremental($limit, $langIso)
+    /**
+     * @param int $limit
+     * @param string $langIso
+     * @param array $objectIds
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
-        $categories = $this->categoryRepository->getCategoriesIncremental($limit, $langIso);
+        $categories = $this->categoryRepository->getCategoriesIncremental($limit, $langIso, $objectIds);
 
         if (!is_array($categories)) {
             return [];
         }
 
-        $categoryIds = $this->separateCategoryIds($categories);
-
         $this->categoryDecorator->decorateCategories($categories);
 
-        $categories = array_map(function ($category) {
+        return array_map(function ($category) {
             return [
                 'id' => "{$category['id_category']}-{$category['iso_code']}",
                 'collection' => 'categories',
                 'properties' => $category,
             ];
         }, $categories);
-
-        return [
-            'data' => $categories,
-            'ids' => $categoryIds,
-        ];
-    }
-
-    /**
-     * @param array $categories
-     *
-     * @return array
-     */
-    private function separateCategoryIds(array $categories)
-    {
-        return $this->arrayFormatter->formatValueArray($categories, 'id_category', true);
     }
 }

@@ -171,18 +171,13 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @throws PrestaShopDatabaseException
      */
-    public function getFormattedDataIncremental($limit, $langIso)
+    public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
-        $orders = $this->orderRepository->getOrdersIncremental($limit, $this->context->shop->id);
+        $orders = $this->orderRepository->getOrdersIncremental($limit, $this->context->shop->id, $objectIds);
 
         if (!is_array($orders) || empty($orders)) {
-            return [
-                'ids' => [],
-                'data' => [],
-            ];
+            return [];
         }
-
-        $orderIds = $this->separateOrderIds($orders);
 
         $this->castOrderValues($orders);
 
@@ -196,19 +191,6 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             ];
         }, $orders);
 
-        return [
-            'data' => array_merge($orders, $orderDetails),
-            'ids' => $orderIds,
-        ];
-    }
-
-    /**
-     * @param array $orders
-     *
-     * @return array
-     */
-    private function separateOrderIds(array $orders)
-    {
-        return $this->arrayFormatter->formatValueArray($orders, 'id_order', true);
+        return array_merge($orders, $orderDetails);
     }
 }

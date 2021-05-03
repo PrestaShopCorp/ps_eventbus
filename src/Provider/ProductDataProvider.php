@@ -82,51 +82,30 @@ class ProductDataProvider implements PaginatedApiDataProviderInterface
     /**
      * @param int $limit
      * @param string $langIso
+     * @param array $objectIds
      *
      * @return array
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getFormattedDataIncremental($limit, $langIso)
+    public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
         $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
 
-        $products = $this->productRepository->getProductsIncremental($limit, $langIso, $langId);
-
-        $productIds = $this->separateProductIds($products, count($products) < $limit);
+        $products = $this->productRepository->getProductsIncremental($limit, $langId, $objectIds);
 
         if (!empty($products)) {
             $this->productDecorator->decorateProducts($products, $langIso, $langId);
+        } else {
+            return [];
         }
 
-        $data = array_map(function ($product) {
+        return array_map(function ($product) {
             return [
                 'id' => $product['unique_product_id'],
                 'collection' => 'products',
                 'properties' => $product,
             ];
         }, $products);
-
-        return [
-            'data' => $data,
-            'ids' => $productIds,
-        ];
-    }
-
-    /**
-     * @param array $products
-     * @param bool $includeLast
-     *
-     * @return array
-     */
-    private function separateProductIds($products, $includeLast)
-    {
-        $productIds = $this->arrayFormatter->formatValueArray($products, 'id_product', true);
-
-        if (!$includeLast) {
-            array_pop($productIds);
-        }
-
-        return $productIds;
     }
 }

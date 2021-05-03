@@ -74,21 +74,19 @@ class CartRepository
 
     /**
      * @param int $limit
+     * @param array $cartIds
      *
      * @return array
      *
      * @throws PrestaShopDatabaseException
      */
-    public function getCartsIncremental($limit)
+    public function getCartsIncremental($limit, $cartIds)
     {
         $query = $this->getBaseQuery();
 
         $this->addSelectParameters($query);
-        $query->innerJoin(
-            IncrementalSyncRepository::INCREMENTAL_SYNC_TABLE,
-            'aic',
-            'aic.id_object = c.id_cart AND aic.id_shop = c.id_shop AND aic.type = "carts"'
-        )
+
+        $query->where('c.id_cart IN(' . implode(',', array_map('intval', $cartIds)) . ')')
             ->limit($limit);
 
         $result = $this->db->executeS($query);
