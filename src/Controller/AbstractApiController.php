@@ -17,6 +17,7 @@ use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService;
 use PrestaShop\Module\PsEventbus\Service\ProxyService;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
+use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleNotInstalledException;
 use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleVersionException;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use PrestaShopDatabaseException;
@@ -272,6 +273,8 @@ abstract class AbstractApiController extends ModuleFrontController
             $code = Config::INVALID_URL_QUERY;
         } elseif ($exception instanceof ModuleVersionException) {
             $code = Config::INVALID_PS_ACCOUNTS_VERSION;
+        } elseif ($exception instanceof ModuleNotInstalledException) {
+            $code = Config::PS_ACCOUNTS_NOT_INSTALLED;
         }
 
         $response = [

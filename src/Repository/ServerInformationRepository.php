@@ -9,7 +9,6 @@ use Exception;
 use Language;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
-use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleVersionException;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use PrestaShopDatabaseException;
 use Ps_eventbus;
@@ -121,8 +120,6 @@ class ServerInformationRepository
                 $tokenValid = false;
             }
         } catch (Exception $e) {
-            $tokenValid = false;
-        } catch (ModuleVersionException $e) {
             $tokenValid = false;
         }
 

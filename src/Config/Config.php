@@ -12,6 +12,7 @@ class Config
     const PS_FACEBOOK_NOT_INSTALLED = 456;
     const INVALID_URL_QUERY = 458;
     const INVALID_PS_ACCOUNTS_VERSION = 459;
+    const PS_ACCOUNTS_NOT_INSTALLED = 460;
 
     const HTTP_STATUS_MESSAGES = [
         self::REFRESH_TOKEN_ERROR_CODE => 'Cannot refresh token',
@@ -20,5 +21,7 @@ class Config
         self::DATABASE_INSERT_ERROR_CODE => 'Failed to write to database',
         self::PS_FACEBOOK_NOT_INSTALLED => 'Cannot sync Taxonomies without Facebook module',
         self::INVALID_URL_QUERY => 'Invalid URL query',
+        self::INVALID_PS_ACCOUNTS_VERSION => 'Invalid PsAccounts version',
+        self::PS_ACCOUNTS_NOT_INSTALLED => 'PsAccounts not installed',
     ];
 }

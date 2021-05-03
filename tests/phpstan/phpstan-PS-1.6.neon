@@ -31,5 +31,9 @@ parameters:
 		- '#Parameter \#1 \$id of class Currency constructor expects null, string given.#'
 		- '#Static method ConfigurationCore::get\(\) invoked with 5 parameters, 1-4 required.#'
 		- '#Parameter \#1 \$id of class Currency constructor expects null, bool\|string given.#'
+		- '#Property PrestaShop\\Module\\PsEventbus\\Controller\\AbstractApiController::\$psAccountsService has unknown class PrestaShop\\AccountsAuth\\Service\\PsAccountsService as its type.#'
+		- '#Call to method getOrRefreshToken\(\) on an unknown class PrestaShop\\AccountsAuth\\Service\\PsAccountsService.#'
+		- '#Property PrestaShop\\Module\\PsEventbus\\Repository\\ServerInformationRepository::\$psAccountsService has unknown class PrestaShop\\AccountsAuth\\Service\\PsAccountsService as its type.#'
+
 
 	level: 5

@@ -25,7 +25,6 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Post\PostFile;
 use Link;
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 
 /**
@@ -33,8 +32,19 @@ use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
  */
 class EventBusProxyClient extends GenericClient
 {
+    /**
+     * @var string
+     */
     private $baseUrl;
 
+    /**
+     * @param Link $link
+     * @param PsAccounts $psAccountsService
+     * @param string $baseUrl
+     *
+     * @throws \PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleNotInstalledException
+     * @throws \PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleVersionException
+     */
     public function __construct(Link $link, PsAccounts $psAccountsService, $baseUrl)
     {
         $this->baseUrl = $baseUrl;

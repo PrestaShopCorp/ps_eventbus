@@ -14,6 +14,15 @@ class EventBusSyncClient extends GenericClient
      */
     private $baseUrl;
 
+    /**
+     * EventBusSyncClient constructor.
+     * @param Link $link
+     * @param PsAccounts $psAccountsService
+     * @param string $baseUrl
+     *
+     * @throws \PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleNotInstalledException
+     * @throws \PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleVersionException
+     */
     public function __construct(Link $link, PsAccounts $psAccountsService, $baseUrl)
     {
         $this->baseUrl = $baseUrl;
