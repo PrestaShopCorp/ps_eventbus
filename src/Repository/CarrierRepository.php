@@ -133,7 +133,6 @@ class CarrierRepository
         $query->where('aic.type = "' . (string) $type . '"');
         $query->where('ts.id_shop = ' . (string) $this->context->shop->id);
         $query->where('ts.lang_iso = "' . (string) $langIso . '"');
-        $query->where('aic.created_at >= ts.last_sync_date');
 
         return $this->db->executeS($query);
     }
