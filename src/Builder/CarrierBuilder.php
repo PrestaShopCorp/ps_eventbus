@@ -188,6 +188,7 @@ class CarrierBuilder
     {
         $carrierDetail = new CarrierDetail();
         $carrierDetail->setShippingMethod($carrier->getRangeTable());
+        $carrierDetail->setCarrierDetailId($rangeWeight->id);
         $carrierDetail->setDelimiter1($rangeWeight->delimiter1);
         $carrierDetail->setDelimiter2($rangeWeight->delimiter2);
         $carrierDetail->setPrice($zone['price']);
@@ -217,7 +218,8 @@ class CarrierBuilder
      */
     private function buildCarrierTaxes(Carrier $carrier, $zoneId)
     {
-        $carrierTaxesByZone = $this->taxRepository->getCarrierTaxesByZone($zoneId, (int) $carrier->getIdTaxRulesGroup());
+        $taxRulesGroupId = (int) $carrier->getIdTaxRulesGroup();
+        $carrierTaxesByZone = $this->taxRepository->getCarrierTaxesByZone($zoneId, $taxRulesGroupId);
 
         if (!$carrierTaxesByZone[0]['country_iso_code']) {
             return null;
@@ -227,6 +229,7 @@ class CarrierBuilder
 
         $carrierTax = new CarrierTax();
         $carrierTax->setCarrierReference($carrier->id_reference);
+        $carrierTax->setTaxRulesGroupId($taxRulesGroupId);
         $carrierTax->setZoneId($zoneId);
         $carrierTax->setCountryIsoCode($carrierTaxesByZone['country_iso_code']);
         $carrierTax->setStateIsoCodes($carrierTaxesByZone['state_iso_code']);

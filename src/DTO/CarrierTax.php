@@ -19,6 +19,11 @@ class CarrierTax implements JsonSerializable
     /**
      * @var int
      */
+    private $taxRulesGroupId;
+
+    /**
+     * @var int
+     */
     private $zoneId;
 
     /**
@@ -72,6 +77,26 @@ class CarrierTax implements JsonSerializable
     public function setCarrierReference($carrierReference)
     {
         $this->carrierReference = $carrierReference;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTaxRulesGroupId()
+    {
+        return $this->taxRulesGroupId;
+    }
+
+    /**
+     * @param int $taxRulesGroupId
+     *
+     * @return CarrierTax
+     */
+    public function setTaxRulesGroupId($taxRulesGroupId)
+    {
+        $this->taxRulesGroupId = $taxRulesGroupId;
 
         return $this;
     }
@@ -163,6 +188,7 @@ class CarrierTax implements JsonSerializable
             'id' => $this->getCarrierReference() . '-' . $this->getZoneId(),
             'properties' => [
                 'id_reference' => (string) $this->getCarrierReference(),
+                'id_carrier_tax' => (string) $this->getTaxRulesGroupId(),
                 'country_id' => (string) $this->getCountryIsoCode(),
                 'state_ids' => (string) $this->getStateIsoCodes(),
                 'tax_rate' => (float) $this->getTaxRate(),

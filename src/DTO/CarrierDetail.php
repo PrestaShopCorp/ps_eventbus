@@ -28,6 +28,11 @@ class CarrierDetail implements JsonSerializable
     /**
      * @var int
      */
+    private $CarrierDetailId;
+
+    /**
+     * @var int
+     */
     private $zoneId;
 
     /**
@@ -112,6 +117,26 @@ class CarrierDetail implements JsonSerializable
     public function setCarrierReference($carrierReference)
     {
         $this->carrierReference = $carrierReference;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCarrierDetailId()
+    {
+        return $this->CarrierDetailId;
+    }
+
+    /**
+     * @param int $CarrierDetailId
+     *
+     * @return CarrierDetail
+     */
+    public function setCarrierDetailId($CarrierDetailId)
+    {
+        $this->CarrierDetailId = $CarrierDetailId;
 
         return $this;
     }
@@ -267,6 +292,7 @@ class CarrierDetail implements JsonSerializable
             'id' => $this->getCarrierReference() . '-' . $this->getZoneId() . '-' . $shippingMethod . '-' . $this->getRangeId(),
             'properties' => [
                 'id_reference' => (string) $this->getCarrierReference(),
+                'id_carrier_detail' => (string) $this->getCarrierDetailId(),
                 'shipping_method' => (string) $this->getShippingMethod(),
                 'delimiter1' => (float) $this->getDelimiter1(),
                 'delimiter2' => (float) $this->getDelimiter2(),
