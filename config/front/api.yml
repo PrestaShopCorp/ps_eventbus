@@ -4,11 +4,11 @@ services:
     arguments:
       - '@ps_eventbus.link'
       - '@PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
-      - { baseUrl: '%ps_eventbus.sync_api_url%' }
+      - '%ps_eventbus.sync_api_url%'
 
   PrestaShop\Module\PsEventbus\Api\EventBusProxyClient:
     class: PrestaShop\Module\PsEventbus\Api\EventBusProxyClient
     arguments:
       - '@ps_eventbus.link'
       - '@PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
-      - { baseUrl: '%ps_eventbus.proxy_api_url%' }
+      - '%ps_eventbus.proxy_api_url%'

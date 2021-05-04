@@ -1,5 +1,0 @@
-services:
-  PrestaShop\Module\PsEventbus\Adapter\ConfigurationAdapter:
-    class: PrestaShop\Module\PsEventbus\Adapter\ConfigurationAdapter
-    arguments:
-      - '@=service("ps_eventbus.shop").id'

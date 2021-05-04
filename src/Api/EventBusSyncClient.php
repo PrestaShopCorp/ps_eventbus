@@ -16,6 +16,7 @@ class EventBusSyncClient extends GenericClient
 
     /**
      * EventBusSyncClient constructor.
+     *
      * @param Link $link
      * @param PsAccounts $psAccountsService
      * @param string $baseUrl

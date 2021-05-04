@@ -5,7 +5,6 @@ imports:
   - { resource: provider.yml }
   - { resource: repository.yml }
   - { resource: builder.yml }
-  - { resource: adapter.yml }
   - { resource: context.yml }
 
 services:

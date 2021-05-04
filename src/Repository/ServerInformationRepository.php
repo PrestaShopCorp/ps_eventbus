@@ -47,6 +47,10 @@ class ServerInformationRepository
      * @var PsAccountsService
      */
     private $psAccountsService;
+    /**
+     * @var array
+     */
+    private $configuration;
 
     public function __construct(
         Context $context,
@@ -56,7 +60,8 @@ class ServerInformationRepository
         ConfigurationRepository $configurationRepository,
         ShopRepository $shopRepository,
         ArrayFormatter $arrayFormatter,
-        PsAccounts $psAccounts
+        PsAccounts $psAccounts,
+        array $configuration
     ) {
         $this->currencyRepository = $currencyRepository;
         $this->languageRepository = $languageRepository;
@@ -66,6 +71,7 @@ class ServerInformationRepository
         $this->db = $db;
         $this->arrayFormatter = $arrayFormatter;
         $this->psAccountsService = $psAccounts->getPsAccountsService();
+        $this->configuration = $configuration;
     }
 
     /**
@@ -151,8 +157,8 @@ class ServerInformationRepository
             'ps_account' => $tokenValid,
             'ps_eventbus' => $allTablesInstalled,
             'env' => [
-                'EVENT_BUS_PROXY_API_URL' => isset($_ENV['EVENT_BUS_PROXY_API_URL']) ? $_ENV['EVENT_BUS_PROXY_API_URL'] : null,
-                'EVENT_BUS_SYNC_API_URL' => isset($_ENV['EVENT_BUS_SYNC_API_URL']) ? $_ENV['EVENT_BUS_SYNC_API_URL'] : null,
+                'EVENT_BUS_PROXY_API_URL' => isset($this->configuration['EVENT_BUS_PROXY_API_URL']) ? $this->configuration['EVENT_BUS_PROXY_API_URL'] : null,
+                'EVENT_BUS_SYNC_API_URL' => isset($this->configuration['EVENT_BUS_SYNC_API_URL']) ? $this->configuration['EVENT_BUS_SYNC_API_URL'] : null,
             ],
         ];
     }
