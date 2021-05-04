@@ -1,0 +1,9 @@
+services:
+  PrestaShop\Module\PsEventbus\Builder\CarrierBuilder:
+    class: PrestaShop\Module\PsEventbus\Builder\CarrierBuilder
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\CarrierRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\CountryRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\StateRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\TaxRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'

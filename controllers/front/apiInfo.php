@@ -19,6 +19,7 @@ class ps_EventbusApiInfoModuleFrontController extends AbstractApiController
 
         $jobId = Tools::getValue('job_id');
 
+        /** @var ServerInformationRepository $serverInformationRepository */
         $serverInformationRepository = $this->module->getService(ServerInformationRepository::class);
 
         $serverInfo = $serverInformationRepository->getServerInformation(Tools::getValue('lang_iso', null));

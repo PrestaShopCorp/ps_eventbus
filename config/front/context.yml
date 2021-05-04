@@ -1,0 +1,32 @@
+services:
+  ps_eventbus.context:
+    class: 'Context'
+    factory: ['PrestaShop\Module\PsEventbus\Factory\ContextFactory', 'getContext']
+
+  ps_eventbus.controller:
+    class: 'Controller'
+    factory: ['PrestaShop\Module\PsEventbus\Factory\ContextFactory', 'getController']
+
+  ps_eventbus.cookie:
+    class: 'Cookie'
+    factory: ['PrestaShop\Module\PsEventbus\Factory\ContextFactory', 'getCookie']
+
+  ps_eventbus.language:
+    class: 'Language'
+    factory: ['PrestaShop\Module\PsEventbus\Factory\ContextFactory', 'getLanguage']
+
+  ps_eventbus.currency:
+    class: 'Currency'
+    factory: ['PrestaShop\Module\PsEventbus\Factory\ContextFactory', 'getCurrency']
+
+  ps_eventbus.smarty:
+    class: 'Smarty'
+    factory: ['PrestaShop\Module\PsEventbus\Factory\ContextFactory', 'getSmarty']
+
+  ps_eventbus.shop:
+    class: 'Shop'
+    factory: ['PrestaShop\Module\PsEventbus\Factory\ContextFactory', 'getShop']
+
+  ps_eventbus.link:
+    class: 'Shop'
+    factory: ['PrestaShop\Module\PsEventbus\Factory\ContextFactory', 'getLink']
