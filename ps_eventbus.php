@@ -371,7 +371,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'shipping',
+            'carrier',
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -384,7 +384,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'shipping',
+            'carrier',
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -397,7 +397,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'shipping',
+            'carrier',
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -410,7 +410,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'shipping',
+            'carrier',
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -423,7 +423,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'shipping',
+            'carrier',
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -436,7 +436,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'shipping',
+            'carrier',
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -449,7 +449,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'shipping',
+            'carrier',
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -462,7 +462,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'shipping',
+            'carrier',
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -475,7 +475,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'shipping',
+            'carrier',
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -488,7 +488,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'shipping',
+            'carrier',
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -501,7 +501,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'shipping',
+            'carrier',
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -514,7 +514,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'shipping',
+            'carrier',
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -527,7 +527,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'shipping',
+            'carrier',
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -540,7 +540,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'shipping',
+            'carrier',
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -553,7 +553,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'shipping',
+            'carrier',
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -566,7 +566,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'shipping',
+            'carrier',
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -579,7 +579,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'shipping',
+            'carrier',
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -592,7 +592,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'shipping',
+            'carrier',
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -605,7 +605,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'shipping',
+            'carrier',
             date(DATE_ATOM),
             $this->context->shop->id
         );

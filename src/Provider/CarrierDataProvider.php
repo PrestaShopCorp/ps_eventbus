@@ -10,7 +10,7 @@ use PrestaShop\Module\PsEventbus\DTO\Carrier as EventBusCarrier;
 use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
 use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 
-class ShippingDataProvider implements PaginatedApiDataProviderInterface
+class CarrierDataProvider implements PaginatedApiDataProviderInterface
 {
     /**
      * @var ConfigurationRepository
@@ -66,7 +66,7 @@ class ShippingDataProvider implements PaginatedApiDataProviderInterface
 
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
-        $shippingIncremental = $this->carrierRepository->getShippingIncremental('shipping', $langIso);
+        $shippingIncremental = $this->carrierRepository->getShippingIncremental('carrier', $langIso);
 
         if (!$shippingIncremental) {
             return [];

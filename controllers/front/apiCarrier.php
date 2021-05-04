@@ -1,11 +1,11 @@
 <?php
 
 use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
-use PrestaShop\Module\PsEventbus\Provider\ShippingDataProvider;
+use PrestaShop\Module\PsEventbus\Provider\CarrierDataProvider;
 
-class ps_EventbusApiShippingModuleFrontController extends AbstractApiController
+class ps_EventbusApiCarrierModuleFrontController extends AbstractApiController
 {
-    public $type = 'shipping';
+    public $type = 'carrier';
 
     /**
      * @throws PrestaShopException
@@ -14,7 +14,7 @@ class ps_EventbusApiShippingModuleFrontController extends AbstractApiController
      */
     public function postProcess()
     {
-        $categoryDataProvider = $this->module->getService(ShippingDataProvider::class);
+        $categoryDataProvider = $this->module->getService(CarrierDataProvider::class);
 
         $response = $this->handleDataSync($categoryDataProvider);
 
