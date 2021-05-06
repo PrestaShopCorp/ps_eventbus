@@ -3,8 +3,8 @@ PHP = $(shell which php 2> /dev/null)
 DOCKER = $(shell docker ps 2> /dev/null)
 NPM = $(shell which npm 2> /dev/null)
 YARN = $(shell which yarn 2> /dev/null)
-VERSION ?= $(shell git describe --tags)
 
+VERSION ?= $(shell git describe --tags 2> /dev/null || echo "0.0.0")
 SEM_VERSION ?= $(shell echo ${VERSION} | sed 's/^v//')
 MODULE ?= $(shell basename ${PWD})
 PACKAGE ?= "${MODULE}-${VERSION}"
@@ -32,31 +32,28 @@ version:
 	sed -i.bak -e "s|\(<version><!\[CDATA\[\)[0-9a-z.-]\{1,\}]]></version>|\1${SEM_VERSION}]]></version>|" config.xml
 	rm -f ps_eventbus.php.bak config.xml.bak
 
-# target: dist                                   - A directory to save zip bundles
-dist:
-	mkdir -p ./dist
-
 # target: zip                                    - Make zip bundles
 zip: zip-prod zip-inte
 
 # target: zip-prod                               - Bundle a production zip
-zip-prod: dist ./vendor
-	cp .env.dist .env
-	cd .. && zip -r ${PACKAGE}.zip ${MODULE} -x '*.git*' \
+zip-prod: ./vendor
+	mkdir -p ./dist
+	git co -- config/parameters.yml
+	cd .. && zip -r ${PACKAGE}.zip ${MODULE} -x '*.git*' -x '*.env*' \
 	  ${MODULE}/dist/\* \
 	  ${MODULE}/composer.phar \
 	  ${MODULE}/Makefile
 	mv ../${PACKAGE}.zip ./dist
 
 # target: zip-inte                               - Bundle a integration zip
-zip-inte: dist ./vendor
-	cp .env.inte .env
-	cd .. && zip -r ${PACKAGE}_integration.zip ${MODULE} -x '*.git*' \
+zip-inte: ./vendor
+	mkdir -p ./dist
+	cp .env.inte.yml config/parameters.yml 2>/dev/null || echo "WARNING: no integration config file found";
+	cd .. && zip -r ${PACKAGE}_integration.zip ${MODULE} -x '*.git*' -x '*.env*' \
 	  ${MODULE}/dist/\* \
 	  ${MODULE}/composer.phar \
 	  ${MODULE}/Makefile
 	mv ../${PACKAGE}_integration.zip ./dist
-	rm -f .env
 
 # target: build                                  - Setup PHP & Node.js locally
 build: ./vendor
