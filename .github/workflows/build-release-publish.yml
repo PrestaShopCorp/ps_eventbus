@@ -88,10 +88,10 @@ jobs:
       - name: Bundle the integration zip
         run: |
           cd ${{ github.event.repository.name }}
-          echo "$ENV_FILE" > .env.inte
+          echo "$PARAMETERS_FILE" > config/parameters.yml
           make zip-inte
         env:
-          ENV_FILE: ${{ secrets.PS_EVENTBUS_ENV_INTE }}
+          PARAMETERS_FILE: ${{ secrets.PS_EVENTBUS_ENV_INTE }}
 
       - name: Publish the integration zip
         uses: actions/upload-release-asset@v1.0.1
