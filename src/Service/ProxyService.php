@@ -62,7 +62,7 @@ class ProxyService
         $dataJson = $this->jsonFormatter->formatNewlineJsonString($data);
 
         try {
-            $response = $this->eventBusProxyClient->delete($jobId, $dataJson);
+            $response = $this->eventBusProxyClient->uploadDelete($jobId, $dataJson);
         } catch (ClientException $exception) {
             return ['error' => $exception->getMessage()];
         }

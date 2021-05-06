@@ -17,6 +17,7 @@ class ps_EventbusApiThemesModuleFrontController extends AbstractApiController
 
         $jobId = Tools::getValue('job_id');
 
+        /** @var ThemeRepository $themeRepository */
         $themeRepository = $this->module->getService(ThemeRepository::class);
 
         $themeInfo = $themeRepository->getThemes();

@@ -17,6 +17,9 @@ use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService;
 use PrestaShop\Module\PsEventbus\Service\ProxyService;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
+use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleNotInstalledException;
+use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleVersionException;
+use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use PrestaShopDatabaseException;
 use PrestaShopException;
 use Ps_eventbus;
@@ -68,19 +71,29 @@ abstract class AbstractApiController extends ModuleFrontController
      * @var Ps_eventbus
      */
     public $module;
+    /**
+     * @var bool
+     */
+    public $psAccountsInstalled = true;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->controller_type = 'module';
-        $this->proxyService = $this->module->getService(ProxyService::class);
-        $this->authorizationService = $this->module->getService(ApiAuthorizationService::class);
+
+        try {
+            $this->psAccountsService = $this->module->getService(PsAccounts::class)->getPsAccountsService();
+            $this->proxyService = $this->module->getService(ProxyService::class);
+            $this->authorizationService = $this->module->getService(ApiAuthorizationService::class);
+            $this->synchronizationService = $this->module->getService(SynchronizationService::class);
+        } catch (ModuleVersionException $exception) {
+            $this->exitWithExceptionMessage($exception);
+        }
+
         $this->eventbusSyncRepository = $this->module->getService(EventbusSyncRepository::class);
         $this->languageRepository = $this->module->getService(LanguageRepository::class);
-        $this->psAccountsService = new PsAccountsService();
         $this->incrementalSyncRepository = $this->module->getService(IncrementalSyncRepository::class);
-        $this->synchronizationService = $this->module->getService(SynchronizationService::class);
     }
 
     /**
@@ -258,6 +271,10 @@ abstract class AbstractApiController extends ModuleFrontController
             $code = Config::REFRESH_TOKEN_ERROR_CODE;
         } elseif ($exception instanceof QueryParamsException) {
             $code = Config::INVALID_URL_QUERY;
+        } elseif ($exception instanceof ModuleVersionException) {
+            $code = Config::INVALID_PS_ACCOUNTS_VERSION;
+        } elseif ($exception instanceof ModuleNotInstalledException) {
+            $code = Config::PS_ACCOUNTS_NOT_INSTALLED;
         }
 
         $response = [

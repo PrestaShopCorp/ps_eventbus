@@ -37,5 +37,8 @@ parameters:
 		- '#Parameter \#1 \$id of class Currency constructor expects null, bool\|string given.#'
 		- '#Parameter \#1 \$id of class Language constructor expects int\|null, bool\|string given.#'
 		- '#Parameter \#1 \$id of class Currency constructor expects int\|null, bool\|string given.#'
+		- '#Property PrestaShop\\Module\\PsEventbus\\Controller\\AbstractApiController::\$psAccountsService has unknown class PrestaShop\\AccountsAuth\\Service\\PsAccountsService as its type.#'
+		- '#Call to method getOrRefreshToken\(\) on an unknown class PrestaShop\\AccountsAuth\\Service\\PsAccountsService.#'
+		- '#Property PrestaShop\\Module\\PsEventbus\\Repository\\ServerInformationRepository::\$psAccountsService has unknown class PrestaShop\\AccountsAuth\\Service\\PsAccountsService as its type.#'
 
 	level: 5

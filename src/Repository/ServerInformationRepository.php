@@ -9,6 +9,7 @@ use Exception;
 use Language;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
+use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use PrestaShopDatabaseException;
 use Ps_eventbus;
 
@@ -42,6 +43,14 @@ class ServerInformationRepository
      * @var ShopRepository
      */
     private $shopRepository;
+    /**
+     * @var PsAccountsService
+     */
+    private $psAccountsService;
+    /**
+     * @var array
+     */
+    private $configuration;
 
     public function __construct(
         Context $context,
@@ -50,7 +59,9 @@ class ServerInformationRepository
         LanguageRepository $languageRepository,
         ConfigurationRepository $configurationRepository,
         ShopRepository $shopRepository,
-        ArrayFormatter $arrayFormatter
+        ArrayFormatter $arrayFormatter,
+        PsAccounts $psAccounts,
+        array $configuration
     ) {
         $this->currencyRepository = $currencyRepository;
         $this->languageRepository = $languageRepository;
@@ -59,6 +70,8 @@ class ServerInformationRepository
         $this->context = $context;
         $this->db = $db;
         $this->arrayFormatter = $arrayFormatter;
+        $this->psAccountsService = $psAccounts->getPsAccountsService();
+        $this->configuration = $configuration;
     }
 
     /**
@@ -106,10 +119,8 @@ class ServerInformationRepository
         $allTablesInstalled = true;
         $phpVersion = '';
 
-        $psAccountsService = new PsAccountsService();
-
         try {
-            $token = $psAccountsService->getOrRefreshToken();
+            $token = $this->psAccountsService->getOrRefreshToken();
 
             if (!$token) {
                 $tokenValid = false;
@@ -146,8 +157,8 @@ class ServerInformationRepository
             'ps_account' => $tokenValid,
             'ps_eventbus' => $allTablesInstalled,
             'env' => [
-                'EVENT_BUS_PROXY_API_URL' => isset($_ENV['EVENT_BUS_PROXY_API_URL']) ? $_ENV['EVENT_BUS_PROXY_API_URL'] : null,
-                'EVENT_BUS_SYNC_API_URL' => isset($_ENV['EVENT_BUS_SYNC_API_URL']) ? $_ENV['EVENT_BUS_SYNC_API_URL'] : null,
+                'EVENT_BUS_PROXY_API_URL' => isset($this->configuration['EVENT_BUS_PROXY_API_URL']) ? $this->configuration['EVENT_BUS_PROXY_API_URL'] : null,
+                'EVENT_BUS_SYNC_API_URL' => isset($this->configuration['EVENT_BUS_SYNC_API_URL']) ? $this->configuration['EVENT_BUS_SYNC_API_URL'] : null,
             ],
         ];
     }

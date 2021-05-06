@@ -3,35 +3,46 @@
 namespace PrestaShop\Module\PsEventbus\Api;
 
 use GuzzleHttp\Client;
-use PrestaShop\AccountsAuth\Api\Client\GenericClient;
-use PrestaShop\AccountsAuth\Service\PsAccountsService;
+use Link;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
+use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 
 class EventBusSyncClient extends GenericClient
 {
-    public function __construct(\Link $link, Client $client = null)
+    /**
+     * @var string
+     */
+    private $baseUrl;
+
+    /**
+     * EventBusSyncClient constructor.
+     *
+     * @param Link $link
+     * @param PsAccounts $psAccountsService
+     * @param string $baseUrl
+     *
+     * @throws \PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleNotInstalledException
+     * @throws \PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleVersionException
+     */
+    public function __construct(Link $link, PsAccounts $psAccountsService, $baseUrl)
     {
-        parent::__construct();
-
+        $this->baseUrl = $baseUrl;
         $this->setLink($link);
-        $psAccountsService = new PsAccountsService();
-        $token = $psAccountsService->getOrRefreshToken();
+        $token = $psAccountsService->getPsAccountsService()->getOrRefreshToken();
 
-        if (null === $client) {
-            $client = new Client([
-                'base_url' => $_ENV['EVENT_BUS_SYNC_API_URL'],
-                'defaults' => [
-                    'timeout' => $this->timeout,
-                    'exceptions' => $this->catchExceptions,
-                    'headers' => [
-                        'Accept' => 'application/json',
-                        'Authorization' => "Bearer $token",
-                    ],
+        $client = new Client([
+            'base_url' => $this->baseUrl,
+            'defaults' => [
+                'timeout' => $this->timeout,
+                'exceptions' => $this->catchExceptions,
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => "Bearer $token",
                 ],
-            ]);
-        }
+            ],
+        ]);
 
-        $this->setClient($client);
+        parent::__construct($client);
     }
 
     /**
@@ -43,11 +54,7 @@ class EventBusSyncClient extends GenericClient
      */
     public function validateJobId($jobId)
     {
-        if (!isset($_ENV['EVENT_BUS_SYNC_API_URL'])) {
-            throw new EnvVarException('EVENT_BUS_SYNC_API_URL is not defined');
-        }
-
-        $this->setRoute($_ENV['EVENT_BUS_SYNC_API_URL'] . "/job/$jobId");
+        $this->setRoute($this->baseUrl . "/job/$jobId");
 
         return $this->get();
     }
