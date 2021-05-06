@@ -189,7 +189,7 @@ class CarrierTax implements JsonSerializable
             'properties' => [
                 'id_reference' => (string) $this->getCarrierReference(),
                 'id_carrier_tax' => (string) $this->getTaxRulesGroupId(),
-                'country_id' => (string) $this->getCountryIsoCode(),
+                'country_ids' => (string) $this->getCountryIsoCode(),
                 'state_ids' => (string) $this->getStateIsoCodes(),
                 'tax_rate' => (float) $this->getTaxRate(),
             ],
