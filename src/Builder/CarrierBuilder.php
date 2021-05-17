@@ -61,7 +61,7 @@ class CarrierBuilder
     {
         $eventBusCarriers = [];
         foreach ($carriers as $carrier) {
-            $eventBusCarriers[] = self::build(
+            $eventBusCarriers[] = self::buildCarrier(
                 $carrier['id_carrier'],
                 $lang,
                 $currency,
@@ -79,9 +79,8 @@ class CarrierBuilder
     }
 
     /**
-     * @param int $carrierId
-     * @param Language $lang
-     * @param Currency $currency
+     * @param Carrier $carrier
+     * @param string $currencyIsoCode
      * @param string $weightUnit
      *
      * @return EventBusCarrier
@@ -89,10 +88,9 @@ class CarrierBuilder
      * @throws \PrestaShopDatabaseException
      * @throws \PrestaShopException
      */
-    public function build($carrierId, Language $lang, Currency $currency, $weightUnit)
+    public function buildCarrier(Carrier $carrier, $currencyIsoCode, $weightUnit)
     {
         $eventBusCarrier = new EventBusCarrier();
-        $carrier = new Carrier($carrierId, $lang->id);
         $freeShippingStartsAtPrice = (float) $this->configurationRepository->get('PS_SHIPPING_FREE_PRICE');
         $freeShippingStartsAtWeight = (float) $this->configurationRepository->get('PS_SHIPPING_FREE_WEIGHT');
         $eventBusCarrier->setFreeShippingStartsAtPrice($freeShippingStartsAtPrice);
@@ -120,7 +118,7 @@ class CarrierBuilder
             ->setMaxWeight($carrier->max_weight)
             ->setGrade($carrier->grade)
             ->setDelay($carrier->delay)
-            ->setCurrency($currency->iso_code)
+            ->setCurrency($currencyIsoCode)
             ->setWeightUnit($weightUnit);
 
         $deliveryPriceByRanges = $this->carrierRepository->getDeliveryPriceByRange($carrier);
@@ -132,7 +130,7 @@ class CarrierBuilder
         $carrierDetails = [];
         $carrierTaxes = [];
         foreach ($deliveryPriceByRanges as $deliveryPriceByRange) {
-            $range = $this->getCarrierRange($deliveryPriceByRange);
+            $range = $this->carrierRepository->getCarrierRange($deliveryPriceByRange);
             if (!$range) {
                 continue;
             }
@@ -153,26 +151,6 @@ class CarrierBuilder
         $eventBusCarrier->setCarrierTaxes($carrierTaxes);
 
         return $eventBusCarrier;
-    }
-
-    /**
-     * @param array $deliveryPriceByRange
-     *
-     * @return false|RangeWeight|RangePrice
-     *
-     * @throws \PrestaShopDatabaseException
-     * @throws \PrestaShopException
-     */
-    private function getCarrierRange(array $deliveryPriceByRange)
-    {
-        if (isset($deliveryPriceByRange['id_range_weight'])) {
-            return new RangeWeight($deliveryPriceByRange['id_range_weight']);
-        }
-        if (isset($deliveryPriceByRange['id_range_price'])) {
-            return new RangePrice($deliveryPriceByRange['id_range_price']);
-        }
-
-        return false;
     }
 
     /**

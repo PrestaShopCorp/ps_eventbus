@@ -6,6 +6,8 @@ use Carrier;
 use Context;
 use Db;
 use DbQuery;
+use RangePrice;
+use RangeWeight;
 
 class CarrierRepository
 {
@@ -135,5 +137,25 @@ class CarrierRepository
         $query->where('ts.lang_iso = "' . (string) $langIso . '"');
 
         return $this->db->executeS($query);
+    }
+
+    /**
+     * @param array $deliveryPriceByRange
+     *
+     * @return false|RangeWeight|RangePrice
+     *
+     * @throws \PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     */
+    public function getCarrierRange(array $deliveryPriceByRange)
+    {
+        if (isset($deliveryPriceByRange['id_range_weight'])) {
+            return new RangeWeight($deliveryPriceByRange['id_range_weight']);
+        }
+        if (isset($deliveryPriceByRange['id_range_price'])) {
+            return new RangePrice($deliveryPriceByRange['id_range_price']);
+        }
+
+        return false;
     }
 }
