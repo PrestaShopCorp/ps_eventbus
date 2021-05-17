@@ -62,9 +62,8 @@ class CarrierBuilder
         $eventBusCarriers = [];
         foreach ($carriers as $carrier) {
             $eventBusCarriers[] = self::buildCarrier(
-                $carrier['id_carrier'],
-                $lang,
-                $currency,
+                new Carrier($carrier['id_carrier'], $lang->id),
+                $currency->iso_code,
                 $weightUnit
             );
         }

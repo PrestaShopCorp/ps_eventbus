@@ -490,7 +490,7 @@ class CarrierBuilderTest extends \PHPUnit_Framework_TestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function createCarrierRepositoryMock($mockedDeliveryBy, $mockedCarrierRange): \PHPUnit_Framework_MockObject_MockObject
+    private function createCarrierRepositoryMock($mockedDeliveryBy, $mockedCarrierRange)
     {
         $carrierRepo = $this->getMockBuilder(CarrierRepository::class)
             ->disableOriginalConstructor()
@@ -506,7 +506,7 @@ class CarrierBuilderTest extends \PHPUnit_Framework_TestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function createCountryRepositoryMock($mockedCountryIsoCode): \PHPUnit_Framework_MockObject_MockObject
+    private function createCountryRepositoryMock($mockedCountryIsoCode)
     {
         $countryRepo = $this->getMockBuilder(CountryRepository::class)
             ->disableOriginalConstructor()
@@ -521,7 +521,7 @@ class CarrierBuilderTest extends \PHPUnit_Framework_TestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStateRepositoryMock($mockedStateIsoCode): \PHPUnit_Framework_MockObject_MockObject
+    private function createStateRepositoryMock($mockedStateIsoCode)
     {
         $stateRepo = $this->getMockBuilder(StateRepository::class)
             ->disableOriginalConstructor()
@@ -536,7 +536,7 @@ class CarrierBuilderTest extends \PHPUnit_Framework_TestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function createTaxRepositoryMock($mockedCarrierTaxesByZone): \PHPUnit_Framework_MockObject_MockObject
+    private function createTaxRepositoryMock($mockedCarrierTaxesByZone)
     {
         $taxRepository = $this->getMockBuilder(TaxRepository::class)
             ->disableOriginalConstructor()
@@ -552,7 +552,7 @@ class CarrierBuilderTest extends \PHPUnit_Framework_TestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function createConfigurationRepositoryMock(float $freeShippintAtPrice, float $freeShippingAtWeight): \PHPUnit_Framework_MockObject_MockObject
+    private function createConfigurationRepositoryMock($freeShippintAtPrice, $freeShippingAtWeight)
     {
         $configurationRepository = $this->getMockBuilder(ConfigurationRepository::class)
             ->disableOriginalConstructor()
