@@ -1,6 +1,7 @@
 services:
   PrestaShop\Module\PsEventbus\Decorator\ProductDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\ProductDecorator
+    public: true
     arguments:
       - '@ps_eventbus.context'
       - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
@@ -10,8 +11,10 @@ services:
 
   PrestaShop\Module\PsEventbus\Decorator\CategoryDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\CategoryDecorator
+    public: true
 
   PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator
+    public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Formatter\DateFormatter'

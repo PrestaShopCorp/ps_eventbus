@@ -10,32 +10,39 @@ imports:
 services:
   PrestaShop\Module\PsEventbus\Formatter\JsonFormatter:
     class: PrestaShop\Module\PsEventbus\Formatter\JsonFormatter
+    public: true
 
   PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter:
     class: PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter
+    public: true
 
   PrestaShop\Module\PsEventbus\Formatter\DateFormatter:
     class: PrestaShop\Module\PsEventbus\Formatter\DateFormatter
+    public: true
 
   PrestaShop\Module\PsEventbus\Service\CompressionService:
     class: PrestaShop\Module\PsEventbus\Service\CompressionService
+    public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Formatter\JsonFormatter'
 
   PrestaShop\Module\PsEventbus\Service\ProxyService:
     class: PrestaShop\Module\PsEventbus\Service\ProxyService
+    public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Api\EventBusProxyClient'
       - '@PrestaShop\Module\PsEventbus\Formatter\JsonFormatter'
 
   PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService:
     class: PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService
+    public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Api\EventBusSyncClient'
 
   PrestaShop\Module\PsEventbus\Service\DeletedObjectsService:
     class: PrestaShop\Module\PsEventbus\Service\DeletedObjectsService
+    public: true
     arguments:
       - '@ps_eventbus.context'
       - '@PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository'
@@ -43,6 +50,7 @@ services:
 
   PrestaShop\Module\PsEventbus\Service\SynchronizationService:
     class: PrestaShop\Module\PsEventbus\Service\SynchronizationService
+    public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository'
