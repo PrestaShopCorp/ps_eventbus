@@ -1,37 +1,45 @@
 services:
   PrestaShop\Module\PsEventbus\Repository\CurrencyRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CurrencyRepository
+    public: true
 
   PrestaShop\Module\PsEventbus\Repository\LanguageRepository:
     class: PrestaShop\Module\PsEventbus\Repository\LanguageRepository
+    public: true
 
   PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository
+    public: true
 
   PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository:
     class: PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository
+    public: true
     arguments:
       - '@ps_eventbus.db'
       - '@ps_eventbus.context'
 
   PrestaShop\Module\PsEventbus\Repository\CategoryRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CategoryRepository
+    public: true
     arguments:
       - '@ps_eventbus.db'
       - '@ps_eventbus.context'
 
   PrestaShop\Module\PsEventbus\Repository\ImageRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ImageRepository
+    public: true
     arguments:
       - '@ps_eventbus.db'
 
   PrestaShop\Module\PsEventbus\Repository\ModuleRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ModuleRepository
+    public: true
     arguments:
       - '@ps_eventbus.db'
 
   PrestaShop\Module\PsEventbus\Repository\ProductRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ProductRepository
+    public: true
     arguments:
       - '@ps_eventbus.db'
       - '@ps_eventbus.context'
@@ -39,6 +47,7 @@ services:
 
   PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository
+    public: true
     arguments:
       - '@ps_eventbus.context'
       - '@ps_eventbus.db'
@@ -52,76 +61,89 @@ services:
 
   PrestaShop\Module\PsEventbus\Repository\ThemeRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ThemeRepository
+    public: true
     arguments:
       - '@ps_eventbus.context'
       - '@ps_eventbus.db'
 
   PrestaShop\Module\PsEventbus\Repository\OrderRepository:
     class: PrestaShop\Module\PsEventbus\Repository\OrderRepository
+    public: true
     arguments:
       - '@ps_eventbus.db'
 
   PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository:
     class: PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository
+    public: true
     arguments:
       - '@ps_eventbus.db'
       - '@ps_eventbus.context'
 
   PrestaShop\Module\PsEventbus\Repository\CartRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CartRepository
+    public: true
     arguments:
       - '@ps_eventbus.db'
       - '@ps_eventbus.context'
 
   PrestaShop\Module\PsEventbus\Repository\CartProductRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CartProductRepository
+    public: true
     arguments:
       - '@ps_eventbus.db'
       - '@ps_eventbus.context'
 
   PrestaShop\Module\PsEventbus\Repository\GoogleTaxonomyRepository:
     class: PrestaShop\Module\PsEventbus\Repository\GoogleTaxonomyRepository
+    public: true
     arguments:
       - '@ps_eventbus.db'
 
   PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository:
     class: PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository
+    public: true
     arguments:
       - '@ps_eventbus.db'
       - '@ps_eventbus.context'
 
   PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository:
     class: PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository
+    public: true
     arguments:
       - '@ps_eventbus.db'
       - '@ps_eventbus.context'
 
   PrestaShop\Module\PsEventbus\Repository\ShopRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ShopRepository
+    public: true
     arguments:
       - '@ps_eventbus.context'
       - '@ps_eventbus.db'
 
   PrestaShop\Module\PsEventbus\Repository\CountryRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CountryRepository
+    public: true
     arguments:
       - '@ps_eventbus.db'
       - '@ps_eventbus.context'
 
   PrestaShop\Module\PsEventbus\Repository\StateRepository:
     class: PrestaShop\Module\PsEventbus\Repository\StateRepository
+    public: true
     arguments:
       - '@ps_eventbus.db'
       - '@ps_eventbus.context'
 
   PrestaShop\Module\PsEventbus\Repository\TaxRepository:
     class: PrestaShop\Module\PsEventbus\Repository\TaxRepository
+    public: true
     arguments:
       - '@ps_eventbus.db'
       - '@ps_eventbus.context'
 
   PrestaShop\Module\PsEventbus\Repository\CarrierRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CarrierRepository
+    public: true
     arguments:
       - '@ps_eventbus.db'
       - '@ps_eventbus.context'

@@ -1,6 +1,7 @@
 services:
   PrestaShop\Module\PsEventbus\Api\EventBusSyncClient:
     class: PrestaShop\Module\PsEventbus\Api\EventBusSyncClient
+    public: true
     arguments:
       - '@ps_eventbus.link'
       - '@PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
@@ -8,6 +9,7 @@ services:
 
   PrestaShop\Module\PsEventbus\Api\EventBusProxyClient:
     class: PrestaShop\Module\PsEventbus\Api\EventBusProxyClient
+    public: true
     arguments:
       - '@ps_eventbus.link'
       - '@PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
