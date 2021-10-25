@@ -1,11 +1,9 @@
 <?php
 
 /**
- * @param Ps_eventbus $module
- *
  * @return bool
  */
-function upgrade_module_1_3_8($module)
+function upgrade_module_1_5_1()
 {
     $db = Db::getInstance();
 
