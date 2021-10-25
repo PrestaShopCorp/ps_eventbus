@@ -607,6 +607,10 @@ class Ps_eventbus extends Module
      */
     private function insertIncrementalSyncObject($objectId, $type, $date, $shopId, $hasMultiLang = false)
     {
+        if ((int) $objectId === 0) {
+            return;
+        }
+
         /** @var \PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository $incrementalSyncRepository */
         $incrementalSyncRepository = $this->getService(
             \PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository::class
@@ -631,15 +635,19 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param int $id
+     * @param int $objectId
      * @param string $type
      * @param string $date
      * @param int $shopId
      *
      * @return void
      */
-    private function insertDeletedObject($id, $type, $date, $shopId)
+    private function insertDeletedObject($objectId, $type, $date, $shopId)
     {
+        if ((int) $objectId === 0) {
+            return;
+        }
+
         /** @var \PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository $deletedObjectsRepository */
         $deletedObjectsRepository = $this->getService(
             \PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository::class
@@ -650,7 +658,7 @@ class Ps_eventbus extends Module
             \PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository::class
         );
 
-        $deletedObjectsRepository->insertDeletedObject($id, $type, $date, $shopId);
-        $incrementalSyncRepository->removeIncrementalSyncObject($type, $id);
+        $deletedObjectsRepository->insertDeletedObject($objectId, $type, $date, $shopId);
+        $incrementalSyncRepository->removeIncrementalSyncObject($type, $objectId);
     }
 }
