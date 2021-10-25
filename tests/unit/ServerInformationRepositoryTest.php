@@ -7,6 +7,7 @@ use PrestaShop\Module\PsEventbus\Repository\CurrencyRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository;
 use PrestaShop\Module\PsEventbus\Repository\ShopRepository;
+use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 
 class ServerInformationRepositoryTest extends TestCase
 {
@@ -42,6 +43,10 @@ class ServerInformationRepositoryTest extends TestCase
      * @var Db
      */
     private $db;
+    /**
+     * @var PsAccounts
+     */
+    private $psAccounts;
 
     protected function setUp()
     {
@@ -50,6 +55,8 @@ class ServerInformationRepositoryTest extends TestCase
         $this->languageRepository = $this->createMock(LanguageRepository::class);
         $this->configurationRepository = $this->createMock(ConfigurationRepository::class);
         $this->shopRepository = $this->createMock(ShopRepository::class);
+        $this->arrayFormatter = $this->createMock(ArrayFormatter::class);
+        $this->psAccounts = $this->createMock(PsAccounts::class);
         $this->arrayFormatter = $this->createMock(ArrayFormatter::class);
         $this->context = $this->createMock(Context::class);
         $link = $this->createMock(Link::class);
@@ -63,7 +70,9 @@ class ServerInformationRepositoryTest extends TestCase
             $this->languageRepository,
             $this->configurationRepository,
             $this->shopRepository,
-            $this->arrayFormatter
+            $this->arrayFormatter,
+            $this->psAccounts,
+            []
         );
     }
 
