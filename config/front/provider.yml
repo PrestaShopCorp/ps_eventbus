@@ -53,3 +53,10 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
       - '@PrestaShop\Module\PsEventbus\Builder\CarrierBuilder'
       - '@PrestaShop\Module\PsEventbus\Repository\CarrierRepository'
+
+  PrestaShop\Module\PsEventbus\Provider\CustomPriceDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\CustomPriceDataProvider
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\CustomPriceRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\CustomPriceDecorator'

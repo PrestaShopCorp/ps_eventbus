@@ -18,3 +18,11 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Formatter\DateFormatter'
+
+  PrestaShop\Module\PsEventbus\Decorator\CustomPriceDecorator:
+    class: PrestaShop\Module\PsEventbus\Decorator\CustomPriceDecorator
+    public: true
+    arguments:
+      - '@ps_eventbus.context'
+      - '@PrestaShop\Module\PsEventbus\Repository\ProductRepository'
+      - '@PrestaShop\Module\PsEventbus\Service\SpecificPriceService'

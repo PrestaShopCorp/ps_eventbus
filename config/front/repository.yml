@@ -147,3 +147,10 @@ services:
     arguments:
       - '@ps_eventbus.db'
       - '@ps_eventbus.context'
+
+  PrestaShop\Module\PsEventbus\Repository\CustomPriceRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CustomPriceRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
+      - '@ps_eventbus.context'

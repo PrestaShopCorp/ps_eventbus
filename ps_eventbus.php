@@ -365,7 +365,7 @@ class Ps_eventbus extends Module
     /**
      * @return void
      */
-    public function hookActionObjectCarrierUpdateAfter()
+    public function hookActionObjectCarrierUpdateAfter($params)
     {
         $this->insertIncrementalSyncObject(
             0,

@@ -54,7 +54,6 @@ class ProductRepository
         $query->from('product', 'p')
             ->innerJoin('product_shop', 'ps', 'ps.id_product = p.id_product AND ps.id_shop = ' . (int) $shopId)
             ->innerJoin('product_lang', 'pl', 'pl.id_product = ps.id_product AND pl.id_shop = ps.id_shop AND pl.id_lang = ' . (int) $langId)
-
             ->leftJoin('product_attribute_shop', 'pas', 'pas.id_product = p.id_product AND pas.id_shop = ps.id_shop')
             ->leftJoin('product_attribute', 'pa', 'pas.id_product_attribute = pa.id_product_attribute')
             ->leftJoin('category_lang', 'cl', 'ps.id_category_default = cl.id_category AND ps.id_shop = cl.id_shop AND cl.id_lang = ' . (int) $langId)
@@ -218,21 +217,40 @@ class ProductRepository
     /**
      * @param int $productId
      * @param int $attributeId
+     * @param ?Context $context
      *
      * @return float
      */
-    public function getPriceTaxExcluded($productId, $attributeId)
+    public function getPriceTaxExcluded($productId, $attributeId, $context = null)
     {
-        return Product::getPriceStatic($productId, false, $attributeId, 6, null, false, false);
+        return Product::getPriceStatic(
+            $productId,
+            false,
+            $attributeId,
+            6,
+            null,
+            false,
+            false,
+            1,
+            false,
+            null,
+            null,
+            null,
+            $specific_price_output,
+            true,
+            true,
+            $context
+        );
     }
 
     /**
      * @param int $productId
      * @param int $attributeId
+     * @param ?Context $context
      *
      * @return float
      */
-    public function getPriceTaxIncluded($productId, $attributeId)
+    public function getPriceTaxIncluded($productId, $attributeId, $context = null)
     {
         return Product::getPriceStatic($productId, true, $attributeId, 6, null, false, false);
     }
@@ -240,10 +258,11 @@ class ProductRepository
     /**
      * @param int $productId
      * @param int $attributeId
+     * @param ?Context $context
      *
      * @return float
      */
-    public function getSalePriceTaxExcluded($productId, $attributeId)
+    public function getSalePriceTaxExcluded($productId, $attributeId, $context = null)
     {
         return Product::getPriceStatic($productId, false, $attributeId, 6);
     }
@@ -251,10 +270,11 @@ class ProductRepository
     /**
      * @param int $productId
      * @param int $attributeId
+     * @param ?Context $context
      *
      * @return float
      */
-    public function getSalePriceTaxIncluded($productId, $attributeId)
+    public function getSalePriceTaxIncluded($productId, $attributeId, $context = null)
     {
         return Product::getPriceStatic($productId, true, $attributeId, 6);
     }
