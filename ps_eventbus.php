@@ -642,7 +642,7 @@ class Ps_eventbus extends Module
         /** @var SpecificPrice $specificPrice */
         $specificPrice = $params['object'];
         if ($specificPrice instanceof SpecificPrice) {
-            $this->insertIncrementalSyncObject(
+            $this->insertDeletedObject(
                 $specificPrice->id,
                 'price',
                 date(DATE_ATOM),
