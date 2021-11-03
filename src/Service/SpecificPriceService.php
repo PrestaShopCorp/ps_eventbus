@@ -195,7 +195,7 @@ class SpecificPriceService
                 $sql->select('0 as id_product_attribute');
             }
 
-            $res = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
+            $res = Db::getInstance((bool) _PS_USE_SQL_SLAVE_)->executeS($sql);
 
             if (is_array($res) && count($res)) {
                 foreach ($res as $row) {
@@ -242,9 +242,12 @@ class SpecificPriceService
             }
         }
 
-        // Customization price
-        if ((int) $id_customization) {
-            $price += Tools::convertPrice(Customization::getCustomizationPrice($id_customization), $id_currency);
+        if (version_compare(_PS_VERSION_, '1.7.0.0', '>=')) {
+            // Customization price
+            if ((int) $id_customization) {
+                /* @phpstan-ignore-next-line */
+                $price += Tools::convertPrice(Customization::getCustomizationPrice($id_customization), $id_currency);
+            }
         }
 
         // Tax
@@ -361,6 +364,6 @@ class SpecificPriceService
 
         $query .= ' ORDER BY `id_product_attribute` DESC, `id_cart` DESC, `from_quantity` DESC, `id_specific_price_rule` ASC, `to` DESC, `from` DESC';
 
-        return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($query);
+        return Db::getInstance((bool) _PS_USE_SQL_SLAVE_)->getRow($query);
     }
 }
