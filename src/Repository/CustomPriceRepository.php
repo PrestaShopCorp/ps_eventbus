@@ -7,7 +7,6 @@ use Db;
 use DbQuery;
 use Employee;
 use PrestaShopDatabaseException;
-use Product;
 
 class CustomPriceRepository
 {
@@ -44,9 +43,6 @@ class CustomPriceRepository
         $query->from('specific_price', 'sp')
             ->leftJoin('country', 'c', 'c.id_country = sp.id_country')
             ->leftJoin('currency', 'cur', 'cur.id_currency = sp.id_currency')
-//            ->leftJoin('specific_price_rule', 'spr', 'pas.id_product_attribute = pa.id_product_attribute')
-//            ->leftJoin('specific_price_rule_condition', 'sprc', 'ps.id_category_default = cl.id_category AND ps.id_shop = cl.id_shop AND cl.id_lang = ' . (int) $langId)
-//            ->leftJoin('specific_price_rule_condition_group', 'sprcg', 'sa.id_product = p.id_product AND sa.id_product_attribute = IFNULL(pas.id_product_attribute, 0) AND sa.id_shop = ps.id_shop')
         ;
 
         $query->where('sp.id_shop = 0 OR sp.id_shop = ' . (int) $shopId);

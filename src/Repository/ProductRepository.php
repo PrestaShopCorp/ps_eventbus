@@ -217,40 +217,21 @@ class ProductRepository
     /**
      * @param int $productId
      * @param int $attributeId
-     * @param ?Context $context
      *
      * @return float
      */
-    public function getPriceTaxExcluded($productId, $attributeId, $context = null)
+    public function getPriceTaxExcluded($productId, $attributeId)
     {
-        return Product::getPriceStatic(
-            $productId,
-            false,
-            $attributeId,
-            6,
-            null,
-            false,
-            false,
-            1,
-            false,
-            null,
-            null,
-            null,
-            $specific_price_output,
-            true,
-            true,
-            $context
-        );
+        return Product::getPriceStatic($productId, false, $attributeId, 6, null, false, false);
     }
 
     /**
      * @param int $productId
      * @param int $attributeId
-     * @param ?Context $context
      *
      * @return float
      */
-    public function getPriceTaxIncluded($productId, $attributeId, $context = null)
+    public function getPriceTaxIncluded($productId, $attributeId)
     {
         return Product::getPriceStatic($productId, true, $attributeId, 6, null, false, false);
     }
@@ -258,11 +239,10 @@ class ProductRepository
     /**
      * @param int $productId
      * @param int $attributeId
-     * @param ?Context $context
      *
      * @return float
      */
-    public function getSalePriceTaxExcluded($productId, $attributeId, $context = null)
+    public function getSalePriceTaxExcluded($productId, $attributeId)
     {
         return Product::getPriceStatic($productId, false, $attributeId, 6);
     }
@@ -270,11 +250,10 @@ class ProductRepository
     /**
      * @param int $productId
      * @param int $attributeId
-     * @param ?Context $context
      *
      * @return float
      */
-    public function getSalePriceTaxIncluded($productId, $attributeId, $context = null)
+    public function getSalePriceTaxIncluded($productId, $attributeId)
     {
         return Product::getPriceStatic($productId, true, $attributeId, 6);
     }
