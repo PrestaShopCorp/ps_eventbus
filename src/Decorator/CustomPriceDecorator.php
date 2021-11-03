@@ -3,15 +3,10 @@
 namespace PrestaShop\Module\PsEventbus\Decorator;
 
 use Context;
-use PrestaShop\Module\PsEventbus\Repository\ProductRepository;
 use PrestaShop\Module\PsEventbus\Service\SpecificPriceService;
 
 class CustomPriceDecorator
 {
-    /**
-     * @var ProductRepository
-     */
-    private $productRepository;
     /**
      * @var Context
      */
@@ -23,10 +18,8 @@ class CustomPriceDecorator
 
     public function __construct(
         Context $context,
-        ProductRepository $productRepository,
         SpecificPriceService $priceService
     ) {
-        $this->productRepository = $productRepository;
         $this->context = $context;
         $this->priceService = $priceService;
     }

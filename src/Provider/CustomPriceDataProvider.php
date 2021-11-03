@@ -72,12 +72,10 @@ class CustomPriceDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
-        $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
+        $specificPrices = $this->customPriceRepository->getSpecificPricesIncremental($limit, $objectIds);
 
-        $products = $this->customPriceRepository->getProductsIncremental($limit, $langId, $objectIds);
-
-        if (!empty($products)) {
-            $this->productDecorator->decorateProducts($products, $langIso, $langId);
+        if (!empty($specificPrices)) {
+            $this->customPriceDecorator->decorateSpecificPrices($specificPrices);
         } else {
             return [];
         }
@@ -88,6 +86,6 @@ class CustomPriceDataProvider implements PaginatedApiDataProviderInterface
                 'collection' => 'products',
                 'properties' => $product,
             ];
-        }, $products);
+        }, $specificPrices);
     }
 }

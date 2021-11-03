@@ -3,7 +3,6 @@
 namespace PrestaShop\Module\PsEventbus\Service;
 
 use Address;
-use Cache;
 use Cart;
 use Combination;
 use Configuration;
@@ -31,35 +30,6 @@ class SpecificPriceService
         return $this->getPriceStatic($productId, $attributeId, $specificPriceId, $useTax, $usereduc, $context);
     }
 
-    /**
-     * Returns product price.
-     *
-     * @param int $id_product Product id
-     * @param bool $usetax With taxes or not (optional)
-     * @param int|null $id_product_attribute product attribute id (optional).
-     *                                       If set to false, do not apply the combination price impact.
-     *                                       NULL does apply the default combination price impact
-     * @param int $decimals Number of decimals (optional)
-     * @param int|null $divisor Useful when paying many time without fees (optional)
-     * @param bool $only_reduc Returns only the reduction amount
-     * @param bool $usereduc Set if the returned amount will include reduction
-     * @param int $quantity Required for quantity discount application (default value: 1)
-     * @param bool $force_associated_tax DEPRECATED - NOT USED Force to apply the associated tax.
-     *                                   Only works when the parameter $usetax is true
-     * @param int|null $id_customer Customer ID (for customer group reduction)
-     * @param int|null $id_cart Cart ID. Required when the cookie is not accessible
-     *                          (e.g., inside a payment module, a cron task...)
-     * @param int|null $id_address Customer address ID. Required for price (tax included)
-     *                             calculation regarding the guest localization
-     * @param null $specific_price_output If a specific price applies regarding the previous parameters,
-     *                                    this variable is filled with the corresponding SpecificPrice object
-     * @param bool $with_ecotax insert ecotax in price output
-     * @param bool $use_group_reduction
-     * @param Context $context
-     * @param bool $use_customer_price
-     *
-     * @return float Product price
-     */
     private function getPriceStatic(
         $id_product,
         $id_product_attribute,
@@ -70,15 +40,12 @@ class SpecificPriceService
         $decimals = 6,
         $divisor = null,
         $only_reduc = false,
-        $quantity = 1,
-        $force_associated_tax = false,
         $id_customer = null,
         $id_cart = null,
         $id_address = null,
         &$specific_price_output = null,
         $with_ecotax = true,
         $use_group_reduction = true,
-        $use_customer_price = true,
         $id_customization = null
     ) {
         if (!$context) {
@@ -121,21 +88,6 @@ class SpecificPriceService
             }
         }
 
-        $cart_quantity = 0;
-        if ((int) $id_cart) {
-            $cache_id = 'Product::getPriceStatic_' . (int) $id_product . '-' . (int) $id_cart;
-            if (!Cache::isStored($cache_id) || ($cart_quantity = Cache::retrieve($cache_id) != (int) $quantity)) {
-                $sql = 'SELECT SUM(`quantity`)
-                FROM `' . _DB_PREFIX_ . 'cart_product`
-                WHERE `id_product` = ' . (int) $id_product . '
-                AND `id_cart` = ' . (int) $id_cart;
-                $cart_quantity = (int) Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue($sql);
-                Cache::store($cache_id, $cart_quantity);
-            } else {
-                $cart_quantity = Cache::retrieve($cache_id);
-            }
-        }
-
         $id_currency = Validate::isLoadedObject($context->currency) ? (int) $context->currency->id : (int) Configuration::get('PS_CURRENCY_DEFAULT');
 
         if (!$id_address && Validate::isLoadedObject($cur_cart)) {
@@ -159,10 +111,6 @@ class SpecificPriceService
             $usetax = false;
         }
 
-        if (null === $id_customer && Validate::isLoadedObject($context->customer)) {
-            $id_customer = $context->customer->id;
-        }
-
         return $this->priceCalculation(
             $context->shop->id,
             $id_product,
@@ -173,7 +121,6 @@ class SpecificPriceService
             $zipcode,
             $id_currency,
             $id_group,
-            $quantity,
             $usetax,
             $decimals,
             $only_reduc,
@@ -181,41 +128,10 @@ class SpecificPriceService
             $with_ecotax,
             $specific_price_output,
             $use_group_reduction,
-            $id_customer,
-            $use_customer_price,
-            $id_cart,
-            $cart_quantity,
             $id_customization
         );
     }
 
-    /**
-     * Price calculation / Get product price.
-     *
-     * @param int $id_shop Shop id
-     * @param int $id_product Product id
-     * @param int $id_product_attribute Product attribute id
-     * @param int $id_country Country id
-     * @param int $id_state State id
-     * @param string $zipcode
-     * @param int $id_currency Currency id
-     * @param int $id_group Group id
-     * @param int $quantity Quantity Required for Specific prices : quantity discount application
-     * @param bool $use_tax with (1) or without (0) tax
-     * @param int $decimals Number of decimals returned
-     * @param bool $only_reduc Returns only the reduction amount
-     * @param bool $use_reduc Set if the returned amount will include reduction
-     * @param bool $with_ecotax insert ecotax in price output
-     * @param null $specific_price If a specific price applies regarding the previous parameters,
-     *                             this variable is filled with the corresponding SpecificPrice object
-     * @param bool $use_group_reduction
-     * @param int $id_customer
-     * @param bool $use_customer_price
-     * @param int $id_cart
-     * @param int $real_quantity
-     *
-     * @return float Product price
-     **/
     private function priceCalculation(
         $id_shop,
         $id_product,
@@ -226,7 +142,6 @@ class SpecificPriceService
         $zipcode,
         $id_currency,
         $id_group,
-        $quantity,
         $use_tax,
         $decimals,
         $only_reduc,
@@ -234,10 +149,6 @@ class SpecificPriceService
         $with_ecotax,
         &$specific_price,
         $use_group_reduction,
-        $id_customer = 0,
-        $use_customer_price = true,
-        $id_cart = 0,
-        $real_quantity = 0,
         $id_customization = 0
     ) {
         static $address = null;
@@ -260,18 +171,9 @@ class SpecificPriceService
             $context->shop = new Shop((int) $id_shop);
         }
 
-        if (!$use_customer_price) {
-            $id_customer = 0;
-        }
-
         if ($id_product_attribute === null) {
             $id_product_attribute = Product::getDefaultAttribute($id_product);
         }
-
-        $cache_id = (int) $id_product . '-' . (int) $id_shop . '-' . (int) $id_currency . '-' . (int) $id_country . '-' . $id_state . '-' . $zipcode . '-' . (int) $id_group .
-            '-' . (int) $quantity . '-' . (int) $id_product_attribute . '-' . (int) $id_customization .
-            '-' . (int) $with_ecotax . '-' . (int) $id_customer . '-' . (int) $use_group_reduction . '-' . (int) $id_cart . '-' . (int) $real_quantity .
-            '-' . ($only_reduc ? '1' : '0') . '-' . ($use_reduc ? '1' : '0') . '-' . ($use_tax ? '1' : '0') . '-' . (int) $decimals;
 
         // reference parameter is filled before any returns
         $specific_price = $this->getSpecificPrice(

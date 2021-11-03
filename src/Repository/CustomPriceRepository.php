@@ -104,4 +104,26 @@ class CustomPriceRepository
         $query->select('c.iso_code as country');
         $query->select('cur.iso_code as currency');
     }
+
+    /**
+     * @param int $limit
+     * @param array $specificPriceIds
+     *
+     * @return array
+     *
+     * @throws PrestaShopDatabaseException
+     */
+    public function getSpecificPricesIncremental($limit, $specificPriceIds)
+    {
+        $query = $this->getBaseQuery($this->context->shop->id);
+
+        $this->addSelectParameters($query);
+
+        $query->where('sp.id_specific_price IN(' . implode(',', array_map('intval', $specificPriceIds)) . ')')
+            ->limit($limit);
+
+        $result = $this->db->executeS($query);
+
+        return is_array($result) ? $result : [];
+    }
 }
