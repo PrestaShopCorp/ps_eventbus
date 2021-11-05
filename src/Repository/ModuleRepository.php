@@ -8,6 +8,7 @@ use DbQuery;
 class ModuleRepository
 {
     const MODULE_TABLE = 'module';
+    const MODULE_TABLE_HISTORY = 'module_history';
 
     /**
      * @var Db
@@ -24,10 +25,9 @@ class ModuleRepository
      */
     public function getBaseQuery()
     {
-        $query = new DbQuery();
-        $query->from(self::MODULE_TABLE, 'm');
-
-        return $query;
+        return new DbQuery()
+          ->from(self::MODULE_TABLE, 'm')
+          ->leftJoin(self::MODULE_TABLE_HISTORY, 'h', 'm.id_module = h.id_module')
     }
 
     /**
@@ -42,7 +42,7 @@ class ModuleRepository
     {
         $query = $this->getBaseQuery();
 
-        $query->select('id_module as module_id, name, version as module_version, active')
+        $query->select('id_module as module_id, name, version as module_version, active, date_add as created_at, date_upd as updated_at')
             ->limit($limit, $offset);
 
         return $this->db->executeS($query);

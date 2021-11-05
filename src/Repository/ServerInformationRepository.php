@@ -72,6 +72,7 @@ class ServerInformationRepository
         $this->arrayFormatter = $arrayFormatter;
         $this->psAccountsService = $psAccounts->getPsAccountsService();
         $this->configuration = $configuration;
+        $this->createdAt = $this->shopRepository->getCreatedAt()
     }
 
     /**
@@ -88,7 +89,7 @@ class ServerInformationRepository
                 'id' => '1',
                 'collection' => 'shops',
                 'properties' => [
-                    'created_at' => date(DATE_ATOM),
+                    'created_at' => $this->createdAt,
                     'cms_version' => _PS_VERSION_,
                     'url_is_simplified' => $this->configurationRepository->get('PS_REWRITING_SETTINGS') == '1',
                     'cart_is_persistent' => $this->configurationRepository->get('PS_CART_FOLLOWING') == '1',
