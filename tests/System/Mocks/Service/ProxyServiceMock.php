@@ -1,6 +1,6 @@
 <?php
 
-namespace  PrestaShop\Module\PsEventbus\Tests\system\Mocks\Service;
+namespace PrestaShop\Module\PsEventbus\Tests\System\Mocks\Service;
 
 use PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface;
 

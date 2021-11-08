@@ -1,8 +1,7 @@
 <?php
 
-namespace  PrestaShop\Module\PsEventbus\Tests\System\Tests\Synchronization;
+namespace PrestaShop\Module\PsEventbus\Tests\System\Tests\Synchronization;
 
-use Db;
 use PrestaShop\Module\PsEventbus\Provider\CarrierDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CartDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CategoryDataProvider;
