@@ -21,7 +21,7 @@ class SynchronizationService
      */
     private $incrementalSyncRepository;
     /**
-     * @var ProxyService
+     * @var ProxyServiceInterface
      */
     private $proxyService;
     /**
@@ -32,7 +32,7 @@ class SynchronizationService
     public function __construct(
         EventbusSyncRepository $eventbusSyncRepository,
         IncrementalSyncRepository $incrementalSyncRepository,
-        ProxyService $proxyService,
+        ProxyServiceInterface $proxyService,
         PayloadDecorator $payloadDecorator
     ) {
         $this->eventbusSyncRepository = $eventbusSyncRepository;

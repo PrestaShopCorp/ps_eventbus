@@ -175,6 +175,11 @@ class Ps_eventbus extends Module
         return $this->serviceContainer->getService($serviceName);
     }
 
+    public function getContainer()
+    {
+        return $this->serviceContainer;
+    }
+
     /**
      * @param array $parameters
      *

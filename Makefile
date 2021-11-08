@@ -117,3 +117,23 @@ fix-lint: vendor/bin/php-cs-fixer
 
 vendor/bin/php-cs-fixer:
 	./composer.phar install
+
+bps177: build-ps-177
+ata177: all-tests-actions-177
+rda177:run-docker-actions-177
+
+build-ps-177:
+	-docker exec -i prestashop-177 sh -c "rm -rf /var/www/html/install"
+	-docker exec -i prestashop-177 sh -c "mv /var/www/html/admin /var/www/html/admin1"
+	mysql -h 127.0.0.1 -P 9001 --protocol=tcp -u root -pprestashop prestashop < $(shell pwd)/tests/System/Seed/Database/177.sql
+	docker exec -i prestashop-177 sh -c "cd /var/www/html && php  bin/console prestashop:module install eventBus"
+
+run-docker-actions-177:
+	docker-compose up -d --force-recreate prestashop-177
+	/bin/bash .docker/wait-for-container.sh sq-mysql
+
+all-tests-actions-177:
+	make rda177
+	make bps177
+	docker exec -i prestashop-177 sh -c "cd /var/www/html/modules/ps_eventbus && php vendor/bin/phpunit -c tests/phpunit-unit.xml"
+	docker exec -i prestashop-177 sh -c "cd /var/www/html/modules/ps_eventbus && php vendor/bin/phpunit -c tests/phpunit-system.xml"
