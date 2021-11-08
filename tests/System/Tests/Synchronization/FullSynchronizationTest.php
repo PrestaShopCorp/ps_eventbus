@@ -34,7 +34,7 @@ class FullSynchronizationTest extends BaseTestCase
             '2021-11-11T11:11:11'
         );
 
-        $this->assertEquals('201', $response['httpCode']);
+        $this->assertEquals(201, $response['httpCode']);
     }
 
     public function fullSyncDataProvider()

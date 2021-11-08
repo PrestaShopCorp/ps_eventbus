@@ -22,8 +22,8 @@ class DataProviderTest extends BaseTestCase
         return [
             'carrier provider' => [
                 'provider' => $this->container->getService(CarrierDataProvider::class),
-                'expected response' =>
-                    [
+                'expected response' => [
+                    0 =>
                         [
                             'collection' => 'carriers',
                             'id' => '1',
@@ -31,14 +31,14 @@ class DataProviderTest extends BaseTestCase
                                 [
                                     'id_carrier' => '1',
                                     'id_reference' => '1',
-                                    'name' => 'eventBus',
+                                    'name' => '177',
                                     'carrier_taxes_rates_group_id' => '1',
                                     'url' => '',
                                     'active' => true,
                                     'deleted' => false,
                                     'shipping_handling' => 0,
-                                    'free_shipping_starts_at_price' => 100,
-                                    'free_shipping_starts_at_weight' => 10,
+                                    'free_shipping_starts_at_price' => 0,
+                                    'free_shipping_starts_at_weight' => 0,
                                     'disable_carrier_when_out_of_range' => false,
                                     'is_module' => false,
                                     'is_free' => true,
@@ -51,25 +51,26 @@ class DataProviderTest extends BaseTestCase
                                     'max_weight' => 0,
                                     'grade' => 0,
                                     'delay' => 'Pick up in-store',
-                                    'currency' => 'EUR',
+                                    'currency' => 'USD',
                                     'weight_unit' => 'kg',
                                 ],
                         ],
+                    1 =>
                         [
                             'collection' => 'carriers',
                             'id' => '2',
                             'properties' =>
                                 [
-                                    'id_carrier' => '15',
+                                    'id_carrier' => '2',
                                     'id_reference' => '2',
                                     'name' => 'My carrier',
-                                    'carrier_taxes_rates_group_id' => '1',
+                                    'carrier_taxes_rates_group_id' => '9',
                                     'url' => '',
                                     'active' => true,
                                     'deleted' => false,
                                     'shipping_handling' => 2,
-                                    'free_shipping_starts_at_price' => 100,
-                                    'free_shipping_starts_at_weight' => 10,
+                                    'free_shipping_starts_at_price' => 0,
+                                    'free_shipping_starts_at_weight' => 0,
                                     'disable_carrier_when_out_of_range' => false,
                                     'is_module' => false,
                                     'is_free' => false,
@@ -82,52 +83,55 @@ class DataProviderTest extends BaseTestCase
                                     'max_weight' => 0,
                                     'grade' => 0,
                                     'delay' => 'Delivery next day!',
-                                    'currency' => 'EUR',
+                                    'currency' => 'USD',
                                     'weight_unit' => 'kg',
                                 ],
                         ],
+                    2 =>
                         [
                             'collection' => 'carrier_details',
-                            'id' => '2-1-0-2',
+                            'id' => '2-2-0-1',
                             'properties' =>
                                 [
                                     'id_reference' => '2',
-                                    'id_carrier_detail' => '2',
+                                    'id_carrier_detail' => '1',
                                     'shipping_method' => 'range_weight',
                                     'delimiter1' => 0,
                                     'delimiter2' => 10000,
-                                    'country_ids' => 'FR,LT',
-                                    'state_ids' => '',
+                                    'country_ids' => 'US',
+                                    'state_ids' => 'AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC',
                                     'price' => 5,
                                 ],
                         ],
+                    3 =>
                         [
                             'collection' => 'carrier_taxes',
-                            'id' => '2-1',
+                            'id' => '2-2',
                             'properties' =>
                                 [
                                     'id_reference' => '2',
-                                    'id_carrier_tax' => '1',
-                                    'country_id' => 'FR',
-                                    'state_ids' => '',
-                                    'tax_rate' => 21,
+                                    'id_carrier_tax' => '9',
+                                    'country_id' => 'US',
+                                    'state_ids' => 'FL',
+                                    'tax_rate' => 6,
                                 ],
                         ],
+                    4 =>
                         [
                             'collection' => 'carriers',
                             'id' => '3',
                             'properties' =>
                                 [
-                                    'id_carrier' => '21',
+                                    'id_carrier' => '3',
                                     'id_reference' => '3',
-                                    'name' => 'test2',
-                                    'carrier_taxes_rates_group_id' => '0',
+                                    'name' => 'My cheap carrier',
+                                    'carrier_taxes_rates_group_id' => '9',
                                     'url' => '',
-                                    'active' => true,
+                                    'active' => false,
                                     'deleted' => false,
                                     'shipping_handling' => 2,
-                                    'free_shipping_starts_at_price' => 100,
-                                    'free_shipping_starts_at_weight' => 10,
+                                    'free_shipping_starts_at_price' => 0,
+                                    'free_shipping_starts_at_weight' => 0,
                                     'disable_carrier_when_out_of_range' => false,
                                     'is_module' => false,
                                     'is_free' => false,
@@ -139,12 +143,218 @@ class DataProviderTest extends BaseTestCase
                                     'max_depth' => 0,
                                     'max_weight' => 0,
                                     'grade' => 0,
-                                    'delay' => 'test2',
-                                    'currency' => 'EUR',
+                                    'delay' => 'Buy more to pay less!',
+                                    'currency' => 'USD',
                                     'weight_unit' => 'kg',
                                 ],
                         ],
-                    ]
+                    5 =>
+                        [
+                            'collection' => 'carrier_details',
+                            'id' => '3-2-1-2',
+                            'properties' =>
+                                [
+                                    'id_reference' => '3',
+                                    'id_carrier_detail' => '2',
+                                    'shipping_method' => 'range_price',
+                                    'delimiter1' => 0,
+                                    'delimiter2' => 50,
+                                    'country_ids' => 'US',
+                                    'state_ids' => 'AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC',
+                                    'price' => 4,
+                                ],
+                        ],
+                    6 =>
+                        [
+                            'collection' => 'carrier_details',
+                            'id' => '3-2-1-3',
+                            'properties' =>
+                                [
+                                    'id_reference' => '3',
+                                    'id_carrier_detail' => '3',
+                                    'shipping_method' => 'range_price',
+                                    'delimiter1' => 50,
+                                    'delimiter2' => 100,
+                                    'country_ids' => 'US',
+                                    'state_ids' => 'AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC',
+                                    'price' => 2,
+                                ],
+                        ],
+                    7 =>
+                        [
+                            'collection' => 'carrier_details',
+                            'id' => '3-2-1-4',
+                            'properties' =>
+                                [
+                                    'id_reference' => '3',
+                                    'id_carrier_detail' => '4',
+                                    'shipping_method' => 'range_price',
+                                    'delimiter1' => 100,
+                                    'delimiter2' => 200,
+                                    'country_ids' => 'US',
+                                    'state_ids' => 'AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC',
+                                    'price' => 0,
+                                ],
+                        ],
+                    8 =>
+                        [
+                            'collection' => 'carrier_taxes',
+                            'id' => '3-2',
+                            'properties' =>
+                                [
+                                    'id_reference' => '3',
+                                    'id_carrier_tax' => '9',
+                                    'country_id' => 'US',
+                                    'state_ids' => 'FL',
+                                    'tax_rate' => 6,
+                                ],
+                        ],
+                    9 =>
+                        [
+                            'collection' => 'carrier_taxes',
+                            'id' => '3-2',
+                            'properties' =>
+                                [
+                                    'id_reference' => '3',
+                                    'id_carrier_tax' => '9',
+                                    'country_id' => 'US',
+                                    'state_ids' => 'FL',
+                                    'tax_rate' => 6,
+                                ],
+                        ],
+                    10 =>
+                        [
+                            'collection' => 'carrier_taxes',
+                            'id' => '3-2',
+                            'properties' =>
+                                [
+                                    'id_reference' => '3',
+                                    'id_carrier_tax' => '9',
+                                    'country_id' => 'US',
+                                    'state_ids' => 'FL',
+                                    'tax_rate' => 6,
+                                ],
+                        ],
+                    11 =>
+                        [
+                            'collection' => 'carriers',
+                            'id' => '4',
+                            'properties' =>
+                                [
+                                    'id_carrier' => '4',
+                                    'id_reference' => '4',
+                                    'name' => 'My light carrier',
+                                    'carrier_taxes_rates_group_id' => '9',
+                                    'url' => '',
+                                    'active' => false,
+                                    'deleted' => false,
+                                    'shipping_handling' => 2,
+                                    'free_shipping_starts_at_price' => 0,
+                                    'free_shipping_starts_at_weight' => 0,
+                                    'disable_carrier_when_out_of_range' => false,
+                                    'is_module' => false,
+                                    'is_free' => false,
+                                    'shipping_external' => false,
+                                    'need_range' => false,
+                                    'external_module_name' => '',
+                                    'max_width' => 0,
+                                    'max_height' => 0,
+                                    'max_depth' => 0,
+                                    'max_weight' => 0,
+                                    'grade' => 0,
+                                    'delay' => 'The lighter the cheaper!',
+                                    'currency' => 'USD',
+                                    'weight_unit' => 'kg',
+                                ],
+                        ],
+                    12 =>
+                        [
+                            'collection' => 'carrier_details',
+                            'id' => '4-2-0-2',
+                            'properties' =>
+                                [
+                                    'id_reference' => '4',
+                                    'id_carrier_detail' => '2',
+                                    'shipping_method' => 'range_weight',
+                                    'delimiter1' => 0,
+                                    'delimiter2' => 1,
+                                    'country_ids' => 'US',
+                                    'state_ids' => 'AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC',
+                                    'price' => 0,
+                                ],
+                        ],
+                    13 =>
+                        [
+                            'collection' => 'carrier_details',
+                            'id' => '4-2-0-3',
+                            'properties' =>
+                                [
+                                    'id_reference' => '4',
+                                    'id_carrier_detail' => '3',
+                                    'shipping_method' => 'range_weight',
+                                    'delimiter1' => 1,
+                                    'delimiter2' => 3,
+                                    'country_ids' => 'US',
+                                    'state_ids' => 'AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC',
+                                    'price' => 3,
+                                ],
+                        ],
+                    14 =>
+                        [
+                            'collection' => 'carrier_details',
+                            'id' => '4-2-0-4',
+                            'properties' =>
+                                [
+                                    'id_reference' => '4',
+                                    'id_carrier_detail' => '4',
+                                    'shipping_method' => 'range_weight',
+                                    'delimiter1' => 3,
+                                    'delimiter2' => 10000,
+                                    'country_ids' => 'US',
+                                    'state_ids' => 'AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC',
+                                    'price' => 6,
+                                ],
+                        ],
+                    15 =>
+                        [
+                            'collection' => 'carrier_taxes',
+                            'id' => '4-2',
+                            'properties' =>
+                                [
+                                    'id_reference' => '4',
+                                    'id_carrier_tax' => '9',
+                                    'country_id' => 'US',
+                                    'state_ids' => 'FL',
+                                    'tax_rate' => 6,
+                                ],
+                        ],
+                    16 =>
+                        [
+                            'collection' => 'carrier_taxes',
+                            'id' => '4-2',
+                            'properties' =>
+                                [
+                                    'id_reference' => '4',
+                                    'id_carrier_tax' => '9',
+                                    'country_id' => 'US',
+                                    'state_ids' => 'FL',
+                                    'tax_rate' => 6,
+                                ],
+                        ],
+                    17 =>
+                        [
+                            'collection' => 'carrier_taxes',
+                            'id' => '4-2',
+                            'properties' =>
+                                [
+                                    'id_reference' => '4',
+                                    'id_carrier_tax' => '9',
+                                    'country_id' => 'US',
+                                    'state_ids' => 'FL',
+                                    'tax_rate' => 6,
+                                ],
+                        ],
+                ]
             ]
         ];
     }
