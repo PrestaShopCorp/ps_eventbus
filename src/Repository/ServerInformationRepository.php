@@ -51,6 +51,10 @@ class ServerInformationRepository
      * @var array
      */
     private $configuration;
+    /**
+     * @var string
+     */
+    private $createdAt;
 
     public function __construct(
         Context $context,
@@ -72,7 +76,7 @@ class ServerInformationRepository
         $this->arrayFormatter = $arrayFormatter;
         $this->psAccountsService = $psAccounts->getPsAccountsService();
         $this->configuration = $configuration;
-        $this->createdAt = $this->shopRepository->getCreatedAt()
+        $this->createdAt = $this->shopRepository->getCreatedAt();
     }
 
     /**

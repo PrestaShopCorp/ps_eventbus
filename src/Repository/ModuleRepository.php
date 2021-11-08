@@ -25,9 +25,9 @@ class ModuleRepository
      */
     public function getBaseQuery()
     {
-        return new DbQuery()
+        return (new DbQuery())
           ->from(self::MODULE_TABLE, 'm')
-          ->leftJoin(self::MODULE_TABLE_HISTORY, 'h', 'm.id_module = h.id_module')
+          ->leftJoin(self::MODULE_TABLE_HISTORY, 'h', 'm.id_module = h.id_module');
     }
 
     /**

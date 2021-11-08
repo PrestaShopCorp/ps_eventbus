@@ -37,11 +37,14 @@ class ShopRepository
         return (int) $this->db->getValue($query);
     }
 
-    public function getCreatedAt(){
-        $query = new DbQuery()
-          ->select('date_add as created_at')
+    public function getCreatedAt()
+    {
+        $query = new DbQuery();
+
+        $query->select('date_add as created_at')
           ->from('log')
-          ->where('id = 1')
+          ->where('id = 1');
+
         return (string) $this->db->getValue($query);
     }
 }
