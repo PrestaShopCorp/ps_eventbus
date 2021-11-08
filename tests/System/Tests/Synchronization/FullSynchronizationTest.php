@@ -46,11 +46,11 @@ class FullSynchronizationTest extends BaseTestCase
             ],
             'apiCarts' => [
                 'dataProvider' => $this->container->getService(CartDataProvider::class),
-                'type' => 'carrier',
+                'type' => 'carts',
             ],
             'apiCategories' => [
                 'dataProvider' => $this->container->getService(CategoryDataProvider::class),
-                'type' => 'carrier',
+                'type' => 'categories',
             ],
             // todo: for now it doesnt have any category matches
 //            'apiGoogleTaxonomies' => [
@@ -59,15 +59,15 @@ class FullSynchronizationTest extends BaseTestCase
 //            ],
             'apiModules' => [
                 'dataProvider' => $this->container->getService(ModuleDataProvider::class),
-                'type' => 'carrier',
+                'type' => 'modules',
             ],
             'apiOrders' => [
                 'dataProvider' => $this->container->getService(OrderDataProvider::class),
-                'type' => 'carrier',
+                'type' => 'orders',
             ],
             'apiProducts' => [
                 'dataProvider' => $this->container->getService(ProductDataProvider::class),
-                'type' => 'carrier',
+                'type' => 'products',
             ],
         ];
     }
