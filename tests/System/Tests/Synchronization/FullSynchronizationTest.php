@@ -2,6 +2,7 @@
 
 namespace  PrestaShop\Module\PsEventbus\Tests\system\Tests\Synchronization;
 
+use Db;
 use PrestaShop\Module\PsEventbus\Provider\CarrierDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CartDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CategoryDataProvider;
@@ -52,11 +53,6 @@ class FullSynchronizationTest extends BaseTestCase
                 'dataProvider' => $this->container->getService(CategoryDataProvider::class),
                 'type' => 'categories',
             ],
-            // todo: for now it doesnt have any category matches
-//            'apiGoogleTaxonomies' => [
-//                'dataProvider' => $this->container->getService(GoogleTaxonomyDataProvider::class),
-//                'type' => 'carrier'
-//            ],
             'apiModules' => [
                 'dataProvider' => $this->container->getService(ModuleDataProvider::class),
                 'type' => 'modules',
