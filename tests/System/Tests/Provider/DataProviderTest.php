@@ -1,6 +1,6 @@
 <?php
 
-namespace PrestaShop\Module\PsEventbus\Tests\system\Tests\Provider;
+namespace PrestaShop\Module\PsEventbus\Tests\System\Tests\Provider;
 
 use PrestaShop\Module\PsEventbus\Provider\CarrierDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CartDataProvider;
@@ -9,7 +9,7 @@ use PrestaShop\Module\PsEventbus\Provider\ModuleDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\OrderDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Provider\ProductDataProvider;
-use PrestaShop\Module\PsEventbus\Tests\system\Tests\BaseTestCase;
+use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 
 class DataProviderTest extends BaseTestCase
 {

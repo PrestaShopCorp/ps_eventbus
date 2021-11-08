@@ -1,6 +1,6 @@
 <?php
 
-namespace  PrestaShop\Module\PsEventbus\Tests\system\Tests;
+namespace  PrestaShop\Module\PsEventbus\Tests\System\Tests;
 
 use PHPUnit\Framework\TestCase;
 

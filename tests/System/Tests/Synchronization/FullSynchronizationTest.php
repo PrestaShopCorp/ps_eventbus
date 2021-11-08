@@ -1,6 +1,6 @@
 <?php
 
-namespace  PrestaShop\Module\PsEventbus\Tests\system\Tests\Synchronization;
+namespace  PrestaShop\Module\PsEventbus\Tests\System\Tests\Synchronization;
 
 use Db;
 use PrestaShop\Module\PsEventbus\Provider\CarrierDataProvider;
@@ -11,7 +11,7 @@ use PrestaShop\Module\PsEventbus\Provider\OrderDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Provider\ProductDataProvider;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
-use PrestaShop\Module\PsEventbus\Tests\system\Tests\BaseTestCase;
+use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 
 class FullSynchronizationTest extends BaseTestCase
 {
