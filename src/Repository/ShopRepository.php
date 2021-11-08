@@ -42,8 +42,8 @@ class ShopRepository
         $query = new DbQuery();
 
         $query->select('date_add as created_at')
-          ->from('log')
-          ->where('id = 1');
+          ->from('configuration')
+          ->where('name = "PS_INSTALL_VERSION"');
 
         return (string) $this->db->getValue($query);
     }
