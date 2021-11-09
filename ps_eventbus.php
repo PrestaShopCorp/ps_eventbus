@@ -91,6 +91,9 @@ class Ps_eventbus extends Module
         'actionObjectTaxRulesGroupUpdateAfter',
         'actionObjectTaxRulesGroupDeleteAfter',
         'actionShippingPreferencesPageSave',
+        'actionObjectSpecificPriceAddAfter',
+        'actionObjectSpecificPriceUpdateAfter',
+        'actionObjectSpecificPriceDeleteAfter',
     ];
 
     /**
@@ -122,6 +125,7 @@ class Ps_eventbus extends Module
             $this->name,
             $this->getLocalPath()
         );
+        $this->registerhook('actionObjectSpecificPriceDeleteAfter');
     }
 
     /**
@@ -365,7 +369,7 @@ class Ps_eventbus extends Module
     /**
      * @return void
      */
-    public function hookActionObjectCarrierUpdateAfter()
+    public function hookActionObjectCarrierUpdateAfter($params)
     {
         $this->insertIncrementalSyncObject(
             0,
@@ -594,6 +598,57 @@ class Ps_eventbus extends Module
             date(DATE_ATOM),
             $this->context->shop->id
         );
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionObjectSpecificPriceAddAfter($params)
+    {
+        /** @var SpecificPrice $specificPrice */
+        $specificPrice = $params['object'];
+        if ($specificPrice instanceof SpecificPrice) {
+            $this->insertIncrementalSyncObject(
+                $specificPrice->id,
+                'price',
+                date(DATE_ATOM),
+                $this->context->shop->id
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionObjectSpecificPriceUpdateAfter($params)
+    {
+        /** @var SpecificPrice $specificPrice */
+        $specificPrice = $params['object'];
+        if ($specificPrice instanceof SpecificPrice) {
+            $this->insertIncrementalSyncObject(
+                $specificPrice->id,
+                'price',
+                date(DATE_ATOM),
+                $this->context->shop->id
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function hookActionObjectSpecificPriceDeleteAfter($params)
+    {
+        /** @var SpecificPrice $specificPrice */
+        $specificPrice = $params['object'];
+        if ($specificPrice instanceof SpecificPrice) {
+            $this->insertDeletedObject(
+                $specificPrice->id,
+                'price',
+                date(DATE_ATOM),
+                $this->context->shop->id
+            );
+        }
     }
 
     /**

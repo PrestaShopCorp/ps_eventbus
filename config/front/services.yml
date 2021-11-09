@@ -56,3 +56,7 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Service\ProxyService'
       - '@PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator'
+
+  PrestaShop\Module\PsEventbus\Service\SpecificPriceService:
+    class: PrestaShop\Module\PsEventbus\Service\SpecificPriceService
+    public: true
