@@ -36,4 +36,15 @@ class ShopRepository
 
         return (int) $this->db->getValue($query);
     }
+
+    public function getCreatedAt()
+    {
+        $query = new DbQuery();
+
+        $query->select('date_add as created_at')
+          ->from('configuration')
+          ->where('name = "PS_INSTALL_VERSION"');
+
+        return (string) $this->db->getValue($query);
+    }
 }

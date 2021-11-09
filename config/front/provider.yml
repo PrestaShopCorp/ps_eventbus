@@ -4,6 +4,7 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\ModuleRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
 
   PrestaShop\Module\PsEventbus\Provider\ProductDataProvider:
     class: PrestaShop\Module\PsEventbus\Provider\ProductDataProvider

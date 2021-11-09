@@ -3,6 +3,7 @@
 namespace PrestaShop\Module\PsEventbus\Provider;
 
 use PrestaShop\Module\PsEventbus\Repository\ModuleRepository;
+use PrestaShop\Module\PsEventbus\Repository\ShopRepository;
 use PrestaShopDatabaseException;
 
 class ModuleDataProvider implements PaginatedApiDataProviderInterface
@@ -12,9 +13,12 @@ class ModuleDataProvider implements PaginatedApiDataProviderInterface
      */
     private $moduleRepository;
 
-    public function __construct(ModuleRepository $moduleRepository)
+    private $createdAt;
+
+    public function __construct(ModuleRepository $moduleRepository, ShopRepository $shopRepository)
     {
         $this->moduleRepository = $moduleRepository;
+        $this->createdAt = $shopRepository->getCreatedAt();
     }
 
     /**
@@ -39,6 +43,8 @@ class ModuleDataProvider implements PaginatedApiDataProviderInterface
         return array_map(function ($module) {
             $moduleId = (string) $module['module_id'];
             $module['active'] = $module['active'] == '1';
+            $module['created_at'] = $module['created_at'] || $this->createdAt;
+            $module['updated_at'] = $module['updated_at'] || $this->createdAt;
 
             return [
                 'id' => $moduleId,
