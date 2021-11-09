@@ -356,10 +356,13 @@ class Ps_eventbus extends Module
     /**
      * @return void
      */
-    public function hookActionObjectCarrierAddAfter()
+    public function hookActionObjectCarrierAddAfter($params)
     {
+        /** @var Carrier $carrier */
+        $carrier = $params['object'];
+
         $this->insertIncrementalSyncObject(
-            0,
+            $carrier->id,
             'carrier',
             date(DATE_ATOM),
             $this->context->shop->id
@@ -371,8 +374,11 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCarrierUpdateAfter($params)
     {
+        /** @var Carrier $carrier */
+        $carrier = $params['object'];
+
         $this->insertIncrementalSyncObject(
-            0,
+            $carrier->id,
             'carrier',
             date(DATE_ATOM),
             $this->context->shop->id
@@ -382,10 +388,13 @@ class Ps_eventbus extends Module
     /**
      * @return void
      */
-    public function hookActionObjectCarrierDeleteAfter()
+    public function hookActionObjectCarrierDeleteAfter($params)
     {
+        /** @var Carrier $carrier */
+        $carrier = $params['object'];
+
         $this->insertIncrementalSyncObject(
-            0,
+            $carrier->id,
             'carrier',
             date(DATE_ATOM),
             $this->context->shop->id

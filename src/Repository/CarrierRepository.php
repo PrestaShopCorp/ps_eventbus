@@ -29,26 +29,25 @@ class CarrierRepository
 
     /**
      * @param int $langId
+     * @param array $carrierIds
      *
      * @return array
      */
-    public function getCarriers($langId)
+    public function getCarriers($langId, array $carrierIds)
     {
-        $carriers = Carrier::getCarriers($langId);
-
         $data = [];
-        foreach ($carriers as $key => $carrier) {
-            $carrierObj = new Carrier($carrier['id_carrier']);
+        foreach ($carrierIds as $carrierId) {
+            $carrierObj = new Carrier($carrierId);
 
-            $data[$key]['collection'] = 'carriers';
-            $data[$key]['id'] = $carrierObj->id;
-            $data[$key]['properties'] = $carrier;
+            $data[$carrierId]['collection'] = 'carriers';
+            $data[$carrierId]['id'] = $carrierObj->id;
+            $data[$carrierId]['properties'] = $carrier;
 
             $deliveryPriceByRanges = self::getDeliveryPriceByRange($carrierObj);
             foreach ($deliveryPriceByRanges as $deliveryPriceByRange) {
-                $data[$key]['collection'] = 'carriers_details';
-                $data[$key]['id'] = $deliveryPriceByRange['id_range_weight'];
-                $data[$key]['properties'] = $deliveryPriceByRange;
+                $data[$carrierId]['collection'] = 'carriers_details';
+                $data[$carrierId]['id'] = $deliveryPriceByRange['id_range_weight'];
+                $data[$carrierId]['properties'] = $deliveryPriceByRange;
             }
         }
 
@@ -157,5 +156,20 @@ class CarrierRepository
         }
 
         return false;
+    }
+
+    public function getCarrierProperties($carrierIds, $langId)
+    {
+        $query = new DbQuery();
+        $query->from('carrier', 'c');
+        $query->select('c.*, cl.delay');
+        $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
+        $query->leftJoin('carrier_zone', 'cz', 'cz.id_carrier = c.id_carrier');
+        $query->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier');
+        $query->where('c.id_carrier IN (' . implode(',', array_map('intval', $carrierIds)) . ')');
+        $query->where('cs.id_shop = ' . (int) $this->context->shop->id);
+        $query->where('c.deleted = 0');
+
+        return $this->db->executeS($query);
     }
 }

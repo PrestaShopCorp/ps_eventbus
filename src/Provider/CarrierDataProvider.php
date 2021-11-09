@@ -74,8 +74,8 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
 
         $language = new Language($this->configurationRepository->get('PS_LANG_DEFAULT'));
         $currency = new Currency($this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
-
-        $carriers = Carrier::getCarriers($language->id);
+        $carrierIds = array_column($shippingIncremental, 'id_object');
+        $carriers = $this->carrierRepository->getCarrierProperties($carrierIds, $language->id);
 
         /** @var EventBusCarrier[] $eventBusCarriers */
         $eventBusCarriers = $this->carrierBuilder->buildCarriers(
