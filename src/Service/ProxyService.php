@@ -8,7 +8,7 @@ use PrestaShop\Module\PsEventbus\Api\EventBusProxyClient;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
 
-class ProxyService
+class ProxyService implements ProxyServiceInterface
 {
     /**
      * @var EventBusProxyClient

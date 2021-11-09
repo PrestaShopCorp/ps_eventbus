@@ -18,11 +18,11 @@ class DeletedObjectsService
      */
     private $deletedObjectsRepository;
     /**
-     * @var ProxyService
+     * @var ProxyServiceInterface
      */
     private $proxyService;
 
-    public function __construct(Context $context, DeletedObjectsRepository $deletedObjectsRepository, ProxyService $proxyService)
+    public function __construct(Context $context, DeletedObjectsRepository $deletedObjectsRepository, ProxyServiceInterface $proxyService)
     {
         $this->context = $context;
         $this->deletedObjectsRepository = $deletedObjectsRepository;

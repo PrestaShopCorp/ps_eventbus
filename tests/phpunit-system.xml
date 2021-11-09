@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" bootstrap="bootstrap-system.php" colors="true" executionOrder="random" beStrictAboutChangesToGlobalState="true" beStrictAboutResourceUsageDuringSmallTests="true" beStrictAboutOutputDuringTests="true">
+  <testsuites>
+    <testsuite name="System tests">
+      <directory>System</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>
