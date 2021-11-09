@@ -135,13 +135,37 @@ class CarrierRepository
     {
         $query = new DbQuery();
         $query->from('carrier', 'c');
-        $query->select('c.*, cl.delay');
+        $query->select('c.*, cl.delay, eis.created_at as update_date');
         $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
         $query->leftJoin('carrier_zone', 'cz', 'cz.id_carrier = c.id_carrier');
         $query->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier');
+        $query->leftJoin(
+            'eventbus_incremental_sync',
+            'eis',
+            'eis.id_object = c.id_carrier AND eis.type = "carrier" AND eis.id_shop = cs.id_shop AND eis.lang_iso = cl.id_lang'
+        );
         $query->where('c.id_carrier IN (' . implode(',', array_map('intval', $carrierIds)) . ')');
         $query->where('cs.id_shop = ' . (int) $this->context->shop->id);
         $query->where('c.deleted = 0');
+
+        return $this->db->executeS($query);
+    }
+
+    public function getAllCarrierProperties($langId)
+    {
+        $query = new DbQuery();
+        $query->from('carrier', 'c');
+        $query->select('c.id_carrier, IFNULL(eis.created_at, CURRENT_DATE()) as update_date');
+        $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
+        $query->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier');
+        $query->leftJoin(
+            'eventbus_incremental_sync',
+            'eis',
+            'eis.id_object = c.id_carrier AND eis.type = "carrier" AND eis.id_shop = cs.id_shop AND eis.lang_iso = cl.id_lang'
+        );
+        $query->where('cs.id_shop = ' . (int) $this->context->shop->id);
+        $query->where('c.deleted = 0');
+        $query->orderBy('c.id_carrier');
 
         return $this->db->executeS($query);
     }

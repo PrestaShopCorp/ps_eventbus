@@ -142,6 +142,11 @@ class Carrier implements JsonSerializable
     private $carrierTaxes = [];
 
     /**
+     * @var string
+     */
+    private $updateDate;
+
+    /**
      * @return string
      */
     public function getCollection()
@@ -681,6 +686,23 @@ class Carrier implements JsonSerializable
         return $this;
     }
 
+    public function getUpdateDate()
+    {
+        return $this->updateDate;
+    }
+
+    /**
+     * @param string $updateDate
+     *
+     * @return Carrier
+     */
+    public function setUpdateDate($updateDate)
+    {
+        $this->updateDate = $updateDate;
+
+        return $this;
+    }
+
     public function jsonSerialize()
     {
         $return = [];
@@ -713,6 +735,7 @@ class Carrier implements JsonSerializable
                 'delay' => (string) $this->getDelay(),
                 'currency' => (string) $this->getCurrency(),
                 'weight_unit' => (string) $this->getWeightUnit(),
+                'update_date' => (string) $this->getUpdateDate(),
             ],
         ];
 
