@@ -42,7 +42,7 @@ class ModuleRepository
     {
         $query = $this->getBaseQuery();
 
-        $query->select('id_module as module_id, name, version as module_version, active, date_add as created_at, date_upd as updated_at')
+        $query->select('m.id_module as module_id, name, version as module_version, active, date_add as created_at, date_upd as updated_at')
             ->limit($limit, $offset);
 
         return $this->db->executeS($query);
@@ -57,7 +57,7 @@ class ModuleRepository
     {
         $query = $this->getBaseQuery();
 
-        $query->select('(COUNT(id_module) - ' . (int) $offset . ') as count');
+        $query->select('(COUNT(m.id_module) - ' . (int) $offset . ') as count');
 
         return (int) $this->db->getValue($query);
     }

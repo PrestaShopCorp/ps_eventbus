@@ -3,7 +3,6 @@
 use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\PsEventbus\Decorator\CustomPriceDecorator;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
-use PrestaShop\Module\PsEventbus\Repository\ProductRepository;
 use PrestaShop\Module\PsEventbus\Service\SpecificPriceService;
 
 class SpecificPriceDecoratorTest extends TestCase
@@ -29,14 +28,10 @@ class SpecificPriceDecoratorTest extends TestCase
         $languageRepository = $this->createMock(LanguageRepository::class);
         $languageRepository->method('getLanguageIdByIsoCode')->willReturn(1);
 
-        $productRepository = $this->createMock(ProductRepository::class);
-        $productRepository->method('getProductImages')->willReturn([]);
-        $productRepository->method('getAttributeImages')->willReturn([]);
-
         $specificPriceService = $this->createMock(SpecificPriceService::class);
         $specificPriceService->method('getSpecificProductPrice')->willReturn(0);
 
-        $productDecorator = new CustomPriceDecorator($contextMock, $productRepository, $specificPriceService);
+        $productDecorator = new CustomPriceDecorator($contextMock, $specificPriceService);
         $productDecorator->decorateSpecificPrices($specificPrices);
 
         $this->assertEquals($result, $specificPrices);
@@ -54,6 +49,7 @@ class SpecificPriceDecoratorTest extends TestCase
                             'id_currency' => '0',
                             'id_country' => '8',
                             'id_group' => '0',
+                            'id_shop_group' => '0',
                             'id_customer' => '0',
                             'id_product_attribute' => '0',
                             'price' => '-1.000000',
@@ -73,6 +69,7 @@ class SpecificPriceDecoratorTest extends TestCase
                         'id_product' => 1,
                         'id_shop' => 0,
                         'id_group' => 0,
+                        'id_shop_group' => 0,
                         'id_product_attribute' => 0,
                         'price' => -1.000000,
                         'from_quantity' => 1,
@@ -105,6 +102,7 @@ class SpecificPriceDecoratorTest extends TestCase
                         'id_currency' => '0',
                         'id_country' => '131',
                         'id_group' => '0',
+                        'id_shop_group' => '0',
                         'id_customer' => '0',
                         'id_product_attribute' => '0',
                         'price' => '-1.000000',
@@ -123,6 +121,7 @@ class SpecificPriceDecoratorTest extends TestCase
                         'id_shop' => 1,
                         'id_product' => 1,
                         'id_group' => 0,
+                        'id_shop_group' => 0,
                         'id_product_attribute' => 0,
                         'id_currency' => 0,
                         'currency' => 'ALL',
