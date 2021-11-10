@@ -15,6 +15,8 @@ use RangeWeight;
 
 class CarrierBuilderTest extends \PHPUnit_Framework_TestCase
 {
+    const UPDATE_DATE = '2020-10-10 10:00:00';
+
     /**
      * @dataProvider buildCarrierDataProvider
      *
@@ -57,7 +59,7 @@ class CarrierBuilderTest extends \PHPUnit_Framework_TestCase
         $configurationRepository = $this->createConfigurationRepositoryMock($freeShippingAtPrice, $freeShippingAtWeight);
 
         $carrierBuilder = new CarrierBuilder($carrierRepo, $countryRepo, $stateRepo, $taxRepository, $configurationRepository);
-        $carrierLine = $carrierBuilder->buildCarrier($carrier, $currency, $weightUnit);
+        $carrierLine = $carrierBuilder->buildCarrier($carrier, $currency, $weightUnit, self::UPDATE_DATE);
 
         $this->assertEquals($expected, $carrierLine->jsonSerialize());
     }
@@ -229,6 +231,7 @@ class CarrierBuilderTest extends \PHPUnit_Framework_TestCase
                             'delay' => $freeCarrierDelay,
                             'currency' => $currency,
                             'weight_unit' => $weightUnit,
+                            'updated_at' => self::UPDATE_DATE,
                         ],
                     ],
                 ],
@@ -290,6 +293,7 @@ class CarrierBuilderTest extends \PHPUnit_Framework_TestCase
                             'delay' => $carrierDelay,
                             'currency' => $currency,
                             'weight_unit' => $weightUnit,
+                            'updated_at' => self::UPDATE_DATE,
                         ],
                     ],
                     [
@@ -376,6 +380,7 @@ class CarrierBuilderTest extends \PHPUnit_Framework_TestCase
                             'delay' => $carrierDelay,
                             'currency' => $currency,
                             'weight_unit' => $weightUnit,
+                            'updated_at' => self::UPDATE_DATE,
                         ],
                     ],
                     [

@@ -5,6 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Tests\System\Tests\Synchronization;
 use PrestaShop\Module\PsEventbus\Provider\CarrierDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CartDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CategoryDataProvider;
+use PrestaShop\Module\PsEventbus\Provider\CustomPriceDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\ModuleDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\OrderDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
@@ -29,7 +30,7 @@ class FullSynchronizationTest extends BaseTestCase
             'test',
             'en',
             0,
-            50,
+            200,
             '2021-10-10T10:10:10',
             '2021-11-11T11:11:11'
         );
@@ -62,6 +63,10 @@ class FullSynchronizationTest extends BaseTestCase
             ],
             'apiProducts' => [
                 'dataProvider' => $this->container->getService(ProductDataProvider::class),
+                'type' => 'products',
+            ],
+            'apiCustomPrices' => [
+                'dataProvider' => $this->container->getService(CustomPriceDataProvider::class),
                 'type' => 'products',
             ],
         ];

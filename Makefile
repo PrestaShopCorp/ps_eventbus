@@ -121,6 +121,7 @@ vendor/bin/php-cs-fixer:
 bps177: build-ps-177
 ata177: all-tests-actions-177
 rda177:run-docker-actions-177
+du:docker-up
 
 build-ps-177:
 	-docker exec -i prestashop-177 sh -c "rm -rf /var/www/html/install"
@@ -136,3 +137,6 @@ all-tests-actions-177:
 	make rda177
 	make bps177
 	docker exec -i prestashop-177 sh -c "cd /var/www/html/modules/ps_eventbus && php vendor/bin/phpunit -c tests/phpunit-system.xml"
+
+docker-up:
+	docker-compose -f docker-compose.yml up

@@ -28,34 +28,6 @@ class CarrierRepository
     }
 
     /**
-     * @param int $langId
-     *
-     * @return array
-     */
-    public function getCarriers($langId)
-    {
-        $carriers = Carrier::getCarriers($langId);
-
-        $data = [];
-        foreach ($carriers as $key => $carrier) {
-            $carrierObj = new Carrier($carrier['id_carrier']);
-
-            $data[$key]['collection'] = 'carriers';
-            $data[$key]['id'] = $carrierObj->id;
-            $data[$key]['properties'] = $carrier;
-
-            $deliveryPriceByRanges = self::getDeliveryPriceByRange($carrierObj);
-            foreach ($deliveryPriceByRanges as $deliveryPriceByRange) {
-                $data[$key]['collection'] = 'carriers_details';
-                $data[$key]['id'] = $deliveryPriceByRange['id_range_weight'];
-                $data[$key]['properties'] = $deliveryPriceByRange;
-            }
-        }
-
-        return $data;
-    }
-
-    /**
      * @param Carrier $carrierObj
      *
      * @return array|false
@@ -65,9 +37,9 @@ class CarrierRepository
         $rangeTable = $carrierObj->getRangeTable();
         switch ($rangeTable) {
             case 'range_weight':
-                return self::getCarrierByWeightRange($carrierObj, 'range_weight');
+                return $this->getCarrierByWeightRange($carrierObj, 'range_weight');
             case 'range_price':
-                return self::getCarrierByPriceRange($carrierObj, 'range_price');
+                return $this->getCarrierByPriceRange($carrierObj, 'range_price');
             default:
                 return false;
         }
@@ -157,5 +129,44 @@ class CarrierRepository
         }
 
         return false;
+    }
+
+    public function getCarrierProperties($carrierIds, $langId)
+    {
+        $query = new DbQuery();
+        $query->from('carrier', 'c');
+        $query->select('c.*, cl.delay, eis.created_at as update_date');
+        $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
+        $query->leftJoin('carrier_zone', 'cz', 'cz.id_carrier = c.id_carrier');
+        $query->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier');
+        $query->leftJoin(
+            'eventbus_incremental_sync',
+            'eis',
+            'eis.id_object = c.id_carrier AND eis.type = "carrier" AND eis.id_shop = cs.id_shop AND eis.lang_iso = cl.id_lang'
+        );
+        $query->where('c.id_carrier IN (' . implode(',', array_map('intval', $carrierIds)) . ')');
+        $query->where('cs.id_shop = ' . (int) $this->context->shop->id);
+        $query->where('c.deleted = 0');
+
+        return $this->db->executeS($query);
+    }
+
+    public function getAllCarrierProperties($langId)
+    {
+        $query = new DbQuery();
+        $query->from('carrier', 'c');
+        $query->select('c.id_carrier, IFNULL(eis.created_at, CURRENT_DATE()) as update_date');
+        $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
+        $query->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier');
+        $query->leftJoin(
+            'eventbus_incremental_sync',
+            'eis',
+            'eis.id_object = c.id_carrier AND eis.type = "carrier" AND eis.id_shop = cs.id_shop AND eis.lang_iso = cl.id_lang'
+        );
+        $query->where('cs.id_shop = ' . (int) $this->context->shop->id);
+        $query->where('c.deleted = 0');
+        $query->orderBy('c.id_carrier');
+
+        return $this->db->executeS($query);
     }
 }

@@ -5,6 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Tests\System\Tests\Provider;
 use PrestaShop\Module\PsEventbus\Provider\CarrierDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CartDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CategoryDataProvider;
+use PrestaShop\Module\PsEventbus\Provider\CustomPriceDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\ModuleDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\OrderDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
@@ -46,6 +47,9 @@ class DataProviderTest extends BaseTestCase
                 ],
             'product provider' => [
                 'provider' => $this->container->getService(ProductDataProvider::class),
+                ],
+            'custom price provider' => [
+                'provider' => $this->container->getService(CustomPriceDataProvider::class),
                 ],
         ];
     }

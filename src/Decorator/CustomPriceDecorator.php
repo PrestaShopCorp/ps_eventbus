@@ -78,6 +78,7 @@ class CustomPriceDecorator
         $specificPrice['id_product'] = (int) $specificPrice['id_product'];
         $specificPrice['id_shop'] = (int) $specificPrice['id_shop'];
         $specificPrice['id_group'] = (int) $specificPrice['id_group'];
+        $specificPrice['id_shop_group'] = (int) $specificPrice['id_shop_group'];
         $specificPrice['id_product_attribute'] = (int) $specificPrice['id_product_attribute'];
         $specificPrice['price'] = (float) $specificPrice['price'];
         $specificPrice['from_quantity'] = (int) $specificPrice['from_quantity'];

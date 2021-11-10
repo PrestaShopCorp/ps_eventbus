@@ -61,10 +61,11 @@ class CarrierBuilder
     {
         $eventBusCarriers = [];
         foreach ($carriers as $carrier) {
-            $eventBusCarriers[] = self::buildCarrier(
+            $eventBusCarriers[] = $this->buildCarrier(
                 new Carrier($carrier['id_carrier'], $lang->id),
                 $currency->iso_code,
-                $weightUnit
+                $weightUnit,
+                $carrier['update_date']
             );
         }
 
@@ -87,7 +88,7 @@ class CarrierBuilder
      * @throws \PrestaShopDatabaseException
      * @throws \PrestaShopException
      */
-    public function buildCarrier(Carrier $carrier, $currencyIsoCode, $weightUnit)
+    public function buildCarrier(Carrier $carrier, $currencyIsoCode, $weightUnit, $updateDate)
     {
         $eventBusCarrier = new EventBusCarrier();
         $freeShippingStartsAtPrice = (float) $this->configurationRepository->get('PS_SHIPPING_FREE_PRICE');
@@ -118,7 +119,8 @@ class CarrierBuilder
             ->setGrade($carrier->grade)
             ->setDelay($carrier->delay)
             ->setCurrency($currencyIsoCode)
-            ->setWeightUnit($weightUnit);
+            ->setWeightUnit($weightUnit)
+            ->setUpdateAt($updateDate);
 
         $deliveryPriceByRanges = $this->carrierRepository->getDeliveryPriceByRange($carrier);
 

@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Provider;
 
-use Carrier;
 use Currency;
 use Language;
 use PrestaShop\Module\PsEventbus\Builder\CarrierBuilder;
@@ -51,7 +50,7 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
         $language = new Language($this->configurationRepository->get('PS_LANG_DEFAULT'));
         $currency = new Currency($this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
 
-        $carriers = Carrier::getCarriers($language->id);
+        $carriers = $this->carrierRepository->getAllCarrierProperties($language->id);
 
         /** @var EventBusCarrier[] $eventBusCarriers */
         $eventBusCarriers = $this->carrierBuilder->buildCarriers(
@@ -74,8 +73,8 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
 
         $language = new Language($this->configurationRepository->get('PS_LANG_DEFAULT'));
         $currency = new Currency($this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
-
-        $carriers = Carrier::getCarriers($language->id);
+        $carrierIds = array_column($shippingIncremental, 'id_object');
+        $carriers = $this->carrierRepository->getCarrierProperties($carrierIds, $language->id);
 
         /** @var EventBusCarrier[] $eventBusCarriers */
         $eventBusCarriers = $this->carrierBuilder->buildCarriers(
