@@ -62,7 +62,7 @@ class CarrierDataProviderTest extends BaseTestCase
                                     'delay' => 'Pick up in-store',
                                     'currency' => 'USD',
                                     'weight_unit' => 'kg',
-                                    'update_date' => '2021-01-01 08:45:30',
+                                    'updated_at' => '2021-01-01 08:45:30',
                                 ],
                         ],
                     1 => [
@@ -93,7 +93,7 @@ class CarrierDataProviderTest extends BaseTestCase
                                     'delay' => 'Delivery next day!',
                                     'currency' => 'USD',
                                     'weight_unit' => 'kg',
-                                    'update_date' => date('Y-m-d 00:00:00'),
+                                    'updated_at' => date('Y-m-d 00:00:00'),
                                 ],
                         ],
                     2 => [
@@ -149,7 +149,7 @@ class CarrierDataProviderTest extends BaseTestCase
                                     'delay' => 'Buy more to pay less!',
                                     'currency' => 'USD',
                                     'weight_unit' => 'kg',
-                                    'update_date' => date('Y-m-d 00:00:00'),
+                                    'updated_at' => date('Y-m-d 00:00:00'),
                                 ],
                         ],
                     5 => [
@@ -255,7 +255,7 @@ class CarrierDataProviderTest extends BaseTestCase
                                     'delay' => 'The lighter the cheaper!',
                                     'currency' => 'USD',
                                     'weight_unit' => 'kg',
-                                    'update_date' => date('Y-m-d 00:00:00'),
+                                    'updated_at' => date('Y-m-d 00:00:00'),
                                 ],
                         ],
                     12 => [

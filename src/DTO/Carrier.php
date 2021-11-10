@@ -144,7 +144,7 @@ class Carrier implements JsonSerializable
     /**
      * @var string
      */
-    private $updateDate;
+    private $updateAt;
 
     /**
      * @return string
@@ -686,19 +686,19 @@ class Carrier implements JsonSerializable
         return $this;
     }
 
-    public function getUpdateDate()
+    public function getUpdateAt()
     {
-        return $this->updateDate;
+        return $this->updateAt;
     }
 
     /**
-     * @param string $updateDate
+     * @param string $updateAt
      *
      * @return Carrier
      */
-    public function setUpdateDate($updateDate)
+    public function setUpdateAt($updateAt)
     {
-        $this->updateDate = $updateDate;
+        $this->updateAt = $updateAt;
 
         return $this;
     }
@@ -735,7 +735,7 @@ class Carrier implements JsonSerializable
                 'delay' => (string) $this->getDelay(),
                 'currency' => (string) $this->getCurrency(),
                 'weight_unit' => (string) $this->getWeightUnit(),
-                'update_date' => (string) $this->getUpdateDate(),
+                'updated_at' => (string) $this->getUpdateAt(),
             ],
         ];
 

@@ -231,7 +231,7 @@ class CarrierBuilderTest extends \PHPUnit_Framework_TestCase
                             'delay' => $freeCarrierDelay,
                             'currency' => $currency,
                             'weight_unit' => $weightUnit,
-                            'update_date' => self::UPDATE_DATE,
+                            'updated_at' => self::UPDATE_DATE,
                         ],
                     ],
                 ],
@@ -293,7 +293,7 @@ class CarrierBuilderTest extends \PHPUnit_Framework_TestCase
                             'delay' => $carrierDelay,
                             'currency' => $currency,
                             'weight_unit' => $weightUnit,
-                            'update_date' => self::UPDATE_DATE,
+                            'updated_at' => self::UPDATE_DATE,
                         ],
                     ],
                     [
@@ -380,7 +380,7 @@ class CarrierBuilderTest extends \PHPUnit_Framework_TestCase
                             'delay' => $carrierDelay,
                             'currency' => $currency,
                             'weight_unit' => $weightUnit,
-                            'update_date' => self::UPDATE_DATE,
+                            'updated_at' => self::UPDATE_DATE,
                         ],
                     ],
                     [

@@ -120,7 +120,7 @@ class CarrierBuilder
             ->setDelay($carrier->delay)
             ->setCurrency($currencyIsoCode)
             ->setWeightUnit($weightUnit)
-            ->setUpdateDate($updateDate);
+            ->setUpdateAt($updateDate);
 
         $deliveryPriceByRanges = $this->carrierRepository->getDeliveryPriceByRange($carrier);
 
