@@ -6,7 +6,7 @@ use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Provider\ProductDataProvider;
 use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 
-class CarrierDataProviderTest extends BaseTestCase
+class ProductDataProviderTest extends BaseTestCase
 {
     /**
      * @dataProvider getDataProviderInfo
