@@ -1,11 +1,12 @@
 <?php
 
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
 use PrestaShop\Module\PsEventbus\Provider\CustomProductCarrierDataProvider;
 
 class ps_EventbusApiCustomProductCarrierModuleFrontController extends AbstractApiController
 {
-    public $type = 'customProductCarrier';
+    public $type = Config::COLLECTION_CUSTOM_PRODUCT_CARRIER;
 
     /**
      * @throws PrestaShopException

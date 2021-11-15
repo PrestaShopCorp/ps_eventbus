@@ -1,11 +1,12 @@
 <?php
 
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
 use PrestaShop\Module\PsEventbus\Provider\CustomPriceDataProvider;
 
 class ps_EventbusApiCustomPricesModuleFrontController extends AbstractApiController
 {
-    public $type = 'price';
+    public $type = Config::COLLECTION_SPECIFIC_PRICE;
 
     /**
      * @throws PrestaShopException

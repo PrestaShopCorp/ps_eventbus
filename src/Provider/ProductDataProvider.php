@@ -2,6 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Provider;
 
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\ProductDecorator;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
@@ -58,7 +59,7 @@ class ProductDataProvider implements PaginatedApiDataProviderInterface
         return array_map(function ($product) {
             return [
                 'id' => $product['unique_product_id'],
-                'collection' => 'products',
+                'collection' => Config::COLLECTION_PRODUCTS,
                 'properties' => $product,
             ];
         }, $products);
@@ -103,7 +104,7 @@ class ProductDataProvider implements PaginatedApiDataProviderInterface
         return array_map(function ($product) {
             return [
                 'id' => $product['unique_product_id'],
-                'collection' => 'products',
+                'collection' => Config::COLLECTION_PRODUCTS,
                 'properties' => $product,
             ];
         }, $products);

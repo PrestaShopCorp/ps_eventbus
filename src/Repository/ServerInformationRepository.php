@@ -8,6 +8,7 @@ use DbQuery;
 use Exception;
 use Language;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use PrestaShopDatabaseException;
@@ -91,7 +92,7 @@ class ServerInformationRepository
         return [
             [
                 'id' => '1',
-                'collection' => 'shops',
+                'collection' => Config::COLLECTION_SHOPS,
                 'properties' => [
                     'created_at' => $this->createdAt,
                     'cms_version' => _PS_VERSION_,
@@ -125,7 +126,6 @@ class ServerInformationRepository
     {
         $tokenValid = true;
         $allTablesInstalled = true;
-        $phpVersion = '';
 
         try {
             $token = $this->psAccountsService->getOrRefreshToken();

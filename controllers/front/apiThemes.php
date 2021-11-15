@@ -1,12 +1,13 @@
 <?php
 
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Repository\ThemeRepository;
 
 class ps_EventbusApiThemesModuleFrontController extends AbstractApiController
 {
-    public $type = 'themes';
+    public $type = Config::COLLECTION_THEMES;
 
     /**
      * @return void

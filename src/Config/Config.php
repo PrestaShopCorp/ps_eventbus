@@ -25,5 +25,17 @@ class Config
         self::PS_ACCOUNTS_NOT_INSTALLED => 'PsAccounts not installed',
     ];
 
+    const COLLECTION_CARRIER = 'carrier';
+    const COLLECTION_CARTS = 'carts';
+    const COLLECTION_CATEGORIES = 'categories';
+    const COLLECTION_SPECIFIC_PRICE = 'specific_price';
     const COLLECTION_CUSTOM_PRODUCT_CARRIER = 'custom_product_carrier';
+    const COLLECTION_TAXONOMIES = 'taxonomies';
+    const COLLECTION_MODULES = 'modules';
+    const COLLECTION_ORDERS = 'orders';
+    const COLLECTION_ORDER_DETAILS = 'order_details';
+    const COLLECTION_PRODUCTS = 'products';
+    const COLLECTION_DELETED = 'deleted';
+    const COLLECTION_SHOPS = 'shops';
+    const COLLECTION_THEMES = 'themes';
 }

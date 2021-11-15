@@ -2,6 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Provider;
 
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\CategoryDecorator;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Repository\CategoryRepository;
@@ -50,7 +51,7 @@ class CategoryDataProvider implements PaginatedApiDataProviderInterface
         return array_map(function ($category) {
             return [
                 'id' => "{$category['id_category']}-{$category['iso_code']}",
-                'collection' => 'categories',
+                'collection' => Config::COLLECTION_CATEGORIES,
                 'properties' => $category,
             ];
         }, $categories);
@@ -89,7 +90,7 @@ class CategoryDataProvider implements PaginatedApiDataProviderInterface
         return array_map(function ($category) {
             return [
                 'id' => "{$category['id_category']}-{$category['iso_code']}",
-                'collection' => 'categories',
+                'collection' => Config::COLLECTION_CATEGORIES,
                 'properties' => $category,
             ];
         }, $categories);

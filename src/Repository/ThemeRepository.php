@@ -4,6 +4,7 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 
 use Context;
 use Db;
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\PrestaShop\Core\Addon\Theme\ThemeManagerBuilder;
 use Theme;
 
@@ -39,7 +40,7 @@ class ThemeRepository
             return array_map(function ($key, $theme) use ($currentTheme) {
                 return [
                     'id' => md5((string) $key),
-                    'collection' => 'themes',
+                    'collection' => Config::COLLECTION_THEMES,
                     'properties' => [
                         'theme_id' => md5((string) $key),
                         'name' => (string) $theme->getName(),
@@ -58,7 +59,7 @@ class ThemeRepository
 
                 $themeData = [
                     'id' => md5($theme),
-                    'collection' => 'themes',
+                    'collection' => Config::COLLECTION_THEMES,
                     'properties' => [],
                 ];
 

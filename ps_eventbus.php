@@ -23,6 +23,9 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
+use PrestaShop\Module\PsEventbus\Config\Config;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -190,7 +193,7 @@ class Ps_eventbus extends Module
 
         $this->insertDeletedObject(
             $product->id,
-            'products',
+            Config::COLLECTION_PRODUCTS,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -207,7 +210,7 @@ class Ps_eventbus extends Module
 
         $this->insertIncrementalSyncObject(
             $product->id,
-            'products',
+            Config::COLLECTION_PRODUCTS,
             date(DATE_ATOM),
             $this->context->shop->id,
             true
@@ -233,7 +236,7 @@ class Ps_eventbus extends Module
 
         $this->insertIncrementalSyncObject(
             $product->id,
-            'products',
+            Config::COLLECTION_PRODUCTS,
             date(DATE_ATOM),
             $this->context->shop->id,
             true
@@ -259,7 +262,7 @@ class Ps_eventbus extends Module
 
         $this->insertIncrementalSyncObject(
             $category->id,
-            'categories',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CATEGORIES,
             date(DATE_ATOM),
             $this->context->shop->id,
             true
@@ -277,7 +280,7 @@ class Ps_eventbus extends Module
 
         $this->insertIncrementalSyncObject(
             $category->id,
-            'categories',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CATEGORIES,
             date(DATE_ATOM),
             $this->context->shop->id,
             true
@@ -295,7 +298,7 @@ class Ps_eventbus extends Module
 
         $this->insertDeletedObject(
             $category->id,
-            'categories',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CATEGORIES,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -312,7 +315,7 @@ class Ps_eventbus extends Module
 
         $this->insertIncrementalSyncObject(
             $cart->id,
-            'carts',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARTS,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -329,7 +332,7 @@ class Ps_eventbus extends Module
 
         $this->insertIncrementalSyncObject(
             $cart->id,
-            'carts',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARTS,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -346,7 +349,7 @@ class Ps_eventbus extends Module
 
         $this->insertIncrementalSyncObject(
             $order->id,
-            'orders',
+            Config::COLLECTION_ORDERS,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -363,7 +366,7 @@ class Ps_eventbus extends Module
 
         $this->insertIncrementalSyncObject(
             $order->id,
-            'orders',
+            Config::COLLECTION_ORDERS,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -379,7 +382,7 @@ class Ps_eventbus extends Module
 
         $this->insertIncrementalSyncObject(
             $carrier->id,
-            'carrier',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIER,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -395,7 +398,7 @@ class Ps_eventbus extends Module
 
         $this->insertIncrementalSyncObject(
             $carrier->id,
-            'carrier',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIER,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -411,7 +414,7 @@ class Ps_eventbus extends Module
 
         $this->insertIncrementalSyncObject(
             $carrier->id,
-            'carrier',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIER,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -424,7 +427,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'carrier',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIER,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -437,7 +440,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'carrier',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIER,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -450,7 +453,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'carrier',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIER,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -463,7 +466,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'carrier',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIER,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -476,7 +479,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'carrier',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIER,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -489,7 +492,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'carrier',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIER,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -502,7 +505,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'carrier',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIER,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -515,7 +518,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'carrier',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIER,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -528,7 +531,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'carrier',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIER,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -541,7 +544,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'carrier',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIER,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -554,7 +557,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'carrier',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIER,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -567,7 +570,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'carrier',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIER,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -580,7 +583,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'carrier',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIER,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -593,7 +596,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'carrier',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIER,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -606,7 +609,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'carrier',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIER,
             date(DATE_ATOM),
             $this->context->shop->id
         );
@@ -619,7 +622,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            'carrier',
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIER,
             date(DATE_ATOM),
             $this->context->shop->id
         );

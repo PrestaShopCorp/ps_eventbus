@@ -1,11 +1,12 @@
 <?php
 
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
 use PrestaShop\Module\PsEventbus\Provider\ModuleDataProvider;
 
 class ps_EventbusApiModulesModuleFrontController extends AbstractApiController
 {
-    public $type = 'modules';
+    public $type = Config::COLLECTION_MODULES;
 
     /**
      * @throws PrestaShopException
