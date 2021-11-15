@@ -52,11 +52,11 @@ class ProductRepository
         $query = new DbQuery();
 
         $query->from('product', 'p')
-            ->innerJoin('product_shop', 'ps', 'ps.id_product = p.id_product AND ps.id_shop = ' . (int) $shopId)
-            ->innerJoin('product_lang', 'pl', 'pl.id_product = ps.id_product AND pl.id_shop = ps.id_shop AND pl.id_lang = ' . (int) $langId)
+            ->innerJoin('product_shop', 'ps', 'ps.id_product = p.id_product AND ps.id_shop = ' . (int)$shopId)
+            ->innerJoin('product_lang', 'pl', 'pl.id_product = ps.id_product AND pl.id_shop = ps.id_shop AND pl.id_lang = ' . (int)$langId)
             ->leftJoin('product_attribute_shop', 'pas', 'pas.id_product = p.id_product AND pas.id_shop = ps.id_shop')
             ->leftJoin('product_attribute', 'pa', 'pas.id_product_attribute = pa.id_product_attribute')
-            ->leftJoin('category_lang', 'cl', 'ps.id_category_default = cl.id_category AND ps.id_shop = cl.id_shop AND cl.id_lang = ' . (int) $langId)
+            ->leftJoin('category_lang', 'cl', 'ps.id_category_default = cl.id_category AND ps.id_shop = cl.id_shop AND cl.id_lang = ' . (int)$langId)
             ->leftJoin('stock_available', 'sa', 'sa.id_product = p.id_product AND sa.id_product_attribute = IFNULL(pas.id_product_attribute, 0) AND sa.id_shop = ps.id_shop')
             ->leftJoin('manufacturer', 'm', 'p.id_manufacturer = m.id_manufacturer');
 
@@ -120,9 +120,9 @@ class ProductRepository
             ->from('product_attribute_shop', 'pas')
             ->leftJoin('product_attribute_combination', 'pac', 'pac.id_product_attribute = pas.id_product_attribute')
             ->leftJoin('attribute', 'a', 'a.id_attribute = pac.id_attribute')
-            ->leftJoin('attribute_group_lang', 'agl', 'agl.id_attribute_group = a.id_attribute_group AND agl.id_lang = ' . (int) $langId)
+            ->leftJoin('attribute_group_lang', 'agl', 'agl.id_attribute_group = a.id_attribute_group AND agl.id_lang = ' . (int)$langId)
             ->leftJoin('attribute_lang', 'al', 'al.id_attribute = pac.id_attribute AND al.id_lang = agl.id_lang')
-            ->where('pas.id_product_attribute IN (' . $this->arrayFormatter->arrayToString($attributeIds, ',') . ') AND pas.id_shop = ' . (int) $this->context->shop->id)
+            ->where('pas.id_product_attribute IN (' . $this->arrayFormatter->arrayToString($attributeIds, ',') . ') AND pas.id_shop = ' . (int)$this->context->shop->id)
             ->groupBy('pas.id_product_attribute');
 
         $attributes = $this->db->executeS($query);
@@ -154,7 +154,7 @@ class ProductRepository
 
         $query->select('fp.id_product, IFNULL(GROUP_CONCAT(DISTINCT fl.name, ":", fvl.value SEPARATOR ";"), "") as value')
             ->from('feature_product', 'fp')
-            ->leftJoin('feature_lang', 'fl', 'fl.id_feature = fp.id_feature AND fl.id_lang = ' . (int) $langId)
+            ->leftJoin('feature_lang', 'fl', 'fl.id_feature = fp.id_feature AND fl.id_lang = ' . (int)$langId)
             ->leftJoin('feature_value_lang', 'fvl', 'fvl.id_feature_value = fp.id_feature_value AND fvl.id_lang = fl.id_lang')
             ->where('fp.id_product IN (' . $this->arrayFormatter->arrayToString($productIds, ',') . ')')
             ->groupBy('fp.id_product');
@@ -187,7 +187,7 @@ class ProductRepository
 
         $query->select('imgs.id_product, imgs.id_image, IFNULL(imgs.cover, 0) as cover')
             ->from('image_shop', 'imgs')
-            ->where('imgs.id_shop = ' . (int) $this->context->shop->id . ' AND imgs.id_product IN (' . $this->arrayFormatter->arrayToString($productIds, ',') . ')');
+            ->where('imgs.id_shop = ' . (int)$this->context->shop->id . ' AND imgs.id_product IN (' . $this->arrayFormatter->arrayToString($productIds, ',') . ')');
 
         $result = $this->db->executeS($query);
 
@@ -267,7 +267,7 @@ class ProductRepository
     public function getSaleDate($productId, $attributeId)
     {
         $specific_price = SpecificPrice::getSpecificPrice(
-            (int) $productId,
+            (int)$productId,
             $this->context->shop->id,
             0,
             0,
@@ -326,6 +326,9 @@ class ProductRepository
             IFNULL(pa.ean13, p.ean13) as ean, ps.condition, ps.visibility, ps.active, sa.quantity, m.name as manufacturer,
             (p.weight + IFNULL(pas.weight, 0)) as weight, (ps.price + IFNULL(pas.price, 0)) as price_tax_excl,
             p.date_add as created_at, p.date_upd as updated_at');
+
+        $query->select('p.width, p.height, p.depth, p.weight, p.additional_delivery_times, p.additional_shipping_cost');
+        $query->select('pl.delivery_in_stock, pl.delivery_out_stock');
 
         if (version_compare(_PS_VERSION_, '1.7', '>=')) {
             $query->select('IFNULL(pa.isbn, p.isbn) as isbn');

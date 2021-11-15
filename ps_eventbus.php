@@ -94,6 +94,7 @@ class Ps_eventbus extends Module
         'actionObjectSpecificPriceAddAfter',
         'actionObjectSpecificPriceUpdateAfter',
         'actionObjectSpecificPriceDeleteAfter',
+        'actionObjectProductCarrierAddAfter',
     ];
 
     /**
@@ -116,6 +117,7 @@ class Ps_eventbus extends Module
 
         parent::__construct();
 
+        $this->registerHook('actionObjectProductCarrierAddAfter');
         $this->displayName = $this->l('PrestaShop Eventbus');
         $this->description = $this->l('Link your PrestaShop account to synchronize your shop\'s data to the partners you want . Don&#039;t uninstall this module if you are already using a service, as it will prevent it from working.');
         $this->confirmUninstall = $this->l('This action will prevent immediately your PrestaShop services and Community services from working as they are using PrestaShop Eventbus module for syncing.');
@@ -194,6 +196,13 @@ class Ps_eventbus extends Module
             date(DATE_ATOM),
             $this->context->shop->id
         );
+
+        $this->insertDeletedObject(
+            $product->id,
+            'product_carriers',
+            date(DATE_ATOM),
+            $this->context->shop->id
+        );
     }
 
     /**
@@ -212,6 +221,14 @@ class Ps_eventbus extends Module
             $this->context->shop->id,
             true
         );
+
+        $this->insertIncrementalSyncObject(
+            $product->id,
+            'customProductCarrier',
+            date(DATE_ATOM),
+            $this->context->shop->id,
+            false
+        );
     }
 
     /**
@@ -229,6 +246,14 @@ class Ps_eventbus extends Module
             date(DATE_ATOM),
             $this->context->shop->id,
             true
+        );
+
+        $this->insertIncrementalSyncObject(
+            $product->id,
+            'customProductCarrier',
+            date(DATE_ATOM),
+            $this->context->shop->id,
+            false
         );
     }
 

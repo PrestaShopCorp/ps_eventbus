@@ -45,6 +45,14 @@ services:
       - '@ps_eventbus.context'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
 
+  PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
+      - '@ps_eventbus.context'
+      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
+
   PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository
     public: true

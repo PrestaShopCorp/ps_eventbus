@@ -6,15 +6,24 @@ use PrestaShop\Module\PsEventbus\Provider\CarrierDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CartDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CategoryDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CustomPriceDataProvider;
+use PrestaShop\Module\PsEventbus\Provider\CustomProductCarrierDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\ModuleDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\OrderDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Provider\ProductDataProvider;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
 use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
+use Product;
 
 class FullSynchronizationTest extends BaseTestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+        $product = new Product(1);
+        $product->setCarriers([1,2]);
+    }
+
     /**
      * @dataProvider fullSyncDataProvider
      */
@@ -68,6 +77,10 @@ class FullSynchronizationTest extends BaseTestCase
             'apiCustomPrices' => [
                 'dataProvider' => $this->container->getService(CustomPriceDataProvider::class),
                 'type' => 'products',
+            ],
+            'apiCustomProductCarrier' => [
+                'dataProvider' => $this->container->getService(CustomProductCarrierDataProvider::class),
+                'type' => 'product_carriers',
             ],
         ];
     }

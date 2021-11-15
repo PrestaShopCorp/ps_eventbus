@@ -88,9 +88,12 @@ class ServerInformationRepositoryTest extends TestCase
         $this->configurationRepository->expects($this->at(0))->method('get')->with('PS_REWRITING_SETTINGS')->willReturn(true);
         $this->configurationRepository->expects($this->at(1))->method('get')->with('PS_CART_FOLLOWING')->willReturn(true);
         $this->configurationRepository->expects($this->at(2))->method('get')->with('PS_WEIGHT_UNIT')->willReturn('kg');
-        $this->configurationRepository->expects($this->at(3))->method('get')->with('PS_TIMEZONE')->willReturn('GMT/Zulu');
-        $this->configurationRepository->expects($this->at(4))->method('get')->with('PS_ORDER_RETURN')->willReturn('1');
-        $this->configurationRepository->expects($this->at(5))->method('get')->with('PS_ORDER_RETURN_NB_DAYS')->willReturn('1');
+        $this->configurationRepository->expects($this->at(3))->method('get')->with('PS_BASE_DISTANCE_UNIT')->willReturn('km');
+        $this->configurationRepository->expects($this->at(4))->method('get')->with('PS_VOLUME_UNIT')->willReturn('L');
+        $this->configurationRepository->expects($this->at(5))->method('get')->with('PS_DIMENSION_UNIT')->willReturn('cm');
+        $this->configurationRepository->expects($this->at(6))->method('get')->with('PS_TIMEZONE')->willReturn('GMT/Zulu');
+        $this->configurationRepository->expects($this->at(7))->method('get')->with('PS_ORDER_RETURN')->willReturn('1');
+        $this->configurationRepository->expects($this->at(8))->method('get')->with('PS_ORDER_RETURN_NB_DAYS')->willReturn('1');
 
         $this->context->link->method('getPageLink')->willReturn('some link');
 
