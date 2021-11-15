@@ -2,13 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Provider;
 
-use Currency;
-use Language;
-use PrestaShop\Module\PsEventbus\Builder\CarrierBuilder;
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\DTO\Carrier as EventBusCarrier;
-use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
-use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository;
 
 class CustomProductCarrierDataProvider implements PaginatedApiDataProviderInterface
@@ -72,5 +66,4 @@ class CustomProductCarrierDataProvider implements PaginatedApiDataProviderInterf
     {
         return (int) $this->productCarrierRepository->getRemainingProductCarriersCount($offset);
     }
-
 }

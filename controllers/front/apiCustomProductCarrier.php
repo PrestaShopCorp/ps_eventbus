@@ -1,7 +1,6 @@
 <?php
 
 use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
-use PrestaShop\Module\PsEventbus\Provider\CarrierDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CustomProductCarrierDataProvider;
 
 class ps_EventbusApiCustomProductCarrierModuleFrontController extends AbstractApiController

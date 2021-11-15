@@ -21,7 +21,7 @@ class FullSynchronizationTest extends BaseTestCase
     {
         parent::setUp();
         $product = new Product(1);
-        $product->setCarriers([1,2]);
+        $product->setCarriers([1, 2]);
     }
 
     /**

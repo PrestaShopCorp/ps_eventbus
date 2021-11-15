@@ -3,7 +3,6 @@
 namespace PrestaShop\Module\PsEventbus\Tests\System\Tests\Provider;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Provider\CustomPriceDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CustomProductCarrierDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
@@ -15,7 +14,7 @@ class CustomProductCarrierDataProviderTest extends BaseTestCase
     {
         parent::setUp();
         $product = new Product(1);
-        $product->setCarriers([1,2]);
+        $product->setCarriers([1, 2]);
     }
 
     /**
@@ -38,7 +37,7 @@ class CustomProductCarrierDataProviderTest extends BaseTestCase
                                 'collection' => Config::COLLECTION_CUSTOM_PRODUCT_CARRIER,
                                 'properties' => [
                                         'id_product' => 1,
-                                        'id_carrier_reference' => 1
+                                        'id_carrier_reference' => 1,
                                     ],
                             ],
                         1 => [
@@ -46,7 +45,7 @@ class CustomProductCarrierDataProviderTest extends BaseTestCase
                             'collection' => Config::COLLECTION_CUSTOM_PRODUCT_CARRIER,
                             'properties' => [
                                 'id_product' => 1,
-                                'id_carrier_reference' => 2
+                                'id_carrier_reference' => 2,
                             ],
                         ],
                     ],
