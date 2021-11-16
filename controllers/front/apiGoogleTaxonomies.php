@@ -6,7 +6,7 @@ use PrestaShop\Module\PsEventbus\Provider\GoogleTaxonomyDataProvider;
 
 class ps_EventbusApiGoogleTaxonomiesModuleFrontController extends AbstractApiController
 {
-    public $type = 'taxonomies';
+    public $type = Config::COLLECTION_TAXONOMIES;
 
     /**
      * @throws PrestaShopException

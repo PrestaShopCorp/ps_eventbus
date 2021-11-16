@@ -3,6 +3,7 @@
 namespace PrestaShop\Module\PsEventbus\Provider;
 
 use Context;
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Repository\GoogleTaxonomyRepository;
 
 class GoogleTaxonomyDataProvider implements PaginatedApiDataProviderInterface
@@ -36,7 +37,7 @@ class GoogleTaxonomyDataProvider implements PaginatedApiDataProviderInterface
 
             return [
                 'id' => $uniqueId,
-                'collection' => 'taxonomies',
+                'collection' => Config::COLLECTION_TAXONOMIES,
                 'properties' => $googleTaxonomy,
             ];
         }, $data);

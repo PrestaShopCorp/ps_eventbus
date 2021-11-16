@@ -5,6 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Provider;
 use Currency;
 use Language;
 use PrestaShop\Module\PsEventbus\Builder\CarrierBuilder;
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\DTO\Carrier as EventBusCarrier;
 use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
 use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
@@ -65,7 +66,7 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
 
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
-        $shippingIncremental = $this->carrierRepository->getShippingIncremental('carrier', $langIso);
+        $shippingIncremental = $this->carrierRepository->getShippingIncremental(Config::COLLECTION_CARRIER, $langIso);
 
         if (!$shippingIncremental) {
             return [];

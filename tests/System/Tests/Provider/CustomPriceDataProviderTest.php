@@ -2,6 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Tests\System\Tests\Provider;
 
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Provider\CustomPriceDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
@@ -25,7 +26,7 @@ class CustomPriceDataProviderTest extends BaseTestCase
                 'result' => [
                         0 => [
                                 'id' => 1,
-                                'collection' => 'specific_price',
+                                'collection' => Config::COLLECTION_SPECIFIC_PRICE,
                                 'properties' => [
                                         'id_specific_price' => 1,
                                         'id_product' => 1,
@@ -56,7 +57,7 @@ class CustomPriceDataProviderTest extends BaseTestCase
                             ],
                         1 => [
                                 'id' => 2,
-                                'collection' => 'specific_price',
+                                'collection' => Config::COLLECTION_SPECIFIC_PRICE,
                                 'properties' => [
                                         'id_specific_price' => 2,
                                         'id_product' => 2,
@@ -87,7 +88,7 @@ class CustomPriceDataProviderTest extends BaseTestCase
                             ],
                         2 => [
                                 'id' => 3,
-                                'collection' => 'specific_price',
+                                'collection' => Config::COLLECTION_SPECIFIC_PRICE,
                                 'properties' => [
                                         'id_specific_price' => 3,
                                         'id_product' => 3,

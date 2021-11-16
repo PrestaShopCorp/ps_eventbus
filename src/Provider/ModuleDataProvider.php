@@ -2,6 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Provider;
 
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Repository\ModuleRepository;
 use PrestaShop\Module\PsEventbus\Repository\ShopRepository;
 use PrestaShopDatabaseException;
@@ -48,7 +49,7 @@ class ModuleDataProvider implements PaginatedApiDataProviderInterface
 
             return [
                 'id' => $moduleId,
-                'collection' => 'modules',
+                'collection' => Config::COLLECTION_MODULES,
                 'properties' => $module,
             ];
         }, $modules);

@@ -2,6 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Provider;
 
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Repository\CartProductRepository;
 use PrestaShop\Module\PsEventbus\Repository\CartRepository;
@@ -51,7 +52,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
         $carts = array_map(function ($cart) {
             return [
                 'id' => $cart['id_cart'],
-                'collection' => 'carts',
+                'collection' => Config::COLLECTION_CARTS,
                 'properties' => $cart,
             ];
         }, $carts);
@@ -122,7 +123,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
         $carts = array_map(function ($cart) {
             return [
                 'id' => $cart['id_cart'],
-                'collection' => 'carts',
+                'collection' => Config::COLLECTION_CARTS,
                 'properties' => $cart,
             ];
         }, $carts);

@@ -2,6 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Tests\System\Tests\Provider;
 
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Provider\CarrierDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
@@ -14,9 +15,9 @@ class CarrierDataProviderTest extends BaseTestCase
         parent::setUp();
         /** @var IncrementalSyncRepository $syncRepository */
         $syncRepository = $this->container->getService(IncrementalSyncRepository::class);
-        $syncRepository->insertIncrementalObject(1, 'carrier', '2021-01-01 08:45:30', 1, 1);
-        $syncRepository->insertIncrementalObject(2, 'carrier', '2021-01-02 08:45:30', 1, 2);
-        $syncRepository->insertIncrementalObject(3, 'carrier', '2021-01-03 08:45:30', 2, 1);
+        $syncRepository->insertIncrementalObject(1, Config::COLLECTION_CARRIER, '2021-01-01 08:45:30', 1, 1);
+        $syncRepository->insertIncrementalObject(2, Config::COLLECTION_CARRIER, '2021-01-02 08:45:30', 1, 2);
+        $syncRepository->insertIncrementalObject(3, Config::COLLECTION_CARRIER, '2021-01-03 08:45:30', 2, 1);
     }
 
     /**

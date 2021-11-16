@@ -2,6 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Provider;
 
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\CustomPriceDecorator;
 use PrestaShop\Module\PsEventbus\Repository\CustomPriceRepository;
 
@@ -42,7 +43,7 @@ class CustomPriceDataProvider implements PaginatedApiDataProviderInterface
         return array_map(function ($specificPrice) {
             return [
                 'id' => $specificPrice['id_specific_price'],
-                'collection' => 'specific_price',
+                'collection' => Config::COLLECTION_SPECIFIC_PRICE,
                 'properties' => $specificPrice,
             ];
         }, $specificPrices);
@@ -80,11 +81,11 @@ class CustomPriceDataProvider implements PaginatedApiDataProviderInterface
             return [];
         }
 
-        return array_map(function ($product) {
+        return array_map(function ($specificPrice) {
             return [
-                'id' => $product['unique_product_id'],
-                'collection' => 'products',
-                'properties' => $product,
+                'id' => $specificPrice['id_specific_price'],
+                'collection' => Config::COLLECTION_SPECIFIC_PRICE,
+                'properties' => $specificPrice,
             ];
         }, $specificPrices);
     }

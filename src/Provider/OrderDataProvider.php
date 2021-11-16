@@ -3,6 +3,7 @@
 namespace PrestaShop\Module\PsEventbus\Provider;
 
 use Context;
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderRepository;
@@ -63,7 +64,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         $orders = array_map(function ($order) {
             return [
                 'id' => $order['id_order'],
-                'collection' => 'orders',
+                'collection' => Config::COLLECTION_ORDERS,
                 'properties' => $order,
             ];
         }, $orders);
@@ -109,7 +110,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         $orderDetails = array_map(function ($orderDetail) {
             return [
                 'id' => $orderDetail['id_order_detail'],
-                'collection' => 'order_details',
+                'collection' => Config::COLLECTION_ORDER_DETAILS,
                 'properties' => $orderDetail,
             ];
         }, $orderDetails);
@@ -186,7 +187,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         $orders = array_map(function ($order) {
             return [
                 'id' => $order['id_order'],
-                'collection' => 'orders',
+                'collection' => Config::COLLECTION_ORDERS,
                 'properties' => $order,
             ];
         }, $orders);

@@ -2,6 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Tests\System\Tests\Synchronization;
 
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Provider\CarrierDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CartDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CategoryDataProvider;
@@ -52,35 +53,35 @@ class FullSynchronizationTest extends BaseTestCase
         return [
             'apiCarrier' => [
                 'dataProvider' => $this->container->getService(CarrierDataProvider::class),
-                'type' => 'carrier',
+                'type' => Config::COLLECTION_CARRIER,
             ],
             'apiCarts' => [
                 'dataProvider' => $this->container->getService(CartDataProvider::class),
-                'type' => 'carts',
+                'type' => Config::COLLECTION_CARTS,
             ],
             'apiCategories' => [
                 'dataProvider' => $this->container->getService(CategoryDataProvider::class),
-                'type' => 'categories',
+                'type' => Config::COLLECTION_CATEGORIES,
             ],
             'apiModules' => [
                 'dataProvider' => $this->container->getService(ModuleDataProvider::class),
-                'type' => 'modules',
+                'type' => Config::COLLECTION_MODULES,
             ],
             'apiOrders' => [
                 'dataProvider' => $this->container->getService(OrderDataProvider::class),
-                'type' => 'orders',
+                'type' => Config::COLLECTION_ORDERS,
             ],
             'apiProducts' => [
                 'dataProvider' => $this->container->getService(ProductDataProvider::class),
-                'type' => 'products',
+                'type' => Config::COLLECTION_PRODUCTS,
             ],
             'apiCustomPrices' => [
                 'dataProvider' => $this->container->getService(CustomPriceDataProvider::class),
-                'type' => 'products',
+                'type' => Config::COLLECTION_PRODUCTS,
             ],
             'apiCustomProductCarrier' => [
                 'dataProvider' => $this->container->getService(CustomProductCarrierDataProvider::class),
-                'type' => 'product_carriers',
+                'type' => Config::COLLECTION_CUSTOM_PRODUCT_CARRIER,
             ],
         ];
     }

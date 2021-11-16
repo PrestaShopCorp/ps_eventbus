@@ -1,11 +1,12 @@
 <?php
 
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
 use PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository;
 
 class ps_EventbusApiHealthCheckModuleFrontController extends AbstractApiController
 {
-    public $type = 'shops';
+    public $type = Config::COLLECTION_SHOPS;
 
     public function init()
     {
