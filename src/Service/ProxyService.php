@@ -2,11 +2,13 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
+use Exception;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Ring\Exception\ConnectException;
 use PrestaShop\Module\PsEventbus\Api\EventBusProxyClient;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
+use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 
 class ProxyService implements ProxyServiceInterface
 {
@@ -18,11 +20,16 @@ class ProxyService implements ProxyServiceInterface
      * @var JsonFormatter
      */
     private $jsonFormatter;
+    /**
+     * @var ErrorHandler
+     */
+    private $errorHandler;
 
-    public function __construct(EventBusProxyClient $eventBusProxyClient, JsonFormatter $jsonFormatter)
+    public function __construct(EventBusProxyClient $eventBusProxyClient, JsonFormatter $jsonFormatter, ErrorHandler $errorHandler)
     {
         $this->eventBusProxyClient = $eventBusProxyClient;
         $this->jsonFormatter = $jsonFormatter;
+        $this->errorHandler = $errorHandler;
     }
 
     /**
@@ -41,8 +48,10 @@ class ProxyService implements ProxyServiceInterface
         try {
             $response = $this->eventBusProxyClient->upload($jobId, $dataJson, $scriptStartTime);
         } catch (ClientException $exception) {
+            $this->errorHandler->handle($exception);
             return ['error' => $exception->getMessage()];
         } catch (ConnectException $exception) {
+            $this->errorHandler->handle($exception);
             return ['error' => $exception->getMessage()];
         }
 
@@ -64,6 +73,7 @@ class ProxyService implements ProxyServiceInterface
         try {
             $response = $this->eventBusProxyClient->uploadDelete($jobId, $dataJson);
         } catch (ClientException $exception) {
+            $this->errorHandler->handle($exception);
             return ['error' => $exception->getMessage()];
         }
 

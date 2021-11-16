@@ -10,6 +10,7 @@ use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
 use PrestaShop\Module\PsEventbus\Exception\QueryParamsException;
+use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
@@ -76,18 +77,25 @@ abstract class AbstractApiController extends ModuleFrontController
      */
     public $psAccountsInstalled = true;
 
+    /**
+     * @var ErrorHandler
+     */
+    public $errorHandler;
+
     public function __construct()
     {
         parent::__construct();
 
         $this->controller_type = 'module';
 
+        $this->errorHandler = $this->module->getService(ErrorHandler::class);
         try {
             $this->psAccountsService = $this->module->getService(PsAccounts::class)->getPsAccountsService();
             $this->proxyService = $this->module->getService(ProxyService::class);
             $this->authorizationService = $this->module->getService(ApiAuthorizationService::class);
             $this->synchronizationService = $this->module->getService(SynchronizationService::class);
         } catch (ModuleVersionException $exception) {
+            $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
         }
 
@@ -106,10 +114,13 @@ abstract class AbstractApiController extends ModuleFrontController
         try {
             $this->authorize();
         } catch (PrestaShopDatabaseException $exception) {
+            $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
         } catch (EnvVarException $exception) {
+            $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
         } catch (FirebaseException $exception) {
+            $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
         }
     }
@@ -216,12 +227,16 @@ abstract class AbstractApiController extends ModuleFrontController
                 $response
             );
         } catch (PrestaShopDatabaseException $exception) {
+            $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
         } catch (EnvVarException $exception) {
+            $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
         } catch (FirebaseException $exception) {
+            $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
         } catch (Exception $exception) {
+            $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
         }
 

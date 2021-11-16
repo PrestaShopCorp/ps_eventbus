@@ -4,6 +4,8 @@ namespace PrestaShop\Module\PsEventbus\Config;
 
 class Config
 {
+    const PSX_EVENTBUS_SENTRY_CREDENTIALS = 'https://205f0aa236aa46b8883ac8ded58f4839@o471790.ingest.sentry.io/5532403';
+
     const PROXY_TIMEOUT = 30;
     const REFRESH_TOKEN_ERROR_CODE = 452;
     const ENV_MISCONFIGURED_ERROR_CODE = 453;

@@ -17,16 +17,11 @@ class CategoryDataProvider implements PaginatedApiDataProviderInterface
      * @var CategoryDecorator
      */
     private $categoryDecorator;
-    /**
-     * @var ArrayFormatter
-     */
-    private $arrayFormatter;
 
-    public function __construct(CategoryRepository $categoryRepository, CategoryDecorator $categoryDecorator, ArrayFormatter $arrayFormatter)
+    public function __construct(CategoryRepository $categoryRepository, CategoryDecorator $categoryDecorator)
     {
         $this->categoryRepository = $categoryRepository;
         $this->categoryDecorator = $categoryDecorator;
-        $this->arrayFormatter = $arrayFormatter;
     }
 
     /**
