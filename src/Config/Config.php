@@ -4,7 +4,7 @@ namespace PrestaShop\Module\PsEventbus\Config;
 
 class Config
 {
-    const PSX_EVENTBUS_SENTRY_CREDENTIALS = 'https://205f0aa236aa46b8883ac8ded58f4839@o471790.ingest.sentry.io/5532403';
+    const PSX_EVENTBUS_SENTRY_CREDENTIALS = 'https://457f191226df4b8f9a0d7bf6f250bab2@o298402.ingest.sentry.io/6066714';
 
     const PROXY_TIMEOUT = 30;
     const REFRESH_TOKEN_ERROR_CODE = 452;
