@@ -4,7 +4,7 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 
 use Db;
 use DbQuery;
-use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
+use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
 
 class DeletedObjectsRepository
 {
@@ -16,11 +16,11 @@ class DeletedObjectsRepository
     private $db;
 
     /**
-     * @var ErrorHandler
+     * @var ErrorHandlerInterface
      */
     private $errorHandler;
 
-    public function __construct(Db $db, ErrorHandler $errorHandler)
+    public function __construct(Db $db, ErrorHandlerInterface $errorHandler)
     {
         $this->db = $db;
         $this->errorHandler = $errorHandler;

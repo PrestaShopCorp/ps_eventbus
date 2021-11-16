@@ -10,7 +10,7 @@ use Language;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
-use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
+use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use PrestaShopDatabaseException;
 use Ps_eventbus;
@@ -58,7 +58,7 @@ class ServerInformationRepository
      */
     private $createdAt;
     /**
-     * @var ErrorHandler
+     * @var ErrorHandlerInterface
      */
     private $errorHandler;
 
@@ -71,7 +71,7 @@ class ServerInformationRepository
         ShopRepository $shopRepository,
         ArrayFormatter $arrayFormatter,
         PsAccounts $psAccounts,
-        ErrorHandler $errorHandler,
+        ErrorHandlerInterface $errorHandler,
         array $configuration
     ) {
         $this->currencyRepository = $currencyRepository;

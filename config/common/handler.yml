@@ -1,4 +1,6 @@
 services:
+  PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface: '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler'
+
   PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler:
     class: PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler
     arguments:

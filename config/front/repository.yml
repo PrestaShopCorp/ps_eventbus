@@ -65,7 +65,7 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
       - '@PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
-      - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler'
+      - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
       - { EVENT_BUS_SYNC_API_URL: '%ps_eventbus.sync_api_url%', EVENT_BUS_PROXY_API_URL: '%ps_eventbus.proxy_api_url%' }
 
   PrestaShop\Module\PsEventbus\Repository\ThemeRepository:
@@ -113,7 +113,7 @@ services:
     public: true
     arguments:
       - '@ps_eventbus.db'
-      - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler'
+      - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
 
   PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository:
     class: PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository
@@ -121,7 +121,7 @@ services:
     arguments:
       - '@ps_eventbus.db'
       - '@ps_eventbus.context'
-      - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler'
+      - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
 
   PrestaShop\Module\PsEventbus\Repository\ShopRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ShopRepository

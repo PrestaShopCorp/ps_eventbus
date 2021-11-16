@@ -28,7 +28,7 @@ use Raven_Client;
 /**
  * Handle Error.
  */
-class ErrorHandler
+class ErrorHandler implements ErrorHandlerInterface
 {
     /**
      * @var Raven_Client

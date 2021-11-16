@@ -1,7 +1,7 @@
 imports:
-  - { resource: ../parameters.yml }
-  - { resource: ../common/config.yml }
-  - { resource: ../common/handler.yml }
+  - { resource: parameters.yml }
+  - { resource: common/config.yml }
+  - { resource: common/handler.yml }
 
 services:
   ps_eventbus.db:
