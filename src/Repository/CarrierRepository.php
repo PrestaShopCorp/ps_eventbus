@@ -6,6 +6,7 @@ use Carrier;
 use Context;
 use Db;
 use DbQuery;
+use PrestaShopDatabaseException;
 use RangePrice;
 use RangeWeight;
 
@@ -151,7 +152,7 @@ class CarrierRepository
         return $this->db->executeS($query);
     }
 
-    public function getAllCarrierProperties($langId)
+    public function getAllCarrierProperties($offset, $limit, $langId)
     {
         $query = new DbQuery();
         $query->from('carrier', 'c');
@@ -166,7 +167,27 @@ class CarrierRepository
         $query->where('cs.id_shop = ' . (int) $this->context->shop->id);
         $query->where('c.deleted = 0');
         $query->orderBy('c.id_carrier');
+        $query->limit($limit, $offset);
 
         return $this->db->executeS($query);
+    }
+
+    /**
+     * @param int $offset
+     * @param string $langId
+     *
+     * @return int
+     *
+     * @throws PrestaShopDatabaseException
+     */
+    public function getRemainingCarriersCount($offset, $langId)
+    {
+        $carriers = $this->getAllCarrierProperties($offset, 1, $langId);
+
+        if (!is_array($carriers) || empty($carriers)) {
+            return 0;
+        }
+
+        return count($carriers);
     }
 }

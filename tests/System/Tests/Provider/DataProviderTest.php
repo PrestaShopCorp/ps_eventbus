@@ -6,6 +6,7 @@ use PrestaShop\Module\PsEventbus\Provider\CarrierDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CartDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CategoryDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CustomPriceDataProvider;
+use PrestaShop\Module\PsEventbus\Provider\CustomProductCarrierDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\ModuleDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\OrderDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
@@ -50,6 +51,9 @@ class DataProviderTest extends BaseTestCase
                 ],
             'custom price provider' => [
                 'provider' => $this->container->getService(CustomPriceDataProvider::class),
+                ],
+            'custom product carrier' => [
+                'provider' => $this->container->getService(CustomProductCarrierDataProvider::class),
                 ],
         ];
     }

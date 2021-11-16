@@ -327,6 +327,9 @@ class ProductRepository
             (p.weight + IFNULL(pas.weight, 0)) as weight, (ps.price + IFNULL(pas.price, 0)) as price_tax_excl,
             p.date_add as created_at, p.date_upd as updated_at');
 
+        $query->select('p.width, p.height, p.depth, p.weight, p.additional_delivery_times, p.additional_shipping_cost');
+        $query->select('pl.delivery_in_stock, pl.delivery_out_stock');
+
         if (version_compare(_PS_VERSION_, '1.7', '>=')) {
             $query->select('IFNULL(pa.isbn, p.isbn) as isbn');
         }

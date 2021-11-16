@@ -212,6 +212,14 @@ class Ps_eventbus extends Module
             $this->context->shop->id,
             true
         );
+
+        $this->insertIncrementalSyncObject(
+            $product->id,
+            'customProductCarrier',
+            date(DATE_ATOM),
+            $this->context->shop->id,
+            false
+        );
     }
 
     /**
@@ -229,6 +237,14 @@ class Ps_eventbus extends Module
             date(DATE_ATOM),
             $this->context->shop->id,
             true
+        );
+
+        $this->insertIncrementalSyncObject(
+            $product->id,
+            'customProductCarrier',
+            date(DATE_ATOM),
+            $this->context->shop->id,
+            false
         );
     }
 

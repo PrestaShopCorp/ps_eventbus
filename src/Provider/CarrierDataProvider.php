@@ -50,7 +50,7 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
         $language = new Language($this->configurationRepository->get('PS_LANG_DEFAULT'));
         $currency = new Currency($this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
 
-        $carriers = $this->carrierRepository->getAllCarrierProperties($language->id);
+        $carriers = $this->carrierRepository->getAllCarrierProperties($offset, $limit, $language->id);
 
         /** @var EventBusCarrier[] $eventBusCarriers */
         $eventBusCarriers = $this->carrierBuilder->buildCarriers(
@@ -89,6 +89,6 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
 
     public function getRemainingObjectsCount($offset, $langIso)
     {
-        return 0;
+        return (int) $this->carrierRepository->getRemainingCarriersCount($offset, $langIso);
     }
 }

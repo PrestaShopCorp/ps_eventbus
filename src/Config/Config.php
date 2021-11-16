@@ -24,4 +24,6 @@ class Config
         self::INVALID_PS_ACCOUNTS_VERSION => 'Invalid PsAccounts version',
         self::PS_ACCOUNTS_NOT_INSTALLED => 'PsAccounts not installed',
     ];
+
+    const COLLECTION_CUSTOM_PRODUCT_CARRIER = 'custom_product_carrier';
 }
