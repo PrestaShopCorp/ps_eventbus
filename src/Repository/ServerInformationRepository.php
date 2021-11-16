@@ -10,6 +10,7 @@ use Language;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
+use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use PrestaShopDatabaseException;
 use Ps_eventbus;
@@ -56,6 +57,10 @@ class ServerInformationRepository
      * @var string
      */
     private $createdAt;
+    /**
+     * @var ErrorHandler
+     */
+    private $errorHandler;
 
     public function __construct(
         Context $context,
@@ -66,6 +71,7 @@ class ServerInformationRepository
         ShopRepository $shopRepository,
         ArrayFormatter $arrayFormatter,
         PsAccounts $psAccounts,
+        ErrorHandler $errorHandler,
         array $configuration
     ) {
         $this->currencyRepository = $currencyRepository;
@@ -78,6 +84,7 @@ class ServerInformationRepository
         $this->psAccountsService = $psAccounts->getPsAccountsService();
         $this->configuration = $configuration;
         $this->createdAt = $this->shopRepository->getCreatedAt();
+        $this->errorHandler = $errorHandler;
     }
 
     /**
@@ -134,6 +141,7 @@ class ServerInformationRepository
                 $tokenValid = false;
             }
         } catch (Exception $e) {
+            $this->errorHandler->handle($e);
             $tokenValid = false;
         }
 

@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use Exception;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Ring\Exception\ConnectException;
 use PrestaShop\Module\PsEventbus\Api\EventBusProxyClient;
@@ -49,9 +48,11 @@ class ProxyService implements ProxyServiceInterface
             $response = $this->eventBusProxyClient->upload($jobId, $dataJson, $scriptStartTime);
         } catch (ClientException $exception) {
             $this->errorHandler->handle($exception);
+
             return ['error' => $exception->getMessage()];
         } catch (ConnectException $exception) {
             $this->errorHandler->handle($exception);
+
             return ['error' => $exception->getMessage()];
         }
 
@@ -74,6 +75,7 @@ class ProxyService implements ProxyServiceInterface
             $response = $this->eventBusProxyClient->uploadDelete($jobId, $dataJson);
         } catch (ClientException $exception) {
             $this->errorHandler->handle($exception);
+
             return ['error' => $exception->getMessage()];
         }
 

@@ -2,9 +2,9 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
 use Db;
 use DbQuery;
+use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 
 class DeletedObjectsRepository
 {
@@ -14,15 +14,16 @@ class DeletedObjectsRepository
      * @var Db
      */
     private $db;
-    /**
-     * @var Context
-     */
-    private $context;
 
-    public function __construct(Db $db, Context $context)
+    /**
+     * @var ErrorHandler
+     */
+    private $errorHandler;
+
+    public function __construct(Db $db, ErrorHandler $errorHandler)
     {
         $this->db = $db;
-        $this->context = $context;
+        $this->errorHandler = $errorHandler;
     }
 
     /**
@@ -70,6 +71,8 @@ class DeletedObjectsRepository
                 Db::ON_DUPLICATE_KEY
             );
         } catch (\PrestaShopDatabaseException $e) {
+            $this->errorHandler->handle($e);
+
             return false;
         }
     }

@@ -4,7 +4,6 @@ namespace PrestaShop\Module\PsEventbus\Provider;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\CategoryDecorator;
-use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Repository\CategoryRepository;
 
 class CategoryDataProvider implements PaginatedApiDataProviderInterface
