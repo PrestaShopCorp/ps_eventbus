@@ -42,3 +42,7 @@ yarn-error.log*
 
 # OS relou
 .DS_Store
+
+build
+allure-report
+.gradle

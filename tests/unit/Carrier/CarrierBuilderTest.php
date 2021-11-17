@@ -3,6 +3,7 @@
 namespace Carrier;
 
 use Carrier;
+use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\PsEventbus\Builder\CarrierBuilder;
 use PrestaShop\Module\PsEventbus\DTO\CarrierDetail;
 use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
@@ -13,7 +14,7 @@ use PrestaShop\Module\PsEventbus\Repository\TaxRepository;
 use RangePrice;
 use RangeWeight;
 
-class CarrierBuilderTest extends \PHPUnit_Framework_TestCase
+class CarrierBuilderTest extends TestCase
 {
     const UPDATE_DATE = '2020-10-10 10:00:00';
 

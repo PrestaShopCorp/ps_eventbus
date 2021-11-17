@@ -7,7 +7,11 @@ use PrestaShop\Module\PsEventbus\Provider\CustomProductCarrierDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 use Product;
+use Yandex\Allure\Adapter\Annotation\Title;
 
+/**
+ * @Title("CustomProductCarrierDataProviderTest")
+ */
 class CustomProductCarrierDataProviderTest extends BaseTestCase
 {
     public function setUp()
@@ -18,6 +22,8 @@ class CustomProductCarrierDataProviderTest extends BaseTestCase
     }
 
     /**
+     * @Title("testDataProviders")
+     *
      * @dataProvider getDataProviderInfo
      */
     public function testDataProviders(PaginatedApiDataProviderInterface $dataProvider, array $result)
