@@ -135,7 +135,6 @@ jobs:
       - run: composer install
       - run: npm i
       - run: make ata${{ matrix.presta-versions }}
-      - run: make allure-run
       - name: 📊 Step 5 - Collect Allure files and generate allure-report folder
         run: |
           allure generate output/
@@ -144,3 +143,5 @@ jobs:
         with:
           name: allure-report
           path: allure-report
+
+
