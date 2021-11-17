@@ -3,114 +3,114 @@ name: EventBus Quality Control PHP
 on: [pull_request]
 
 jobs:
-  php-linter:
-    name: PHP Syntax check 5.6|7.2|7.3
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2.0.0
-      - name: PHP syntax checker 5.6
-        uses: prestashop/github-action-php-lint/5.6@master
-      - name: PHP syntax checker 7.2
-        uses: prestashop/github-action-php-lint/7.2@master
-      - name: PHP syntax checker 7.3
-        uses: prestashop/github-action-php-lint/7.3@master
-
-  php-cs-fixer:
-    name: PHP-CS-FIXER
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2.0.0
-      - name: Run PHP-CS-Fixer
-        uses: prestashopcorp/github-action-php-cs-fixer@master
-
-  phpstan:
-    name: PHPStan
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        presta-versions: ["latest", "1.7.0.3", "1.6.1.21", "1.6.1.0"]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2.0.0
-
-      - name: Cache vendor folder
-        uses: actions/cache@v1
-        with:
-          path: vendor
-          key: php-${{ hashFiles('composer.lock') }}
-
-      - name: Cache composer folder
-        uses: actions/cache@v1
-        with:
-          path: ~/.composer/cache
-          key: php-composer-cache
-
-      - name: Install dependencies
-        run: composer install
-
-      - name: Select .neon file compatible with PrestaShop ${{ matrix.presta-versions }}
-        id: neon
-        run: |
-          PS_VERSION="${{ matrix.presta-versions }}"
-          [[ "${PS_VERSION:0:3}" == '1.6' ]] && echo ::set-output name=filename::phpstan-PS-1.6.neon || echo ::set-output name=filename::phpstan-PS-1.7.neon
-
-      - name: PHPStan PrestaShop ${{ matrix.presta-versions }}
-        run: |
-          PS_VERSION="${{ matrix.presta-versions }}" \
-          NEON_FILE=${{steps.neon.outputs.filename}} \
-          make phpstan
-
-  phpunit:
-    name: PHPUNIT
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2.0.0
-
-      - name: Cache vendor folder
-        uses: actions/cache@v1
-        with:
-          path: vendor
-          key: php-${{ hashFiles('composer.lock') }}
-
-      - name: Cache composer folder
-        uses: actions/cache@v1
-        with:
-          path: ~/.composer/cache
-          key: php-composer-cache
-
-      - name: Install dependencies
-        run: composer install
-
-      - name: PHPUnit PrestaShop latest
-        run: |
-          PS_VERSION="latest" make phpunit
-
-  unit-system-tests:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        presta-versions: ['177']
-    steps:
-      -   name: Checkout
-          uses: actions/checkout@v2.0.0
-
-      -   name: Cache vendor folder
-          uses: actions/cache@v1
-          with:
-            path: vendor
-            key: php-${{ hashFiles('composer.lock') }}
-
-      -   name: Cache composer folder
-          uses: actions/cache@v1
-          with:
-            path: ~/.composer/cache
-            key: php-composer-cache
-
-      -   run: composer install
-      -   run: make ata${{ matrix.presta-versions }}
+#  php-linter:
+#    name: PHP Syntax check 5.6|7.2|7.3
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2.0.0
+#      - name: PHP syntax checker 5.6
+#        uses: prestashop/github-action-php-lint/5.6@master
+#      - name: PHP syntax checker 7.2
+#        uses: prestashop/github-action-php-lint/7.2@master
+#      - name: PHP syntax checker 7.3
+#        uses: prestashop/github-action-php-lint/7.3@master
+#
+#  php-cs-fixer:
+#    name: PHP-CS-FIXER
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2.0.0
+#      - name: Run PHP-CS-Fixer
+#        uses: prestashopcorp/github-action-php-cs-fixer@master
+#
+#  phpstan:
+#    name: PHPStan
+#    runs-on: ubuntu-latest
+#    strategy:
+#      matrix:
+#        presta-versions: ["latest", "1.7.0.3", "1.6.1.21", "1.6.1.0"]
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2.0.0
+#
+#      - name: Cache vendor folder
+#        uses: actions/cache@v1
+#        with:
+#          path: vendor
+#          key: php-${{ hashFiles('composer.lock') }}
+#
+#      - name: Cache composer folder
+#        uses: actions/cache@v1
+#        with:
+#          path: ~/.composer/cache
+#          key: php-composer-cache
+#
+#      - name: Install dependencies
+#        run: composer install
+#
+#      - name: Select .neon file compatible with PrestaShop ${{ matrix.presta-versions }}
+#        id: neon
+#        run: |
+#          PS_VERSION="${{ matrix.presta-versions }}"
+#          [[ "${PS_VERSION:0:3}" == '1.6' ]] && echo ::set-output name=filename::phpstan-PS-1.6.neon || echo ::set-output name=filename::phpstan-PS-1.7.neon
+#
+#      - name: PHPStan PrestaShop ${{ matrix.presta-versions }}
+#        run: |
+#          PS_VERSION="${{ matrix.presta-versions }}" \
+#          NEON_FILE=${{steps.neon.outputs.filename}} \
+#          make phpstan
+#
+#  phpunit:
+#    name: PHPUNIT
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2.0.0
+#
+#      - name: Cache vendor folder
+#        uses: actions/cache@v1
+#        with:
+#          path: vendor
+#          key: php-${{ hashFiles('composer.lock') }}
+#
+#      - name: Cache composer folder
+#        uses: actions/cache@v1
+#        with:
+#          path: ~/.composer/cache
+#          key: php-composer-cache
+#
+#      - name: Install dependencies
+#        run: composer install
+#
+#      - name: PHPUnit PrestaShop latest
+#        run: |
+#          PS_VERSION="latest" make phpunit
+#
+#  unit-system-tests:
+#    runs-on: ubuntu-latest
+#    strategy:
+#      matrix:
+#        presta-versions: ['177']
+#    steps:
+#      -   name: Checkout
+#          uses: actions/checkout@v2.0.0
+#
+#      -   name: Cache vendor folder
+#          uses: actions/cache@v1
+#          with:
+#            path: vendor
+#            key: php-${{ hashFiles('composer.lock') }}
+#
+#      -   name: Cache composer folder
+#          uses: actions/cache@v1
+#          with:
+#            path: ~/.composer/cache
+#            key: php-composer-cache
+#
+#      -   run: composer install
+#      -   run: make ata${{ matrix.presta-versions }}
   selenium_tests:
     runs-on: ubuntu-latest
     strategy:
@@ -133,6 +133,7 @@ jobs:
           key: php-composer-cache
 
       - run: composer install
+      - run: npm i
       - run: make ata${{ matrix.presta-versions }}
       - run: make allure-run
       - name: 📊 Step 5 - Collect Allure files and generate allure-report folder
