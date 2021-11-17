@@ -145,6 +145,6 @@ allure-run:
 	./node_modules/.bin/allure serve build/allure-results/
 
 allure-report:
-	./node_modules/.bin/allure generate output/
+	./node_modules/.bin/allure generate build/allure-results/
 
 
