@@ -7,10 +7,13 @@ use PrestaShop\Module\PsEventbus\Provider\CarrierDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
+use Yandex\Allure\Adapter\Annotation\Features;
+use Yandex\Allure\Adapter\Annotation\Stories;
 use Yandex\Allure\Adapter\Annotation\Title;
 
 /**
- * @Title("CarrierDataProviderTest")
+ * @Features("dataProvider")
+ * @Stories("carrier data provider")
  */
 class CarrierDataProviderTest extends BaseTestCase
 {
@@ -25,6 +28,7 @@ class CarrierDataProviderTest extends BaseTestCase
     }
 
     /**
+     * @Stories("carrier data provider")
      * @Title("testDataProviders")
      *
      * @dataProvider getDataProviderInfo

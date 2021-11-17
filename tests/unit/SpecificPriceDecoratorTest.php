@@ -4,7 +4,14 @@ use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\PsEventbus\Decorator\CustomPriceDecorator;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Service\SpecificPriceService;
+use Yandex\Allure\Adapter\Annotation\Features;
+use Yandex\Allure\Adapter\Annotation\Stories;
+use Yandex\Allure\Adapter\Annotation\Title;
 
+/**
+ * @Features("decorator")
+ * @Stories("specific price decorator")
+ */
 class SpecificPriceDecoratorTest extends TestCase
 {
     public function setUp()
@@ -13,6 +20,9 @@ class SpecificPriceDecoratorTest extends TestCase
     }
 
     /**
+     * @Stories("specific price decorator")
+     * @Title("testDecorateSpecificPrice")
+     *
      * @dataProvider getSpecificPrices
      */
     public function testDecorateSpecificPrice(array $specificPrices, array $result)

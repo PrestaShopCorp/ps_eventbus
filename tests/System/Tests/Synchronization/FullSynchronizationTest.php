@@ -15,10 +15,13 @@ use PrestaShop\Module\PsEventbus\Provider\ProductDataProvider;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
 use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 use Product;
+use Yandex\Allure\Adapter\Annotation\Features;
+use Yandex\Allure\Adapter\Annotation\Stories;
 use Yandex\Allure\Adapter\Annotation\Title;
 
 /**
- * @Title("FullSynchronizationTest")
+ * @Features("synchronization")
+ * @Stories("full synchronization")
  */
 class FullSynchronizationTest extends BaseTestCase
 {
@@ -30,6 +33,7 @@ class FullSynchronizationTest extends BaseTestCase
     }
 
     /**
+     * @Stories("full synchronization")
      * @Title("testFullSync")
      *
      * @dataProvider fullSyncDataProvider

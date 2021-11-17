@@ -2,7 +2,14 @@
 
 use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
+use Yandex\Allure\Adapter\Annotation\Features;
+use Yandex\Allure\Adapter\Annotation\Stories;
+use Yandex\Allure\Adapter\Annotation\Title;
 
+/**
+ * @Features("formatter")
+ * @Stories("json formatter")
+ */
 class JsonFormatterTest extends TestCase
 {
     /**
@@ -16,6 +23,10 @@ class JsonFormatterTest extends TestCase
         $this->jsonFormatter = new JsonFormatter();
     }
 
+    /**
+     * @Stories("json formatter")
+     * @Title("testFormatNewlineJsonString")
+     */
     public function testFormatNewlineJsonString()
     {
         $data = [

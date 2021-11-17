@@ -6,7 +6,14 @@ use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Repository\CategoryRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\ProductRepository;
+use Yandex\Allure\Adapter\Annotation\Features;
+use Yandex\Allure\Adapter\Annotation\Stories;
+use Yandex\Allure\Adapter\Annotation\Title;
 
+/**
+ * @Features("decorator")
+ * @Stories("product decorator")
+ */
 class ProductDecoratorTest extends TestCase
 {
     public function setUp()
@@ -14,6 +21,10 @@ class ProductDecoratorTest extends TestCase
         parent::setUp();
     }
 
+    /**
+     * @Stories("product decorator")
+     * @Title("testDecorateProducts")
+     */
     public function testDecorateProducts()
     {
         $products = [

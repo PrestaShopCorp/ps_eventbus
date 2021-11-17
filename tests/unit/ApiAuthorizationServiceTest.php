@@ -4,7 +4,14 @@ use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\PsEventbus\Api\EventBusSyncClient;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService;
+use Yandex\Allure\Adapter\Annotation\Features;
+use Yandex\Allure\Adapter\Annotation\Stories;
+use Yandex\Allure\Adapter\Annotation\Title;
 
+/**
+ * @Features("authorization")
+ * @Stories("api authorization service")
+ */
 class ApiAuthorizationServiceTest extends TestCase
 {
     /**
@@ -32,6 +39,10 @@ class ApiAuthorizationServiceTest extends TestCase
         );
     }
 
+    /**
+     * @Stories("api authorization service")
+     * @Title("testAuthorizeCallSucceeds")
+     */
     public function testAuthorizeCallSucceeds()
     {
         $jobId = '12345';

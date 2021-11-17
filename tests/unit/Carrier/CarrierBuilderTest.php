@@ -13,12 +13,22 @@ use PrestaShop\Module\PsEventbus\Repository\StateRepository;
 use PrestaShop\Module\PsEventbus\Repository\TaxRepository;
 use RangePrice;
 use RangeWeight;
+use Yandex\Allure\Adapter\Annotation\Features;
+use Yandex\Allure\Adapter\Annotation\Stories;
+use Yandex\Allure\Adapter\Annotation\Title;
 
+/**
+ * @Features("synchronization")
+ * @Stories("carrier builder")
+ */
 class CarrierBuilderTest extends TestCase
 {
     const UPDATE_DATE = '2020-10-10 10:00:00';
 
     /**
+     * @Stories("carrier builder")
+     * @Title("testBuildCarrier")
+     *
      * @dataProvider buildCarrierDataProvider
      *
      * @param Carrier $carrier

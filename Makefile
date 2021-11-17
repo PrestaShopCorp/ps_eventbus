@@ -141,7 +141,7 @@ all-tests-actions-177:
 docker-up:
 	docker-compose -f docker-compose.yml up
 
-allure-run:
+allure:
 	./node_modules/.bin/allure serve build/allure-results/
 
 allure-report:

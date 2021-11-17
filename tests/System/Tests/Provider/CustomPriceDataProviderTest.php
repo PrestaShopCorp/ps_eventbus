@@ -6,14 +6,18 @@ use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Provider\CustomPriceDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
+use Yandex\Allure\Adapter\Annotation\Features;
+use Yandex\Allure\Adapter\Annotation\Stories;
 use Yandex\Allure\Adapter\Annotation\Title;
 
 /**
- * @Title("CustomPriceDataProviderTest")
+ * @Features("dataProvider")
+ * @Stories("custom price data provider")
  */
 class CustomPriceDataProviderTest extends BaseTestCase
 {
     /**
+     * @Stories("custom price data provider")
      * @Title("testDataProviders")
      *
      * @dataProvider getDataProviderInfo

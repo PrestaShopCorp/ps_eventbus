@@ -5,14 +5,18 @@ namespace PrestaShop\Module\PsEventbus\Tests\System\Tests\Provider;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Provider\ProductDataProvider;
 use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
+use Yandex\Allure\Adapter\Annotation\Features;
+use Yandex\Allure\Adapter\Annotation\Stories;
 use Yandex\Allure\Adapter\Annotation\Title;
 
 /**
- * @Title("ProductDataProviderTest")
+ * @Features("dataProvider")
+ * @Stories("product data provider")
  */
 class ProductDataProviderTest extends BaseTestCase
 {
     /**
+     * @Stories("product data provider")
      * @Title("testDataProviders")
      *
      * @dataProvider getDataProviderInfo
