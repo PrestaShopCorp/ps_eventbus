@@ -137,7 +137,7 @@ jobs:
       - run: make ata${{ matrix.presta-versions }}
       - name: 📊 Step 5 - Collect Allure files and generate allure-report folder
         run: |
-          allure generate output/
+          make allure-report
       - name: 🎁 Step 6 - Publishing Allure artifact to GitHub Actions
         uses: actions/upload-artifact@v2
         with:
