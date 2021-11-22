@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Tests\System\Tests\Provider;
 
-use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Provider\CarrierDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CartDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CategoryDataProvider;
@@ -79,7 +78,6 @@ class DataProviderTest extends BaseTestCase
             $provider = $this->container->getService(CustomProductCarrierDataProvider::class);
             $this->handle($provider);
         });
-
     }
 
     private function handle(PaginatedApiDataProviderInterface $dataProvider)

@@ -3,21 +3,12 @@
 namespace PrestaShop\Module\PsEventbus\Tests\System\Tests\Synchronization;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Provider\CarrierDataProvider;
-use PrestaShop\Module\PsEventbus\Provider\CartDataProvider;
-use PrestaShop\Module\PsEventbus\Provider\CategoryDataProvider;
-use PrestaShop\Module\PsEventbus\Provider\CustomPriceDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CustomProductCarrierDataProvider;
-use PrestaShop\Module\PsEventbus\Provider\ModuleDataProvider;
-use PrestaShop\Module\PsEventbus\Provider\OrderDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
-use PrestaShop\Module\PsEventbus\Provider\ProductDataProvider;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
 use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 use Product;
-use Yandex\Allure\Adapter\Annotation\Description;
 use Yandex\Allure\Adapter\Annotation\Features;
-use Yandex\Allure\Adapter\Annotation\Label;
 use Yandex\Allure\Adapter\Annotation\Stories;
 use Yandex\Allure\Adapter\Annotation\Title;
 use Yandex\Allure\Adapter\Support\StepSupport;
@@ -43,7 +34,6 @@ class FullSynchronizationTest extends BaseTestCase
      */
     public function testFullSync()
     {
-
         $this->executeStep('apiCarrier', function () {
             /** @var PaginatedApiDataProviderInterface $provider */
             $provider = $this->container->getService(CustomProductCarrierDataProvider::class);
