@@ -111,7 +111,7 @@ jobs:
 
       -   run: composer install
       -   run: make ata${{ matrix.presta-versions }}
-  selenium_tests:
+  allure:
     runs-on: ubuntu-latest
     strategy:
       matrix:
