@@ -15,9 +15,12 @@ use PrestaShop\Module\PsEventbus\Provider\ProductDataProvider;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
 use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 use Product;
+use Yandex\Allure\Adapter\Annotation\Description;
 use Yandex\Allure\Adapter\Annotation\Features;
+use Yandex\Allure\Adapter\Annotation\Label;
 use Yandex\Allure\Adapter\Annotation\Stories;
 use Yandex\Allure\Adapter\Annotation\Title;
+use Yandex\Allure\Adapter\Support\StepSupport;
 
 /**
  * @Features("synchronization")
@@ -25,6 +28,8 @@ use Yandex\Allure\Adapter\Annotation\Title;
  */
 class FullSynchronizationTest extends BaseTestCase
 {
+    use StepSupport;
+
     public function setUp()
     {
         parent::setUp();
@@ -35,13 +40,61 @@ class FullSynchronizationTest extends BaseTestCase
     /**
      * @Stories("full synchronization")
      * @Title("testFullSync")
-     *
-     * @dataProvider fullSyncDataProvider
      */
-    public function testFullSync(
-        PaginatedApiDataProviderInterface $dataProvider,
-        $type
-    ) {
+    public function testFullSync()
+    {
+
+        $this->executeStep('apiCarrier', function () {
+            /** @var PaginatedApiDataProviderInterface $provider */
+            $provider = $this->container->getService(CustomProductCarrierDataProvider::class);
+            $this->handle($provider, Config::COLLECTION_CARRIER);
+        });
+
+        $this->executeStep('apiCarts', function () {
+            /** @var PaginatedApiDataProviderInterface $provider */
+            $provider = $this->container->getService(CustomProductCarrierDataProvider::class);
+            $this->handle($provider, Config::COLLECTION_CARTS);
+        });
+
+        $this->executeStep('apiCategories', function () {
+            /** @var PaginatedApiDataProviderInterface $provider */
+            $provider = $this->container->getService(CustomProductCarrierDataProvider::class);
+            $this->handle($provider, Config::COLLECTION_CATEGORIES);
+        });
+
+        $this->executeStep('apiModules', function () {
+            /** @var PaginatedApiDataProviderInterface $provider */
+            $provider = $this->container->getService(CustomProductCarrierDataProvider::class);
+            $this->handle($provider, Config::COLLECTION_MODULES);
+        });
+
+        $this->executeStep('apiOrders', function () {
+            /** @var PaginatedApiDataProviderInterface $provider */
+            $provider = $this->container->getService(CustomProductCarrierDataProvider::class);
+            $this->handle($provider, Config::COLLECTION_ORDERS);
+        });
+
+        $this->executeStep('apiProducts', function () {
+            /** @var PaginatedApiDataProviderInterface $provider */
+            $provider = $this->container->getService(CustomProductCarrierDataProvider::class);
+            $this->handle($provider, Config::COLLECTION_PRODUCTS);
+        });
+
+        $this->executeStep('apiCustomPrices', function () {
+            /** @var PaginatedApiDataProviderInterface $provider */
+            $provider = $this->container->getService(CustomProductCarrierDataProvider::class);
+            $this->handle($provider, Config::COLLECTION_PRODUCTS);
+        });
+
+        $this->executeStep('apiCustomProductCarrier', function () {
+            /** @var PaginatedApiDataProviderInterface $provider */
+            $provider = $this->container->getService(CustomProductCarrierDataProvider::class);
+            $this->handle($provider, Config::COLLECTION_CUSTOM_PRODUCT_CARRIER);
+        });
+    }
+
+    private function handle(PaginatedApiDataProviderInterface $dataProvider, $type)
+    {
         /** @var SynchronizationService $syncService */
         $syncService = $this->container->getService(SynchronizationService::class);
         $response = $syncService->handleFullSync(
@@ -56,43 +109,5 @@ class FullSynchronizationTest extends BaseTestCase
         );
 
         $this->assertEquals(201, $response['httpCode']);
-    }
-
-    public function fullSyncDataProvider()
-    {
-        return [
-            'apiCarrier' => [
-                'dataProvider' => $this->container->getService(CarrierDataProvider::class),
-                'type' => Config::COLLECTION_CARRIER,
-            ],
-            'apiCarts' => [
-                'dataProvider' => $this->container->getService(CartDataProvider::class),
-                'type' => Config::COLLECTION_CARTS,
-            ],
-            'apiCategories' => [
-                'dataProvider' => $this->container->getService(CategoryDataProvider::class),
-                'type' => Config::COLLECTION_CATEGORIES,
-            ],
-            'apiModules' => [
-                'dataProvider' => $this->container->getService(ModuleDataProvider::class),
-                'type' => Config::COLLECTION_MODULES,
-            ],
-            'apiOrders' => [
-                'dataProvider' => $this->container->getService(OrderDataProvider::class),
-                'type' => Config::COLLECTION_ORDERS,
-            ],
-            'apiProducts' => [
-                'dataProvider' => $this->container->getService(ProductDataProvider::class),
-                'type' => Config::COLLECTION_PRODUCTS,
-            ],
-            'apiCustomPrices' => [
-                'dataProvider' => $this->container->getService(CustomPriceDataProvider::class),
-                'type' => Config::COLLECTION_PRODUCTS,
-            ],
-            'apiCustomProductCarrier' => [
-                'dataProvider' => $this->container->getService(CustomProductCarrierDataProvider::class),
-                'type' => Config::COLLECTION_CUSTOM_PRODUCT_CARRIER,
-            ],
-        ];
     }
 }
