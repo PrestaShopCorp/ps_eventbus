@@ -39,7 +39,7 @@ zip: zip-prod zip-inte
 zip-prod: ./vendor
 	mkdir -p ./dist
 	git checkout -- config/parameters.yml
-	cd .. && zip -r ${PACKAGE}.zip ${MODULE} -x '*.git*' -x '*.env*' \
+	cd .. && zip -r ${PACKAGE}.zip ${MODULE} -x '*.git*' \
 	  ${MODULE}/dist/\* \
 	  ${MODULE}/composer.phar \
 	  ${MODULE}/Makefile
@@ -49,7 +49,7 @@ zip-prod: ./vendor
 zip-inte: ./vendor
 	mkdir -p ./dist
 	cp .env.inte.yml config/parameters.yml 2>/dev/null || echo "WARNING: no integration config file found";
-	cd .. && zip -r ${PACKAGE}_integration.zip ${MODULE} -x '*.git*' -x '*.env*' \
+	cd .. && zip -r ${PACKAGE}_integration.zip ${MODULE} -x '*.git*' \
 	  ${MODULE}/dist/\* \
 	  ${MODULE}/composer.phar \
 	  ${MODULE}/Makefile
