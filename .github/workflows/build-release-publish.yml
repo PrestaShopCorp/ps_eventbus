@@ -63,7 +63,10 @@ jobs:
       - name: Bundle the production zip
         run: |
           cd ${{ github.event.repository.name }}
+          echo "SENTRY_CREDENTIALS=$SENTRY_CREDENTIALS" >> .env
           make zip-prod
+        env:
+          SENTRY_CREDENTIALS: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Publish the production zip
         uses: actions/upload-release-asset@v1.0.1
@@ -89,6 +92,7 @@ jobs:
         run: |
           cd ${{ github.event.repository.name }}
           echo "$PARAMETERS_FILE" > config/parameters.yml
+          echo "SENTRY_CREDENTIALS=" >> .env.inte
           make zip-inte
         env:
           PARAMETERS_FILE: ${{ secrets.PS_EVENTBUS_ENV_INTE }}
