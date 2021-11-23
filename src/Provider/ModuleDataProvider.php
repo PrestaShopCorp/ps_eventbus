@@ -5,7 +5,6 @@ namespace PrestaShop\Module\PsEventbus\Provider;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Repository\ModuleRepository;
 use PrestaShop\Module\PsEventbus\Repository\ShopRepository;
-use PrestaShopDatabaseException;
 
 class ModuleDataProvider implements PaginatedApiDataProviderInterface
 {
@@ -31,11 +30,7 @@ class ModuleDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getFormattedData($offset, $limit, $langIso)
     {
-        try {
-            $modules = $this->moduleRepository->getModules($offset, $limit);
-        } catch (PrestaShopDatabaseException $e) {
-            return [];
-        }
+        $modules = $this->moduleRepository->getModules($offset, $limit);
 
         if (!is_array($modules)) {
             return [];

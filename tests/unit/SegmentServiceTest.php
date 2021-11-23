@@ -5,6 +5,7 @@ use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\PsEventbus\Api\EventBusProxyClient;
 use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
 use PrestaShop\Module\PsEventbus\Service\ProxyService;
+use PrestaShop\Module\PsEventbus\Tests\Mocks\Handler\ErrorHandlerMock;
 use Yandex\Allure\Adapter\Annotation\Features;
 use Yandex\Allure\Adapter\Annotation\Stories;
 use Yandex\Allure\Adapter\Annotation\Title;
@@ -38,7 +39,8 @@ class ProxyServiceTest extends TestCase
         $this->context = Context::getContext();
         $this->eventBusProxyClient = $this->createMock(EventBusProxyClient::class);
         $this->jsonFormatter = new JsonFormatter();
-        $this->segmentService = new ProxyService($this->eventBusProxyClient, $this->jsonFormatter);
+        $errorHandler = new ErrorHandlerMock();
+        $this->segmentService = new ProxyService($this->eventBusProxyClient, $this->jsonFormatter, $errorHandler);
     }
 
     /**

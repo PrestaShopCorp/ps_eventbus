@@ -4,7 +4,6 @@ namespace PrestaShop\Module\PsEventbus\Provider;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\CategoryDecorator;
-use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Repository\CategoryRepository;
 
 class CategoryDataProvider implements PaginatedApiDataProviderInterface
@@ -17,16 +16,11 @@ class CategoryDataProvider implements PaginatedApiDataProviderInterface
      * @var CategoryDecorator
      */
     private $categoryDecorator;
-    /**
-     * @var ArrayFormatter
-     */
-    private $arrayFormatter;
 
-    public function __construct(CategoryRepository $categoryRepository, CategoryDecorator $categoryDecorator, ArrayFormatter $arrayFormatter)
+    public function __construct(CategoryRepository $categoryRepository, CategoryDecorator $categoryDecorator)
     {
         $this->categoryRepository = $categoryRepository;
         $this->categoryDecorator = $categoryDecorator;
-        $this->arrayFormatter = $arrayFormatter;
     }
 
     /**

@@ -7,6 +7,7 @@ use PrestaShop\Module\PsEventbus\Repository\CurrencyRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository;
 use PrestaShop\Module\PsEventbus\Repository\ShopRepository;
+use PrestaShop\Module\PsEventbus\Tests\Mocks\Handler\ErrorHandlerMock;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use Yandex\Allure\Adapter\Annotation\Features;
 use Yandex\Allure\Adapter\Annotation\Stories;
@@ -79,6 +80,7 @@ class ServerInformationRepositoryTest extends TestCase
             $this->shopRepository,
             $this->arrayFormatter,
             $this->psAccounts,
+            new ErrorHandlerMock(),
             []
         );
     }

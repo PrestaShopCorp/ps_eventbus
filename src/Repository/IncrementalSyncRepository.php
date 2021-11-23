@@ -5,6 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 use Context;
 use Db;
 use DbQuery;
+use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
 
 class IncrementalSyncRepository
 {
@@ -18,11 +19,16 @@ class IncrementalSyncRepository
      * @var Context
      */
     private $context;
+    /**
+     * @var ErrorHandlerInterface
+     */
+    private $errorHandler;
 
-    public function __construct(Db $db, Context $context)
+    public function __construct(Db $db, Context $context, ErrorHandlerInterface $errorHandler)
     {
         $this->db = $db;
         $this->context = $context;
+        $this->errorHandler = $errorHandler;
     }
 
     /**
@@ -51,6 +57,8 @@ class IncrementalSyncRepository
                 Db::ON_DUPLICATE_KEY
             );
         } catch (\PrestaShopDatabaseException $e) {
+            $this->errorHandler->handle($e);
+
             return false;
         }
     }

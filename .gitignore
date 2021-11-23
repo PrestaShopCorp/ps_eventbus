@@ -34,7 +34,7 @@ views/files/*
 /views/css/chunk-vendors.css
 /views/favicon.ico
 /views/index.html
-
+/config.xml
 # Log files
 npm-debug.log*
 yarn-debug.log*
