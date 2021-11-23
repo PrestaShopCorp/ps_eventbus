@@ -6,7 +6,14 @@ use PrestaShop\Module\PsEventbus\Api\EventBusProxyClient;
 use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
 use PrestaShop\Module\PsEventbus\Service\ProxyService;
 use PrestaShop\Module\PsEventbus\Tests\Mocks\Handler\ErrorHandlerMock;
+use Yandex\Allure\Adapter\Annotation\Features;
+use Yandex\Allure\Adapter\Annotation\Stories;
+use Yandex\Allure\Adapter\Annotation\Title;
 
+/**
+ * @Features("synchronization")
+ * @Stories("proxy service")
+ */
 class ProxyServiceTest extends TestCase
 {
     /**
@@ -36,6 +43,10 @@ class ProxyServiceTest extends TestCase
         $this->segmentService = new ProxyService($this->eventBusProxyClient, $this->jsonFormatter, $errorHandler);
     }
 
+    /**
+     * @Stories("proxy service")
+     * @Title("testValidUpload")
+     */
     public function testValidUpload()
     {
         $data = ['important_server_data' => ':)'];

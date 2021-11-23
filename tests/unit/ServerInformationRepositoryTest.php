@@ -9,7 +9,14 @@ use PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository;
 use PrestaShop\Module\PsEventbus\Repository\ShopRepository;
 use PrestaShop\Module\PsEventbus\Tests\Mocks\Handler\ErrorHandlerMock;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
+use Yandex\Allure\Adapter\Annotation\Features;
+use Yandex\Allure\Adapter\Annotation\Stories;
+use Yandex\Allure\Adapter\Annotation\Title;
 
+/**
+ * @Features("repository")
+ * @Stories("server information repository")
+ */
 class ServerInformationRepositoryTest extends TestCase
 {
     /**
@@ -78,6 +85,10 @@ class ServerInformationRepositoryTest extends TestCase
         );
     }
 
+    /**
+     * @Stories("server information repository")
+     * @Title("testGetServerInformation")
+     */
     public function testGetServerInformation()
     {
         $this->shopRepository->method('getMultiShopCount')->willReturn(1);
