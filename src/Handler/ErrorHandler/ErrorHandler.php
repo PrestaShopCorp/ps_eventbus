@@ -39,7 +39,7 @@ class ErrorHandler implements ErrorHandlerInterface
     {
         $psAccounts = Module::getInstanceByName('ps_accounts');
         $this->client = new Raven_Client(
-            $env->get('PSX_EVENTBUS_SENTRY_CREDENTIALS'),
+            $env->get('SENTRY_CREDENTIALS'),
             [
                 'level' => 'warning',
                 'tags' => [
