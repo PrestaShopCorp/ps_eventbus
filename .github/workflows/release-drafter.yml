@@ -70,6 +70,7 @@ jobs:
           make zip-inte
         env:
           ENV_FILE: ${{ secrets.PS_EVENTBUS_ENV_INTE }}
+          SENTRY_CREDENTIALS: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Publish the integration zip
         uses: actions/upload-release-asset@v1.0.1
