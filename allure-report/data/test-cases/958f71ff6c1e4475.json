@@ -1,0 +1,46 @@
+{
+  "uid" : "958f71ff6c1e4475",
+  "name" : "testFormatNewlineJsonString",
+  "fullName" : "JsonFormatterTest.testFormatNewlineJsonString",
+  "historyId" : "622c40e0d3687512eb731b7c70096777",
+  "time" : {
+    "start" : 1637151872828,
+    "stop" : 1637151872829,
+    "duration" : 1
+  },
+  "description" : "",
+  "descriptionHtml" : "",
+  "status" : "passed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ ],
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "suite",
+    "value" : "JsonFormatterTest"
+  }, {
+    "name" : "testClass",
+    "value" : "JsonFormatterTest"
+  }, {
+    "name" : "testMethod",
+    "value" : "testFormatNewlineJsonString"
+  }, {
+    "name" : "package",
+    "value" : "JsonFormatterTest"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure1"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "958f71ff6c1e4475.json",
+  "parameterValues" : [ ]
+}

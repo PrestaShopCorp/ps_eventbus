@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alr:test-suite xmlns:alr="urn:model.allure.qatools.yandex.ru" start="1637585691238" stop="1637585691246" version="1.4.0">
+  <name>Carrier\CarrierBuilderTest</name>
+  <test-cases>
+    <test-case start="1637585691239" stop="1637585691241" status="passed">
+      <name>testBuildCarrier with data set "free shipping"</name>
+      <title><![CDATA[testBuildCarrier]]></title>
+      <labels>
+        <label name="story" value="carrier builder"/>
+      </labels>
+    </test-case>
+    <test-case start="1637585691242" stop="1637585691244" status="passed">
+      <name>testBuildCarrier with data set "carrier with price, range by price"</name>
+      <title><![CDATA[testBuildCarrier]]></title>
+      <labels>
+        <label name="story" value="carrier builder"/>
+      </labels>
+    </test-case>
+    <test-case start="1637585691245" stop="1637585691246" status="passed">
+      <name>testBuildCarrier with data set "carrier with price, range by weight"</name>
+      <title><![CDATA[testBuildCarrier]]></title>
+      <labels>
+        <label name="story" value="carrier builder"/>
+      </labels>
+    </test-case>
+  </test-cases>
+  <labels>
+    <label name="feature" value="synchronization"/>
+    <label name="story" value="carrier builder"/>
+  </labels>
+</alr:test-suite>

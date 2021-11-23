@@ -1,0 +1,46 @@
+{
+  "uid" : "f84375d13735b2b5",
+  "name" : "testAuthorizeCallFails",
+  "fullName" : "ApiAuthorizationServiceTest.testAuthorizeCallFails",
+  "historyId" : "b21faa886e7a198fab6e1777a033e42",
+  "time" : {
+    "start" : 1637151872772,
+    "stop" : 1637151872774,
+    "duration" : 2
+  },
+  "description" : "",
+  "descriptionHtml" : "",
+  "status" : "passed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ ],
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "suite",
+    "value" : "ApiAuthorizationServiceTest"
+  }, {
+    "name" : "testClass",
+    "value" : "ApiAuthorizationServiceTest"
+  }, {
+    "name" : "testMethod",
+    "value" : "testAuthorizeCallFails"
+  }, {
+    "name" : "package",
+    "value" : "ApiAuthorizationServiceTest"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure1"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "f84375d13735b2b5.json",
+  "parameterValues" : [ ]
+}

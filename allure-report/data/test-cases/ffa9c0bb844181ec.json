@@ -1,0 +1,44 @@
+{
+  "uid" : "ffa9c0bb844181ec",
+  "name" : "testFullSync",
+  "fullName" : "PrestaShop\\Module\\PsEventbus\\Tests\\System\\Tests\\Synchronization\\FullSynchronizationTest.testFullSync with data set \"apiOrders\"",
+  "historyId" : "3c47cb3022b892772cd76a2e91e95e98",
+  "time" : {
+    "start" : 1637151872678,
+    "stop" : 1637151872686,
+    "duration" : 8
+  },
+  "description" : "",
+  "descriptionHtml" : "",
+  "status" : "passed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ ],
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "suite",
+    "value" : "FullSynchronizationTest"
+  }, {
+    "name" : "testClass",
+    "value" : "PrestaShop\\Module\\PsEventbus\\Tests\\System\\Tests\\Synchronization\\FullSynchronizationTest"
+  }, {
+    "name" : "testMethod",
+    "value" : "testFullSync with data set \"apiOrders\""
+  }, {
+    "name" : "package",
+    "value" : "PrestaShop\\Module\\PsEventbus\\Tests\\System\\Tests\\Synchronization\\FullSynchronizationTest"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure1"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : true,
+  "retry" : true,
+  "extra" : {
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "ffa9c0bb844181ec.json",
+  "parameterValues" : [ ]
+}

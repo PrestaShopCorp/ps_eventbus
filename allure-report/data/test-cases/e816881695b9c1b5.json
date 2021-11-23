@@ -1,0 +1,46 @@
+{
+  "uid" : "e816881695b9c1b5",
+  "name" : "testDataProviders",
+  "fullName" : "PrestaShop\\Module\\PsEventbus\\Tests\\System\\Tests\\Provider\\ProductDataProviderTest.testDataProviders with data set #0",
+  "historyId" : "ae5a84586063d9df275fe26629a622e1",
+  "time" : {
+    "start" : 1637151872570,
+    "stop" : 1637151872621,
+    "duration" : 51
+  },
+  "description" : "",
+  "descriptionHtml" : "",
+  "status" : "passed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ ],
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "suite",
+    "value" : "ProductDataProviderTest"
+  }, {
+    "name" : "testClass",
+    "value" : "PrestaShop\\Module\\PsEventbus\\Tests\\System\\Tests\\Provider\\ProductDataProviderTest"
+  }, {
+    "name" : "testMethod",
+    "value" : "testDataProviders with data set #0"
+  }, {
+    "name" : "package",
+    "value" : "PrestaShop\\Module\\PsEventbus\\Tests\\System\\Tests\\Provider\\ProductDataProviderTest"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure1"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "e816881695b9c1b5.json",
+  "parameterValues" : [ ]
+}

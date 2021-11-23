@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alr:test-suite xmlns:alr="urn:model.allure.qatools.yandex.ru" start="1637585691370" stop="1637585691377" version="1.4.0">
+  <name>SpecificPriceDecoratorTest</name>
+  <test-cases>
+    <test-case start="1637585691371" stop="1637585691373" status="passed">
+      <name>testDecorateSpecificPrice with data set "one country - 20%"</name>
+      <title><![CDATA[testDecorateSpecificPrice]]></title>
+      <labels>
+        <label name="story" value="specific price decorator"/>
+      </labels>
+    </test-case>
+    <test-case start="1637585691374" stop="1637585691377" status="passed">
+      <name>testDecorateSpecificPrice with data set "one country - 4e discount"</name>
+      <title><![CDATA[testDecorateSpecificPrice]]></title>
+      <labels>
+        <label name="story" value="specific price decorator"/>
+      </labels>
+    </test-case>
+  </test-cases>
+  <labels>
+    <label name="feature" value="decorator"/>
+    <label name="story" value="specific price decorator"/>
+  </labels>
+</alr:test-suite>

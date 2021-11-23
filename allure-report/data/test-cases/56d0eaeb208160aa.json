@@ -1,0 +1,102 @@
+{
+  "uid" : "56d0eaeb208160aa",
+  "name" : "testDataProviders",
+  "fullName" : "PrestaShop\\Module\\PsEventbus\\Tests\\System\\Tests\\Provider\\DataProviderTest.testDataProviders with data set \"custom product carrier\"",
+  "historyId" : "4e21277c2cc589fbdc24615489531787",
+  "time" : {
+    "start" : 1637151872546,
+    "stop" : 1637151872547,
+    "duration" : 1
+  },
+  "description" : "",
+  "descriptionHtml" : "",
+  "status" : "passed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ ],
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "suite",
+    "value" : "DataProviderTest"
+  }, {
+    "name" : "testClass",
+    "value" : "PrestaShop\\Module\\PsEventbus\\Tests\\System\\Tests\\Provider\\DataProviderTest"
+  }, {
+    "name" : "testMethod",
+    "value" : "testDataProviders with data set \"custom product carrier\""
+  }, {
+    "name" : "package",
+    "value" : "PrestaShop\\Module\\PsEventbus\\Tests\\System\\Tests\\Provider\\DataProviderTest"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure1"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ {
+      "uid" : "a9c38509538cb9fc",
+      "status" : "passed",
+      "time" : {
+        "start" : 1637151872535,
+        "stop" : 1637151872546,
+        "duration" : 11
+      }
+    }, {
+      "uid" : "d86e3aaecec2d097",
+      "status" : "passed",
+      "time" : {
+        "start" : 1637151872073,
+        "stop" : 1637151872534,
+        "duration" : 461
+      }
+    }, {
+      "uid" : "2a6a356523a834b",
+      "status" : "passed",
+      "time" : {
+        "start" : 1637151872070,
+        "stop" : 1637151872073,
+        "duration" : 3
+      }
+    }, {
+      "uid" : "a091c14351bd1d35",
+      "status" : "passed",
+      "time" : {
+        "start" : 1637151872067,
+        "stop" : 1637151872069,
+        "duration" : 2
+      }
+    }, {
+      "uid" : "72cb91bc27dec520",
+      "status" : "passed",
+      "time" : {
+        "start" : 1637151872064,
+        "stop" : 1637151872066,
+        "duration" : 2
+      }
+    }, {
+      "uid" : "fc5cacf578b891e8",
+      "status" : "passed",
+      "time" : {
+        "start" : 1637151872062,
+        "stop" : 1637151872064,
+        "duration" : 2
+      }
+    }, {
+      "uid" : "286ac69eb46320a2",
+      "status" : "passed",
+      "time" : {
+        "start" : 1637151872050,
+        "stop" : 1637151872061,
+        "duration" : 11
+      }
+    } ],
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "56d0eaeb208160aa.json",
+  "parameterValues" : [ ]
+}

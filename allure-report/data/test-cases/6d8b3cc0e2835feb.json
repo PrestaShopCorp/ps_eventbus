@@ -1,0 +1,46 @@
+{
+  "uid" : "6d8b3cc0e2835feb",
+  "name" : "testValidUpload",
+  "fullName" : "ProxyServiceTest.testValidUpload",
+  "historyId" : "14e3c05737d2fb40000e58e8f27c0ff5",
+  "time" : {
+    "start" : 1637151872875,
+    "stop" : 1637151872877,
+    "duration" : 2
+  },
+  "description" : "",
+  "descriptionHtml" : "",
+  "status" : "passed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ ],
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "suite",
+    "value" : "ProxyServiceTest"
+  }, {
+    "name" : "testClass",
+    "value" : "ProxyServiceTest"
+  }, {
+    "name" : "testMethod",
+    "value" : "testValidUpload"
+  }, {
+    "name" : "package",
+    "value" : "ProxyServiceTest"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure1"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "6d8b3cc0e2835feb.json",
+  "parameterValues" : [ ]
+}

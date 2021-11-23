@@ -1,0 +1,46 @@
+{
+  "uid" : "b84d74591041b9f9",
+  "name" : "testBuildCarrier with data set \"carrier with price, range by weight\"",
+  "fullName" : "Carrier\\CarrierBuilderTest.testBuildCarrier with data set \"carrier with price, range by weight\"",
+  "historyId" : "ebde4dd9b952f1cf448293f5f8ddad9b",
+  "time" : {
+    "start" : 1637151872813,
+    "stop" : 1637151872815,
+    "duration" : 2
+  },
+  "description" : "",
+  "descriptionHtml" : "",
+  "status" : "passed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ ],
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "suite",
+    "value" : "Carrier\\CarrierBuilderTest"
+  }, {
+    "name" : "testClass",
+    "value" : "Carrier\\CarrierBuilderTest"
+  }, {
+    "name" : "testMethod",
+    "value" : "testBuildCarrier with data set \"carrier with price, range by weight\""
+  }, {
+    "name" : "package",
+    "value" : "Carrier\\CarrierBuilderTest"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure1"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "b84d74591041b9f9.json",
+  "parameterValues" : [ ]
+}

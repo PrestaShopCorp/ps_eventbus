@@ -1,0 +1,46 @@
+{
+  "uid" : "44061765cc0840e8",
+  "name" : "testBuildCarrier with data set \"free shipping\"",
+  "fullName" : "Carrier\\CarrierBuilderTest.testBuildCarrier with data set \"free shipping\"",
+  "historyId" : "f15c6979898320b6345e7d06b01d471",
+  "time" : {
+    "start" : 1637151872807,
+    "stop" : 1637151872810,
+    "duration" : 3
+  },
+  "description" : "",
+  "descriptionHtml" : "",
+  "status" : "passed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ ],
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "suite",
+    "value" : "Carrier\\CarrierBuilderTest"
+  }, {
+    "name" : "testClass",
+    "value" : "Carrier\\CarrierBuilderTest"
+  }, {
+    "name" : "testMethod",
+    "value" : "testBuildCarrier with data set \"free shipping\""
+  }, {
+    "name" : "package",
+    "value" : "Carrier\\CarrierBuilderTest"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure1"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "44061765cc0840e8.json",
+  "parameterValues" : [ ]
+}

@@ -197,7 +197,7 @@ abstract class AbstractApiController extends ModuleFrontController
                 $this->eventbusSyncRepository->insertTypeSync($this->type, $offset, $dateNow, $langIso);
             }
 
-            if ($incrementalSync) {
+            if (false) {
                 $response = $this->synchronizationService->handleIncrementalSync(
                     $dataProvider,
                     $this->type,

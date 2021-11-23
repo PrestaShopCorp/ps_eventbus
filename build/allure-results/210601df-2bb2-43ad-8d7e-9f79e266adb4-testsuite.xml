@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alr:test-suite xmlns:alr="urn:model.allure.qatools.yandex.ru" start="1637585690340" stop="1637585690395" version="1.4.0">
+  <name>PrestaShop\Module\PsEventbus\Tests\System\Tests\Provider\CarrierDataProviderTest</name>
+  <test-cases>
+    <test-case start="1637585690343" stop="1637585690395" status="passed">
+      <name>testDataProviders with data set "custom price provider"</name>
+      <title><![CDATA[testDataProviders]]></title>
+      <labels>
+        <label name="story" value="carrier data provider"/>
+      </labels>
+    </test-case>
+  </test-cases>
+  <labels>
+    <label name="feature" value="dataProvider"/>
+    <label name="story" value="carrier data provider"/>
+  </labels>
+</alr:test-suite>

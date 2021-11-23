@@ -1,0 +1,44 @@
+{
+  "uid" : "a9c38509538cb9fc",
+  "name" : "testDataProviders",
+  "fullName" : "PrestaShop\\Module\\PsEventbus\\Tests\\System\\Tests\\Provider\\DataProviderTest.testDataProviders with data set \"custom price provider\"",
+  "historyId" : "4e21277c2cc589fbdc24615489531787",
+  "time" : {
+    "start" : 1637151872535,
+    "stop" : 1637151872546,
+    "duration" : 11
+  },
+  "description" : "",
+  "descriptionHtml" : "",
+  "status" : "passed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ ],
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "suite",
+    "value" : "DataProviderTest"
+  }, {
+    "name" : "testClass",
+    "value" : "PrestaShop\\Module\\PsEventbus\\Tests\\System\\Tests\\Provider\\DataProviderTest"
+  }, {
+    "name" : "testMethod",
+    "value" : "testDataProviders with data set \"custom price provider\""
+  }, {
+    "name" : "package",
+    "value" : "PrestaShop\\Module\\PsEventbus\\Tests\\System\\Tests\\Provider\\DataProviderTest"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure1"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : true,
+  "retry" : true,
+  "extra" : {
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "a9c38509538cb9fc.json",
+  "parameterValues" : [ ]
+}

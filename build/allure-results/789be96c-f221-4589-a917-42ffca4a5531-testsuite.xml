@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alr:test-suite xmlns:alr="urn:model.allure.qatools.yandex.ru" start="1637585691158" stop="1637585691171" version="1.4.0">
+  <name>PrestaShop\Module\PsEventbus\Tests\System\Tests\Synchronization\FullSynchronizationTest</name>
+  <test-cases>
+    <test-case start="1637585691159" stop="1637585691171" status="passed">
+      <name>testFullSync</name>
+      <title><![CDATA[testFullSync]]></title>
+      <steps>
+        <step start="1637585691163" stop="1637585691166" status="passed">
+          <name><![CDATA[apiCarrier]]></name>
+          <title><![CDATA[apiCarrier]]></title>
+        </step>
+        <step start="1637585691166" stop="1637585691167" status="passed">
+          <name><![CDATA[apiCarts]]></name>
+          <title><![CDATA[apiCarts]]></title>
+        </step>
+        <step start="1637585691167" stop="1637585691168" status="passed">
+          <name><![CDATA[apiCategories]]></name>
+          <title><![CDATA[apiCategories]]></title>
+        </step>
+        <step start="1637585691168" stop="1637585691168" status="passed">
+          <name><![CDATA[apiModules]]></name>
+          <title><![CDATA[apiModules]]></title>
+        </step>
+        <step start="1637585691168" stop="1637585691169" status="passed">
+          <name><![CDATA[apiOrders]]></name>
+          <title><![CDATA[apiOrders]]></title>
+        </step>
+        <step start="1637585691169" stop="1637585691170" status="passed">
+          <name><![CDATA[apiProducts]]></name>
+          <title><![CDATA[apiProducts]]></title>
+        </step>
+        <step start="1637585691170" stop="1637585691170" status="passed">
+          <name><![CDATA[apiCustomPrices]]></name>
+          <title><![CDATA[apiCustomPrices]]></title>
+        </step>
+        <step start="1637585691170" stop="1637585691171" status="passed">
+          <name><![CDATA[apiCustomProductCarrier]]></name>
+          <title><![CDATA[apiCustomProductCarrier]]></title>
+        </step>
+      </steps>
+      <labels>
+        <label name="story" value="full synchronization"/>
+      </labels>
+    </test-case>
+  </test-cases>
+  <labels>
+    <label name="feature" value="synchronization"/>
+    <label name="story" value="full synchronization"/>
+  </labels>
+</alr:test-suite>
