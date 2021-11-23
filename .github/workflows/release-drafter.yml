@@ -52,7 +52,10 @@ jobs:
 
       - name: Bundle the production zip
         run: |
+          echo "SENTRY_CREDENTIALS=$SENTRY_CREDENTIALS" >> .env
           make zip-prod
+        env:
+          SENTRY_CREDENTIALS: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Publish the production zip
         uses: actions/upload-release-asset@v1.0.1
@@ -67,10 +70,10 @@ jobs:
       - name: Bundle the integration zip
         run: |
           echo "$ENV_FILE" > .env.inte
+          echo "SENTRY_CREDENTIALS=" >> .env.inte
           make zip-inte
         env:
           ENV_FILE: ${{ secrets.PS_EVENTBUS_ENV_INTE }}
-          SENTRY_CREDENTIALS: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Publish the integration zip
         uses: actions/upload-release-asset@v1.0.1

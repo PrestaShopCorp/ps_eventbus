@@ -35,11 +35,11 @@ class ErrorHandler implements ErrorHandlerInterface
      */
     protected $client;
 
-    public function __construct(Module $module, Env $env, Context $context)
+    public function __construct(Module $module, Context $context, $sentryCredentials)
     {
         $psAccounts = Module::getInstanceByName('ps_accounts');
         $this->client = new Raven_Client(
-            $env->get('SENTRY_CREDENTIALS'),
+            $sentryCredentials,
             [
                 'level' => 'warning',
                 'tags' => [

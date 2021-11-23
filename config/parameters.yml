@@ -8,3 +8,4 @@ parameters:
 
   ps_eventbus.proxy_api_url: 'https://eventbus-proxy.psessentials.net'
   ps_eventbus.sync_api_url: 'https://eventbus-sync.psessentials.net'
+  ps_eventbus.sentry.credentials: '%env(string:SENTRY_CREDENTIALS)%'
