@@ -5,4 +5,12 @@
             <directory suffix="Test.php">./tests/unit</directory>
         </testsuite>
     </testsuites>
+    <listeners>
+        <listener class="Yandex\Allure\PhpUnit\AllurePhpUnit" file="vendor/allure-framework/allure-phpunit/src/Yandex/Allure/PhpUnit/AllurePhpUnit.php">
+            <arguments>
+                <string>build/allure-results</string> <!-- XML files output directory -->
+                <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->
+            </arguments>
+        </listener>
+    </listeners>
 </phpunit>

@@ -2,7 +2,14 @@
 
 use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
+use Yandex\Allure\Adapter\Annotation\Features;
+use Yandex\Allure\Adapter\Annotation\Stories;
+use Yandex\Allure\Adapter\Annotation\Title;
 
+/**
+ * @Features("formatter")
+ * @Stories("array formatter")
+ */
 class ArrayFormatterTest extends TestCase
 {
     /**
@@ -15,6 +22,10 @@ class ArrayFormatterTest extends TestCase
         $this->arrayFormatter = new ArrayFormatter();
     }
 
+    /**
+     * @Stories("array formatter")
+     * @Title("testFormatArray")
+     */
     public function testFormatArray()
     {
         $data = [
@@ -26,6 +37,10 @@ class ArrayFormatterTest extends TestCase
         $this->assertEquals('value1:value2', $this->arrayFormatter->arrayToString($data, ':'));
     }
 
+    /**
+     * @Stories("arrayFormatter")
+     * @Title("testFormatValueArrayTest")
+     */
     public function testFormatValueArrayTest()
     {
         $data = [
