@@ -61,7 +61,6 @@ class OrderDataProviderTest extends BaseTestCase
                 $this->assertArrayHasKey('updated_at', $properties);
                 $this->assertArrayHasKey('unique_product_id', $properties);
             }
-
         }
     }
 
