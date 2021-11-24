@@ -112,7 +112,7 @@ class OrderRepository
          c.iso_code as currency, SUM(os.total_products_tax_incl + os.total_shipping_tax_incl) as refund,
          SUM(os.total_products_tax_excl + os.total_shipping_tax_excl) as refund_tax_excl, o.module as payment_module,
          o.payment as payment_mode, o.total_paid_real, o.total_shipping as shipping_cost, o.date_add as created_at,
-         o.date_upd as updated_at,
+         o.date_upd as updated_at, o.id_carrier,
          GROUP_CONCAT(CONCAT(IF(o.id_address_delivery = a.id_address, "delivery", "invoice"), ":", cnt.iso_code)) as address_iso');
     }
 }

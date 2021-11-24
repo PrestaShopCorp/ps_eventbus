@@ -43,6 +43,7 @@ class OrderDataProviderTest extends BaseTestCase
                 $this->assertArrayHasKey('total_paid_tax', $properties);
                 $this->assertArrayHasKey('invoice_country_code', $properties);
                 $this->assertArrayHasKey('delivery_country_code', $properties);
+                $this->assertArrayHasKey('id_carrier', $properties);
             } elseif ($data['collection'] == 'order_details') {
                 $this->assertArrayHasKey('id_order_detail', $properties);
                 $this->assertArrayHasKey('id_order', $properties);

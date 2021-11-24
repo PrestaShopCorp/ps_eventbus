@@ -138,6 +138,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             $order['is_paid'] = (float) $order['total_paid_real'] >= (float) $order['total_paid_tax_incl'];
             $order['shipping_cost'] = (float) $order['shipping_cost'];
             $order['total_paid_tax'] = $order['total_paid_tax_incl'] - $order['total_paid_tax_excl'];
+            $order['id_carrier'] = (int) $order['id_carrier'];
             $this->castAddressIsoCodes($order);
             unset($order['address_iso']);
         }
