@@ -138,6 +138,9 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             $order['is_paid'] = (float) $order['total_paid_real'] >= (float) $order['total_paid_tax_incl'];
             $order['shipping_cost'] = (float) $order['shipping_cost'];
             $order['total_paid_tax'] = $order['total_paid_tax_incl'] - $order['total_paid_tax_excl'];
+            $order['id_carrier'] = (int) $order['id_carrier'];
+            $this->castAddressIsoCodes($order);
+            unset($order['address_iso']);
         }
     }
 
@@ -161,6 +164,34 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             $orderDetail['category'] = (int) $orderDetail['category'];
             $orderDetail['unique_product_id'] = "{$orderDetail['product_id']}-{$orderDetail['product_attribute_id']}-{$orderDetail['iso_code']}";
             $orderDetail['conversion_rate'] = (float) $orderDetail['conversion_rate'];
+        }
+    }
+
+    private function castAddressIsoCodes(&$orderDetail)
+    {
+        if (!$orderDetail['address_iso']) {
+            $orderDetail['invoice_country_code'] = null;
+            $orderDetail['delivery_country_code'] = null;
+
+            return;
+        }
+
+        $addressAndIsoCodes = explode(',', $orderDetail['address_iso']);
+        if (count($addressAndIsoCodes) === 1) {
+            $addressAndIsoCode = explode(':', $addressAndIsoCodes[0]);
+            $orderDetail['invoice_country_code'] = $addressAndIsoCode[1];
+            $orderDetail['delivery_country_code'] = $addressAndIsoCode[1];
+
+            return;
+        }
+
+        foreach ($addressAndIsoCodes as $addressAndIsoCodeString) {
+            $addressAndIsoCode = explode(':', $addressAndIsoCodeString);
+            if ($addressAndIsoCode[0] === 'delivery') {
+                $orderDetail['delivery_country_code'] = $addressAndIsoCode[1];
+            } elseif ($addressAndIsoCode[0] === 'invoice') {
+                $orderDetail['invoice_country_code'] = $addressAndIsoCode[1];
+            }
         }
     }
 

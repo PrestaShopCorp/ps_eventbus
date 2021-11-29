@@ -92,29 +92,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        presta-versions: ['177']
-    steps:
-      -   name: Checkout
-          uses: actions/checkout@v2.0.0
-
-      -   name: Cache vendor folder
-          uses: actions/cache@v1
-          with:
-            path: vendor
-            key: php-${{ hashFiles('composer.lock') }}
-
-      -   name: Cache composer folder
-          uses: actions/cache@v1
-          with:
-            path: ~/.composer/cache
-            key: php-composer-cache
-
-      -   run: composer install
-      -   run: make ata${{ matrix.presta-versions }}
-  allure:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
         presta-versions: [ '177' ]
     steps:
       - name: Checkout
@@ -143,5 +120,3 @@ jobs:
         with:
           name: allure-report
           path: allure-report
-
-
