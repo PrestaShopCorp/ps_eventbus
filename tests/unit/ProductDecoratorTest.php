@@ -154,7 +154,6 @@ class ProductDecoratorTest extends TestCase
         $categoryRepository = $this->createMock(CategoryRepository::class);
         $categoryRepository->method('getCategoryPaths')->willReturn($categories);
         $bundleRepository = $this->createMock(BundleRepository::class);
-//        $bundleRepository->method('getCategoryPaths')->willReturn($categories);
 
         $arrayFormatter = new ArrayFormatter();
 
