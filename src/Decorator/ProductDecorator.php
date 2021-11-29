@@ -91,7 +91,7 @@ class ProductDecorator
         $bundles = [];
         foreach ($products as $product) {
             if ($product['is_bundle']) {
-                $bundles = array_merge($bundles, $this->addBundleCollection($product));
+                $bundles = array_merge($bundles, $this->getBundleCollection($product));
             }
         }
 
@@ -141,7 +141,7 @@ class ProductDecorator
         $product['sale_date'] = $this->productRepository->getSaleDate($product['id_product'], $product['id_attribute']);
     }
 
-    private function addBundleCollection(array $product)
+    private function getBundleCollection(array $product)
     {
         $bundleProducts = $this->bundleRepository->getBundleProducts($product['id_product']);
         $uniqueProductId = $product['unique_product_id'];
