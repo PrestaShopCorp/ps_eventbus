@@ -22,7 +22,6 @@ namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
 use Context;
 use Module;
-use PrestaShop\Module\PsEventbus\Config\Env;
 use Raven_Client;
 
 /**

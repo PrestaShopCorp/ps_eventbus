@@ -13,7 +13,7 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\ProductRepository'
       - '@PrestaShop\Module\PsEventbus\Decorator\ProductDecorator'
       - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
-      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
+      - '@PrestaShop\Module\PsEventbus\Repository\BundleRepository'
 
   PrestaShop\Module\PsEventbus\Provider\CategoryDataProvider:
     class: PrestaShop\Module\PsEventbus\Provider\CategoryDataProvider

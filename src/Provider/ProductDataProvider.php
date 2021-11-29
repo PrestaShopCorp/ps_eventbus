@@ -4,7 +4,7 @@ namespace PrestaShop\Module\PsEventbus\Provider;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\ProductDecorator;
-use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
+use PrestaShop\Module\PsEventbus\Repository\BundleRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\ProductRepository;
 
@@ -23,20 +23,20 @@ class ProductDataProvider implements PaginatedApiDataProviderInterface
      */
     private $languageRepository;
     /**
-     * @var ArrayFormatter
+     * @var BundleRepository
      */
-    private $arrayFormatter;
+    private $bundleRepository;
 
     public function __construct(
         ProductRepository $productRepository,
         ProductDecorator $productDecorator,
         LanguageRepository $languageRepository,
-        ArrayFormatter $arrayFormatter
+        BundleRepository $bundleRepository
     ) {
         $this->productRepository = $productRepository;
         $this->productDecorator = $productDecorator;
         $this->languageRepository = $languageRepository;
-        $this->arrayFormatter = $arrayFormatter;
+        $this->bundleRepository = $bundleRepository;
     }
 
     /**
@@ -56,13 +56,17 @@ class ProductDataProvider implements PaginatedApiDataProviderInterface
 
         $this->productDecorator->decorateProducts($products, $langIso, $langId);
 
-        return array_map(function ($product) {
+        $bundles = $this->productDecorator->getBundles($products);
+
+        $products = array_map(function ($product) {
             return [
                 'id' => $product['unique_product_id'],
                 'collection' => Config::COLLECTION_PRODUCTS,
                 'properties' => $product,
             ];
         }, $products);
+
+        return array_merge($products, $bundles);
     }
 
     /**
@@ -101,12 +105,16 @@ class ProductDataProvider implements PaginatedApiDataProviderInterface
             return [];
         }
 
-        return array_map(function ($product) {
+        $orderDetails = $this->productDecorator->getBundles($products);
+
+        $products = array_map(function ($product) {
             return [
                 'id' => $product['unique_product_id'],
                 'collection' => Config::COLLECTION_PRODUCTS,
                 'properties' => $product,
             ];
         }, $products);
+
+        return array_merge($products, $orderDetails);
     }
 }

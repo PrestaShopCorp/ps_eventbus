@@ -3,7 +3,9 @@
 namespace PrestaShop\Module\PsEventbus\Decorator;
 
 use Context;
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
+use PrestaShop\Module\PsEventbus\Repository\BundleRepository;
 use PrestaShop\Module\PsEventbus\Repository\CategoryRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\ProductRepository;
@@ -31,19 +33,25 @@ class ProductDecorator
      * @var ArrayFormatter
      */
     private $arrayFormatter;
+    /**
+     * @var BundleRepository
+     */
+    private $bundleRepository;
 
     public function __construct(
         Context $context,
         LanguageRepository $languageRepository,
         ProductRepository $productRepository,
         CategoryRepository $categoryRepository,
-        ArrayFormatter $arrayFormatter
+        ArrayFormatter $arrayFormatter,
+        BundleRepository $bundleRepository
     ) {
         $this->context = $context;
         $this->languageRepository = $languageRepository;
         $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;
         $this->arrayFormatter = $arrayFormatter;
+        $this->bundleRepository = $bundleRepository;
     }
 
     /**
@@ -71,6 +79,23 @@ class ProductDecorator
             $this->addCategoryTree($product);
             $this->castPropertyValues($product);
         }
+    }
+
+    /**
+     * @param array $products
+     *
+     * @return array
+     */
+    public function getBundles(array $products)
+    {
+        $bundles = [];
+        foreach ($products as $product) {
+            if ($product['is_bundle']) {
+                $bundles = array_merge($bundles, $this->addBundleCollection($product));
+            }
+        }
+
+        return $bundles;
     }
 
     /**
@@ -114,6 +139,26 @@ class ProductDecorator
         $product['sale_tax'] = $product['sale_price_tax_incl'] - $product['sale_price_tax_excl'];
 
         $product['sale_date'] = $this->productRepository->getSaleDate($product['id_product'], $product['id_attribute']);
+    }
+
+    private function addBundleCollection(array $product)
+    {
+        $bundleProducts = $this->bundleRepository->getBundleProducts($product['id_product']);
+        $uniqueProductId = $product['unique_product_id'];
+
+        return array_map(function ($bundleProduct) use ($uniqueProductId) {
+            return [
+                'id' => $bundleProduct['id_bundle'],
+                'collection' => Config::COLLECTION_BUNDLES,
+                'properties' => [
+                    'id_bundle' => $bundleProduct['id_bundle'],
+                    'id_product' => $bundleProduct['id_product'],
+                    'id_product_attribute' => $bundleProduct['id_product_attribute'],
+                    'unique_product_id' => $uniqueProductId,
+                    'quantity' => $bundleProduct['quantity'],
+                ],
+            ];
+        }, $bundleProducts);
     }
 
     /**
@@ -163,6 +208,10 @@ class ProductDecorator
         $product['ean'] = (string) $product['ean'];
         $product['upc'] = (string) $product['upc'];
         $product['is_default_attribute'] = $product['id_attribute'] === 0 ? true : $product['is_default_attribute'] === '1';
+        $product['available_for_order'] = (int) $product['available_for_order'];
+        $product['available_date'] = (string) $product['available_date'];
+        $product['is_bundle'] = $product['is_bundle'] == '1';
+        $product['is_virtual'] = $product['is_virtual'] == '1';
     }
 
     /**

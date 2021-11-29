@@ -38,4 +38,5 @@ class Config
     const COLLECTION_DELETED = 'deleted';
     const COLLECTION_SHOPS = 'shops';
     const COLLECTION_THEMES = 'themes';
+    const COLLECTION_BUNDLES = 'bundles';
 }

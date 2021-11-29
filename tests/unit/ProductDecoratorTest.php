@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\PsEventbus\Decorator\ProductDecorator;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
+use PrestaShop\Module\PsEventbus\Repository\BundleRepository;
 use PrestaShop\Module\PsEventbus\Repository\CategoryRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\ProductRepository;
@@ -56,6 +57,10 @@ class ProductDecoratorTest extends TestCase
                 'images' => '1:1;2:0',
                 'attribute_images' => '1;2;3',
                 'is_default_attribute' => '1',
+                'available_for_order' => '1',
+                'available_date' => '0000-00-00',
+                'is_bundle' => '0',
+                'is_virtual' => '1',
             ],
             [
                 'id_product' => '2',
@@ -85,6 +90,10 @@ class ProductDecoratorTest extends TestCase
                 'images' => '1:1;2:0',
                 'attribute_images' => '1',
                 'is_default_attribute' => '1',
+                'available_for_order' => '1',
+                'available_date' => '0000-00-00',
+                'is_bundle' => '0',
+                'is_virtual' => '1',
             ],
             [
                 'id_product' => '2',
@@ -114,6 +123,10 @@ class ProductDecoratorTest extends TestCase
                 'images' => '1:1;2:0',
                 'attribute_images' => '1',
                 'is_default_attribute' => '1',
+                'available_for_order' => '1',
+                'available_date' => '0000-00-00',
+                'is_bundle' => '0',
+                'is_virtual' => '1',
             ],
         ];
 
@@ -140,10 +153,12 @@ class ProductDecoratorTest extends TestCase
         $productRepository->method('getAttributeImages')->willReturn([]);
         $categoryRepository = $this->createMock(CategoryRepository::class);
         $categoryRepository->method('getCategoryPaths')->willReturn($categories);
+        $bundleRepository = $this->createMock(BundleRepository::class);
+//        $bundleRepository->method('getCategoryPaths')->willReturn($categories);
 
         $arrayFormatter = new ArrayFormatter();
 
-        $productDecorator = new ProductDecorator($contextMock, $languageRepository, $productRepository, $categoryRepository, $arrayFormatter);
+        $productDecorator = new ProductDecorator($contextMock, $languageRepository, $productRepository, $categoryRepository, $arrayFormatter, $bundleRepository);
         $productDecorator->decorateProducts($products, 'en', 1);
 
         $this->assertInternalType('int', $products[0]['id_product']);
