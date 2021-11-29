@@ -42,7 +42,6 @@ class BundleRepository
     }
 
     /**
-     * @param int $langId
      * @param int $productPackId
      *
      * @return array
