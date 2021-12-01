@@ -120,7 +120,7 @@ vendor/bin/php-cs-fixer:
 
 bps177: build-ps-177
 ata177: all-tests-actions-177
-rda177:run-docker-actions-177
+rda177: run-docker-actions-177
 du:docker-up
 
 build-ps-177:
