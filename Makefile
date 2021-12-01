@@ -136,7 +136,7 @@ run-docker-actions-177:
 all-tests-actions-177:
 	make rda177
 	make bps177
-	docker exec -i prestashop-177 sh -c "cd /var/www/html/modules/ps_eventbus && php vendor/bin/phpunit -c tests/phpunit-system.xml"
+	docker exec -i prestashop-177 sh -c "cd /var/www/html/modules/ps_eventbus && php vendor/bin/phpunit -c tests/phpunit.xml"
 
 docker-up:
 	docker-compose -f docker-compose.yml up

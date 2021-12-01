@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" bootstrap="bootstrap.php" colors="true" executionOrder="random" beStrictAboutChangesToGlobalState="true" beStrictAboutResourceUsageDuringSmallTests="true" beStrictAboutOutputDuringTests="true">
+  <extensions>
+    <extension class="PrestaShop\Module\PsEventbus\Tests\Extensions\Boot"/>
+  </extensions>
+  <testsuites>
+    <testsuite name="Ps eventbus Tests">
+      <directory>.</directory>
+    </testsuite>
+  </testsuites>
+  <listeners>
+    <listener class="Yandex\Allure\PhpUnit\AllurePhpUnit" file="../vendor/allure-framework/allure-phpunit/src/Yandex/Allure/PhpUnit/AllurePhpUnit.php">
+      <arguments>
+        <string>build/allure-results</string> <!-- XML files output directory -->
+        <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->
+      </arguments>
+    </listener>
+  </listeners>
+</phpunit>
