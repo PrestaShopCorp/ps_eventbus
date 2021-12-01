@@ -3520,16 +3520,16 @@
         },
         {
             "name": "prestashop/php-dev-tools",
-            "version": "v3.16.0",
+            "version": "v3.16.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PrestaShop/php-dev-tools.git",
-                "reference": "578bffb03fb683fa6f35e07c7c32db8d2781abef"
+                "reference": "785108c29ef6f580930372d88b8f551740fdee98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PrestaShop/php-dev-tools/zipball/578bffb03fb683fa6f35e07c7c32db8d2781abef",
-                "reference": "578bffb03fb683fa6f35e07c7c32db8d2781abef",
+                "url": "https://api.github.com/repos/PrestaShop/php-dev-tools/zipball/785108c29ef6f580930372d88b8f551740fdee98",
+                "reference": "785108c29ef6f580930372d88b8f551740fdee98",
                 "shasum": ""
             },
             "require": {
@@ -3558,7 +3558,7 @@
                 "MIT"
             ],
             "description": "PrestaShop coding standards",
-            "time": "2021-06-22T08:28:47+00:00"
+            "time": "2021-10-18T07:48:21+00:00"
         },
         {
             "name": "ramsey/uuid",
