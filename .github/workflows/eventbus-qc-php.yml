@@ -97,6 +97,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.0.0
 
+      - name: Xdebug Action
+        uses: MilesChou/docker-xdebug@master
+
       - name: Cache vendor folder
         uses: actions/cache@v1
         with:
