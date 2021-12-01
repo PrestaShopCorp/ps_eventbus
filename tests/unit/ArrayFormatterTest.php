@@ -1,11 +1,10 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
+use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 use Yandex\Allure\Adapter\Annotation\Features;
 use Yandex\Allure\Adapter\Annotation\Stories;
 use Yandex\Allure\Adapter\Annotation\Title;
-use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 
 /**
  * @Features("formatter")

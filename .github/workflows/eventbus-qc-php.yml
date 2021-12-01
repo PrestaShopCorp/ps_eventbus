@@ -124,4 +124,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: code-coverage-report
-          path: tests/code-coverage-report
+          path: tests/tmp/code-coverage-report

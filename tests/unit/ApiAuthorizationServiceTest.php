@@ -1,6 +1,5 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\PsEventbus\Api\EventBusSyncClient;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService;

@@ -15,7 +15,7 @@ class Boot implements BeforeFirstTestHook, AfterLastTestHook
 
     public function executeBeforeFirstTest(): void
     {
-        $this->coverage = new CodeCoverage;
+        $this->coverage = new CodeCoverage();
         $this->coverage->filter()->addDirectoryToWhitelist(_PS_MODULE_DIR_ . '/ps_eventbus/src');
         $this->coverage->start('<name of test>');
     }
@@ -23,10 +23,10 @@ class Boot implements BeforeFirstTestHook, AfterLastTestHook
     public function executeAfterLastTest(): void
     {
         $this->coverage->stop();
-        $writer = new \SebastianBergmann\CodeCoverage\Report\Clover;
+        $writer = new \SebastianBergmann\CodeCoverage\Report\Clover();
         $writer->process($this->coverage, _PS_MODULE_DIR_ . '/ps_eventbus/tests/tmp/clover.xml');
 
-        $writer = new \SebastianBergmann\CodeCoverage\Report\Html\Facade;
+        $writer = new \SebastianBergmann\CodeCoverage\Report\Html\Facade();
         $writer->process($this->coverage, _PS_MODULE_DIR_ . '/ps_eventbus/tests/tmp/code-coverage-report');
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
 use GuzzleHttp\Exception\ClientException;
-use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\PsEventbus\Api\EventBusProxyClient;
 use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
 use PrestaShop\Module\PsEventbus\Service\ProxyService;

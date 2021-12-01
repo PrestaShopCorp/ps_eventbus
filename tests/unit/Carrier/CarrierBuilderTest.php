@@ -3,7 +3,6 @@
 namespace Carrier;
 
 use Carrier;
-use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\PsEventbus\Builder\CarrierBuilder;
 use PrestaShop\Module\PsEventbus\DTO\CarrierDetail;
 use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
