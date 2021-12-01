@@ -16,7 +16,6 @@ class Boot implements BeforeFirstTestHook, AfterLastTestHook
 
     public function executeBeforeFirstTest(): void
     {
-        throw new Exception('php xdebug is enabled:' . (string)\extension_loaded('xdebug'));
         $this->coverage = new CodeCoverage();
         $this->coverage->filter()->addDirectoryToWhitelist(_PS_MODULE_DIR_ . '/ps_eventbus/src');
         $this->coverage->start('<name of test>');
