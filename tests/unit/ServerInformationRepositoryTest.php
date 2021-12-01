@@ -12,12 +12,13 @@ use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use Yandex\Allure\Adapter\Annotation\Features;
 use Yandex\Allure\Adapter\Annotation\Stories;
 use Yandex\Allure\Adapter\Annotation\Title;
+use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 
 /**
  * @Features("repository")
  * @Stories("server information repository")
  */
-class ServerInformationRepositoryTest extends TestCase
+class ServerInformationRepositoryTest extends BaseTestCase
 {
     /**
      * @var CurrencyRepository
@@ -56,7 +57,7 @@ class ServerInformationRepositoryTest extends TestCase
      */
     private $psAccounts;
 
-    protected function setUp()
+    public function setUp()
     {
         parent::setUp();
         $this->currencyRepository = $this->createMock(CurrencyRepository::class);

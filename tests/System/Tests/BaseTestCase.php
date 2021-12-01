@@ -3,6 +3,7 @@
 namespace PrestaShop\Module\PsEventbus\Tests\System\Tests;
 
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\CodeCoverage\CodeCoverage;
 
 class BaseTestCase extends TestCase
 {
@@ -18,5 +19,6 @@ class BaseTestCase extends TestCase
             'ps_eventbus_test',
             __DIR__ . '/../'
         );
+
     }
 }

@@ -10,12 +10,13 @@ use PrestaShop\Module\PsEventbus\Repository\ProductRepository;
 use Yandex\Allure\Adapter\Annotation\Features;
 use Yandex\Allure\Adapter\Annotation\Stories;
 use Yandex\Allure\Adapter\Annotation\Title;
+use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 
 /**
  * @Features("decorator")
  * @Stories("product decorator")
  */
-class ProductDecoratorTest extends TestCase
+class ProductDecoratorTest extends BaseTestCase
 {
     public function setUp()
     {

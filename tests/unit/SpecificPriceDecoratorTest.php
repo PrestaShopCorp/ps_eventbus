@@ -7,12 +7,13 @@ use PrestaShop\Module\PsEventbus\Service\SpecificPriceService;
 use Yandex\Allure\Adapter\Annotation\Features;
 use Yandex\Allure\Adapter\Annotation\Stories;
 use Yandex\Allure\Adapter\Annotation\Title;
+use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 
 /**
  * @Features("decorator")
  * @Stories("specific price decorator")
  */
-class SpecificPriceDecoratorTest extends TestCase
+class SpecificPriceDecoratorTest extends BaseTestCase
 {
     public function setUp()
     {

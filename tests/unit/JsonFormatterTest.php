@@ -5,19 +5,20 @@ use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
 use Yandex\Allure\Adapter\Annotation\Features;
 use Yandex\Allure\Adapter\Annotation\Stories;
 use Yandex\Allure\Adapter\Annotation\Title;
+use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 
 /**
  * @Features("formatter")
  * @Stories("json formatter")
  */
-class JsonFormatterTest extends TestCase
+class JsonFormatterTest extends BaseTestCase
 {
     /**
      * @var JsonFormatter
      */
     private $jsonFormatter;
 
-    protected function setUp()
+    public function setUp()
     {
         parent::setUp();
         $this->jsonFormatter = new JsonFormatter();

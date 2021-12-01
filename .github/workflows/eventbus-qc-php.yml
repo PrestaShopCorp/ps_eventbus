@@ -120,3 +120,8 @@ jobs:
         with:
           name: allure-report
           path: allure-report
+      - name: 🎁 Step 7 - Publishing Code coverage report to GitHub Actions
+        uses: actions/upload-artifact@v2
+        with:
+          name: code-coverage-report
+          path: tests/code-coverage-report
