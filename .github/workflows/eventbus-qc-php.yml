@@ -62,32 +62,6 @@ jobs:
           NEON_FILE=${{steps.neon.outputs.filename}} \
           make phpstan
 
-  phpunit:
-    name: PHPUNIT
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2.0.0
-
-      - name: Cache vendor folder
-        uses: actions/cache@v1
-        with:
-          path: vendor
-          key: php-${{ hashFiles('composer.lock') }}
-
-      - name: Cache composer folder
-        uses: actions/cache@v1
-        with:
-          path: ~/.composer/cache
-          key: php-composer-cache
-
-      - name: Install dependencies
-        run: composer install
-
-      - name: PHPUnit PrestaShop latest
-        run: |
-          PS_VERSION="latest" make phpunit
-
   unit-system-tests:
     runs-on: ubuntu-latest
     strategy:

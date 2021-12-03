@@ -107,7 +107,7 @@ endif
 	  --workdir /app \
 	  --entrypoint /vendor/phpunit/phpunit/phpunit \
 	  phpunit/phpunit:${PHPUNIT_VERSION} \
-	  --configuration ./phpunit.xml \
+	  --configuration ./tests/phpunit.xml \
 	  --bootstrap ./tests/unit/bootstrap.php
 	@echo phpunit passed
 
