@@ -17,6 +17,13 @@ class Boot implements BeforeFirstTestHook, AfterLastTestHook
     {
         $this->coverage = new CodeCoverage();
         $this->coverage->filter()->addDirectoryToWhitelist(_PS_MODULE_DIR_ . '/ps_eventbus/src');
+        $this->coverage->filter()->removeDirectoryFromWhitelist(_PS_MODULE_DIR_ . '/ps_eventbus/src/Controller');
+        foreach ($this->coverage->filter()->getWhitelistedFiles() as $fileName => $value) {
+            if (!strpos($fileName, 'index.php')) {
+                continue;
+            }
+            $this->coverage->filter()->removeFileFromWhitelist($fileName);
+        }
         $this->coverage->start('<name of test>');
     }
 
