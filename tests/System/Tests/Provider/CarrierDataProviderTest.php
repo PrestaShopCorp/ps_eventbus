@@ -51,7 +51,7 @@ class CarrierDataProviderTest extends BaseTestCase
                             'properties' => [
                                     'id_carrier' => '1',
                                     'id_reference' => '1',
-                                    'name' => '177',
+                                    'name' => '',
                                     'carrier_taxes_rates_group_id' => '1',
                                     'url' => '',
                                     'active' => true,

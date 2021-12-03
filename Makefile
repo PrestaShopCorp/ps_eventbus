@@ -130,7 +130,7 @@ build-ps-177:
 	docker exec -i prestashop-177 sh -c "cd /var/www/html && php  bin/console prestashop:module install eventBus"
 
 run-docker-actions-177:
-	docker-compose up -d --force-recreate prestashop-177
+	docker-compose up -d --build --force-recreate prestashop-177
 	/bin/bash .docker/wait-for-container.sh sq-mysql
 
 all-tests-actions-177:

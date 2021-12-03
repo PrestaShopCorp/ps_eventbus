@@ -4,7 +4,6 @@ namespace PrestaShop\Module\PsEventbus\Tests\Extensions;
 
 use PHPUnit\Runner\AfterLastTestHook;
 use PHPUnit\Runner\BeforeFirstTestHook;
-use PrestaShop\PrestaShop\Core\Foundation\IoC\Exception;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
 
 class Boot implements BeforeFirstTestHook, AfterLastTestHook

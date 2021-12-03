@@ -34,7 +34,6 @@ services:
         build:
             context: .
             dockerfile: .docker/Dockerfile
-            target: prod
         environment:
             PS_INSTALL_AUTO: 0
             DB_PASSWD: prestashop
