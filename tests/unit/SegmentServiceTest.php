@@ -1,11 +1,11 @@
 <?php
 
 use GuzzleHttp\Exception\ClientException;
-use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\PsEventbus\Api\EventBusProxyClient;
 use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
 use PrestaShop\Module\PsEventbus\Service\ProxyService;
 use PrestaShop\Module\PsEventbus\Tests\Mocks\Handler\ErrorHandlerMock;
+use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 use Yandex\Allure\Adapter\Annotation\Features;
 use Yandex\Allure\Adapter\Annotation\Stories;
 use Yandex\Allure\Adapter\Annotation\Title;
@@ -14,7 +14,7 @@ use Yandex\Allure\Adapter\Annotation\Title;
  * @Features("synchronization")
  * @Stories("proxy service")
  */
-class ProxyServiceTest extends TestCase
+class SegmentServiceTest extends BaseTestCase
 {
     /**
      * @var ProxyService

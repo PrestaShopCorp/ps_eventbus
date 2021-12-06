@@ -107,7 +107,7 @@ endif
 	  --workdir /app \
 	  --entrypoint /vendor/phpunit/phpunit/phpunit \
 	  phpunit/phpunit:${PHPUNIT_VERSION} \
-	  --configuration ./phpunit.xml \
+	  --configuration ./tests/phpunit.xml \
 	  --bootstrap ./tests/unit/bootstrap.php
 	@echo phpunit passed
 
@@ -120,7 +120,7 @@ vendor/bin/php-cs-fixer:
 
 bps177: build-ps-177
 ata177: all-tests-actions-177
-rda177:run-docker-actions-177
+rda177: run-docker-actions-177
 du:docker-up
 
 build-ps-177:
@@ -130,13 +130,13 @@ build-ps-177:
 	docker exec -i prestashop-177 sh -c "cd /var/www/html && php  bin/console prestashop:module install eventBus"
 
 run-docker-actions-177:
-	docker-compose up -d --force-recreate prestashop-177
+	docker-compose up -d --build --force-recreate prestashop-177
 	/bin/bash .docker/wait-for-container.sh sq-mysql
 
 all-tests-actions-177:
 	make rda177
 	make bps177
-	docker exec -i prestashop-177 sh -c "cd /var/www/html/modules/ps_eventbus && php vendor/bin/phpunit -c tests/phpunit-system.xml"
+	docker exec -i prestashop-177 sh -c "cd /var/www/html/modules/ps_eventbus && php vendor/bin/phpunit -c tests/phpunit.xml"
 
 docker-up:
 	docker-compose -f docker-compose.yml up

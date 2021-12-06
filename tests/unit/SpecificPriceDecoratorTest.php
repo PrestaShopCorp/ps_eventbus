@@ -1,9 +1,9 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\PsEventbus\Decorator\CustomPriceDecorator;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Service\SpecificPriceService;
+use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 use Yandex\Allure\Adapter\Annotation\Features;
 use Yandex\Allure\Adapter\Annotation\Stories;
 use Yandex\Allure\Adapter\Annotation\Title;
@@ -12,7 +12,7 @@ use Yandex\Allure\Adapter\Annotation\Title;
  * @Features("decorator")
  * @Stories("specific price decorator")
  */
-class SpecificPriceDecoratorTest extends TestCase
+class SpecificPriceDecoratorTest extends BaseTestCase
 {
     public function setUp()
     {

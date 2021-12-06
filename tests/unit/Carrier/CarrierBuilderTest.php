@@ -3,7 +3,6 @@
 namespace Carrier;
 
 use Carrier;
-use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\PsEventbus\Builder\CarrierBuilder;
 use PrestaShop\Module\PsEventbus\DTO\CarrierDetail;
 use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
@@ -11,6 +10,7 @@ use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\CountryRepository;
 use PrestaShop\Module\PsEventbus\Repository\StateRepository;
 use PrestaShop\Module\PsEventbus\Repository\TaxRepository;
+use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 use RangePrice;
 use RangeWeight;
 use Yandex\Allure\Adapter\Annotation\Features;
@@ -21,7 +21,7 @@ use Yandex\Allure\Adapter\Annotation\Title;
  * @Features("synchronization")
  * @Stories("carrier builder")
  */
-class CarrierBuilderTest extends TestCase
+class CarrierBuilderTest extends BaseTestCase
 {
     const UPDATE_DATE = '2020-10-10 10:00:00';
 

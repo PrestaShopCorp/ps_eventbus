@@ -1,6 +1,5 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\CurrencyRepository;
@@ -8,6 +7,7 @@ use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository;
 use PrestaShop\Module\PsEventbus\Repository\ShopRepository;
 use PrestaShop\Module\PsEventbus\Tests\Mocks\Handler\ErrorHandlerMock;
+use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use Yandex\Allure\Adapter\Annotation\Features;
 use Yandex\Allure\Adapter\Annotation\Stories;
@@ -17,7 +17,7 @@ use Yandex\Allure\Adapter\Annotation\Title;
  * @Features("repository")
  * @Stories("server information repository")
  */
-class ServerInformationRepositoryTest extends TestCase
+class ServerInformationRepositoryTest extends BaseTestCase
 {
     /**
      * @var CurrencyRepository
@@ -56,7 +56,7 @@ class ServerInformationRepositoryTest extends TestCase
      */
     private $psAccounts;
 
-    protected function setUp()
+    public function setUp()
     {
         parent::setUp();
         $this->currencyRepository = $this->createMock(CurrencyRepository::class);

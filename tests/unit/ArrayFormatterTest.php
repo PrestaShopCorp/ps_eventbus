@@ -1,7 +1,7 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
+use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 use Yandex\Allure\Adapter\Annotation\Features;
 use Yandex\Allure\Adapter\Annotation\Stories;
 use Yandex\Allure\Adapter\Annotation\Title;
@@ -10,16 +10,17 @@ use Yandex\Allure\Adapter\Annotation\Title;
  * @Features("formatter")
  * @Stories("array formatter")
  */
-class ArrayFormatterTest extends TestCase
+class ArrayFormatterTest extends BaseTestCase
 {
     /**
      * @var ArrayFormatter
      */
     private $arrayFormatter;
 
-    protected function setUp()
+    public function setUp()
     {
         $this->arrayFormatter = new ArrayFormatter();
+        parent::setUp();
     }
 
     /**
