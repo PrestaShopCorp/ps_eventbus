@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Tests\System\Tests\Synchronization;
 
-use Configuration;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Provider\CarrierDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CartDataProvider;
@@ -41,7 +40,7 @@ class IncrementalSynchronizationTest extends BaseTestCase
         parent::setUp();
         $product = new Product(1);
         $product->setCarriers([1, 2]);
-        /** @var EventbusSyncRepository $syncRepository */
+        /* @var EventbusSyncRepository $syncRepository */
         $this->syncRepository = $this->container->getService(EventbusSyncRepository::class);
     }
 
