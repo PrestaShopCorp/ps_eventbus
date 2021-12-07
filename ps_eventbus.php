@@ -756,7 +756,7 @@ class Ps_eventbus extends Module
         }
 
         if (file_exists(_PS_MODULE_DIR_ . 'ps_eventbus/.env.dist')) {
-            $dotenv = Dotenv::create(_PS_MODULE_DIR_ . 'ps_eventbus/');
+            $dotenv = Dotenv::create(_PS_MODULE_DIR_ . 'ps_eventbus/', '.env.dist');
             $dotenv->load();
         }
     }
