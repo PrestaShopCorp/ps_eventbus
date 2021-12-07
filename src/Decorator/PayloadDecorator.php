@@ -35,13 +35,13 @@ class PayloadDecorator
             }
 
             if (isset($payloadItem['properties']['from'])) {
-                $payloadItem['properties']['updated_at'] =
-                    $this->dateFormatter->convertToIso8061($payloadItem['properties']['updated_at']);
+                $payloadItem['properties']['from'] =
+                    $this->dateFormatter->convertToIso8061($payloadItem['properties']['from']);
             }
 
             if (isset($payloadItem['properties']['to'])) {
-                $payloadItem['properties']['updated_at'] =
-                    $this->dateFormatter->convertToIso8061($payloadItem['properties']['updated_at']);
+                $payloadItem['properties']['to'] =
+                    $this->dateFormatter->convertToIso8061($payloadItem['properties']['to']);
             }
         }
     }
