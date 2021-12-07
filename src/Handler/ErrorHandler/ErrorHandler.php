@@ -52,6 +52,8 @@ class ErrorHandler implements ErrorHandlerInterface
                 ],
             ]
         );
+
+        $this->client->setAppPath(realpath(_PS_MODULE_DIR_ . $module->name . '/'));
     }
 
     /**
