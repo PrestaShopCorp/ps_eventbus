@@ -15,7 +15,7 @@ class EnvTest extends BaseTestCase
 {
     public function testDecorateSpecificPrice()
     {
-        $dotenv = Dotenv::create(_PS_MODULE_DIR_ . 'ps_eventbus/');
+        $dotenv = Dotenv::create(_PS_MODULE_DIR_ . 'ps_eventbus/', '.env.dist');
         $dotenv->load();
         $env = new Env();
         $url = $env->get('ACCOUNTS_SVC_API_URL');
