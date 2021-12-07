@@ -74,14 +74,6 @@ class CarrierDetail implements JsonSerializable
     }
 
     /**
-     * @param string $collection
-     */
-    public function setCollection($collection)
-    {
-        $this->collection = $collection;
-    }
-
-    /**
      * @return string
      */
     public function getShippingMethod()

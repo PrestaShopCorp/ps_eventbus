@@ -9,16 +9,6 @@ services:
     public: true
     factory: [ 'Db', 'getInstance' ]
 
-  ps_eventbus.context:
-    class: Context
-    public: true
-    factory: [ 'Context', 'getContext' ]
-
-  ps_eventbus.link:
-    class: Link
-    public: true
-    factory: [ 'PrestaShop\Module\PsEventbus\Factory\Link', 'get' ]
-
   ps_eventbus:
     class: 'Ps_eventbus'
     public: true

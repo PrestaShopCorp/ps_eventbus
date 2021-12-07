@@ -50,18 +50,6 @@ class CarrierTax implements JsonSerializable
     }
 
     /**
-     * @param string $collection
-     *
-     * @return CarrierTax
-     */
-    public function setCollection($collection)
-    {
-        $this->collection = $collection;
-
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getCarrierReference()

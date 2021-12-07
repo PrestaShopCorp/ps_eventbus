@@ -43,7 +43,7 @@ class CustomProductCarrierDataProvider implements PaginatedApiDataProviderInterf
 
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
-        $productCarrierIncremental = $this->productCarrierRepository->getProductCarrierIncremental('customProductCarrier', $langIso);
+        $productCarrierIncremental = $this->productCarrierRepository->getProductCarrierIncremental(Config::COLLECTION_CUSTOM_PRODUCT_CARRIER, $langIso);
 
         if (!$productCarrierIncremental) {
             return [];
