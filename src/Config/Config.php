@@ -27,6 +27,7 @@ class Config
 
     const COLLECTION_CARRIER = 'carrier';
     const COLLECTION_CARTS = 'carts';
+    const COLLECTION_CART_PRODUCTS = 'cart_products';
     const COLLECTION_CATEGORIES = 'categories';
     const COLLECTION_SPECIFIC_PRICE = 'specific_price';
     const COLLECTION_CUSTOM_PRODUCT_CARRIER = 'custom_product_carrier';

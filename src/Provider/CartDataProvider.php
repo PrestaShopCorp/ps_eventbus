@@ -156,7 +156,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
             return array_map(function ($cartProduct) {
                 return [
                     'id' => "{$cartProduct['id_cart']}-{$cartProduct['id_product']}-{$cartProduct['id_product_attribute']}",
-                    'collection' => 'cart_products',
+                    'collection' => Config::COLLECTION_CART_PRODUCTS,
                     'properties' => $cartProduct,
                 ];
             }, $cartProducts);

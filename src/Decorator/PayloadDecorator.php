@@ -33,6 +33,16 @@ class PayloadDecorator
                 $payloadItem['properties']['updated_at'] =
                     $this->dateFormatter->convertToIso8061($payloadItem['properties']['updated_at']);
             }
+
+            if (isset($payloadItem['properties']['from'])) {
+                $payloadItem['properties']['from'] =
+                    $this->dateFormatter->convertToIso8061($payloadItem['properties']['from']);
+            }
+
+            if (isset($payloadItem['properties']['to'])) {
+                $payloadItem['properties']['to'] =
+                    $this->dateFormatter->convertToIso8061($payloadItem['properties']['to']);
+            }
         }
     }
 }

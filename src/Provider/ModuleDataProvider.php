@@ -39,8 +39,8 @@ class ModuleDataProvider implements PaginatedApiDataProviderInterface
         return array_map(function ($module) {
             $moduleId = (string) $module['module_id'];
             $module['active'] = $module['active'] == '1';
-            $module['created_at'] = $module['created_at'] || $this->createdAt;
-            $module['updated_at'] = $module['updated_at'] || $this->createdAt;
+            $module['created_at'] = $module['created_at'] ?: $this->createdAt;
+            $module['updated_at'] = $module['updated_at'] ?: $this->createdAt;
 
             return [
                 'id' => $moduleId,
