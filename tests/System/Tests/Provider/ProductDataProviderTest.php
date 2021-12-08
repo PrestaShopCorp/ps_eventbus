@@ -21,9 +21,31 @@ class ProductDataProviderTest extends BaseTestCase
      *
      * @dataProvider getDataProviderInfo
      */
-    public function testDataProviders(PaginatedApiDataProviderInterface $dataProvider)
+    public function testFormattedData(PaginatedApiDataProviderInterface $dataProvider)
     {
         $formattedData = $dataProvider->getFormattedData(0, 50, 'en');
+        foreach ($formattedData as $data) {
+            $this->assertArrayHasKey('id', $data);
+            $this->assertArrayHasKey('collection', $data);
+            $this->assertArrayHasKey('properties', $data);
+            $properties = $data['properties'];
+            if ($data['collection'] === 'products') {
+                $this->checkProductCollectionProperties($properties);
+            } elseif ($data['collection'] === 'bundle') {
+                $this->checkBundleCollectionProperties($properties);
+            }
+        }
+    }
+
+    /**
+     * @Stories("product data provider")
+     * @Title("testDataProviders")
+     *
+     * @dataProvider getDataProviderInfo
+     */
+    public function testDataIncremental(PaginatedApiDataProviderInterface $dataProvider)
+    {
+        $formattedData = $dataProvider->getFormattedDataIncremental(50, 'en', [1]);
         foreach ($formattedData as $data) {
             $this->assertArrayHasKey('id', $data);
             $this->assertArrayHasKey('collection', $data);

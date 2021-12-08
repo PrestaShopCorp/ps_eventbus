@@ -155,18 +155,6 @@ class Carrier implements JsonSerializable
     }
 
     /**
-     * @param string $collection
-     *
-     * @return Carrier
-     */
-    public function setCollection($collection)
-    {
-        $this->collection = $collection;
-
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getIdCarrier()
