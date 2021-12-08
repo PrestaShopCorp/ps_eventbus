@@ -219,7 +219,7 @@ class Ps_eventbus extends Module
 
         $this->insertIncrementalSyncObject(
             $product->id,
-            'customProductCarrier',
+            Config::COLLECTION_CUSTOM_PRODUCT_CARRIER,
             date(DATE_ATOM),
             $this->context->shop->id,
             false
@@ -245,7 +245,7 @@ class Ps_eventbus extends Module
 
         $this->insertIncrementalSyncObject(
             $product->id,
-            'customProductCarrier',
+            Config::COLLECTION_CUSTOM_PRODUCT_CARRIER,
             date(DATE_ATOM),
             $this->context->shop->id,
             false
@@ -639,7 +639,7 @@ class Ps_eventbus extends Module
         if ($specificPrice instanceof SpecificPrice) {
             $this->insertIncrementalSyncObject(
                 $specificPrice->id,
-                'price',
+                Config::COLLECTION_SPECIFIC_PRICE,
                 date(DATE_ATOM),
                 $this->context->shop->id
             );
@@ -656,7 +656,7 @@ class Ps_eventbus extends Module
         if ($specificPrice instanceof SpecificPrice) {
             $this->insertIncrementalSyncObject(
                 $specificPrice->id,
-                'price',
+                Config::COLLECTION_SPECIFIC_PRICE,
                 date(DATE_ATOM),
                 $this->context->shop->id
             );
@@ -673,7 +673,7 @@ class Ps_eventbus extends Module
         if ($specificPrice instanceof SpecificPrice) {
             $this->insertDeletedObject(
                 $specificPrice->id,
-                'price',
+                Config::COLLECTION_SPECIFIC_PRICE,
                 date(DATE_ATOM),
                 $this->context->shop->id
             );
