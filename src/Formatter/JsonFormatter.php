@@ -15,6 +15,8 @@ class JsonFormatter
             return json_encode($dataItem, JSON_UNESCAPED_SLASHES);
         }, $data);
 
-        return implode("\r\n", $jsonArray);
+        $json = implode("\r\n", $jsonArray);
+
+        return str_replace("\\u0000", "", $json);
     }
 }
