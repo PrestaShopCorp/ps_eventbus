@@ -17,6 +17,6 @@ class JsonFormatter
 
         $json = implode("\r\n", $jsonArray);
 
-        return str_replace("\\u0000", "", $json);
+        return str_replace('\\u0000', '', $json);
     }
 }
