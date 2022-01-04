@@ -80,13 +80,11 @@ class CustomPriceRepository
      */
     public function getRemainingSpecificPricesCount($offset)
     {
-        $products = $this->getSpecificPrices($offset, 0);
+        $query = $this->getBaseQuery($this->context->shop->id);
 
-        if (!is_array($products) || empty($products)) {
-            return 0;
-        }
+        $query->select('(COUNT(sp.id_specific_price) - ' . (int) $offset . ') as count');
 
-        return count($products);
+        return (int) $this->db->getValue($query);
     }
 
     /**

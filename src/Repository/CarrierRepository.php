@@ -138,7 +138,6 @@ class CarrierRepository
         $query->from('carrier', 'c');
         $query->select('c.*, cl.delay, eis.created_at as update_date');
         $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
-        $query->leftJoin('carrier_zone', 'cz', 'cz.id_carrier = c.id_carrier');
         $query->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier');
         $query->leftJoin(
             'eventbus_incremental_sync',

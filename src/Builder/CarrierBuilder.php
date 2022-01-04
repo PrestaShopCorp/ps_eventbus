@@ -141,7 +141,7 @@ class CarrierBuilder
                     $carrierDetails[] = $carrierDetail;
                 }
 
-                $carrierTax = $this->buildCarrierTaxes($carrier, $zone['id_zone']);
+                $carrierTax = $this->buildCarrierTaxes($carrier, $zone['id_zone'], $range->id);
                 if ($carrierTax) {
                     $carrierTaxes[] = $carrierTax;
                 }
@@ -156,24 +156,24 @@ class CarrierBuilder
 
     /**
      * @param Carrier $carrier
-     * @param RangeWeight|RangePrice $rangeWeight
+     * @param RangeWeight|RangePrice $range
      * @param array $zone
      *
      * @return false|CarrierDetail
      *
      * @throws \PrestaShopDatabaseException
      */
-    private function buildCarrierDetails(Carrier $carrier, $rangeWeight, array $zone)
+    private function buildCarrierDetails(Carrier $carrier, $range, array $zone)
     {
         $carrierDetail = new CarrierDetail();
         $carrierDetail->setShippingMethod($carrier->getRangeTable());
-        $carrierDetail->setCarrierDetailId($rangeWeight->id);
-        $carrierDetail->setDelimiter1($rangeWeight->delimiter1);
-        $carrierDetail->setDelimiter2($rangeWeight->delimiter2);
+        $carrierDetail->setCarrierDetailId($range->id);
+        $carrierDetail->setDelimiter1($range->delimiter1);
+        $carrierDetail->setDelimiter2($range->delimiter2);
         $carrierDetail->setPrice($zone['price']);
         $carrierDetail->setCarrierReference($carrier->id_reference);
         $carrierDetail->setZoneId($zone['id_zone']);
-        $carrierDetail->setRangeId($rangeWeight->id);
+        $carrierDetail->setRangeId($range->id);
 
         $countryIsoCodes = $this->countryRepository->getCountyIsoCodesByZoneId($zone['id_zone']);
         if (!$countryIsoCodes) {
@@ -195,7 +195,7 @@ class CarrierBuilder
      *
      * @throws \PrestaShopDatabaseException
      */
-    private function buildCarrierTaxes(Carrier $carrier, $zoneId)
+    private function buildCarrierTaxes(Carrier $carrier, $zoneId, $rangeId)
     {
         $taxRulesGroupId = (int) $carrier->getIdTaxRulesGroup();
         $carrierTaxesByZone = $this->taxRepository->getCarrierTaxesByZone($zoneId, $taxRulesGroupId);
@@ -208,6 +208,7 @@ class CarrierBuilder
 
         $carrierTax = new CarrierTax();
         $carrierTax->setCarrierReference($carrier->id_reference);
+        $carrierTax->setRangeId($rangeId);
         $carrierTax->setTaxRulesGroupId($taxRulesGroupId);
         $carrierTax->setZoneId($zoneId);
         $carrierTax->setCountryIsoCode($carrierTaxesByZone['country_iso_code']);
