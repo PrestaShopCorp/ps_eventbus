@@ -120,7 +120,7 @@ jobs:
         uses: dsaltares/fetch-gh-release-asset@0.0.5
         with:
           repo: ${{ github.event.repository.full_name }}
-          version: ${{ github.event.release.tag_name }}
+          version: tags/${{ github.event.release.tag_name }}
           file: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}.zip
           token: ${{ secrets.JARVIS_TOKEN }}
 
