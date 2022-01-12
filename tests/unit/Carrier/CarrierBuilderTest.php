@@ -4,7 +4,6 @@ namespace Carrier;
 
 use Carrier;
 use PrestaShop\Module\PsEventbus\Builder\CarrierBuilder;
-use PrestaShop\Module\PsEventbus\DTO\CarrierDetail;
 use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
 use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\CountryRepository;
@@ -52,11 +51,11 @@ class CarrierBuilderTest extends BaseTestCase
         string $weightUnit,
         float $freeShippingAtPrice,
         float $freeShippingAtWeight,
-        $mockedDeliveryBy,
-        $mockedCountryIsoCode,
-        $mockedStateIsoCode,
-        $mockedCarrierTaxesByZone,
-        $mockedCarrierRange,
+                $mockedDeliveryBy,
+                $mockedCountryIsoCode,
+                $mockedStateIsoCode,
+                $mockedCarrierTaxesByZone,
+                $mockedCarrierRange,
         array $expected
     ) {
         $carrierRepo = $this->createCarrierRepositoryMock($mockedDeliveryBy, $mockedCarrierRange);
@@ -309,7 +308,7 @@ class CarrierBuilderTest extends BaseTestCase
                     ],
                     [
                         'collection' => (string) $carrierDetailsCollection,
-                        'id' => $carrierReference . '-' . $firstZoneId . '-' . CarrierDetail::RANGE_BY_PRICE . '-' . $rangePriceId,
+                        'id' => $carrierReference . '-' . $firstZoneId . '-' . 'range_price' . '-' . $rangePriceId,
                         'properties' => [
                             'id_reference' => (string) $carrierReference,
                             'id_carrier_detail' => (string) $rangePriceId,
@@ -319,17 +318,21 @@ class CarrierBuilderTest extends BaseTestCase
                             'country_ids' => $countryIsoCode,
                             'state_ids' => '',
                             'price' => $carrierShippingPrice,
+                            'id_zone' => $firstZoneId,
+                            'id_range' => $rangePriceId,
                         ],
                     ],
                     [
                         'collection' => (string) $carrierTaxesCollection,
-                        'id' => $carrierReference . '-' . $firstZoneId,
+                        'id' => $carrierReference . '-' . $firstZoneId . '-' . $rangePriceId,
                         'properties' => [
                             'id_reference' => (string) $carrierReference,
                             'id_carrier_tax' => (string) $carrierTaxesRatesGroupId,
                             'country_id' => $countryIsoCode,
                             'state_ids' => '',
                             'tax_rate' => $taxRate,
+                            'id_zone' => $firstZoneId,
+                            'id_range' => $rangePriceId,
                         ],
                     ],
                 ],
@@ -396,7 +399,7 @@ class CarrierBuilderTest extends BaseTestCase
                     ],
                     [
                         'collection' => (string) $carrierDetailsCollection,
-                        'id' => $carrierReference . '-' . $firstZoneId . '-' . CarrierDetail::RANGE_BY_WEIGHT . '-' . $rangeWeightId,
+                        'id' => $carrierReference . '-' . $firstZoneId . '-' . 'range_weight' . '-' . $rangeWeightId,
                         'properties' => [
                             'id_reference' => (string) $carrierReference,
                             'id_carrier_detail' => (string) $rangeWeightId,
@@ -406,17 +409,21 @@ class CarrierBuilderTest extends BaseTestCase
                             'country_ids' => $countryIsoCode,
                             'state_ids' => '',
                             'price' => $carrierShippingPrice,
+                            'id_zone' => $firstZoneId,
+                            'id_range' => $rangeWeightId,
                         ],
                     ],
                     [
                         'collection' => (string) $carrierTaxesCollection,
-                        'id' => $carrierReference . '-' . $firstZoneId,
+                        'id' => $carrierReference . '-' . $firstZoneId . '-' . $rangeWeightId,
                         'properties' => [
                             'id_reference' => (string) $carrierReference,
                             'id_carrier_tax' => (string) $carrierTaxesRatesGroupId,
                             'country_id' => $countryIsoCode,
                             'state_ids' => '',
                             'tax_rate' => $taxRate,
+                            'id_zone' => $firstZoneId,
+                            'id_range' => $rangeWeightId,
                         ],
                     ],
                 ],

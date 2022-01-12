@@ -22,6 +22,7 @@ namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
 use Context;
 use Module;
+use PrestaShop\Module\PsEventbus\Config\Env;
 use Raven_Client;
 
 /**
@@ -34,11 +35,11 @@ class ErrorHandler implements ErrorHandlerInterface
      */
     protected $client;
 
-    public function __construct(Module $module, Context $context, $sentryCredentials)
+    public function __construct(Module $module, Context $context, Env $env)
     {
         $psAccounts = Module::getInstanceByName('ps_accounts');
         $this->client = new Raven_Client(
-            $sentryCredentials,
+            $env->get('SENTRY_CREDENTIALS'),
             [
                 'level' => 'warning',
                 'tags' => [

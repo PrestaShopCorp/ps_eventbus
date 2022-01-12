@@ -125,6 +125,11 @@ class Ps_eventbus extends Module
         $this->confirmUninstall = $this->l('This action will prevent immediately your PrestaShop services and Community services from working as they are using PrestaShop Eventbus module for syncing.');
         $this->ps_versions_compliancy = ['min' => '1.6', 'max' => _PS_VERSION_];
         $this->adminControllers = [];
+        // If PHP is not compliant, we will not load composer and the autoloader
+        if (!$this->isPhpVersionCompliant()) {
+            return;
+        }
+
         $this->serviceContainer = new \PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer(
             $this->name,
             $this->getLocalPath()
@@ -153,6 +158,14 @@ class Ps_eventbus extends Module
      */
     public function install()
     {
+        if (!$this->isPhpVersionCompliant()) {
+            $this->_errors[] = $this->l('This requires PHP 7.1 to work properly. Please upgrade your server configuration.');
+
+            // We return true during the installation of PrestaShop to not stop the whole process,
+            // Otherwise we warn properly the installation failed.
+            return defined('PS_INSTALLATION_IN_PROGRESS');
+        }
+
         $installer = new PrestaShop\Module\PsEventbus\Module\Install($this, Db::getInstance());
 
         return $installer->installInMenu()
@@ -751,13 +764,16 @@ class Ps_eventbus extends Module
         if (file_exists(_PS_MODULE_DIR_ . 'ps_eventbus/.env')) {
             $dotenv = Dotenv::create(_PS_MODULE_DIR_ . 'ps_eventbus/');
             $dotenv->load();
-
-            return;
         }
 
         if (file_exists(_PS_MODULE_DIR_ . 'ps_eventbus/.env.dist')) {
             $dotenv = Dotenv::create(_PS_MODULE_DIR_ . 'ps_eventbus/', '.env.dist');
             $dotenv->load();
         }
+    }
+
+    private function isPhpVersionCompliant()
+    {
+        return 70100 <= PHP_VERSION_ID;
     }
 }

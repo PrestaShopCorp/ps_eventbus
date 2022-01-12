@@ -6,10 +6,6 @@ use JsonSerializable;
 
 class CarrierDetail implements JsonSerializable
 {
-    const RANGE_BY_WEIGHT = 0;
-
-    const RANGE_BY_PRICE = 1;
-
     /**
      * @var string
      */
@@ -277,13 +273,14 @@ class CarrierDetail implements JsonSerializable
     {
         $countryIds = implode(',', $this->getCountryIsoCodes());
         $stateIds = implode(',', $this->getStateIsoCodes());
-        $shippingMethod = $this->getShippingMethod() === 'range_weight' ? self::RANGE_BY_WEIGHT : self::RANGE_BY_PRICE;
 
         return [
             'collection' => $this->getCollection(),
-            'id' => $this->getCarrierReference() . '-' . $this->getZoneId() . '-' . $shippingMethod . '-' . $this->getRangeId(),
+            'id' => $this->getCarrierReference() . '-' . $this->getZoneId() . '-' . $this->getShippingMethod() . '-' . $this->getRangeId(),
             'properties' => [
                 'id_reference' => (string) $this->getCarrierReference(),
+                'id_zone' => (string) $this->getZoneId(),
+                'id_range' => (string) $this->getRangeId(),
                 'id_carrier_detail' => (string) $this->getCarrierDetailId(),
                 'shipping_method' => (string) $this->getShippingMethod(),
                 'delimiter1' => (float) $this->getDelimiter1(),
