@@ -32,7 +32,7 @@ use Raven_Client;
 class ErrorHandler implements ErrorHandlerInterface
 {
     /**
-     * @var Raven_Client
+     * @var ?Raven_Client
      */
     protected $client;
 
