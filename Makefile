@@ -42,7 +42,8 @@ zip-prod: ./vendor
 	cd .. && zip -r ${PACKAGE}.zip ${MODULE} -x '*.git*' \
 	  ${MODULE}/dist/\* \
 	  ${MODULE}/composer.phar \
-	  ${MODULE}/Makefile
+	  ${MODULE}/Makefile \
+		${MODULE}/.env.dist
 	mv ../${PACKAGE}.zip ./dist
 
 # target: zip-inte                               - Bundle a integration zip
@@ -52,7 +53,8 @@ zip-inte: ./vendor
 	cd .. && zip -r ${PACKAGE}_integration.zip ${MODULE} -x '*.git*' \
 	  ${MODULE}/dist/\* \
 	  ${MODULE}/composer.phar \
-	  ${MODULE}/Makefile
+	  ${MODULE}/Makefile \
+		${MODULE}/.env.dist
 	mv ../${PACKAGE}_integration.zip ./dist
 
 # target: build                                  - Setup PHP & Node.js locally
