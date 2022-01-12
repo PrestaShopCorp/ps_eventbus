@@ -21,6 +21,7 @@
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
 use Context;
+use Exception;
 use Module;
 use PrestaShop\Module\PsEventbus\Config\Env;
 use Raven_Client;
@@ -31,42 +32,48 @@ use Raven_Client;
 class ErrorHandler implements ErrorHandlerInterface
 {
     /**
-     * @var Raven_Client
+     * @var ?Raven_Client
      */
     protected $client;
 
     public function __construct(Module $module, Context $context, Env $env)
     {
         $psAccounts = Module::getInstanceByName('ps_accounts');
-        $this->client = new Raven_Client(
-            $env->get('SENTRY_CREDENTIALS'),
-            [
-                'level' => 'warning',
-                'tags' => [
-                    'shop_id' => $context->shop->id,
-                    'ps_eventbus_version' => $module->version,
-                    'ps_accounts_version' => $psAccounts ? $psAccounts->version : false,
-                    'php_version' => phpversion(),
-                    'prestashop_version' => _PS_VERSION_,
-                    'ps_eventbus_is_enabled' => Module::isEnabled($module->name),
-                    'ps_eventbus_is_installed' => Module::isInstalled($module->name),
-                ],
-            ]
-        );
+        try {
+            $this->client = new Raven_Client(
+                $env->get('SENTRY_CREDENTIALS'),
+                [
+                    'level' => 'warning',
+                    'tags' => [
+                        'shop_id' => $context->shop->id,
+                        'ps_eventbus_version' => $module->version,
+                        'ps_accounts_version' => $psAccounts ? $psAccounts->version : false,
+                        'php_version' => phpversion(),
+                        'prestashop_version' => _PS_VERSION_,
+                        'ps_eventbus_is_enabled' => Module::isEnabled($module->name),
+                        'ps_eventbus_is_installed' => Module::isInstalled($module->name),
+                    ],
+                ]
+            );
+        } catch (Exception $e) {
+        }
     }
 
     /**
-     * @param \Exception $error
+     * @param Exception $error
      * @param mixed $code
      * @param bool|null $throw
      * @param array|null $data
      *
      * @return void
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle($error, $code = null, $throw = true, $data = null)
     {
+        if (!$this->client) {
+            return;
+        }
         $this->client->captureException($error, $data);
         if ($code && true === $throw) {
             http_response_code($code);
