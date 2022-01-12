@@ -18,8 +18,8 @@ class EnvTest extends BaseTestCase
         $dotenv = Dotenv::create(_PS_MODULE_DIR_ . 'ps_eventbus/', '.env.dist');
         $dotenv->load();
         $env = new Env();
-        $url = $env->get('ACCOUNTS_SVC_API_URL');
-        $this->assertEquals('https://accounts-api.psessentials.net', $url);
+        $url = $env->get('SENTRY_CREDENTIALS');
+        $this->assertEquals('SENTRY_CREDENTIALS_KEY', $url);
 
         $timeout = $env->get('PROXY_TIMEOUT');
         $this->assertEquals(Config::PROXY_TIMEOUT, $timeout);
