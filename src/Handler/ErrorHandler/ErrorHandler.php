@@ -20,10 +20,10 @@
 
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
-use Context;
 use Exception;
 use Module;
 use PrestaShop\Module\PsEventbus\Config\Env;
+use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use Raven_Client;
 
 /**
@@ -36,7 +36,7 @@ class ErrorHandler implements ErrorHandlerInterface
      */
     protected $client;
 
-    public function __construct(Module $module, Context $context, Env $env)
+    public function __construct(Module $module, Env $env, PsAccounts $accountsService)
     {
         $psAccounts = Module::getInstanceByName('ps_accounts');
         try {
@@ -45,7 +45,7 @@ class ErrorHandler implements ErrorHandlerInterface
                 [
                     'level' => 'warning',
                     'tags' => [
-                        'shop_id' => $context->shop->id,
+                        'shop_id' => $accountsService->getPsAccountsService()->getShopUuid(),
                         'ps_eventbus_version' => $module->version,
                         'ps_accounts_version' => $psAccounts ? $psAccounts->version : false,
                         'php_version' => phpversion(),
