@@ -5,6 +5,6 @@ services:
     class: PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler
     arguments:
       - '@ps_eventbus'
-      - '@ps_eventbus.context'
       - '@PrestaShop\Module\PsEventbus\Config\Env'
+      - '@PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
 
