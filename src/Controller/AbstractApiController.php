@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Controller;
 use DateTime;
 use Exception;
 use ModuleFrontController;
-use PrestaShop\AccountsAuth\Service\PsAccountsService;
+use PrestaShop\Module\PsAccounts\Service\PsAccountsService;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;

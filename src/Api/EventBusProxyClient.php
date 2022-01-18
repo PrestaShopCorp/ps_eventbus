@@ -22,7 +22,6 @@
 namespace PrestaShop\Module\PsEventbus\Api;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Post\PostFile;
 use Link;
 use PrestaShop\Module\PsEventbus\Config\Config;
@@ -118,8 +117,8 @@ class EventBusProxyClient extends GenericClient
                     [
                         'name' => 'file',
                         'contents' => $compressedData,
-                        'filename' => 'file'
-                    ]
+                        'filename' => 'file',
+                    ],
                 ],
                 'timeout' => $timeout,
             ]);

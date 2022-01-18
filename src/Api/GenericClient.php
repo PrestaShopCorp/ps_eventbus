@@ -109,9 +109,8 @@ abstract class GenericClient
     protected function post(array $options = [])
     {
         $response = $this->getClient()->post($this->getRoute(), $options);
-        $responseHandler = new ResponseApiHandler();
 
-        return $responseHandler->handleResponse($response);
+        return $this->handleResponse($response);
     }
 
     /**
@@ -124,9 +123,8 @@ abstract class GenericClient
     protected function patch(array $options = [])
     {
         $response = $this->getClient()->patch($this->getRoute(), $options);
-        $responseHandler = new ResponseApiHandler();
 
-        return $responseHandler->handleResponse($response);
+        return $this->handleResponse($response);
     }
 
     /**
@@ -139,9 +137,8 @@ abstract class GenericClient
     protected function delete(array $options = [])
     {
         $response = $this->getClient()->delete($this->getRoute(), $options);
-        $responseHandler = new ResponseApiHandler();
 
-        return $responseHandler->handleResponse($response);
+        return $this->handleResponse($response);
     }
 
     /**
@@ -153,11 +150,9 @@ abstract class GenericClient
      */
     protected function get(array $options = [])
     {
-        //todo: guzzle7 returns \Psr\Http\Message\ResponseInterface and not GuzzleHttp\Message\ResponseInterface like guzzle 5
         $response = $this->getClient()->get($this->getRoute(), $options);
-        $responseHandler = new ResponseApiHandler();
 
-        return $responseHandler->handleResponse($response);
+        return $this->handleResponse($response);
     }
 
     /**
@@ -242,14 +237,21 @@ abstract class GenericClient
     {
         // Guzzle 7
         if (defined('\GuzzleHttp\ClientInterface::MAJOR_VERSION')) {
-            return (int)\GuzzleHttp\ClientInterface::MAJOR_VERSION;
+            return (int) \GuzzleHttp\ClientInterface::MAJOR_VERSION;
         }
 
         // Before Guzzle 7
         if (defined('\GuzzleHttp\ClientInterface::VERSION')) {
-            return (int)\GuzzleHttp\ClientInterface::VERSION[0];
+            return (int) \GuzzleHttp\ClientInterface::VERSION[0];
         }
 
         return null;
+    }
+
+    private function handleResponse($response)
+    {
+        $responseHandler = new ResponseApiHandler();
+
+        return $responseHandler->handleResponse($response);
     }
 }
