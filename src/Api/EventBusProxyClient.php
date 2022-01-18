@@ -52,29 +52,26 @@ class EventBusProxyClient extends GenericClient
         $this->setLink($link);
         $token = $psAccountsService->getPsAccountsService()->getOrRefreshToken();
 
-        switch (ClientInterface::MAJOR_VERSION) {
-            case 7:
-                $client = new Client([
-                    'base_url' => $this->baseUrl,
+        if ($this->isGuzzleVersion6Or7()) {
+            $client = new Client([
+                'base_url' => $this->baseUrl,
+                'headers' => [
+                    'Authorization' => "Bearer $token",
+                ],
+                'timeout' => 60,
+                'exceptions' => $this->catchExceptions,
+            ]);
+        } else {
+            $client = new Client([
+                'base_url' => $this->baseUrl,
+                'defaults' => [
+                    'timeout' => 60,
+                    'exceptions' => $this->catchExceptions,
                     'headers' => [
                         'Authorization' => "Bearer $token",
                     ],
-                    'timeout' => 60,
-                    'exceptions' => $this->catchExceptions,
-                ]);
-                break;
-            case 5:
-            default:
-                $client = new Client([
-                    'base_url' => $this->baseUrl,
-                    'defaults' => [
-                        'timeout' => 60,
-                        'exceptions' => $this->catchExceptions,
-                        'headers' => [
-                            'Authorization' => "Bearer $token",
-                        ],
-                    ],
-                ]);
+                ],
+            ]);
         }
 
         parent::__construct($client);
@@ -82,53 +79,18 @@ class EventBusProxyClient extends GenericClient
 
     /**
      * @param string $jobId
-     * @param string $data
+     * @param string $compressedData
      * @param int $scriptStartTime
      *
      * @return array
      */
-    public function upload($jobId, $data, $scriptStartTime)
+    public function upload($jobId, $compressedData, $scriptStartTime)
     {
         $timeout = Config::PROXY_TIMEOUT - (time() - $scriptStartTime);
 
         $route = $this->baseUrl . "/upload/$jobId";
 
-        $this->setRoute($route);
-
-        switch (ClientInterface::MAJOR_VERSION) {
-            case 7:
-                $response = $this->post([
-                    'multipart' => [
-                        [
-                            'name' => 'file',
-                            'contents' => $data,
-                            'filename' => 'file'
-                        ]
-                    ],
-                    'timeout' => $timeout,
-                ]);
-                break;
-            case 5:
-            default:
-                $file = new PostFile(
-                    'file',
-                    $data,
-                    'file'
-                );
-
-                $response = $this->post([
-                    'body' => [
-                        'file' => $file,
-                    ],
-                    'timeout' => $timeout,
-                ]);
-        }
-
-        if (is_array($response)) {
-            $response['upload_url'] = $route;
-        }
-
-        return $response;
+        return $this->send($route, $compressedData, $timeout);
     }
 
     /**
@@ -143,20 +105,38 @@ class EventBusProxyClient extends GenericClient
 
         $this->setRoute($route);
 
-        $file = new PostFile(
-            'file',
-            $compressedData,
-            'file.gz'
-        );
+        return $this->send($route, $compressedData);
+    }
 
-        $response = $this->post([
-            'headers' => [
-                'Content-Type' => 'binary/octet-stream',
-            ],
-            'body' => [
-                'file' => $file,
-            ],
-        ]);
+    private function send($route, $compressedData, $timeout = Config::PROXY_TIMEOUT)
+    {
+        $this->setRoute($route);
+
+        if ($this->isGuzzleVersion6Or7()) {
+            $response = $this->post([
+                'multipart' => [
+                    [
+                        'name' => 'file',
+                        'contents' => $compressedData,
+                        'filename' => 'file'
+                    ]
+                ],
+                'timeout' => $timeout,
+            ]);
+        } else {
+            $file = new PostFile(
+                'file',
+                $compressedData,
+                'file'
+            );
+
+            $response = $this->post([
+                'body' => [
+                    'file' => $file,
+                ],
+                'timeout' => $timeout,
+            ]);
+        }
 
         if (is_array($response)) {
             $response['upload_url'] = $route;

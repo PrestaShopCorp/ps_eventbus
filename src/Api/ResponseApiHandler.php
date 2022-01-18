@@ -26,8 +26,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use GuzzleHttp\Message\ResponseInterface;
-
 /**
  * Handle api response.
  */
@@ -38,7 +36,7 @@ class ResponseApiHandler
      *
      * @return array
      */
-    public function handleResponse(\Psr\Http\Message\ResponseInterface $response)
+    public function handleResponse($response)
     {
         $responseContents = json_decode($response->getBody()->getContents(), true);
 

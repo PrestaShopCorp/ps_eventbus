@@ -110,9 +110,8 @@ abstract class GenericClient
     {
         $response = $this->getClient()->post($this->getRoute(), $options);
         $responseHandler = new ResponseApiHandler();
-        $response = $responseHandler->handleResponse($response);
 
-        return $response;
+        return $responseHandler->handleResponse($response);
     }
 
     /**
@@ -126,9 +125,8 @@ abstract class GenericClient
     {
         $response = $this->getClient()->patch($this->getRoute(), $options);
         $responseHandler = new ResponseApiHandler();
-        $response = $responseHandler->handleResponse($response);
 
-        return $response;
+        return $responseHandler->handleResponse($response);
     }
 
     /**
@@ -142,9 +140,8 @@ abstract class GenericClient
     {
         $response = $this->getClient()->delete($this->getRoute(), $options);
         $responseHandler = new ResponseApiHandler();
-        $response = $responseHandler->handleResponse($response);
 
-        return $response;
+        return $responseHandler->handleResponse($response);
     }
 
     /**
@@ -159,9 +156,8 @@ abstract class GenericClient
         //todo: guzzle7 returns \Psr\Http\Message\ResponseInterface and not GuzzleHttp\Message\ResponseInterface like guzzle 5
         $response = $this->getClient()->get($this->getRoute(), $options);
         $responseHandler = new ResponseApiHandler();
-        $response = $responseHandler->handleResponse($response);
 
-        return $response;
+        return $responseHandler->handleResponse($response);
     }
 
     /**
@@ -218,5 +214,42 @@ abstract class GenericClient
     protected function setTimeout($timeout)
     {
         $this->timeout = $timeout;
+    }
+
+    protected function isGuzzleVersion6Or7()
+    {
+        if ($this->guzzleIsDetected()) {
+            $guzzleVersion = $this->guzzleMajorVersionNumber();
+
+            return $guzzleVersion && in_array($guzzleVersion, [6, 7]);
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    private function guzzleIsDetected()
+    {
+        return interface_exists("\GuzzleHttp\ClientInterface");
+    }
+
+    /**
+     * @return int|null
+     */
+    private function guzzleMajorVersionNumber()
+    {
+        // Guzzle 7
+        if (defined('\GuzzleHttp\ClientInterface::MAJOR_VERSION')) {
+            return (int)\GuzzleHttp\ClientInterface::MAJOR_VERSION;
+        }
+
+        // Before Guzzle 7
+        if (defined('\GuzzleHttp\ClientInterface::VERSION')) {
+            return (int)\GuzzleHttp\ClientInterface::VERSION[0];
+        }
+
+        return null;
     }
 }
