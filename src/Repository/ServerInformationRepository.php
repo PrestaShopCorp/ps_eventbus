@@ -101,7 +101,7 @@ class ServerInformationRepository
                 'id' => '1',
                 'collection' => Config::COLLECTION_SHOPS,
                 'properties' => [
-                    'created_at' => $this->createdAt,
+                'created_at' => $this->createdAt,
                     'cms_version' => _PS_VERSION_,
                     'url_is_simplified' => $this->configurationRepository->get('PS_REWRITING_SETTINGS') == '1',
                     'cart_is_persistent' => $this->configurationRepository->get('PS_CART_FOLLOWING') == '1',

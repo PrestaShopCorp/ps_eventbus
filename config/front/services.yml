@@ -8,6 +8,7 @@ imports:
   - { resource: context.yml }
 
 services:
+  _defaults: { public: true }
   PrestaShop\Module\PsEventbus\Formatter\JsonFormatter:
     class: PrestaShop\Module\PsEventbus\Formatter\JsonFormatter
     public: true

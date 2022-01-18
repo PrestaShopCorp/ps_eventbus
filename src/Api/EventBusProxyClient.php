@@ -22,6 +22,7 @@
 namespace PrestaShop\Module\PsEventbus\Api;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Post\PostFile;
 use Link;
 use PrestaShop\Module\PsEventbus\Config\Config;
@@ -51,16 +52,30 @@ class EventBusProxyClient extends GenericClient
         $this->setLink($link);
         $token = $psAccountsService->getPsAccountsService()->getOrRefreshToken();
 
-        $client = new Client([
-            'base_url' => $this->baseUrl,
-            'defaults' => [
-                'timeout' => 60,
-                'exceptions' => $this->catchExceptions,
-                'headers' => [
-                    'Authorization' => "Bearer $token",
-                ],
-            ],
-        ]);
+        switch (ClientInterface::MAJOR_VERSION) {
+            case 7:
+                $client = new Client([
+                    'base_url' => $this->baseUrl,
+                    'headers' => [
+                        'Authorization' => "Bearer $token",
+                    ],
+                    'timeout' => 60,
+                    'exceptions' => $this->catchExceptions,
+                ]);
+                break;
+            case 5:
+            default:
+                $client = new Client([
+                    'base_url' => $this->baseUrl,
+                    'defaults' => [
+                        'timeout' => 60,
+                        'exceptions' => $this->catchExceptions,
+                        'headers' => [
+                            'Authorization' => "Bearer $token",
+                        ],
+                    ],
+                ]);
+        }
 
         parent::__construct($client);
     }
@@ -80,21 +95,34 @@ class EventBusProxyClient extends GenericClient
 
         $this->setRoute($route);
 
-        $file = new PostFile(
-            'file',
-            $data,
-            'file'
-        );
+        switch (ClientInterface::MAJOR_VERSION) {
+            case 7:
+                $response = $this->post([
+                    'multipart' => [
+                        [
+                            'name' => 'file',
+                            'contents' => $data,
+                            'filename' => 'file'
+                        ]
+                    ],
+                    'timeout' => $timeout,
+                ]);
+                break;
+            case 5:
+            default:
+                $file = new PostFile(
+                    'file',
+                    $data,
+                    'file'
+                );
 
-        $response = $this->post([
-            'headers' => [
-                'Content-Type' => 'binary/octet-stream',
-            ],
-            'body' => [
-                'file' => $file,
-            ],
-            'timeout' => $timeout,
-        ]);
+                $response = $this->post([
+                    'body' => [
+                        'file' => $file,
+                    ],
+                    'timeout' => $timeout,
+                ]);
+        }
 
         if (is_array($response)) {
             $response['upload_url'] = $route;

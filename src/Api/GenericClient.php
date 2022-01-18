@@ -156,6 +156,7 @@ abstract class GenericClient
      */
     protected function get(array $options = [])
     {
+        //todo: guzzle7 returns \Psr\Http\Message\ResponseInterface and not GuzzleHttp\Message\ResponseInterface like guzzle 5
         $response = $this->getClient()->get($this->getRoute(), $options);
         $responseHandler = new ResponseApiHandler();
         $response = $responseHandler->handleResponse($response);

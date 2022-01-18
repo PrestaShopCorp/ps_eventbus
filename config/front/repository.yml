@@ -1,4 +1,5 @@
 services:
+  _defaults: { public: true }
   PrestaShop\Module\PsEventbus\Repository\CurrencyRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CurrencyRepository
     public: true

@@ -1,4 +1,5 @@
 services:
+  _defaults: { public: true }
   PrestaShop\Module\PsEventbus\Api\EventBusSyncClient:
     class: PrestaShop\Module\PsEventbus\Api\EventBusSyncClient
     public: true

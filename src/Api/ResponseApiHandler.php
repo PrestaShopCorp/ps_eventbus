@@ -38,7 +38,7 @@ class ResponseApiHandler
      *
      * @return array
      */
-    public function handleResponse(ResponseInterface $response)
+    public function handleResponse(\Psr\Http\Message\ResponseInterface $response)
     {
         $responseContents = json_decode($response->getBody()->getContents(), true);
 

@@ -4,6 +4,7 @@ imports:
   - { resource: common/handler.yml }
 
 services:
+  _defaults: { public: true }
   ps_eventbus.db:
     class: Db
     public: true

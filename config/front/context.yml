@@ -1,4 +1,5 @@
 services:
+  _defaults: { public: true }
   ps_eventbus.context:
     class: 'Context'
     public: true
