@@ -51,7 +51,7 @@ class EventBusProxyClient extends GenericClient
         $this->setLink($link);
         $token = $psAccountsService->getPsAccountsService()->getOrRefreshToken();
 
-        if ($this->isGuzzleVersion6Or7()) {
+        if ($this->isGuzzleVersionGreaterThan5()) {
             $client = new Client([
                 'base_url' => $this->baseUrl,
                 'headers' => [
@@ -111,7 +111,7 @@ class EventBusProxyClient extends GenericClient
     {
         $this->setRoute($route);
 
-        if ($this->isGuzzleVersion6Or7()) {
+        if ($this->isGuzzleVersionGreaterThan5()) {
             $response = $this->post([
                 'multipart' => [
                     [

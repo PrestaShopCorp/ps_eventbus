@@ -8,22 +8,18 @@ imports:
   - { resource: context.yml }
 
 services:
-  _defaults: { public: true }
+
   PrestaShop\Module\PsEventbus\Formatter\JsonFormatter:
     class: PrestaShop\Module\PsEventbus\Formatter\JsonFormatter
-    public: true
 
   PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter:
     class: PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter
-    public: true
 
   PrestaShop\Module\PsEventbus\Formatter\DateFormatter:
     class: PrestaShop\Module\PsEventbus\Formatter\DateFormatter
-    public: true
 
   PrestaShop\Module\PsEventbus\Service\CompressionService:
     class: PrestaShop\Module\PsEventbus\Service\CompressionService
-    public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Formatter\JsonFormatter'
 

@@ -4,22 +4,19 @@ imports:
   - { resource: common/handler.yml }
 
 services:
-  _defaults: { public: true }
   ps_eventbus.db:
     class: Db
-    public: true
+
     factory: [ 'Db', 'getInstance' ]
 
   ps_eventbus:
     class: 'Ps_eventbus'
-    public: true
     factory: ['Module', 'getInstanceByName']
     arguments:
       - 'ps_eventbus'
 
   PrestaShop\PsAccountsInstaller\Installer\Installer:
     class: PrestaShop\PsAccountsInstaller\Installer\Installer
-    public: true
     arguments:
       - '4.0.0'
 

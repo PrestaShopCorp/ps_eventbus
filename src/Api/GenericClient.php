@@ -211,12 +211,12 @@ abstract class GenericClient
         $this->timeout = $timeout;
     }
 
-    protected function isGuzzleVersion6Or7()
+    protected function isGuzzleVersionGreaterThan5()
     {
         if ($this->guzzleIsDetected()) {
             $guzzleVersion = $this->guzzleMajorVersionNumber();
 
-            return $guzzleVersion && in_array($guzzleVersion, [6, 7]);
+            return $guzzleVersion > 5;
         }
 
         return false;

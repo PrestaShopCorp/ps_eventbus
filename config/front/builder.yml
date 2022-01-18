@@ -1,8 +1,7 @@
 services:
-  _defaults: { public: true }
   PrestaShop\Module\PsEventbus\Builder\CarrierBuilder:
     class: PrestaShop\Module\PsEventbus\Builder\CarrierBuilder
-    public: true
+
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\CarrierRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\CountryRepository'
