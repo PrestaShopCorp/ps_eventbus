@@ -35,7 +35,7 @@ class IncrementalSynchronizationTest extends BaseTestCase
      */
     private $syncRepository;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $product = new Product(1);

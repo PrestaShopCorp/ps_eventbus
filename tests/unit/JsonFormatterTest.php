@@ -17,7 +17,7 @@ class JsonFormatterTest extends BaseTestCase
      */
     private $jsonFormatter;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->jsonFormatter = new JsonFormatter();

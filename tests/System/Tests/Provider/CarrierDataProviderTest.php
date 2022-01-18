@@ -17,7 +17,7 @@ use Yandex\Allure\Adapter\Annotation\Title;
  */
 class CarrierDataProviderTest extends BaseTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         /** @var IncrementalSyncRepository $syncRepository */

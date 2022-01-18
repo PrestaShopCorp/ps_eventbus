@@ -17,7 +17,7 @@ use Yandex\Allure\Adapter\Annotation\Title;
  */
 class CustomProductCarrierDataProviderTest extends BaseTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $product = new Product(1);
