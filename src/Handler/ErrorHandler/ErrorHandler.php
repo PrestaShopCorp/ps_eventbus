@@ -20,6 +20,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
+use Configuration;
 use Exception;
 use Module;
 use PrestaShop\Module\PsEventbus\Config\Env;
@@ -52,9 +53,11 @@ class ErrorHandler implements ErrorHandlerInterface
                         'prestashop_version' => _PS_VERSION_,
                         'ps_eventbus_is_enabled' => Module::isEnabled($module->name),
                         'ps_eventbus_is_installed' => Module::isInstalled($module->name),
+                        'env' => $env->get('environment')
                     ],
                 ]
             );
+            $this->client->set_user_data($accountsService->getPsAccountsService()->getShopUuid(), Configuration::get('PS_SHOP_EMAIL'));
         } catch (Exception $e) {
         }
     }
