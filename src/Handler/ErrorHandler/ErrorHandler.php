@@ -53,7 +53,7 @@ class ErrorHandler implements ErrorHandlerInterface
                         'prestashop_version' => _PS_VERSION_,
                         'ps_eventbus_is_enabled' => Module::isEnabled($module->name),
                         'ps_eventbus_is_installed' => Module::isInstalled($module->name),
-                        'env' => $env->get('environment'),
+                        'env' => $env->get('SENTRY_ENVIRONMENT'),
                     ],
                 ]
             );

@@ -53,11 +53,11 @@ jobs:
       - name: Bundle the production zip
         run: |
           echo "SENTRY_CREDENTIALS=$SENTRY_CREDENTIALS" >> .env
-          echo "environment=$ENV" >> .env
+          echo "SENTRY_ENVIRONMENT=$ENV" >> .env
           make zip-prod
         env:
           SENTRY_CREDENTIALS: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          ENV: prod
+          ENV: production
 
       - name: Publish the production zip
         uses: actions/upload-release-asset@v1.0.1
