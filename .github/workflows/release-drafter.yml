@@ -53,6 +53,7 @@ jobs:
       - name: Bundle the production zip
         run: |
           echo "SENTRY_CREDENTIALS=$SENTRY_CREDENTIALS" >> .env
+          echo "SENTRY_ENVIRONMENT=production" >> .env
           make zip-prod
         env:
           SENTRY_CREDENTIALS: ${{ secrets.SENTRY_AUTH_TOKEN }}

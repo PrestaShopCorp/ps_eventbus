@@ -64,6 +64,7 @@ jobs:
         run: |
           cd ${{ github.event.repository.name }}
           echo "SENTRY_CREDENTIALS=$SENTRY_CREDENTIALS" >> .env
+          echo "SENTRY_ENVIRONMENT=production" >> .env
           make zip-prod
         env:
           SENTRY_CREDENTIALS: ${{ secrets.SENTRY_AUTH_TOKEN }}
@@ -93,6 +94,7 @@ jobs:
           cd ${{ github.event.repository.name }}
           echo "$PARAMETERS_FILE" > config/parameters.yml
           echo "SENTRY_CREDENTIALS=" >> .env.inte
+          echo "SENTRY_ENVIRONMENT=" >> .env.inte
           make zip-inte
         env:
           PARAMETERS_FILE: ${{ secrets.PS_EVENTBUS_ENV_INTE }}
