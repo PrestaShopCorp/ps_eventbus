@@ -6,6 +6,7 @@ use Context;
 use Db;
 use DbQuery;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
+use PrestaShopDatabaseException;
 
 class IncrementalSyncRepository
 {
@@ -56,9 +57,10 @@ class IncrementalSyncRepository
                 true,
                 Db::ON_DUPLICATE_KEY
             );
-        } catch (\PrestaShopDatabaseException $e) {
-            $this->errorHandler->handle($e);
-
+        } catch (PrestaShopDatabaseException $e) {
+            $this->errorHandler->handle(
+                new PrestaShopDatabaseException('Failed to insert incremental object', $e->getCode(), $e)
+            );
             return false;
         }
     }
@@ -88,7 +90,7 @@ class IncrementalSyncRepository
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShopDatabaseException
      */
     public function getIncrementalSyncObjectIds($type, $langIso, $limit)
     {
