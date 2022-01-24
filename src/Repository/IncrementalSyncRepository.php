@@ -61,6 +61,7 @@ class IncrementalSyncRepository
             $this->errorHandler->handle(
                 new PrestaShopDatabaseException('Failed to insert incremental object', $e->getCode(), $e)
             );
+
             return false;
         }
     }
