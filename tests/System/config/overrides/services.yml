@@ -1,5 +1,5 @@
 services:
-  PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface: '@PrestaShop\Module\PsEventbus\Tests\system\Mocks\Service\ProxyServiceMock'
+  PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface: '@PrestaShop\Module\PsEventbus\Tests\System\Mocks\Service\ProxyServiceMock'
 
   PrestaShop\Module\PsEventbus\Tests\System\Mocks\Service\ProxyServiceMock:
     class: PrestaShop\Module\PsEventbus\Tests\System\Mocks\Service\ProxyServiceMock
