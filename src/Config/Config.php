@@ -36,6 +36,7 @@ class Config
     const COLLECTION_ORDERS = 'orders';
     const COLLECTION_ORDER_DETAILS = 'order_details';
     const COLLECTION_PRODUCTS = 'products';
+    const COLLECTION_PRODUCT_ATTRIBUTES = 'attributes';
     const COLLECTION_DELETED = 'deleted';
     const COLLECTION_SHOPS = 'shops';
     const COLLECTION_THEMES = 'themes';
