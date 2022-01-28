@@ -11,6 +11,7 @@ use Exception;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShopDatabaseException;
 use Product;
+use Shop;
 use SpecificPrice;
 
 class ProductRepository
@@ -42,23 +43,30 @@ class ProductRepository
     }
 
     /**
-     * @param int $shopId
+     * @param Shop $shop
      * @param int $langId
      *
      * @return DbQuery
      */
-    private function getBaseQuery($shopId, $langId)
+    private function getBaseQuery(Shop $shop, $langId)
     {
         $query = new DbQuery();
 
         $query->from('product', 'p')
-            ->innerJoin('product_shop', 'ps', 'ps.id_product = p.id_product AND ps.id_shop = ' . (int) $shopId)
+            ->innerJoin('product_shop', 'ps', 'ps.id_product = p.id_product AND ps.id_shop = ' . (int) $shop->id)
             ->innerJoin('product_lang', 'pl', 'pl.id_product = ps.id_product AND pl.id_shop = ps.id_shop AND pl.id_lang = ' . (int) $langId)
             ->leftJoin('product_attribute_shop', 'pas', 'pas.id_product = p.id_product AND pas.id_shop = ps.id_shop')
             ->leftJoin('product_attribute', 'pa', 'pas.id_product_attribute = pa.id_product_attribute')
             ->leftJoin('category_lang', 'cl', 'ps.id_category_default = cl.id_category AND ps.id_shop = cl.id_shop AND cl.id_lang = ' . (int) $langId)
-            ->leftJoin('stock_available', 'sa', 'sa.id_product = p.id_product AND sa.id_product_attribute = IFNULL(pas.id_product_attribute, 0) AND sa.id_shop = ps.id_shop')
             ->leftJoin('manufacturer', 'm', 'p.id_manufacturer = m.id_manufacturer');
+
+        if ($shop->getGroup()->share_stock) {
+            $query->leftJoin('stock_available', 'sa', 'sa.id_product = p.id_product AND
+             sa.id_product_attribute = IFNULL(pas.id_product_attribute, 0) AND sa.id_shop_group = ' . (int) $shop->id_shop_group);
+        } else {
+            $query->leftJoin('stock_available', 'sa', 'sa.id_product = p.id_product AND
+             sa.id_product_attribute = IFNULL(pas.id_product_attribute, 0) AND sa.id_shop = ps.id_shop');
+        }
 
         return $query;
     }
@@ -74,7 +82,7 @@ class ProductRepository
      */
     public function getProducts($offset, $limit, $langId)
     {
-        $query = $this->getBaseQuery($this->context->shop->id, $langId);
+        $query = $this->getBaseQuery($this->context->shop, $langId);
 
         $this->addSelectParameters($query);
 
@@ -301,7 +309,7 @@ class ProductRepository
      */
     public function getProductsIncremental($limit, $langId, $productIds)
     {
-        $query = $this->getBaseQuery($this->context->shop->id, $langId);
+        $query = $this->getBaseQuery($this->context->shop, $langId);
 
         $this->addSelectParameters($query);
 
