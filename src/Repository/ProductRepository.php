@@ -267,38 +267,6 @@ class ProductRepository
     }
 
     /**
-     * @param int $productId
-     * @param int $attributeId
-     *
-     * @return string
-     */
-    public function getSaleDate($productId, $attributeId)
-    {
-        $specific_price = SpecificPrice::getSpecificPrice(
-            (int) $productId,
-            $this->context->shop->id,
-            0,
-            0,
-            0,
-            1,
-            $attributeId
-        );
-
-        try {
-            if (is_array($specific_price) && array_key_exists('to', $specific_price)) {
-                $from = new DateTime($specific_price['from']);
-                $to = new DateTime($specific_price['to']);
-
-                return $from->format('Y-m-dTh:i-Z') . '/' . $to->format('Y-m-dTh:i-Z');
-            }
-        } catch (Exception $exception) {
-            return '';
-        }
-
-        return '';
-    }
-
-    /**
      * @param int $limit
      * @param int $langId
      * @param array $productIds

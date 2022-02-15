@@ -137,8 +137,6 @@ class ProductDecorator
 
         $product['tax'] = $product['price_tax_incl'] - $product['price_tax_excl'];
         $product['sale_tax'] = $product['sale_price_tax_incl'] - $product['sale_price_tax_excl'];
-
-        $product['sale_date'] = $this->productRepository->getSaleDate($product['id_product'], $product['id_attribute']);
     }
 
     private function getBundleCollection(array $product)
