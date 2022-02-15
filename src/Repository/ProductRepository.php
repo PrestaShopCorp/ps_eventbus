@@ -3,16 +3,13 @@
 namespace PrestaShop\Module\PsEventbus\Repository;
 
 use Context;
-use DateTime;
 use Db;
 use DbQuery;
 use Employee;
-use Exception;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShopDatabaseException;
 use Product;
 use Shop;
-use SpecificPrice;
 
 class ProductRepository
 {
