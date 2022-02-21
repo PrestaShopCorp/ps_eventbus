@@ -112,7 +112,6 @@ class ProductDataProviderTest extends BaseTestCase
         $this->assertArrayHasKey('sale_price_tax_incl', $properties);
         $this->assertArrayHasKey('tax', $properties);
         $this->assertArrayHasKey('sale_tax', $properties);
-        $this->assertArrayHasKey('sale_date', $properties);
         $this->assertArrayHasKey('category_path', $properties);
         $this->assertArrayHasKey('category_id_path', $properties);
         $this->assertArrayHasKey('available_for_order', $properties);

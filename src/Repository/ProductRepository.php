@@ -3,16 +3,13 @@
 namespace PrestaShop\Module\PsEventbus\Repository;
 
 use Context;
-use DateTime;
 use Db;
 use DbQuery;
 use Employee;
-use Exception;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShopDatabaseException;
 use Product;
 use Shop;
-use SpecificPrice;
 
 class ProductRepository
 {
@@ -264,38 +261,6 @@ class ProductRepository
     public function getSalePriceTaxIncluded($productId, $attributeId)
     {
         return Product::getPriceStatic($productId, true, $attributeId, 6);
-    }
-
-    /**
-     * @param int $productId
-     * @param int $attributeId
-     *
-     * @return string
-     */
-    public function getSaleDate($productId, $attributeId)
-    {
-        $specific_price = SpecificPrice::getSpecificPrice(
-            (int) $productId,
-            $this->context->shop->id,
-            0,
-            0,
-            0,
-            1,
-            $attributeId
-        );
-
-        try {
-            if (is_array($specific_price) && array_key_exists('to', $specific_price)) {
-                $from = new DateTime($specific_price['from']);
-                $to = new DateTime($specific_price['to']);
-
-                return $from->format('Y-m-dTh:i-Z') . '/' . $to->format('Y-m-dTh:i-Z');
-            }
-        } catch (Exception $exception) {
-            return '';
-        }
-
-        return '';
     }
 
     /**
