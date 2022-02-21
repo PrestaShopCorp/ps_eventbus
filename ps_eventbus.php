@@ -98,6 +98,7 @@ class Ps_eventbus extends Module
         'actionObjectSpecificPriceAddAfter',
         'actionObjectSpecificPriceUpdateAfter',
         'actionObjectSpecificPriceDeleteAfter',
+        'actionObjectCombinationDeleteAfter',
     ];
 
     /**
@@ -246,6 +247,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectProductUpdateAfter($parameters)
     {
+        /** @var Product $product */
         $product = $parameters['object'];
 
         $this->insertIncrementalSyncObject(
@@ -262,6 +264,24 @@ class Ps_eventbus extends Module
             date(DATE_ATOM),
             $this->context->shop->id,
             false
+        );
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectCombinationDeleteAfter($parameters)
+    {
+        /** @var Combination $combination */
+        $combination = $parameters['object'];
+
+        $this->insertDeletedObject(
+            $combination->id,
+            Config::COLLECTION_PRODUCT_ATTRIBUTES,
+            date(DATE_ATOM),
+            $this->context->shop->id
         );
     }
 
