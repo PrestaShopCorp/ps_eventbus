@@ -41,7 +41,7 @@ class FullSynchronizationTest extends BaseTestCase
      */
     public function testFullSync()
     {
-        $this->executeStep('apiCarrier', function () {
+        $this->executeStep('apiCarriers', function () {
             /** @var PaginatedApiDataProviderInterface $provider */
             $provider = $this->container->getService(CarrierDataProvider::class);
             $this->handle($provider, Config::COLLECTION_CARRIERS);
@@ -77,13 +77,13 @@ class FullSynchronizationTest extends BaseTestCase
             $this->handle($provider, Config::COLLECTION_PRODUCTS);
         });
 
-        $this->executeStep('apiCustomPrices', function () {
+        $this->executeStep('apiSpecificPrices', function () {
             /** @var PaginatedApiDataProviderInterface $provider */
             $provider = $this->container->getService(CustomPriceDataProvider::class);
             $this->handle($provider, Config::COLLECTION_PRODUCTS);
         });
 
-        $this->executeStep('apiCustomProductCarrier', function () {
+        $this->executeStep('apiCustomProductCarriers', function () {
             /** @var PaginatedApiDataProviderInterface $provider */
             $provider = $this->container->getService(CustomProductCarrierDataProvider::class);
             $this->handle($provider, Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS);
