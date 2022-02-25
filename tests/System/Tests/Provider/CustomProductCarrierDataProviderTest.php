@@ -44,7 +44,7 @@ class CustomProductCarrierDataProviderTest extends BaseTestCase
                 'result' => [
                         0 => [
                                 'id' => '1-1',
-                                'collection' => Config::COLLECTION_CUSTOM_PRODUCT_CARRIER,
+                                'collection' => Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
                                 'properties' => [
                                         'id_product' => 1,
                                         'id_carrier_reference' => 1,
@@ -52,7 +52,7 @@ class CustomProductCarrierDataProviderTest extends BaseTestCase
                             ],
                         1 => [
                             'id' => '1-2',
-                            'collection' => Config::COLLECTION_CUSTOM_PRODUCT_CARRIER,
+                            'collection' => Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
                             'properties' => [
                                 'id_product' => 1,
                                 'id_carrier_reference' => 2,
