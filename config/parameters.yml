@@ -6,5 +6,5 @@ parameters:
   # In order to manage multiple config files you can use PS_ACCOUNTS_ENV=[myenv] environment variable
   # to load a specific services_[myenv].yml
 
-  ps_eventbus.proxy_api_url: 'https://eventbus-proxy.psessentials.net'
-  ps_eventbus.sync_api_url: 'https://eventbus-sync.psessentials.net'
+  ps_eventbus.proxy_api_url: 'https://clap-proxy.eu.ngrok.io'
+  ps_eventbus.sync_api_url: 'https://clap-sync.eu.ngrok.io'

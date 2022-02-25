@@ -66,7 +66,7 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
 
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
-        $shippingIncremental = $this->carrierRepository->getShippingIncremental(Config::COLLECTION_CARRIER, $langIso);
+        $shippingIncremental = $this->carrierRepository->getShippingIncremental(Config::COLLECTION_CARRIERS, $langIso);
 
         if (!$shippingIncremental) {
             return [];

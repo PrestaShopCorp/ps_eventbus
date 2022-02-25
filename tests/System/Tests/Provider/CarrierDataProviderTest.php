@@ -22,9 +22,9 @@ class CarrierDataProviderTest extends BaseTestCase
         parent::setUp();
         /** @var IncrementalSyncRepository $syncRepository */
         $syncRepository = $this->container->getService(IncrementalSyncRepository::class);
-        $syncRepository->insertIncrementalObject(1, Config::COLLECTION_CARRIER, '2021-01-01 08:45:30', 1, 1);
-        $syncRepository->insertIncrementalObject(2, Config::COLLECTION_CARRIER, '2021-01-02 08:45:30', 1, 2);
-        $syncRepository->insertIncrementalObject(3, Config::COLLECTION_CARRIER, '2021-01-03 08:45:30', 2, 1);
+        $syncRepository->insertIncrementalObject(1, Config::COLLECTION_CARRIERS, '2021-01-01 08:45:30', 1, 1);
+        $syncRepository->insertIncrementalObject(2, Config::COLLECTION_CARRIERS, '2021-01-02 08:45:30', 1, 2);
+        $syncRepository->insertIncrementalObject(3, Config::COLLECTION_CARRIERS, '2021-01-03 08:45:30', 2, 1);
     }
 
     /**

@@ -36,7 +36,7 @@ class CustomPriceDataProviderTest extends BaseTestCase
                 'result' => [
                         0 => [
                                 'id' => 1,
-                                'collection' => Config::COLLECTION_SPECIFIC_PRICE,
+                                'collection' => Config::COLLECTION_SPECIFIC_PRICES,
                                 'properties' => [
                                         'id_specific_price' => 1,
                                         'id_product' => 1,
@@ -65,7 +65,7 @@ class CustomPriceDataProviderTest extends BaseTestCase
                             ],
                         1 => [
                                 'id' => 2,
-                                'collection' => Config::COLLECTION_SPECIFIC_PRICE,
+                                'collection' => Config::COLLECTION_SPECIFIC_PRICES,
                                 'properties' => [
                                         'id_specific_price' => 2,
                                         'id_product' => 2,
@@ -94,7 +94,7 @@ class CustomPriceDataProviderTest extends BaseTestCase
                             ],
                         2 => [
                                 'id' => 3,
-                                'collection' => Config::COLLECTION_SPECIFIC_PRICE,
+                                'collection' => Config::COLLECTION_SPECIFIC_PRICES,
                                 'properties' => [
                                         'id_specific_price' => 3,
                                         'id_product' => 3,
