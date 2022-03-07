@@ -308,6 +308,7 @@ class ProductDecorator
                 }
             }
 
+            // Product is without attributes -> get product images
             if ($product['id_attribute'] === '0') {
                 $productImageIds = $this->arrayFormatter->formatValueArray($productImages, 'id_image');
             } else {
@@ -315,7 +316,15 @@ class ProductDecorator
                     return $image['id_product_attribute'] === $product['id_attribute'];
                 });
 
-                $productImageIds = $this->arrayFormatter->formatValueArray($productAttributeImages, 'id_image');
+                // If combination has some pictures -> the first one is the cover
+                if (count($productAttributeImages)) {
+                    $productImageIds = $this->arrayFormatter->formatValueArray($productAttributeImages, 'id_image');
+                    $coverImageId = reset($productImageIds);
+                }
+                // Fallback on cover & images of the product when no pictures are chosen
+                else {
+                    $productImageIds = $this->arrayFormatter->formatValueArray($productImages, 'id_image');
+                }
             }
 
             $productImageIds = array_diff($productImageIds, [$coverImageId]);
