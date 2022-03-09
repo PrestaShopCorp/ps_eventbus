@@ -53,6 +53,7 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
       - '@PrestaShop\Module\PsEventbus\Builder\CarrierBuilder'
       - '@PrestaShop\Module\PsEventbus\Repository\CarrierRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
 
   PrestaShop\Module\PsEventbus\Provider\CustomPriceDataProvider:
     class: PrestaShop\Module\PsEventbus\Provider\CustomPriceDataProvider

@@ -9,6 +9,7 @@ use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\DTO\Carrier as EventBusCarrier;
 use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
 use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
+use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 
 class CarrierDataProvider implements PaginatedApiDataProviderInterface
 {
@@ -27,14 +28,21 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
      */
     private $carrierRepository;
 
+    /**
+     * @var LanguageRepository
+     */
+    private $languageRepository;
+
     public function __construct(
         ConfigurationRepository $configurationRepository,
         CarrierBuilder $carrierBuilder,
-        CarrierRepository $carrierRepository
+        CarrierRepository $carrierRepository,
+        LanguageRepository $languageRepository
     ) {
         $this->configurationRepository = $configurationRepository;
         $this->carrierBuilder = $carrierBuilder;
         $this->carrierRepository = $carrierRepository;
+        $this->languageRepository = $languageRepository;
     }
 
     /**
@@ -48,7 +56,8 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getFormattedData($offset, $limit, $langIso)
     {
-        $language = new Language($this->configurationRepository->get('PS_LANG_DEFAULT'));
+        $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
+        $language = new Language($langId);
         $currency = new Currency($this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
 
         $carriers = $this->carrierRepository->getAllCarrierProperties($offset, $limit, $language->id);
