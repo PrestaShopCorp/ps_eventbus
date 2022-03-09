@@ -25,12 +25,12 @@ class Config
         self::PS_ACCOUNTS_NOT_INSTALLED => 'PsAccounts not installed',
     ];
 
-    const COLLECTION_CARRIER = 'carrier';
+    const COLLECTION_CARRIERS = 'carriers';
     const COLLECTION_CARTS = 'carts';
     const COLLECTION_CART_PRODUCTS = 'cart_products';
     const COLLECTION_CATEGORIES = 'categories';
-    const COLLECTION_SPECIFIC_PRICE = 'specific_price';
-    const COLLECTION_CUSTOM_PRODUCT_CARRIER = 'custom_product_carrier';
+    const COLLECTION_SPECIFIC_PRICES = 'specific_prices';
+    const COLLECTION_CUSTOM_PRODUCT_CARRIERS = 'custom_product_carriers';
     const COLLECTION_TAXONOMIES = 'taxonomies';
     const COLLECTION_MODULES = 'modules';
     const COLLECTION_ORDERS = 'orders';

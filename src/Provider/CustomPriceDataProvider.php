@@ -43,7 +43,7 @@ class CustomPriceDataProvider implements PaginatedApiDataProviderInterface
         return array_map(function ($specificPrice) {
             return [
                 'id' => $specificPrice['id_specific_price'],
-                'collection' => Config::COLLECTION_SPECIFIC_PRICE,
+                'collection' => Config::COLLECTION_SPECIFIC_PRICES,
                 'properties' => $specificPrice,
             ];
         }, $specificPrices);
@@ -84,7 +84,7 @@ class CustomPriceDataProvider implements PaginatedApiDataProviderInterface
         return array_map(function ($specificPrice) {
             return [
                 'id' => $specificPrice['id_specific_price'],
-                'collection' => Config::COLLECTION_SPECIFIC_PRICE,
+                'collection' => Config::COLLECTION_SPECIFIC_PRICES,
                 'properties' => $specificPrice,
             ];
         }, $specificPrices);

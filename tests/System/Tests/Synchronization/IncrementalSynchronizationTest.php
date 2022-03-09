@@ -53,12 +53,12 @@ class IncrementalSynchronizationTest extends BaseTestCase
         /** @var IncrementalSyncRepository $incrementalSyncRepository */
         $incrementalSyncRepository = $this->container->getService(IncrementalSyncRepository::class);
 
-        $this->executeStep('apiCarrier', function () use ($incrementalSyncRepository) {
-            $this->syncRepository->insertTypeSync(Config::COLLECTION_CARRIER, 0, date(DATE_ATOM), 'en');
-            $incrementalSyncRepository->insertIncrementalObject(1, Config::COLLECTION_CARRIER, date(DATE_ATOM), 1, 'en');
+        $this->executeStep('apiCarriers', function () use ($incrementalSyncRepository) {
+            $this->syncRepository->insertTypeSync(Config::COLLECTION_CARRIERS, 0, date(DATE_ATOM), 'en');
+            $incrementalSyncRepository->insertIncrementalObject(1, Config::COLLECTION_CARRIERS, date(DATE_ATOM), 1, 'en');
             /** @var PaginatedApiDataProviderInterface $provider */
             $provider = $this->container->getService(CarrierDataProvider::class);
-            $this->handle($provider, Config::COLLECTION_CARRIER);
+            $this->handle($provider, Config::COLLECTION_CARRIERS);
         });
 
         $this->executeStep('apiCarts', function () use ($incrementalSyncRepository) {
@@ -101,7 +101,7 @@ class IncrementalSynchronizationTest extends BaseTestCase
             $this->handle($provider, Config::COLLECTION_PRODUCTS);
         });
 
-        $this->executeStep('apiCustomPrices', function () use ($incrementalSyncRepository) {
+        $this->executeStep('apiSpecificPrices', function () use ($incrementalSyncRepository) {
             $this->syncRepository->insertTypeSync(Config::COLLECTION_PRODUCTS, 0, date(DATE_ATOM), 'en');
             $incrementalSyncRepository->insertIncrementalObject(1, Config::COLLECTION_PRODUCTS, date(DATE_ATOM), 1, 'en');
             /** @var PaginatedApiDataProviderInterface $provider */
@@ -109,12 +109,12 @@ class IncrementalSynchronizationTest extends BaseTestCase
             $this->handle($provider, Config::COLLECTION_PRODUCTS);
         });
 
-        $this->executeStep('apiCustomProductCarrier', function () use ($incrementalSyncRepository) {
-            $this->syncRepository->insertTypeSync(Config::COLLECTION_CUSTOM_PRODUCT_CARRIER, 0, date(DATE_ATOM), 'en');
-            $incrementalSyncRepository->insertIncrementalObject(1, Config::COLLECTION_CUSTOM_PRODUCT_CARRIER, date(DATE_ATOM), 1, 'en');
+        $this->executeStep('apiCustomProductCarriers', function () use ($incrementalSyncRepository) {
+            $this->syncRepository->insertTypeSync(Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS, 0, date(DATE_ATOM), 'en');
+            $incrementalSyncRepository->insertIncrementalObject(1, Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS, date(DATE_ATOM), 1, 'en');
             /** @var PaginatedApiDataProviderInterface $provider */
             $provider = $this->container->getService(CustomProductCarrierDataProvider::class);
-            $this->handle($provider, Config::COLLECTION_CUSTOM_PRODUCT_CARRIER);
+            $this->handle($provider, Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS);
         });
     }
 

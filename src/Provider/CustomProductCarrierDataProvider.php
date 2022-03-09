@@ -33,7 +33,7 @@ class CustomProductCarrierDataProvider implements PaginatedApiDataProviderInterf
         $productCarriers = array_map(function ($productCarrier) {
             return [
                 'id' => $productCarrier['id_product'] . '-' . $productCarrier['id_carrier_reference'],
-                'collection' => Config::COLLECTION_CUSTOM_PRODUCT_CARRIER,
+                'collection' => Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
                 'properties' => $productCarrier,
             ];
         }, $productCarriers);
@@ -43,7 +43,7 @@ class CustomProductCarrierDataProvider implements PaginatedApiDataProviderInterf
 
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
-        $productCarrierIncremental = $this->productCarrierRepository->getProductCarrierIncremental(Config::COLLECTION_CUSTOM_PRODUCT_CARRIER, $langIso);
+        $productCarrierIncremental = $this->productCarrierRepository->getProductCarrierIncremental(Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS, $langIso);
 
         if (!$productCarrierIncremental) {
             return [];
@@ -56,7 +56,7 @@ class CustomProductCarrierDataProvider implements PaginatedApiDataProviderInterf
         return array_map(function ($productCarrier) {
             return [
                 'id' => "{$productCarrier['id_product']}-{$productCarrier['id_carrier_reference']}",
-                'collection' => Config::COLLECTION_CUSTOM_PRODUCT_CARRIER,
+                'collection' => Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
                 'properties' => $productCarrier,
             ];
         }, $productCarriers);
