@@ -147,7 +147,7 @@ class CarrierRepository
         $query->leftJoin(
             'eventbus_incremental_sync',
             'eis',
-            'eis.id_object = c.id_carrier AND eis.type = "carrier" AND eis.id_shop = cs.id_shop AND eis.lang_iso = cl.id_lang'
+            'eis.id_object = c.id_carrier AND eis.type = "' . Config::COLLECTION_CARRIERS . '" AND eis.id_shop = cs.id_shop AND eis.lang_iso = cl.id_lang'
         );
         $query->where('c.id_carrier IN (' . implode(',', array_map('intval', $carrierIds)) . ')');
         $query->where('cs.id_shop = ' . (int) $this->context->shop->id);
