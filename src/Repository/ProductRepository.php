@@ -299,7 +299,9 @@ class ProductRepository
             IFNULL(pa.ean13, p.ean13) as ean, ps.condition, ps.visibility, ps.active, sa.quantity, m.name as manufacturer,
             (p.weight + IFNULL(pas.weight, 0)) as weight, (ps.price + IFNULL(pas.price, 0)) as price_tax_excl,
             p.date_add as created_at, p.date_upd as updated_at,
-            p.available_for_order, p.available_date, p.cache_is_pack as is_bundle, p.is_virtual');
+            p.available_for_order, p.available_date, p.cache_is_pack as is_bundle, p.is_virtual,
+            p.unity, p.unit_price_ratio
+            ');
 
         $query->select('p.width, p.height, p.depth, p.additional_delivery_times, p.additional_shipping_cost');
         $query->select('pl.delivery_in_stock, pl.delivery_out_stock');

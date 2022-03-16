@@ -61,6 +61,8 @@ class ProductDecoratorTest extends BaseTestCase
                 'available_date' => '0000-00-00',
                 'is_bundle' => '0',
                 'is_virtual' => '1',
+                'unit_price_ratio' => '0.0000',
+                'unity' => '',
             ],
             [
                 'id_product' => '2',
@@ -94,6 +96,8 @@ class ProductDecoratorTest extends BaseTestCase
                 'available_date' => '0000-00-00',
                 'is_bundle' => '0',
                 'is_virtual' => '1',
+                'unit_price_ratio' => '0.50000',
+                'unity' => 'per kilo',
             ],
             [
                 'id_product' => '2',
@@ -127,6 +131,8 @@ class ProductDecoratorTest extends BaseTestCase
                 'available_date' => '0000-00-00',
                 'is_bundle' => '0',
                 'is_virtual' => '1',
+                'unit_price_ratio' => '0.5000',
+                'unity' => '',
             ],
         ];
 
@@ -164,6 +170,15 @@ class ProductDecoratorTest extends BaseTestCase
         $this->assertInternalType('int', $products[0]['id_category_default']);
         $this->assertInternalType('float', $products[0]['price_tax_excl']);
         $this->assertInternalType('float', $products[0]['price_tax_incl']);
+        $this->assertNotTrue(isset($products[0]['unit_price_ratio']));
+        $this->assertEquals(0.5, $products[1]['unit_price_ratio']);
+        $this->assertEquals(0.5, $products[2]['unit_price_ratio']);
+        $this->assertNotTrue(isset($products[0]['unity']));
+        $this->assertEquals('per kilo', $products[1]['unity']);
+        $this->assertEquals('', $products[2]['unity']);
+        $this->assertNotTrue(isset($products[0]['price_per_unit']));
+        $this->assertEquals(47.8 , $products[1]['price_per_unit']);
+        $this->assertEquals(47.8 , $products[2]['price_per_unit']);
     }
 
     /**
@@ -205,6 +220,8 @@ class ProductDecoratorTest extends BaseTestCase
                 'available_date' => '0000-00-00',
                 'is_bundle' => '0',
                 'is_virtual' => '1',
+                'unit_price_ratio' => '0.00000',
+                'unity' => '',
             ],
             [
                 'id_product' => '1',
@@ -238,6 +255,8 @@ class ProductDecoratorTest extends BaseTestCase
                 'available_date' => '0000-00-00',
                 'is_bundle' => '0',
                 'is_virtual' => '1',
+                'unit_price_ratio' => '0.50000',
+                'unity' => 'per kilo',
             ],
             [
                 'id_product' => '1',
@@ -271,6 +290,8 @@ class ProductDecoratorTest extends BaseTestCase
                 'available_date' => '0000-00-00',
                 'is_bundle' => '0',
                 'is_virtual' => '1',
+                'unit_price_ratio' => '0.50000',
+                'unity' => '',
             ],
         ];
 
@@ -368,9 +389,15 @@ class ProductDecoratorTest extends BaseTestCase
             'https://test.link/1-11358-product.jpg;https://test.link/1-11359-product.jpg;https://test.link/1-11360-product.jpg;https://test.link/1-14136-product.jpg',
             $products[2]['images']
         );
-        $this->assertEquals(
-            'https://test.link/1-11357-product.jpg',
-            $products[2]['cover']
-        );
+        $this->assertEquals('https://test.link/1-11357-product.jpg', $products[2]['cover']);
+        $this->assertNotTrue(isset($products[0]['unit_price_ratio']));
+        $this->assertEquals(0.5, $products[1]['unit_price_ratio']);
+        $this->assertEquals(0.5, $products[2]['unit_price_ratio']);
+        $this->assertNotTrue(isset($products[0]['unity']));
+        $this->assertEquals('per kilo', $products[1]['unity']);
+        $this->assertEquals('', $products[2]['unity']);
+        $this->assertNotTrue(isset($products[0]['price_per_unit']));
+        $this->assertEquals(47.8 , $products[1]['price_per_unit']);
+        $this->assertEquals(47.8 , $products[2]['price_per_unit']);
     }
 }

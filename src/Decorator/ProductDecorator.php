@@ -210,6 +210,14 @@ class ProductDecorator
         $product['available_date'] = (string) $product['available_date'];
         $product['is_bundle'] = $product['is_bundle'] == '1';
         $product['is_virtual'] = $product['is_virtual'] == '1';
+        if ($product['unit_price_ratio'] == 0) {
+            unset($product['unit_price_ratio']);
+            unset($product['unity']);
+        } else {
+            $product['unit_price_ratio'] = (float) $product['unit_price_ratio'];
+            $product['unity'] = (string) $product['unity'];
+            $product['price_per_unit'] = (float) ($product['price_tax_excl'] / $product['unit_price_ratio']);
+        }
     }
 
     /**
