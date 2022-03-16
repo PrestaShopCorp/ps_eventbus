@@ -177,8 +177,8 @@ class ProductDecoratorTest extends BaseTestCase
         $this->assertEquals('per kilo', $products[1]['unity']);
         $this->assertEquals('', $products[2]['unity']);
         $this->assertNotTrue(isset($products[0]['price_per_unit']));
-        $this->assertEquals(47.8 , $products[1]['price_per_unit']);
-        $this->assertEquals(47.8 , $products[2]['price_per_unit']);
+        $this->assertEquals(47.8, $products[1]['price_per_unit']);
+        $this->assertEquals(47.8, $products[2]['price_per_unit']);
     }
 
     /**
@@ -397,7 +397,7 @@ class ProductDecoratorTest extends BaseTestCase
         $this->assertEquals('per kilo', $products[1]['unity']);
         $this->assertEquals('', $products[2]['unity']);
         $this->assertNotTrue(isset($products[0]['price_per_unit']));
-        $this->assertEquals(47.8 , $products[1]['price_per_unit']);
-        $this->assertEquals(47.8 , $products[2]['price_per_unit']);
+        $this->assertEquals(47.8, $products[1]['price_per_unit']);
+        $this->assertEquals(47.8, $products[2]['price_per_unit']);
     }
 }
