@@ -8,11 +8,13 @@ use DbQuery;
 use Exception;
 use Language;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
+use PrestaShop\Module\PsAccounts\Api\Client\AccountsClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use PrestaShopDatabaseException;
+use Ps_accounts;
 use Ps_eventbus;
 
 class ServerInformationRepository
@@ -131,18 +133,25 @@ class ServerInformationRepository
      */
     public function getHealthCheckData()
     {
-        $tokenValid = true;
+        $tokenValid = false;
+        $tokenIsSet = true;
         $allTablesInstalled = true;
 
         try {
             $token = $this->psAccountsService->getOrRefreshToken();
 
             if (!$token) {
-                $tokenValid = false;
+                $tokenIsSet = false;
+            } else {
+                $accountsClient = $this->getAccountsClient();
+                $response = $accountsClient->verifyToken($token);
+                if ($response && true === $response['status']) {
+                    $tokenValid = true;
+                }
             }
         } catch (Exception $e) {
             $this->errorHandler->handle($e);
-            $tokenValid = false;
+            $tokenIsSet = false;
         }
 
         foreach (Ps_eventbus::REQUIRED_TABLES as $requiredTable) {
@@ -169,13 +178,28 @@ class ServerInformationRepository
         return [
             'prestashop_version' => _PS_VERSION_,
             'ps_eventbus_version' => Ps_eventbus::VERSION,
+            'ps_accounts_version' => defined('Ps_accounts::VERSION') ? Ps_accounts::VERSION : false,
             'php_version' => $phpVersion,
-            'ps_account' => $tokenValid,
+            'ps_account' => $tokenIsSet,
+            'is_valid_jwt' => $tokenValid,
             'ps_eventbus' => $allTablesInstalled,
             'env' => [
                 'EVENT_BUS_PROXY_API_URL' => isset($this->configuration['EVENT_BUS_PROXY_API_URL']) ? $this->configuration['EVENT_BUS_PROXY_API_URL'] : null,
                 'EVENT_BUS_SYNC_API_URL' => isset($this->configuration['EVENT_BUS_SYNC_API_URL']) ? $this->configuration['EVENT_BUS_SYNC_API_URL'] : null,
             ],
         ];
+    }
+
+    /**
+     * @return AccountsClient
+     *
+     * @throws \Exception
+     */
+    private function getAccountsClient()
+    {
+        /** @var Ps_accounts $module */
+        $module = \Module::getInstanceByName('ps_accounts');
+
+        return $module->getService(AccountsClient::class);
     }
 }
