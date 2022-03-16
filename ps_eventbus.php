@@ -31,8 +31,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once __DIR__ . '/vendor/autoload.php';
-
 class Ps_eventbus extends Module
 {
     /**
@@ -130,6 +128,8 @@ class Ps_eventbus extends Module
         if (!$this->isPhpVersionCompliant()) {
             return;
         }
+
+        require_once __DIR__ . '/vendor/autoload.php';
 
         $this->serviceContainer = new \PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer(
             $this->name,
