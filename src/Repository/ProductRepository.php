@@ -301,6 +301,10 @@ class ProductRepository
             p.date_add as created_at, p.date_upd as updated_at,
             p.available_for_order, p.available_date, p.cache_is_pack as is_bundle, p.is_virtual');
 
+        if (property_exists(new Product(), 'mpn')) {
+            $query->select('p.mpn');
+        }
+
         $query->select('p.width, p.height, p.depth, p.additional_delivery_times, p.additional_shipping_cost');
         $query->select('pl.delivery_in_stock, pl.delivery_out_stock');
 

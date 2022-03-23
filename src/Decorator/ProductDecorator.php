@@ -203,6 +203,7 @@ class ProductDecorator
         $product['manufacturer'] = (string) $product['manufacturer'];
         $product['default_category'] = (string) $product['default_category'];
         $product['isbn'] = isset($product['isbn']) ? (string) $product['isbn'] : '';
+        $product['mpn'] = isset($product['mpn']) ? (string) $product['mpn'] : '';
         $product['ean'] = (string) $product['ean'];
         $product['upc'] = (string) $product['upc'];
         $product['is_default_attribute'] = $product['id_attribute'] === 0 ? true : $product['is_default_attribute'] === '1';
