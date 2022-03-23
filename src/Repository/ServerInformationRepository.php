@@ -144,6 +144,7 @@ class ServerInformationRepository
                 $tokenIsSet = false;
             } else {
                 $accountsClient = $this->getAccountsClient();
+                /** @phpstan-ignore-next-line */
                 $response = $accountsClient->verifyToken($token);
                 if ($response && true === $response['status']) {
                     $tokenValid = true;
@@ -178,7 +179,7 @@ class ServerInformationRepository
         return [
             'prestashop_version' => _PS_VERSION_,
             'ps_eventbus_version' => Ps_eventbus::VERSION,
-            'ps_accounts_version' => defined('Ps_accounts::VERSION') ? Ps_accounts::VERSION : false,
+            'ps_accounts_version' => defined('Ps_accounts::VERSION') ? Ps_accounts::VERSION : false, /* @phpstan-ignore-line */
             'php_version' => $phpVersion,
             'ps_account' => $tokenIsSet,
             'is_valid_jwt' => $tokenValid,
@@ -190,16 +191,12 @@ class ServerInformationRepository
         ];
     }
 
-    /**
-     * @return AccountsClient
-     *
-     * @throws \Exception
-     */
     private function getAccountsClient()
     {
         /** @var Ps_accounts $module */
         $module = \Module::getInstanceByName('ps_accounts');
 
+        /* @phpstan-ignore-next-line */
         return $module->getService(AccountsClient::class);
     }
 }
