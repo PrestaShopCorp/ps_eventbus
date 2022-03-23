@@ -193,7 +193,6 @@ class ServerInformationRepository
 
     private function getAccountsClient()
     {
-        /** @var Ps_accounts $module */
         $module = \Module::getInstanceByName('ps_accounts');
 
         /* @phpstan-ignore-next-line */
