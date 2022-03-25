@@ -303,6 +303,10 @@ class ProductRepository
             p.unity, p.unit_price_ratio
             ');
 
+        if (property_exists(new Product(), 'mpn')) {
+            $query->select('p.mpn');
+        }
+
         $query->select('p.width, p.height, p.depth, p.additional_delivery_times, p.additional_shipping_cost');
         $query->select('pl.delivery_in_stock, pl.delivery_out_stock');
 
