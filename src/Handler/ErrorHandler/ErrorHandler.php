@@ -40,26 +40,57 @@ class ErrorHandler implements ErrorHandlerInterface
     public function __construct(Module $module, Env $env, PsAccounts $accountsService)
     {
         $psAccounts = Module::getInstanceByName('ps_accounts');
-        try {
-            $this->client = new Raven_Client(
-                $env->get('SENTRY_CREDENTIALS'),
+
+        \Sentry\init(
+            [
+                'dsn' => $env->get('SENTRY_CREDENTIALS'),
+
+            ]
+        );
+        \Sentry\configureScope(function (\Sentry\State\Scope $scope) use ($module, $env, $accountsService, $psAccounts): void {
+            $scope->setLevel(\Sentry\Severity::warning());
+            $scope->setUser(
                 [
-                    'level' => 'warning',
-                    'tags' => [
-                        'shop_id' => $accountsService->getPsAccountsService()->getShopUuid(),
-                        'ps_eventbus_version' => $module->version,
-                        'ps_accounts_version' => $psAccounts ? $psAccounts->version : false,
-                        'php_version' => phpversion(),
-                        'prestashop_version' => _PS_VERSION_,
-                        'ps_eventbus_is_enabled' => Module::isEnabled($module->name),
-                        'ps_eventbus_is_installed' => Module::isInstalled($module->name),
-                        'env' => $env->get('SENTRY_ENVIRONMENT'),
-                    ],
+                    'id' => $accountsService->getPsAccountsService()->getShopUuid(),
+                    'name' => Configuration::get('PS_SHOP_EMAIL')
+                ],
+                true
+            );
+            $scope->setTags(
+                [
+                    'shop_id' => $accountsService->getPsAccountsService()->getShopUuid(),
+                    'ps_eventbus_version' => $module->version,
+                    'ps_accounts_version' => $psAccounts ? $psAccounts->version : false,
+                    'php_version' => phpversion(),
+                    'prestashop_version' => _PS_VERSION_,
+                    'ps_eventbus_is_enabled' => (int) Module::isEnabled($module->name),
+                    'ps_eventbus_is_installed' => (int) Module::isInstalled($module->name),
+                    'env' => $env->get('SENTRY_ENVIRONMENT'),
                 ]
             );
-            $this->client->set_user_data($accountsService->getPsAccountsService()->getShopUuid(), Configuration::get('PS_SHOP_EMAIL'));
-        } catch (Exception $e) {
-        }
+        });
+
+//
+//        try {
+//            $this->client = new Raven_Client(
+//                $env->get('SENTRY_CREDENTIALS'),
+//                [
+//                    'level' => 'warning',
+//                    'tags' => [
+//                        'shop_id' => $accountsService->getPsAccountsService()->getShopUuid(),
+//                        'ps_eventbus_version' => $module->version,
+//                        'ps_accounts_version' => $psAccounts ? $psAccounts->version : false,
+//                        'php_version' => phpversion(),
+//                        'prestashop_version' => _PS_VERSION_,
+//                        'ps_eventbus_is_enabled' => Module::isEnabled($module->name),
+//                        'ps_eventbus_is_installed' => Module::isInstalled($module->name),
+//                        'env' => $env->get('SENTRY_ENVIRONMENT'),
+//                    ],
+//                ]
+//            );
+//            $this->client->set_user_data($accountsService->getPsAccountsService()->getShopUuid(), Configuration::get('PS_SHOP_EMAIL'));
+//        } catch (Exception $e) {
+//        }
     }
 
     /**
@@ -72,16 +103,9 @@ class ErrorHandler implements ErrorHandlerInterface
      *
      * @throws Exception
      */
-    public function handle($error, $code = null, $throw = true, $data = null)
+    public function handle($exception, $code = null, $throw = true, $data = null)
     {
-        if (!$this->client) {
-            return;
-        }
-        $this->client->captureException($error, $data);
-        if ($code && true === $throw) {
-            http_response_code($code);
-            throw $error;
-        }
+        \Sentry\captureException($exception);
     }
 
     /**
