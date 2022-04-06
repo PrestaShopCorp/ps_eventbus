@@ -121,14 +121,13 @@ class ProductRepository
     {
         $query = new DbQuery();
 
-        $query->select('pas.id_product_attribute, IFNULL(GROUP_CONCAT(DISTINCT agl.name, ":", al.name SEPARATOR ";"), "") as value')
+        $query->select('pas.id_product_attribute, agl.name as name, al.name as value')
             ->from('product_attribute_shop', 'pas')
             ->leftJoin('product_attribute_combination', 'pac', 'pac.id_product_attribute = pas.id_product_attribute')
             ->leftJoin('attribute', 'a', 'a.id_attribute = pac.id_attribute')
             ->leftJoin('attribute_group_lang', 'agl', 'agl.id_attribute_group = a.id_attribute_group AND agl.id_lang = ' . (int) $langId)
             ->leftJoin('attribute_lang', 'al', 'al.id_attribute = pac.id_attribute AND al.id_lang = agl.id_lang')
-            ->where('pas.id_product_attribute IN (' . $this->arrayFormatter->arrayToString($attributeIds, ',') . ') AND pas.id_shop = ' . (int) $this->context->shop->id)
-            ->groupBy('pas.id_product_attribute');
+            ->where('pas.id_product_attribute IN (' . $this->arrayFormatter->arrayToString($attributeIds, ',') . ') AND pas.id_shop = ' . (int) $this->context->shop->id);
 
         $attributes = $this->db->executeS($query);
 
@@ -136,7 +135,7 @@ class ProductRepository
             $resultArray = [];
 
             foreach ($attributes as $attribute) {
-                $resultArray[$attribute['id_product_attribute']] = $attribute['value'];
+                $resultArray[$attribute['id_product_attribute']][$attribute['name']] = $attribute['value'];
             }
 
             return $resultArray;
@@ -157,12 +156,11 @@ class ProductRepository
     {
         $query = new DbQuery();
 
-        $query->select('fp.id_product, IFNULL(GROUP_CONCAT(DISTINCT fl.name, ":", fvl.value SEPARATOR ";"), "") as value')
+        $query->select('fp.id_product, fl.name, fvl.value')
             ->from('feature_product', 'fp')
             ->leftJoin('feature_lang', 'fl', 'fl.id_feature = fp.id_feature AND fl.id_lang = ' . (int) $langId)
             ->leftJoin('feature_value_lang', 'fvl', 'fvl.id_feature_value = fp.id_feature_value AND fvl.id_lang = fl.id_lang')
-            ->where('fp.id_product IN (' . $this->arrayFormatter->arrayToString($productIds, ',') . ')')
-            ->groupBy('fp.id_product');
+            ->where('fp.id_product IN (' . $this->arrayFormatter->arrayToString($productIds, ',') . ')');
 
         $features = $this->db->executeS($query);
 
@@ -170,7 +168,7 @@ class ProductRepository
             $resultArray = [];
 
             foreach ($features as $feature) {
-                $resultArray[$feature['id_product']] = $feature['value'];
+                $resultArray[$feature['id_product']][$feature['name']] = $feature['value'];
             }
 
             return $resultArray;
