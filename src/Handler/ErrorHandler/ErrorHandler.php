@@ -26,6 +26,7 @@ use Module;
 use PrestaShop\Module\PsEventbus\Config\Env;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use Raven_Client;
+use Raven_ErrorHandler;
 
 /**
  * Handle Error.
@@ -69,28 +70,6 @@ class ErrorHandler implements ErrorHandlerInterface
                 ]
             );
         });
-
-//
-//        try {
-//            $this->client = new Raven_Client(
-//                $env->get('SENTRY_CREDENTIALS'),
-//                [
-//                    'level' => 'warning',
-//                    'tags' => [
-//                        'shop_id' => $accountsService->getPsAccountsService()->getShopUuid(),
-//                        'ps_eventbus_version' => $module->version,
-//                        'ps_accounts_version' => $psAccounts ? $psAccounts->version : false,
-//                        'php_version' => phpversion(),
-//                        'prestashop_version' => _PS_VERSION_,
-//                        'ps_eventbus_is_enabled' => Module::isEnabled($module->name),
-//                        'ps_eventbus_is_installed' => Module::isInstalled($module->name),
-//                        'env' => $env->get('SENTRY_ENVIRONMENT'),
-//                    ],
-//                ]
-//            );
-//            $this->client->set_user_data($accountsService->getPsAccountsService()->getShopUuid(), Configuration::get('PS_SHOP_EMAIL'));
-//        } catch (Exception $e) {
-//        }
     }
 
     /**
