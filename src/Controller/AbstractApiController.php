@@ -110,15 +110,10 @@ abstract class AbstractApiController extends ModuleFrontController
     public function init()
     {
         $this->startTime = time();
-        throw new PrestaShopDatabaseException('test3');
-
-
         try {
-                        throw new PrestaShopDatabaseException('test3');
-
             $this->authorize();
         } catch (PrestaShopDatabaseException $exception) {
-//            $this->errorHandler->handle($exception);
+            $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
         } catch (EnvVarException $exception) {
             $this->errorHandler->handle($exception);
