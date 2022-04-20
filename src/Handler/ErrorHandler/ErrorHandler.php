@@ -26,12 +26,11 @@ use Module;
 use PrestaShop\Module\PsEventbus\Config\Env;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use Raven_Client;
-use Raven_ErrorHandler;
 
 /**
  * Handle Error.
  */
-class ErrorHandler implements ErrorHandlerInterface
+class ErrorHandler extends \PrestaShop\Sentry\Handler\ErrorHandler
 {
     /**
      * @var ?Raven_Client
@@ -40,57 +39,31 @@ class ErrorHandler implements ErrorHandlerInterface
 
     public function __construct(Module $module, Env $env, PsAccounts $accountsService)
     {
+        parent::__construct($module, $env->get('SENTRY_CREDENTIALS'));
+
         $psAccounts = Module::getInstanceByName('ps_accounts');
 
-        \Sentry\init(
+        $this->setUser(
             [
-                'dsn' => $env->get('SENTRY_CREDENTIALS'),
+                'id' => $accountsService->getPsAccountsService()->getShopUuid(),
+                'name' => Configuration::get('PS_SHOP_EMAIL')
+            ],
+            true
+        );
 
+        $this->setLevel(\Sentry\Severity::warning());
+
+        $this->setTags(                [
+                'shop_id' => $accountsService->getPsAccountsService()->getShopUuid(),
+                'ps_eventbus_version' => $module->version,
+                'ps_accounts_version' => $psAccounts ? $psAccounts->version : false,
+                'php_version' => phpversion(),
+                'prestashop_version' => _PS_VERSION_,
+                'ps_eventbus_is_enabled' => (int) Module::isEnabled($module->name),
+                'ps_eventbus_is_installed' => (int) Module::isInstalled($module->name),
+                'env' => $env->get('SENTRY_ENVIRONMENT'),
+                'geo.country_code' => 'LT'
             ]
         );
-        \Sentry\configureScope(function (\Sentry\State\Scope $scope) use ($module, $env, $accountsService, $psAccounts): void {
-            $scope->setLevel(\Sentry\Severity::warning());
-            $scope->setUser(
-                [
-                    'id' => $accountsService->getPsAccountsService()->getShopUuid(),
-                    'name' => Configuration::get('PS_SHOP_EMAIL')
-                ],
-                true
-            );
-            $scope->setTags(
-                [
-                    'shop_id' => $accountsService->getPsAccountsService()->getShopUuid(),
-                    'ps_eventbus_version' => $module->version,
-                    'ps_accounts_version' => $psAccounts ? $psAccounts->version : false,
-                    'php_version' => phpversion(),
-                    'prestashop_version' => _PS_VERSION_,
-                    'ps_eventbus_is_enabled' => (int) Module::isEnabled($module->name),
-                    'ps_eventbus_is_installed' => (int) Module::isInstalled($module->name),
-                    'env' => $env->get('SENTRY_ENVIRONMENT'),
-                ]
-            );
-        });
-    }
-
-    /**
-     * @param Exception $error
-     * @param mixed $code
-     * @param bool|null $throw
-     * @param array|null $data
-     *
-     * @return void
-     *
-     * @throws Exception
-     */
-    public function handle($exception, $code = null, $throw = true, $data = null)
-    {
-        \Sentry\captureException($exception);
-    }
-
-    /**
-     * @return void
-     */
-    private function __clone()
-    {
     }
 }

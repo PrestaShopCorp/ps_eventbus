@@ -2,7 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Tests\Mocks\Handler;
 
-use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
+use PrestaShop\Sentry\Handler\ErrorHandlerInterface;
 
 class ErrorHandlerMock implements ErrorHandlerInterface
 {

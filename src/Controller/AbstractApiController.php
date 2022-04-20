@@ -110,6 +110,7 @@ abstract class AbstractApiController extends ModuleFrontController
     public function init()
     {
         $this->startTime = time();
+        throw new Exception('test');
 
         try {
             $this->authorize();

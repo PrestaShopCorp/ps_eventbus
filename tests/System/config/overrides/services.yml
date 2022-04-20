@@ -5,7 +5,7 @@ services:
     class: PrestaShop\Module\PsEventbus\Tests\System\Mocks\Service\ProxyServiceMock
     public: true
 
-  PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface: '@PrestaShop\Module\PsEventbus\Tests\Mocks\Handler\ErrorHandlerMock'
+  PrestaShop\Sentry\Handler\ErrorHandlerInterface: '@PrestaShop\Module\PsEventbus\Tests\Mocks\Handler\ErrorHandlerMock'
 
   PrestaShop\Module\PsEventbus\Tests\Mocks\Handler\ErrorHandlerMock:
     class: PrestaShop\Module\PsEventbus\Tests\Mocks\Handler\ErrorHandlerMock

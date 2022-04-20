@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7193df0fe456387d7fd4af11dbf28ada",
+    "content-hash": "0c0e019f71b63631b6a620976ad17804",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -1216,6 +1216,41 @@
                 "prestashop"
             ],
             "time": "2020-09-08T14:13:23+00:00"
+        },
+        {
+            "name": "prestashop/module-lib-error-handler",
+            "version": "dev-sentry-lib-handler",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PrestaShopCorp/module-lib-error-handler.git",
+                "reference": "6ecbab27438564649a402a9fcc18a7fc0e3b7a37"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PrestaShopCorp/module-lib-error-handler/zipball/6ecbab27438564649a402a9fcc18a7fc0e3b7a37",
+                "reference": "6ecbab27438564649a402a9fcc18a7fc0e3b7a37",
+                "shasum": ""
+            },
+            "require": {
+                "http-interop/http-factory-guzzle": "^1.1",
+                "php": ">=7.1.3",
+                "php-http/curl-client": "^2.2",
+                "sentry/sentry": "^2.5",
+                "symfony/http-client": "^4.3|^5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PrestaShop\\Sentry\\": "src/"
+                }
+            },
+            "description": "Automatically send module exceptions to sentry",
+            "homepage": "https://github.com/PrestaShopCorp/module-lib-error-handler",
+            "support": {
+                "source": "https://github.com/PrestaShopCorp/module-lib-error-handler/tree/sentry-lib-handler",
+                "issues": "https://github.com/PrestaShopCorp/module-lib-error-handler/issues"
+            },
+            "time": "2022-04-20T06:38:04+00:00"
         },
         {
             "name": "prestashop/module-lib-service-container",
@@ -6617,7 +6652,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "prestashop/module-lib-error-handler": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

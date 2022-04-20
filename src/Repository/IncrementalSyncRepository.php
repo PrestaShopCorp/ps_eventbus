@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 use Context;
 use Db;
 use DbQuery;
-use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
+use PrestaShop\Sentry\Handler\ErrorHandlerInterface;
 use PrestaShopDatabaseException;
 
 class IncrementalSyncRepository

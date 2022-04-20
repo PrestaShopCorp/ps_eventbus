@@ -34,7 +34,7 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Api\EventBusProxyClient'
       - '@PrestaShop\Module\PsEventbus\Formatter\JsonFormatter'
-      - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
+      - '@PrestaShop\Sentry\Handler\ErrorHandlerInterface'
 
   PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService:
     class: PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService

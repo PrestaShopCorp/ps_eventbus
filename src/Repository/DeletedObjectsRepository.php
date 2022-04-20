@@ -4,7 +4,7 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 
 use Db;
 use DbQuery;
-use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
+use PrestaShop\Sentry\Handler\ErrorHandlerInterface;
 
 class DeletedObjectsRepository
 {
