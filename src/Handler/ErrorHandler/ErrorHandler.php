@@ -45,7 +45,7 @@ class ErrorHandler extends \PrestaShop\Sentry\Handler\ErrorHandler
         $this->setUser(
             [
                 'id' => $accountsService->getPsAccountsService()->getShopUuid(),
-                'name' => Configuration::get('PS_SHOP_EMAIL')
+                'name' => Configuration::get('PS_SHOP_EMAIL'),
             ],
             true
         );
@@ -59,7 +59,7 @@ class ErrorHandler extends \PrestaShop\Sentry\Handler\ErrorHandler
                 'ps_accounts_version' => $psAccounts ? $psAccounts->version : false,
                 'php_version' => phpversion(),
                 'prestashop_version' => _PS_VERSION_,
-                'env' => $env->get('SENTRY_ENVIRONMENT')
+                'env' => $env->get('SENTRY_ENVIRONMENT'),
             ]
         );
     }
