@@ -24,18 +24,12 @@ use Configuration;
 use Module;
 use PrestaShop\Module\PsEventbus\Config\Env;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
-use Raven_Client;
 
 /**
  * Handle Error.
  */
 class ErrorHandler extends \PrestaShop\Sentry\Handler\ErrorHandler
 {
-    /**
-     * @var ?Raven_Client
-     */
-    protected $client;
-
     public function __construct(Module $module, Env $env, PsAccounts $accountsService)
     {
         parent::__construct($env->get('SENTRY_CREDENTIALS'), $module->getLocalPath());
