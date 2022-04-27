@@ -1223,12 +1223,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PrestaShopCorp/module-lib-error-handler.git",
-                "reference": "6ecbab27438564649a402a9fcc18a7fc0e3b7a37"
+                "reference": "6b97b3e43ab1f36e18c0a449f2ee93d612f727ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PrestaShopCorp/module-lib-error-handler/zipball/6ecbab27438564649a402a9fcc18a7fc0e3b7a37",
-                "reference": "6ecbab27438564649a402a9fcc18a7fc0e3b7a37",
+                "url": "https://api.github.com/repos/PrestaShopCorp/module-lib-error-handler/zipball/6b97b3e43ab1f36e18c0a449f2ee93d612f727ba",
+                "reference": "6b97b3e43ab1f36e18c0a449f2ee93d612f727ba",
                 "shasum": ""
             },
             "require": {
@@ -1250,7 +1250,7 @@
                 "source": "https://github.com/PrestaShopCorp/module-lib-error-handler/tree/sentry-lib-handler",
                 "issues": "https://github.com/PrestaShopCorp/module-lib-error-handler/issues"
             },
-            "time": "2022-04-20T06:38:04+00:00"
+            "time": "2022-04-27T08:43:13+00:00"
         },
         {
             "name": "prestashop/module-lib-service-container",

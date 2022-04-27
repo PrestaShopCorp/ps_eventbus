@@ -26,6 +26,9 @@
 
 use Dotenv\Dotenv;
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Config\Env;
+use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
+use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -136,6 +139,7 @@ class Ps_eventbus extends Module
             $this->getLocalPath()
         );
         $this->loadEnv();
+        $this->loadSentry();
     }
 
     /**
@@ -795,5 +799,12 @@ class Ps_eventbus extends Module
     private function isPhpVersionCompliant()
     {
         return 70100 <= PHP_VERSION_ID;
+    }
+
+    private function loadSentry()
+    {
+        /** @var PsAccounts $psAccountsService */
+        $psAccountsService = $this->getService(PsAccounts::class);
+        new ErrorHandler($this, new Env(), $psAccountsService);
     }
 }

@@ -21,7 +21,6 @@
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
 use Configuration;
-use Exception;
 use Module;
 use PrestaShop\Module\PsEventbus\Config\Env;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
@@ -39,7 +38,7 @@ class ErrorHandler extends \PrestaShop\Sentry\Handler\ErrorHandler
 
     public function __construct(Module $module, Env $env, PsAccounts $accountsService)
     {
-        parent::__construct($module, $env->get('SENTRY_CREDENTIALS'));
+        parent::__construct($env->get('SENTRY_CREDENTIALS'), $module->getLocalPath());
 
         $psAccounts = Module::getInstanceByName('ps_accounts');
 
@@ -53,16 +52,14 @@ class ErrorHandler extends \PrestaShop\Sentry\Handler\ErrorHandler
 
         $this->setLevel(\Sentry\Severity::warning());
 
-        $this->setTags(                [
+        $this->setModuleInfo($module);
+        $this->setTags(
+            [
                 'shop_id' => $accountsService->getPsAccountsService()->getShopUuid(),
-                'ps_eventbus_version' => $module->version,
                 'ps_accounts_version' => $psAccounts ? $psAccounts->version : false,
                 'php_version' => phpversion(),
                 'prestashop_version' => _PS_VERSION_,
-                'ps_eventbus_is_enabled' => (int) Module::isEnabled($module->name),
-                'ps_eventbus_is_installed' => (int) Module::isInstalled($module->name),
-                'env' => $env->get('SENTRY_ENVIRONMENT'),
-                'geo.country_code' => 'LT'
+                'env' => $env->get('SENTRY_ENVIRONMENT')
             ]
         );
     }

@@ -5,7 +5,7 @@ use PrestaShop\Module\PsEventbus\Config\Config;
 /**
  * @return bool
  */
-function upgrade_module_1_7_2()
+function upgrade_module_1_7_3()
 {
     $db = Db::getInstance();
 
