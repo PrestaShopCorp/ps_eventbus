@@ -212,7 +212,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         }
 
         $orderDetails = $this->getOrderDetails($orders, $this->context->shop->id);
-        
+
         $this->castOrderValues($orders);
 
         $orders = array_map(function ($order) {
