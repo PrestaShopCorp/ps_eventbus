@@ -119,9 +119,9 @@ class Ps_eventbus extends Module
 
         parent::__construct();
 
-        $this->displayName = $this->l('PrestaShop Eventbus');
-        $this->description = $this->l('Link your PrestaShop account to synchronize your shop\'s data to the partners you want . Don&#039;t uninstall this module if you are already using a service, as it will prevent it from working.');
-        $this->confirmUninstall = $this->l('This action will prevent immediately your PrestaShop services and Community services from working as they are using PrestaShop Eventbus module for syncing.');
+        $this->displayName = $this->l('PrestaShop EventBus');
+        $this->description = $this->l('Link your PrestaShop account to synchronize your shop data to a tech partner of your choice. Do not uninstall this module if you are already using a service, as it will prevent it from working.');
+        $this->confirmUninstall = $this->l('This action will immediately prevent your PrestaShop services and Community services from working as they are using PrestaShop CloudSync for syncing.');
         $this->ps_versions_compliancy = ['min' => '1.7', 'max' => _PS_VERSION_];
         $this->adminControllers = [];
         // If PHP is not compliant, we will not load composer and the autoloader
