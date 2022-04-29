@@ -133,24 +133,4 @@ class EventbusSyncRepository
             AND id_shop = ' . $this->context->shop->id
         );
     }
-
-    /**
-     * @param string $type
-     * @param bool $fullSyncFinished
-     * @param string $langIso
-     *
-     * @return bool
-     */
-    public function updateFullSyncStatus($type, $fullSyncFinished, $langIso = null)
-    {
-        return $this->db->update(
-            self::TYPE_SYNC_TABLE_NAME,
-            [
-                'full_sync_finished' => (int) $fullSyncFinished,
-            ],
-            'type = "' . pSQL($type) . '"
-            AND lang_iso = "' . pSQL((string) $langIso) . '"
-            AND id_shop = ' . $this->context->shop->id
-        );
-    }
 }
