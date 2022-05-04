@@ -89,6 +89,7 @@ abstract class AbstractApiController extends ModuleFrontController
         $this->controller_type = 'module';
 
         $this->errorHandler = $this->module->getService(ErrorHandler::class);
+        $this->addCollectionTagToSentry();
         try {
             $this->psAccountsService = $this->module->getService(PsAccounts::class)->getPsAccountsService();
             $this->proxyService = $this->module->getService(ProxyService::class);
@@ -327,5 +328,18 @@ abstract class AbstractApiController extends ModuleFrontController
         echo json_encode($response, JSON_UNESCAPED_SLASHES);
 
         exit;
+    }
+
+    private function addCollectionTagToSentry()
+    {
+        if (!$this->type) {
+            return;
+        }
+
+        $this->errorHandler->setTags(
+            [
+                'collection' => $this->type,
+            ]
+        );
     }
 }
