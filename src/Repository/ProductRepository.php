@@ -119,6 +119,9 @@ class ProductRepository
      */
     public function getProductAttributeValues(array $attributeIds, $langId)
     {
+        if (!$attributeIds) {
+            return [];
+        }
         $query = new DbQuery();
 
         $query->select('pas.id_product_attribute, agl.name as name, al.name as value')
@@ -154,6 +157,10 @@ class ProductRepository
      */
     public function getProductFeatures(array $productIds, $langId)
     {
+        if (!$productIds) {
+            return [];
+        }
+
         $query = new DbQuery();
 
         $query->select('fp.id_product, fl.name, fvl.value')
@@ -186,6 +193,10 @@ class ProductRepository
      */
     public function getProductImages(array $productIds)
     {
+        if (!$productIds) {
+            return [];
+        }
+
         $query = new DbQuery();
 
         $query->select('imgs.id_product, imgs.id_image, IFNULL(imgs.cover, 0) as cover')
@@ -206,6 +217,9 @@ class ProductRepository
      */
     public function getAttributeImages(array $attributeIds)
     {
+        if (!$attributeIds) {
+            return [];
+        }
         $query = new DbQuery();
 
         $query->select('id_product_attribute, id_image')

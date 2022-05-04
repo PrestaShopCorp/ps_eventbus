@@ -53,7 +53,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     {
         $orders = $this->orderRepository->getOrders($offset, $limit, $this->context->shop->id);
 
-        if (!is_array($orders)) {
+        if (empty($orders)) {
             return [];
         }
 
