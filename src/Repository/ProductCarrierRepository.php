@@ -104,6 +104,9 @@ class ProductCarrierRepository
 
     public function getProductCarriersProperties(array $productIds)
     {
+        if (!$productIds) {
+            return [];
+        }
         $query = new DbQuery();
 
         $query->select('pc.*')

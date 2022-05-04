@@ -139,6 +139,9 @@ class CarrierRepository
      */
     public function getCarrierProperties($carrierIds, $langId)
     {
+        if (!$carrierIds) {
+            return [];
+        }
         $query = new DbQuery();
         $query->from('carrier', 'c');
         $query->select('c.*, cl.delay, eis.created_at as update_date');

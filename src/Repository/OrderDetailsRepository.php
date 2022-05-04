@@ -48,6 +48,10 @@ class OrderDetailsRepository
      */
     public function getOrderDetails(array $orderIds, $shopId)
     {
+        if (!$orderIds) {
+            return [];
+        }
+
         $query = $this->getBaseQuery();
 
         $query->select('od.id_order_detail, od.id_order, od.product_id, od.product_attribute_id,
