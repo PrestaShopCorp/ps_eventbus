@@ -24,7 +24,6 @@ namespace PrestaShop\Module\PsEventbus\Api;
 use GuzzleHttp\Client;
 use GuzzleHttp\Post\PostFile;
 use Link;
-use Module;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use Ps_eventbus;
@@ -97,7 +96,7 @@ class EventBusProxyClient extends GenericClient
         $response = $this->post([
             'headers' => [
                 'Content-Type' => 'binary/octet-stream',
-                'ps-eventbus-version' => $this->module->version
+                'ps-eventbus-version' => $this->module->version,
             ],
             'body' => [
                 'file' => $file,
@@ -133,7 +132,7 @@ class EventBusProxyClient extends GenericClient
         $response = $this->post([
             'headers' => [
                 'Content-Type' => 'binary/octet-stream',
-                'ps-eventbus-version' => $this->module->version
+                'ps-eventbus-version' => $this->module->version,
             ],
             'body' => [
                 'file' => $file,
