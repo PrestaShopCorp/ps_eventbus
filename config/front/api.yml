@@ -14,3 +14,4 @@ services:
       - '@ps_eventbus.link'
       - '@PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
       - '%ps_eventbus.proxy_api_url%'
+      - '@ps_eventbus'
