@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "48e0c3c8474f234926a2ef7c332e447e",
+    "content-hash": "85cab566dacf678222cdd191f5ed507e",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -1308,16 +1308,16 @@
         },
         {
             "name": "prestashop/module-lib-error-handler",
-            "version": "dev-sentry-lib-handler",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PrestaShopCorp/module-lib-error-handler.git",
-                "reference": "6b97b3e43ab1f36e18c0a449f2ee93d612f727ba"
+                "reference": "2815930214b99503694940763af41631b0f23d18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PrestaShopCorp/module-lib-error-handler/zipball/6b97b3e43ab1f36e18c0a449f2ee93d612f727ba",
-                "reference": "6b97b3e43ab1f36e18c0a449f2ee93d612f727ba",
+                "url": "https://api.github.com/repos/PrestaShopCorp/module-lib-error-handler/zipball/2815930214b99503694940763af41631b0f23d18",
+                "reference": "2815930214b99503694940763af41631b0f23d18",
                 "shasum": ""
             },
             "require": {
@@ -1333,13 +1333,16 @@
                     "PrestaShop\\Sentry\\": "src/"
                 }
             },
+            "license": [
+                "AFL-3.0"
+            ],
             "description": "Automatically send module exceptions to sentry",
             "homepage": "https://github.com/PrestaShopCorp/module-lib-error-handler",
             "support": {
-                "source": "https://github.com/PrestaShopCorp/module-lib-error-handler/tree/sentry-lib-handler",
+                "source": "https://github.com/PrestaShopCorp/module-lib-error-handler/tree/1.0.0",
                 "issues": "https://github.com/PrestaShopCorp/module-lib-error-handler/issues"
             },
-            "time": "2022-04-27T08:43:13+00:00"
+            "time": "2022-05-04T08:26:21+00:00"
         },
         {
             "name": "prestashop/module-lib-service-container",
@@ -6813,9 +6816,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "prestashop/module-lib-error-handler": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
