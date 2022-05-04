@@ -112,7 +112,7 @@ abstract class AbstractApiController extends ModuleFrontController
         $this->startTime = time();
 
         try {
-//            $this->authorize();
+            $this->authorize();
         } catch (PrestaShopDatabaseException $exception) {
             $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
