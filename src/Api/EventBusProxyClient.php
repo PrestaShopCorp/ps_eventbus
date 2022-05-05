@@ -26,6 +26,7 @@ use GuzzleHttp\Post\PostFile;
 use Link;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
+use Ps_eventbus;
 
 /**
  * Construct the client used to make call to Segment API
@@ -36,17 +37,23 @@ class EventBusProxyClient extends GenericClient
      * @var string
      */
     private $baseUrl;
+    /**
+     * @var Ps_eventbus
+     */
+    private $module;
 
     /**
      * @param Link $link
      * @param PsAccounts $psAccountsService
      * @param string $baseUrl
+     * @param Ps_eventbus $module
      *
      * @throws \PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleNotInstalledException
      * @throws \PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleVersionException
      */
-    public function __construct(Link $link, PsAccounts $psAccountsService, $baseUrl)
+    public function __construct(Link $link, PsAccounts $psAccountsService, $baseUrl, $module)
     {
+        $this->module = $module;
         $this->baseUrl = $baseUrl;
         $this->setLink($link);
         $token = $psAccountsService->getPsAccountsService()->getOrRefreshToken();
@@ -89,6 +96,7 @@ class EventBusProxyClient extends GenericClient
         $response = $this->post([
             'headers' => [
                 'Content-Type' => 'binary/octet-stream',
+                'ps-eventbus-version' => $this->module->version,
             ],
             'body' => [
                 'file' => $file,
@@ -124,6 +132,7 @@ class EventBusProxyClient extends GenericClient
         $response = $this->post([
             'headers' => [
                 'Content-Type' => 'binary/octet-stream',
+                'ps-eventbus-version' => $this->module->version,
             ],
             'body' => [
                 'file' => $file,
