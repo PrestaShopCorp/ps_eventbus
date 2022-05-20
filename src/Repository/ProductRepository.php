@@ -307,8 +307,8 @@ class ProductRepository
     {
         $query->select('p.id_product, IFNULL(pas.id_product_attribute, 0) as id_attribute, pas.default_on as is_default_attribute,
             pl.name, pl.description, pl.description_short, pl.link_rewrite, cl.name as default_category,
-            ps.id_category_default, IFNULL(pa.reference, p.reference) as reference, IFNULL(pa.upc, p.upc) as upc,
-            IFNULL(pa.ean13, p.ean13) as ean, ps.condition, ps.visibility, ps.active, sa.quantity, m.name as manufacturer,
+            ps.id_category_default, IFNULL(NULLIF(pa.reference, ""), p.reference) as reference, IFNULL(NULLIF(pa.upc, ""), p.upc) as upc,
+            IFNULL(NULLIF(pa.ean13, ""), p.ean13) as ean, ps.condition, ps.visibility, ps.active, sa.quantity, m.name as manufacturer,
             (p.weight + IFNULL(pas.weight, 0)) as weight, (ps.price + IFNULL(pas.price, 0)) as price_tax_excl,
             p.date_add as created_at, p.date_upd as updated_at,
             p.available_for_order, p.available_date, p.cache_is_pack as is_bundle, p.is_virtual,
@@ -323,7 +323,7 @@ class ProductRepository
         $query->select('pl.delivery_in_stock, pl.delivery_out_stock');
 
         if (version_compare(_PS_VERSION_, '1.7', '>=')) {
-            $query->select('IFNULL(pa.isbn, p.isbn) as isbn');
+            $query->select('IFNULL(NULLIF(pa.isbn, ""), p.isbn) as isbn');
         }
     }
 }
