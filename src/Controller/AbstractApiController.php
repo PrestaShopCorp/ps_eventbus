@@ -112,9 +112,7 @@ abstract class AbstractApiController extends ModuleFrontController
     public function init()
     {
         $this->startTime = time();
-        $this->ajax = true;
-        $this->content_only = true;
-        
+
         try {
             $this->authorize();
         } catch (PrestaShopDatabaseException $exception) {
