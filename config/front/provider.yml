@@ -30,6 +30,7 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\OrderRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
+      - '@PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository'
 
   PrestaShop\Module\PsEventbus\Provider\CartDataProvider:
     class: PrestaShop\Module\PsEventbus\Provider\CartDataProvider

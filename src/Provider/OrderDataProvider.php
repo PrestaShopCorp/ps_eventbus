@@ -3,9 +3,11 @@
 namespace PrestaShop\Module\PsEventbus\Provider;
 
 use Context;
+use Language;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository;
+use PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderRepository;
 use PrestaShopDatabaseException;
 
@@ -27,17 +29,21 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      * @var OrderDetailsRepository
      */
     private $orderDetailsRepository;
+    /** @var OrderHistoryRepository */
+    private $orderHistoryRepository;
 
     public function __construct(
         Context $context,
         OrderRepository $orderRepository,
         OrderDetailsRepository $orderDetailsRepository,
-        ArrayFormatter $arrayFormatter
+        ArrayFormatter $arrayFormatter,
+        OrderHistoryRepository $orderHistoryRepository
     ) {
         $this->orderRepository = $orderRepository;
         $this->context = $context;
         $this->arrayFormatter = $arrayFormatter;
         $this->orderDetailsRepository = $orderDetailsRepository;
+        $this->orderHistoryRepository = $orderHistoryRepository;
     }
 
     /**
@@ -60,6 +66,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         $this->castOrderValues($orders);
 
         $orderDetails = $this->getOrderDetails($orders, $this->context->shop->id);
+        $orderStatuses = $this->getOrderStatuses($orders, Language::getIdByIso($langIso));
 
         $orders = array_map(function ($order) {
             return [
@@ -69,7 +76,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             ];
         }, $orders);
 
-        return array_merge($orders, $orderDetails);
+        return array_merge($orders, $orderDetails, $orderStatuses);
     }
 
     /**
@@ -81,6 +88,37 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     public function getRemainingObjectsCount($offset, $langIso)
     {
         return (int) $this->orderRepository->getRemainingOrderCount($offset, $this->context->shop->id);
+    }
+
+    /**
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return array
+     *
+     * @throws PrestaShopDatabaseException
+     */
+    public function getFormattedDataIncremental($limit, $langIso, $objectIds)
+    {
+        $orders = $this->orderRepository->getOrdersIncremental($limit, $this->context->shop->id, $objectIds);
+
+        if (!is_array($orders) || empty($orders)) {
+            return [];
+        }
+
+        $orderDetails = $this->getOrderDetails($orders, $this->context->shop->id);
+
+        $this->castOrderValues($orders);
+
+        $orders = array_map(function ($order) {
+            return [
+                'id' => $order['id_order'],
+                'collection' => Config::COLLECTION_ORDERS,
+                'properties' => $order,
+            ];
+        }, $orders);
+
+        return array_merge($orders, $orderDetails);
     }
 
     /**
@@ -118,12 +156,30 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         return $orderDetails;
     }
 
+    private function getOrderStatuses(array $orders, $langId)
+    {
+        if (empty($orders)) {
+            return [];
+        }
+        $orderIds = $this->arrayFormatter->formatValueArray($orders, 'id_order');
+        $orderHistoryStatuses = $this->orderHistoryRepository->getOrderHistoryStatuses($orderIds, $langId);
+        $orderHistoryStatuses = $this->castOrderStatuses($orderHistoryStatuses);
+
+        return array_map(function ($orderHistoryStatus) {
+            return [
+                'id' => $orderHistoryStatus['id_order_history'],
+                'collection' => Config::COLLECTION_ORDER_STATUS_HISTORY,
+                'properties' => $orderHistoryStatus,
+            ];
+        }, $orderHistoryStatuses);
+    }
+
     /**
      * @param array $orders
      *
      * @return void
      */
-    public function castOrderValues(array &$orders)
+    private function castOrderValues(array &$orders)
     {
         foreach ($orders as &$order) {
             $order['id_order'] = (int) $order['id_order'];
@@ -167,6 +223,28 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         }
     }
 
+    private function castOrderStatuses(array &$orderStatuses): array
+    {
+        $castedOrderStatuses = [];
+        foreach ($orderStatuses as $orderStatus) {
+            $castedOrderStatus = [];
+            $castedOrderStatus['id_order_state'] = (int) $orderStatus['id_order_state'];
+            $castedOrderStatus['id_order'] = (int) $orderStatus['id_order'];
+            $castedOrderStatus['id_order_history'] = (int) $orderStatus['id_order_history'];
+            $castedOrderStatus['name'] = (string) $orderStatus['name'];
+            $castedOrderStatus['template'] = (string) $orderStatus['template'];
+            $castedOrderStatus['date_add'] = (string) $orderStatus['date_add'];
+            $castedOrderStatus['is_validated'] = (bool) $orderStatus['logable'];
+            $castedOrderStatus['is_delivered'] = (bool) $orderStatus['delivery'];
+            $castedOrderStatus['is_shipped'] = (bool) $orderStatus['shipped'];
+            $castedOrderStatus['is_paid'] = (bool) $orderStatus['paid'];
+            $castedOrderStatus['is_deleted'] = (bool) $orderStatus['deleted'];
+            $castedOrderStatuses[] = $castedOrderStatus;
+        }
+
+        return $castedOrderStatuses;
+    }
+
     private function castAddressIsoCodes(&$orderDetail)
     {
         if (!$orderDetail['address_iso']) {
@@ -193,36 +271,5 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
                 $orderDetail['invoice_country_code'] = $addressAndIsoCode[1];
             }
         }
-    }
-
-    /**
-     * @param int $limit
-     * @param string $langIso
-     *
-     * @return array
-     *
-     * @throws PrestaShopDatabaseException
-     */
-    public function getFormattedDataIncremental($limit, $langIso, $objectIds)
-    {
-        $orders = $this->orderRepository->getOrdersIncremental($limit, $this->context->shop->id, $objectIds);
-
-        if (!is_array($orders) || empty($orders)) {
-            return [];
-        }
-
-        $orderDetails = $this->getOrderDetails($orders, $this->context->shop->id);
-
-        $this->castOrderValues($orders);
-
-        $orders = array_map(function ($order) {
-            return [
-                'id' => $order['id_order'],
-                'collection' => Config::COLLECTION_ORDERS,
-                'properties' => $order,
-            ];
-        }, $orders);
-
-        return array_merge($orders, $orderDetails);
     }
 }
