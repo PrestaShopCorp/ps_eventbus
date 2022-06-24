@@ -86,6 +86,8 @@ abstract class AbstractApiController extends ModuleFrontController
     {
         parent::__construct();
 
+        $this->ajax = true;
+        $this->content_only = true;
         $this->controller_type = 'module';
 
         $this->errorHandler = $this->module->getService(ErrorHandler::class);
