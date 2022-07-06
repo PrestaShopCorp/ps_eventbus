@@ -94,6 +94,13 @@ services:
     arguments:
       - '@ps_eventbus.db'
 
+  PrestaShop\Module\PsEventbus\Repository\OrderStateHistoryRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\OrderStateHistoryRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
+      - '@ps_eventbus.context'
+
   PrestaShop\Module\PsEventbus\Repository\CartRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CartRepository
     public: true

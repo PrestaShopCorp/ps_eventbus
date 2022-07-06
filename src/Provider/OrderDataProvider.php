@@ -9,6 +9,7 @@ use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderRepository;
+use PrestaShop\Module\PsEventbus\Repository\OrderStateHistoryRepository;
 use PrestaShopDatabaseException;
 
 class OrderDataProvider implements PaginatedApiDataProviderInterface
@@ -29,21 +30,29 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      * @var OrderDetailsRepository
      */
     private $orderDetailsRepository;
-    /** @var OrderHistoryRepository */
+    /**
+     * @var OrderHistoryRepository
+     */
     private $orderHistoryRepository;
+    /**
+     * @var OrderStateHistoryRepository
+     */
+    private $orderStateHistoryRepository;
 
     public function __construct(
         Context $context,
         OrderRepository $orderRepository,
         OrderDetailsRepository $orderDetailsRepository,
         ArrayFormatter $arrayFormatter,
-        OrderHistoryRepository $orderHistoryRepository
+        OrderHistoryRepository $orderHistoryRepository,
+        OrderStateHistoryRepository $orderStateHistoryRepository
     ) {
         $this->orderRepository = $orderRepository;
         $this->context = $context;
         $this->arrayFormatter = $arrayFormatter;
         $this->orderDetailsRepository = $orderDetailsRepository;
         $this->orderHistoryRepository = $orderHistoryRepository;
+        $this->orderStateHistoryRepository = $orderStateHistoryRepository;
     }
 
     /**
@@ -175,6 +184,32 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
+     * @param $offset
+     * @param $limit
+     * @param $langIso
+     * @return array|array[]
+     * @throws PrestaShopDatabaseException
+     */
+    public function getOrderStateHistory($offset, $limit, $langIso)
+    {
+        $orderStateHistory = $this->orderStateHistoryRepository->getOrderStateHistory($offset, $limit, $this->context->shop->id);
+
+        if (empty($orderStateHistory)) {
+            return [];
+        }
+
+        $this->castOrderStateHistory($orderStateHistory);
+
+        return array_map(function ($orderStateHistory) {
+            return [
+                'id' => $orderStateHistory['id_order'],
+                'collection' => Config::COLLECTION_ORDER_STATE_HISTORY,
+                'properties' => $orderStateHistory,
+            ];
+        }, $orderStateHistory);
+    }
+
+    /**
      * @param array $orders
      *
      * @return void
@@ -243,6 +278,21 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         }
 
         return $castedOrderStatuses;
+    }
+
+    private function castOrderStateHistory(array &$orderStateHistories): array
+    {
+        $castOrderStateHistories = [];
+        foreach ($orderStateHistories as $orderStateHistory) {
+            $castOrderStateHistories = [];
+            $castOrderStateHistories['id_order'] = (int) $orderStateHistory['id_order'];
+            $castOrderStateHistories['status_label'] = (string) $orderStateHistory['status_label'];
+            $castOrderStateHistories['id_order_history'] = (int) $orderStateHistory['id_order_history'];
+            $castOrderStateHistories['timestamp'] = (string) $orderStateHistory['date_add'];
+            $castOrderStateHistories[] = $castOrderStateHistories;
+        }
+
+        return $castOrderStateHistories;
     }
 
     private function castAddressIsoCodes(&$orderDetail)
