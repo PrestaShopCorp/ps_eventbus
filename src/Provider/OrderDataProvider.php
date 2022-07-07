@@ -29,7 +29,9 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      * @var OrderDetailsRepository
      */
     private $orderDetailsRepository;
-    /** @var OrderHistoryRepository */
+    /**
+     * @var OrderHistoryRepository
+     */
     private $orderHistoryRepository;
 
     public function __construct(

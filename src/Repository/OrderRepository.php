@@ -35,6 +35,8 @@ class OrderRepository
             ->leftJoin('address', 'ai', 'ai.id_address = o.id_address_invoice')
             ->leftJoin('country', 'cntd', 'cntd.id_country = ad.id_country')
             ->leftJoin('country', 'cnti', 'cnti.id_country = ai.id_country')
+            ->leftJoin('order_state_lang', 'osl', 'o.current_state = osl.id_order_state')
+            ->leftJoin('order_state', 'ost', 'o.current_state = ost.id_order_state')
             ->where('o.id_shop = ' . (int) $shopId)
             ->groupBy('o.id_order');
 
@@ -114,7 +116,12 @@ class OrderRepository
          o.payment as payment_mode, o.total_paid_real, o.total_shipping as shipping_cost, o.date_add as created_at,
          o.date_upd as updated_at, o.id_carrier,
          o.payment as payment_name,
-         CONCAT(CONCAT("delivery", ":", cntd.iso_code), ",", CONCAT("invoice", ":", cnti.iso_code)) as address_iso'
+         CONCAT(CONCAT("delivery", ":", cntd.iso_code), ",", CONCAT("invoice", ":", cnti.iso_code)) as address_iso,
+         o.valid as is_validated,
+         ost.paid as is_paid,
+         ost.shipped as is_shipped,
+         osl.name as status_label,
+         o.module as payment_name'
         );
     }
 }
