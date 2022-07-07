@@ -247,21 +247,6 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         return $castedOrderStatuses;
     }
 
-    private function castOrderStateHistory(array &$orderStateHistories): array
-    {
-        $castOrderStateHistories = [];
-        foreach ($orderStateHistories as $orderStateHistory) {
-            $castOrderStateHistories = [];
-            $castOrderStateHistories['id_order'] = (int) $orderStateHistory['id_order'];
-            $castOrderStateHistories['status_label'] = (string) $orderStateHistory['status_label'];
-            $castOrderStateHistories['id_order_history'] = (int) $orderStateHistory['id_order_history'];
-            $castOrderStateHistories['timestamp'] = (string) $orderStateHistory['date_add'];
-            $castOrderStateHistories[] = $castOrderStateHistories;
-        }
-
-        return $castOrderStateHistories;
-    }
-
     private function castAddressIsoCodes(&$orderDetail)
     {
         if (!$orderDetail['address_iso']) {
