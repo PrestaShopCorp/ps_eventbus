@@ -36,7 +36,6 @@ class Config
     const COLLECTION_ORDERS = 'orders';
     const COLLECTION_ORDER_DETAILS = 'order_details';
     const COLLECTION_ORDER_STATUS_HISTORY = 'order_status_history';
-    const COLLECTION_ORDER_STATE_HISTORY = 'order_state_history';
     const COLLECTION_PRODUCTS = 'products';
     const COLLECTION_PRODUCT_ATTRIBUTES = 'attributes';
     const COLLECTION_DELETED = 'deleted';

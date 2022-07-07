@@ -9,7 +9,6 @@ use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderRepository;
-use PrestaShop\Module\PsEventbus\Repository\OrderStateHistoryRepository;
 use PrestaShopDatabaseException;
 
 class OrderDataProvider implements PaginatedApiDataProviderInterface
@@ -34,25 +33,19 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      * @var OrderHistoryRepository
      */
     private $orderHistoryRepository;
-    /**
-     * @var OrderStateHistoryRepository
-     */
-    private $orderStateHistoryRepository;
 
     public function __construct(
         Context $context,
         OrderRepository $orderRepository,
         OrderDetailsRepository $orderDetailsRepository,
         ArrayFormatter $arrayFormatter,
-        OrderHistoryRepository $orderHistoryRepository,
-        OrderStateHistoryRepository $orderStateHistoryRepository
+        OrderHistoryRepository $orderHistoryRepository
     ) {
         $this->orderRepository = $orderRepository;
         $this->context = $context;
         $this->arrayFormatter = $arrayFormatter;
         $this->orderDetailsRepository = $orderDetailsRepository;
         $this->orderHistoryRepository = $orderHistoryRepository;
-        $this->orderStateHistoryRepository = $orderStateHistoryRepository;
     }
 
     /**
@@ -181,32 +174,6 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
                 'properties' => $orderHistoryStatus,
             ];
         }, $orderHistoryStatuses);
-    }
-
-    /**
-     * @param $offset
-     * @param $limit
-     * @param $langIso
-     * @return array|array[]
-     * @throws PrestaShopDatabaseException
-     */
-    public function getOrderStateHistory($offset, $limit, $langIso)
-    {
-        $orderStateHistory = $this->orderStateHistoryRepository->getOrderStateHistory($offset, $limit, $this->context->shop->id);
-
-        if (empty($orderStateHistory)) {
-            return [];
-        }
-
-        $this->castOrderStateHistory($orderStateHistory);
-
-        return array_map(function ($orderStateHistory) {
-            return [
-                'id' => $orderStateHistory['id_order'],
-                'collection' => Config::COLLECTION_ORDER_STATE_HISTORY,
-                'properties' => $orderStateHistory,
-            ];
-        }, $orderStateHistory);
     }
 
     /**
