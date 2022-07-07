@@ -39,7 +39,7 @@ class OrderHistoryRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getOrderHistoryStatuses(array $orderIds, $langId)
+    public function getOrderHistoryStatuses(array $orderIds)
     {
         if (!$orderIds) {
             return [];
@@ -50,7 +50,7 @@ class OrderHistoryRepository
         $query->select('oh.id_order_state, osl.name, osl.template, oh.date_add, oh.id_order, oh.id_order_history')
             ->select('os.logable, os.delivery,  os.shipped, os.paid, os.deleted')
             ->innerJoin('order_state', 'os', 'os.id_order_state = oh.id_order_State')
-            ->innerJoin('order_state_lang', 'osl', 'osl.id_order_state = os.id_order_State AND osl.id_lang = ' . (int) $langId)
+            ->innerJoin('order_state_lang', 'osl', 'osl.id_order_state = os.id_order_State')
             ->where('oh.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')')
         ;
 
