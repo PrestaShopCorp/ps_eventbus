@@ -108,7 +108,7 @@ class SynchronizationService
                 'total_objects' => 0,
                 'has_remaining_objects' => false,
                 'remaining_objects' => 0,
-                'full' => true
+                'full' => true,
             ];
         }
 
@@ -137,18 +137,18 @@ class SynchronizationService
      * @param array $data
      * @param array $syncResponse
      * @param $remainingObjects
-     * @param $typeSync
+     * @param array $typeSync
      *
      * @return array
      */
-    private function returnSyncResponse(array $data, array $syncResponse, $remainingObjects, $typeSync)
+    private function returnSyncResponse(array $data, array $syncResponse, $remainingObjects, array $typeSync)
     {
         return array_merge([
             'total_objects' => count($data),
             'has_remaining_objects' => $remainingObjects > 0,
             'remaining_objects' => $remainingObjects,
             'md5' => $this->getPayloadMd5($data),
-            'full' => $typeSync['full_sync_finished'] == 1
+            'full' => $typeSync['full_sync_finished'] == 1,
         ], $syncResponse);
     }
 
