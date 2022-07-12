@@ -80,9 +80,9 @@ class SynchronizationService
 
         $this->eventbusSyncRepository->updateTypeSync($type, $offset, $dateNow, $remainingObjects === 0, $langIso);
 
-        $typeSync = $this->eventbusSyncRepository->findTypeSync($type, $langIso);
+        $isFullSync = $this->isFullSync($type, $langIso);
 
-        return $this->returnSyncResponse($data, $response, $remainingObjects, $typeSync);
+        return $this->returnSyncResponse($data, $response, $remainingObjects, $isFullSync);
     }
 
     /**
@@ -128,27 +128,43 @@ class SynchronizationService
 
         $remainingObjects = $this->incrementalSyncRepository->getRemainingIncrementalObjects($type, $langIso);
 
-        $typeSync = $this->eventbusSyncRepository->findTypeSync($type, $langIso);
+        $isFullSync = $this->isFullSync($type, $langIso);
 
-        return $this->returnSyncResponse($data, $response, $remainingObjects, $typeSync);
+        return $this->returnSyncResponse($data, $response, $remainingObjects, $isFullSync);
+    }
+
+    /**
+     * @param $type
+     * @param $langIso
+     * @return bool|null
+     */
+    private function isFullSync($type,$langIso): ?bool
+    {
+        $typeSync = $this->eventbusSyncRepository->findTypeSync($type, $langIso);
+        $isFullSync = null;
+        if (is_array($typeSync)) {
+            $isFullSync = $typeSync['full_sync_finished'] == 1;
+        }
+
+        return $isFullSync;
     }
 
     /**
      * @param array $data
      * @param array $syncResponse
      * @param int $remainingObjects
-     * @param array $typeSync
+     * @param bool $isFullSync
      *
      * @return array
      */
-    private function returnSyncResponse(array $data, array $syncResponse, int $remainingObjects, array $typeSync)
+    private function returnSyncResponse(array $data, array $syncResponse, int $remainingObjects, bool $isFullSync)
     {
         return array_merge([
             'total_objects' => count($data),
             'has_remaining_objects' => $remainingObjects > 0,
             'remaining_objects' => $remainingObjects,
             'md5' => $this->getPayloadMd5($data),
-            'full' => $typeSync['full_sync_finished'] == 1,
+            'full' => $isFullSync,
         ], $syncResponse);
     }
 
