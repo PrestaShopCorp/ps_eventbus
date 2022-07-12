@@ -82,7 +82,7 @@ class SynchronizationService
 
         $typeSync = $this->eventbusSyncRepository->findTypeSync($type, $langIso);
 
-        return $this->returnSyncResponse($data, $response, $typeSync, $remainingObjects);
+        return $this->returnSyncResponse($data, $response, $remainingObjects, $typeSync);
     }
 
     /**
@@ -130,18 +130,18 @@ class SynchronizationService
 
         $typeSync = $this->eventbusSyncRepository->findTypeSync($type, $langIso);
 
-        return $this->returnSyncResponse($data, $response, $typeSync, $remainingObjects);
+        return $this->returnSyncResponse($data, $response, $remainingObjects, $typeSync);
     }
 
     /**
      * @param array $data
      * @param array $syncResponse
+     * @param int $remainingObjects
      * @param array $typeSync
-     * @param $remainingObjects
      *
      * @return array
      */
-    private function returnSyncResponse(array $data, array $syncResponse, array $typeSync, $remainingObjects)
+    private function returnSyncResponse(array $data, array $syncResponse, int $remainingObjects, array $typeSync)
     {
         return array_merge([
             'total_objects' => count($data),
