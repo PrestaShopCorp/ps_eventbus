@@ -154,11 +154,11 @@ class SynchronizationService
      * @param array $data
      * @param array $syncResponse
      * @param int $remainingObjects
-     * @param bool $isFullSync
+     * @param bool|null $isFullSync
      *
      * @return array
      */
-    private function returnSyncResponse(array $data, array $syncResponse, int $remainingObjects, bool $isFullSync)
+    private function returnSyncResponse(array $data, array $syncResponse, int $remainingObjects, ?bool $isFullSync)
     {
         return array_merge([
             'total_objects' => count($data),
