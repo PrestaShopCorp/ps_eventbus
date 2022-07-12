@@ -80,7 +80,9 @@ class SynchronizationService
 
         $this->eventbusSyncRepository->updateTypeSync($type, $offset, $dateNow, $remainingObjects === 0, $langIso);
 
-        return $this->returnSyncResponse($data, $response, $remainingObjects);
+        $typeSync = $this->eventbusSyncRepository->findTypeSync($type, $langIso);
+
+        return $this->returnSyncResponse($data, $response, $remainingObjects, $typeSync);
     }
 
     /**
@@ -106,6 +108,7 @@ class SynchronizationService
                 'total_objects' => 0,
                 'has_remaining_objects' => false,
                 'remaining_objects' => 0,
+                'full' => true
             ];
         }
 
@@ -125,23 +128,27 @@ class SynchronizationService
 
         $remainingObjects = $this->incrementalSyncRepository->getRemainingIncrementalObjects($type, $langIso);
 
-        return $this->returnSyncResponse($data, $response, $remainingObjects);
+        $typeSync = $this->eventbusSyncRepository->findTypeSync($type, $langIso);
+
+        return $this->returnSyncResponse($data, $response, $remainingObjects, $typeSync);
     }
 
     /**
      * @param array $data
      * @param array $syncResponse
-     * @param int $remainingObjects
+     * @param $remainingObjects
+     * @param $typeSync
      *
      * @return array
      */
-    private function returnSyncResponse(array $data, array $syncResponse, $remainingObjects)
+    private function returnSyncResponse(array $data, array $syncResponse, $remainingObjects, $typeSync)
     {
         return array_merge([
             'total_objects' => count($data),
             'has_remaining_objects' => $remainingObjects > 0,
             'remaining_objects' => $remainingObjects,
             'md5' => $this->getPayloadMd5($data),
+            'full' => $typeSync['full_sync_finished'] == 1
         ], $syncResponse);
     }
 
