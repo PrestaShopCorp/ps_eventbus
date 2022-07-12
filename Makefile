@@ -57,6 +57,17 @@ zip-inte: ./vendor
 		${MODULE}/.env.dist
 	mv ../${PACKAGE}_integration.zip ./dist
 
+# target: zip-inte                               - Bundle a integration zip
+zip-preproduction: ./vendor
+	mkdir -p ./dist
+	cp .env.inte.yml config/parameters.yml 2>/dev/null || echo "WARNING: no preproduction config file found";
+	cd .. && zip -r ${PACKAGE}_preproduction.zip ${MODULE} -x '*.git*' \
+	  ${MODULE}/dist/\* \
+	  ${MODULE}/composer.phar \
+	  ${MODULE}/Makefile \
+		${MODULE}/.env.dist
+	mv ../${PACKAGE}_preproduction.zip ./dist
+
 # target: build                                  - Setup PHP & Node.js locally
 build: ./vendor
 
