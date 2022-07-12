@@ -134,12 +134,13 @@ class SynchronizationService
     }
 
     /**
-     * @param $type
-     * @param $langIso
+     * @param string $type
+     * @param string $langIso
      * @return bool|null
      */
-    private function isFullSync($type,$langIso): ?bool
+    private function isFullSync(string $type, string $langIso): ?bool
     {
+        var_dump($type, $langIso);
         $typeSync = $this->eventbusSyncRepository->findTypeSync($type, $langIso);
         $isFullSync = null;
         if (is_array($typeSync)) {
