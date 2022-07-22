@@ -35,17 +35,18 @@ class ProxyService implements ProxyServiceInterface
      * @param string $jobId
      * @param array $data
      * @param int $scriptStartTime
+     * @param bool $isFull
      *
      * @return array
      *
      * @throws EnvVarException
      */
-    public function upload($jobId, $data, $scriptStartTime)
+    public function upload($jobId, $data, $scriptStartTime, bool $isFull = false)
     {
         $dataJson = $this->jsonFormatter->formatNewlineJsonString($data);
 
         try {
-            $response = $this->eventBusProxyClient->upload($jobId, $dataJson, $scriptStartTime);
+            $response = $this->eventBusProxyClient->upload($jobId, $dataJson, $scriptStartTime, $isFull);
         } catch (ClientException $exception) {
             $this->errorHandler->handle($exception);
 

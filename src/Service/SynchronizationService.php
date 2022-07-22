@@ -50,12 +50,13 @@ class SynchronizationService
      * @param int $limit
      * @param string $dateNow
      * @param int $scriptStartTime
+     * @param bool $isFull
      *
      * @return array
      *
      * @throws PrestaShopDatabaseException|EnvVarException|ApiException
      */
-    public function handleFullSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $langIso, $offset, $limit, $dateNow, $scriptStartTime)
+    public function handleFullSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $langIso, $offset, $limit, $dateNow, $scriptStartTime, bool $isFull)
     {
         $response = [];
 
@@ -64,7 +65,7 @@ class SynchronizationService
         $this->payloadDecorator->convertDateFormat($data);
 
         if (!empty($data)) {
-            $response = $this->proxyService->upload($jobId, $data, $scriptStartTime);
+            $response = $this->proxyService->upload($jobId, $data, $scriptStartTime, $isFull);
 
             if ($response['httpCode'] == 201) {
                 $offset += $limit;
@@ -80,9 +81,7 @@ class SynchronizationService
 
         $this->eventbusSyncRepository->updateTypeSync($type, $offset, $dateNow, $remainingObjects === 0, $langIso);
 
-        $isFullSync = $this->isFullSync($type, $langIso);
-
-        return $this->returnSyncResponse($data, $response, $remainingObjects, $isFullSync);
+        return $this->returnSyncResponse($data, $response, $remainingObjects);
     }
 
     /**
@@ -92,12 +91,13 @@ class SynchronizationService
      * @param int $limit
      * @param string $langIso
      * @param int $scriptStartTime
+     * @param bool $isFull
      *
      * @return array
      *
      * @throws PrestaShopDatabaseException|EnvVarException
      */
-    public function handleIncrementalSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $limit, $langIso, $scriptStartTime)
+    public function handleIncrementalSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $limit, $langIso, $scriptStartTime, bool $isFull)
     {
         $response = [];
 
@@ -107,8 +107,7 @@ class SynchronizationService
             return [
                 'total_objects' => 0,
                 'has_remaining_objects' => false,
-                'remaining_objects' => 0,
-                'full' => true,
+                'remaining_objects' => 0
             ];
         }
 
@@ -117,7 +116,7 @@ class SynchronizationService
         $this->payloadDecorator->convertDateFormat($data);
 
         if (!empty($data)) {
-            $response = $this->proxyService->upload($jobId, $data, $scriptStartTime);
+            $response = $this->proxyService->upload($jobId, $data, $scriptStartTime, $isFull);
 
             if ($response['httpCode'] == 201) {
                 $this->incrementalSyncRepository->removeIncrementalSyncObjects($type, $objectIds, $langIso);
@@ -128,44 +127,23 @@ class SynchronizationService
 
         $remainingObjects = $this->incrementalSyncRepository->getRemainingIncrementalObjects($type, $langIso);
 
-        $isFullSync = $this->isFullSync($type, $langIso);
-
-        return $this->returnSyncResponse($data, $response, $remainingObjects, $isFullSync);
-    }
-
-    /**
-     * @param string $type
-     * @param string $langIso
-     *
-     * @return bool|null
-     */
-    private function isFullSync(string $type, string $langIso): ?bool
-    {
-        $typeSync = $this->eventbusSyncRepository->findTypeSync($type, $langIso);
-        $isFullSync = null;
-        if (is_array($typeSync)) {
-            $isFullSync = $typeSync['full_sync_finished'] == 1;
-        }
-
-        return $isFullSync;
+        return $this->returnSyncResponse($data, $response, $remainingObjects);
     }
 
     /**
      * @param array $data
      * @param array $syncResponse
      * @param int $remainingObjects
-     * @param bool|null $isFullSync
      *
      * @return array
      */
-    private function returnSyncResponse(array $data, array $syncResponse, int $remainingObjects, ?bool $isFullSync)
+    private function returnSyncResponse(array $data, array $syncResponse, int $remainingObjects)
     {
         return array_merge([
             'total_objects' => count($data),
             'has_remaining_objects' => $remainingObjects > 0,
             'remaining_objects' => $remainingObjects,
-            'md5' => $this->getPayloadMd5($data),
-            'full' => $isFullSync,
+            'md5' => $this->getPayloadMd5($data)
         ], $syncResponse);
     }
 
