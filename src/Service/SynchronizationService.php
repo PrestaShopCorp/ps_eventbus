@@ -107,7 +107,7 @@ class SynchronizationService
             return [
                 'total_objects' => 0,
                 'has_remaining_objects' => false,
-                'remaining_objects' => 0
+                'remaining_objects' => 0,
             ];
         }
 
@@ -143,7 +143,7 @@ class SynchronizationService
             'total_objects' => count($data),
             'has_remaining_objects' => $remainingObjects > 0,
             'remaining_objects' => $remainingObjects,
-            'md5' => $this->getPayloadMd5($data)
+            'md5' => $this->getPayloadMd5($data),
         ], $syncResponse);
     }
 
