@@ -102,7 +102,8 @@ class FullSynchronizationTest extends BaseTestCase
             0,
             200,
             '2021-10-10T10:10:10',
-            '2021-11-11T11:11:11'
+            '2021-11-11T11:11:11',
+            false
         );
 
         $this->assertEquals(201, $response['httpCode']);
