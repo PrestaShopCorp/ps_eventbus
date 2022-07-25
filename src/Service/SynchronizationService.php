@@ -50,12 +50,13 @@ class SynchronizationService
      * @param int $limit
      * @param string $dateNow
      * @param int $scriptStartTime
+     * @param bool $isFull
      *
      * @return array
      *
      * @throws PrestaShopDatabaseException|EnvVarException|ApiException
      */
-    public function handleFullSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $langIso, $offset, $limit, $dateNow, $scriptStartTime)
+    public function handleFullSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $langIso, $offset, $limit, $dateNow, $scriptStartTime, bool $isFull)
     {
         $response = [];
 
@@ -64,7 +65,7 @@ class SynchronizationService
         $this->payloadDecorator->convertDateFormat($data);
 
         if (!empty($data)) {
-            $response = $this->proxyService->upload($jobId, $data, $scriptStartTime);
+            $response = $this->proxyService->upload($jobId, $data, $scriptStartTime, $isFull);
 
             if ($response['httpCode'] == 201) {
                 $offset += $limit;
@@ -90,12 +91,13 @@ class SynchronizationService
      * @param int $limit
      * @param string $langIso
      * @param int $scriptStartTime
+     * @param bool $isFull
      *
      * @return array
      *
      * @throws PrestaShopDatabaseException|EnvVarException
      */
-    public function handleIncrementalSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $limit, $langIso, $scriptStartTime)
+    public function handleIncrementalSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $limit, $langIso, $scriptStartTime, bool $isFull)
     {
         $response = [];
 
@@ -114,7 +116,7 @@ class SynchronizationService
         $this->payloadDecorator->convertDateFormat($data);
 
         if (!empty($data)) {
-            $response = $this->proxyService->upload($jobId, $data, $scriptStartTime);
+            $response = $this->proxyService->upload($jobId, $data, $scriptStartTime, $isFull);
 
             if ($response['httpCode'] == 201) {
                 $this->incrementalSyncRepository->removeIncrementalSyncObjects($type, $objectIds, $langIso);
@@ -135,7 +137,7 @@ class SynchronizationService
      *
      * @return array
      */
-    private function returnSyncResponse(array $data, array $syncResponse, $remainingObjects)
+    private function returnSyncResponse(array $data, array $syncResponse, int $remainingObjects)
     {
         return array_merge([
             'total_objects' => count($data),

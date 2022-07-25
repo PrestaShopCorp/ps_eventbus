@@ -128,7 +128,8 @@ class IncrementalSynchronizationTest extends BaseTestCase
             'test',
             50,
             'en',
-            '2021-10-10T10:10:10'
+            '2021-10-10T10:10:10',
+            false
         );
 
         if ($hasRemainingObject) {

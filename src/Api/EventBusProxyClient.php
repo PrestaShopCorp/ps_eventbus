@@ -76,10 +76,11 @@ class EventBusProxyClient extends GenericClient
      * @param string $jobId
      * @param string $data
      * @param int $scriptStartTime
+     * @param bool $isFull
      *
      * @return array
      */
-    public function upload($jobId, $data, $scriptStartTime)
+    public function upload(string $jobId, string $data, int $scriptStartTime, bool $isFull = false)
     {
         $timeout = Config::PROXY_TIMEOUT - (time() - $scriptStartTime);
 
@@ -97,6 +98,7 @@ class EventBusProxyClient extends GenericClient
             'headers' => [
                 'Content-Type' => 'binary/octet-stream',
                 'ps-eventbus-version' => $this->module->version,
+                'full' => $isFull ? '1' : '0',
             ],
             'body' => [
                 'file' => $file,

@@ -206,7 +206,8 @@ abstract class AbstractApiController extends ModuleFrontController
                     $jobId,
                     $limit,
                     $langIso,
-                    $this->startTime
+                    $this->startTime,
+                    $initFullSync
                 );
             } else {
                 $response = $this->synchronizationService->handleFullSync(
@@ -217,7 +218,8 @@ abstract class AbstractApiController extends ModuleFrontController
                     $offset,
                     $limit,
                     $dateNow,
-                    $this->startTime
+                    $this->startTime,
+                    $initFullSync
                 );
             }
 

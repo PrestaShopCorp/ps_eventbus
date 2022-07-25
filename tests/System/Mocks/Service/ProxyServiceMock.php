@@ -6,7 +6,7 @@ use PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface;
 
 class ProxyServiceMock implements ProxyServiceInterface
 {
-    public function upload($jobId, $data, $scriptStartTime)
+    public function upload($jobId, $data, $scriptStartTime, bool $isFull = false)
     {
         return ['httpCode' => 201];
     }
