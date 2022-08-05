@@ -111,7 +111,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
 
         $orderDetails = $this->getOrderDetails($orders, $this->context->shop->id);
 
-        $this->castOrderValues($orders);
+        $this->castOrderValues($orders, Language::getIdByIso($langIso));
 
         $orders = array_map(function ($order) {
             return [
@@ -179,12 +179,13 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
 
     /**
      * @param array $orders
-     * @param $langId
+     * @param int $langId
      *
      * @return void
+     *
      * @throws PrestaShopDatabaseException
      */
-    private function castOrderValues(array &$orders, $langId)
+    private function castOrderValues(array &$orders, int $langId)
     {
         foreach ($orders as &$order) {
             $order['id_order'] = (int) $order['id_order'];
@@ -209,21 +210,22 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     /**
      * @param array $orders
      * @param array $order
-     * @param $langId
+     * @param int $langId
      *
      * @return bool|int
+     *
      * @throws PrestaShopDatabaseException
      */
-    private function castIsPaidValue(array $orders, array $order, $langId)
+    private function castIsPaidValue(array $orders, array $order, int $langId)
     {
-        $isPaid = 0;
+        $isPaid = $dateAdd = 0;
         $orderIds = $this->arrayFormatter->formatValueArray($orders, 'id_order');
         $orderHistoryStatuses = $this->orderHistoryRepository->getOrderHistoryStatuses($orderIds, $langId);
 
         foreach ($orderHistoryStatuses as &$orderHistoryStatus) {
-            if ($order['id_order'] == $orderHistoryStatus['id_order']) {
+            if ($order['id_order'] == $orderHistoryStatus['id_order'] && $dateAdd < $orderHistoryStatus['date_add']) {
                 $isPaid = (bool) $orderHistoryStatus['paid'];
-                break;
+                $dateAdd = $orderHistoryStatus['date_add'];
             }
         }
 
