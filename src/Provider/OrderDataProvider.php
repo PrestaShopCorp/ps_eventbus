@@ -64,8 +64,8 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         if (empty($orders)) {
             return [];
         }
-        $langId = (int) Language::getIdByIso($langIso);
 
+        $langId = (int) Language::getIdByIso($langIso);
         $this->castOrderValues($orders, $langId);
 
         $orderDetails = $this->getOrderDetails($orders, $this->context->shop->id);
@@ -111,7 +111,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
 
         $orderDetails = $this->getOrderDetails($orders, $this->context->shop->id);
 
-        $this->castOrderValues($orders, Language::getIdByIso($langIso));
+        $this->castOrderValues($orders, (int) Language::getIdByIso($langIso));
 
         $orders = array_map(function ($order) {
             return [
