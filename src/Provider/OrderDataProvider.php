@@ -64,7 +64,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         if (empty($orders)) {
             return [];
         }
-        $langId = Language::getIdByIso($langIso);
+        $langId = (int) Language::getIdByIso($langIso);
 
         $this->castOrderValues($orders, $langId);
 
@@ -203,7 +203,6 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             $order['id_carrier'] = (int) $order['id_carrier'];
             $this->castAddressIsoCodes($order);
             unset($order['address_iso']);
-
         }
     }
 
@@ -212,7 +211,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      * @param array $order
      * @param int $langId
      *
-     * @return bool|int
+     * @return bool
      *
      * @throws PrestaShopDatabaseException
      */
@@ -229,7 +228,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             }
         }
 
-        return $isPaid;
+        return (bool) $isPaid;
     }
 
     /**
