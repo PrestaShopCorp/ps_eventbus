@@ -65,10 +65,11 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             return [];
         }
 
-        $this->castOrderValues($orders);
+        $langId = (int) Language::getIdByIso($langIso);
+        $this->castOrderValues($orders, $langId);
 
         $orderDetails = $this->getOrderDetails($orders, $this->context->shop->id);
-        $orderStatuses = $this->getOrderStatuses($orders, Language::getIdByIso($langIso));
+        $orderStatuses = $this->getOrderStatuses($orders, $langId);
 
         $orders = array_map(function ($order) {
             return [
@@ -110,7 +111,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
 
         $orderDetails = $this->getOrderDetails($orders, $this->context->shop->id);
 
-        $this->castOrderValues($orders);
+        $this->castOrderValues($orders, (int) Language::getIdByIso($langIso));
 
         $orders = array_map(function ($order) {
             return [
@@ -178,10 +179,13 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
 
     /**
      * @param array $orders
+     * @param int $langId
      *
      * @return void
+     *
+     * @throws PrestaShopDatabaseException
      */
-    private function castOrderValues(array &$orders)
+    private function castOrderValues(array &$orders, int $langId)
     {
         foreach ($orders as &$order) {
             $order['id_order'] = (int) $order['id_order'];
@@ -193,13 +197,38 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             $order['refund'] = (float) $order['refund'];
             $order['refund_tax_excl'] = (float) $order['refund_tax_excl'];
             $order['new_customer'] = $order['new_customer'] === '1';
-            $order['is_paid'] = (float) $order['total_paid_real'] >= (float) $order['total_paid_tax_incl'];
+            $order['is_paid'] = $this->castIsPaidValue($orders, $order, $langId);
             $order['shipping_cost'] = (float) $order['shipping_cost'];
             $order['total_paid_tax'] = $order['total_paid_tax_incl'] - $order['total_paid_tax_excl'];
             $order['id_carrier'] = (int) $order['id_carrier'];
             $this->castAddressIsoCodes($order);
             unset($order['address_iso']);
         }
+    }
+
+    /**
+     * @param array $orders
+     * @param array $order
+     * @param int $langId
+     *
+     * @return bool
+     *
+     * @throws PrestaShopDatabaseException
+     */
+    private function castIsPaidValue(array $orders, array $order, int $langId)
+    {
+        $isPaid = $dateAdd = 0;
+        $orderIds = $this->arrayFormatter->formatValueArray($orders, 'id_order');
+        $orderHistoryStatuses = $this->orderHistoryRepository->getOrderHistoryStatuses($orderIds, $langId);
+
+        foreach ($orderHistoryStatuses as &$orderHistoryStatus) {
+            if ($order['id_order'] == $orderHistoryStatus['id_order'] && $dateAdd < $orderHistoryStatus['date_add']) {
+                $isPaid = (bool) $orderHistoryStatus['paid'];
+                $dateAdd = $orderHistoryStatus['date_add'];
+            }
+        }
+
+        return (bool) $isPaid;
     }
 
     /**
