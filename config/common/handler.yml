@@ -3,6 +3,7 @@ services:
 
   PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler:
     class: PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler
+    public: true
     arguments:
       - '@ps_eventbus'
       - '@PrestaShop\Module\PsEventbus\Config\Env'

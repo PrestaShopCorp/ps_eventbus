@@ -8,7 +8,7 @@ use DbQuery;
 
 class OrderDetailsRepository
 {
-    const TABLE_NAME = 'order_detail';
+    public const TABLE_NAME = 'order_detail';
 
     /**
      * @var Db

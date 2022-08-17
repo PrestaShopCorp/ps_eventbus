@@ -10,8 +10,8 @@ use PrestaShopDatabaseException;
 
 class EventbusSyncRepository
 {
-    const TYPE_SYNC_TABLE_NAME = 'eventbus_type_sync';
-    const JOB_TABLE_NAME = 'eventbus_job';
+    public const TYPE_SYNC_TABLE_NAME = 'eventbus_type_sync';
+    public const JOB_TABLE_NAME = 'eventbus_job';
 
     /**
      * @var Db
