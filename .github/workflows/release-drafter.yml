@@ -26,7 +26,7 @@ jobs:
         id: release_info
         uses: toolmantim/release-drafter@v5
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
         with:
           version: "${{ steps.tagger.outputs.tag }}"
           name: "${{ steps.tagger.outputs.tag }}"
@@ -41,7 +41,7 @@ jobs:
             bin/hub api -X DELETE $asset
           done
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
 
       - name: Bump version and build
         run: |
@@ -61,7 +61,7 @@ jobs:
       - name: Publish the production zip
         uses: actions/upload-release-asset@v1.0.1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
         with:
           upload_url: ${{ steps.release_info.outputs.upload_url }}
           asset_path: ./dist/${{ github.event.repository.name }}-${{ env.full_tag }}.zip
@@ -79,7 +79,7 @@ jobs:
       - name: Publish the integration zip
         uses: actions/upload-release-asset@v1.0.1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
         with:
           upload_url: ${{ steps.release_info.outputs.upload_url }}
           asset_path: ./dist/${{ github.event.repository.name }}-${{ env.full_tag }}_integration.zip
