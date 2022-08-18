@@ -1,7 +1,8 @@
 name: Release and publish
 on:
-  release:
-    types: [released, prereleased]
+  push:
+    branches:
+      - fix/test-ci
 
 jobs:
   build:
@@ -161,6 +162,11 @@ jobs:
 
       - name: Release zip
         run: |
-          ~/.composer/vendor/bin/publish-on-marketplace --archive=$PWD/${{ github.event.repository.name }}-${{ github.event.release.tag_name }}.zip --metadata-json=$PWD/.github/mktp-metadata.json --changelog="${{ github.event.release.body }}" --debug
-        env:
-          MARKETPLACE_API_KEY: ${{ secrets.MARKETPLACE_API_KEY }}
+          echo $MARKETPLACE_API_KEY
+          ls $PWD \
+          echo ~/.composer/vendor/bin/publish-on-marketplace \
+            --archive=$PWD/${{ github.event.repository.name }}-${{ github.event.release.tag_name }}.zip \
+            --metadata-json=$PWD/.github/mktp-metadata.json \
+            --changelog="${{ github.event.release.body }}" \
+            --api-key="${{ secrets.MARKETPLACE_API_KEY }}" \
+            --debug
