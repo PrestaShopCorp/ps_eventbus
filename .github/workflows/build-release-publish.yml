@@ -18,7 +18,7 @@ jobs:
 
       - name: Release zip
         run: |
-          echo $MARKETPLACE_API_KEY
+          echo "toto: $MARKETPLACE_API_KEY"
           ls $PWD
           echo ~/.composer/vendor/bin/publish-on-marketplace \
             --archive=$PWD/${{ github.event.repository.name }}-${{ github.event.release.tag_name }}.zip \
@@ -26,3 +26,5 @@ jobs:
             --changelog="${{ github.event.release.body }}" \
             --api-key="${{ secrets.MARKETPLACE_API_KEY }}" \
             --debug
+        env:
+          MARKETPLACE_API_KEY: ${{ secrets.MARKETPLACE_API_KEY }}
