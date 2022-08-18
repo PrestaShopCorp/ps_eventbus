@@ -1,87 +1,22 @@
-name: Add a release draft
+name: Release drafter
 on:
   push:
     branches:
       - master
+  pull_request:
+    types: [opened, reopened, synchronize]
 
 jobs:
   update_release_draft:
     name: Add or update release draft
+    permissions:
+      contents: write
+      pull-requests: write
     runs-on: ubuntu-latest
     if: github.event.ref == 'refs/heads/master'
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2.0.0
-
-      - name: Find tag
-        id: tagger
-        uses: jimschubert/query-tag-action@v1
-
-      - name: Get full tag
-        id: full_tag
-        run: |
-          echo "full_tag=$(git describe --tags)" >> $GITHUB_ENV
-
-      - name: Get release info
-        id: release_info
-        uses: toolmantim/release-drafter@v5
+      - uses: release-drafter/release-drafter@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
         with:
-          version: "${{ steps.tagger.outputs.tag }}"
-          name: "${{ steps.tagger.outputs.tag }}"
-
-      - name: Clean existing assets
-        shell: bash
-        run: |
-          curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s 2.14.1
-          assets=`bin/hub api -t repos/${{ github.repository }}/releases/${{ steps.release_info.outputs.id }}/assets | awk '/\].url/ { print $2 }'`
-          for asset in $assets
-          do
-            bin/hub api -X DELETE $asset
-          done
-        env:
-          GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
-
-      - name: Bump version and build
-        run: |
-          make 
-          make version
-        env:
-          VERSION: ${{ steps.tagger.outputs.tag }}
-
-      - name: Bundle the production zip
-        run: |
-          echo "SENTRY_CREDENTIALS=$SENTRY_CREDENTIALS" >> .env
-          echo "SENTRY_ENVIRONMENT=production" >> .env
-          make zip-prod
-        env:
-          SENTRY_CREDENTIALS: ${{ secrets.SENTRY_AUTH_TOKEN }}
-
-      - name: Publish the production zip
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
-        with:
-          upload_url: ${{ steps.release_info.outputs.upload_url }}
-          asset_path: ./dist/${{ github.event.repository.name }}-${{ env.full_tag }}.zip
-          asset_name: ${{ github.event.repository.name }}.zip
-          asset_content_type: application/zip
-
-      - name: Bundle the integration zip
-        run: |
-          echo "$ENV_FILE" > .env.inte
-          echo "SENTRY_CREDENTIALS=" >> .env.inte
-          make zip-inte
-        env:
-          ENV_FILE: ${{ secrets.PS_EVENTBUS_ENV_INTE }}
-
-      - name: Publish the integration zip
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
-        with:
-          upload_url: ${{ steps.release_info.outputs.upload_url }}
-          asset_path: ./dist/${{ github.event.repository.name }}-${{ env.full_tag }}_integration.zip
-          asset_name: ${{ github.event.repository.name }}_integration.zip
-          asset_content_type: application/zip
+          config-name: release-drafter.yml
