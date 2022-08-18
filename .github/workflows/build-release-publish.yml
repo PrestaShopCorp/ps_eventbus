@@ -19,7 +19,7 @@ jobs:
       - name: Release zip
         run: |
           echo $MARKETPLACE_API_KEY
-          ls $PWD \
+          ls $PWD
           echo ~/.composer/vendor/bin/publish-on-marketplace \
             --archive=$PWD/${{ github.event.repository.name }}-${{ github.event.release.tag_name }}.zip \
             --metadata-json=$PWD/.github/mktp-metadata.json \
