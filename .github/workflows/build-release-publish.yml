@@ -18,13 +18,12 @@ jobs:
 
       - name: Release zip
         run: |
-          echo "toto: $MARKETPLACE_API_KEY"
-          ls $PWD
+          export CHANGELOG="${CHANGELOG:=No changelog provided}"
           echo ~/.composer/vendor/bin/publish-on-marketplace \
             --archive=$PWD/${{ github.event.repository.name }}-${{ github.event.release.tag_name }}.zip \
             --metadata-json=$PWD/.github/mktp-metadata.json \
-            --changelog="${{ github.event.release.body }}" \
+            --changelog="$CHANGELOG" \
             --api-key="${{ secrets.MARKETPLACE_API_KEY }}" \
             --debug
         env:
-          MARKETPLACE_API_KEY: ${{ secrets.MARKETPLACE_API_KEY }}
+          CHANGELOG: ${{ github.event.release.body }}
