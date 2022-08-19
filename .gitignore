@@ -49,3 +49,4 @@ allure-report
 .gradle
 
 tests/tmp
+tests/.phpunit.result.cache
