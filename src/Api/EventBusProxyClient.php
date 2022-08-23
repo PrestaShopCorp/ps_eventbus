@@ -21,10 +21,10 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\Post\PostFile;
 use Link;
 use PrestaShop\Module\PsEventbus\Config\Config;
+use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use Ps_eventbus;
 
@@ -58,18 +58,16 @@ class EventBusProxyClient extends GenericClient
         $this->setLink($link);
         $token = $psAccountsService->getPsAccountsService()->getOrRefreshToken();
 
-        $client = new Client([
-            'base_url' => $this->baseUrl,
-            'defaults' => [
-                'timeout' => 60,
-                'exceptions' => $this->catchExceptions,
-                'headers' => [
-                    'Authorization' => "Bearer $token",
-                ],
-            ],
-        ]);
+	    $options = [
+		    'base_uri' => $this->baseUrl,
+		    'timeout' => 60,
+		    'http_errors' => $this->catchExceptions,
+		    'headers' => ['authorization' => "Bearer $token"],
+	    ];
 
-        parent::__construct($client);
+        $client = (new ClientFactory())->getClient($options);
+
+        parent::__construct($client, $options);
     }
 
     /**

@@ -2,9 +2,9 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use GuzzleHttp\Client;
 use Link;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
+use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 
 class EventBusSyncClient extends GenericClient
@@ -29,20 +29,19 @@ class EventBusSyncClient extends GenericClient
         $this->baseUrl = $baseUrl;
         $this->setLink($link);
         $token = $psAccountsService->getPsAccountsService()->getOrRefreshToken();
+		$options = [
+			'base_uri' => $this->baseUrl,
+			'timeout' => 60,
+			'http_errors' => $this->catchExceptions,
+			'headers' => [
+				'authorization' => "Bearer $token",
+				'Accept' => 'application/json',
+			],
+		];
 
-        $client = new Client([
-            'base_url' => $this->baseUrl,
-            'defaults' => [
-                'timeout' => $this->timeout,
-                'exceptions' => $this->catchExceptions,
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Authorization' => "Bearer $token",
-                ],
-            ],
-        ]);
+        $client = (new ClientFactory())->getClient($options);
 
-        parent::__construct($client);
+        parent::__construct($client, $options);
     }
 
     /**
