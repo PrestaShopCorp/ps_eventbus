@@ -47,4 +47,15 @@ class ShopRepository
 
         return (string) $this->db->getValue($query);
     }
+
+    public function getShopCountryCode()
+    {
+        $query = new DbQuery();
+
+        $query->select('iso_code')
+          ->from('country')
+          ->where('active = 1');
+
+        return (string) $this->db->getValue($query);
+    }
 }

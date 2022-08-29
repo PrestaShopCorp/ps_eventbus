@@ -1,8 +1,7 @@
 .PHONY: clean help build bundle zip version bundle-prod bundle-inte build-back
-PHP = $(shell which php 2> /dev/null)
-DOCKER = $(shell docker ps 2> /dev/null)
-NPM = $(shell which npm 2> /dev/null)
-YARN = $(shell which yarn 2> /dev/null)
+PHP = $(shell command -v php >/dev/null 2>&1 || { echo >&2 "PHP is not installed."; exit 1; } && which php)
+DOCKER = $(shell command -v docker >/dev/null 2>&1 || { echo >&2 "Docker is not installed."; exit 1; } && which docker)
+COMPOSER = $(shell which composer | which ./composer.phar 2> /dev/null)
 
 VERSION ?= $(shell git describe --tags 2> /dev/null || echo "0.0.0")
 SEM_VERSION ?= $(shell echo ${VERSION} | sed 's/^v//')
@@ -36,9 +35,8 @@ version:
 zip: zip-prod zip-inte
 
 # target: zip-prod                               - Bundle a production zip
-zip-prod: ./vendor
+zip-prod: vendor
 	mkdir -p ./dist
-	git checkout -- config/parameters.yml
 	cd .. && zip -r ${PACKAGE}.zip ${MODULE} -x '*.git*' \
 	  ${MODULE}/dist/\* \
 	  ${MODULE}/composer.phar \
@@ -47,7 +45,7 @@ zip-prod: ./vendor
 	mv ../${PACKAGE}.zip ./dist
 
 # target: zip-inte                               - Bundle a integration zip
-zip-inte: ./vendor
+zip-inte: vendor
 	mkdir -p ./dist
 	cp .env.inte.yml config/parameters.yml 2>/dev/null || echo "WARNING: no integration config file found";
 	cd .. && zip -r ${PACKAGE}_integration.zip ${MODULE} -x '*.git*' \
@@ -58,7 +56,7 @@ zip-inte: ./vendor
 	mv ../${PACKAGE}_integration.zip ./dist
 
 # target: zip-inte                               - Bundle a integration zip
-zip-preproduction: ./vendor
+zip-preproduction: vendor
 	mkdir -p ./dist
 	cp .env.inte.yml config/parameters.yml 2>/dev/null || echo "WARNING: no preproduction config file found";
 	cd .. && zip -r ${PACKAGE}_preproduction.zip ${MODULE} -x '*.git*' \
@@ -69,19 +67,18 @@ zip-preproduction: ./vendor
 	mv ../${PACKAGE}_preproduction.zip ./dist
 
 # target: build                                  - Setup PHP & Node.js locally
-build: ./vendor
+build: vendor
 
-./vendor: composer.phar
-	./composer.phar install --no-dev -o
 
-composer.phar:
-ifndef PHP
-	$(error "PHP is unavailable on your system")
-endif
-	php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-	php -r "if (hash_file('sha384', 'composer-setup.php') === '55ce33d7678c5a611085589f1f3ddf8b3c52d662cd01d4ba75c0ee0459970c2200a51f492d557530c71c15d8dba01eae') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-	php composer-setup.php
-	php -r "unlink('composer-setup.php');"
+vendor:
+	@if [ "$(COMPOSER)" = "" ]; then \
+	echo "Installing composer locally"; \
+	php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"; \
+	php -r "if (hash_file('sha384', 'composer-setup.php') === '55ce33d7678c5a611085589f1f3ddf8b3c52d662cd01d4ba75c0ee0459970c2200a51f492d557530c71c15d8dba01eae') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"; \
+	php composer-setup.php; php -r "unlink('composer-setup.php');"; \
+	./composer.phar install --no-dev -o; \
+	else ${COMPOSER} install --no-dev -o; \
+	fi
 
 # target: tests                                  - Launch the tests and linting
 tests: phpstan phpunit lint
@@ -92,13 +89,10 @@ lint:
 
 # target: phpstan                                - Start phpstan
 phpstan:
-ifndef DOCKER
-	$(error "DOCKER is unavailable on your system")
-endif
-	docker pull phpstan/phpstan:${PHPSTAN_VERSION}
-	docker pull prestashop/prestashop:${PS_VERSION}
-	docker run --rm -d -v ps-volume:/var/www/html --entrypoint /bin/sleep --name test-phpstan prestashop/prestashop:${PS_VERSION} 2s
-	docker run --rm --volumes-from test-phpstan \
+	${DOCKER} pull phpstan/phpstan:${PHPSTAN_VERSION}
+	${DOCKER} pull prestashop/prestashop:${PS_VERSION}
+	${DOCKER} run --rm -d -v ps-volume:/var/www/html --entrypoint /bin/sleep --name test-phpstan prestashop/prestashop:${PS_VERSION} 2s
+	${DOCKER} run --rm --volumes-from test-phpstan \
 	  -v ${PWD}:/web/module \
 	  -e _PS_ROOT_DIR_=/var/www/html \
 	  --workdir=/web/module \
@@ -107,13 +101,10 @@ endif
 
 # target: phpunit                                - Start phpunit
 phpunit:
-ifndef DOCKER
-	$(error "DOCKER is unavailable on your system")
-endif
-	docker pull phpunit/phpunit:${PHPUNIT_VERSION}
-	docker pull prestashop/prestashop:${PS_VERSION}
-	docker run --rm -d -v ps-volume:/var/www/html --entrypoint /bin/sleep --name test-phpunit prestashop/prestashop:${PS_VERSION} 2s
-	docker run --rm --volumes-from test-phpunit \
+	${DOCKER} pull phpunit/phpunit:${PHPUNIT_VERSION}
+	${DOCKER} pull prestashop/prestashop:${PS_VERSION}
+	${DOCKER} run --rm -d -v ps-volume:/var/www/html --entrypoint /bin/sleep --name test-phpunit prestashop/prestashop:${PS_VERSION} 2s
+	${DOCKER} run --rm --volumes-from test-phpunit \
 	  -v ${PWD}:/app:ro \
 	  -v ${PWD}/vendor:/vendor:ro \
 	  -e _PS_ROOT_DIR_=/var/www/html/ \
@@ -124,12 +115,12 @@ endif
 	  --bootstrap ./tests/unit/bootstrap.php
 	@echo phpunit passed
 
-# target: fix-lint                               - Launch php cs fixer and npm run lint
+# target: fix-lint                               - Launch php cs fixer
 fix-lint: vendor/bin/php-cs-fixer
 	vendor/bin/php-cs-fixer fix --using-cache=no
 
-vendor/bin/php-cs-fixer:
-	./composer.phar install
+vendor/bin/php-cs-fixer: vendor
+	$(shell which composer | which ./composer.phar 2> /dev/null) install
 
 bps177: build-ps-177
 ata177: all-tests-actions-177
