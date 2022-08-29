@@ -43,20 +43,20 @@ abstract class GenericClient
      */
     protected $timeout = 10;
 
-	/**
-	 * @var array
-	 */
-	public $options;
+    /**
+     * @var array
+     */
+    public $options;
 
-	/**
-	 * @var array
-	 */
-	public $headers;
+    /**
+     * @var array
+     */
+    public $headers;
 
-	/**
-	 * @param ClientInterface $client
-	 * @param array $options
-	 */
+    /**
+     * @param ClientInterface $client
+     * @param array $options
+     */
     public function __construct(ClientInterface $client, array $options)
     {
         $this->setClient($client);
@@ -64,41 +64,41 @@ abstract class GenericClient
         $this->setHeaders($options['headers']);
     }
 
-	/**
-	 * @return array
-	 */
-	public function getOptions(): array
-	{
-		return $this->options;
-	}
+    /**
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
 
-	/**
-	 * @param array $options
-	 * @return GenericClient
-	 */
-	public function setOptions(array $options): GenericClient
-	{
-		$this->options = $options;
-		return $this;
-	}
+    /**
+     * @param array $options
+     * @return GenericClient
+     */
+    public function setOptions(array $options): GenericClient
+    {
+        $this->options = $options;
+        return $this;
+    }
 
-	/**
-	 * @return array
-	 */
-	public function getHeaders(): array
-	{
-		return $this->headers;
-	}
+    /**
+     * @return array
+     */
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
 
-	/**
-	 * @param array $headers
-	 * @return GenericClient
-	 */
-	public function setHeaders(array $headers): GenericClient
-	{
-		$this->headers = $headers;
-		return $this;
-	}
+    /**
+     * @param array $headers
+     * @return GenericClient
+     */
+    public function setHeaders(array $headers): GenericClient
+    {
+        $this->headers = $headers;
+        return $this;
+    }
 
     /**
      * Getter for client.
@@ -159,9 +159,9 @@ abstract class GenericClient
      */
     protected function post(array $options = [])
     {
-	    $request = new Request('POST', $this->getRoute(), $this->getHeaders());
+        $request = new Request('POST', $this->getRoute(), $this->getHeaders());
 
-	    return $this->sendRequest($request);
+        return $this->sendRequest($request);
     }
 
     /**
@@ -173,9 +173,9 @@ abstract class GenericClient
      */
     protected function patch(array $options = [])
     {
-	    $request = new Request('PATCH', $this->getRoute(), $this->getHeaders());
+        $request = new Request('PATCH', $this->getRoute(), $this->getHeaders());
 
-	    return $this->sendRequest($request);
+        return $this->sendRequest($request);
     }
 
     /**
@@ -187,32 +187,32 @@ abstract class GenericClient
      */
     protected function delete(array $options = [])
     {
-	    $request = new Request('DELETE', $this->getRoute(), $this->getHeaders());
+        $request = new Request('DELETE', $this->getRoute(), $this->getHeaders());
 
-	    return $this->sendRequest($request);
+        return $this->sendRequest($request);
     }
 
-	/**
-	 * Wrapper of method post from guzzle client.
-	 *
-	 * @return array return response or false if no response
-	 * @throws ClientExceptionInterface
-	 */
+    /**
+     * Wrapper of method post from guzzle client.
+     *
+     * @return array return response or false if no response
+     * @throws ClientExceptionInterface
+     */
     protected function get()
     {
-		$request = new Request('GET', $this->getRoute(), $this->getHeaders());
+        $request = new Request('GET', $this->getRoute(), $this->getHeaders());
 
-		return $this->sendRequest($request);
+        return $this->sendRequest($request);
     }
 
-	public function sendRequest($request)
-	{
-		$response = $this->getClient()->sendRequest($request);
-		$responseHandler = new ResponseApiHandler();
-		$response = $responseHandler->handleResponse($response);
+    public function sendRequest($request)
+    {
+        $response = $this->getClient()->sendRequest($request);
+        $responseHandler = new ResponseApiHandler();
+        $response = $responseHandler->handleResponse($response);
 
-		return $response;
-	}
+        return $response;
+    }
 
     /**
      * Setter for client.
