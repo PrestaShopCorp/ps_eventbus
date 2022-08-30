@@ -21,8 +21,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use GuzzleHttp\Psr7\Utils;
 use Link;
+use PrestaShop\Module\PsEventbus\Api\Post\PostFile;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;

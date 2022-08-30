@@ -1,11 +1,7 @@
 <?php
-namespace PrestaShop\Module\PsEventbus\Api;
+namespace PrestaShop\Module\PsEventbus\Api\Post;
 
-use GuzzleHttp\Mimetypes;
-use GuzzleHttp\Post\MultipartBody;
-use GuzzleHttp\Post\PostFileInterface;
-use GuzzleHttp\Stream\StreamInterface;
-use GuzzleHttp\Stream\Stream;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * Post file upload
