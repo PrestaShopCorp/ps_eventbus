@@ -140,7 +140,7 @@ class Stream implements StreamInterface
         return (string) stream_get_contents($this->stream);
     }
 
-    public function getContents(): bool|string
+    public function getContents()
     {
         return $this->stream ? stream_get_contents($this->stream) : '';
     }
