@@ -74,11 +74,13 @@ abstract class GenericClient
 
     /**
      * @param array $options
+     *
      * @return GenericClient
      */
     public function setOptions(array $options): GenericClient
     {
         $this->options = $options;
+
         return $this;
     }
 
@@ -92,12 +94,19 @@ abstract class GenericClient
 
     /**
      * @param array $headers
+     *
      * @return GenericClient
      */
     public function setHeaders(array $headers): GenericClient
     {
         $this->headers = $headers;
+
         return $this;
+    }
+
+    public function mergeHeader(array $headers)
+    {
+        return array_merge($this->getHeaders(), $headers);
     }
 
     /**
@@ -159,7 +168,7 @@ abstract class GenericClient
      */
     protected function post(array $options = [])
     {
-        $request = new Request('POST', $this->getRoute(), $this->getHeaders());
+        $request = new Request('POST', $this->getRoute(), $this->mergeHeader($options['headers']), $options['body']);
 
         return $this->sendRequest($request);
     }
@@ -173,7 +182,7 @@ abstract class GenericClient
      */
     protected function patch(array $options = [])
     {
-        $request = new Request('PATCH', $this->getRoute(), $this->getHeaders());
+        $request = new Request('PATCH', $this->getRoute(), $this->mergeHeader($options['headers']), $options['body']);
 
         return $this->sendRequest($request);
     }
@@ -187,7 +196,7 @@ abstract class GenericClient
      */
     protected function delete(array $options = [])
     {
-        $request = new Request('DELETE', $this->getRoute(), $this->getHeaders());
+        $request = new Request('DELETE', $this->getRoute(), $this->mergeHeader($options['headers']), $options['body']);
 
         return $this->sendRequest($request);
     }
@@ -195,16 +204,28 @@ abstract class GenericClient
     /**
      * Wrapper of method post from guzzle client.
      *
+     * @param array $options payload
+     *
      * @return array return response or false if no response
+     *
      * @throws ClientExceptionInterface
      */
-    protected function get()
+    protected function get(array $options = [])
     {
-        $request = new Request('GET', $this->getRoute(), $this->getHeaders());
+        $request = new Request('GET', $this->getRoute(), $this->mergeHeader($options['headers']));
 
         return $this->sendRequest($request);
     }
 
+    /**
+     * Wrapper of method sendRequest from guzzle client.
+     *
+     * @param $request
+     *
+     * @return array
+     *
+     * @throws ClientExceptionInterface
+     */
     public function sendRequest($request)
     {
         $response = $this->getClient()->sendRequest($request);

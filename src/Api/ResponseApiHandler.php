@@ -26,7 +26,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-
 use Psr\Http\Message\ResponseInterface;
 
 /**

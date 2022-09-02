@@ -1,4 +1,5 @@
 <?php
+
 namespace PrestaShop\Module\PsEventbus\Api\Post;
 
 use Psr\Http\Message\StreamInterface;
@@ -6,7 +7,7 @@ use Psr\Http\Message\StreamInterface;
 /**
  * Post file upload
  */
-class PostFile implements PostFileInterface
+class PostFileApi implements PostFileInterface
 {
     private $name;
     private $filename;

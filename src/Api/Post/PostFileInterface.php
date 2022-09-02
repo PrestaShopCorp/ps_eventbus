@@ -1,7 +1,6 @@
 <?php
 namespace PrestaShop\Module\PsEventbus\Api\Post;
 
-
 use Psr\Http\Message\StreamInterface;
 
 /**

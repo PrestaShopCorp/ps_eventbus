@@ -22,9 +22,12 @@
 namespace PrestaShop\Module\PsEventbus\Api;
 
 use Link;
-use PrestaShop\Module\PsEventbus\Api\Post\PostFile;
+use PrestaShop\Module\PsEventbus\Api\Post\MultipartBody;
+use PrestaShop\Module\PsEventbus\Api\Post\PostFileApi;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
+use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleNotInstalledException;
+use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleVersionException;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use Ps_eventbus;
 
@@ -48,8 +51,8 @@ class EventBusProxyClient extends GenericClient
      * @param string $baseUrl
      * @param Ps_eventbus $module
      *
-     * @throws \PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleNotInstalledException
-     * @throws \PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleVersionException
+     * @throws ModuleNotInstalledException
+     * @throws ModuleVersionException
      */
     public function __construct(Link $link, PsAccounts $psAccountsService, $baseUrl, $module)
     {
@@ -86,22 +89,19 @@ class EventBusProxyClient extends GenericClient
 
         $this->setRoute($route);
 
-        $file = new PostFile(
-            'file',
-            $data,
-            'file'
-        );
+        $file = new PostFileApi('file', $data,'file');
+
+        $multipartBody = new MultipartBody([], [$file],'ps_eventbus_boundary');
 
         $response = $this->post([
             'headers' => [
-                'Content-Type' => 'binary/octet-stream',
+                'Content-Type' => 'multipart/form-data; boundary=ps_eventbus_boundary',
                 'ps-eventbus-version' => $this->module->version,
                 'full' => $isFull ? '1' : '0',
+                'Content-Length' => $file->getContent()->getSize(),
+                'timeout' => $timeout
             ],
-            'body' => [
-                'file' => $file,
-            ],
-            'timeout' => $timeout,
+            'body' => $multipartBody->getContents(),
         ]);
 
         if (is_array($response)) {
@@ -123,7 +123,7 @@ class EventBusProxyClient extends GenericClient
 
         $this->setRoute($route);
 
-        $file = new PostFile(
+        $file = new PostFileApi(
             'file',
             $compressedData,
             'file.gz'

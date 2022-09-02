@@ -1,6 +1,6 @@
 <?php
-namespace PrestaShop\Module\PsEventbus\Api\Post;
 
+namespace PrestaShop\Module\PsEventbus\Api\Post;
 
 use GuzzleHttp\Psr7\AppendStream;
 use GuzzleHttp\Psr7\StreamDecoratorTrait;
@@ -16,17 +16,19 @@ class MultipartBody implements StreamInterface
     private $boundary;
 
     /**
-     * @param array  $fields   Associative array of field names to values where
-     *                         each value is a string or array of strings.
-     * @param array  $files    Associative array of PostFileInterface objects
+     * @param array $fields Associative array of field names to values where
+     *                       each value is a string or array of strings.
+     * @param array $files Associative array of PostFileInterface objects
      * @param string $boundary You can optionally provide a specific boundary
+     *
      * @throws \InvalidArgumentException
      */
     public function __construct(
         array $fields = [],
         array $files = [],
-        $boundary = null
-    ) {
+              $boundary = null
+    )
+    {
         $this->boundary = $boundary ?: uniqid();
         $this->stream = $this->createStream($fields, $files);
     }
@@ -80,7 +82,7 @@ class MultipartBody implements StreamInterface
         $stream = new AppendStream();
 
         foreach ($fields as $name => $fieldValues) {
-            foreach ((array) $fieldValues as $value) {
+            foreach ((array)$fieldValues as $value) {
                 $stream->addStream(
                     Stream::factory($this->getFieldString($name, $value))
                 );

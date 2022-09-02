@@ -29,15 +29,15 @@ class EventBusSyncClient extends GenericClient
         $this->baseUrl = $baseUrl;
         $this->setLink($link);
         $token = $psAccountsService->getPsAccountsService()->getOrRefreshToken();
-		$options = [
-			'base_uri' => $this->baseUrl,
-			'timeout' => 60,
-			'http_errors' => $this->catchExceptions,
-			'headers' => [
-				'authorization' => "Bearer $token",
-				'Accept' => 'application/json',
-			],
-		];
+        $options = [
+            'base_uri' => $this->baseUrl,
+            'timeout' => 60,
+            'http_errors' => $this->catchExceptions,
+            'headers' => [
+                'authorization' => "Bearer $token",
+                'Accept' => 'application/json',
+            ],
+        ];
 
         $client = (new ClientFactory())->getClient($options);
 
