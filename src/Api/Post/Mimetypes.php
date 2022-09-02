@@ -4,7 +4,8 @@ namespace PrestaShop\Module\PsEventbus\Api\Post;
 
 /**
  * Provides mappings of file extensions to mimetypes
- * @link http://svn.apache.org/repos/asf/httpd/httpd/branches/1.3.x/conf/mime.types
+ *
+ * @see http://svn.apache.org/repos/asf/httpd/httpd/branches/1.3.x/conf/mime.types
  */
 class Mimetypes
 {

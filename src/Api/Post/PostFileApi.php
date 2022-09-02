@@ -18,8 +18,8 @@ class PostFileApi implements PostFileInterface
      * @param string $name Name of the form field
      * @param mixed $content Data to send
      * @param string|null $filename Filename content-disposition attribute
-     * @param array $headers Array of headers to set on the file
-     *                                  (can override any default headers)
+     * @param array $headers Array of headers to set on the file (can override any default headers)
+     *
      * @throws \RuntimeException when filename is not passed or can't be determined
      */
     public function __construct(

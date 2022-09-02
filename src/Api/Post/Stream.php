@@ -47,7 +47,7 @@ class Stream implements StreamInterface
      *
      * @return \GuzzleHttp\Psr7\Stream|PumpStream|Stream|StreamInterface
      *
-     * @throws InvalidArgumentException if the $resource arg is not valid.
+     * @throws InvalidArgumentException if the $resource arg is not valid
      */
     public static function factory($resource = '', array $options = [])
     {
@@ -72,7 +72,7 @@ class Stream implements StreamInterface
         }
 
         if ($type == 'object' && method_exists($resource, '__toString')) {
-            return self::factory((string)$resource, $options);
+            return self::factory((string) $resource, $options);
         }
 
         if (is_callable($resource)) {
@@ -103,8 +103,8 @@ class Stream implements StreamInterface
      * - metadata: (array) Any additional metadata to return when the metadata
      *   of the stream is accessed.
      *
-     * @param resource $stream Stream resource to wrap.
-     * @param array $options Associative array of options.
+     * @param resource $stream Stream resource to wrap
+     * @param array $options Associative array of options
      *
      * @throws \InvalidArgumentException if the stream is not a stream resource
      */
@@ -139,7 +139,7 @@ class Stream implements StreamInterface
 
         $this->seek(0);
 
-        return (string)stream_get_contents($this->stream);
+        return (string) stream_get_contents($this->stream);
     }
 
     public function getContents()
