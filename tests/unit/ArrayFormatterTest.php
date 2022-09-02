@@ -17,7 +17,7 @@ class ArrayFormatterTest extends BaseTestCase
      */
     private $arrayFormatter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->arrayFormatter = new ArrayFormatter();
         parent::setUp();

@@ -27,7 +27,7 @@ class ApiAuthorizationServiceTest extends BaseTestCase
      */
     private $eventBusSyncClient;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
