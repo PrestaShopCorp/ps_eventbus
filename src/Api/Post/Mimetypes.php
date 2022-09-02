@@ -1,4 +1,5 @@
 <?php
+
 namespace PrestaShop\Module\PsEventbus\Api\Post;
 
 /**
@@ -11,7 +12,7 @@ class Mimetypes
     protected static $instance;
 
     /** @var array Mapping of extension to mimetype */
-    protected $mimetypes = array(
+    protected $mimetypes = [
         '3dml' => 'text/vnd.in3d.3dml',
         '3g2' => 'video/3gpp2',
         '3gp' => 'video/3gpp',
@@ -914,8 +915,8 @@ class Mimetypes
         'zip' => 'application/zip',
         'zir' => 'application/vnd.zul',
         'zirz' => 'application/vnd.zul',
-        'zmm' => 'application/vnd.handheld-entertainment+xml'
-    );
+        'zmm' => 'application/vnd.handheld-entertainment+xml',
+    ];
 
     /**
      * Get a singleton instance of the class
@@ -925,11 +926,7 @@ class Mimetypes
      */
     public static function getInstance()
     {
-        if (!self::$instance) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
+        return new self();
     }
 
     /**
@@ -938,7 +935,6 @@ class Mimetypes
      * @param string $extension File extension
      *
      * @return string|null
-     *
      */
     public function fromExtension($extension)
     {

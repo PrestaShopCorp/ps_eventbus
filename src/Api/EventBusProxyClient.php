@@ -61,12 +61,12 @@ class EventBusProxyClient extends GenericClient
         $this->setLink($link);
         $token = $psAccountsService->getPsAccountsService()->getOrRefreshToken();
 
-	    $options = [
-		    'base_uri' => $this->baseUrl,
-		    'timeout' => 60,
-		    'http_errors' => $this->catchExceptions,
-		    'headers' => ['authorization' => "Bearer $token"],
-	    ];
+        $options = [
+            'base_uri' => $this->baseUrl,
+            'timeout' => 60,
+            'http_errors' => $this->catchExceptions,
+            'headers' => ['authorization' => "Bearer $token"],
+        ];
 
         $client = (new ClientFactory())->getClient($options);
 
@@ -89,9 +89,9 @@ class EventBusProxyClient extends GenericClient
 
         $this->setRoute($route);
 
-        $file = new PostFileApi('file', $data,'file');
+        $file = new PostFileApi('file', $data, 'file');
 
-        $multipartBody = new MultipartBody([], [$file],'ps_eventbus_boundary');
+        $multipartBody = new MultipartBody([], [$file], 'ps_eventbus_boundary');
 
         $response = $this->post([
             'headers' => [
@@ -99,7 +99,7 @@ class EventBusProxyClient extends GenericClient
                 'ps-eventbus-version' => $this->module->version,
                 'full' => $isFull ? '1' : '0',
                 'Content-Length' => $file->getContent()->getSize(),
-                'timeout' => $timeout
+                'timeout' => $timeout,
             ],
             'body' => $multipartBody->getContents(),
         ]);

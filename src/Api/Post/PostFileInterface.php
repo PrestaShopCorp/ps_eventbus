@@ -1,4 +1,5 @@
 <?php
+
 namespace PrestaShop\Module\PsEventbus\Api\Post;
 
 use Psr\Http\Message\StreamInterface;
@@ -35,7 +36,7 @@ interface PostFileInterface
      * The keys represent the header name as it will be sent over the wire, and
      * each value is a string.
      *
-     * @return array Returns an associative array of the file's headers.
+     * @return array Returns an associative array of the file's headers
      */
     public function getHeaders();
 }

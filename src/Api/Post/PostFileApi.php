@@ -15,10 +15,10 @@ class PostFileApi implements PostFileInterface
     private $headers = [];
 
     /**
-     * @param string          $name     Name of the form field
-     * @param mixed           $content  Data to send
-     * @param string|null     $filename Filename content-disposition attribute
-     * @param array           $headers  Array of headers to set on the file
+     * @param string $name Name of the form field
+     * @param mixed $content Data to send
+     * @param string|null $filename Filename content-disposition attribute
+     * @param array $headers Array of headers to set on the file
      *                                  (can override any default headers)
      * @throws \RuntimeException when filename is not passed or can't be determined
      */
@@ -68,13 +68,13 @@ class PostFileApi implements PostFileInterface
             $this->content = Stream::factory($this->content);
         } elseif ($this->content instanceof MultipartBody) {
             if (!$this->hasHeader('Content-Disposition')) {
-                $disposition = 'form-data; name="' . $this->name .'"';
+                $disposition = 'form-data; name="' . $this->name . '"';
                 $this->headers['Content-Disposition'] = $disposition;
             }
 
             if (!$this->hasHeader('Content-Type')) {
                 $this->headers['Content-Type'] = sprintf(
-                    "multipart/form-data; boundary=%s",
+                    'multipart/form-data; boundary=%s',
                     $this->content->getBoundary()
                 );
             }

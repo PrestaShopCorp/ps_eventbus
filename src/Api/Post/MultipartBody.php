@@ -16,8 +16,8 @@ class MultipartBody implements StreamInterface
     private $boundary;
 
     /**
-     * @param array $fields Associative array of field names to values where
-     *                       each value is a string or array of strings.
+     * @param array $fields associative array of field names to values where
+     *                      each value is a string or array of strings.
      * @param array $files Associative array of PostFileInterface objects
      * @param string $boundary You can optionally provide a specific boundary
      *
@@ -27,8 +27,7 @@ class MultipartBody implements StreamInterface
         array $fields = [],
         array $files = [],
               $boundary = null
-    )
-    {
+    ) {
         $this->boundary = $boundary ?: uniqid();
         $this->stream = $this->createStream($fields, $files);
     }
@@ -82,7 +81,7 @@ class MultipartBody implements StreamInterface
         $stream = new AppendStream();
 
         foreach ($fields as $name => $fieldValues) {
-            foreach ((array)$fieldValues as $value) {
+            foreach ((array) $fieldValues as $value) {
                 $stream->addStream(
                     Stream::factory($this->getFieldString($name, $value))
                 );
@@ -92,8 +91,7 @@ class MultipartBody implements StreamInterface
         foreach ($files as $file) {
 
             if (!$file instanceof PostFileInterface) {
-                throw new \InvalidArgumentException('All POST fields must '
-                    . 'implement PostFieldInterface');
+                throw new \InvalidArgumentException('All POST fields must implement PostFieldInterface');
             }
 
             $stream->addStream(

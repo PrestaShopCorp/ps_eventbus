@@ -26,14 +26,14 @@ class Stream implements StreamInterface
             'r' => true, 'w+' => true, 'r+' => true, 'x+' => true, 'c+' => true,
             'rb' => true, 'w+b' => true, 'r+b' => true, 'x+b' => true,
             'c+b' => true, 'rt' => true, 'w+t' => true, 'r+t' => true,
-            'x+t' => true, 'c+t' => true, 'a+' => true
+            'x+t' => true, 'c+t' => true, 'a+' => true,
         ],
         'write' => [
             'w' => true, 'w+' => true, 'rw' => true, 'r+' => true, 'x+' => true,
             'c+' => true, 'wb' => true, 'w+b' => true, 'r+b' => true,
             'x+b' => true, 'c+b' => true, 'w+t' => true, 'r+t' => true,
-            'x+t' => true, 'c+t' => true, 'a' => true, 'a+' => true
-        ]
+            'x+t' => true, 'c+t' => true, 'a' => true, 'a+' => true,
+        ],
     ];
 
     /**
@@ -43,7 +43,7 @@ class Stream implements StreamInterface
      * in the constructor.
      *
      * @param resource|string|StreamInterface|Iterator $resource Entity body data
-     * @param array                           $options  Additional options
+     * @param array $options Additional options
      *
      * @return \GuzzleHttp\Psr7\Stream|PumpStream|Stream|StreamInterface
      *
@@ -59,6 +59,7 @@ class Stream implements StreamInterface
                 fwrite($stream, $resource);
                 fseek($stream, 0);
             }
+
             return new self($stream, $options);
         }
 
@@ -71,7 +72,7 @@ class Stream implements StreamInterface
         }
 
         if ($type == 'object' && method_exists($resource, '__toString')) {
-            return self::factory((string) $resource, $options);
+            return self::factory((string)$resource, $options);
         }
 
         if (is_callable($resource)) {
@@ -85,6 +86,7 @@ class Stream implements StreamInterface
                 }
                 $result = $resource->current();
                 $resource->next();
+
                 return $result;
             }, $options);
         }
@@ -101,8 +103,8 @@ class Stream implements StreamInterface
      * - metadata: (array) Any additional metadata to return when the metadata
      *   of the stream is accessed.
      *
-     * @param resource $stream  Stream resource to wrap.
-     * @param array    $options Associative array of options.
+     * @param resource $stream Stream resource to wrap.
+     * @param array $options Associative array of options.
      *
      * @throws \InvalidArgumentException if the stream is not a stream resource
      */
@@ -137,7 +139,7 @@ class Stream implements StreamInterface
 
         $this->seek(0);
 
-        return (string) stream_get_contents($this->stream);
+        return (string)stream_get_contents($this->stream);
     }
 
     public function getContents()
@@ -191,6 +193,7 @@ class Stream implements StreamInterface
         $stats = fstat($this->stream);
         if (isset($stats['size'])) {
             $this->size = $stats['size'];
+
             return $this->size;
         }
 

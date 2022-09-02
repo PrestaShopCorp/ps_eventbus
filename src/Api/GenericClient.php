@@ -5,6 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Api;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestInterface;
 
 abstract class GenericClient
 {
@@ -220,13 +221,13 @@ abstract class GenericClient
     /**
      * Wrapper of method sendRequest from guzzle client.
      *
-     * @param $request
+     * @param RequestInterface $request
      *
      * @return array
      *
      * @throws ClientExceptionInterface
      */
-    public function sendRequest($request)
+    public function sendRequest(RequestInterface $request)
     {
         $response = $this->getClient()->sendRequest($request);
         $responseHandler = new ResponseApiHandler();
