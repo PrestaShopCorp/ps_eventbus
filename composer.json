@@ -31,7 +31,6 @@
   },
   "require": {
     "php": ">=7.2.5",
-    "phpseclib/phpseclib": "^2.0",
     "ext-json": "*",
     "monolog/monolog": "1.25.3",
     "prestashop/module-lib-service-container": "^2.0",
@@ -44,6 +43,7 @@
     "phpunit/php-code-coverage": "^7.0.7",
     "prestashop/php-dev-tools": "^4.0",
     "friendsofphp/php-cs-fixer": "^3.1.0",
-    "allure-framework/allure-phpunit": "^v1.5.0"
+    "allure-framework/allure-phpunit": "^v1.5.0",
+    "phpseclib/phpseclib": "^2.0"
   }
 }

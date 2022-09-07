@@ -115,8 +115,7 @@ class PostFileApi implements PostFileInterface
 
         // Set a default Content-Type if one was not supplied
         if (!$this->hasHeader('Content-Type')) {
-            $this->headers['Content-Type'] = Mimetypes::getInstance()
-                ->fromFilename($this->filename) ?: 'text/plain';
+            $this->headers['Content-Type'] = 'text/plain';
         }
     }
 
