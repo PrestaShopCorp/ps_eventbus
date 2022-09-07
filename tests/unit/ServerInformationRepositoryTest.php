@@ -56,7 +56,7 @@ class ServerInformationRepositoryTest extends BaseTestCase
      */
     private $psAccounts;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->currencyRepository = $this->createMock(CurrencyRepository::class);

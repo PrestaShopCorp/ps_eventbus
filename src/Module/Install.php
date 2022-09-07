@@ -24,8 +24,8 @@ use Tools;
 
 class Install
 {
-    const PARENT_TAB_NAME = -1;
-    const TAB_ACTIVE = 0;
+    public const PARENT_TAB_NAME = -1;
+    public const TAB_ACTIVE = 0;
 
     /**
      * @var \Ps_eventbus

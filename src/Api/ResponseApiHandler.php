@@ -26,7 +26,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use GuzzleHttp\Message\ResponseInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Handle api response.

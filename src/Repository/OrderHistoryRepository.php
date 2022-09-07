@@ -7,7 +7,7 @@ use DbQuery;
 
 class OrderHistoryRepository
 {
-    const TABLE_NAME = 'order_history';
+    public const TABLE_NAME = 'order_history';
 
     /**
      * @var Db

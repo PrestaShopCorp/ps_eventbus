@@ -10,7 +10,7 @@ use PrestaShopDatabaseException;
 
 class IncrementalSyncRepository
 {
-    const INCREMENTAL_SYNC_TABLE = 'eventbus_incremental_sync';
+    public const INCREMENTAL_SYNC_TABLE = 'eventbus_incremental_sync';
 
     /**
      * @var Db
