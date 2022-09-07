@@ -105,9 +105,14 @@ abstract class GenericClient
         return $this;
     }
 
+    /**
+     * @param array $headers
+     *
+     * @return GenericClient
+     */
     public function mergeHeader(array $headers)
     {
-        return array_merge($this->getHeaders(), $headers);
+        return $this->setHeaders(array_merge($this->getHeaders(), $headers));
     }
 
     /**
@@ -169,7 +174,8 @@ abstract class GenericClient
      */
     protected function post(array $options = [])
     {
-        $request = new Request('POST', $this->getRoute(), $this->mergeHeader($options['headers']), $options['body']);
+        $this->mergeHeader($options['headers']);
+        $request = new Request('POST', $this->getRoute(), $this->getHeaders(), $options['body']);
 
         return $this->sendRequest($request);
     }
@@ -183,7 +189,8 @@ abstract class GenericClient
      */
     protected function patch(array $options = [])
     {
-        $request = new Request('PATCH', $this->getRoute(), $this->mergeHeader($options['headers']), $options['body']);
+        $this->mergeHeader($options['headers']);
+        $request = new Request('PATCH', $this->getRoute(), $this->getHeaders(), $options['body']);
 
         return $this->sendRequest($request);
     }
@@ -197,7 +204,8 @@ abstract class GenericClient
      */
     protected function delete(array $options = [])
     {
-        $request = new Request('DELETE', $this->getRoute(), $this->mergeHeader($options['headers']), $options['body']);
+        $this->mergeHeader($options['headers']);
+        $request = new Request('DELETE', $this->getRoute(), $this->getHeaders(), $options['body']);
 
         return $this->sendRequest($request);
     }
@@ -205,15 +213,13 @@ abstract class GenericClient
     /**
      * Wrapper of method post from guzzle client.
      *
-     * @param array $options payload
-     *
      * @return array return response or false if no response
      *
      * @throws ClientExceptionInterface
      */
-    protected function get(array $options = [])
+    protected function get()
     {
-        $request = new Request('GET', $this->getRoute(), $this->mergeHeader($options['headers']));
+        $request = new Request('GET', $this->getRoute(), $this->getHeaders());
 
         return $this->sendRequest($request);
     }
