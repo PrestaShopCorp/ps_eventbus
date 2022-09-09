@@ -41,12 +41,12 @@ class Ps_eventbus extends Module
     /**
      * @var string
      */
-    const VERSION = 'x.y.z';
+    public const VERSION = 'x.y.z';
 
     /**
      * @var array
      */
-    const REQUIRED_TABLES = [
+    public const REQUIRED_TABLES = [
         'eventbus_type_sync',
         'eventbus_job',
         'eventbus_deleted_objects',

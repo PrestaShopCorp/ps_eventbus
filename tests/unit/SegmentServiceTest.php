@@ -33,7 +33,7 @@ class SegmentServiceTest extends BaseTestCase
      */
     private $jsonFormatter;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->context = Context::getContext();

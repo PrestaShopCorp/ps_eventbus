@@ -28,7 +28,7 @@ class FullSynchronizationTest extends BaseTestCase
 {
     use StepSupport;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $product = new Product(1);
