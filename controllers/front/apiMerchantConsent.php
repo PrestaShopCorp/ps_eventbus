@@ -4,7 +4,6 @@ use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Repository\MerchantConsentRepository;
-use PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository;
 
 class ps_EventbusApiMerchantConsentModuleFrontController extends AbstractApiController
 {
@@ -19,12 +18,17 @@ class ps_EventbusApiMerchantConsentModuleFrontController extends AbstractApiCont
     {
         $response = [];
 
-        $jobId = Tools::getValue('job_id');
+        $shopId = Tools::getValue('shop_id');
 
         /** @var MerchantConsentRepository $merchantConsentRepository */
         $merchantConsentRepository = $this->module->getService(MerchantConsentRepository::class);
 
-        $merchantConsent = $merchantConsentRepository->getMerchantConsent($jobId);
+        $merchantConsent = $merchantConsentRepository->getMerchantConsent($shopId);
+
+        echo "<hr>";
+        var_dump($merchantConsent);
+        exit(1);
+        echo "</hr>";
 
         try {
 //            $response = $this->proxyService->upload($jobId, $serverInfo, $this->startTime);

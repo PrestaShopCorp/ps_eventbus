@@ -86,21 +86,17 @@ class MerchantConsentRepository
 
         $value = $this->getConsentByShopId($id);
 
-        echo "<hr>";
-        var_dump($value);
-        exit(1);
-        echo "</hr>";
         return [
             [
-                'id' => '1',
-                'collection' => Config::COLLECTION_SHOPS,
+                'id' => $value['id'],
+                'collection' => Config::COLLECTION_MERCHANT_CONSENT,
                 'properties' => [
-                    'created_at' => $this->createdAt,
-                    'updated_at' => $this->updatedAt,
-                    'module' => $this->module,
-                    'shop_consent_revoked' => $this->shopConsentRevoked,
-                    'shop_consent_accepted' => $this->shopConsentAccepted,
-                    'id_shop' => $this->shopId,
+                    'created_at' => $value['createdAt'],
+                    'updated_at' => $value['updatedAt'],
+                    'module' => $value['module'],
+                    'shop_consent_revoked' => $value['shopConsentRevoked'],
+                    'shop_consent_accepted' => $value['shopConsentAccepted'],
+                    'id_shop' => $value['shopId'],
                 ],
             ],
         ];
