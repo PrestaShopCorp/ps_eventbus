@@ -5,42 +5,14 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 use Context;
 use Db;
 use DbQuery;
-use PrestaShop\Module\PsAccounts\Api\Client\AccountsClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
+use PrestaShop\Module\PsEventbus\Service\CacheService;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 
 class MerchantConsentRepository
 {
-    /**
-     * @var ShopRepository
-     */
-    private $shopRepository;
-    /**
-     * @var string
-     */
-    private $createdAt;
-    /**
-     * @var string
-     */
-    private $updatedAt;
-    /**
-     * @var string
-     */
-    private $module;
-    /**
-     * @var bool
-     */
-    private $shopConsentRevoked;
-    /**
-     * @var bool
-     */
-    private $shopConsentAccepted;
-    /**
-     * @var int
-     */
-    private $shopId;
     /**
      * @var Context
      */
@@ -49,64 +21,87 @@ class MerchantConsentRepository
      * @var Db
      */
     private $db;
+    /**
+     * @var CacheService
+     */
+    private $cacheService;
 
     public function __construct(
         Context $context,
         Db $db,
-        ArrayFormatter $arrayFormatter,
-        PsAccounts $psAccounts,
-        ErrorHandlerInterface $errorHandler
+        CacheService $cacheService
     ) {
         $this->context = $context;
         $this->db = $db;
-        $this->arrayFormatter = $arrayFormatter;
-        $this->psAccountsService = $psAccounts->getPsAccountsService();
-        $this->createdAt = $this->shopRepository->getCreatedAt();
-        $this->errorHandler = $errorHandler;
+        $this->cacheService = $cacheService;
     }
 
-    public function getConsentByShopId($id)
+    /**
+     * @param array $value
+     *
+     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     *
+     */
+    public function postMerchantConsent(array $value)
+    {
+        $dbh = $this->db->connect();
+
+        $query = $dbh->prepare("INSERT INTO ps_merchant_consent (shop_id, module_consent, shop_consent_accepted, shop_consent_revoked) 
+        VALUES (:shop_id, :module_consent, :accepted, :revoked)");
+
+        $query->bindParam(':shop_id', $value['shop_id']);
+        $query->bindParam(':module_consent', $value['module_consent']);
+        $query->bindParam(':accepted', $value['accepted']);
+        $query->bindParam(':revoked', $value['revoked']);
+
+        $this->cacheService->setMerchantCacheProperty('merchantConsent.shopId', Context::getContext()->shop->id);
+        $this->cacheService->setMerchantCacheProperty('merchantConsent.moduleConsent', $value['module_consent']);
+        $this->cacheService->setMerchantCacheProperty('merchantConsent.accepted', $value['accepted']);
+        $this->cacheService->setMerchantCacheProperty('merchantConsent.revoked', $value['revoked']);
+
+        $query->execute();
+
+        return $this->getMerchantConsent();
+    }
+
+    /**
+     * @param $idShop
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getConsentByShopId($idShop = null)
     {
         $query = new DbQuery();
 
+        $idShop = $idShop ?: Context::getContext()->shop->id;
+
         $query->select('*')
-            ->from('ps_merchant_consent')
-            ->where('id_shop=' . $id);
+            ->from('merchant_consent')
+            ->where('shop_id=' . $idShop);
 
         return $this->db->executeS($query);
     }
 
     /**
-     * @param null $langIso
-     *
      * @return array
      */
-    public function getMerchantConsent($id)
+    public function getMerchantConsent()
     {
 
-        $value = $this->getConsentByShopId($id);
+        $value = current($this->getConsentByShopId());
 
         return [
-            [
-                'id' => $value['id'],
                 'collection' => Config::COLLECTION_MERCHANT_CONSENT,
                 'properties' => [
-                    'created_at' => $value['createdAt'],
-                    'updated_at' => $value['updatedAt'],
-                    'module' => $value['module'],
-                    'shop_consent_revoked' => $value['shopConsentRevoked'],
-                    'shop_consent_accepted' => $value['shopConsentAccepted'],
-                    'id_shop' => $value['shopId'],
+                    'created-at' => $value['created_at'],
+                    'updated-at' => $value['updated_at'],
+                    'module-name' => $value['module_consent'],
+                    'shop-consent-revoked' => json_decode($value['shop_consent_revoked']),
+                    'shop-consent-accepted' => json_decode($value['shop_consent_accepted']),
+                    'id-shop' => $value['shop_id'],
                 ],
-            ],
         ];
-    }
-
-    private function getAccountsClient()
-    {
-        $module = \Module::getInstanceByName('ps_accounts');
-
-        /* @phpstan-ignore-next-line */
-        return $module->getService(AccountsClient::class);
     }
 }

@@ -74,8 +74,6 @@ services:
     arguments:
       - '@ps_eventbus.context'
       - '@ps_eventbus.db'
-      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
-      - '@PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
       - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
 
   PrestaShop\Module\PsEventbus\Repository\ThemeRepository:
