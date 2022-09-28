@@ -36,3 +36,16 @@ CREATE TABLE IF NOT EXISTS `PREFIX_eventbus_incremental_sync`
     PRIMARY KEY (`type`, `id_object`, `id_shop`, `lang_iso`)
 ) ENGINE = ENGINE_TYPE
   DEFAULT CHARSET = utf8;
+
+CREATE TABLE IF NOT EXISTS `PREFIX_merchant_consent`
+(
+    `id`                    INT unsigned auto_increment not null,
+    `shop_id`               INT(10) NOT NULL,
+    `shop_consent_accepted` JSON NOT NULL,
+    `shop_consent_revoked`  JSON NOT NULL,
+    `module_consent`        VARCHAR(255),
+    `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `updated_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) ENGINE = ENGINE_TYPE
+  DEFAULT CHARSET = utf8;
