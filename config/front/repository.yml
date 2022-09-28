@@ -74,7 +74,7 @@ services:
     arguments:
       - '@ps_eventbus.context'
       - '@ps_eventbus.db'
-      - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
+      - '@PrestaShop\Module\PsEventbus\Service\CacheService'
 
   PrestaShop\Module\PsEventbus\Repository\ThemeRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ThemeRepository

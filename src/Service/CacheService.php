@@ -6,8 +6,7 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 class CacheService
 {
-
-    public function setMerchantCacheProperty($key, $value)
+    public function setCacheProperty($key, $value)
     {
         $cache = new FilesystemAdapter();
         $merchantConsentCache = $cache->getItem($key);
@@ -15,12 +14,11 @@ class CacheService
         $cache->save($merchantConsentCache);
     }
 
-    public function getMerchantCacheProperty($key)
+    public function getCacheProperty($key)
     {
         $cache = new FilesystemAdapter();
         $merchantConsentCache = $cache->getItem($key);
 
         return $merchantConsentCache->get();
     }
-
 }

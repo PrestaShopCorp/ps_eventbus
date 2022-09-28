@@ -39,8 +39,7 @@ class MerchantConsentRepository
     /**
      * @param array $value
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
-     *
+     * @return array
      */
     public function postMerchantConsent(array $value)
     {
@@ -89,7 +88,6 @@ class MerchantConsentRepository
      */
     public function getMerchantConsent()
     {
-
         $value = current($this->getConsentByShopId());
 
         return [
