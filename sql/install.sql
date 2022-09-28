@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_eventbus_incremental_sync`
 ) ENGINE = ENGINE_TYPE
   DEFAULT CHARSET = utf8;
 
-CREATE TABLE IF NOT EXISTS `PREFIX_merchant_consent`
+CREATE TABLE IF NOT EXISTS `PREFIX_eventbus_merchant_consent`
 (
     `id`                    INT unsigned auto_increment not null,
     `shop_id`               INT(10) NOT NULL,

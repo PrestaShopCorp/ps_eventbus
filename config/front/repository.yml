@@ -72,7 +72,6 @@ services:
     class: PrestaShop\Module\PsEventbus\Repository\MerchantConsentRepository
     public: true
     arguments:
-      - '@ps_eventbus.context'
       - '@ps_eventbus.db'
       - '@PrestaShop\Module\PsEventbus\Service\CacheService'
 

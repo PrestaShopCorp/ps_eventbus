@@ -28,7 +28,8 @@ class ps_EventbusApiMerchantConsentModuleFrontController extends AbstractApiCont
         try {
             /** @var MerchantConsentRepository $merchantConsentRepository */
             $merchantConsentRepository = $this->module->getService(MerchantConsentRepository::class);
-            $response = $merchantConsentRepository->postMerchantConsent($data);
+            $merchantConsent = $merchantConsentRepository->postMerchantConsent($data);
+            $response = $this->proxyService->upload(Tools::getValue('job_id'), $merchantConsent, $this->startTime);
         } catch (EnvVarException $exception) {
             $this->exitWithExceptionMessage($exception);
         } catch (Exception $exception) {

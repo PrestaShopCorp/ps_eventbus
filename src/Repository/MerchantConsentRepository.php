@@ -14,10 +14,6 @@ use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 class MerchantConsentRepository
 {
     /**
-     * @var Context
-     */
-    private $context;
-    /**
      * @var Db
      */
     private $db;
@@ -27,11 +23,9 @@ class MerchantConsentRepository
     private $cacheService;
 
     public function __construct(
-        Context $context,
         Db $db,
         CacheService $cacheService
     ) {
-        $this->context = $context;
         $this->db = $db;
         $this->cacheService = $cacheService;
     }
@@ -45,18 +39,18 @@ class MerchantConsentRepository
     {
         $dbh = $this->db->connect();
 
-        $query = $dbh->prepare("INSERT INTO ps_merchant_consent (shop_id, module_consent, shop_consent_accepted, shop_consent_revoked) 
-        VALUES (:shop_id, :module_consent, :accepted, :revoked)");
+        $query = $dbh->prepare('INSERT INTO ps_merchant_consent (shop_id, module_consent, shop_consent_accepted, shop_consent_revoked) 
+        VALUES (:shop_id, :module_consent, :accepted, :revoked)');
 
         $query->bindParam(':shop_id', $value['shop_id']);
         $query->bindParam(':module_consent', $value['module_consent']);
         $query->bindParam(':accepted', $value['accepted']);
         $query->bindParam(':revoked', $value['revoked']);
 
-        $this->cacheService->setMerchantCacheProperty('merchantConsent.shopId', Context::getContext()->shop->id);
-        $this->cacheService->setMerchantCacheProperty('merchantConsent.moduleConsent', $value['module_consent']);
-        $this->cacheService->setMerchantCacheProperty('merchantConsent.accepted', $value['accepted']);
-        $this->cacheService->setMerchantCacheProperty('merchantConsent.revoked', $value['revoked']);
+        $this->cacheService->setCacheProperty('merchantConsent.shopId', Context::getContext()->shop->id);
+        $this->cacheService->setCacheProperty('merchantConsent.moduleConsent', $value['module_consent']);
+        $this->cacheService->setCacheProperty('merchantConsent.accepted', $value['accepted']);
+        $this->cacheService->setCacheProperty('merchantConsent.revoked', $value['revoked']);
 
         $query->execute();
 
