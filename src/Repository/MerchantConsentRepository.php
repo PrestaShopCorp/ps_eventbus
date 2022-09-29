@@ -6,10 +6,7 @@ use Context;
 use Db;
 use DbQuery;
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
-use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
 use PrestaShop\Module\PsEventbus\Service\CacheService;
-use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 
 class MerchantConsentRepository
 {
@@ -85,6 +82,7 @@ class MerchantConsentRepository
         $value = current($this->getConsentByShopId());
 
         return [
+                'id' => $value['id'],
                 'collection' => Config::COLLECTION_MERCHANT_CONSENT,
                 'properties' => [
                     'created-at' => $value['created_at'],
