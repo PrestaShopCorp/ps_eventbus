@@ -99,7 +99,7 @@ phpunit: vendor/bin/phpunit
 
 # target: prestashop                             - Download prestashop source code
 prestashop:
-	git clone --depth 1 --branch ${PS_VERSION} git@github.com:PrestaShop/PrestaShop.git prestashop;
+	git clone --depth 1 --branch ${PS_VERSION} https://github.com/PrestaShop/PrestaShop.git prestashop;
 	${COMPOSER} -d ./prestashop install
 
 # target: phpstan                                - Run phpstan
