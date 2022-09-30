@@ -10,7 +10,6 @@ use Language;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsAccounts\Api\Client\AccountsClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use PrestaShopDatabaseException;
@@ -40,10 +39,6 @@ class ServerInformationRepository
      */
     private $db;
     /**
-     * @var ArrayFormatter
-     */
-    private $arrayFormatter;
-    /**
      * @var ShopRepository
      */
     private $shopRepository;
@@ -71,7 +66,6 @@ class ServerInformationRepository
         LanguageRepository $languageRepository,
         ConfigurationRepository $configurationRepository,
         ShopRepository $shopRepository,
-        ArrayFormatter $arrayFormatter,
         PsAccounts $psAccounts,
         ErrorHandlerInterface $errorHandler,
         array $configuration
@@ -82,7 +76,6 @@ class ServerInformationRepository
         $this->shopRepository = $shopRepository;
         $this->context = $context;
         $this->db = $db;
-        $this->arrayFormatter = $arrayFormatter;
         $this->psAccountsService = $psAccounts->getPsAccountsService();
         $this->configuration = $configuration;
         $this->createdAt = $this->shopRepository->getCreatedAt();
@@ -90,13 +83,13 @@ class ServerInformationRepository
     }
 
     /**
-     * @param null $langIso
+     * @param $langIso
      *
      * @return array
      */
-    public function getServerInformation($langIso = null)
+    public function getServerInformation($langIso = '')
     {
-        $langId = $langIso != null ? (int) Language::getIdByIso($langIso) : null;
+        $langId = empty($langIso) ? (int) Language::getIdByIso($langIso) : null;
 
         return [
             [

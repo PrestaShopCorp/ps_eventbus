@@ -9,7 +9,6 @@ use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\DTO\Carrier as EventBusCarrier;
 use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
 use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
-use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 
 class CarrierDataProvider implements PaginatedApiDataProviderInterface
 {
@@ -28,21 +27,14 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
      */
     private $carrierRepository;
 
-    /**
-     * @var LanguageRepository
-     */
-    private $languageRepository;
-
     public function __construct(
         ConfigurationRepository $configurationRepository,
         CarrierBuilder $carrierBuilder,
-        CarrierRepository $carrierRepository,
-        LanguageRepository $languageRepository
+        CarrierRepository $carrierRepository
     ) {
         $this->configurationRepository = $configurationRepository;
         $this->carrierBuilder = $carrierBuilder;
         $this->carrierRepository = $carrierRepository;
-        $this->languageRepository = $languageRepository;
     }
 
     /**
@@ -56,9 +48,8 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getFormattedData($offset, $limit, $langIso)
     {
-        $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
-        $language = new Language($langId);
-        $currency = new Currency($this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
+        $language = new Language();
+        $currency = new Currency();
 
         $carriers = $this->carrierRepository->getAllCarrierProperties($offset, $limit, $language->id);
 
@@ -81,8 +72,8 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
             return [];
         }
 
-        $language = new Language($this->configurationRepository->get('PS_LANG_DEFAULT'));
-        $currency = new Currency($this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
+        $language = new Language();
+        $currency = new Currency();
         $carrierIds = array_column($shippingIncremental, 'id_object');
         $carriers = $this->carrierRepository->getCarrierProperties($carrierIds, $language->id);
 

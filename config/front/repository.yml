@@ -133,7 +133,6 @@ services:
     class: PrestaShop\Module\PsEventbus\Repository\ShopRepository
     public: true
     arguments:
-      - '@ps_eventbus.context'
       - '@ps_eventbus.db'
 
   PrestaShop\Module\PsEventbus\Repository\CountryRepository:
@@ -148,7 +147,6 @@ services:
     public: true
     arguments:
       - '@ps_eventbus.db'
-      - '@ps_eventbus.context'
 
   PrestaShop\Module\PsEventbus\Repository\TaxRepository:
     class: PrestaShop\Module\PsEventbus\Repository\TaxRepository
@@ -176,4 +174,3 @@ services:
     public: true
     arguments:
       - '@ps_eventbus.db'
-      - '@ps_eventbus.context'

@@ -7,8 +7,8 @@ VERSION ?= $(shell git describe --tags 2> /dev/null || echo "0.0.0")
 SEM_VERSION ?= $(shell echo ${VERSION} | sed 's/^v//')
 MODULE ?= $(shell basename ${PWD})
 PACKAGE ?= "${MODULE}-${VERSION}"
-PHPSTAN_VERSION ?= 0.12
-PHPUNIT_VERSION ?= latest
+PHPUNIT_DOCKER ?= jitesoft/phpunit:8.1
+PHPSTAN_DOCKER ?= ghcr.io/phpstan/phpstan:1.8.6-php8.2
 PS_VERSION ?= 1.7.7.1
 NEON_FILE ?= phpstan-PS-1.7.neon
 
@@ -89,19 +89,17 @@ lint:
 
 # target: phpstan                                - Start phpstan
 phpstan:
-	${DOCKER} pull phpstan/phpstan:${PHPSTAN_VERSION}
 	${DOCKER} pull prestashop/prestashop:${PS_VERSION}
 	${DOCKER} run --rm -d -v ps-volume:/var/www/html --entrypoint /bin/sleep --name test-phpstan prestashop/prestashop:${PS_VERSION} 2s
 	${DOCKER} run --rm --volumes-from test-phpstan \
 	  -v ${PWD}:/web/module \
 	  -e _PS_ROOT_DIR_=/var/www/html \
 	  --workdir=/web/module \
-	  phpstan/phpstan:${PHPSTAN_VERSION} analyse \
+	  ${PHPSTAN_DOCKER} analyse \
 	  --configuration=/web/module/tests/phpstan/${NEON_FILE}
 
 # target: phpunit                                - Start phpunit
 phpunit:
-	${DOCKER} pull phpunit/phpunit:${PHPUNIT_VERSION}
 	${DOCKER} pull prestashop/prestashop:${PS_VERSION}
 	${DOCKER} run --rm -d -v ps-volume:/var/www/html --entrypoint /bin/sleep --name test-phpunit prestashop/prestashop:${PS_VERSION} 2s
 	${DOCKER} run --rm --volumes-from test-phpunit \
@@ -110,7 +108,7 @@ phpunit:
 	  -e _PS_ROOT_DIR_=/var/www/html/ \
 	  --workdir /app \
 	  --entrypoint /vendor/phpunit/phpunit/phpunit \
-	  phpunit/phpunit:${PHPUNIT_VERSION} \
+	  ${PHPUNIT_DOCKER} \
 	  --configuration ./tests/phpunit.xml \
 	  --bootstrap ./tests/unit/bootstrap.php
 	@echo phpunit passed
@@ -150,5 +148,3 @@ allure:
 
 allure-report:
 	./node_modules/.bin/allure generate build/allure-results/
-
-

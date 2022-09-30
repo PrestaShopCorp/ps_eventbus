@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
 use Db;
 use DbQuery;
 use mysqli_result;
@@ -16,17 +15,11 @@ class StateRepository
      */
     private $db;
 
-    /**
-     * @var Context
-     */
-    private $context;
-
     private $stateIsoCodeCache = [];
 
-    public function __construct(Db $db, Context $context)
+    public function __construct(Db $db)
     {
         $this->db = $db;
-        $this->context = $context;
     }
 
     /**

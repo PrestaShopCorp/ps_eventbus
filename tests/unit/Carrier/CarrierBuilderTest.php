@@ -22,7 +22,7 @@ use Yandex\Allure\Adapter\Annotation\Title;
  */
 class CarrierBuilderTest extends BaseTestCase
 {
-    const UPDATE_DATE = '2020-10-10 10:00:00';
+    public const UPDATE_DATE = '2020-10-10 10:00:00';
 
     /**
      * @Stories("carrier builder")

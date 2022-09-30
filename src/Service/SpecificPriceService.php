@@ -78,7 +78,7 @@ class SpecificPriceService
             * When a non-user calls directly this method (e.g., payment module...) is on PrestaShop, he does not have already it BUT knows the cart ID
             * When called from the back office, cart ID can be inexistant
             */
-            if (!$id_cart && !isset($context->employee)) {
+            if (!$id_cart) {
                 exit(Tools::displayError());
             }
             $cur_cart = new Cart($id_cart);
