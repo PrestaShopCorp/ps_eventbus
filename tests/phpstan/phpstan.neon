@@ -15,4 +15,4 @@ parameters:
     - '#Parameter \#1 \$id of class [a-zA-Z0-9\\_]+ constructor expects int\|null, bool\|string given.#'
     - '#Parameter \#1 \$id of class [a-zA-Z0-9\\_]+ constructor expects null, int given.#'
 
-  level: 5
+  level: 9
