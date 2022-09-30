@@ -13,10 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php_version: ["7.1", "7.2", "7.3", "7.4", "8.0", "8.1"]
+        php_version: ["7.2", "7.3", "7.4", "8.0", "8.1"]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.0.0
+        uses: actions/checkout@v3
       - name: PHP syntax checker ${{ matrix.php_version }}
         uses: "jokesterfr/github-action-php-lint@fea-add-action-router"
         with:
@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.0.0
+        uses: actions/checkout@v3
       - name: Run PHP-CS-Fixer
         uses: prestashopcorp/github-action-php-cs-fixer@master
 
@@ -39,7 +39,7 @@ jobs:
         presta_version: ["1.7.0.3", "1.7.8.7"]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.0.0
+        uses: actions/checkout@v3
       - name: Cache vendor folder
         uses: actions/cache@v1
         with:
@@ -75,7 +75,7 @@ jobs:
           php-version: "7.1"
           coverage: xdebug
       - name: Checkout
-        uses: actions/checkout@v2.0.0
+        uses: actions/checkout@v3
       - name: Cache vendor folder
         uses: actions/cache@v1
         with:
