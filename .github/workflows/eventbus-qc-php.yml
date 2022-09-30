@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: ["7.1", "7.2", "7.3", "7.4", "8.0", "8.1"]
+        php_versions: ["7.1", "7.2", "7.3", "7.4", "8.0", "8.1"]
     steps:
       - name: Checkout
         uses: actions/checkout@v2.0.0
-      - name: PHP syntax checker ${{ matrix.php-versions }}
-        uses: prestashop/github-action-php-lint/${{ matrix.php-versions }}@master
+      - name: PHP syntax checker ${{ matrix.php_versions }}
+        uses: "prestashop/github-action-php-lint/${{ matrix.php_versions }}@master"
 
   php-cs-fixer:
     name: PHP-CS-FIXER
@@ -34,35 +34,30 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        presta-versions: ["1.7.0.3", "1.7.8.7"]
+        presta_versions: ["1.7.0.3", "1.7.8.7"]
     steps:
       - name: Checkout
         uses: actions/checkout@v2.0.0
-
       - name: Cache vendor folder
         uses: actions/cache@v1
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
-
       - name: Cache composer folder
         uses: actions/cache@v1
         with:
           path: ~/.composer/cache
           key: php-composer-cache
-
       - name: Install dependencies
         run: composer install
-
-      - name: Select .neon file compatible with PrestaShop ${{ matrix.presta-versions }}
+      - name: Select .neon file compatible with PrestaShop ${{ matrix.presta_versions }}
         id: neon
         run: |
-          PS_VERSION="${{ matrix.presta-versions }}"
+          PS_VERSION="${{ matrix.presta_versions }}"
           echo ::set-output name=filename::phpstan-PS-1.7.neon
-
-      - name: PHPStan PrestaShop ${{ matrix.presta-versions }}
+      - name: PHPStan PrestaShop ${{ matrix.presta_versions }}
         run: |
-          PS_VERSION="${{ matrix.presta-versions }}" \
+          PS_VERSION="${{ matrix.presta_versions }}" \
           NEON_FILE=${{steps.neon.outputs.filename}} \
           make phpstan
 
@@ -70,32 +65,28 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        presta-versions: ["177"]
+        presta_versions: ["177"]
     steps:
       - name: Setup PHP with Xdebug
         uses: shivammathur/setup-php@v2
         with:
           php-version: "7.1"
           coverage: xdebug
-
       - name: Checkout
         uses: actions/checkout@v2.0.0
-
       - name: Cache vendor folder
         uses: actions/cache@v1
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
-
       - name: Cache composer folder
         uses: actions/cache@v1
         with:
           path: ~/.composer/cache
           key: php-composer-cache
-
       - run: composer install
       - run: npm i
-      - run: make ata${{ matrix.presta-versions }}
+      - run: make ata${{ matrix.presta_versions }}
       - name: 📊 Step 5 - Collect Allure files and generate allure-report folder
         run: |
           make allure-report
