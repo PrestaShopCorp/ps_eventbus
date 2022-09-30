@@ -1,6 +1,11 @@
-name: EventBus Quality Control PHP
+name: Quality Control
 
-on: [pull_request]
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+  push:
+    branches:
+      - "main"
 
 jobs:
   php-linter:
