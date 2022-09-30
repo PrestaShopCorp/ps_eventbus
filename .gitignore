@@ -2,7 +2,6 @@
 dist/
 vendor/
 prestashop/
-.cache/
 node_modules/
 
 # Composer
