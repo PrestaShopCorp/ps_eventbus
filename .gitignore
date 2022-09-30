@@ -8,7 +8,6 @@ node_modules/
 # Composer
 composer.phar
 /vendor/
-.env
 .php_cs.cache
 .php_cs
 install.lock
