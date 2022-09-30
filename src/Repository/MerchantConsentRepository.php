@@ -55,19 +55,19 @@ class MerchantConsentRepository
     }
 
     /**
-     * @param int|null $idShop
+     * @param int $idShop
      *
      * @return array
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getConsentByShopId(int $idShop = null)
+    public function getConsentByShopId(int $idShop = 0)
     {
         $query = new DbQuery();
 
         $query->select('*')
             ->from('merchant_consent')
-            ->where('shop_id=' . $idShop ?: Context::getContext()->shop->id);
+            ->where("shop_id='" . $idShop > 0 ? $idShop : Context::getContext()->shop->id . "'");
 
         return $this->db->executeS($query);
     }
