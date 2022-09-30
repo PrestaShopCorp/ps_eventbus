@@ -74,12 +74,19 @@ vendor:
 	echo "Installing composer locally"; \
 	php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"; \
 	php -r "if (hash_file('sha384', 'composer-setup.php') === '55ce33d7678c5a611085589f1f3ddf8b3c52d662cd01d4ba75c0ee0459970c2200a51f492d557530c71c15d8dba01eae') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"; \
-	php composer-setup.php; php -r "unlink('composer-setup.php');"; \
+	php composer-setup.php; \
+	php -r "unlink('composer-setup.php');"; \
 	./composer.phar install --no-dev -o; \
 	else ${COMPOSER} install --no-dev -o; \
 	fi
 
 vendor/bin/php-cs-fixer:
+	${COMPOSER} install
+
+vendor/bin/phpunit:
+	${COMPOSER} install
+
+vendor/bin/phpstan:
 	${COMPOSER} install
 
 # target: test                                   - Static and unit testing
@@ -103,11 +110,11 @@ prestashop:
 	${COMPOSER} -d ./prestashop install
 
 # target: phpstan                                - Run phpstan
-phpstan: prestashop
-	_PS_ROOT_DIR_=${PS_ROOT_DIR} phpstan analyse --configuration=./tests/phpstan/phpstan.neon;
+phpstan: prestashop vendor/bin/phpstan
+	_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
 
 # target: docker-test                            - Static and unit testing in docker
-docker-test: docker-lint phpstan phpunit 
+docker-test: docker-lint docker-phpstan docker-phpunit 
 
 # target: docker-lint                            - Lint the code in docker
 docker-lint:
