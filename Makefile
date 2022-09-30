@@ -5,10 +5,10 @@ COMPOSER = $(shell which composer | which ./composer.phar 2> /dev/null)
 VERSION ?= $(shell git describe --tags 2> /dev/null || echo "0.0.0")
 SEM_VERSION ?= $(shell echo ${VERSION} | sed 's/^v//')
 PACKAGE ?= "ps_eventbus-${VERSION}"
-PHPUNIT_DOCKER ?= jitesoft/phpunit:8.1
-PHPSTAN_DOCKER ?= ghcr.io/phpstan/phpstan:1.8.6-php8.2
+PHP_VERSION ?= 8.1
+BUILDPLATFORM ?= linux/amd64
 TESTING_DOCKER_IMAGE ?= ps-eventbus-testing:latest
-TESTING_DOCKER_BASE_IMAGE ?= phpdockerio/php73-cli
+TESTING_DOCKER_BASE_IMAGE ?= phpdockerio/php80-cli
 PS_ROOT_DIR ?= $(shell pwd)/prestashop
 PS_VERSION ?= 1.7.8.7
 
@@ -90,24 +90,29 @@ vendor/bin/phpstan:
 	${COMPOSER} install
 
 # target: test                                   - Static and unit testing
-test: lint phpstan phpunit 
+test: lint php-lint phpstan phpunit 
 
 # target: lint                                   - Lint the code and expose errors
 lint: vendor/bin/php-cs-fixer
-	vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no;
+	@vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no;
+
+# target: php-lint                               - Use php linter to check the code
+php-lint:
+	@git ls-files | grep -E '.*\.(php)' | xargs -n1 php -l -n | (! grep -v "No syntax errors" );
+	@echo "php $(shell php -r 'echo PHP_VERSION;') lint passed";
 
 # target: lint-fix                               - Lint the code and fix it
 lint-fix:
-	vendor/bin/php-cs-fixer fix --using-cache=no;
+	@vendor/bin/php-cs-fixer fix --using-cache=no;
 
 # target: phpunit                                - Run phpunit
 phpunit: vendor/bin/phpunit
-	vendor/bin/phpunit tests;
+	@vendor/bin/phpunit tests;
 
 # target: prestashop                             - Download prestashop source code
 prestashop:
-	git clone --depth 1 --branch ${PS_VERSION} https://github.com/PrestaShop/PrestaShop.git prestashop;
-	${COMPOSER} -d ./prestashop install
+	@git clone --depth 1 --branch ${PS_VERSION} https://github.com/PrestaShop/PrestaShop.git prestashop;
+	@${COMPOSER} -d ./prestashop install
 
 # target: phpstan                                - Run phpstan
 phpstan: prestashop vendor/bin/phpstan
@@ -118,39 +123,25 @@ docker-test: docker-lint docker-phpstan docker-phpunit
 
 # target: docker-lint                            - Lint the code in docker
 docker-lint:
-	docker run \
-	--rm -w /var/www/html \
-	-e "_PS_ROOT_DIR_=/var/www/html" \
-	-v $(shell pwd):/var/www/html \
+	docker run --rm -w /src \
+	-v $(shell pwd):/src \
 	${TESTING_DOCKER_IMAGE} \
 	-c "make lint";
 
-# target: testing-docker-image                    - Build a local testing docker image
-testing-docker-image: .cache/testing-image-built
-.cache/testing-image-built:
-	-docker run --name 7ghqQ3jgzpr9DZfg56 --entrypoint /bin/sh ${TESTING_DOCKER_BASE_IMAGE} -c "apt-get -qqy update && apt-get -qqy install make"
-	-docker commit 7ghqQ3jgzpr9DZfg56 ${TESTING_DOCKER_IMAGE}
-	-docker rm 7ghqQ3jgzpr9DZfg56
-	-mkdir -p .cache
-	-touch .cache/testing-image-built
-	
+# target: docker-lint                            - Lint the code with php in docker
+docker-php-lint:
+	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
+	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} php-lint;
+
 # target: docker-phpunit                         - Run phpunit in docker
 docker-phpunit:
-	docker run \
-	--rm \
-	-w /phpunit \
-	-v $(shell pwd):/phpunit \
-	${TESTING_DOCKER_IMAGE} \
-	-c "make phpunit";
+	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
+	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpunit;
 
 # target: docker-phpstan                         - Run phpstan in docker
 docker-phpstan:
-	docker run \
-	--rm -w /var/www/html \
-	-e "_PS_ROOT_DIR_=/var/www/html" \
-	-v $(shell pwd):/var/www/html \
-	${TESTING_DOCKER_IMAGE} \
-	-c "make phpstan";
+	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
+	docker run --rm -e _PS_ROOT_DIR_=/src/prestashop -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpstan;
 
 bps177: build-ps-177
 ata177: all-tests-actions-177

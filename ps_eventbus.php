@@ -1,9 +1,4 @@
-ldsldkbqsdlk
 <?php
-
-qsdlkqsjdlkqs
-qslkdjqslkd
-qslkdqjslkd
 /**
  * 2007-2020 PrestaShop.
  *
