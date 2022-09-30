@@ -4,17 +4,16 @@ on: [pull_request]
 
 jobs:
   php-linter:
-    name: PHP Syntax check 7.1|7.2|7.3
+    name: PHP Syntax check
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: ["7.1", "7.2", "7.3", "7.4", "8.0", "8.1"]
     steps:
       - name: Checkout
         uses: actions/checkout@v2.0.0
-      - name: PHP syntax checker 7.1
-        uses: prestashop/github-action-php-lint/7.1@master
-      - name: PHP syntax checker 7.2
-        uses: prestashop/github-action-php-lint/7.2@master
-      - name: PHP syntax checker 7.3
-        uses: prestashop/github-action-php-lint/7.3@master
+      - name: PHP syntax checker ${{ matrix.php-versions }}
+        uses: prestashop/github-action-php-lint/${{ matrix.php-versions }}@master
 
   php-cs-fixer:
     name: PHP-CS-FIXER
@@ -30,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        presta-versions: ["latest", "1.7.0.3", "1.7.8.7"]
+        presta-versions: ["1.7.0.3", "1.7.8.7"]
     steps:
       - name: Checkout
         uses: actions/checkout@v2.0.0
@@ -66,12 +65,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        presta-versions: [ '177' ]
+        presta-versions: ["177"]
     steps:
       - name: Setup PHP with Xdebug
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.1'
+          php-version: "7.1"
           coverage: xdebug
 
       - name: Checkout
