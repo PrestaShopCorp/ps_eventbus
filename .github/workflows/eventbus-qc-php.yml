@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.0.0
+        uses: actions/checkout@v3
       - name: Run PHP-CS-Fixer
         uses: prestashopcorp/github-action-php-cs-fixer@master
 
@@ -30,10 +30,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        presta-versions: ["latest", "1.7.0.3", "1.7.8.7"]
+        presta_version: ["latest", "1.7.0.3", "1.7.8.7"]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.0.0
+        uses: actions/checkout@v3
 
       - name: Cache vendor folder
         uses: actions/cache@v1
@@ -50,15 +50,15 @@ jobs:
       - name: Install dependencies
         run: composer install
 
-      - name: Select .neon file compatible with PrestaShop ${{ matrix.presta-versions }}
+      - name: Select .neon file compatible with PrestaShop ${{ matrix.presta_version }}
         id: neon
         run: |
-          PS_VERSION="${{ matrix.presta-versions }}"
+          PS_VERSION="${{ matrix.presta_version }}"
           echo ::set-output name=filename::phpstan-PS-1.7.neon
 
-      - name: PHPStan PrestaShop ${{ matrix.presta-versions }}
+      - name: PHPStan PrestaShop ${{ matrix.presta_version }}
         run: |
-          PS_VERSION="${{ matrix.presta-versions }}" \
+          PS_VERSION="${{ matrix.presta_version }}" \
           NEON_FILE=${{steps.neon.outputs.filename}} \
           make phpstan
 
@@ -66,16 +66,16 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        presta-versions: [ '177' ]
+        presta-versions: ["177"]
     steps:
       - name: Setup PHP with Xdebug
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.1'
+          php-version: "7.1"
           coverage: xdebug
 
       - name: Checkout
-        uses: actions/checkout@v2.0.0
+        uses: actions/checkout@v3
 
       - name: Cache vendor folder
         uses: actions/cache@v1
@@ -91,7 +91,7 @@ jobs:
 
       - run: composer install
       - run: npm i
-      - run: make ata${{ matrix.presta-versions }}
+      - run: make ata${{ matrix.presta_version }}
       - name: 📊 Step 5 - Collect Allure files and generate allure-report folder
         run: |
           make allure-report
