@@ -26,14 +26,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Cache vendor folder
-        uses: actions/cache@v1
-        with:
-          path: vendor
-          key: php-${{ hashFiles('composer.lock') }}
-      - name: Install dependencies
-        run: composer install
-      - name: Run PHP-CS-Fixer
+      - name: Run composer validate
         run: make composer-validate
 
   php-cs-fixer:
@@ -84,7 +77,7 @@ jobs:
           key: php-${{ hashFiles('composer.lock') }}
       - name: Install dependencies
         run: composer install
-      - name: PHP unit
+      - name: PHP unit with PHP 8.1
         run: PHP_VERSION="8.1" make docker-phpunit
 
       # - name: 📊 Step 5 - Collect Allure files and generate allure-report folder
