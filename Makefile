@@ -5,12 +5,12 @@ COMPOSER = $(shell which composer | which ./composer.phar 2> /dev/null)
 VERSION ?= $(shell git describe --tags 2> /dev/null || echo "0.0.0")
 SEM_VERSION ?= $(shell echo ${VERSION} | sed 's/^v//')
 PACKAGE ?= "ps_eventbus-${VERSION}"
-PHP_VERSION ?= 8.1
 BUILDPLATFORM ?= linux/amd64
 TESTING_DOCKER_IMAGE ?= ps-eventbus-testing:latest
 TESTING_DOCKER_BASE_IMAGE ?= phpdockerio/php80-cli
-PS_ROOT_DIR ?= $(shell pwd)/prestashop
+PHP_VERSION ?= 8.1
 PS_VERSION ?= 1.7.8.7
+PS_ROOT_DIR ?= $(shell pwd)/prestashop/prestashop-${PS_VERSION}
 
 # target: default                                - Calling build by default
 default: build
@@ -90,7 +90,11 @@ vendor/bin/phpstan:
 	${COMPOSER} install
 
 # target: test                                   - Static and unit testing
-test: lint php-lint phpstan phpunit 
+test: composer-validate lint php-lint phpstan phpunit 
+
+# target: composer-validate                      - Validates composer.json and composer.lock
+composer-validate:
+	@${COMPOSER} validate --no-check-publish
 
 # target: lint                                   - Lint the code and expose errors
 lint: vendor/bin/php-cs-fixer
@@ -111,8 +115,9 @@ phpunit: vendor/bin/phpunit
 
 # target: prestashop                             - Download prestashop source code
 prestashop:
-	@git clone --depth 1 --branch ${PS_VERSION} https://github.com/PrestaShop/PrestaShop.git prestashop;
-	@${COMPOSER} -d ./prestashop install
+	@mkdir -p ./prestashop
+	@git clone --depth 1 --branch ${PS_VERSION} https://github.com/PrestaShop/PrestaShop.git prestashop/prestashop-${PS_VERSION};
+	@${COMPOSER} -d ./prestashop/prestashop-${PS_VERSION} install
 
 # target: phpstan                                - Run phpstan
 phpstan: prestashop vendor/bin/phpstan
