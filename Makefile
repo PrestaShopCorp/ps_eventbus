@@ -144,9 +144,9 @@ docker-phpunit:
 	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpunit;
 
 # target: docker-phpstan                         - Run phpstan in docker
-docker-phpstan:
+docker-phpstan: prestashop
 	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
-	docker run --rm -e _PS_ROOT_DIR_=/src/prestashop -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpstan;
+	docker run --rm -e _PS_ROOT_DIR_=/src/prestashop/prestashop-${PS_VERSION} -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpstan;
 
 bps177: build-ps-177
 ata177: all-tests-actions-177
