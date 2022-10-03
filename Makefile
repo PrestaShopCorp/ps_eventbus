@@ -1,16 +1,15 @@
-.PHONY: clean help build bundle zip version bundle-prod bundle-inte build-back
+.PHONY: clean help build bundle zip version bundle-prod bundle-inte build-back test static-testing unit-testing
 PHP = $(shell command -v php >/dev/null 2>&1 || { echo >&2 "PHP is not installed."; exit 1; } && which php)
-DOCKER = $(shell command -v docker >/dev/null 2>&1 || { echo >&2 "Docker is not installed."; exit 1; } && which docker)
-COMPOSER = $(shell which composer | which ./composer.phar 2> /dev/null)
 
 VERSION ?= $(shell git describe --tags 2> /dev/null || echo "0.0.0")
 SEM_VERSION ?= $(shell echo ${VERSION} | sed 's/^v//')
-MODULE ?= $(shell basename ${PWD})
-PACKAGE ?= "${MODULE}-${VERSION}"
-PHPUNIT_DOCKER ?= jitesoft/phpunit:8.1
-PHPSTAN_DOCKER ?= ghcr.io/phpstan/phpstan:1.8.6-php8.2
-PS_VERSION ?= 1.7.7.1
-NEON_FILE ?= phpstan-PS-1.7.neon
+PACKAGE ?= "ps_eventbus-${VERSION}"
+BUILDPLATFORM ?= linux/amd64
+TESTING_DOCKER_IMAGE ?= ps-eventbus-testing:latest
+TESTING_DOCKER_BASE_IMAGE ?= phpdockerio/php80-cli
+PHP_VERSION ?= 8.1
+PS_VERSION ?= 1.7.8.7
+PS_ROOT_DIR ?= $(shell pwd)/prestashop/prestashop-${PS_VERSION}
 
 # target: default                                - Calling build by default
 default: build
@@ -37,94 +36,119 @@ zip: zip-prod zip-inte
 # target: zip-prod                               - Bundle a production zip
 zip-prod: vendor
 	mkdir -p ./dist
-	cd .. && zip -r ${PACKAGE}.zip ${MODULE} -x '*.git*' \
-	  ${MODULE}/dist/\* \
-	  ${MODULE}/composer.phar \
-	  ${MODULE}/Makefile \
-		${MODULE}/.env.dist
+	cd .. && zip -r ${PACKAGE}.zip ps_eventbus -x '*.git*' \
+	  ps_eventbus/dist/\* \
+	  ps_eventbus/composer.phar \
+	  ps_eventbus/Makefile \
+		ps_eventbus/.env.dist
 	mv ../${PACKAGE}.zip ./dist
 
 # target: zip-inte                               - Bundle a integration zip
 zip-inte: vendor
 	mkdir -p ./dist
 	cp .env.inte.yml config/parameters.yml 2>/dev/null || echo "WARNING: no integration config file found";
-	cd .. && zip -r ${PACKAGE}_integration.zip ${MODULE} -x '*.git*' \
-	  ${MODULE}/dist/\* \
-	  ${MODULE}/composer.phar \
-	  ${MODULE}/Makefile \
-		${MODULE}/.env.dist
+	cd .. && zip -r ${PACKAGE}_integration.zip ps_eventbus -x '*.git*' \
+	  ps_eventbus/dist/\* \
+	  ps_eventbus/composer.phar \
+	  ps_eventbus/Makefile \
+		ps_eventbus/.env.dist
 	mv ../${PACKAGE}_integration.zip ./dist
 
 # target: zip-inte                               - Bundle a integration zip
 zip-preproduction: vendor
 	mkdir -p ./dist
 	cp .env.inte.yml config/parameters.yml 2>/dev/null || echo "WARNING: no preproduction config file found";
-	cd .. && zip -r ${PACKAGE}_preproduction.zip ${MODULE} -x '*.git*' \
-	  ${MODULE}/dist/\* \
-	  ${MODULE}/composer.phar \
-	  ${MODULE}/Makefile \
-		${MODULE}/.env.dist
+	cd .. && zip -r ${PACKAGE}_preproduction.zip ps_eventbus -x '*.git*' \
+	  ps_eventbus/dist/\* \
+	  ps_eventbus/composer.phar \
+	  ps_eventbus/Makefile \
+		ps_eventbus/.env.dist
 	mv ../${PACKAGE}_preproduction.zip ./dist
 
 # target: build                                  - Setup PHP & Node.js locally
 build: vendor
 
+composer.phar:
+	@php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');";
+	@php -r "if (hash_file('sha384', 'composer-setup.php') === '55ce33d7678c5a611085589f1f3ddf8b3c52d662cd01d4ba75c0ee0459970c2200a51f492d557530c71c15d8dba01eae') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;";
+	@php composer-setup.php;
+	@php -r "unlink('composer-setup.php');";
 
-vendor:
-	@if [ "$(COMPOSER)" = "" ]; then \
-	echo "Installing composer locally"; \
-	php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"; \
-	php -r "if (hash_file('sha384', 'composer-setup.php') === '55ce33d7678c5a611085589f1f3ddf8b3c52d662cd01d4ba75c0ee0459970c2200a51f492d557530c71c15d8dba01eae') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"; \
-	php composer-setup.php; php -r "unlink('composer-setup.php');"; \
-	./composer.phar install --no-dev -o; \
-	else ${COMPOSER} install --no-dev -o; \
-	fi
+vendor: composer.phar
+	./composer.phar install --no-dev -o;
 
-# target: tests                                  - Launch the tests and linting
-tests: phpstan phpunit lint
+vendor/bin/php-cs-fixer:
+	./composer.phar install
 
-# target: lint-back                              - Launch the back linting
-lint:
-	vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no --diff-format udiff
+vendor/bin/phpunit:
+	./composer.phar install
 
-# target: phpstan                                - Start phpstan
-phpstan:
-	${DOCKER} pull prestashop/prestashop:${PS_VERSION}
-	${DOCKER} run --rm -d -v ps-volume:/var/www/html --entrypoint /bin/sleep --name test-phpstan prestashop/prestashop:${PS_VERSION} 2s
-	${DOCKER} run --rm --volumes-from test-phpstan \
-	  -v ${PWD}:/web/module \
-	  -e _PS_ROOT_DIR_=/var/www/html \
-	  --workdir=/web/module \
-	  ${PHPSTAN_DOCKER} analyse \
-	  --configuration=/web/module/tests/phpstan/${NEON_FILE}
+vendor/bin/phpstan:
+	./composer.phar install
 
-# target: phpunit                                - Start phpunit
-phpunit:
-	${DOCKER} pull prestashop/prestashop:${PS_VERSION}
-	${DOCKER} run --rm -d -v ps-volume:/var/www/html --entrypoint /bin/sleep --name test-phpunit prestashop/prestashop:${PS_VERSION} 2s
-	${DOCKER} run --rm --volumes-from test-phpunit \
-	  -v ${PWD}:/app:ro \
-	  -v ${PWD}/vendor:/vendor:ro \
-	  -e _PS_ROOT_DIR_=/var/www/html/ \
-	  --workdir /app \
-	  --entrypoint /vendor/phpunit/phpunit/phpunit \
-	  ${PHPUNIT_DOCKER} \
-	  --configuration ./tests/phpunit.xml \
-	  --bootstrap ./tests/unit/bootstrap.php
-	@echo phpunit passed
+prestashop:
+	@mkdir -p ./prestashop
 
-# target: fix-lint                               - Launch php cs fixer
-fix-lint: vendor/bin/php-cs-fixer
-	vendor/bin/php-cs-fixer fix --using-cache=no
+prestashop/prestashop-${PS_VERSION}: prestashop composer.phar
+	@git clone --depth 1 --branch ${PS_VERSION} https://github.com/PrestaShop/PrestaShop.git prestashop/prestashop-${PS_VERSION};
+	@./composer.phar -d ./prestashop/prestashop-${PS_VERSION} install
 
-vendor/bin/php-cs-fixer: vendor
-	$(shell which composer | which ./composer.phar 2> /dev/null) install
+# target: test                                   - Static and unit testing
+test: composer-validate lint php-lint phpstan phpunit
+
+# target: composer-validate                      - Validates composer.json and composer.lock
+composer-validate: vendor
+	@./composer.phar validate --no-check-publish
+
+# target: lint                                   - Lint the code and expose errors
+lint: vendor/bin/php-cs-fixer
+	@vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no;
+
+# target: php-lint                               - Use php linter to check the code
+php-lint:
+	@git ls-files | grep -E '.*\.(php)' | xargs -n1 php -l -n | (! grep -v "No syntax errors" );
+	@echo "php $(shell php -r 'echo PHP_VERSION;') lint passed";
+
+# target: lint-fix                               - Lint the code and fix it
+lint-fix:
+	@vendor/bin/php-cs-fixer fix --using-cache=no;
+
+# target: phpunit                                - Run phpunit
+phpunit: vendor/bin/phpunit
+	@vendor/bin/phpunit tests;
+
+# target: phpstan                                - Run phpstan
+phpstan: prestashop/prestashop-${PS_VERSION} vendor/bin/phpstan
+	_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
+
+# target: docker-test                            - Static and unit testing in docker
+docker-test: docker-lint docker-phpstan docker-phpunit
+
+# target: docker-lint                            - Lint the code in docker
+docker-lint:
+	docker run --rm -w /src \
+	-v $(shell pwd):/src \
+	${TESTING_DOCKER_IMAGE} \
+	-c "make lint";
+
+# target: docker-lint                            - Lint the code with php in docker
+docker-php-lint:
+	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
+	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} php-lint;
+
+# target: docker-phpunit                         - Run phpunit in docker
+docker-phpunit:
+	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
+	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpunit;
+
+# target: docker-phpstan                         - Run phpstan in docker
+docker-phpstan: prestashop/prestashop-${PS_VERSION}
+	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
+	docker run --rm -e _PS_ROOT_DIR_=/src/prestashop/prestashop-${PS_VERSION} -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpstan;
 
 bps177: build-ps-177
 ata177: all-tests-actions-177
 rda177: run-docker-actions-177
-du:docker-up
-
 build-ps-177:
 	-docker exec -i prestashop-177 sh -c "rm -rf /var/www/html/install"
 	-docker exec -i prestashop-177 sh -c "mv /var/www/html/admin /var/www/html/admin1"
@@ -139,9 +163,6 @@ all-tests-actions-177:
 	make rda177
 	make bps177
 	docker exec -i prestashop-177 sh -c "cd /var/www/html/modules/ps_eventbus && php vendor/bin/phpunit -c tests/phpunit.xml"
-
-docker-up:
-	docker-compose -f docker-compose.yml up
 
 allure:
 	./node_modules/.bin/allure serve build/allure-results/

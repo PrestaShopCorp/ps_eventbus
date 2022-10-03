@@ -10,6 +10,10 @@ parameters:
   reportUnmatchedIgnoredErrors: false
   checkMissingIterableValueType: false
   ignoreErrors:
+    - '#Parameter \#4 \$ssl of method LinkCore::getModuleLink\(\) expects null, true given.#'
+    - '#Parameter \#1 \$id of class [a-zA-Z0-9\\_]+ constructor expects null, bool\|string given.#'
+    - '#Parameter \#1 \$id of class [a-zA-Z0-9\\_]+ constructor expects int\|null, bool\|string given.#'
+    - '#Parameter \#1 \$id of class [a-zA-Z0-9\\_]+ constructor expects null, int given.#'
     - '#Property [a-zA-Z0-9\\_:]+\$psAccountsService has unknown class PrestaShop\\AccountsAuth\\Service\\PsAccountsService as its type.#'
     - '#Call to method getOrRefreshToken\(\) on an unknown class PrestaShop\\AccountsAuth\\Service\\PsAccountsService.#'
     - '#Instantiated class Symfony\\Component\\Cache\\Adapter\\FilesystemAdapter not found.#'
@@ -17,5 +21,7 @@ parameters:
     - '#Call to method save\(\) on an unknown class Symfony\\Component\\Cache\\Adapter\\FilesystemAdapter.#'
     - '#Property ContextCore::\$employee \(Employee\) in isset\(\) is not nullable.#'
     - '#Access to an undefined property Context::\$theme.#'
+    includes:
+      - %currentWorkingDirectory%/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
 
-  level: 5
+  level: 9
