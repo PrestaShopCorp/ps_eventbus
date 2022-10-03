@@ -41,7 +41,7 @@ parameters:
 		- '#Call to method getOrRefreshToken\(\) on an unknown class PrestaShop\\AccountsAuth\\Service\\PsAccountsService.#'
 		- '#Property PrestaShop\\Module\\PsEventbus\\Repository\\ServerInformationRepository::\$psAccountsService has unknown class PrestaShop\\AccountsAuth\\Service\\PsAccountsService as its type.#'
 		- '#Instantiated class Symfony\\Component\\Cache\\Adapter\\FilesystemAdapter not found.#'
-		- '#Call to method save() on an unknown class Symfony\\Component\\Cache\\Adapter\\FilesystemAdapter. #'
-		- '#Call to method getItem() on an unknown class Symfony\\Component\\Cache\\Adapter\\FilesystemAdapter. #'
+		- '#Call to method save\(\) on an unknown class Symfony\\Component\\Cache\\Adapter\\FilesystemAdapter. #'
+		- '#Call to method getItem\(\) on an unknown class Symfony\\Component\\Cache\\Adapter\\FilesystemAdapter. #'
 
 	level: 5
