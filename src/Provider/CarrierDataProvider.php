@@ -56,9 +56,8 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getFormattedData($offset, $limit, $langIso)
     {
-        $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
-        $language = new Language($langId);
-        $currency = new Currency($this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
+        $language = new Language();
+        $currency = new Currency();
 
         $carriers = $this->carrierRepository->getAllCarrierProperties($offset, $limit, $language->id);
 
@@ -81,8 +80,8 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
             return [];
         }
 
-        $language = new Language($this->configurationRepository->get('PS_LANG_DEFAULT'));
-        $currency = new Currency($this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
+        $language = new Language();
+        $currency = new Currency();
         $carrierIds = array_column($shippingIncremental, 'id_object');
         $carriers = $this->carrierRepository->getCarrierProperties($carrierIds, $language->id);
 
