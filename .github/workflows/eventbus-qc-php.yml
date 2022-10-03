@@ -34,7 +34,7 @@ jobs:
       - name: Install dependencies
         run: composer install
       - name: Run PHP-CS-Fixer
-        run: make composer-lint
+        run: make composer-validate
 
   php-cs-fixer:
     name: PHP-CS-FIXER
