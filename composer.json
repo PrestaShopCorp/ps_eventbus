@@ -1,5 +1,6 @@
 {
   "name": "prestashopcorp/ps_eventbus",
+  "description": "PrestaShop CloudSync - share your shop data with other modules",
   "type": "prestashop-module",
   "author": "PrestaShop",
   "license": "AFL-3.0",
@@ -18,7 +19,8 @@
     },
     "classmap": [
       "ps_eventbus.php",
-      "controllers/"
+      "controllers/",
+      "src/"
     ]
   },
   "autoload-dev": {
@@ -40,8 +42,9 @@
     "vlucas/phpdotenv": "3.4"
   },
   "require-dev": {
-    "phpunit/php-code-coverage": "^7.0.7",
-    "prestashop/php-dev-tools": "^4.0",
+    "prestashop/php-dev-tools": "^4.2",
+    "phpunit/phpunit": "^8.5",
+    "phpstan/phpstan": "^1.8.6",
     "friendsofphp/php-cs-fixer": "^3.1.0",
     "allure-framework/allure-phpunit": "^v1.5.0",
     "phpseclib/phpseclib": "^2.0"
