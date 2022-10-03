@@ -93,7 +93,7 @@ vendor/bin/phpstan:
 test: composer-validate lint php-lint phpstan phpunit 
 
 # target: composer-validate                      - Validates composer.json and composer.lock
-composer-validate:
+composer-validate: vendor
 	@${COMPOSER} validate --no-check-publish
 
 # target: lint                                   - Lint the code and expose errors
