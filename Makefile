@@ -1,6 +1,5 @@
 .PHONY: clean help build bundle zip version bundle-prod bundle-inte build-back test static-testing unit-testing
 PHP = $(shell command -v php >/dev/null 2>&1 || { echo >&2 "PHP is not installed."; exit 1; } && which php)
-COMPOSER = $(shell which composer | which ./composer.phar 2> /dev/null)
 
 VERSION ?= $(shell git describe --tags 2> /dev/null || echo "0.0.0")
 SEM_VERSION ?= $(shell echo ${VERSION} | sed 's/^v//')
@@ -69,32 +68,31 @@ zip-preproduction: vendor
 # target: build                                  - Setup PHP & Node.js locally
 build: vendor
 
-vendor:
-	@if [ "$(COMPOSER)" = "" ]; then \
+composer.phar:
 	echo "Installing composer locally"; \
 	php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"; \
 	php -r "if (hash_file('sha384', 'composer-setup.php') === '55ce33d7678c5a611085589f1f3ddf8b3c52d662cd01d4ba75c0ee0459970c2200a51f492d557530c71c15d8dba01eae') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"; \
 	php composer-setup.php; \
-	php -r "unlink('composer-setup.php');"; \
-	./composer.phar install --no-dev -o; \
-	else ${COMPOSER} install --no-dev -o; \
-	fi
+	php -r "unlink('composer-setup.php');";
+
+vendor: composer.phar
+	./composer.phar install --no-dev -o;
 
 vendor/bin/php-cs-fixer:
-	${COMPOSER} install
+	./composer.phar install
 
 vendor/bin/phpunit:
-	${COMPOSER} install
+	./composer.phar install
 
 vendor/bin/phpstan:
-	${COMPOSER} install
+	./composer.phar install
 
 # target: test                                   - Static and unit testing
 test: composer-validate lint php-lint phpstan phpunit 
 
 # target: composer-validate                      - Validates composer.json and composer.lock
 composer-validate: vendor
-	@${COMPOSER} validate --no-check-publish
+	@./composer.phar validate --no-check-publish
 
 # target: lint                                   - Lint the code and expose errors
 lint: vendor/bin/php-cs-fixer
@@ -117,7 +115,7 @@ phpunit: vendor/bin/phpunit
 prestashop:
 	@mkdir -p ./prestashop
 	@git clone --depth 1 --branch ${PS_VERSION} https://github.com/PrestaShop/PrestaShop.git prestashop/prestashop-${PS_VERSION};
-	@${COMPOSER} -d ./prestashop/prestashop-${PS_VERSION} install
+	@./composer.phar -d ./prestashop/prestashop-${PS_VERSION} install
 
 # target: phpstan                                - Run phpstan
 phpstan: prestashop vendor/bin/phpstan
