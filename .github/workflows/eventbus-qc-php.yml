@@ -63,16 +63,17 @@ jobs:
           make phpstan
 
   unit-system-tests:
+    name: PHPUnit
     runs-on: ubuntu-latest
     strategy:
       matrix:
         presta-versions: ["177"]
+        version: [7.2, 7.4, 8.1]
     steps:
       - name: Setup PHP with Xdebug
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "7.1"
-          coverage: xdebug
+          php-version: ${{ matrix.version }}
 
       - name: Checkout
         uses: actions/checkout@v3
