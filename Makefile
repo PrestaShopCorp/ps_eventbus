@@ -89,7 +89,7 @@ vendor/bin/phpstan:
 prestashop:
 	@mkdir -p ./prestashop
 
-prestashop/prestashop-${PS_VERSION}:
+prestashop/prestashop-${PS_VERSION}: prestashop
 	@git clone --depth 1 --branch ${PS_VERSION} https://github.com/PrestaShop/PrestaShop.git prestashop/prestashop-${PS_VERSION};
 	@./composer.phar -d ./prestashop/prestashop-${PS_VERSION} install
 
