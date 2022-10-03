@@ -86,6 +86,13 @@ vendor/bin/phpunit:
 vendor/bin/phpstan:
 	./composer.phar install
 
+prestashop:
+	@mkdir -p ./prestashop
+
+prestashop/prestashop-${PS_VERSION}:
+	@git clone --depth 1 --branch ${PS_VERSION} https://github.com/PrestaShop/PrestaShop.git prestashop/prestashop-${PS_VERSION};
+	@./composer.phar -d ./prestashop/prestashop-${PS_VERSION} install
+
 # target: test                                   - Static and unit testing
 test: composer-validate lint php-lint phpstan phpunit 
 
@@ -110,14 +117,8 @@ lint-fix:
 phpunit: vendor/bin/phpunit
 	@vendor/bin/phpunit tests;
 
-# target: prestashop                             - Download prestashop source code
-prestashop:
-	@mkdir -p ./prestashop
-	@git clone --depth 1 --branch ${PS_VERSION} https://github.com/PrestaShop/PrestaShop.git prestashop/prestashop-${PS_VERSION};
-	@./composer.phar -d ./prestashop/prestashop-${PS_VERSION} install
-
 # target: phpstan                                - Run phpstan
-phpstan: prestashop vendor/bin/phpstan
+phpstan: prestashop/prestashop-${PS_VERSION} vendor/bin/phpstan
 	_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
 
 # target: docker-test                            - Static and unit testing in docker
