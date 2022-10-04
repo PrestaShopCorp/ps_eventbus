@@ -31,7 +31,7 @@ services:
     container_name: prestashop-177
     build:
       context: .
-      dockerfile: .docker/Dockerfile
+      dockerfile: .docker/prestashop-177.Dockerfile
     environment:
       PS_INSTALL_AUTO: 0
       DB_PASSWD: prestashop
