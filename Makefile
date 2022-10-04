@@ -133,17 +133,17 @@ docker-lint:
 
 # target: docker-lint                            - Lint the code with php in docker
 docker-php-lint:
-	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
+	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f .docker/dev-tools.Dockerfile .;
 	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} php-lint;
 
 # target: docker-phpunit                         - Run phpunit in docker
 docker-phpunit:
-	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
+	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f .docker/dev-tools.Dockerfile .;
 	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpunit;
 
 # target: docker-phpstan                         - Run phpstan in docker
 docker-phpstan: prestashop/prestashop-${PS_VERSION}
-	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
+	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f .docker/dev-tools.Dockerfile .;
 	docker run --rm -e _PS_ROOT_DIR_=/src/prestashop/prestashop-${PS_VERSION} -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpstan;
 
 bps177: build-ps-177
