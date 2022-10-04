@@ -165,7 +165,7 @@ all-tests-actions-177:
 	docker exec -i prestashop-177 sh -c "cd /var/www/html/modules/ps_eventbus && php vendor/bin/phpunit -c tests/phpunit.xml"
 
 allure:
-	./node_modules/.bin/allure serve build/allure-results/
+	npx allure serve build/allure-results/
 
 allure-report:
-	./node_modules/.bin/allure generate build/allure-results/
+	npx allure generate build/allure-results/
