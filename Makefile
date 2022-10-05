@@ -40,20 +40,27 @@ dist:
 .config.prod.yml:
 	@echo ".config.prod.yml file is missing, please create it. Exiting" && exit 1;
 
+define zip_it
+$(eval TMP_DIR := $(shell mktemp -d))
+mkdir -p ${TMP_DIR}/ps_eventbus;
+cp -r $(shell cat .zip-contents) ${TMP_DIR}/ps_eventbus;
+cp $1 ${TMP_DIR}/ps_eventbus/config/parameters.yml;
+cd ${TMP_DIR} && zip -9 -r $2 ./ps_eventbus;
+mv ${TMP_DIR}/$2 ./dist;
+rm -rf ${TMP_DIR:-/dev/null};
+endef
+
 # target: zip-inte                               - Bundle an integration zip
 zip-inte: vendor dist .config.inte.yml
-	cp .config.inte.yml ./config/parameters.yml;
-	zip -9 -r "dist/${PACKAGE}_integration.zip" $(shell cat .zip-contents);
+	@$(call zip_it,.config.inte.yml,${PACKAGE}_integration.zip)
 
 # target: zip-preprod                            - Bundle a preproduction zip
 zip-preprod: vendor dist .config.preprod.yml
-	cp .config.preprod.yml ./config/parameters.yml;
-	zip -9 -r "dist/${PACKAGE}_preproduction.zip" $(shell cat .zip-contents);
+	@$(call zip_it,.config.preprod.yml,${PACKAGE}_preproduction.zip)
 
 # target: zip-prod                               - Bundle a production zip
 zip-prod: vendor dist .config.prod.yml
-	cp .config.prod.yml ./config/parameters.yml;
-	zip -9 -r "dist/${PACKAGE}.zip" $(shell cat .zip-contents);
+	@$(call zip_it,.config.prod.yml,${PACKAGE}.zip)
 
 # target: build                                  - Setup PHP & Node.js locally
 build: vendor
