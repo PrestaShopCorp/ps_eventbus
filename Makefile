@@ -109,7 +109,7 @@ phpunit: vendor/bin/phpunit
 
 # target: phpstan                                - Run phpstan
 phpstan: prestashop/prestashop-${PS_VERSION} vendor/bin/phpstan
-	_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpstan analyse --generate-baseline --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
+	_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
 
 # target: phpstan-baseline                       - Generate a phpstan baseline to ignore all errors
 phpstan-baseline: prestashop/prestashop-${PS_VERSION} vendor/bin/phpstan
