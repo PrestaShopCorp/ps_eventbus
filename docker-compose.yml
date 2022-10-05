@@ -1,31 +1,14 @@
 services:
-  php:
-    image: phpdockerio/php72-cli
-    volumes:
-      - ./:/var/www/html
-    working_dir: /var/www/html
-    environment:
-      _PS_ROOT_DIR_: /var/www/html
-  node:
-    image: node:10.16
-    volumes:
-      - ./:/var/www/html
-    working_dir: /var/www/html
-    environment:
-      PATH: /var/www/html/_dev/node_modules/.bin/:$PATH
-
   mysql:
-    container_name: sq-mysql
     image: mysql:5.7
-    ports:
-      - "9001:3306"
     environment:
       MYSQL_ROOT_PASSWORD: prestashop
       MYSQL_DATABASE: prestashop
-    restart: always
     healthcheck:
       test: "mysqladmin ping -h127.0.0.1 -uroot -pprestashop --silent"
       interval: 10s
+    expose:
+      - "3306"
 
   prestashop-177:
     container_name: prestashop-177
@@ -37,13 +20,11 @@ services:
       DB_PASSWD: prestashop
       DB_NAME: prestashop
       DB_SERVER: mysql
-      PS_DOMAIN: 172.17.0.1:8001
+      PS_DOMAIN: localhost:80
       PS_FOLDER_INSTALL: install
       PS_FOLDER_ADMIN: admin1
     depends_on:
       - mysql
-    ports:
-      - "8001:80"
     volumes:
       - ./:/var/www/html/modules/ps_eventbus
       - ./tests/System/Seed/Config/defines.inc.php:/var/www/html/config/defines.inc.php
@@ -53,3 +34,5 @@ services:
     healthcheck:
       test: "wget --no-verbose --tries=1 --spider http://localhost:80 || exit 1"
       interval: 10s
+    expose:
+      - "80"
