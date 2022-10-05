@@ -1,35 +1,33 @@
 {
   "name": "prestashopcorp/ps_eventbus",
-  "description": "PrestaShop CloudSync - share your shop data with other modules",
+  "description": "PrestaShop EventBus is an enabler to help you share data with other modules",
   "type": "prestashop-module",
   "author": "PrestaShop",
   "license": "AFL-3.0",
   "config": {
     "preferred-install": "dist",
     "platform": {
-      "php": "7.2.5"
+      "php": "8.1"
     },
     "optimize-autoloader": true,
     "prepend-autoloader": false,
     "platform-check": false
   },
   "autoload": {
+    "classmap": [
+      "ps_eventbus.php"
+    ],
     "psr-4": {
       "PrestaShop\\Module\\PsEventbus\\": "src/"
-    },
-    "classmap": [
-      "ps_eventbus.php",
-      "controllers/",
-      "src/"
-    ]
+    }
   },
   "autoload-dev": {
-    "psr-4": {
-      "PrestaShop\\Module\\PsEventbus\\Tests\\": "tests/"
-    },
     "classmap": [
       "src/"
-    ]
+    ],
+    "psr-4": {
+      "PrestaShop\\Module\\PsEventbus\\Tests\\": "tests/"
+    }
   },
   "require": {
     "php": ">=7.2.5",
