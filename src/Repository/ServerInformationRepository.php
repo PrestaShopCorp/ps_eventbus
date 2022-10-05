@@ -123,7 +123,7 @@ class ServerInformationRepository
                     'url' => $this->context->link->getPageLink('index', null, $langId),
                     'ssl' => $this->configurationRepository->get('PS_SSL_ENABLED') == '1',
                     'multi_shop_count' => $this->shopRepository->getMultiShopCount(),
-                    'country' => $this->shopRepository->getShopCountryCode(),
+                    'country_code' => $this->shopRepository->getShopCountryCode(),
                 ],
             ],
         ];
