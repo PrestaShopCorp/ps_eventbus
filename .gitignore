@@ -1,8 +1,10 @@
 .env
+.config*.yml
 dist/
 vendor/
 prestashop/
 node_modules/
+phpstan-baseline.neon
 
 # Composer
 composer.phar
