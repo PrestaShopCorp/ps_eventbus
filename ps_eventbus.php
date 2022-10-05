@@ -24,7 +24,6 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-use Dotenv\Dotenv;
 use PrestaShop\Module\PsEventbus\Config\Config;
 
 if (!defined('_PS_VERSION_')) {
@@ -135,7 +134,6 @@ class Ps_eventbus extends Module
             $this->name,
             $this->getLocalPath()
         );
-        $this->loadEnv();
     }
 
     /**
@@ -777,19 +775,6 @@ class Ps_eventbus extends Module
 
         $deletedObjectsRepository->insertDeletedObject($objectId, $type, $date, $shopId);
         $incrementalSyncRepository->removeIncrementalSyncObject($type, $objectId);
-    }
-
-    private function loadEnv()
-    {
-        if (file_exists(_PS_MODULE_DIR_ . 'ps_eventbus/.env')) {
-            $dotenv = Dotenv::create(_PS_MODULE_DIR_ . 'ps_eventbus/');
-            $dotenv->load();
-        }
-
-        if (file_exists(_PS_MODULE_DIR_ . 'ps_eventbus/.env.dist')) {
-            $dotenv = Dotenv::create(_PS_MODULE_DIR_ . 'ps_eventbus/', '.env.dist');
-            $dotenv->load();
-        }
     }
 
     private function isPhpVersionCompliant()

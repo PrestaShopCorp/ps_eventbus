@@ -37,12 +37,12 @@ class ErrorHandler implements ErrorHandlerInterface
      */
     protected $client;
 
-    public function __construct(Module $module, Env $env, PsAccounts $accountsService)
+    public function __construct(Module $module, PsAccounts $accountsService, string $sentryDsn, string $sentryEnv)
     {
         $psAccounts = Module::getInstanceByName('ps_accounts');
         try {
             $this->client = new Raven_Client(
-                $env->get('SENTRY_CREDENTIALS'),
+                $sentryDsn,
                 [
                     'level' => 'warning',
                     'tags' => [
@@ -53,7 +53,7 @@ class ErrorHandler implements ErrorHandlerInterface
                         'prestashop_version' => _PS_VERSION_,
                         'ps_eventbus_is_enabled' => Module::isEnabled($module->name),
                         'ps_eventbus_is_installed' => Module::isInstalled($module->name),
-                        'env' => $env->get('SENTRY_ENVIRONMENT'),
+                        'env' => $sentryEnv,
                     ],
                 ]
             );
