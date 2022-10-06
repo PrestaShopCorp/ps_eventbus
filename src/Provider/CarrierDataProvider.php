@@ -59,14 +59,17 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
         $language = new Language();
         $currency = new Currency();
 
+        /** @var array $carriers */
         $carriers = $this->carrierRepository->getAllCarrierProperties($offset, $limit, $language->id);
 
+        /** @var string $configurationPsWeightUnit */
+        $configurationPsWeightUnit = $this->configurationRepository->get('PS_WEIGHT_UNIT');
         /** @var EventBusCarrier[] $eventBusCarriers */
         $eventBusCarriers = $this->carrierBuilder->buildCarriers(
             $carriers,
             $language,
             $currency,
-            $this->configurationRepository->get('PS_WEIGHT_UNIT')
+            $configurationPsWeightUnit
         );
 
         return $eventBusCarriers;
@@ -74,6 +77,7 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
 
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
+        /** @var array $shippingIncremental */
         $shippingIncremental = $this->carrierRepository->getShippingIncremental(Config::COLLECTION_CARRIERS, $langIso);
 
         if (!$shippingIncremental) {
@@ -83,21 +87,34 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
         $language = new Language();
         $currency = new Currency();
         $carrierIds = array_column($shippingIncremental, 'id_object');
+        /** @var array $carriers */
         $carriers = $this->carrierRepository->getCarrierProperties($carrierIds, $language->id);
 
+        /** @var string $configurationPsWeightUnit */
+        $configurationPsWeightUnit = $this->configurationRepository->get('PS_WEIGHT_UNIT');
         /** @var EventBusCarrier[] $eventBusCarriers */
         $eventBusCarriers = $this->carrierBuilder->buildCarriers(
             $carriers,
             $language,
             $currency,
-            $this->configurationRepository->get('PS_WEIGHT_UNIT')
+            $configurationPsWeightUnit
         );
 
         return $eventBusCarriers;
     }
 
+    /**
+     * @param int $offset
+     * @param string $langIso
+     *
+     * @return int
+     *
+     * @throws \PrestaShopDatabaseException
+     */
     public function getRemainingObjectsCount($offset, $langIso)
     {
-        return (int) $this->carrierRepository->getRemainingCarriersCount($offset, $langIso);
+        $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
+
+        return (int) $this->carrierRepository->getRemainingCarriersCount($offset, $langId);
     }
 }

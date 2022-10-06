@@ -169,3 +169,7 @@ allure:
 
 allure-report:
 	./node_modules/.bin/allure generate build/allure-results/
+
+# target: phpstan-baseline                        - Generate a phpstan baseline to ignore all errors
+phpstan-baseline: prestashop/prestashop-${PS_VERSION} vendor/bin/phpstan
+	_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpstan analyse --generate-baseline --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;

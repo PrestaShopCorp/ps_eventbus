@@ -15,6 +15,7 @@ class ps_EventbusApiSpecificPricesModuleFrontController extends AbstractApiContr
      */
     public function postProcess()
     {
+        /** @var CustomPriceDataProvider $productDataProvider */
         $productDataProvider = $this->module->getService(CustomPriceDataProvider::class);
 
         $response = $this->handleDataSync($productDataProvider);

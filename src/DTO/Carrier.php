@@ -674,6 +674,9 @@ class Carrier implements JsonSerializable
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getUpdateAt()
     {
         return $this->updateAt;

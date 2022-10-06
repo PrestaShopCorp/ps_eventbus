@@ -15,9 +15,10 @@ class ps_EventbusApiCarriersModuleFrontController extends AbstractApiController
      */
     public function postProcess()
     {
-        $categoryDataProvider = $this->module->getService(CarrierDataProvider::class);
+        /** @var CarrierDataProvider $carrierDataProvider */
+        $carrierDataProvider = $this->module->getService(CarrierDataProvider::class);
 
-        $response = $this->handleDataSync($categoryDataProvider);
+        $response = $this->handleDataSync($carrierDataProvider);
 
         $this->exitWithResponse($response);
     }

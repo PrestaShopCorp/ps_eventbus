@@ -102,6 +102,13 @@ class ProductCarrierRepository
         return $this->db->executeS($query);
     }
 
+    /**
+     * @param array $productIds
+     *
+     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     *
+     * @throws PrestaShopDatabaseException
+     */
     public function getProductCarriersProperties(array $productIds)
     {
         if (!$productIds) {

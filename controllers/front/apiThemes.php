@@ -16,11 +16,13 @@ class ps_EventbusApiThemesModuleFrontController extends AbstractApiController
     {
         $response = [];
 
+        /** @var string $jobId */
         $jobId = Tools::getValue('job_id');
 
         /** @var ThemeRepository $themeRepository */
         $themeRepository = $this->module->getService(ThemeRepository::class);
 
+        /** @var array $themeInfo */
         $themeInfo = $themeRepository->getThemes();
 
         try {

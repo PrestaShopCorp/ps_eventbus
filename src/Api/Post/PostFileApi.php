@@ -9,14 +9,18 @@ use Psr\Http\Message\StreamInterface;
  */
 class PostFileApi implements PostFileInterface
 {
+    /** @var string */
     private $name;
+    /** @var string|null */
     private $filename;
+    /** @var StreamInterface|MultipartBody|mixed */
     private $content;
+    /** @var array */
     private $headers = [];
 
     /**
      * @param string $name Name of the form field
-     * @param mixed $content Data to send
+     * @param StreamInterface|MultipartBody|string $content Data to send
      * @param string|null $filename Filename content-disposition attribute
      * @param array $headers Array of headers to set on the file (can override any default headers)
      *
@@ -40,6 +44,9 @@ class PostFileApi implements PostFileInterface
         return $this->name;
     }
 
+    /**
+     * @return string|null
+     */
     public function getFilename()
     {
         return $this->filename;
@@ -58,7 +65,9 @@ class PostFileApi implements PostFileInterface
     /**
      * Prepares the contents of a POST file.
      *
-     * @param mixed $content Content of the POST file
+     * @param StreamInterface|MultipartBody|string $content Content of the POST file
+     *
+     * @return void
      */
     private function prepareContent($content)
     {
@@ -85,6 +94,8 @@ class PostFileApi implements PostFileInterface
      * Applies a file name to the POST file based on various checks.
      *
      * @param string|null $filename Filename to apply (or null to guess)
+     *
+     * @return void
      */
     private function prepareFilename($filename)
     {
@@ -101,6 +112,8 @@ class PostFileApi implements PostFileInterface
 
     /**
      * Applies default Content-Disposition and Content-Type headers if needed.
+     *
+     * @return void
      */
     private function prepareDefaultHeaders()
     {
@@ -109,7 +122,7 @@ class PostFileApi implements PostFileInterface
             $this->headers['Content-Disposition'] = sprintf(
                 'form-data; name="%s"; filename="%s"',
                 $this->name,
-                basename($this->filename)
+                basename(is_null($this->filename) ? '' : $this->filename)
             );
         }
 

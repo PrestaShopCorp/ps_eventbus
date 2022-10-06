@@ -29,7 +29,7 @@ class Env
     /**
      * @param string $key
      *
-     * @return string
+     * @return mixed
      */
     public function get($key)
     {

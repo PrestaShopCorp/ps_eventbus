@@ -25,7 +25,9 @@ class GoogleTaxonomyDataProvider implements PaginatedApiDataProviderInterface
 
     public function getFormattedData($offset, $limit, $langIso)
     {
-        $data = $this->googleTaxonomyRepository->getTaxonomyCategories($offset, $limit, $this->context->shop->id);
+        /** @var int $shopId */
+        $shopId = $this->context->shop->id;
+        $data = $this->googleTaxonomyRepository->getTaxonomyCategories($offset, $limit, $shopId);
 
         if (!is_array($data)) {
             return [];
@@ -45,7 +47,10 @@ class GoogleTaxonomyDataProvider implements PaginatedApiDataProviderInterface
 
     public function getRemainingObjectsCount($offset, $langIso)
     {
-        return (int) $this->googleTaxonomyRepository->getRemainingTaxonomyRepositories($offset, $this->context->shop->id);
+        /** @var int $shopId */
+        $shopId = $this->context->shop->id;
+
+        return (int) $this->googleTaxonomyRepository->getRemainingTaxonomyRepositories($offset, $shopId);
     }
 
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)

@@ -10,10 +10,6 @@ parameters:
   reportUnmatchedIgnoredErrors: false
   checkMissingIterableValueType: false
   ignoreErrors:
-    - '#Parameter \#4 \$ssl of method LinkCore::getModuleLink\(\) expects null, true given.#'
-    - '#Parameter \#1 \$id of class [a-zA-Z0-9\\_]+ constructor expects null, bool\|string given.#'
-    - '#Parameter \#1 \$id of class [a-zA-Z0-9\\_]+ constructor expects int\|null, bool\|string given.#'
-    - '#Parameter \#1 \$id of class [a-zA-Z0-9\\_]+ constructor expects null, int given.#'
     - '#Property [a-zA-Z0-9\\_:]+\$psAccountsService has unknown class PrestaShop\\AccountsAuth\\Service\\PsAccountsService as its type.#'
     - '#Call to method getOrRefreshToken\(\) on an unknown class PrestaShop\\AccountsAuth\\Service\\PsAccountsService.#'
     - '#Instantiated class Symfony\\Component\\Cache\\Adapter\\FilesystemAdapter not found.#'
@@ -21,7 +17,17 @@ parameters:
     - '#Call to method save\(\) on an unknown class Symfony\\Component\\Cache\\Adapter\\FilesystemAdapter.#'
     - '#Property ContextCore::\$employee \(Employee\) in isset\(\) is not nullable.#'
     - '#Access to an undefined property Context::\$theme.#'
-    includes:
-      - %currentWorkingDirectory%/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
+    - '#Cannot call method getOrRefreshToken\(\) on mixed.#'
+    - '#Cannot call method getMetadata\(\) on mixed.#'
+    - '#Method PrestaShop\\Module\\PsEventbus\\Api\\Post\\PostFileApi::getContent\(\) should return Psr\\Http\\Message\\StreamInterface but returns mixed.#'
+    - '#Property PrestaShop\\Module\\PsEventbus\\Controller\\AbstractApiController::[a-zA-Z0-9\\_\$\(\) ]+ does not accept mixed.#'
+    - '#Cannot call method getShopUuid\(\) on mixed.#'
+    - '#Cannot call method getPsAccountsService\(\) on mixed.#'
+    - '#Cannot call method handle\(\) on mixed.#'
+    - '#Cannot access property [a-z\$]+ on Context\|null.#'
+    - '#Property [a-zA-Z0-9\\_:]+\$psAccountsService \(PrestaShop\\AccountsAuth\\Service\\PsAccountsService\) does not accept mixed.#'
+    - '#Parameter \#2 \$currency of static method ToolsCore::convertPrice\(\) expects array\|object\|null, [a-z0-9<>,-\| ]+ given.#'
+    - '#Method PrestaShop\\Module\\PsEventbus\\Service\\SpecificPriceService::priceCalculation\(\) never returns void so it can be removed from the return type.#'
+    - '#Property PrestaShop\\Module\\PsEventbus\\Api\\Post\\Stream::\$stream \(resource\) does not accept null.#'
 
   level: 9

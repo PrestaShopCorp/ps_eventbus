@@ -12,6 +12,7 @@ class LanguageRepository
      */
     public function getLanguagesIsoCodes()
     {
+        /** @var array $languages */
         $languages = Language::getLanguages();
 
         return array_map(function ($language) {

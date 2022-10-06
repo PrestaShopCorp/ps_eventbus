@@ -83,9 +83,11 @@ class ServerInformationRepository
     }
 
     /**
-     * @param $langIso
+     * @param string $langIso
      *
-     * @return array
+     * @return array[]
+     *
+     * @throws \PrestaShopException
      */
     public function getServerInformation($langIso = '')
     {
@@ -185,6 +187,9 @@ class ServerInformationRepository
         ];
     }
 
+    /**
+     * @return mixed
+     */
     private function getAccountsClient()
     {
         $module = \Module::getInstanceByName('ps_accounts');

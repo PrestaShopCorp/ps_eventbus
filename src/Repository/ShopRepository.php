@@ -31,6 +31,9 @@ class ShopRepository
         return (int) $this->db->getValue($query);
     }
 
+    /**
+     * @return string
+     */
     public function getCreatedAt()
     {
         $query = new DbQuery();
@@ -42,6 +45,9 @@ class ShopRepository
         return (string) $this->db->getValue($query);
     }
 
+    /**
+     * @return string
+     */
     public function getShopCountryCode()
     {
         $query = new DbQuery();
