@@ -114,8 +114,8 @@ lint-fix:
 	@vendor/bin/php-cs-fixer fix --using-cache=no;
 
 # target: phpunit                                - Run phpunit
-phpunit: vendor/bin/phpunit
-	@vendor/bin/phpunit tests;
+phpunit: prestashop/prestashop-${PS_VERSION} vendor/bin/phpunit
+	@_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpunit ./tests/unit;
 
 # target: phpstan                                - Run phpstan
 phpstan: prestashop/prestashop-${PS_VERSION} vendor/bin/phpstan
