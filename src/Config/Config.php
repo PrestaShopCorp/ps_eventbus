@@ -25,9 +25,6 @@ class Config
         self::PS_ACCOUNTS_NOT_INSTALLED => 'PsAccounts not installed',
     ];
 
-    public const SENTRY_CREDENTIALS = 'SENTRY_CREDENTIALS_KEY';
-    public const SENTRY_ENVIRONMENT = 'production';
-
     public const COLLECTION_CARRIERS = 'carriers';
     public const COLLECTION_CARTS = 'carts';
     public const COLLECTION_CART_PRODUCTS = 'cart_products';
