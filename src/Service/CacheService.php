@@ -15,9 +15,9 @@ class CacheService
     public function setCacheProperty($key, $value)
     {
         $cache = new FilesystemAdapter();
-        $merchantConsentCache = $cache->getItem($key);
-        $merchantConsentCache->set($value);
-        $cache->save($merchantConsentCache);
+        $cacheItem = $cache->getItem($key);
+        $cacheItem->set($value);
+        $cache->save($cacheItem);
     }
 
     /**
@@ -28,8 +28,8 @@ class CacheService
     public function getCacheProperty($key)
     {
         $cache = new FilesystemAdapter();
-        $merchantConsentCache = $cache->getItem($key);
+        $cacheItem = $cache->getItem($key);
 
-        return $merchantConsentCache->get();
+        return $cacheItem->get();
     }
 }
