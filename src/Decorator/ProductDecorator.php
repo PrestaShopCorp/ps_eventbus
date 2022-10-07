@@ -139,7 +139,7 @@ class ProductDecorator
         $product['sale_tax'] = $product['sale_price_tax_incl'] - $product['sale_price_tax_excl'];
     }
 
-    private function getBundleCollection(array $product)
+    private function getBundleCollection(array $product): array
     {
         $bundleProducts = $this->bundleRepository->getBundleProducts($product['id_product']);
         $uniqueProductId = $product['unique_product_id'];
@@ -177,10 +177,12 @@ class ProductDecorator
      */
     private function addCategoryTree(array &$product)
     {
+        /** @var int $shopId */
+        $shopId = $this->context->shop->id;
         $categoryPaths = $this->categoryRepository->getCategoryPaths(
             $product['id_category_default'],
             $this->languageRepository->getLanguageIdByIsoCode($product['iso_code']),
-            $this->context->shop->id
+            $shopId
         );
 
         $product['category_path'] = $categoryPaths['category_path'];

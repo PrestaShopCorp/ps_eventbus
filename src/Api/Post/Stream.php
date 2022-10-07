@@ -12,12 +12,19 @@ use Psr\Http\Message\StreamInterface;
  */
 class Stream implements StreamInterface
 {
+    /** @var resource */
     private $stream;
+    /** @var int|mixed */
     private $size;
+    /** @var bool */
     private $seekable;
-    private $readable;
+    /** @var bool */
     private $writable;
+    /** @var bool */
+    private $readable;
+    /** @var string */
     private $uri;
+    /** @var array */
     private $customMetadata;
 
     /** @var array Hash of readable and writable stream types */
@@ -51,19 +58,17 @@ class Stream implements StreamInterface
      */
     public static function factory($resource = '', array $options = [])
     {
-        $type = gettype($resource);
-
-        if ($type == 'string') {
+        if (is_string($resource)) {
             $stream = fopen('php://temp', 'r+');
-            if ($resource !== '') {
+            if ($resource !== '' && is_resource($stream)) {
                 fwrite($stream, $resource);
                 fseek($stream, 0);
-            }
 
-            return new self($stream, $options);
+                return new self($stream, $options);
+            }
         }
 
-        if ($type == 'resource') {
+        if (is_resource($resource)) {
             return new self($resource, $options);
         }
 
@@ -71,7 +76,7 @@ class Stream implements StreamInterface
             return $resource;
         }
 
-        if ($type == 'object' && method_exists($resource, '__toString')) {
+        if (is_object($resource) && method_exists($resource, '__toString')) {
             return self::factory((string) $resource, $options);
         }
 
@@ -84,6 +89,7 @@ class Stream implements StreamInterface
                 if (!$resource->valid()) {
                     return false;
                 }
+                /** @var string|false|null $result */
                 $result = $resource->current();
                 $resource->next();
 
@@ -91,7 +97,7 @@ class Stream implements StreamInterface
             }, $options);
         }
 
-        throw new InvalidArgumentException('Invalid resource type: ' . $type);
+        throw new InvalidArgumentException('Invalid resource type: ' . gettype($resource));
     }
 
     /**
@@ -133,18 +139,17 @@ class Stream implements StreamInterface
 
     public function __toString()
     {
-        if (!$this->stream) {
-            return '';
-        }
-
         $this->seek(0);
 
         return (string) stream_get_contents($this->stream);
     }
 
+    /**
+     * @return false|string
+     */
     public function getContents()
     {
-        return $this->stream ? stream_get_contents($this->stream) : '';
+        return stream_get_contents($this->stream);
     }
 
     public function close()
@@ -159,12 +164,18 @@ class Stream implements StreamInterface
     public function detach()
     {
         $result = $this->stream;
-        $this->stream = $this->size = $this->uri = null;
+        $this->size = $this->stream = null;
         $this->readable = $this->writable = $this->seekable = false;
+        $this->uri = '';
 
         return $result;
     }
 
+    /**
+     * @param resource $stream
+     *
+     * @return void
+     */
     public function attach($stream)
     {
         $this->stream = $stream;
@@ -172,17 +183,18 @@ class Stream implements StreamInterface
         $this->seekable = $meta['seekable'];
         $this->readable = isset(self::$readWriteHash['read'][$meta['mode']]);
         $this->writable = isset(self::$readWriteHash['write'][$meta['mode']]);
-        $this->uri = $this->getMetadata('uri');
+        /** @var string $uri */
+        $uri = $this->getMetadata('uri');
+        $this->uri = $uri;
     }
 
+    /**
+     * @return int|mixed|null
+     */
     public function getSize()
     {
         if ($this->size !== null) {
             return $this->size;
-        }
-
-        if (!$this->stream) {
-            return null;
         }
 
         // Clear the stat cache if the stream has a URI
@@ -191,7 +203,10 @@ class Stream implements StreamInterface
         }
 
         $stats = fstat($this->stream);
-        if (isset($stats['size'])) {
+        if (
+          /* @phpstan-ignore-next-line */
+          isset($stats['size'])
+        ) {
             $this->size = $stats['size'];
 
             return $this->size;
@@ -217,14 +232,22 @@ class Stream implements StreamInterface
 
     public function eof()
     {
-        return !$this->stream || feof($this->stream);
+        return feof($this->stream);
     }
 
+    /**
+     * @return false|int
+     */
     public function tell()
     {
-        return $this->stream ? ftell($this->stream) : false;
+        return ftell($this->stream);
     }
 
+    /**
+     * @param int|mixed $size
+     *
+     * @return $this
+     */
     public function setSize($size)
     {
         $this->size = $size;
@@ -232,16 +255,32 @@ class Stream implements StreamInterface
         return $this;
     }
 
+    /**
+     * @param int $offset
+     * @param int $whence
+     *
+     * @return bool
+     */
     public function seek($offset, $whence = SEEK_SET)
     {
         return $this->seekable && fseek($this->stream, $offset, $whence) === 0;
     }
 
+    /**
+     * @param int<0, max> $length
+     *
+     * @return false|string
+     */
     public function read($length)
     {
         return $this->readable ? fread($this->stream, $length) : false;
     }
 
+    /**
+     * @param string $string
+     *
+     * @return false|int
+     */
     public function write($string)
     {
         // We can't know the size after writing anything
@@ -252,9 +291,7 @@ class Stream implements StreamInterface
 
     public function getMetadata($key = null)
     {
-        if (!$this->stream) {
-            return $key ? null : [];
-        } elseif (!$key) {
+        if (!$key) {
             return $this->customMetadata + stream_get_meta_data($this->stream);
         } elseif (isset($this->customMetadata[$key])) {
             return $this->customMetadata[$key];

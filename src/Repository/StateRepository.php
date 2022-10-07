@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
 use Db;
 use DbQuery;
 use mysqli_result;
@@ -17,16 +16,13 @@ class StateRepository
     private $db;
 
     /**
-     * @var Context
+     * @var array
      */
-    private $context;
-
     private $stateIsoCodeCache = [];
 
-    public function __construct(Db $db, Context $context)
+    public function __construct(Db $db)
     {
         $this->db = $db;
-        $this->context = $context;
     }
 
     /**
@@ -63,8 +59,12 @@ class StateRepository
             $query->where('c.active = ' . (bool) $active);
 
             $isoCodes = [];
-            foreach ($this->db->executeS($query) as $state) {
-                $isoCodes[] = $state['iso_code'];
+
+            $result = $this->db->executeS($query);
+            if (is_array($result)) {
+                foreach ($result as $state) {
+                    $isoCodes[] = $state['iso_code'];
+                }
             }
             $this->stateIsoCodeCache[$cacheKey] = $isoCodes;
         }

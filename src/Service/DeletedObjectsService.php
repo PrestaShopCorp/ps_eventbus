@@ -38,7 +38,9 @@ class DeletedObjectsService
      */
     public function handleDeletedObjectsSync($jobId)
     {
-        $deletedObjects = $this->deletedObjectsRepository->getDeletedObjectsGrouped($this->context->shop->id);
+        /** @var int $shopId */
+        $shopId = $this->context->shop->id;
+        $deletedObjects = $this->deletedObjectsRepository->getDeletedObjectsGrouped($shopId);
 
         if (empty($deletedObjects)) {
             return [
@@ -55,7 +57,7 @@ class DeletedObjectsService
                 $this->deletedObjectsRepository->removeDeletedObjects(
                     $dataItem['collection'],
                     $dataItem['deleteIds'],
-                    $this->context->shop->id
+                    $shopId
                 );
             }
         }

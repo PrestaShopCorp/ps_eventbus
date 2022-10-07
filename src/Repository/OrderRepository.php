@@ -8,7 +8,7 @@ use PrestaShopDatabaseException;
 
 class OrderRepository
 {
-    const ORDERS_TABLE = 'orders';
+    public const ORDERS_TABLE = 'orders';
 
     /**
      * @var Db

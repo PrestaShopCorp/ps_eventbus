@@ -19,6 +19,7 @@ class ps_EventbusApiGoogleTaxonomiesModuleFrontController extends AbstractApiCon
             $this->exitWithExceptionMessage(new Exception('Facebook module is not installed', Config::PS_FACEBOOK_NOT_INSTALLED));
         }
 
+        /** @var GoogleTaxonomyDataProvider $categoryDataProvider */
         $categoryDataProvider = $this->module->getService(GoogleTaxonomyDataProvider::class);
 
         $response = $this->handleDataSync($categoryDataProvider);

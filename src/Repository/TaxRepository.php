@@ -21,6 +21,9 @@ class TaxRepository
      */
     private $context;
 
+    /**
+     * @var array
+     */
     private $countryIsoCodeCache = [];
 
     public function __construct(Db $db, Context $context)

@@ -3,7 +3,6 @@
 namespace PrestaShop\Module\PsEventbus\Provider;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Repository\CartProductRepository;
 use PrestaShop\Module\PsEventbus\Repository\CartRepository;
 
@@ -17,24 +16,17 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
      * @var CartProductRepository
      */
     private $cartProductRepository;
-    /**
-     * @var ArrayFormatter
-     */
-    private $arrayFormatter;
 
     /**
      * @param CartRepository $cartRepository
      * @param CartProductRepository $cartProductRepository
-     * @param ArrayFormatter $arrayFormatter
      */
     public function __construct(
         CartRepository $cartRepository,
-        CartProductRepository $cartProductRepository,
-        ArrayFormatter $arrayFormatter
+        CartProductRepository $cartProductRepository
     ) {
         $this->cartRepository = $cartRepository;
         $this->cartProductRepository = $cartProductRepository;
-        $this->arrayFormatter = $arrayFormatter;
     }
 
     public function getFormattedData($offset, $limit, $langIso)

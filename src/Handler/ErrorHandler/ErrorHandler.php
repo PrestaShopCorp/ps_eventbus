@@ -56,7 +56,9 @@ class ErrorHandler implements ErrorHandlerInterface
                     ],
                 ]
             );
-            $this->client->set_user_data($accountsService->getPsAccountsService()->getShopUuid(), Configuration::get('PS_SHOP_EMAIL'));
+            /** @var string $configurationPsShopEmail */
+            $configurationPsShopEmail = Configuration::get('PS_SHOP_EMAIL');
+            $this->client->set_user_data($accountsService->getPsAccountsService()->getShopUuid(), $configurationPsShopEmail);
         } catch (Exception $e) {
         }
     }
@@ -77,7 +79,7 @@ class ErrorHandler implements ErrorHandlerInterface
             return;
         }
         $this->client->captureException($error, $data);
-        if ($code && true === $throw) {
+        if (is_int($code) && true === $throw) {
             http_response_code($code);
             throw $error;
         }

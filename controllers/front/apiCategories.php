@@ -15,6 +15,7 @@ class ps_EventbusApiCategoriesModuleFrontController extends AbstractApiControlle
      */
     public function postProcess()
     {
+        /** @var CategoryDataProvider $categoryDataProvider */
         $categoryDataProvider = $this->module->getService(CategoryDataProvider::class);
 
         $response = $this->handleDataSync($categoryDataProvider);

@@ -15,6 +15,7 @@ class ps_EventbusApiCustomProductCarriersModuleFrontController extends AbstractA
      */
     public function postProcess()
     {
+        /** @var CustomProductCarrierDataProvider $categoryDataProvider */
         $categoryDataProvider = $this->module->getService(CustomProductCarrierDataProvider::class);
 
         $response = $this->handleDataSync($categoryDataProvider);

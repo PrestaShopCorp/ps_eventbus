@@ -17,19 +17,19 @@ class ps_EventbusApiInfoModuleFrontController extends AbstractApiController
     public function postProcess()
     {
         $response = [];
-
+        /** @var string $jobId */
         $jobId = Tools::getValue('job_id');
 
         /** @var ServerInformationRepository $serverInformationRepository */
         $serverInformationRepository = $this->module->getService(ServerInformationRepository::class);
 
-        $serverInfo = $serverInformationRepository->getServerInformation(Tools::getValue('lang_iso', null));
+        /** @var string $langIso */
+        $langIso = Tools::getValue('lang_iso', '');
+        $serverInfo = $serverInformationRepository->getServerInformation($langIso);
 
         try {
             $response = $this->proxyService->upload($jobId, $serverInfo, $this->startTime);
-        } catch (EnvVarException $exception) {
-            $this->exitWithExceptionMessage($exception);
-        } catch (Exception $exception) {
+        } catch (EnvVarException|Exception $exception) {
             $this->exitWithExceptionMessage($exception);
         }
 

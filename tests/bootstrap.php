@@ -1,7 +1,7 @@
 <?php
 
-$rootDirectory = __DIR__ . '/../../../';
-$projectDir = __DIR__ . '/../';
+$prestashopDir = getenv('_PS_ROOT_DIR_');
+$projectDir = __DIR__ . '/..';
 
-require_once $rootDirectory . 'config/config.inc.php';
-require_once $projectDir . 'vendor/autoload.php';
+require_once $prestashopDir . '/config/config.inc.php';
+require_once $projectDir . '/vendor/autoload.php';

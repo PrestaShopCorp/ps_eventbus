@@ -22,11 +22,8 @@
     }
   },
   "autoload-dev": {
-    "classmap": [
-      "src/"
-    ],
     "psr-4": {
-      "PrestaShop\\Module\\PsEventbus\\Tests\\": "tests/"
+      "PrestaShop\\Module\\PsEventbus\\Tests\\": "tests"
     }
   },
   "require": {
