@@ -12,7 +12,7 @@ class CarrierDetail implements JsonSerializable
     private $collection = 'carrier_details';
 
     /**
-     * @var string
+     * @var string|bool
      */
     private $shippingMethod;
 
@@ -70,7 +70,7 @@ class CarrierDetail implements JsonSerializable
     }
 
     /**
-     * @return string
+     * @return string|bool
      */
     public function getShippingMethod()
     {
@@ -78,7 +78,7 @@ class CarrierDetail implements JsonSerializable
     }
 
     /**
-     * @param string $shippingMethod
+     * @param bool|string $shippingMethod
      *
      * @return CarrierDetail
      */

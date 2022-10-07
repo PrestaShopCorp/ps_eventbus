@@ -134,6 +134,7 @@ abstract class AbstractApiController extends ModuleFrontController
      */
     private function authorize()
     {
+        /** @var string $jobId */
         $jobId = Tools::getValue('job_id', 'empty_job_id');
 
         $authorizationResponse = $this->authorizationService->authorizeCall($jobId);
@@ -162,15 +163,19 @@ abstract class AbstractApiController extends ModuleFrontController
      */
     protected function handleDataSync(PaginatedApiDataProviderInterface $dataProvider)
     {
+        /** @var string $jobId */
         $jobId = Tools::getValue('job_id');
+        /** @var string $langIso */
         $langIso = Tools::getValue('lang_iso', $this->languageRepository->getDefaultLanguageIsoCode());
-        $limit = (int) Tools::getValue('limit', 50);
+        /** @var int $limit */
+        $limit = Tools::getValue('limit', 50);
 
         if ($limit < 0) {
             $this->exitWithExceptionMessage(new QueryParamsException('Invalid URL Parameters', Config::INVALID_URL_QUERY));
         }
 
-        $initFullSync = (int) Tools::getValue('full', 0) == 1;
+        /** @var bool $initFullSync */
+        $initFullSync = Tools::getValue('full', 0) == 1;
 
         $dateNow = (new DateTime())->format(DateTime::ATOM);
         $offset = 0;
@@ -258,7 +263,7 @@ abstract class AbstractApiController extends ModuleFrontController
      */
     public function ajaxDie($value = null, $controller = null, $method = null)
     {
-        parent::ajaxDie(json_encode($value), $controller, $method);
+        parent::ajaxDie(json_encode($value) ?: null, $controller, $method);
     }
 
     /**

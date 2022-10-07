@@ -13,6 +13,9 @@ class ModuleDataProvider implements PaginatedApiDataProviderInterface
      */
     private $moduleRepository;
 
+    /**
+     * @var string
+     */
     private $createdAt;
 
     public function __construct(ModuleRepository $moduleRepository, ShopRepository $shopRepository)

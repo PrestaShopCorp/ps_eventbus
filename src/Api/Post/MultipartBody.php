@@ -13,6 +13,7 @@ class MultipartBody implements StreamInterface
 {
     use StreamDecoratorTrait;
 
+    /** @var string */
     private $boundary;
 
     /**
@@ -49,6 +50,11 @@ class MultipartBody implements StreamInterface
 
     /**
      * Get the string needed to transfer a POST field
+     *
+     * @param string $name
+     * @param string $value
+     *
+     * @return string
      */
     private function getFieldString($name, $value)
     {
@@ -62,6 +68,10 @@ class MultipartBody implements StreamInterface
 
     /**
      * Get the headers needed before transferring the content of a POST file
+     *
+     * @param PostFileInterface $file
+     *
+     * @return string
      */
     private function getFileHeaders(PostFileInterface $file)
     {
@@ -75,6 +85,11 @@ class MultipartBody implements StreamInterface
 
     /**
      * Create the aggregate stream that will be used to upload the POST data
+     *
+     * @param array $fields
+     * @param array $files
+     *
+     * @return AppendStream
      */
     protected function createStream(array $fields, array $files)
     {

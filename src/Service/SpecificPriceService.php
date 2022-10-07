@@ -23,13 +23,46 @@ use Validate;
 
 class SpecificPriceService
 {
+    /** @var array */
     private static $_pricesLevel2;
 
+    /**
+     * @param int $productId
+     * @param int $attributeId
+     * @param int $specificPriceId
+     * @param bool $useTax
+     * @param bool $usereduc
+     * @param Context|null $context
+     *
+     * @return float|int|void
+     *
+     * @throws \PrestaShopException
+     */
     public function getSpecificProductPrice($productId, $attributeId, $specificPriceId, $useTax, $usereduc, $context)
     {
         return $this->getPriceStatic($productId, $attributeId, $specificPriceId, $useTax, $usereduc, $context);
     }
 
+    /**
+     * @param int $id_product
+     * @param int $id_product_attribute
+     * @param int $specificPriceId
+     * @param bool $usetax
+     * @param bool $usereduc
+     * @param Context|null $context
+     * @param int $decimals
+     * @param null $divisor
+     * @param bool $only_reduc
+     * @param null $id_customer
+     * @param null $id_cart
+     * @param null $id_address
+     * @param null $specific_price_output
+     * @param bool $use_group_reduction
+     *
+     * @return float|int|void
+     *
+     * @throws \PrestaShopException
+     */
     private function getPriceStatic(
         $id_product,
         $id_product_attribute,
@@ -44,53 +77,29 @@ class SpecificPriceService
         $id_cart = null,
         $id_address = null,
         &$specific_price_output = null,
-        $with_ecotax = true,
-        $use_group_reduction = true,
-        $id_customization = null
+        $use_group_reduction = true
     ) {
         if (!$context) {
+            /** @var Context $context */
             $context = Context::getContext();
         }
 
         $cur_cart = $context->cart;
 
-        if ($divisor !== null) {
-            Tools::displayParameterAsDeprecated('divisor');
-        }
+        Tools::displayParameterAsDeprecated('divisor');
 
         if (!Validate::isBool($usetax) || !Validate::isUnsignedId($id_product)) {
             exit(Tools::displayError());
         }
 
         // Initializations
-        $id_group = null;
-        if ($id_customer) {
-            $id_group = Customer::getDefaultGroupId((int) $id_customer);
-        }
-        if (!$id_group) {
-            $id_group = (int) Group::getCurrent()->id;
-        }
+        $id_group = (int) Group::getCurrent()->id;
 
-        // If there is cart in context or if the specified id_cart is different from the context cart id
-        if (!is_object($cur_cart) || (Validate::isUnsignedInt($id_cart) && $id_cart && $cur_cart->id != $id_cart)) {
-            /*
-            * When a user (e.g., guest, customer, Google...) is on PrestaShop, he has already its cart as the global (see /init.php)
-            * When a non-user calls directly this method (e.g., payment module...) is on PrestaShop, he does not have already it BUT knows the cart ID
-            * When called from the back office, cart ID can be inexistant
-            */
-            if (!$id_cart && !isset($context->employee)) {
-                exit(Tools::displayError());
-            }
-            $cur_cart = new Cart($id_cart);
-            // Store cart in context to avoid multiple instantiations in BO
-            if (!Validate::isLoadedObject($context->cart)) {
-                $context->cart = $cur_cart;
-            }
-        }
+        /** @var \Currency $currency */
+        $currency = $context->currency;
+        $id_currency = Validate::isLoadedObject($currency) ? (int) $currency->id : (int) Configuration::get('PS_CURRENCY_DEFAULT');
 
-        $id_currency = Validate::isLoadedObject($context->currency) ? (int) $context->currency->id : (int) Configuration::get('PS_CURRENCY_DEFAULT');
-
-        if (!$id_address && Validate::isLoadedObject($cur_cart)) {
+        if (Validate::isLoadedObject($cur_cart)) {
             $id_address = $cur_cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
         }
 
@@ -111,8 +120,11 @@ class SpecificPriceService
             $usetax = false;
         }
 
+        /** @var int $shopId */
+        $shopId = $context->shop->id;
+
         return $this->priceCalculation(
-            $context->shop->id,
+            $shopId,
             $id_product,
             $id_product_attribute,
             $specificPriceId,
@@ -125,13 +137,33 @@ class SpecificPriceService
             $decimals,
             $only_reduc,
             $usereduc,
-            $with_ecotax,
             $specific_price_output,
-            $use_group_reduction,
-            $id_customization
+            $use_group_reduction
         );
     }
 
+    /**
+     * @param int $id_shop
+     * @param int $id_product
+     * @param int $id_product_attribute
+     * @param int $specificPriceId
+     * @param int $id_country
+     * @param int $id_state
+     * @param string $zipcode
+     * @param int $id_currency
+     * @param int $id_group
+     * @param bool $use_tax
+     * @param int $decimals
+     * @param bool $only_reduc
+     * @param bool $use_reduc
+     * @param null $specific_price
+     * @param bool $use_group_reduction
+     * @param int $id_customization
+     *
+     * @return float|int|void
+     *
+     * @throws \PrestaShopDatabaseException
+     */
     private function priceCalculation(
         $id_shop,
         $id_product,
@@ -146,7 +178,6 @@ class SpecificPriceService
         $decimals,
         $only_reduc,
         $use_reduc,
-        $with_ecotax,
         &$specific_price,
         $use_group_reduction,
         $id_customization = 0
@@ -155,7 +186,9 @@ class SpecificPriceService
         static $context = null;
 
         if ($context == null) {
-            $context = Context::getContext()->cloneContext();
+            /** @var Context $context */
+            $context = Context::getContext();
+            $context = $context->cloneContext();
         }
 
         if ($address === null) {
@@ -171,14 +204,13 @@ class SpecificPriceService
             $context->shop = new Shop((int) $id_shop);
         }
 
-        if ($id_product_attribute === null) {
+        if ($id_product_attribute == null) {
             $id_product_attribute = Product::getDefaultAttribute($id_product);
         }
 
         // reference parameter is filled before any returns
-        $specific_price = $this->getSpecificPrice(
-            $specificPriceId
-        );
+        /** @var array $specific_price */
+        $specific_price = $this->getSpecificPrice($specificPriceId);
 
         // fetch price & attribute price
         $cache_id_2 = $id_product . '-' . $id_shop . '-' . $specificPriceId;
@@ -260,11 +292,11 @@ class SpecificPriceService
 
         // Add Tax
         if ($use_tax) {
-            $price = $product_tax_calculator->addTaxes($price);
+            $price = $product_tax_calculator->addTaxes((float) $price);
         }
 
         // Eco Tax
-        if (($result['ecotax'] || isset($result['attribute_ecotax'])) && $with_ecotax) {
+        if (($result['ecotax'] || isset($result['attribute_ecotax']))) {
             $ecotax = $result['ecotax'];
             if (isset($result['attribute_ecotax']) && $result['attribute_ecotax'] > 0) {
                 $ecotax = $result['attribute_ecotax'];
@@ -335,7 +367,7 @@ class SpecificPriceService
             return Tools::ps_round($specific_price_reduction, $decimals);
         }
 
-        $price = Tools::ps_round($price, $decimals);
+        $price = Tools::ps_round((float) $price, $decimals);
 
         if ($price < 0) {
             $price = 0;
@@ -347,20 +379,21 @@ class SpecificPriceService
     /**
      * Returns the specificPrice information related to a given productId and context.
      *
-     * @return array
+     * @param int $specificPriceId
+     *
+     * @return array|bool|object|null
      */
-    private function getSpecificPrice(
-        $specificPriceId
-    ) {
+    private function getSpecificPrice($specificPriceId)
+    {
         if (!SpecificPrice::isFeatureActive()) {
             return [];
         }
 
         $query = '
-			SELECT * 
-				FROM `' . _DB_PREFIX_ . 'specific_price`
-				WHERE
-                `id_specific_price` = ' . (int) $specificPriceId;
+        SELECT *
+          FROM `' . _DB_PREFIX_ . 'specific_price`
+          WHERE
+                  `id_specific_price` = ' . (int) $specificPriceId;
 
         $query .= ' ORDER BY `id_product_attribute` DESC, `id_cart` DESC, `from_quantity` DESC, `id_specific_price_rule` ASC, `to` DESC, `from` DESC';
 

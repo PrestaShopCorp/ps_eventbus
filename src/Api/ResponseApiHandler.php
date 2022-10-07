@@ -40,6 +40,7 @@ class ResponseApiHandler
      */
     public function handleResponse(ResponseInterface $response)
     {
+        /** @var array $responseContents */
         $responseContents = json_decode($response->getBody()->getContents(), true);
 
         return [

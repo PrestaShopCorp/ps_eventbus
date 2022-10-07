@@ -25,11 +25,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "PrestaShop\\Module\\PsEventbus\\Tests\\": "tests/"
-    },
-    "classmap": [
-      "src/"
-    ]
+      "PrestaShop\\Module\\PsEventbus\\Tests\\": "tests"
+    }
   },
   "require": {
     "php": ">=7.2.5",

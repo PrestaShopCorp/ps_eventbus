@@ -136,6 +136,10 @@ class CarrierRepository
     /**
      * @param int[] $carrierIds
      * @param int $langId
+     *
+     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     *
+     * @throws PrestaShopDatabaseException
      */
     public function getCarrierProperties($carrierIds, $langId)
     {
@@ -159,6 +163,15 @@ class CarrierRepository
         return $this->db->executeS($query);
     }
 
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param int $langId
+     *
+     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     *
+     * @throws PrestaShopDatabaseException
+     */
     public function getAllCarrierProperties($offset, $limit, $langId)
     {
         $query = new DbQuery();
@@ -181,7 +194,7 @@ class CarrierRepository
 
     /**
      * @param int $offset
-     * @param string $langId
+     * @param int $langId
      *
      * @return int
      *

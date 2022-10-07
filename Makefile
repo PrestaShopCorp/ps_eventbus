@@ -94,7 +94,7 @@ prestashop/prestashop-${PS_VERSION}: prestashop composer.phar
 	@./composer.phar -d ./prestashop/prestashop-${PS_VERSION} install
 
 # target: test                                   - Static and unit testing
-test: composer-validate lint php-lint phpstan phpunit 
+test: composer-validate lint php-lint phpstan phpunit
 
 # target: composer-validate                      - Validates composer.json and composer.lock
 composer-validate: vendor
@@ -114,15 +114,15 @@ lint-fix:
 	@vendor/bin/php-cs-fixer fix --using-cache=no;
 
 # target: phpunit                                - Run phpunit
-phpunit: vendor/bin/phpunit
-	@vendor/bin/phpunit tests;
+phpunit: prestashop/prestashop-${PS_VERSION} vendor/bin/phpunit
+	@_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpunit ./tests/unit;
 
 # target: phpstan                                - Run phpstan
 phpstan: prestashop/prestashop-${PS_VERSION} vendor/bin/phpstan
 	_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
 
 # target: docker-test                            - Static and unit testing in docker
-docker-test: docker-lint docker-phpstan docker-phpunit 
+docker-test: docker-lint docker-phpstan docker-phpunit
 
 # target: docker-lint                            - Lint the code in docker
 docker-lint:
@@ -137,9 +137,9 @@ docker-php-lint:
 	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} php-lint;
 
 # target: docker-phpunit                         - Run phpunit in docker
-docker-phpunit:
+docker-phpunit: prestashop/prestashop-${PS_VERSION}
 	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
-	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpunit;
+	docker run --rm -e _PS_ROOT_DIR_=/src/prestashop/prestashop-${PS_VERSION} -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpunit;
 
 # target: docker-phpstan                         - Run phpstan in docker
 docker-phpstan: prestashop/prestashop-${PS_VERSION}
@@ -169,3 +169,7 @@ allure:
 
 allure-report:
 	./node_modules/.bin/allure generate build/allure-results/
+
+# target: phpstan-baseline                        - Generate a phpstan baseline to ignore all errors
+phpstan-baseline: prestashop/prestashop-${PS_VERSION} vendor/bin/phpstan
+	_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpstan analyse --generate-baseline --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;

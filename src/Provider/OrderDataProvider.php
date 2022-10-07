@@ -59,7 +59,9 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getFormattedData($offset, $limit, $langIso)
     {
-        $orders = $this->orderRepository->getOrders($offset, $limit, $this->context->shop->id);
+        /** @var int $shopId */
+        $shopId = $this->context->shop->id;
+        $orders = $this->orderRepository->getOrders($offset, $limit, $shopId);
 
         if (empty($orders)) {
             return [];
@@ -68,7 +70,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         $langId = (int) Language::getIdByIso($langIso);
         $this->castOrderValues($orders, $langId);
 
-        $orderDetails = $this->getOrderDetails($orders, $this->context->shop->id);
+        $orderDetails = $this->getOrderDetails($orders, $shopId);
         $orderStatuses = $this->getOrderStatuses($orders, $langId);
 
         $orders = array_map(function ($order) {
@@ -90,7 +92,10 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getRemainingObjectsCount($offset, $langIso)
     {
-        return (int) $this->orderRepository->getRemainingOrderCount($offset, $this->context->shop->id);
+        /** @var int $shopId */
+        $shopId = $this->context->shop->id;
+
+        return (int) $this->orderRepository->getRemainingOrderCount($offset, $shopId);
     }
 
     /**
@@ -103,13 +108,15 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
-        $orders = $this->orderRepository->getOrdersIncremental($limit, $this->context->shop->id, $objectIds);
+        /** @var int $shopId */
+        $shopId = $this->context->shop->id;
+        $orders = $this->orderRepository->getOrdersIncremental($limit, $shopId, $objectIds);
 
         if (!is_array($orders) || empty($orders)) {
             return [];
         }
 
-        $orderDetails = $this->getOrderDetails($orders, $this->context->shop->id);
+        $orderDetails = $this->getOrderDetails($orders, $shopId);
 
         $this->castOrderValues($orders, (int) Language::getIdByIso($langIso));
 
@@ -159,6 +166,14 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         return $orderDetails;
     }
 
+    /**
+     * @param array $orders
+     * @param int $langId
+     *
+     * @return array|array[]
+     *
+     * @throws PrestaShopDatabaseException
+     */
     private function getOrderStatuses(array $orders, $langId)
     {
         if (empty($orders)) {
@@ -219,6 +234,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     {
         $isPaid = $dateAdd = 0;
         $orderIds = $this->arrayFormatter->formatValueArray($orders, 'id_order');
+        /** @var array $orderHistoryStatuses */
         $orderHistoryStatuses = $this->orderHistoryRepository->getOrderHistoryStatuses($orderIds, $langId);
 
         foreach ($orderHistoryStatuses as &$orderHistoryStatus) {
@@ -276,6 +292,11 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         return $castedOrderStatuses;
     }
 
+    /**
+     * @param array $orderDetail
+     *
+     * @return void
+     */
     private function castAddressIsoCodes(&$orderDetail)
     {
         if (!$orderDetail['address_iso']) {

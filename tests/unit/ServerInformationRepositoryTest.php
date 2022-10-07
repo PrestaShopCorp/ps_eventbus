@@ -1,6 +1,5 @@
 <?php
 
-use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\CurrencyRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
@@ -9,9 +8,6 @@ use PrestaShop\Module\PsEventbus\Repository\ShopRepository;
 use PrestaShop\Module\PsEventbus\Tests\Mocks\Handler\ErrorHandlerMock;
 use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
-use Yandex\Allure\Adapter\Annotation\Features;
-use Yandex\Allure\Adapter\Annotation\Stories;
-use Yandex\Allure\Adapter\Annotation\Title;
 
 /**
  * @Features("repository")
@@ -40,10 +36,6 @@ class ServerInformationRepositoryTest extends BaseTestCase
      */
     private $shopRepository;
     /**
-     * @var ArrayFormatter
-     */
-    private $arrayFormatter;
-    /**
      * @var Context
      */
     private $context;
@@ -63,9 +55,7 @@ class ServerInformationRepositoryTest extends BaseTestCase
         $this->languageRepository = $this->createMock(LanguageRepository::class);
         $this->configurationRepository = $this->createMock(ConfigurationRepository::class);
         $this->shopRepository = $this->createMock(ShopRepository::class);
-        $this->arrayFormatter = $this->createMock(ArrayFormatter::class);
         $this->psAccounts = $this->createMock(PsAccounts::class);
-        $this->arrayFormatter = $this->createMock(ArrayFormatter::class);
         $this->context = $this->createMock(Context::class);
         $link = $this->createMock(Link::class);
         $this->context->link = $link;
@@ -78,7 +68,6 @@ class ServerInformationRepositoryTest extends BaseTestCase
             $this->languageRepository,
             $this->configurationRepository,
             $this->shopRepository,
-            $this->arrayFormatter,
             $this->psAccounts,
             new ErrorHandlerMock(),
             []
