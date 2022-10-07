@@ -38,7 +38,7 @@ class MerchantConsentRepository
         $dbh = $this->db->connect();
 
         /* @var \PDO $query */
-        $query = $dbh->prepare('INSERT INTO ps_merchant_consent (shop_id, module_consent, shop_consent_accepted, shop_consent_revoked)
+        $query = $dbh->prepare('INSERT INTO ps_merchant_consents (shop_id, module_consent, shop_consent_accepted, shop_consent_revoked)
         VALUES (:shop_id, :module_consent, :accepted, :revoked)');
 
         /* @var \PDO $query */
@@ -72,7 +72,7 @@ class MerchantConsentRepository
         $query = new DbQuery();
 
         $query->select('*')
-            ->from('merchant_consent')
+            ->from('merchant_consents')
             ->where("shop_id='" . $idShop > 0 ? $idShop : (string) Context::getContext()->shop->id . "'");
 
         return $this->db->executeS($query);
