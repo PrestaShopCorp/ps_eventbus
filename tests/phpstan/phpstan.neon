@@ -29,5 +29,10 @@ parameters:
     - '#Parameter \#2 \$currency of static method ToolsCore::convertPrice\(\) expects array\|object\|null, [a-z0-9<>,-\| ]+ given.#'
     - '#Method PrestaShop\\Module\\PsEventbus\\Service\\SpecificPriceService::priceCalculation\(\) never returns void so it can be removed from the return type.#'
     - '#Property PrestaShop\\Module\\PsEventbus\\Api\\Post\\Stream::\$stream \(resource\) does not accept null.#'
+    - '#Cannot call method prepare\(\) on mysqli\|PDO\|resource.#'
+    - '#Cannot call method bindParam\(\) on mysqli_stmt\|PDOStatement\|false.#'
+    - '#Cannot call method execute\(\) on mysqli_stmt\|PDOStatement\|false.#'
+    - '#Parameter \#1 \$restriction of method DbQueryCore::where\(\) expects string, int\|string given.#'
+    - '#Method PrestaShop\\Module\\PsEventbus\\Repository\\MerchantConsentRepository::getConsentByShopId\(\) should return array but returns array\|mysqli_result\|PDOStatement\|resource\|false\|null.#'
 
   level: 9

@@ -20,6 +20,10 @@ services:
     class: PrestaShop\Module\PsEventbus\Formatter\DateFormatter
     public: true
 
+  PrestaShop\Module\PsEventbus\Service\CacheService:
+    class: PrestaShop\Module\PsEventbus\Service\CacheService
+    public: true
+
   PrestaShop\Module\PsEventbus\Service\CompressionService:
     class: PrestaShop\Module\PsEventbus\Service\CompressionService
     public: true
