@@ -834,6 +834,6 @@ class Ps_eventbus extends Module
      */
     private function isPhpVersionCompliant()
     {
-        return 70100 <= PHP_VERSION_ID;
+        return PHP_VERSION_ID >= 70205;
     }
 }
