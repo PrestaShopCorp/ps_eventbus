@@ -91,7 +91,7 @@ class ServerInformationRepository
      */
     public function getServerInformation($langIso = '')
     {
-        $langId = empty($langIso) ? (int) Language::getIdByIso($langIso) : null;
+        $langId = !empty($langIso) ? (int) Language::getIdByIso($langIso) : null;
 
         return [
             [
