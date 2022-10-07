@@ -7,8 +7,8 @@ use DbQuery;
 
 class ModuleRepository
 {
-    const MODULE_TABLE = 'module';
-    const MODULE_TABLE_HISTORY = 'module_history';
+    public const MODULE_TABLE = 'module';
+    public const MODULE_TABLE_HISTORY = 'module_history';
 
     /**
      * @var Db

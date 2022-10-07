@@ -63,7 +63,6 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
-      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
       - '@PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
       - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
       - { EVENT_BUS_SYNC_API_URL: '%ps_eventbus.sync_api_url%', EVENT_BUS_PROXY_API_URL: '%ps_eventbus.proxy_api_url%' }
@@ -140,7 +139,6 @@ services:
     class: PrestaShop\Module\PsEventbus\Repository\ShopRepository
     public: true
     arguments:
-      - '@ps_eventbus.context'
       - '@ps_eventbus.db'
 
   PrestaShop\Module\PsEventbus\Repository\CountryRepository:
@@ -155,7 +153,6 @@ services:
     public: true
     arguments:
       - '@ps_eventbus.db'
-      - '@ps_eventbus.context'
 
   PrestaShop\Module\PsEventbus\Repository\TaxRepository:
     class: PrestaShop\Module\PsEventbus\Repository\TaxRepository
@@ -183,4 +180,3 @@ services:
     public: true
     arguments:
       - '@ps_eventbus.db'
-      - '@ps_eventbus.context'

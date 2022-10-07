@@ -14,6 +14,7 @@ class ps_EventbusApiDeletedObjectsModuleFrontController extends AbstractApiContr
      */
     public function postProcess()
     {
+        /** @var string $jobId */
         $jobId = Tools::getValue('job_id', '');
 
         /** @var DeletedObjectsService $deletedObjectsService */

@@ -15,6 +15,7 @@ class ps_EventbusApiCartsModuleFrontController extends AbstractApiController
      */
     public function postProcess()
     {
+        /** @var CartDataProvider $cartDataProvider */
         $cartDataProvider = $this->module->getService(CartDataProvider::class);
 
         $response = $this->handleDataSync($cartDataProvider);

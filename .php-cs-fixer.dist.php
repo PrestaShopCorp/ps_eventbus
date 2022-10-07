@@ -7,6 +7,7 @@ $config
     ->getFinder()
     ->in(__DIR__)
     ->exclude('translations')
+    ->exclude('prestashop')
     ->exclude('vendor');
 
 return $config;

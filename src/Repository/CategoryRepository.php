@@ -156,7 +156,9 @@ class CategoryRepository
      */
     public function getCategories($offset, $limit, $langIso)
     {
-        $query = $this->getBaseQuery($this->context->shop->id, $langIso);
+        /** @var int $shopId */
+        $shopId = $this->context->shop->id;
+        $query = $this->getBaseQuery($shopId, $langIso);
 
         $this->addSelectParameters($query);
 
@@ -173,7 +175,9 @@ class CategoryRepository
      */
     public function getRemainingCategoriesCount($offset, $langIso)
     {
-        $query = $this->getBaseQuery($this->context->shop->id, $langIso)
+        /** @var int $shopId */
+        $shopId = $this->context->shop->id;
+        $query = $this->getBaseQuery($shopId, $langIso)
             ->select('(COUNT(cs.id_category) - ' . (int) $offset . ') as count');
 
         return (int) $this->db->getValue($query);
@@ -190,7 +194,9 @@ class CategoryRepository
      */
     public function getCategoriesIncremental($limit, $langIso, $categoryIds)
     {
-        $query = $this->getBaseQuery($this->context->shop->id, $langIso);
+        /** @var int $shopId */
+        $shopId = $this->context->shop->id;
+        $query = $this->getBaseQuery($shopId, $langIso);
 
         $this->addSelectParameters($query);
 

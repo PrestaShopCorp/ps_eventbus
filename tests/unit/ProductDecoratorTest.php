@@ -166,10 +166,10 @@ class ProductDecoratorTest extends BaseTestCase
         $productDecorator = new ProductDecorator($contextMock, $languageRepository, $productRepository, $categoryRepository, $arrayFormatter, $bundleRepository);
         $productDecorator->decorateProducts($products, 'en', 1);
 
-        $this->assertInternalType('int', $products[0]['id_product']);
-        $this->assertInternalType('int', $products[0]['id_category_default']);
-        $this->assertInternalType('float', $products[0]['price_tax_excl']);
-        $this->assertInternalType('float', $products[0]['price_tax_incl']);
+        $this->assertIsInt('int', $products[0]['id_product']);
+        $this->assertIsInt('int', $products[0]['id_category_default']);
+        $this->assertIsFloat('float', $products[0]['price_tax_excl']);
+        $this->assertIsFloat('float', $products[0]['price_tax_incl']);
         $this->assertNotTrue(isset($products[0]['unit_price_ratio']));
         $this->assertEquals(0.5, $products[1]['unit_price_ratio']);
         $this->assertEquals(0.5, $products[2]['unit_price_ratio']);

@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
 use Db;
 use DbQuery;
 use PrestaShopDatabaseException;
@@ -10,18 +9,13 @@ use PrestaShopDatabaseException;
 class BundleRepository
 {
     /**
-     * @var Context
-     */
-    private $context;
-    /**
      * @var Db
      */
     private $db;
 
-    public function __construct(Db $db, Context $context)
+    public function __construct(Db $db)
     {
         $this->db = $db;
-        $this->context = $context;
     }
 
     /**

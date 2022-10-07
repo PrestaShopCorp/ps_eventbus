@@ -34,17 +34,23 @@ class MerchantConsentRepository
      */
     public function postMerchantConsent(array $value)
     {
+        /* @var \PDO $dbh */
         $dbh = $this->db->connect();
 
-        $query = $dbh->prepare('INSERT INTO ps_merchant_consent (shop_id, module_consent, shop_consent_accepted, shop_consent_revoked) 
+        /* @var \PDO $query */
+        $query = $dbh->prepare('INSERT INTO ps_merchant_consent (shop_id, module_consent, shop_consent_accepted, shop_consent_revoked)
         VALUES (:shop_id, :module_consent, :accepted, :revoked)');
 
+        /* @var \PDO $query */
         $query->bindParam(':shop_id', $value['shop_id']);
+        /* @var \PDO $query */
         $query->bindParam(':module_consent', $value['module_consent']);
+        /* @var \PDO $query */
         $query->bindParam(':accepted', $value['accepted']);
+        /* @var \PDO $query */
         $query->bindParam(':revoked', $value['revoked']);
 
-        $this->cacheService->setCacheProperty('merchantConsent.shopId', Context::getContext()->shop->id);
+        $this->cacheService->setCacheProperty('merchantConsent.shopId', (string) Context::getContext()->shop->id);
         $this->cacheService->setCacheProperty('merchantConsent.moduleConsent', $value['module_consent']);
         $this->cacheService->setCacheProperty('merchantConsent.accepted', $value['accepted']);
         $this->cacheService->setCacheProperty('merchantConsent.revoked', $value['revoked']);
@@ -67,7 +73,7 @@ class MerchantConsentRepository
 
         $query->select('*')
             ->from('merchant_consent')
-            ->where("shop_id='" . $idShop > 0 ? $idShop : Context::getContext()->shop->id . "'");
+            ->where("shop_id='" . $idShop > 0 ? $idShop : (string) Context::getContext()->shop->id . "'");
 
         return $this->db->executeS($query);
     }

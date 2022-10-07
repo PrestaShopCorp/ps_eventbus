@@ -16,18 +16,18 @@ class ps_EventbusApiThemesModuleFrontController extends AbstractApiController
     {
         $response = [];
 
+        /** @var string $jobId */
         $jobId = Tools::getValue('job_id');
 
         /** @var ThemeRepository $themeRepository */
         $themeRepository = $this->module->getService(ThemeRepository::class);
 
+        /** @var array $themeInfo */
         $themeInfo = $themeRepository->getThemes();
 
         try {
             $response = $this->proxyService->upload($jobId, $themeInfo, $this->startTime);
-        } catch (EnvVarException $exception) {
-            $this->exitWithExceptionMessage($exception);
-        } catch (Exception $exception) {
+        } catch (EnvVarException|Exception $exception) {
             $this->exitWithExceptionMessage($exception);
         }
 

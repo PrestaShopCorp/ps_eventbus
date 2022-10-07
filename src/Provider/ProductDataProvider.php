@@ -4,7 +4,6 @@ namespace PrestaShop\Module\PsEventbus\Provider;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\ProductDecorator;
-use PrestaShop\Module\PsEventbus\Repository\BundleRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\ProductRepository;
 
@@ -22,21 +21,15 @@ class ProductDataProvider implements PaginatedApiDataProviderInterface
      * @var LanguageRepository
      */
     private $languageRepository;
-    /**
-     * @var BundleRepository
-     */
-    private $bundleRepository;
 
     public function __construct(
         ProductRepository $productRepository,
         ProductDecorator $productDecorator,
-        LanguageRepository $languageRepository,
-        BundleRepository $bundleRepository
+        LanguageRepository $languageRepository
     ) {
         $this->productRepository = $productRepository;
         $this->productDecorator = $productDecorator;
         $this->languageRepository = $languageRepository;
-        $this->bundleRepository = $bundleRepository;
     }
 
     /**

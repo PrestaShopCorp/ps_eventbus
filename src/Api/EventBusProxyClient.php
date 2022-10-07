@@ -47,19 +47,20 @@ class EventBusProxyClient extends GenericClient
 
     /**
      * @param Link $link
-     * @param PsAccounts $psAccountsService
+     * @param PsAccounts $psAccounts
      * @param string $baseUrl
      * @param Ps_eventbus $module
      *
      * @throws ModuleNotInstalledException
      * @throws ModuleVersionException
+     * @throws \Exception
      */
-    public function __construct(Link $link, PsAccounts $psAccountsService, $baseUrl, $module)
+    public function __construct(Link $link, PsAccounts $psAccounts, $baseUrl, $module)
     {
         $this->module = $module;
         $this->baseUrl = $baseUrl;
         $this->setLink($link);
-        $token = $psAccountsService->getPsAccountsService()->getOrRefreshToken();
+        $token = $psAccounts->getPsAccountsService()->getOrRefreshToken();
 
         $options = [
             'base_uri' => $this->baseUrl,

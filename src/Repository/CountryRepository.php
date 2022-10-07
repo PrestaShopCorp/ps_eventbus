@@ -21,6 +21,9 @@ class CountryRepository
      */
     private $context;
 
+    /**
+     * @var array
+     */
     private $countryIsoCodeCache = [];
 
     public function __construct(Db $db, Context $context)
@@ -65,8 +68,11 @@ class CountryRepository
             $query->where('active = ' . (bool) $active);
 
             $isoCodes = [];
-            foreach ($this->db->executeS($query) as $country) {
-                $isoCodes[] = $country['iso_code'];
+            $result = $this->db->executeS($query);
+            if (is_array($result)) {
+                foreach ($result as $country) {
+                    $isoCodes[] = $country['iso_code'];
+                }
             }
             $this->countryIsoCodeCache[$cacheKey] = $isoCodes;
         }

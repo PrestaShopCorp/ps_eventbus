@@ -15,6 +15,7 @@ class ps_EventbusApiOrdersModuleFrontController extends AbstractApiController
      */
     public function postProcess()
     {
+        /** @var OrderDataProvider $orderDataProvider */
         $orderDataProvider = $this->module->getService(OrderDataProvider::class);
 
         $response = $this->handleDataSync($orderDataProvider);

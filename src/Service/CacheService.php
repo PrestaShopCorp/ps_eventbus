@@ -6,6 +6,12 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 class CacheService
 {
+    /**
+     * @param string $key
+     * @param string $value
+     *
+     * @return void
+     */
     public function setCacheProperty($key, $value)
     {
         $cache = new FilesystemAdapter();
@@ -14,6 +20,11 @@ class CacheService
         $cache->save($merchantConsentCache);
     }
 
+    /**
+     * @param string $key
+     *
+     * @return mixed
+     */
     public function getCacheProperty($key)
     {
         $cache = new FilesystemAdapter();

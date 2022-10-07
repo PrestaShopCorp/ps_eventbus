@@ -60,7 +60,9 @@ class CustomPriceRepository
      */
     public function getSpecificPrices($offset, $limit)
     {
-        $query = $this->getBaseQuery($this->context->shop->id);
+        /** @var int $shopId */
+        $shopId = $this->context->shop->id;
+        $query = $this->getBaseQuery($shopId);
 
         $this->addSelectParameters($query);
 
@@ -80,7 +82,9 @@ class CustomPriceRepository
      */
     public function getRemainingSpecificPricesCount($offset)
     {
-        $query = $this->getBaseQuery($this->context->shop->id);
+        /** @var int $shopId */
+        $shopId = $this->context->shop->id;
+        $query = $this->getBaseQuery($shopId);
 
         $query->select('(COUNT(sp.id_specific_price) - ' . (int) $offset . ') as count');
 
@@ -95,7 +99,7 @@ class CustomPriceRepository
     private function addSelectParameters(DbQuery $query)
     {
         $query->select('sp.id_specific_price, sp.id_product, sp.id_shop, sp.id_shop_group, sp.id_currency,
-            sp.id_country, sp.id_group, sp.id_customer, sp.id_product_attribute, sp.price, sp.from_quantity, 
+            sp.id_country, sp.id_group, sp.id_customer, sp.id_product_attribute, sp.price, sp.from_quantity,
             sp.reduction, sp.reduction_tax, sp.from, sp.to, sp.reduction_type
         ');
 
@@ -113,7 +117,9 @@ class CustomPriceRepository
      */
     public function getSpecificPricesIncremental($limit, $specificPriceIds)
     {
-        $query = $this->getBaseQuery($this->context->shop->id);
+        /** @var int $shopId */
+        $shopId = $this->context->shop->id;
+        $query = $this->getBaseQuery($shopId);
 
         $this->addSelectParameters($query);
 

@@ -10,7 +10,6 @@ use Language;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsAccounts\Api\Client\AccountsClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use PrestaShopDatabaseException;
@@ -40,10 +39,6 @@ class ServerInformationRepository
      */
     private $db;
     /**
-     * @var ArrayFormatter
-     */
-    private $arrayFormatter;
-    /**
      * @var ShopRepository
      */
     private $shopRepository;
@@ -71,7 +66,6 @@ class ServerInformationRepository
         LanguageRepository $languageRepository,
         ConfigurationRepository $configurationRepository,
         ShopRepository $shopRepository,
-        ArrayFormatter $arrayFormatter,
         PsAccounts $psAccounts,
         ErrorHandlerInterface $errorHandler,
         array $configuration
@@ -82,7 +76,6 @@ class ServerInformationRepository
         $this->shopRepository = $shopRepository;
         $this->context = $context;
         $this->db = $db;
-        $this->arrayFormatter = $arrayFormatter;
         $this->psAccountsService = $psAccounts->getPsAccountsService();
         $this->configuration = $configuration;
         $this->createdAt = $this->shopRepository->getCreatedAt();
@@ -90,13 +83,15 @@ class ServerInformationRepository
     }
 
     /**
-     * @param null $langIso
+     * @param string $langIso
      *
-     * @return array
+     * @return array[]
+     *
+     * @throws \PrestaShopException
      */
-    public function getServerInformation($langIso = null)
+    public function getServerInformation($langIso = '')
     {
-        $langId = $langIso != null ? (int) Language::getIdByIso($langIso) : null;
+        $langId = !empty($langIso) ? (int) Language::getIdByIso($langIso) : null;
 
         return [
             [
@@ -123,7 +118,7 @@ class ServerInformationRepository
                     'url' => $this->context->link->getPageLink('index', null, $langId),
                     'ssl' => $this->configurationRepository->get('PS_SSL_ENABLED') == '1',
                     'multi_shop_count' => $this->shopRepository->getMultiShopCount(),
-                    'country' => $this->shopRepository->getShopCountryCode(),
+                    'country_code' => $this->shopRepository->getShopCountryCode(),
                 ],
             ],
         ];
@@ -192,6 +187,9 @@ class ServerInformationRepository
         ];
     }
 
+    /**
+     * @return mixed
+     */
     private function getAccountsClient()
     {
         $module = \Module::getInstanceByName('ps_accounts');

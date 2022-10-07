@@ -1,107 +1,95 @@
-name: EventBus Quality Control PHP
+name: Quality Control
 
-on: [pull_request]
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+  push:
+    branches:
+      - "main"
 
 jobs:
   php-linter:
-    name: PHP Syntax check 7.1|7.2|7.3
+    name: PHP Syntax check
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php_version: ["7.2", "7.3", "7.4", "8.0", "8.1"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: PHP syntax checker ${{ matrix.php_version }}
+        run: PHP_VERSION=${{ matrix.php_version }} make docker-php-lint
+
+  composer-validate:
+    name: Composer validate
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.0.0
-      - name: PHP syntax checker 7.1
-        uses: prestashop/github-action-php-lint/7.1@master
-      - name: PHP syntax checker 7.2
-        uses: prestashop/github-action-php-lint/7.2@master
-      - name: PHP syntax checker 7.3
-        uses: prestashop/github-action-php-lint/7.3@master
+        uses: actions/checkout@v3
+      - name: Run composer validate
+        run: make composer-validate
 
   php-cs-fixer:
     name: PHP-CS-FIXER
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.0.0
+        uses: actions/checkout@v3
+      - name: Cache vendor folder
+        uses: actions/cache@v1
+        with:
+          path: vendor
+          key: php-${{ hashFiles('composer.lock') }}
+      - name: Install dependencies
+        run: composer install
       - name: Run PHP-CS-Fixer
-        uses: prestashopcorp/github-action-php-cs-fixer@master
+        run: make lint
 
   phpstan:
     name: PHPStan
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        presta-versions: ["latest", "1.7.0.3", "1.7.8.7"]
+        presta_version: ["1.7.8.7"]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.0.0
-
+        uses: actions/checkout@v3
       - name: Cache vendor folder
         uses: actions/cache@v1
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
-
-      - name: Cache composer folder
-        uses: actions/cache@v1
-        with:
-          path: ~/.composer/cache
-          key: php-composer-cache
-
       - name: Install dependencies
         run: composer install
+      - name: PHPStan PrestaShop 1.7.8.7
+        run: PS_VERSION="1.7.8.7" PHP_VERSION="8.1" make docker-phpstan
 
-      - name: Select .neon file compatible with PrestaShop ${{ matrix.presta-versions }}
-        id: neon
-        run: |
-          PS_VERSION="${{ matrix.presta-versions }}"
-          echo ::set-output name=filename::phpstan-PS-1.7.neon
-
-      - name: PHPStan PrestaShop ${{ matrix.presta-versions }}
-        run: |
-          PS_VERSION="${{ matrix.presta-versions }}" \
-          NEON_FILE=${{steps.neon.outputs.filename}} \
-          make phpstan
-
-  unit-system-tests:
+  phpunit:
+    name: PHP Unit
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        presta-versions: [ '177' ]
     steps:
-      - name: Setup PHP with Xdebug
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '7.1'
-          coverage: xdebug
-
       - name: Checkout
-        uses: actions/checkout@v2.0.0
-
+        uses: actions/checkout@v3
       - name: Cache vendor folder
         uses: actions/cache@v1
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
+      - name: Install dependencies
+        run: composer install
+      - name: PHP unit with PHP 8.1
+        run: PHP_VERSION="8.1" make docker-phpunit
 
-      - name: Cache composer folder
-        uses: actions/cache@v1
-        with:
-          path: ~/.composer/cache
-          key: php-composer-cache
-
-      - run: composer install
-      - run: npm i
-      - run: make ata${{ matrix.presta-versions }}
-      - name: 📊 Step 5 - Collect Allure files and generate allure-report folder
-        run: |
-          make allure-report
-      - name: 🎁 Step 6 - Publishing Allure artifact to GitHub Actions
-        uses: actions/upload-artifact@v2
-        with:
-          name: allure-report
-          path: allure-report
-      - name: 🎁 Step 7 - Publishing Code coverage report to GitHub Actions
-        uses: actions/upload-artifact@v2
-        with:
-          name: code-coverage-report
-          path: tests/tmp/code-coverage-report
+      # - name: 📊 Step 5 - Collect Allure files and generate allure-report folder
+      #   run: |
+      #     make allure-report
+      # - name: 🎁 Step 6 - Publishing Allure artifact to GitHub Actions
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: allure-report
+      #     path: allure-report
+      # - name: 🎁 Step 7 - Publishing Code coverage report to GitHub Actions
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: code-coverage-report
+      #     path: tests/tmp/code-coverage-report

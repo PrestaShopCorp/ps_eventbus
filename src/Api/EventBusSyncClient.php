@@ -18,17 +18,18 @@ class EventBusSyncClient extends GenericClient
      * EventBusSyncClient constructor.
      *
      * @param Link $link
-     * @param PsAccounts $psAccountsService
+     * @param PsAccounts $psAccounts
      * @param string $baseUrl
      *
      * @throws \PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleNotInstalledException
      * @throws \PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleVersionException
+     * @throws \Exception
      */
-    public function __construct(Link $link, PsAccounts $psAccountsService, $baseUrl)
+    public function __construct(Link $link, PsAccounts $psAccounts, $baseUrl)
     {
         $this->baseUrl = $baseUrl;
         $this->setLink($link);
-        $token = $psAccountsService->getPsAccountsService()->getOrRefreshToken();
+        $token = $psAccounts->getPsAccountsService()->getOrRefreshToken();
         $options = [
             'base_uri' => $this->baseUrl,
             'timeout' => 60,

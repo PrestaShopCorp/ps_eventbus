@@ -1,28 +1,17 @@
-# ps_eventbus
+# PS EventBus
 
-Module companion for EventBus
+`ps_eventbus` is a module companion for CloudSync.
 
 ## Architecture
 
-ps_eventbus receives an input request from the eventbus processor, and pushes objects from the Prestashop database to the eventbus proxy. More information in the [miro board of the Eventbus project](https://miro.com/app/board/o9J_ksqp-sc=).
+This module opens controllers, and is called multiple times a day by the CloudSync services.
+Open routes are:
 
-## Build
-
-```
-make
-make build
-VERSION=v1.2.3-rc4 make version
-make zip
-# look for ./dist to get the zips
-```
-
-## API Endpoints
-
-### Open routes
+** Without authentication: **
 
 - `/apiHealthCheck`
 
-### Authenticated routes (with `job_id`)
+** Authenticated routes: **
 
 - `/apiCarriers`
 - `/apiCarts`
@@ -33,3 +22,26 @@ make zip
 - `/apiProducts`
 - `/apiGoogleTaxonomies`
 - `/apiThemes`
+
+## Use
+
+```sh
+make help        # get help on how to use the awesome Makefile features
+make             # bundle all vendors required for the module to run
+make version     # update the package configuration to the current version
+make zip         # make a zip ready to be tested in PrestaShop (see ./dist)
+```
+
+> Pro tip: prefix all you make commands with the variables you want to override. Ie: `VERSION=v1.2.3-rc4 make version` to set the package do the desired version.
+
+## Testing
+
+```sh
+make lint            # linting the code with vendor/bin/php-cs-fixer
+make lint-fix        # linting and fixing the code with vendor/bin/php-cs-fixer
+make php-lint        # linting with php
+make phpunit         # unit testing with vendor/bin/phpunit
+make phpstan         # linting the code with PrestaShop and vendor/bin/phpstanphpstan
+
+make docker-<stuff>  # same as above, but within a docker container
+```
