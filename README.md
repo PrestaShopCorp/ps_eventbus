@@ -1,5 +1,7 @@
 # PS EventBus
 
+[![Quality Control](https://github.com/PrestaShopCorp/ps_eventbus/actions/workflows/eventbus-qc-php.yml/badge.svg)](https://github.com/PrestaShopCorp/ps_eventbus/actions/workflows/eventbus-qc-php.yml)
+
 `ps_eventbus` is a module companion for CloudSync.
 
 ## Architecture
