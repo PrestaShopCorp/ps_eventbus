@@ -1,26 +1,25 @@
 imports:
   - { resource: parameters.yml }
-  - { resource: common/config.yml }
   - { resource: common/handler.yml }
 
 services:
   ps_eventbus.db:
     class: Db
     public: true
-    factory: [ 'Db', 'getInstance' ]
+    factory: ["Db", "getInstance"]
 
   ps_eventbus:
-    class: 'Ps_eventbus'
+    class: "Ps_eventbus"
     public: true
-    factory: ['Module', 'getInstanceByName']
+    factory: ["Module", "getInstanceByName"]
     arguments:
-      - 'ps_eventbus'
+      - "ps_eventbus"
 
   PrestaShop\PsAccountsInstaller\Installer\Installer:
     class: PrestaShop\PsAccountsInstaller\Installer\Installer
     public: true
     arguments:
-      - '4.0.0'
+      - "5.3.0"
 
   PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts:
     class: PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts

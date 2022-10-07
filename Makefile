@@ -1,9 +1,8 @@
-.PHONY: clean help build bundle zip version bundle-prod bundle-inte build-back test static-testing unit-testing
+.PHONY: help build version zip zip-inte zip-preprod zip-prod build test composer-validate lint php-lint lint-fix phpunit phpstan phpstan-baseline docker-test docker-lint docker-lint docker-phpunit docker-phpstan
 PHP = $(shell command -v php >/dev/null 2>&1 || { echo >&2 "PHP is not installed."; exit 1; } && which php)
-
 VERSION ?= $(shell git describe --tags 2> /dev/null || echo "0.0.0")
 SEM_VERSION ?= $(shell echo ${VERSION} | sed 's/^v//')
-PACKAGE ?= "ps_eventbus-${VERSION}"
+PACKAGE ?= ps_eventbus-${VERSION}
 BUILDPLATFORM ?= linux/amd64
 TESTING_DOCKER_IMAGE ?= ps-eventbus-testing:latest
 TESTING_DOCKER_BASE_IMAGE ?= phpdockerio/php80-cli
@@ -24,46 +23,44 @@ clean:
 
 # target: version                                - Replace version in files
 version:
-	echo "...$(VERSION)..."
-	sed -i.bak -e "s/\(VERSION = \).*/\1\'${SEM_VERSION}\';/" ps_eventbus.php
-	sed -i.bak -e "s/\($this->version = \).*/\1\'${SEM_VERSION}\';/" ps_eventbus.php
-	sed -i.bak -e "s|\(<version><!\[CDATA\[\)[0-9a-z.-]\{1,\}]]></version>|\1${SEM_VERSION}]]></version>|" config.xml
-	rm -f ps_eventbus.php.bak config.xml.bak
+	@echo "...$(VERSION)..."
+	@sed -i.bak -e "s/\(VERSION = \).*/\1\'${SEM_VERSION}\';/" ps_eventbus.php
+	@sed -i.bak -e "s/\($this->version = \).*/\1\'${SEM_VERSION}\';/" ps_eventbus.php
+	@sed -i.bak -e "s|\(<version><!\[CDATA\[\)[0-9a-z.-]\{1,\}]]></version>|\1${SEM_VERSION}]]></version>|" config.xml
+	@rm -f ps_eventbus.php.bak config.xml.bak
 
 # target: zip                                    - Make zip bundles
-zip: zip-prod zip-inte
+zip: zip-prod zip-preprod zip-inte
+dist:
+	@mkdir -p ./dist
+.config.inte.yml:
+	@echo ".config.inte.yml file is missing, please create it. Exiting" && exit 1;
+.config.preprod.yml:
+	@echo ".config.preprod.yml file is missing, please create it. Exiting" && exit 1;
+.config.prod.yml:
+	@echo ".config.prod.yml file is missing, please create it. Exiting" && exit 1;
+
+define zip_it
+$(eval TMP_DIR := $(shell mktemp -d))
+mkdir -p ${TMP_DIR}/ps_eventbus;
+cp -r $(shell cat .zip-contents) ${TMP_DIR}/ps_eventbus;
+cp $1 ${TMP_DIR}/ps_eventbus/config/parameters.yml;
+cd ${TMP_DIR} && zip -9 -r $2 ./ps_eventbus;
+mv ${TMP_DIR}/$2 ./dist;
+rm -rf ${TMP_DIR:-/dev/null};
+endef
+
+# target: zip-inte                               - Bundle an integration zip
+zip-inte: vendor dist .config.inte.yml
+	@$(call zip_it,.config.inte.yml,${PACKAGE}_integration.zip)
+
+# target: zip-preprod                            - Bundle a preproduction zip
+zip-preprod: vendor dist .config.preprod.yml
+	@$(call zip_it,.config.preprod.yml,${PACKAGE}_preproduction.zip)
 
 # target: zip-prod                               - Bundle a production zip
-zip-prod: vendor
-	mkdir -p ./dist
-	cd .. && zip -r ${PACKAGE}.zip ps_eventbus -x '*.git*' \
-	  ps_eventbus/dist/\* \
-	  ps_eventbus/composer.phar \
-	  ps_eventbus/Makefile \
-		ps_eventbus/.env.dist
-	mv ../${PACKAGE}.zip ./dist
-
-# target: zip-inte                               - Bundle a integration zip
-zip-inte: vendor
-	mkdir -p ./dist
-	cp .env.inte.yml config/parameters.yml 2>/dev/null || echo "WARNING: no integration config file found";
-	cd .. && zip -r ${PACKAGE}_integration.zip ps_eventbus -x '*.git*' \
-	  ps_eventbus/dist/\* \
-	  ps_eventbus/composer.phar \
-	  ps_eventbus/Makefile \
-		ps_eventbus/.env.dist
-	mv ../${PACKAGE}_integration.zip ./dist
-
-# target: zip-inte                               - Bundle a integration zip
-zip-preproduction: vendor
-	mkdir -p ./dist
-	cp .env.inte.yml config/parameters.yml 2>/dev/null || echo "WARNING: no preproduction config file found";
-	cd .. && zip -r ${PACKAGE}_preproduction.zip ps_eventbus -x '*.git*' \
-	  ps_eventbus/dist/\* \
-	  ps_eventbus/composer.phar \
-	  ps_eventbus/Makefile \
-		ps_eventbus/.env.dist
-	mv ../${PACKAGE}_preproduction.zip ./dist
+zip-prod: vendor dist .config.prod.yml
+	@$(call zip_it,.config.prod.yml,${PACKAGE}.zip)
 
 # target: build                                  - Setup PHP & Node.js locally
 build: vendor
@@ -121,6 +118,10 @@ phpunit: prestashop/prestashop-${PS_VERSION} vendor/bin/phpunit
 phpstan: prestashop/prestashop-${PS_VERSION} vendor/bin/phpstan
 	_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
 
+# target: phpstan-baseline                       - Generate a phpstan baseline to ignore all errors
+phpstan-baseline: prestashop/prestashop-${PS_VERSION} vendor/bin/phpstan
+	_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpstan analyse --generate-baseline --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
+
 # target: docker-test                            - Static and unit testing in docker
 docker-test: docker-lint docker-phpstan docker-phpunit
 
@@ -150,14 +151,13 @@ bps177: build-ps-177
 ata177: all-tests-actions-177
 rda177: run-docker-actions-177
 build-ps-177:
-	-docker exec -i prestashop-177 sh -c "rm -rf /var/www/html/install"
-	-docker exec -i prestashop-177 sh -c "mv /var/www/html/admin /var/www/html/admin1"
+	docker exec -i prestashop-177 sh -c "rm -rf /var/www/html/install"
+	docker exec -i prestashop-177 sh -c "mv /var/www/html/admin /var/www/html/admin1"
 	mysql -h 127.0.0.1 -P 9001 --protocol=tcp -u root -pprestashop prestashop < $(shell pwd)/tests/System/Seed/Database/177.sql
 	docker exec -i prestashop-177 sh -c "cd /var/www/html && php  bin/console prestashop:module install eventBus"
 
 run-docker-actions-177:
 	docker-compose up -d --build --force-recreate prestashop-177
-	/bin/bash .docker/wait-for-container.sh sq-mysql
 
 all-tests-actions-177:
 	make rda177

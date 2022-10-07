@@ -1,4 +1,0 @@
-services:
-  PrestaShop\Module\PsEventbus\Config\Env:
-    class: PrestaShop\Module\PsEventbus\Config\Env
-    public: true

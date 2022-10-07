@@ -63,11 +63,10 @@ jobs:
       - name: Bundle the production zip
         run: |
           cd ${{ github.event.repository.name }}
-          echo "SENTRY_CREDENTIALS=$SENTRY_CREDENTIALS" >> .env
-          echo "SENTRY_ENVIRONMENT=production" >> .env
+          echo "$CONFIG_FILE" >> .config.prod.yml
           make zip-prod
         env:
-          SENTRY_CREDENTIALS: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          CONFIG_FILE: ${{ secrets.PS_EVENTBUS_PRODUCTION_CONFIG }}
 
       - name: Publish the production zip
         uses: actions/upload-release-asset@v1.0.1
@@ -92,12 +91,10 @@ jobs:
       - name: Bundle the integration zip
         run: |
           cd ${{ github.event.repository.name }}
-          echo "$PARAMETERS_FILE" > config/parameters.yml
-          echo "SENTRY_CREDENTIALS=" >> .env.inte
-          echo "SENTRY_ENVIRONMENT=" >> .env.inte
+          echo "$CONFIG_FILE" >> .config.inte.yml
           make zip-inte
         env:
-          PARAMETERS_FILE: ${{ secrets.PS_EVENTBUS_ENV_INTE }}
+          CONFIG_FILE: ${{ secrets.PS_EVENTBUS_INTEGRATION_CONFIG }}
 
       - name: Publish the integration zip
         uses: actions/upload-release-asset@v1.0.1
@@ -119,15 +116,13 @@ jobs:
         with:
           name: ${{ github.event.repository.name }}
 
-      - name: Bundle the preproduction zip
+      - name: Bundle the pre-production zip
         run: |
           cd ${{ github.event.repository.name }}
-          echo "$PARAMETERS_FILE" > config/parameters.yml
-          echo "SENTRY_CREDENTIALS=" >> .env.preproduction
-          echo "SENTRY_ENVIRONMENT=" >> .env.preproduction
-          make zip-preproduction
+          echo "$CONFIG_FILE" >> .config.preprod.yml
+          make zip-preprod
         env:
-          PARAMETERS_FILE: ${{ secrets.PS_EVENTBUS_ENV_PREPROD }}
+          CONFIG_FILE: ${{ secrets.PS_EVENTBUS_PREPRODUCTION_CONFIG }}
 
       - name: Publish the preprod zip
         uses: actions/upload-release-asset@v1.0.1
