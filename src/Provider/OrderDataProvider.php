@@ -211,7 +211,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             $order['total_paid_tax_excl'] = (float) $order['total_paid_tax_excl'];
             $order['refund'] = (float) $order['refund'];
             $order['refund_tax_excl'] = (float) $order['refund_tax_excl'];
-            $order['new_customer'] = $order['new_customer'] === '1';
+            $order['new_customer'] = $order['new_customer'] == 1;
             $order['is_paid'] = $this->castIsPaidValue($orders, $order, $langId);
             $order['shipping_cost'] = (float) $order['shipping_cost'];
             $order['total_paid_tax'] = $order['total_paid_tax_incl'] - $order['total_paid_tax_excl'];

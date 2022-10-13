@@ -313,14 +313,14 @@ class ProductDecorator
             });
 
             foreach ($productImages as $productImage) {
-                if ($productImage['cover'] === '1') {
+                if ($productImage['cover'] == 1) {
                     $coverImageId = $productImage['id_image'];
                     break;
                 }
             }
 
             // Product is without attributes -> get product images
-            if ($product['id_attribute'] === '0') {
+            if ($product['id_attribute'] == 0) {
                 $productImageIds = $this->arrayFormatter->formatValueArray($productImages, 'id_image');
             } else {
                 $productAttributeImages = array_filter($attributeImages, function ($image) use ($product) {
