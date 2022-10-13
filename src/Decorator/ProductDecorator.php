@@ -208,7 +208,7 @@ class ProductDecorator
         $product['mpn'] = isset($product['mpn']) ? (string) $product['mpn'] : '';
         $product['ean'] = (string) $product['ean'];
         $product['upc'] = (string) $product['upc'];
-        $product['is_default_attribute'] = $product['id_attribute'] === 0 ? true : $product['is_default_attribute'] == '1';
+        $product['is_default_attribute'] = $product['id_attribute'] === 0 ? true : $product['is_default_attribute'] == 1;
         $product['available_for_order'] = $product['available_for_order'] == '1';
         $product['available_date'] = (string) $product['available_date'];
         $product['is_bundle'] = $product['is_bundle'] == '1';
