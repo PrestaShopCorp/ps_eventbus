@@ -39,7 +39,8 @@ class MerchantConsentRepository
 
         /* @var \PDO $query */
         $query = $dbh->prepare('INSERT INTO ps_eventbus_merchant_consents (shop_id, module_consent, shop_consent_accepted, shop_consent_revoked)
-        VALUES (:shop_id, :module_consent, :accepted, :revoked)');
+        VALUES (:shop_id, :module_consent, :accepted, :revoked) 
+        ON DUPLICATE KEY UPDATE shop_consent_accepted = :accepted, shop_consent_revoked = :revoked, updated_at = NOW()');
 
         /* @var \PDO $query */
         $query->bindParam(':shop_id', $value['shop_id']);
