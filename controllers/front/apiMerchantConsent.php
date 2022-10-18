@@ -44,7 +44,7 @@ class ps_EventbusApiMerchantConsentModuleFrontController extends AbstractApiCont
                     'error' => 'bad params'
                 ]);
             }
-            // TODO check if consents are valid
+            // TODO check if consents types are valid
             $data = [
                 'shop_id' => Context::getContext()->shop->id,
                 'accepted' => json_encode(explode(',', Tools::getValue('accepted')), JSON_UNESCAPED_SLASHES),
@@ -56,15 +56,15 @@ class ps_EventbusApiMerchantConsentModuleFrontController extends AbstractApiCont
             $merchantConsentRepository = $this->module->getService(MerchantConsentRepository::class);
             $merchantConsent = $merchantConsentRepository->postMerchantConsent($data);
 
+            $saved = $this->authorizationService->sendConsents(Context::getContext()->shop->id, Tools::getValue('jwt'), Tools::getValue('module_consent'));
+
             $this->exitWithResponse(
-                array_merge(
-                    [
-                        'consentSaved' => true
-                    ],
-                    $merchantConsent
-                )
+                [
+                    'consentSaved' => $saved,
+                    'error' => $saved ? null : 'consent not saved to cloudsync',
+                    'data' => $merchantConsent
+                ]
             );
-            // TODO call consent api
             // $response = $this->proxyService->upload($jobId, $merchantConsent, $this->startTime);
         } catch (EnvVarException $exception) {
             $this->exitWithExceptionMessage($exception);

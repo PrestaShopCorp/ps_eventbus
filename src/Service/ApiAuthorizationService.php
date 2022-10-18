@@ -5,6 +5,8 @@ namespace PrestaShop\Module\PsEventbus\Service;
 use PrestaShop\Module\PsEventbus\Api\EventBusSyncClient;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
+use PrestaShop\Module\PsEventbus\Repository\MerchantConsentRepository;
+
 use PrestaShopDatabaseException;
 
 class ApiAuthorizationService
@@ -17,13 +19,19 @@ class ApiAuthorizationService
      * @var EventBusSyncClient
      */
     private $eventBusSyncClient;
+    /**
+     * @var MerchantConsentRepository
+     */
+    private $merchantConsentRepository;
 
     public function __construct(
         EventbusSyncRepository $eventbusSyncStateRepository,
-        EventBusSyncClient $eventBusSyncClient
+        EventBusSyncClient $eventBusSyncClient,
+        MerchantConsentRepository $merchantConsentRepository,
     ) {
         $this->eventbusSyncStateRepository = $eventbusSyncStateRepository;
         $this->eventBusSyncClient = $eventBusSyncClient;
+        $this->merchantConsentRepository = $merchantConsentRepository;
     }
 
     /**
@@ -50,5 +58,26 @@ class ApiAuthorizationService
         }
 
         return $jobValidationResponse;
+    }
+
+    /**
+     * Send the consents to cloudsync
+     *
+     * @param string $shopId
+     *
+     * @return bool
+     *
+     * @throws PrestaShopDatabaseException|EnvVarException
+     */
+    public function sendConsents($shopId, $accountJWT, $moduleName)
+    {
+        $consents = $this->merchantConsentRepository->getMerchantConsent($shopId, $moduleName);
+
+        $accountsModule =  \Module::getInstanceByName("ps_accounts");
+        $accountService = $accountsModule->getService("PrestaShop\Module\PsAccounts\Service\PsAccountsService");
+        $shopUuid = $accountService->getShopUuid();
+
+        $consentResponse = $this->eventBusSyncClient->validateConsent($shopUuid, $accountJWT, $moduleName, $consents['shop-consent-revoked'], $consents['shop-consent-revoked']);
+        return (int) $consentResponse['httpCode'] === 201;
     }
 }

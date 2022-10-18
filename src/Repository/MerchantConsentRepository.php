@@ -87,14 +87,12 @@ class MerchantConsentRepository
         $value = current($this->getConsentByShopIdAndModuleName($idShop, $moduleName));
         return [
             'id' => $value['id'],
-            'properties' => [
-                'created-at' => $value['created_at'],
-                'updated-at' => $value['updated_at'],
-                'module-name' => $value['module_consent'],
-                'shop-consent-revoked' => json_decode($value['shop_consent_revoked']),
-                'shop-consent-accepted' => json_decode($value['shop_consent_accepted']),
-                'id-shop' => $value['shop_id'],
-            ],
+            'created-at' => $value['created_at'],
+            'updated-at' => $value['updated_at'],
+            'module-name' => $value['module_consent'],
+            'shop-consent-revoked' => json_decode($value['shop_consent_revoked']),
+            'shop-consent-accepted' => json_decode($value['shop_consent_accepted']),
+            'id-shop' => $value['shop_id'],
         ];
     }
 }
