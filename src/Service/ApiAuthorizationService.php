@@ -77,7 +77,7 @@ class ApiAuthorizationService
         $accountService = $accountsModule->getService("PrestaShop\Module\PsAccounts\Service\PsAccountsService");
         $shopUuid = $accountService->getShopUuid();
 
-        $consentResponse = $this->eventBusSyncClient->validateConsent($shopUuid, $accountJWT, $moduleName, $consents['shop-consent-revoked'], $consents['shop-consent-revoked']);
+        $consentResponse = $this->eventBusSyncClient->validateConsent($shopUuid, $accountJWT, $moduleName, $consents['shop-consent-accepted'], $consents['shop-consent-revoked']);
         return (int) $consentResponse['httpCode'] === 201;
     }
 }
