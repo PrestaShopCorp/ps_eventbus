@@ -38,7 +38,7 @@ class MerchantConsentRepository
         $dbh = $this->db->connect();
 
         /* @var \PDO $query */
-        $query = $dbh->prepare('INSERT INTO ps_merchant_consents (shop_id, module_consent, shop_consent_accepted, shop_consent_revoked)
+        $query = $dbh->prepare('INSERT INTO ps_eventbus_merchant_consents (shop_id, module_consent, shop_consent_accepted, shop_consent_revoked)
         VALUES (:shop_id, :module_consent, :accepted, :revoked)');
 
         /* @var \PDO $query */
@@ -57,7 +57,7 @@ class MerchantConsentRepository
 
         $query->execute();
 
-        return $this->getMerchantConsent();
+        return $this->getMerchantConsent(2, $value['module_consent']);
     }
 
     /**
@@ -67,35 +67,34 @@ class MerchantConsentRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getConsentByShopId(int $idShop = 0)
+    public function getConsentByShopIdAndModuleName(int $idShop = 0, string $moduleName)
     {
-        $query = new DbQuery();
+        /* @var \PDO $dbh */
+        $dbh = $this->db->connect();
 
-        $query->select('*')
-            ->from('merchant_consents')
-            ->where("shop_id='" . $idShop > 0 ? $idShop : (string) Context::getContext()->shop->id . "'");
+        /* @var \PDO $query */
+        $query = $dbh->prepare('SELECT * FROM ps_eventbus_merchant_consents WHERE shop_id = :shop_id AND module_consent LIKE :module_consent LIMIT 1');
 
-        return $this->db->executeS($query);
+        $query->execute(['shop_id' => '1', 'module_consent' => $moduleName]);
+        return $query->fetchAll();
     }
 
     /**
      * @return array
      */
-    public function getMerchantConsent()
+    public function getMerchantConsent(int $idShop = 0, string $moduleName)
     {
-        $value = current($this->getConsentByShopId());
-
+        $value = current($this->getConsentByShopIdAndModuleName($idShop, $moduleName));
         return [
-                'id' => $value['id'],
-                'collection' => Config::COLLECTION_MERCHANT_CONSENT,
-                'properties' => [
-                    'created-at' => $value['created_at'],
-                    'updated-at' => $value['updated_at'],
-                    'module-name' => $value['module_consent'],
-                    'shop-consent-revoked' => json_decode($value['shop_consent_revoked']),
-                    'shop-consent-accepted' => json_decode($value['shop_consent_accepted']),
-                    'id-shop' => $value['shop_id'],
-                ],
+            'id' => $value['id'],
+            'properties' => [
+                'created-at' => $value['created_at'],
+                'updated-at' => $value['updated_at'],
+                'module-name' => $value['module_consent'],
+                'shop-consent-revoked' => json_decode($value['shop_consent_revoked']),
+                'shop-consent-accepted' => json_decode($value['shop_consent_accepted']),
+                'id-shop' => $value['shop_id'],
+            ],
         ];
     }
 }

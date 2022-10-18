@@ -82,6 +82,8 @@ abstract class AbstractApiController extends ModuleFrontController
      */
     public $errorHandler;
 
+    protected $checkJobId = true;
+
     public function __construct()
     {
         parent::__construct();
@@ -114,7 +116,9 @@ abstract class AbstractApiController extends ModuleFrontController
         $this->startTime = time();
 
         try {
-            $this->authorize();
+            if ($this->checkJobId) {
+                $this->authorize();
+            }
         } catch (PrestaShopDatabaseException $exception) {
             $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);

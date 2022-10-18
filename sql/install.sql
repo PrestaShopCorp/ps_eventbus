@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_eventbus_merchant_consents`
     `shop_id`               INT(10) NOT NULL,
     `shop_consent_accepted` JSON NOT NULL,
     `shop_consent_revoked`  JSON NOT NULL,
-    `module_consent`        VARCHAR(255),
+    `module_consent`        VARCHAR(255) unique not null,
     `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
     `updated_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
