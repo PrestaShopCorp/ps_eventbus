@@ -4,8 +4,6 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 
 use Context;
 use Db;
-use DbQuery;
-use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Service\CacheService;
 
 class MerchantConsentRepository
