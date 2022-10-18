@@ -10,6 +10,7 @@ use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
 use PrestaShop\Module\PsEventbus\Exception\QueryParamsException;
+use PrestaShop\Module\PsEventbus\Exception\AuthException;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
@@ -83,6 +84,7 @@ abstract class AbstractApiController extends ModuleFrontController
     public $errorHandler;
 
     protected $checkJobId = true;
+    protected $checkJWT = false;
 
     public function __construct()
     {
@@ -119,6 +121,9 @@ abstract class AbstractApiController extends ModuleFrontController
             if ($this->checkJobId) {
                 $this->authorize();
             }
+            if ($this->checkJWT) {
+                $this->checkAccountJWT();
+            }
         } catch (PrestaShopDatabaseException $exception) {
             $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
@@ -126,6 +131,9 @@ abstract class AbstractApiController extends ModuleFrontController
             $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
         } catch (FirebaseException $exception) {
+            $this->errorHandler->handle($exception);
+            $this->exitWithExceptionMessage($exception);
+        } catch (AuthException $exception) {
             $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
         }
@@ -160,6 +168,19 @@ abstract class AbstractApiController extends ModuleFrontController
         }
     }
 
+    private function checkAccountJWT()
+    {
+        $jwt = Tools::getValue('jwt');
+        if (!$jwt) {
+            throw new AuthException('No JWT provided');
+        }
+
+        $accountsModule =  \Module::getInstanceByName("ps_accounts");
+        $accountService = $accountsModule->getService("PrestaShop\Module\PsAccounts\Service\PsAccountsService");
+        if ($jwt === '' || $accountService->getToken() !== $jwt) { // TODO really check jwt signature and jwt.user_id
+            throw new AuthException('Invalid JWT');
+        }
+    }
     /**
      * @param PaginatedApiDataProviderInterface $dataProvider
      *

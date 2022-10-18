@@ -32,29 +32,13 @@ class ps_EventbusApiMerchantConsentModuleFrontController extends AbstractApiCont
     {
         parent::__construct();
         $this->checkJobId = false;
+        $this->checkJWT = true;
     }
     public function postProcess()
     {
-
-
         try {
 
-            // TODO move in AbstractApiController
 
-            $jwt = Tools::getValue('jwt');
-            if (!$jwt) {
-                $this->exitWithResponse([
-                    'not_authorized' => 'no jwt'
-                ]);
-            }
-
-            $accountsModule =  \Module::getInstanceByName("ps_accounts");
-            $accountService = $accountsModule->getService("PrestaShop\Module\PsAccounts\Service\PsAccountsService");
-            if ($jwt === '' || $accountService->getToken() !== $jwt) { // TODO really check jwt signature
-                $this->exitWithResponse([
-                    'not_authorized' => 'wrong jwt'
-                ]);
-            }
             if (!Tools::getIsset('module_consent')) {
                 $this->exitWithResponse([
                     'error' => 'bad params'
