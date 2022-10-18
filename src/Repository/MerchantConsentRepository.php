@@ -41,6 +41,7 @@ class MerchantConsentRepository
         $query = $dbh->prepare('INSERT INTO ps_eventbus_merchant_consents (shop_id, module_consent, shop_consent_accepted, shop_consent_revoked)
         VALUES (:shop_id, :module_consent, :accepted, :revoked) 
         ON DUPLICATE KEY UPDATE shop_consent_accepted = :accepted, shop_consent_revoked = :revoked, updated_at = NOW()');
+        // FIXME each request increment the id index of the table but does not create a new row
 
         /* @var \PDO $query */
         $query->bindParam(':shop_id', $value['shop_id']);
@@ -58,7 +59,7 @@ class MerchantConsentRepository
 
         $query->execute();
 
-        return $this->getMerchantConsent(2, $value['module_consent']);
+        return $this->getMerchantConsent(Context::getContext()->shop->id, $value['module_consent']);
     }
 
     /**
@@ -76,7 +77,7 @@ class MerchantConsentRepository
         /* @var \PDO $query */
         $query = $dbh->prepare('SELECT * FROM ps_eventbus_merchant_consents WHERE shop_id = :shop_id AND module_consent LIKE :module_consent LIMIT 1');
 
-        $query->execute(['shop_id' => '1', 'module_consent' => $moduleName]);
+        $query->execute(['shop_id' => $idShop > 0 ? (string)$idShop : (string) Context::getContext()->shop->id, 'module_consent' => $moduleName]);
         return $query->fetchAll();
     }
 
