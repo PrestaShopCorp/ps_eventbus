@@ -6,9 +6,7 @@ use DateTime;
 use Exception;
 use ModuleFrontController;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
-use PrestaShop\Module\PsAccounts\Api\Client\AccountsClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Exception\AuthException;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
 use PrestaShop\Module\PsEventbus\Exception\QueryParamsException;
@@ -82,14 +80,6 @@ abstract class AbstractApiController extends ModuleFrontController
      * @var ErrorHandler
      */
     public $errorHandler;
-    /**
-     * @var bool
-     */
-    protected $checkJobId = true;
-    /**
-     * @var bool
-     */
-    protected $checkJWT = false;
 
     public function __construct()
     {
@@ -123,12 +113,7 @@ abstract class AbstractApiController extends ModuleFrontController
         $this->startTime = time();
 
         try {
-            if ($this->checkJobId) {
-                $this->authorize();
-            }
-            if ($this->checkJWT) {
-                $this->checkAccountJWT();
-            }
+            $this->authorize();
         } catch (PrestaShopDatabaseException $exception) {
             $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
@@ -136,9 +121,6 @@ abstract class AbstractApiController extends ModuleFrontController
             $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
         } catch (FirebaseException $exception) {
-            $this->errorHandler->handle($exception);
-            $this->exitWithExceptionMessage($exception);
-        } catch (AuthException $exception) {
             $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
         }
@@ -170,27 +152,6 @@ abstract class AbstractApiController extends ModuleFrontController
 
         if (!$token) {
             throw new FirebaseException('Invalid token');
-        }
-    }
-
-    /**
-     * @return void
-     *
-     * @throws AuthException|EnvVarException
-     */
-    private function checkAccountJWT()
-    {
-        $jwt = Tools::getValue('jwt');
-        if (!$jwt) {
-            throw new AuthException('No JWT provided');
-        }
-
-        $accountsModule = \Module::getInstanceByName('ps_accounts');
-        /* @phpstan-ignore-next-line */
-        $accountsClient = $accountsModule->getService(AccountsClient::class);
-        $response = $accountsClient->verifyToken($jwt);
-        if (!isset($response) || $response['status'] !== true) {
-            throw new AuthException('Invalid JWT');
         }
     }
 
