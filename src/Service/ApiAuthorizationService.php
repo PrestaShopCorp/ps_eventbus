@@ -27,7 +27,7 @@ class ApiAuthorizationService
     public function __construct(
         EventbusSyncRepository $eventbusSyncStateRepository,
         EventBusSyncClient $eventBusSyncClient,
-        MerchantConsentRepository $merchantConsentRepository,
+        MerchantConsentRepository $merchantConsentRepository
     ) {
         $this->eventbusSyncStateRepository = $eventbusSyncStateRepository;
         $this->eventBusSyncClient = $eventBusSyncClient;
