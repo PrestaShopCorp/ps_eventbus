@@ -6,6 +6,7 @@ use DateTime;
 use Exception;
 use ModuleFrontController;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
+use PrestaShop\Module\PsAccounts\Api\Client\AccountsClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Exception\AuthException;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
@@ -168,6 +169,11 @@ abstract class AbstractApiController extends ModuleFrontController
         }
     }
 
+    /**
+     * @return void
+     *
+     * @throws AuthException|EnvVarException
+     */
     private function checkAccountJWT()
     {
         $jwt = Tools::getValue('jwt');
@@ -176,8 +182,10 @@ abstract class AbstractApiController extends ModuleFrontController
         }
 
         $accountsModule = \Module::getInstanceByName('ps_accounts');
-        $accountService = $accountsModule->getService("PrestaShop\Module\PsAccounts\Service\PsAccountsService");
-        if ($jwt === '' || $accountService->getToken() !== $jwt) { // TODO really check jwt signature and jwt.user_id
+        /* @phpstan-ignore-next-line */
+        $accountsClient = $accountsModule->getService(AccountsClient::class);
+        $response = $accountsClient->verifyToken($jwt);
+        if (!isset($response) || $response['status'] !== true) {
             throw new AuthException('Invalid JWT');
         }
     }
