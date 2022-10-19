@@ -57,17 +57,18 @@ class MerchantConsentRepository
 
         $query->execute();
 
-        return $this->getMerchantConsent(Context::getContext()->shop->id, $value['module_consent']);
+        return $this->getMerchantConsent($value['module_consent']);
     }
 
     /**
      * @param int $idShop
+     * @param string $moduleName
      *
      * @return array
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getConsentByShopIdAndModuleName(int $idShop = 0, string $moduleName)
+    private function getConsentByShopIdAndModuleName(string $moduleName, int $idShop)
     {
         /* @var \PDO $dbh */
         $dbh = $this->db->connect();
@@ -75,7 +76,7 @@ class MerchantConsentRepository
         /* @var \PDO $query */
         $query = $dbh->prepare('SELECT * FROM ps_eventbus_merchant_consents WHERE shop_id = :shop_id AND module_consent LIKE :module_consent LIMIT 1');
 
-        $query->execute(['shop_id' => $idShop > 0 ? (string) $idShop : (string) Context::getContext()->shop->id, 'module_consent' => $moduleName]);
+        $query->execute(['shop_id' => $idShop, 'module_consent' => $moduleName]);
 
         return $query->fetchAll();
     }
@@ -83,9 +84,9 @@ class MerchantConsentRepository
     /**
      * @return array
      */
-    public function getMerchantConsent(int $idShop = 0, string $moduleName)
+    public function getMerchantConsent(string $moduleName, int $idShop = 0)
     {
-        $value = current($this->getConsentByShopIdAndModuleName($idShop, $moduleName));
+        $value = current($this->getConsentByShopIdAndModuleName($moduleName, $idShop > 0 ? (int) $idShop : (int) Context::getContext()->shop->id));
 
         return [
             'id' => $value['id'],

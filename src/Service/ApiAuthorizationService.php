@@ -2,6 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
+use PrestaShop\Module\PsAccounts\Service\PsAccountsService;
 use PrestaShop\Module\PsEventbus\Api\EventBusSyncClient;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
@@ -70,10 +71,10 @@ class ApiAuthorizationService
      */
     public function sendConsents($shopId, $accountJWT, $moduleName)
     {
-        $consents = $this->merchantConsentRepository->getMerchantConsent($shopId, $moduleName);
+        $consents = $this->merchantConsentRepository->getMerchantConsent($moduleName, $shopId);
 
         $accountsModule = \Module::getInstanceByName('ps_accounts');
-        $accountService = $accountsModule->getService("PrestaShop\Module\PsAccounts\Service\PsAccountsService");
+        $accountService = $accountsModule->getService(PsAccountsService::class);
         $shopUuid = $accountService->getShopUuid();
 
         $consentResponse = $this->eventBusSyncClient->validateConsent($shopUuid, $accountJWT, $moduleName, $consents['shop-consent-accepted'], $consents['shop-consent-revoked']);

@@ -2,12 +2,14 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
+use PrestaShop\Module\PsAccounts\Service\PsAccountsService;
+
 class PresenterService
 {
     public function __construct()
     {
         $accountsModule = \Module::getInstanceByName('ps_accounts');
-        $accountService = $accountsModule->getService("PrestaShop\Module\PsAccounts\Service\PsAccountsService");
+        $accountService = $accountsModule->getService(PsAccountsService::class);
         $this->psAccountsService = $accountService;
     }
 
