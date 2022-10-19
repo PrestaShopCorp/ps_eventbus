@@ -20,14 +20,21 @@ class PresenterService
     }
 
     /**
+     * @param string $moduleName
+     * @param array $requiredConsents
+     * @param array $optionalConsents
+     *
      * @return array
      */
-    public function expose()
+    public function expose($moduleName, $requiredConsents = [], $optionalConsents = [])
     {
         return [
             'jwt' => $this->psAccountsService->getOrRefreshToken(),
-            'consentUri' => \Context::getContext()->link->getModuleLink('ps_eventbus', 'apiMerchantConsent'),
-            'consents' => ['products', 'carts'],
+            /* @phpstan-ignore-next-line */
+            'shopId' => $this->psAccountsService->getShopUuid(),
+            'requiredConsents' => $requiredConsents,
+            'optionalConsents' => $optionalConsents,
+            'moduleName' => $moduleName,
         ];
     }
 }
