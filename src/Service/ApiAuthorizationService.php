@@ -6,7 +6,6 @@ use PrestaShop\Module\PsEventbus\Api\EventBusSyncClient;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\MerchantConsentRepository;
-
 use PrestaShopDatabaseException;
 
 class ApiAuthorizationService
@@ -73,11 +72,12 @@ class ApiAuthorizationService
     {
         $consents = $this->merchantConsentRepository->getMerchantConsent($shopId, $moduleName);
 
-        $accountsModule =  \Module::getInstanceByName("ps_accounts");
+        $accountsModule = \Module::getInstanceByName('ps_accounts');
         $accountService = $accountsModule->getService("PrestaShop\Module\PsAccounts\Service\PsAccountsService");
         $shopUuid = $accountService->getShopUuid();
 
         $consentResponse = $this->eventBusSyncClient->validateConsent($shopUuid, $accountJWT, $moduleName, $consents['shop-consent-accepted'], $consents['shop-consent-revoked']);
+
         return (int) $consentResponse['httpCode'] === 201;
     }
 }

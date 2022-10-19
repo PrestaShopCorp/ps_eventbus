@@ -7,10 +7,10 @@ use Exception;
 use ModuleFrontController;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Exception\AuthException;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
 use PrestaShop\Module\PsEventbus\Exception\QueryParamsException;
-use PrestaShop\Module\PsEventbus\Exception\AuthException;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
@@ -175,12 +175,13 @@ abstract class AbstractApiController extends ModuleFrontController
             throw new AuthException('No JWT provided');
         }
 
-        $accountsModule =  \Module::getInstanceByName("ps_accounts");
+        $accountsModule = \Module::getInstanceByName('ps_accounts');
         $accountService = $accountsModule->getService("PrestaShop\Module\PsAccounts\Service\PsAccountsService");
         if ($jwt === '' || $accountService->getToken() !== $jwt) { // TODO really check jwt signature and jwt.user_id
             throw new AuthException('Invalid JWT');
         }
     }
+
     /**
      * @param PaginatedApiDataProviderInterface $dataProvider
      *

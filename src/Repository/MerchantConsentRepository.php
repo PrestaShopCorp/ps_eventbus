@@ -75,7 +75,8 @@ class MerchantConsentRepository
         /* @var \PDO $query */
         $query = $dbh->prepare('SELECT * FROM ps_eventbus_merchant_consents WHERE shop_id = :shop_id AND module_consent LIKE :module_consent LIMIT 1');
 
-        $query->execute(['shop_id' => $idShop > 0 ? (string)$idShop : (string) Context::getContext()->shop->id, 'module_consent' => $moduleName]);
+        $query->execute(['shop_id' => $idShop > 0 ? (string) $idShop : (string) Context::getContext()->shop->id, 'module_consent' => $moduleName]);
+
         return $query->fetchAll();
     }
 
@@ -85,6 +86,7 @@ class MerchantConsentRepository
     public function getMerchantConsent(int $idShop = 0, string $moduleName)
     {
         $value = current($this->getConsentByShopIdAndModuleName($idShop, $moduleName));
+
         return [
             'id' => $value['id'],
             'created-at' => $value['created_at'],

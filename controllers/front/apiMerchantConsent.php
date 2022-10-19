@@ -15,6 +15,7 @@ function getBearerToken($header)
             return $matches[1];
         }
     }
+
     return null;
 }
 class ps_EventbusApiMerchantConsentModuleFrontController extends AbstractApiController
@@ -22,26 +23,25 @@ class ps_EventbusApiMerchantConsentModuleFrontController extends AbstractApiCont
     public $type = Config::COLLECTION_SHOPS;
     public $auth = true;
     public $guestAllowed = false;
+
     /**
      * @throws PrestaShopException
      *
      * @return void
      */
-
     public function __construct()
     {
         parent::__construct();
         $this->checkJobId = false;
         $this->checkJWT = true;
     }
+
     public function postProcess()
     {
         try {
-
-
             if (!Tools::getIsset('module_consent')) {
                 $this->exitWithResponse([
-                    'error' => 'bad params'
+                    'error' => 'bad params',
                 ]);
             }
             // TODO check if consents types are valid
@@ -49,7 +49,7 @@ class ps_EventbusApiMerchantConsentModuleFrontController extends AbstractApiCont
                 'shop_id' => Context::getContext()->shop->id,
                 'accepted' => json_encode(explode(',', Tools::getValue('accepted')), JSON_UNESCAPED_SLASHES),
                 'revoked' => json_encode(explode(',', Tools::getValue('revoked')), JSON_UNESCAPED_SLASHES),
-                'module_consent' => Tools::getValue('module_consent')
+                'module_consent' => Tools::getValue('module_consent'),
             ];
 
             /** @var MerchantConsentRepository $merchantConsentRepository */
@@ -62,7 +62,7 @@ class ps_EventbusApiMerchantConsentModuleFrontController extends AbstractApiCont
                 [
                     'consentSaved' => $saved,
                     'error' => $saved ? null : 'consent not saved to cloudsync',
-                    'data' => $merchantConsent
+                    'data' => $merchantConsent,
                 ]
             );
             // $response = $this->proxyService->upload($jobId, $merchantConsent, $this->startTime);
