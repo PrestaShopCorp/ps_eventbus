@@ -2,7 +2,6 @@
 
 use PrestaShop\Module\PsEventbus\Api\EventBusSyncClient;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
-use PrestaShop\Module\PsEventbus\Repository\MerchantConsentRepository;
 use PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService;
 use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 use Yandex\Allure\Adapter\Annotation\Features;
@@ -33,12 +32,10 @@ class ApiAuthorizationServiceTest extends BaseTestCase
         parent::setUp();
 
         $this->eventbusSyncRepository = $this->createMock(EventbusSyncRepository::class);
-        $this->merchantConsentRepository = $this->createMock(MerchantConsentRepository::class);
         $this->eventBusSyncClient = $this->createMock(EventBusSyncClient::class);
         $this->apiAuthorizationService = new ApiAuthorizationService(
             $this->eventbusSyncRepository,
             $this->eventBusSyncClient,
-            $this->merchantConsentRepository
         );
     }
 

@@ -42,5 +42,4 @@ class Config
     public const COLLECTION_SHOPS = 'shops';
     public const COLLECTION_THEMES = 'themes';
     public const COLLECTION_BUNDLES = 'bundles';
-    public const COLLECTION_MERCHANT_CONSENT = 'merchant_consents';
 }

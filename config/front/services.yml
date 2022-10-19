@@ -46,7 +46,6 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Api\EventBusSyncClient'
-      - '@PrestaShop\Module\PsEventbus\Repository\MerchantConsentRepository'
 
   PrestaShop\Module\PsEventbus\Service\DeletedObjectsService:
     class: PrestaShop\Module\PsEventbus\Service\DeletedObjectsService

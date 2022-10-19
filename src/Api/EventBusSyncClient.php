@@ -58,36 +58,4 @@ class EventBusSyncClient extends GenericClient
 
         return $this->get();
     }
-
-    /**
-     * @param string $shopId
-     * @param string $accountJWT
-     * @param string $moduleName
-     * @param array $allowedConsents
-     * @param array $revokedConsents
-     *
-     * @return array
-     *
-     * @throws EnvVarException
-     */
-    public function validateConsent($shopId, $accountJWT, $moduleName, $allowedConsents, $revokedConsents)
-    {
-        $this->setRoute($this->baseUrl . "/consent/$shopId");
-        /*
-            moduleName: string;
-            shopConsentAccepted: ShopContentDto[];
-            shopConsentRevoked: ShopContentDto[];
-        */
-        return $this->post([
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'authorization' => "Bearer $accountJWT",
-            ],
-            'body' => json_encode([
-                'moduleName' => $moduleName,
-                'shopConsentAccepted' => $allowedConsents,
-                'shopConsentRevoked' => $revokedConsents,
-            ]),
-        ]);
-    }
 }
