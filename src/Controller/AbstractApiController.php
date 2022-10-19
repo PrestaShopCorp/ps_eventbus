@@ -76,6 +76,7 @@ abstract class AbstractApiController extends ModuleFrontController
      * @var bool
      */
     public $psAccountsInstalled = true;
+
     /**
      * @var ErrorHandler
      */
