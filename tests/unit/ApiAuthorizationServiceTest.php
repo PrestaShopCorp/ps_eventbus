@@ -35,7 +35,7 @@ class ApiAuthorizationServiceTest extends BaseTestCase
         $this->eventBusSyncClient = $this->createMock(EventBusSyncClient::class);
         $this->apiAuthorizationService = new ApiAuthorizationService(
             $this->eventbusSyncRepository,
-            $this->eventBusSyncClient,
+            $this->eventBusSyncClient
         );
     }
 
