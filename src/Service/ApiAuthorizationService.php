@@ -63,7 +63,9 @@ class ApiAuthorizationService
     /**
      * Send the consents to cloudsync
      *
-     * @param string $shopId
+     * @param int $shopId
+     * @param string $accountJWT
+     * @param string $moduleName
      *
      * @return bool
      *
@@ -74,6 +76,7 @@ class ApiAuthorizationService
         $consents = $this->merchantConsentRepository->getMerchantConsent($moduleName, $shopId);
 
         $accountsModule = \Module::getInstanceByName('ps_accounts');
+        /* @phpstan-ignore-next-line */
         $accountService = $accountsModule->getService(PsAccountsService::class);
         $shopUuid = $accountService->getShopUuid();
 

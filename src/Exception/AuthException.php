@@ -23,6 +23,12 @@ namespace PrestaShop\Module\PsEventbus\Exception;
 
 class AuthException extends \Exception
 {
+    /**
+     * @param string $message
+     * @param \Exception $previous
+     *
+     * @return AuthException
+     */
     public function __construct($message, \Exception $previous = null)
     {
         parent::__construct($message, 401, $previous);

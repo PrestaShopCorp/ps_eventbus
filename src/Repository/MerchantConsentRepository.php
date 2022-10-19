@@ -41,16 +41,12 @@ class MerchantConsentRepository
         ON DUPLICATE KEY UPDATE shop_consent_accepted = :accepted, shop_consent_revoked = :revoked, updated_at = NOW()');
         // FIXME each request increment the id index of the table but does not create a new row
 
-        /* @var \PDO $query */
         $query->bindParam(':shop_id', $value['shop_id']);
-        /* @var \PDO $query */
         $query->bindParam(':module_consent', $value['module_consent']);
-        /* @var \PDO $query */
         $query->bindParam(':accepted', $value['accepted']);
-        /* @var \PDO $query */
         $query->bindParam(':revoked', $value['revoked']);
 
-        $this->cacheService->setCacheProperty('merchantConsent.shopId', (string) Context::getContext()->shop->id);
+        $this->cacheService->setCacheProperty('merchantConsent.shopId', (string) $value['shop_id']);
         $this->cacheService->setCacheProperty('merchantConsent.moduleConsent', $value['module_consent']);
         $this->cacheService->setCacheProperty('merchantConsent.accepted', $value['accepted']);
         $this->cacheService->setCacheProperty('merchantConsent.revoked', $value['revoked']);
@@ -64,7 +60,7 @@ class MerchantConsentRepository
      * @param int $idShop
      * @param string $moduleName
      *
-     * @return array
+     * @return array|false
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -78,15 +74,21 @@ class MerchantConsentRepository
 
         $query->execute(['shop_id' => $idShop, 'module_consent' => $moduleName]);
 
-        return $query->fetchAll();
+        /* @phpstan-ignore-next-line */
+        return $query->fetch();
     }
 
     /**
      * @return array
+     *
+     * @throws \Exception
      */
     public function getMerchantConsent(string $moduleName, int $idShop = 0)
     {
-        $value = current($this->getConsentByShopIdAndModuleName($moduleName, $idShop > 0 ? (int) $idShop : (int) Context::getContext()->shop->id));
+        $value = $this->getConsentByShopIdAndModuleName($moduleName, $idShop > 0 ? $idShop : (int) Context::getContext()->shop->id);
+        if ($value === false) {
+            throw new \Exception('No merchant consent found');
+        }
 
         return [
             'id' => $value['id'],

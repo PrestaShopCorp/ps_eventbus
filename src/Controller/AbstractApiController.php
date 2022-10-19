@@ -78,13 +78,17 @@ abstract class AbstractApiController extends ModuleFrontController
      * @var bool
      */
     public $psAccountsInstalled = true;
-
     /**
      * @var ErrorHandler
      */
     public $errorHandler;
-
+    /**
+     * @var bool
+     */
     protected $checkJobId = true;
+    /**
+     * @var bool
+     */
     protected $checkJWT = false;
 
     public function __construct()

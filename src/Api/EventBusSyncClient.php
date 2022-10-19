@@ -60,6 +60,12 @@ class EventBusSyncClient extends GenericClient
     }
 
     /**
+     * @param string $shopId
+     * @param string $accountJWT
+     * @param string $moduleName
+     * @param array $allowedConsents
+     * @param array $revokedConsents
+     *
      * @return array
      *
      * @throws EnvVarException

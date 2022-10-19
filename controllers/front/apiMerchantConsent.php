@@ -7,17 +7,6 @@ use PrestaShop\Module\PsEventbus\Repository\MerchantConsentRepository;
 
 header('Access-Control-Allow-Origin: *'); // TODO set CDC origin
 
-function getBearerToken($header)
-{
-    // HEADER: Get the access token from the header
-    if (!empty($header)) {
-        if (preg_match('/Bearer\s(\S+)/', $header, $matches)) {
-            return $matches[1];
-        }
-    }
-
-    return null;
-}
 class ps_EventbusApiMerchantConsentModuleFrontController extends AbstractApiController
 {
     public $type = Config::COLLECTION_SHOPS;
@@ -36,6 +25,9 @@ class ps_EventbusApiMerchantConsentModuleFrontController extends AbstractApiCont
         $this->checkJWT = true;
     }
 
+    /**
+     * @return void
+     */
     public function postProcess()
     {
         try {
@@ -45,10 +37,23 @@ class ps_EventbusApiMerchantConsentModuleFrontController extends AbstractApiCont
                 ]);
             }
             // TODO check if consents types are valid
+            // TODO check if module is install and active
+
+            /** @var string $accepted */
+            $accepted = Tools::getIsset('accepted') ? Tools::getValue('accepted') : '';
+            /** @var string $revoked */
+            $revoked = Tools::getIsset('revoked') ? Tools::getValue('revoked') : '';
+            /** @var string $jwt */
+            $jwt = Tools::getValue('jwt');
+            /** @var string $moduleConsent */
+            $moduleConsent = Tools::getValue('module_consent');
+            /** @var int $shopId */
+            $shopId = Context::getContext()->shop->id;
+
             $data = [
                 'shop_id' => Context::getContext()->shop->id,
-                'accepted' => json_encode(explode(',', Tools::getValue('accepted')), JSON_UNESCAPED_SLASHES),
-                'revoked' => json_encode(explode(',', Tools::getValue('revoked')), JSON_UNESCAPED_SLASHES),
+                'accepted' => json_encode(explode(',', $accepted), JSON_UNESCAPED_SLASHES),
+                'revoked' => json_encode(explode(',', $revoked), JSON_UNESCAPED_SLASHES),
                 'module_consent' => Tools::getValue('module_consent'),
             ];
 
@@ -56,7 +61,7 @@ class ps_EventbusApiMerchantConsentModuleFrontController extends AbstractApiCont
             $merchantConsentRepository = $this->module->getService(MerchantConsentRepository::class);
             $merchantConsent = $merchantConsentRepository->postMerchantConsent($data);
 
-            $saved = $this->authorizationService->sendConsents(Context::getContext()->shop->id, Tools::getValue('jwt'), Tools::getValue('module_consent'));
+            $saved = $this->authorizationService->sendConsents($shopId, $jwt, $moduleConsent);
 
             $this->exitWithResponse(
                 [
@@ -65,7 +70,6 @@ class ps_EventbusApiMerchantConsentModuleFrontController extends AbstractApiCont
                     'data' => $merchantConsent,
                 ]
             );
-            // $response = $this->proxyService->upload($jobId, $merchantConsent, $this->startTime);
         } catch (EnvVarException $exception) {
             $this->exitWithExceptionMessage($exception);
         } catch (Exception $exception) {
