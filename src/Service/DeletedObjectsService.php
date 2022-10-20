@@ -31,12 +31,13 @@ class DeletedObjectsService
 
     /**
      * @param string $jobId
+     * @param int $scriptStartTime
      *
      * @return array
      *
      * @throws PrestaShopDatabaseException|EnvVarException
      */
-    public function handleDeletedObjectsSync($jobId)
+    public function handleDeletedObjectsSync($jobId, $scriptStartTime)
     {
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
@@ -50,7 +51,7 @@ class DeletedObjectsService
 
         $data = $this->formatData($deletedObjects);
 
-        $response = $this->proxyService->delete($jobId, $data);
+        $response = $this->proxyService->delete($jobId, $data, $scriptStartTime);
 
         if ($response['httpCode'] == 200) {
             foreach ($data as $dataItem) {

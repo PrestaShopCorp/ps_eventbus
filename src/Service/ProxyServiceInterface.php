@@ -17,8 +17,9 @@ interface ProxyServiceInterface
     /**
      * @param string $jobId
      * @param array $data
+     * @param int $scriptStartTime
      *
      * @return array
      */
-    public function delete($jobId, $data);
+    public function delete($jobId, $data, $scriptStartTime);
 }
