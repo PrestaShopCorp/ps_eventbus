@@ -67,13 +67,6 @@ services:
       - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
       - { EVENT_BUS_SYNC_API_URL: '%ps_eventbus.sync_api_url%', EVENT_BUS_PROXY_API_URL: '%ps_eventbus.proxy_api_url%' }
 
-  PrestaShop\Module\PsEventbus\Repository\MerchantConsentRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\MerchantConsentRepository
-    public: true
-    arguments:
-      - '@ps_eventbus.db'
-      - '@PrestaShop\Module\PsEventbus\Service\CacheService'
-
   PrestaShop\Module\PsEventbus\Repository\ThemeRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ThemeRepository
     public: true
