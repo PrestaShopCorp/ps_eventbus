@@ -63,17 +63,18 @@ class ProxyService implements ProxyServiceInterface
     /**
      * @param string $jobId
      * @param array $data
+     * @param int $scriptStartTime
      *
      * @return array
      *
      * @throws EnvVarException
      */
-    public function delete($jobId, $data)
+    public function delete($jobId, $data, $scriptStartTime)
     {
         $dataJson = $this->jsonFormatter->formatNewlineJsonString($data);
 
         try {
-            $response = $this->eventBusProxyClient->uploadDelete($jobId, $dataJson);
+            $response = $this->eventBusProxyClient->uploadDelete($jobId, $dataJson, $scriptStartTime);
         } catch (ClientException $exception) {
             $this->errorHandler->handle($exception);
 

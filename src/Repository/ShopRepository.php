@@ -46,6 +46,8 @@ class ShopRepository
     }
 
     /**
+     * Gives back the first iso_code registered, which correspond to the default country of this shop
+     *
      * @return string
      */
     public function getShopCountryCode()
