@@ -28,7 +28,6 @@ class PresenterService
      */
     public function expose($moduleName, $requiredConsents = [], $optionalConsents = [])
     {
-        // TODO check consents types
         return [
             'jwt' => $this->psAccountsService->getOrRefreshToken(),
             /* @phpstan-ignore-next-line */
