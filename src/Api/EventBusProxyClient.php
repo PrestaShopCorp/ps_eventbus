@@ -115,11 +115,14 @@ class EventBusProxyClient extends GenericClient
     /**
      * @param string $jobId
      * @param string $compressedData
+     * @param int $scriptStartTime
      *
      * @return array
      */
-    public function uploadDelete($jobId, $compressedData)
+    public function uploadDelete(string $jobId, string $compressedData, int $scriptStartTime)
     {
+        $timeout = Config::PROXY_TIMEOUT - (time() - $scriptStartTime);
+
         $route = $this->baseUrl . "/delete/$jobId";
 
         $this->setRoute($route);
@@ -127,17 +130,19 @@ class EventBusProxyClient extends GenericClient
         $file = new PostFileApi(
             'file',
             $compressedData,
-            'file.gz'
+            'file'
         );
+
+        $multipartBody = new MultipartBody([], [$file], 'ps_eventbus_boundary');
 
         $response = $this->post([
             'headers' => [
-                'Content-Type' => 'binary/octet-stream',
+                'Content-Type' => 'multipart/form-data; boundary=ps_eventbus_boundary',
                 'ps-eventbus-version' => $this->module->version,
+                'Content-Length' => $file->getContent()->getSize(),
+                'timeout' => $timeout,
             ],
-            'body' => [
-                'file' => $file,
-            ],
+            'body' => $multipartBody->getContents(),
         ]);
 
         if (is_array($response)) {

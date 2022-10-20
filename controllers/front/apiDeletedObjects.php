@@ -21,7 +21,7 @@ class ps_EventbusApiDeletedObjectsModuleFrontController extends AbstractApiContr
         $deletedObjectsService = $this->module->getService(DeletedObjectsService::class);
 
         try {
-            $response = $deletedObjectsService->handleDeletedObjectsSync($jobId);
+            $response = $deletedObjectsService->handleDeletedObjectsSync($jobId, $this->startTime);
             $this->exitWithResponse($response);
         } catch (PrestaShopDatabaseException $exception) {
             $this->exitWithExceptionMessage($exception);
