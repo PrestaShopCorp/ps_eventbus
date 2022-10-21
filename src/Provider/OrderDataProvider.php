@@ -110,6 +110,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     {
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
+        $langId = (int) Language::getIdByIso($langIso);
         $orders = $this->orderRepository->getOrdersIncremental($limit, $shopId, $objectIds);
 
         if (!is_array($orders) || empty($orders)) {
@@ -117,6 +118,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         }
 
         $orderDetails = $this->getOrderDetails($orders, $shopId);
+        $orderStatuses = $this->getOrderStatuses($orders, $langId);
 
         $this->castOrderValues($orders, (int) Language::getIdByIso($langIso));
 
@@ -128,7 +130,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             ];
         }, $orders);
 
-        return array_merge($orders, $orderDetails);
+        return array_merge($orders, $orderDetails, $orderStatuses);
     }
 
     /**
