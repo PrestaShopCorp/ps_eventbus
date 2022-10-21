@@ -120,7 +120,6 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         $orderDetails = $this->getOrderDetails($orders, $shopId);
         $orderStatuses = $this->getOrderStatuses($orders, $langId);
 
-
         $this->castOrderValues($orders, (int) Language::getIdByIso($langIso));
 
         $orders = array_map(function ($order) {
@@ -133,6 +132,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
 
         return array_merge($orders, $orderDetails, $orderStatuses);
     }
+
     /**
      * @param array $orders
      * @param int $shopId
