@@ -36,7 +36,7 @@
     "sentry/sentry": "^1.11.0"
   },
   "require-dev": {
-    "prestashop/php-dev-tools": "^4.2",
+    "prestashop/php-dev-tools": "^4.3",
     "phpunit/phpunit": "^8.5",
     "phpstan/phpstan": "^1.8.6",
     "friendsofphp/php-cs-fixer": "^3.1.0",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e32bbcc8d9c9aaef2cd968eb58185c8b",
+    "content-hash": "f9a2ab6738d7f1cb556cfa04ff8f74ed",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -74,16 +74,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "2.4.1",
+            "version": "2.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "69568e4293f4fa993f3b0e51c9723e1e17c41379"
+                "reference": "67c26b443f348a51926030c83481b85718457d3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/69568e4293f4fa993f3b0e51c9723e1e17c41379",
-                "reference": "69568e4293f4fa993f3b0e51c9723e1e17c41379",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/67c26b443f348a51926030c83481b85718457d3d",
+                "reference": "67c26b443f348a51926030c83481b85718457d3d",
                 "shasum": ""
             },
             "require": {
@@ -173,7 +173,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/2.4.1"
+                "source": "https://github.com/guzzle/psr7/tree/2.4.3"
             },
             "funding": [
                 {
@@ -189,7 +189,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-28T14:45:39+00:00"
+            "time": "2022-10-26T14:07:24+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -2186,16 +2186,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "2.0.38",
+            "version": "2.0.39",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "b03536539f43a4f9aa33c4f0b2f3a1c752088fcd"
+                "reference": "f3a0e2b715c40cf1fd270d444901b63311725d63"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/b03536539f43a4f9aa33c4f0b2f3a1c752088fcd",
-                "reference": "b03536539f43a4f9aa33c4f0b2f3a1c752088fcd",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/f3a0e2b715c40cf1fd270d444901b63311725d63",
+                "reference": "f3a0e2b715c40cf1fd270d444901b63311725d63",
                 "shasum": ""
             },
             "require": {
@@ -2276,7 +2276,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpseclib/phpseclib/issues",
-                "source": "https://github.com/phpseclib/phpseclib/tree/2.0.38"
+                "source": "https://github.com/phpseclib/phpseclib/tree/2.0.39"
             },
             "funding": [
                 {
@@ -2292,20 +2292,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-09-02T17:04:26+00:00"
+            "time": "2022-10-24T10:49:03+00:00"
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "1.9.0",
+            "version": "1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "5f7eb9724b0ae386b922f34b62b3b55fee3b26cd"
+                "reference": "33aefcdab42900e36366d0feab6206e2dd68f947"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/5f7eb9724b0ae386b922f34b62b3b55fee3b26cd",
-                "reference": "5f7eb9724b0ae386b922f34b62b3b55fee3b26cd",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/33aefcdab42900e36366d0feab6206e2dd68f947",
+                "reference": "33aefcdab42900e36366d0feab6206e2dd68f947",
                 "shasum": ""
             },
             "require": {
@@ -2335,22 +2335,22 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.9.0"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.13.0"
             },
-            "time": "2022-10-06T11:32:36+00:00"
+            "time": "2022-10-21T09:57:39+00:00"
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.8.8",
+            "version": "1.8.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "08310ce271984587e2a4cda94e1ac66510a6ea07"
+                "reference": "46e223dd68a620da18855c23046ddb00940b4014"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/08310ce271984587e2a4cda94e1ac66510a6ea07",
-                "reference": "08310ce271984587e2a4cda94e1ac66510a6ea07",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/46e223dd68a620da18855c23046ddb00940b4014",
+                "reference": "46e223dd68a620da18855c23046ddb00940b4014",
                 "shasum": ""
             },
             "require": {
@@ -2380,7 +2380,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.8.8"
+                "source": "https://github.com/phpstan/phpstan/tree/1.8.11"
             },
             "funding": [
                 {
@@ -2396,7 +2396,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-06T12:51:57+00:00"
+            "time": "2022-10-24T15:45:13+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -2794,23 +2794,23 @@
         },
         {
             "name": "prestashop/autoindex",
-            "version": "v2.0.0",
+            "version": "v2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PrestaShopCorp/autoindex.git",
-                "reference": "355c224de4ca8766d63a038dcdcb24f56cb19fec"
+                "reference": "235f3ec115432ffc32d582198ea498467b3946d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PrestaShopCorp/autoindex/zipball/355c224de4ca8766d63a038dcdcb24f56cb19fec",
-                "reference": "355c224de4ca8766d63a038dcdcb24f56cb19fec",
+                "url": "https://api.github.com/repos/PrestaShopCorp/autoindex/zipball/235f3ec115432ffc32d582198ea498467b3946d0",
+                "reference": "235f3ec115432ffc32d582198ea498467b3946d0",
                 "shasum": ""
             },
             "require": {
                 "nikic/php-parser": "^4.10",
-                "php": ">=7.2",
-                "symfony/console": "^3.4 || ~4.0 || ~5.0",
-                "symfony/finder": "^3.4 || ~4.0 || ~5.0"
+                "php": "^8.0 || ^7.2",
+                "symfony/console": "^3.4 || ~4.0 || ~5.0 || ~6.0",
+                "symfony/finder": "^3.4 || ~4.0 || ~5.0 || ~6.0"
             },
             "require-dev": {
                 "phpstan/phpstan": "^0.12.83",
@@ -2838,29 +2838,29 @@
             "description": "Automatically add an 'index.php' in all the current or specified directories and all sub-directories.",
             "homepage": "https://github.com/PrestaShopCorp/autoindex",
             "support": {
-                "source": "https://github.com/PrestaShopCorp/autoindex/tree/v2.0.0"
+                "source": "https://github.com/PrestaShopCorp/autoindex/tree/v2.1.0"
             },
-            "time": "2021-06-09T15:37:17+00:00"
+            "time": "2022-10-10T08:35:00+00:00"
         },
         {
             "name": "prestashop/header-stamp",
-            "version": "v2.1",
+            "version": "v2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PrestaShopCorp/header-stamp.git",
-                "reference": "d00c2ce550fe9b1a3713cebafee669f44a93ff2a"
+                "reference": "ae1533967ca797e7c8efd5bbbf4351d163253cf4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PrestaShopCorp/header-stamp/zipball/d00c2ce550fe9b1a3713cebafee669f44a93ff2a",
-                "reference": "d00c2ce550fe9b1a3713cebafee669f44a93ff2a",
+                "url": "https://api.github.com/repos/PrestaShopCorp/header-stamp/zipball/ae1533967ca797e7c8efd5bbbf4351d163253cf4",
+                "reference": "ae1533967ca797e7c8efd5bbbf4351d163253cf4",
                 "shasum": ""
             },
             "require": {
                 "nikic/php-parser": "^4.10",
-                "php": ">=7.2.5",
-                "symfony/console": "^3.4 || ~4.0 || ~5.0",
-                "symfony/finder": "^3.4 || ~4.0 || ~5.0"
+                "php": "^8.0 || ^7.2",
+                "symfony/console": "^3.4 || ~4.0 || ~5.0 || ~6.0",
+                "symfony/finder": "^3.4 || ~4.0 || ~5.0 || ~6.0"
             },
             "require-dev": {
                 "phpstan/phpstan": "^0.12.83",
@@ -2889,22 +2889,22 @@
             "homepage": "https://github.com/PrestaShopCorp/header-stamp",
             "support": {
                 "issues": "https://github.com/PrestaShopCorp/header-stamp/issues",
-                "source": "https://github.com/PrestaShopCorp/header-stamp/tree/v2.1"
+                "source": "https://github.com/PrestaShopCorp/header-stamp/tree/v2.2"
             },
-            "time": "2021-11-15T16:57:29+00:00"
+            "time": "2022-10-10T08:26:55+00:00"
         },
         {
             "name": "prestashop/php-dev-tools",
-            "version": "v4.2.1",
+            "version": "v4.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PrestaShop/php-dev-tools.git",
-                "reference": "359a2896c5115014b01155af1af2bea18ea28451"
+                "reference": "843275b19729ba810d8ba2b9c97b568e5bbabe03"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PrestaShop/php-dev-tools/zipball/359a2896c5115014b01155af1af2bea18ea28451",
-                "reference": "359a2896c5115014b01155af1af2bea18ea28451",
+                "url": "https://api.github.com/repos/PrestaShop/php-dev-tools/zipball/843275b19729ba810d8ba2b9c97b568e5bbabe03",
+                "reference": "843275b19729ba810d8ba2b9c97b568e5bbabe03",
                 "shasum": ""
             },
             "require": {
@@ -2913,8 +2913,8 @@
                 "prestashop/autoindex": "^2.0",
                 "prestashop/header-stamp": "^2.0",
                 "squizlabs/php_codesniffer": "^3.4",
-                "symfony/console": "~3.2 || ~4.0 || ~5.0",
-                "symfony/filesystem": "~3.2 || ~4.0 || ~5.0"
+                "symfony/console": "~3.2 || ~4.0 || ~5.0 || ~6.0",
+                "symfony/filesystem": "~3.2 || ~4.0 || ~5.0 || ~6.0"
             },
             "bin": [
                 "bin/prestashop-coding-standards"
@@ -2932,9 +2932,9 @@
             "description": "PrestaShop coding standards",
             "support": {
                 "issues": "https://github.com/PrestaShop/php-dev-tools/issues",
-                "source": "https://github.com/PrestaShop/php-dev-tools/tree/v4.2.1"
+                "source": "https://github.com/PrestaShop/php-dev-tools/tree/v4.3.0"
             },
-            "time": "2021-12-01T11:02:58+00:00"
+            "time": "2022-10-18T14:19:51+00:00"
         },
         {
             "name": "psr/cache",
@@ -4045,16 +4045,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v5.4.13",
+            "version": "v5.4.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "3f97f6c7b7e26848a90c0c0cfb91eeb2bb8618be"
+                "reference": "984ea2c0f45f42dfed01d2f3987b187467c4b16d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/3f97f6c7b7e26848a90c0c0cfb91eeb2bb8618be",
-                "reference": "3f97f6c7b7e26848a90c0c0cfb91eeb2bb8618be",
+                "url": "https://api.github.com/repos/symfony/console/zipball/984ea2c0f45f42dfed01d2f3987b187467c4b16d",
+                "reference": "984ea2c0f45f42dfed01d2f3987b187467c4b16d",
                 "shasum": ""
             },
             "require": {
@@ -4124,7 +4124,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https://github.com/symfony/console/tree/v5.4.13"
+                "source": "https://github.com/symfony/console/tree/v5.4.14"
             },
             "funding": [
                 {
@@ -4140,7 +4140,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-26T13:50:20+00:00"
+            "time": "2022-10-07T08:01:20+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -4502,16 +4502,16 @@
         },
         {
             "name": "symfony/mime",
-            "version": "v5.4.13",
+            "version": "v5.4.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/mime.git",
-                "reference": "bb2ccf759e2b967dcd11bdee5bdf30dddd2290bd"
+                "reference": "1c118b253bb3495d81e95a6e3ec6c2766a98a0c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/mime/zipball/bb2ccf759e2b967dcd11bdee5bdf30dddd2290bd",
-                "reference": "bb2ccf759e2b967dcd11bdee5bdf30dddd2290bd",
+                "url": "https://api.github.com/repos/symfony/mime/zipball/1c118b253bb3495d81e95a6e3ec6c2766a98a0c4",
+                "reference": "1c118b253bb3495d81e95a6e3ec6c2766a98a0c4",
                 "shasum": ""
             },
             "require": {
@@ -4525,7 +4525,8 @@
                 "egulias/email-validator": "~3.0.0",
                 "phpdocumentor/reflection-docblock": "<3.2.2",
                 "phpdocumentor/type-resolver": "<1.4.0",
-                "symfony/mailer": "<4.4"
+                "symfony/mailer": "<4.4",
+                "symfony/serializer": "<5.4.14|>=6.0,<6.0.14|>=6.1,<6.1.6"
             },
             "require-dev": {
                 "egulias/email-validator": "^2.1.10|^3.1",
@@ -4533,7 +4534,7 @@
                 "symfony/dependency-injection": "^4.4|^5.0|^6.0",
                 "symfony/property-access": "^4.4|^5.1|^6.0",
                 "symfony/property-info": "^4.4|^5.1|^6.0",
-                "symfony/serializer": "^5.2|^6.0"
+                "symfony/serializer": "^5.4.14|~6.0.14|^6.1.6"
             },
             "type": "library",
             "autoload": {
@@ -4565,7 +4566,7 @@
                 "mime-type"
             ],
             "support": {
-                "source": "https://github.com/symfony/mime/tree/v5.4.13"
+                "source": "https://github.com/symfony/mime/tree/v5.4.14"
             },
             "funding": [
                 {
@@ -4581,7 +4582,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-09-01T18:18:29+00:00"
+            "time": "2022-10-07T08:01:20+00:00"
         },
         {
             "name": "symfony/options-resolver",
@@ -5595,16 +5596,16 @@
         },
         {
             "name": "symfony/string",
-            "version": "v5.4.13",
+            "version": "v5.4.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "2900c668a32138a34118740de3e4d5a701801f53"
+                "reference": "089e7237497fae7a9c404d0c3aeb8db3254733e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/2900c668a32138a34118740de3e4d5a701801f53",
-                "reference": "2900c668a32138a34118740de3e4d5a701801f53",
+                "url": "https://api.github.com/repos/symfony/string/zipball/089e7237497fae7a9c404d0c3aeb8db3254733e4",
+                "reference": "089e7237497fae7a9c404d0c3aeb8db3254733e4",
                 "shasum": ""
             },
             "require": {
@@ -5661,7 +5662,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https://github.com/symfony/string/tree/v5.4.13"
+                "source": "https://github.com/symfony/string/tree/v5.4.14"
             },
             "funding": [
                 {
@@ -5677,7 +5678,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-09-01T01:52:16+00:00"
+            "time": "2022-10-05T15:16:54+00:00"
         },
         {
             "name": "theseer/tokenizer",
