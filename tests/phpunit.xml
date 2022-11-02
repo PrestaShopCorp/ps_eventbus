@@ -1,8 +1,21 @@
 <?xml version="1.0"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" bootstrap="bootstrap.php" colors="true" executionOrder="random" beStrictAboutChangesToGlobalState="true" beStrictAboutResourceUsageDuringSmallTests="true" beStrictAboutOutputDuringTests="true">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  beStrictAboutChangesToGlobalState="true"
+  beStrictAboutOutputDuringTests="true"
+  beStrictAboutResourceUsageDuringSmallTests="true"
+  bootstrap="bootstrap.php"
+  cacheResultFile="tests/.phpunit.result.cache"
+  colors="true"
+  executionOrder="random"
+  xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
   <extensions>
     <extension class="PrestaShop\Module\PsEventbus\Tests\Extensions\Boot"/>
   </extensions>
+  <php>
+    <ini name="error_reporting" value="-1" />
+    <ini name="xdebug.mode" value="coverage" />
+    <env name="XDEBUG_MODE" value="coverage" />
+  </php>
   <testsuites>
     <testsuite name="Ps eventbus Tests">
       <directory>.</directory>
@@ -16,4 +29,19 @@
       </arguments>
     </listener>
   </listeners>
+  <filter>
+    <whitelist processUncoveredFilesFromWhitelist="true">
+      <directory suffix=".php">src</directory>
+      <directory suffix=".php">controllers</directory>
+    </whitelist>
+  </filter>
+  <coverage cacheDirectory="tests/.phpunit.result.cache" processUncoveredFiles="true" includeUncoveredFiles="true">
+      <include>
+        <directory suffix=".php">src</directory>
+        <directory suffix=".php">controllers</directory>
+      </include>
+      <report>
+          <html outputDirectory="tests/coverage-html" lowUpperBound="50" highLowerBound="90"/>
+      </report>
+  </coverage>
 </phpunit>

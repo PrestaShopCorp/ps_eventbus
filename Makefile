@@ -75,13 +75,13 @@ vendor: composer.phar
 	./composer.phar install --no-dev -o;
 
 vendor/bin/php-cs-fixer:
-	./composer.phar install
+	./composer.phar install --ignore-platform-reqs
 
 vendor/bin/phpunit:
-	./composer.phar install
+	./composer.phar install --ignore-platform-reqs
 
 vendor/bin/phpstan:
-	./composer.phar install
+	./composer.phar install --ignore-platform-reqs
 
 prestashop:
 	@mkdir -p ./prestashop
@@ -112,7 +112,7 @@ lint-fix:
 
 # target: phpunit                                - Run phpunit
 phpunit: prestashop/prestashop-${PS_VERSION} vendor/bin/phpunit
-	@_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpunit ./tests/unit;
+	@_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpunit ./tests/unit --coverage-html ./tests/coverage-html;
 
 # target: phpstan                                - Run phpstan
 phpstan: prestashop/prestashop-${PS_VERSION} vendor/bin/phpstan
