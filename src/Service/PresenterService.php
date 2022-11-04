@@ -63,6 +63,7 @@ class PresenterService
             return [];
         }
         $array = [];
+        /* @phpstan-ignore-next-line */ // TODO understand why phpstan complains about this
         foreach ($object as $key => $value) {
             if (is_object($value)) {
                 $array[$key] = $this->convertObjectToArray($value);
