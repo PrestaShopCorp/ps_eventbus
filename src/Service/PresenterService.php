@@ -116,6 +116,7 @@ class PresenterService
                     /* @phpstan-ignore-next-line */
                     'id' => $this->psAccountsService->getShopUuid(),
                     'name' => Configuration::get('PS_SHOP_NAME'),
+                    'url' => Tools::getHttpHost(true),
                 ],
                 'psEventbusModule' => $this->convertObjectToArray(\Module::getInstanceByName('ps_eventbus')),
             ];
