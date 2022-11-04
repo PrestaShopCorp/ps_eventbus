@@ -101,14 +101,15 @@ composer-validate: vendor
 lint: vendor/bin/php-cs-fixer
 	@vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no;
 
+# target: lint-fix                               - Lint the code and fix it
+lint-fix:
+	@vendor/bin/php-cs-fixer fix --using-cache=no;
+
 # target: php-lint                               - Use php linter to check the code
 php-lint:
 	@git ls-files | grep -E '.*\.(php)' | xargs -n1 php -l -n | (! grep -v "No syntax errors" );
 	@echo "php $(shell php -r 'echo PHP_VERSION;') lint passed";
 
-# target: lint-fix                               - Lint the code and fix it
-lint-fix:
-	@vendor/bin/php-cs-fixer fix --using-cache=no;
 
 # target: phpunit                                - Run phpunit with coverage and allure
 phpunit: prestashop/prestashop-${PS_VERSION} vendor/bin/phpunit

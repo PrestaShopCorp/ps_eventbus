@@ -1,7 +1,6 @@
 <?php
 
 use PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator;
-use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Formatter\DateFormatter;
 use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 use Yandex\Allure\Adapter\Annotation\Features;
@@ -22,7 +21,6 @@ class PayloadDecoratorTest extends BaseTestCase
     /**
      * @Stories("payload  decorator")
      * @Title("testPayloadDecorator")
-     *
      */
     public function testPayloadDecorator()
     {
@@ -47,7 +45,5 @@ class PayloadDecoratorTest extends BaseTestCase
         $this->assertEquals('2020-01-01 00:00:00', $payload[0]['properties']['updated_at']);
         $this->assertEquals('2020-01-01 00:00:00', $payload[0]['properties']['from']);
         $this->assertEquals('2020-01-01 00:00:00', $payload[0]['properties']['to']);
-
     }
-    
 }
