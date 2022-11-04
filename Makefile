@@ -74,13 +74,13 @@ composer.phar:
 vendor: composer.phar
 	./composer.phar install --no-dev -o;
 
-vendor/bin/php-cs-fixer:
+vendor/bin/php-cs-fixer: composer.phar
 	./composer.phar install --ignore-platform-reqs
 
-vendor/bin/phpunit:
+vendor/bin/phpunit: composer.phar
 	./composer.phar install --ignore-platform-reqs
 
-vendor/bin/phpstan:
+vendor/bin/phpstan: composer.phar
 	./composer.phar install --ignore-platform-reqs
 
 prestashop:
