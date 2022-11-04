@@ -40,8 +40,6 @@ jobs:
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
-      - name: Install dependencies
-        run: composer install
       - name: Run PHP-CS-Fixer
         run: make lint
 
@@ -59,8 +57,6 @@ jobs:
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
-      - name: Install dependencies
-        run: composer install
       - name: PHPStan PrestaShop 1.7.8.7
         run: PS_VERSION="1.7.8.7" PHP_VERSION="8.1" make docker-phpstan
 
@@ -75,21 +71,18 @@ jobs:
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
-      - name: Install dependencies
-        run: composer install
       - name: PHP unit with PHP 8.1
         run: PHP_VERSION="8.1" make docker-phpunit
 
-      # - name: 📊 Step 5 - Collect Allure files and generate allure-report folder
-      #   run: |
-      #     make allure-report
-      # - name: 🎁 Step 6 - Publishing Allure artifact to GitHub Actions
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: allure-report
-      #     path: allure-report
-      # - name: 🎁 Step 7 - Publishing Code coverage report to GitHub Actions
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: code-coverage-report
-      #     path: tests/tmp/code-coverage-report
+      - name: 📊 Step 5 - Collect Allure files and generate allure-report folder
+        run: make phpunit
+      - name: 🎁 Step 6 - Publishing Allure artifact to GitHub Actions
+        uses: actions/upload-artifact@v2
+        with:
+          name: allure-reports
+          path: allure-reports
+      - name: 🎁 Step 7 - Publishing Code coverage report to GitHub Actions
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-reports
+          path: coverage-reports
