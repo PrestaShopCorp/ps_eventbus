@@ -44,6 +44,10 @@ class ModuleRepository
     {
         $query = $this->getBaseQuery();
 
+        /*
+         * The `active` field of the "ps_module" table has been deprecated, this is why we use the "ps_module_shop" table
+         * to check if a module is active or not
+        */
         $query->select('m.id_module as module_id, name, version as module_version, IF(m_shop.enable_device, 1, 0) as active, date_add as created_at, date_upd as updated_at')
             ->limit($limit, $offset);
 
