@@ -28,14 +28,14 @@ class PresenterService
             $accountService = $accountsModule->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
             $this->psAccountsService = $accountService;
         } else {
-            $this->init();
+            $this->initPsAccount();
         }
     }
 
     /**
      * @return void
      */
-    public function init()
+    public function initPsAccount()
     {
         $moduleManager = ModuleManagerBuilder::getInstance();
         if (!$moduleManager) {
@@ -80,7 +80,7 @@ class PresenterService
      *
      * @return array
      */
-    private function checkMandatoryConsents($consents)
+    private function enforceMandatoryConsents($consents)
     {
         $mandatories = ['info', 'modules', 'themes'];
         foreach ($mandatories as $consent) {
@@ -99,9 +99,9 @@ class PresenterService
      *
      * @return array
      */
-    public function expose($module, $requiredConsents = [], $optionalConsents = [])
+    public function expose(ModuleCore $module, $requiredConsents = [], $optionalConsents = [])
     {
-        $requiredConsents = $this->checkMandatoryConsents($requiredConsents);
+        $requiredConsents = $this->enforceMandatoryConsents($requiredConsents);
         if ($this->psAccountsService == null) {
             return [];
         } else {
