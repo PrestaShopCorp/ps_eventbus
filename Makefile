@@ -102,7 +102,7 @@ lint: vendor/bin/php-cs-fixer
 	@vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no;
 
 # target: lint-fix                               - Lint the code and fix it
-lint-fix:
+lint-fix: vendor/bin/php-cs-fixer
 	@vendor/bin/php-cs-fixer fix --using-cache=no;
 
 # target: php-lint                               - Use php linter to check the code
@@ -110,13 +110,12 @@ php-lint:
 	@git ls-files | grep -E '.*\.(php)' | xargs -n1 php -l -n | (! grep -v "No syntax errors" );
 	@echo "php $(shell php -r 'echo PHP_VERSION;') lint passed";
 
-
 # target: phpunit                                - Run phpunit with coverage and allure
-phpunit: prestashop/prestashop-${PS_VERSION} vendor/bin/phpunit
+phpunit: vendor/bin/phpunit
 	vendor/bin/phpunit --coverage-html ./coverage-reports/coverage-html --configuration=./tests/phpunit.xml;
 
 # target: phpstan                                - Run phpstan
-phpstan: prestashop/prestashop-${PS_VERSION} vendor/bin/phpstan
+phpstan: vendor/bin/phpstan prestashop/prestashop-${PS_VERSION}
 	_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
 
 # target: phpstan-baseline                       - Generate a phpstan baseline to ignore all errors
