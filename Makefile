@@ -112,7 +112,7 @@ lint-fix:
 
 # target: phpunit                                - Run phpunit
 phpunit: prestashop/prestashop-${PS_VERSION} vendor/bin/phpunit
-	@_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpunit ./tests/unit --coverage-html ./tests/coverage-html;
+	_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpunit --coverage-html ./tests/code-coverage-rapport/coverage-html --configuration=./tests/phpunit.xml;
 
 # target: phpstan                                - Run phpstan
 phpstan: prestashop/prestashop-${PS_VERSION} vendor/bin/phpstan
@@ -171,5 +171,5 @@ allure-report:
 	./node_modules/.bin/allure generate build/allure-results/
 
 # target: phpstan-baseline                        - Generate a phpstan baseline to ignore all errors
-phpstan-baseline: prestashop/prestashop-${PS_VERSION} vendor/bin/phpstan
-	_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpstan analyse --generate-baseline --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
+# phpstan-baseline: prestashop/prestashop-${PS_VERSION} vendor/bin/phpstan
+# 	_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpstan analyse --generate-baseline --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;

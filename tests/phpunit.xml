@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  beStrictAboutChangesToGlobalState="true"
-  beStrictAboutOutputDuringTests="true"
-  beStrictAboutResourceUsageDuringSmallTests="true"
-  bootstrap="bootstrap.php"
-  cacheResultFile="tests/.phpunit.result.cache"
-  colors="true"
-  executionOrder="random"
-  xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+        beStrictAboutChangesToGlobalState="true"
+        beStrictAboutOutputDuringTests="true"
+        beStrictAboutResourceUsageDuringSmallTests="true"
+        cacheResultFile="./code-coverage-rapport/.phpunit.result.cache"
+        colors="true"
+        executionOrder="random"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+        <!-- delete :  bootstrap="bootstrap.php" from balise phpunit (probably not use because configuration is here) -->
   <extensions>
     <extension class="PrestaShop\Module\PsEventbus\Tests\Extensions\Boot"/>
   </extensions>
@@ -18,30 +18,21 @@
   </php>
   <testsuites>
     <testsuite name="Ps eventbus Tests">
-      <directory>.</directory>
+      <directory>./unit</directory>
     </testsuite>
   </testsuites>
   <listeners>
     <listener class="Yandex\Allure\PhpUnit\AllurePhpUnit" file="../vendor/allure-framework/allure-phpunit/src/Yandex/Allure/PhpUnit/AllurePhpUnit.php">
       <arguments>
-        <string>build/allure-results</string> <!-- XML files output directory -->
-        <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->
+        <string>./tests/code-coverage-rapport/allure-results</string>
+        <boolean>true</boolean>
       </arguments>
     </listener>
   </listeners>
   <filter>
-    <whitelist processUncoveredFilesFromWhitelist="true">
-      <directory suffix=".php">src</directory>
-      <directory suffix=".php">controllers</directory>
+    <whitelist>
+      <directory suffix=".php">../src</directory>
+      <directory suffix=".php">../controllers</directory>
     </whitelist>
   </filter>
-  <coverage cacheDirectory="tests/.phpunit.result.cache" processUncoveredFiles="true" includeUncoveredFiles="true">
-      <include>
-        <directory suffix=".php">src</directory>
-        <directory suffix=".php">controllers</directory>
-      </include>
-      <report>
-          <html outputDirectory="tests/coverage-html" lowUpperBound="50" highLowerBound="90"/>
-      </report>
-  </coverage>
 </phpunit>

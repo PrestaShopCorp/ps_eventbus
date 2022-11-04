@@ -12,10 +12,15 @@ class Boot implements BeforeFirstTestHook, AfterLastTestHook
      * @var CodeCoverage
      */
     private $coverage;
+    
+    /************************************************************* 
+     *  the two methods are used for configure the code-coverage. We use now phpunit.xml (think that _PS_MODULE_DIR_ is not defined on Makefile and it cause damage) 
+     * If this file is deleted, make phpunit throw an error.
+     **************************************************************/
 
     public function executeBeforeFirstTest(): void
     {
-        $this->coverage = new CodeCoverage();
+       /*  $this->coverage = new CodeCoverage();
         $this->coverage->filter()->addDirectoryToWhitelist(_PS_MODULE_DIR_ . '/ps_eventbus/src');
         $this->coverage->filter()->removeDirectoryFromWhitelist(_PS_MODULE_DIR_ . '/ps_eventbus/src/Controller');
         $this->coverage->filter()->removeDirectoryFromWhitelist(_PS_MODULE_DIR_ . '/ps_eventbus/src/Handler/ErrorHandler');
@@ -26,16 +31,16 @@ class Boot implements BeforeFirstTestHook, AfterLastTestHook
             }
             $this->coverage->filter()->removeFileFromWhitelist($fileName);
         }
-        $this->coverage->start('<name of test>');
+        $this->coverage->start('<name of test>'); */
     }
 
     public function executeAfterLastTest(): void
     {
-        $this->coverage->stop();
+        /* $this->coverage->stop();
         $writer = new \SebastianBergmann\CodeCoverage\Report\Clover();
         $writer->process($this->coverage, _PS_MODULE_DIR_ . '/ps_eventbus/tests/tmp/clover.xml');
 
         $writer = new \SebastianBergmann\CodeCoverage\Report\Html\Facade();
-        $writer->process($this->coverage, _PS_MODULE_DIR_ . '/ps_eventbus/tests/tmp/code-coverage-report');
+        $writer->process($this->coverage, _PS_MODULE_DIR_ . '/ps_eventbus/tests/tmp/code-coverage-report'); */
     }
 }

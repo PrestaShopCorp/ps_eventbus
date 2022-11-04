@@ -8,6 +8,9 @@ use PrestaShop\Module\PsEventbus\Repository\ShopRepository;
 use PrestaShop\Module\PsEventbus\Tests\Mocks\Handler\ErrorHandlerMock;
 use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
+use Yandex\Allure\Adapter\Annotation\Features;
+use Yandex\Allure\Adapter\Annotation\Stories;
+use Yandex\Allure\Adapter\Annotation\Title;
 
 /**
  * @Features("repository")
