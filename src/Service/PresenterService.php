@@ -76,6 +76,23 @@ class PresenterService
     }
 
     /**
+     * @param array $consents
+     *
+     * @return array
+     */
+    private function checkMandatoryConsents($consents)
+    {
+        $mandatories = ['info', 'modules', 'themes'];
+        foreach ($mandatories as $consent) {
+            if (!in_array($consent, $consents)) {
+                array_unshift($consents, $consent);
+            }
+        }
+
+        return $consents;
+    }
+
+    /**
      * @param ModuleCore $module
      * @param array $requiredConsents
      * @param array $optionalConsents
@@ -84,6 +101,7 @@ class PresenterService
      */
     public function expose($module, $requiredConsents = [], $optionalConsents = [])
     {
+        $requiredConsents = $this->checkMandatoryConsents($requiredConsents);
         if ($this->psAccountsService == null) {
             return [];
         } else {
