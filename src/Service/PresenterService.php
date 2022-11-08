@@ -17,19 +17,7 @@ class PresenterService
 
     public function __construct()
     {
-        $moduleManager = ModuleManagerBuilder::getInstance();
-        if (!$moduleManager) {
-            return;
-        }
-        $moduleManager = $moduleManager->build();
-        if ($moduleManager->isInstalled('ps_accounts')) {
-            $accountsModule = \Module::getInstanceByName('ps_accounts');
-            /* @phpstan-ignore-next-line */
-            $accountService = $accountsModule->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
-            $this->psAccountsService = $accountService;
-        } else {
-            $this->initPsAccount();
-        }
+        $this->initPsAccount();
     }
 
     /**
@@ -47,9 +35,12 @@ class PresenterService
             $moduleManager->install('ps_accounts');
         } elseif (!$moduleManager->isEnabled('ps_accounts')) {
             $moduleManager->enable('ps_accounts');
-        } else {
-            $moduleManager->upgrade('ps_accounts');
         }
+
+        $accountsModule = \Module::getInstanceByName('ps_accounts');
+        /* @phpstan-ignore-next-line */
+        $accountService = $accountsModule->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
+        $this->psAccountsService = $accountService;
     }
 
     /**
@@ -103,7 +94,12 @@ class PresenterService
     {
         $requiredConsents = $this->enforceMandatoryConsents($requiredConsents);
         if ($this->psAccountsService == null) {
-            return [];
+            return [
+                'module' => array_merge([
+                    'logoUrl' => Tools::getHttpHost(true) . '/modules/' . $module->name . '/logo.png',
+                ], $this->convertObjectToArray($module)),
+                'psEventbusModule' => $this->convertObjectToArray(\Module::getInstanceByName('ps_eventbus')),
+            ];
         } else {
             return [
                 'jwt' => $this->psAccountsService->getOrRefreshToken(),
