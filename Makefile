@@ -110,9 +110,13 @@ php-lint:
 	@git ls-files | grep -E '.*\.(php)' | xargs -n1 php -l -n | (! grep -v "No syntax errors" );
 	@echo "php $(shell php -r 'echo PHP_VERSION;') lint passed";
 
-# target: phpunit                                - Run phpunit with coverage and allure
+# target: phpunit                                - Run phpunit tests
 phpunit: vendor/bin/phpunit
-	vendor/bin/phpunit --coverage-html ./coverage-reports/coverage-html --configuration=./tests/phpunit.xml;
+	vendor/bin/phpunit --configuration=./tests/phpunit.xml;
+
+# target: phpunit-coverage                       - Run phpunit with coverage and allure
+phpunit-coverage: vendor/bin/phpunit
+	php -dxdebug.mode=coverage vendor/bin/phpunit --coverage-html ./coverage-reports/coverage-html --configuration=./tests/phpunit-coverage.xml;
 
 # target: phpstan                                - Run phpstan
 phpstan: vendor/bin/phpstan prestashop/prestashop-${PS_VERSION}
@@ -141,6 +145,11 @@ docker-php-lint:
 docker-phpunit: prestashop/prestashop-${PS_VERSION}
 	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
 	docker run --rm -e _PS_ROOT_DIR_=/src/prestashop/prestashop-${PS_VERSION} -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpunit;
+
+# target: docker-phpunit                         - Run phpunit in docker
+docker-phpunit-coverage: prestashop/prestashop-${PS_VERSION}
+	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
+	docker run --rm -e _PS_ROOT_DIR_=/src/prestashop/prestashop-${PS_VERSION} -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpunit-coverage;
 
 # target: docker-phpstan                         - Run phpstan in docker
 docker-phpstan: prestashop/prestashop-${PS_VERSION}

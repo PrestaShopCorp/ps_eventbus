@@ -66,22 +66,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Cache vendor folder
         uses: actions/cache@v1
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
-      - name: PHP unit with PHP 8.1
-        run: PHP_VERSION="8.1" make docker-phpunit
 
-      - name: 📊 Step 5 - Collect Allure files and generate allure-report folder
-        run: make phpunit
-      - name: 🎁 Step 6 - Publishing Allure artifact to GitHub Actions
+      - name: PHP unit with PHP 8.1
+        run: PHP_VERSION="8.1" make docker-phpunit-coverage
+
+      - name: 🎁 Publishing Allure artifact to GitHub Actions
         uses: actions/upload-artifact@v2
         with:
           name: allure-reports
           path: allure-reports
-      - name: 🎁 Step 7 - Publishing Code coverage report to GitHub Actions
+
+      - name: 🎁 Publishing Code coverage report to GitHub Actions
         uses: actions/upload-artifact@v2
         with:
           name: coverage-reports

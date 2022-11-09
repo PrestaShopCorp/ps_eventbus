@@ -5,7 +5,8 @@ FROM --platform=${BUILDPLATFORM} php:${PHP_VERSION} as dev-tools
 
 WORKDIR /src
 RUN apt-get update -qqy && \
-  apt-get -qqy install make git
+  apt-get -qqy install make git && \
+  pecl install -f xdebug;
 RUN useradd -rm -s /bin/sh -u 1000 php
 USER php
 
