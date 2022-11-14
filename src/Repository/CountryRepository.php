@@ -2,22 +2,15 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
-use Db;
-use DbQuery;
-use mysqli_result;
-use PDOStatement;
-use PrestaShopDatabaseException;
-
 class CountryRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
 
@@ -26,18 +19,18 @@ class CountryRepository
      */
     private $countryIsoCodeCache = [];
 
-    public function __construct(Db $db, Context $context)
+    public function __construct(\Db $db, \Context $context)
     {
         $this->db = $db;
         $this->context = $context;
     }
 
     /**
-     * @return DbQuery
+     * @return \DbQuery
      */
     private function getBaseQuery()
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->from('country', 'c')
             ->innerJoin('country_shop', 'cs', 'cs.id_country = c.id_country')
@@ -52,9 +45,9 @@ class CountryRepository
      * @param int $zoneId
      * @param bool $active
      *
-     * @return array|bool|mysqli_result|PDOStatement|resource|null
+     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getCountyIsoCodesByZoneId($zoneId, $active = true)
     {

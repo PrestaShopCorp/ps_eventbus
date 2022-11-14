@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use Exception;
 use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
 
 class CompressionService
@@ -24,18 +23,18 @@ class CompressionService
      *
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function gzipCompressData($data)
     {
         if (!extension_loaded('zlib')) {
-            throw new Exception('Zlib extension for PHP is not enabled');
+            throw new \Exception('Zlib extension for PHP is not enabled');
         }
 
         $dataJson = $this->jsonFormatter->formatNewlineJsonString($data);
 
         if (!$encodedData = gzencode($dataJson)) {
-            throw new Exception('Failed encoding data to GZIP');
+            throw new \Exception('Failed encoding data to GZIP');
         }
 
         return $encodedData;

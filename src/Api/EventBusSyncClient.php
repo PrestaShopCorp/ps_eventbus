@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use Link;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
@@ -17,7 +16,7 @@ class EventBusSyncClient extends GenericClient
     /**
      * EventBusSyncClient constructor.
      *
-     * @param Link $link
+     * @param \Link $link
      * @param PsAccounts $psAccounts
      * @param string $baseUrl
      *
@@ -25,7 +24,7 @@ class EventBusSyncClient extends GenericClient
      * @throws \PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleVersionException
      * @throws \Exception
      */
-    public function __construct(Link $link, PsAccounts $psAccounts, $baseUrl)
+    public function __construct(\Link $link, PsAccounts $psAccounts, $baseUrl)
     {
         $this->baseUrl = $baseUrl;
         $this->setLink($link);

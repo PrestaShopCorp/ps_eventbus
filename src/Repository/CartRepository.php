@@ -2,36 +2,29 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
-use Db;
-use DbQuery;
-use mysqli_result;
-use PDOStatement;
-use PrestaShopDatabaseException;
-
 class CartRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
 
-    public function __construct(Db $db, Context $context)
+    public function __construct(\Db $db, \Context $context)
     {
         $this->db = $db;
         $this->context = $context;
     }
 
     /**
-     * @return DbQuery
+     * @return \DbQuery
      */
     private function getBaseQuery()
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->from('cart', 'c')
             ->where('c.id_shop = ' . (int) $this->context->shop->id);
@@ -43,9 +36,9 @@ class CartRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array|bool|mysqli_result|PDOStatement|resource|null
+     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getCarts($offset, $limit)
     {
@@ -78,7 +71,7 @@ class CartRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getCartsIncremental($limit, $cartIds)
     {
@@ -95,11 +88,11 @@ class CartRepository
     }
 
     /**
-     * @param DbQuery $query
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(DbQuery $query)
+    private function addSelectParameters(\DbQuery $query)
     {
         $query->select('c.id_cart, date_add as created_at, date_upd as updated_at');
     }

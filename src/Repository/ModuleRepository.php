@@ -2,9 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Db;
-use DbQuery;
-
 class ModuleRepository
 {
     public const MODULE_TABLE = 'module';
@@ -12,21 +9,21 @@ class ModuleRepository
     public const MODULE_SHOP = 'module_shop';
 
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
-    public function __construct(Db $db)
+    public function __construct(\Db $db)
     {
         $this->db = $db;
     }
 
     /**
-     * @return DbQuery
+     * @return \DbQuery
      */
     public function getBaseQuery()
     {
-        return (new DbQuery())
+        return (new \DbQuery())
           ->from(self::MODULE_TABLE, 'm')
           ->leftJoin(self::MODULE_TABLE_HISTORY, 'h', 'm.id_module = h.id_module')
           ->leftJoin(self::MODULE_SHOP, 'm_shop', 'm.id_module = m_shop.id_module');

@@ -2,16 +2,14 @@
 
 namespace PrestaShop\Module\PsEventbus\Factory;
 
-use Context;
-
 class ContextFactory
 {
     /**
-     * @return Context|null
+     * @return \Context|null
      */
     public static function getContext()
     {
-        return Context::getContext();
+        return \Context::getContext();
     }
 
     /**
@@ -19,7 +17,7 @@ class ContextFactory
      */
     public static function getLanguage()
     {
-        return Context::getContext()->language;
+        return \Context::getContext()->language;
     }
 
     /**
@@ -27,7 +25,7 @@ class ContextFactory
      */
     public static function getCurrency()
     {
-        return Context::getContext()->currency;
+        return \Context::getContext()->currency;
     }
 
     /**
@@ -35,7 +33,7 @@ class ContextFactory
      */
     public static function getSmarty()
     {
-        return Context::getContext()->smarty;
+        return \Context::getContext()->smarty;
     }
 
     /**
@@ -43,7 +41,7 @@ class ContextFactory
      */
     public static function getShop()
     {
-        return Context::getContext()->shop;
+        return \Context::getContext()->shop;
     }
 
     /**
@@ -51,7 +49,7 @@ class ContextFactory
      */
     public static function getController()
     {
-        return Context::getContext()->controller;
+        return \Context::getContext()->controller;
     }
 
     /**
@@ -59,7 +57,7 @@ class ContextFactory
      */
     public static function getCookie()
     {
-        return Context::getContext()->cookie;
+        return \Context::getContext()->cookie;
     }
 
     /**
@@ -67,6 +65,6 @@ class ContextFactory
      */
     public static function getLink()
     {
-        return Context::getContext()->link;
+        return \Context::getContext()->link;
     }
 }

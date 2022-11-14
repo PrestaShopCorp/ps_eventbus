@@ -2,17 +2,14 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Db;
-use DbQuery;
-
 class GoogleTaxonomyRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
-    public function __construct(Db $db)
+    public function __construct(\Db $db)
     {
         $this->db = $db;
     }
@@ -20,11 +17,11 @@ class GoogleTaxonomyRepository
     /**
      * @param int $shopId
      *
-     * @return DbQuery
+     * @return \DbQuery
      */
     public function getBaseQuery($shopId)
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->from('fb_category_match', 'cm')
             ->where('cm.id_shop = ' . (int) $shopId);

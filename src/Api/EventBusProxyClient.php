@@ -21,7 +21,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use Link;
 use PrestaShop\Module\PsEventbus\Api\Post\MultipartBody;
 use PrestaShop\Module\PsEventbus\Api\Post\PostFileApi;
 use PrestaShop\Module\PsEventbus\Config\Config;
@@ -29,7 +28,6 @@ use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
 use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleNotInstalledException;
 use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleVersionException;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
-use Ps_eventbus;
 
 /**
  * Construct the client used to make call to Segment API
@@ -41,21 +39,21 @@ class EventBusProxyClient extends GenericClient
      */
     private $baseUrl;
     /**
-     * @var Ps_eventbus
+     * @var \Ps_eventbus
      */
     private $module;
 
     /**
-     * @param Link $link
+     * @param \Link $link
      * @param PsAccounts $psAccounts
      * @param string $baseUrl
-     * @param Ps_eventbus $module
+     * @param \Ps_eventbus $module
      *
      * @throws ModuleNotInstalledException
      * @throws ModuleVersionException
      * @throws \Exception
      */
-    public function __construct(Link $link, PsAccounts $psAccounts, $baseUrl, $module)
+    public function __construct(\Link $link, PsAccounts $psAccounts, $baseUrl, $module)
     {
         $this->module = $module;
         $this->baseUrl = $baseUrl;

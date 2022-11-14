@@ -2,22 +2,18 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
-use Db;
-use DbQuery;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
-use PrestaShopDatabaseException;
 
 class IncrementalSyncRepository
 {
     public const INCREMENTAL_SYNC_TABLE = 'eventbus_incremental_sync';
 
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
     /**
@@ -25,7 +21,7 @@ class IncrementalSyncRepository
      */
     private $errorHandler;
 
-    public function __construct(Db $db, Context $context, ErrorHandlerInterface $errorHandler)
+    public function __construct(\Db $db, \Context $context, ErrorHandlerInterface $errorHandler)
     {
         $this->db = $db;
         $this->context = $context;
@@ -55,11 +51,11 @@ class IncrementalSyncRepository
                 ],
                 false,
                 true,
-                Db::ON_DUPLICATE_KEY
+                \Db::ON_DUPLICATE_KEY
             );
-        } catch (PrestaShopDatabaseException $e) {
+        } catch (\PrestaShopDatabaseException $e) {
             $this->errorHandler->handle(
-                new PrestaShopDatabaseException('Failed to insert incremental object', $e->getCode(), $e)
+                new \PrestaShopDatabaseException('Failed to insert incremental object', $e->getCode(), $e)
             );
 
             return false;
@@ -91,11 +87,11 @@ class IncrementalSyncRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getIncrementalSyncObjectIds($type, $langIso, $limit)
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->select('id_object')
             ->from(self::INCREMENTAL_SYNC_TABLE)
@@ -123,7 +119,7 @@ class IncrementalSyncRepository
      */
     public function getRemainingIncrementalObjects($type, $langIso)
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->select('COUNT(id_object) as count')
             ->from(self::INCREMENTAL_SYNC_TABLE)

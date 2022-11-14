@@ -2,29 +2,26 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Db;
-use DbQuery;
-
 class OrderHistoryRepository
 {
     public const TABLE_NAME = 'order_history';
 
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
-    public function __construct(Db $db)
+    public function __construct(\Db $db)
     {
         $this->db = $db;
     }
 
     /**
-     * @return DbQuery
+     * @return \DbQuery
      */
     public function getBaseQuery()
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->from(self::TABLE_NAME, 'oh');
 

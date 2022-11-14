@@ -14,7 +14,6 @@ use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Provider\ProductDataProvider;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
 use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
-use Product;
 use Yandex\Allure\Adapter\Annotation\Features;
 use Yandex\Allure\Adapter\Annotation\Stories;
 use Yandex\Allure\Adapter\Annotation\Title;
@@ -31,7 +30,7 @@ class FullSynchronizationTest extends BaseTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $product = new Product(1);
+        $product = new \Product(1);
         $product->setCarriers([1, 2]);
     }
 

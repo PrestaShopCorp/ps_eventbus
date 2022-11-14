@@ -2,22 +2,15 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
-use Db;
-use DbQuery;
-use mysqli_result;
-use PDOStatement;
-use PrestaShopDatabaseException;
-
 class TaxRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
 
@@ -26,18 +19,18 @@ class TaxRepository
      */
     private $countryIsoCodeCache = [];
 
-    public function __construct(Db $db, Context $context)
+    public function __construct(\Db $db, \Context $context)
     {
         $this->db = $db;
         $this->context = $context;
     }
 
     /**
-     * @return DbQuery
+     * @return \DbQuery
      */
     private function getBaseQuery()
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->from('tax', 't')
             ->innerJoin('tax_rule', 'tr', 'tr.id_tax = t.id_tax')
@@ -55,9 +48,9 @@ class TaxRepository
      * @param int $taxRulesGroupId
      * @param bool $active
      *
-     * @return array|bool|mysqli_result|PDOStatement|resource|null
+     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getCarrierTaxesByZone($zoneId, $taxRulesGroupId, $active = true)
     {

@@ -2,9 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Configuration;
-use Language;
-
 class LanguageRepository
 {
     /**
@@ -13,7 +10,7 @@ class LanguageRepository
     public function getLanguagesIsoCodes()
     {
         /** @var array $languages */
-        $languages = Language::getLanguages();
+        $languages = \Language::getLanguages();
 
         return array_map(function ($language) {
             return $language['iso_code'];
@@ -25,7 +22,7 @@ class LanguageRepository
      */
     public function getDefaultLanguageIsoCode()
     {
-        $language = Language::getLanguage((int) Configuration::get('PS_LANG_DEFAULT'));
+        $language = \Language::getLanguage((int) \Configuration::get('PS_LANG_DEFAULT'));
 
         if (is_array($language)) {
             return $language['iso_code'];
@@ -41,7 +38,7 @@ class LanguageRepository
      */
     public function getLanguageIdByIsoCode($isoCode)
     {
-        return (int) Language::getIdByIso($isoCode);
+        return (int) \Language::getIdByIso($isoCode);
     }
 
     /**
@@ -49,6 +46,6 @@ class LanguageRepository
      */
     public function getLanguages()
     {
-        return Language::getLanguages();
+        return \Language::getLanguages();
     }
 }

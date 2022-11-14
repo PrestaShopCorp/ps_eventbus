@@ -2,19 +2,11 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
-use Db;
-use DbQuery;
-use Exception;
-use Language;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsAccounts\Api\Client\AccountsClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
-use PrestaShopDatabaseException;
-use Ps_accounts;
-use Ps_eventbus;
 
 class ServerInformationRepository
 {
@@ -31,11 +23,11 @@ class ServerInformationRepository
      */
     private $configurationRepository;
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
     /**
@@ -60,8 +52,8 @@ class ServerInformationRepository
     private $errorHandler;
 
     public function __construct(
-        Context $context,
-        Db $db,
+        \Context $context,
+        \Db $db,
         CurrencyRepository $currencyRepository,
         LanguageRepository $languageRepository,
         ConfigurationRepository $configurationRepository,
@@ -91,7 +83,7 @@ class ServerInformationRepository
      */
     public function getServerInformation($langIso = '')
     {
-        $langId = !empty($langIso) ? (int) Language::getIdByIso($langIso) : null;
+        $langId = !empty($langIso) ? (int) \Language::getIdByIso($langIso) : null;
 
         return [
             [
@@ -146,13 +138,13 @@ class ServerInformationRepository
                     $tokenValid = true;
                 }
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->errorHandler->handle($e);
             $tokenIsSet = false;
         }
 
-        foreach (Ps_eventbus::REQUIRED_TABLES as $requiredTable) {
-            $query = new DbQuery();
+        foreach (\Ps_eventbus::REQUIRED_TABLES as $requiredTable) {
+            $query = new \DbQuery();
 
             $query->select('*')
                 ->from($requiredTable)
@@ -160,7 +152,7 @@ class ServerInformationRepository
 
             try {
                 $this->db->executeS($query);
-            } catch (PrestaShopDatabaseException $e) {
+            } catch (\PrestaShopDatabaseException $e) {
                 $allTablesInstalled = false;
                 break;
             }
@@ -174,8 +166,8 @@ class ServerInformationRepository
 
         return [
             'prestashop_version' => _PS_VERSION_,
-            'ps_eventbus_version' => Ps_eventbus::VERSION,
-            'ps_accounts_version' => defined('Ps_accounts::VERSION') ? Ps_accounts::VERSION : false, /* @phpstan-ignore-line */
+            'ps_eventbus_version' => \Ps_eventbus::VERSION,
+            'ps_accounts_version' => defined('Ps_accounts::VERSION') ? \Ps_accounts::VERSION : false, /* @phpstan-ignore-line */
             'php_version' => $phpVersion,
             'ps_account' => $tokenIsSet,
             'is_valid_jwt' => $tokenValid,

@@ -2,8 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Provider;
 
-use PrestaShopDatabaseException;
-
 interface PaginatedApiDataProviderInterface
 {
     /**
@@ -13,7 +11,7 @@ interface PaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getFormattedData($offset, $limit, $langIso);
 
@@ -23,7 +21,7 @@ interface PaginatedApiDataProviderInterface
      *
      * @return int
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getRemainingObjectsCount($offset, $langIso);
 
@@ -34,7 +32,7 @@ interface PaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getFormattedDataIncremental($limit, $langIso, $objectIds);
 }

@@ -2,17 +2,14 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Db;
-use DbQuery;
-
 class ImageRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
-    public function __construct(Db $db)
+    public function __construct(\Db $db)
     {
         $this->db = $db;
     }
@@ -25,7 +22,7 @@ class ImageRepository
      */
     public function getProductCoverImage($productId, $shopId)
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->select('imgs.id_image')
             ->from('image_shop', 'imgs')
@@ -48,7 +45,7 @@ class ImageRepository
      */
     public function getProductImages($productId, $attributeId, $shopId, $includeCover = false)
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->select('imgs.id_image')
             ->from('image_shop', 'imgs')

@@ -2,15 +2,13 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use Context;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
-use PrestaShopDatabaseException;
 
 class DeletedObjectsService
 {
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
     /**
@@ -22,7 +20,7 @@ class DeletedObjectsService
      */
     private $proxyService;
 
-    public function __construct(Context $context, DeletedObjectsRepository $deletedObjectsRepository, ProxyServiceInterface $proxyService)
+    public function __construct(\Context $context, DeletedObjectsRepository $deletedObjectsRepository, ProxyServiceInterface $proxyService)
     {
         $this->context = $context;
         $this->deletedObjectsRepository = $deletedObjectsRepository;
@@ -35,7 +33,7 @@ class DeletedObjectsService
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException|EnvVarException
+     * @throws \PrestaShopDatabaseException|EnvVarException
      */
     public function handleDeletedObjectsSync($jobId, $scriptStartTime)
     {

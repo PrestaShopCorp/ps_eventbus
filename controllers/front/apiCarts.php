@@ -9,9 +9,9 @@ class ps_EventbusApiCartsModuleFrontController extends AbstractApiController
     public $type = Config::COLLECTION_CARTS;
 
     /**
-     * @throws PrestaShopException
-     *
      * @return void
+     *
+     * @throws PrestaShopException
      */
     public function postProcess()
     {
