@@ -93,7 +93,7 @@ jobs:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
       - name: PHP unit with coverage
-        run: Pmake phpunit-coverage
+        run: make phpunit-coverage
       - name: 🎁 Publishing Allure artifact to GitHub Actions
         uses: actions/upload-artifact@v2
         with:
