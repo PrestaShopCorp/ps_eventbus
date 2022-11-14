@@ -92,8 +92,8 @@ jobs:
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
-      - name: PHP unit with PHP 8.1
-        run: PHP_VERSION="8.1" make docker-phpunit-coverage
+      - name: PHP unit with coverage
+        run: make phpunit-coverage
       - name: 🎁 Publishing Allure artifact to GitHub Actions
         uses: actions/upload-artifact@v2
         with:
