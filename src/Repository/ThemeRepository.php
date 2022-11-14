@@ -2,24 +2,21 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
-use Db;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\PrestaShop\Core\Addon\Theme\ThemeManagerBuilder;
-use Theme;
 
 class ThemeRepository
 {
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
-    public function __construct(Context $context, Db $db)
+    public function __construct(\Context $context, \Db $db)
     {
         $this->context = $context;
         $this->db = $db;
@@ -51,11 +48,11 @@ class ThemeRepository
             }, array_keys($themes), $themes);
         } else {
             /* @phpstan-ignore-next-line */
-            $themes = Theme::getAvailable(false);
+            $themes = \Theme::getAvailable(false);
 
             return array_map(function ($theme) {
                 /* @phpstan-ignore-next-line */
-                $themeObj = Theme::getByDirectory($theme);
+                $themeObj = \Theme::getByDirectory($theme);
 
                 $themeData = [
                     'id' => md5($theme),
@@ -64,9 +61,9 @@ class ThemeRepository
                 ];
 
                 /* @phpstan-ignore-next-line */
-                if ($themeObj instanceof Theme) {
+                if ($themeObj instanceof \Theme) {
                     /* @phpstan-ignore-next-line */
-                    $themeInfo = Theme::getThemeInfo($themeObj->id);
+                    $themeInfo = \Theme::getThemeInfo($themeObj->id);
 
                     $themeData['properties'] = [
                         'theme_id' => md5($theme),

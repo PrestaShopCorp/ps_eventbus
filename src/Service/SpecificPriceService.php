@@ -5,21 +5,14 @@ namespace PrestaShop\Module\PsEventbus\Service;
 use Address;
 use Cart;
 use Combination;
-use Configuration;
 use Context;
 use Customer;
 use Customization;
-use Db;
-use DbQuery;
 use Group;
-use GroupReduction;
 use Product;
 use Shop;
 use SpecificPrice;
 use Tax;
-use TaxManagerFactory;
-use Tools;
-use Validate;
 
 class SpecificPriceService
 {
@@ -32,7 +25,7 @@ class SpecificPriceService
      * @param int $specificPriceId
      * @param bool $useTax
      * @param bool $usereduc
-     * @param Context|null $context
+     * @param \Context|null $context
      *
      * @return float|int|void
      *
@@ -49,7 +42,7 @@ class SpecificPriceService
      * @param int $specificPriceId
      * @param bool $usetax
      * @param bool $usereduc
-     * @param Context|null $context
+     * @param \Context|null $context
      * @param int $decimals
      * @param null $divisor
      * @param bool $only_reduc
@@ -69,7 +62,7 @@ class SpecificPriceService
         $specificPriceId,
         $usetax = true,
         $usereduc = true,
-        Context $context = null,
+        \Context $context = null,
         $decimals = 6,
         $divisor = null,
         $only_reduc = false,
@@ -80,43 +73,43 @@ class SpecificPriceService
         $use_group_reduction = true
     ) {
         if (!$context) {
-            /** @var Context $context */
-            $context = Context::getContext();
+            /** @var \Context $context */
+            $context = \Context::getContext();
         }
 
         $cur_cart = $context->cart;
 
-        Tools::displayParameterAsDeprecated('divisor');
+        \Tools::displayParameterAsDeprecated('divisor');
 
-        if (!Validate::isBool($usetax) || !Validate::isUnsignedId($id_product)) {
-            exit(Tools::displayError());
+        if (!\Validate::isBool($usetax) || !\Validate::isUnsignedId($id_product)) {
+            exit(\Tools::displayError());
         }
 
         // Initializations
-        $id_group = (int) Group::getCurrent()->id;
+        $id_group = (int) \Group::getCurrent()->id;
 
         /** @var \Currency $currency */
         $currency = $context->currency;
-        $id_currency = Validate::isLoadedObject($currency) ? (int) $currency->id : (int) Configuration::get('PS_CURRENCY_DEFAULT');
+        $id_currency = \Validate::isLoadedObject($currency) ? (int) $currency->id : (int) \Configuration::get('PS_CURRENCY_DEFAULT');
 
-        if (Validate::isLoadedObject($cur_cart)) {
-            $id_address = $cur_cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
+        if (\Validate::isLoadedObject($cur_cart)) {
+            $id_address = $cur_cart->{\Configuration::get('PS_TAX_ADDRESS_TYPE')};
         }
 
         // retrieve address informations
-        $address = Address::initialize($id_address, true);
+        $address = \Address::initialize($id_address, true);
         $id_country = (int) $address->id_country;
         $id_state = (int) $address->id_state;
         $zipcode = $address->postcode;
 
-        if (Tax::excludeTaxeOption()) {
+        if (\Tax::excludeTaxeOption()) {
             $usetax = false;
         }
 
         if ($usetax != false
             && !empty($address->vat_number)
-            && $address->id_country != Configuration::get('VATNUMBER_COUNTRY')
-            && Configuration::get('VATNUMBER_MANAGEMENT')) {
+            && $address->id_country != \Configuration::get('VATNUMBER_COUNTRY')
+            && \Configuration::get('VATNUMBER_MANAGEMENT')) {
             $usetax = false;
         }
 
@@ -186,26 +179,26 @@ class SpecificPriceService
         static $context = null;
 
         if ($context == null) {
-            /** @var Context $context */
-            $context = Context::getContext();
+            /** @var \Context $context */
+            $context = \Context::getContext();
             $context = $context->cloneContext();
         }
 
         if ($address === null) {
-            if (is_object($context->cart) && $context->cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')} != null) {
-                $id_address = $context->cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
-                $address = new Address($id_address);
+            if (is_object($context->cart) && $context->cart->{\Configuration::get('PS_TAX_ADDRESS_TYPE')} != null) {
+                $id_address = $context->cart->{\Configuration::get('PS_TAX_ADDRESS_TYPE')};
+                $address = new \Address($id_address);
             } else {
-                $address = new Address();
+                $address = new \Address();
             }
         }
 
         if ($id_shop !== null && $context->shop->id != (int) $id_shop) {
-            $context->shop = new Shop((int) $id_shop);
+            $context->shop = new \Shop((int) $id_shop);
         }
 
         if ($id_product_attribute == null) {
-            $id_product_attribute = Product::getDefaultAttribute($id_product);
+            $id_product_attribute = \Product::getDefaultAttribute($id_product);
         }
 
         // reference parameter is filled before any returns
@@ -215,19 +208,19 @@ class SpecificPriceService
         // fetch price & attribute price
         $cache_id_2 = $id_product . '-' . $id_shop . '-' . $specificPriceId;
         if (!isset(self::$_pricesLevel2[$cache_id_2])) {
-            $sql = new DbQuery();
+            $sql = new \DbQuery();
             $sql->select('product_shop.`price`, product_shop.`ecotax`');
             $sql->from('product', 'p');
             $sql->innerJoin('product_shop', 'product_shop', '(product_shop.id_product=p.id_product AND product_shop.id_shop = ' . (int) $id_shop . ')');
             $sql->where('p.`id_product` = ' . (int) $id_product);
-            if (Combination::isFeatureActive()) {
+            if (\Combination::isFeatureActive()) {
                 $sql->select('IFNULL(product_attribute_shop.id_product_attribute,0) id_product_attribute, product_attribute_shop.`price` AS attribute_price, product_attribute_shop.default_on');
                 $sql->leftJoin('product_attribute_shop', 'product_attribute_shop', '(product_attribute_shop.id_product = p.id_product AND product_attribute_shop.id_shop = ' . (int) $id_shop . ')');
             } else {
                 $sql->select('0 as id_product_attribute');
             }
 
-            $res = Db::getInstance((bool) _PS_USE_SQL_SLAVE_)->executeS($sql);
+            $res = \Db::getInstance((bool) _PS_USE_SQL_SLAVE_)->executeS($sql);
 
             if (is_array($res) && count($res)) {
                 foreach ($res as $row) {
@@ -258,7 +251,7 @@ class SpecificPriceService
         }
         // convert only if the specific price is in the default currency (id_currency = 0)
         if (!$specific_price || !($specific_price['price'] >= 0 && $specific_price['id_currency'])) {
-            $price = Tools::convertPrice($price, $id_currency);
+            $price = \Tools::convertPrice($price, $id_currency);
 
             if (isset($specific_price['price']) && $specific_price['price'] >= 0) {
                 $specific_price['price'] = $price;
@@ -267,7 +260,7 @@ class SpecificPriceService
 
         // Attribute price
         if (is_array($result) && (!$specific_price || !$specific_price['id_product_attribute'] || $specific_price['price'] < 0)) {
-            $attribute_price = Tools::convertPrice($result['attribute_price'] !== null ? (float) $result['attribute_price'] : 0, $id_currency);
+            $attribute_price = \Tools::convertPrice($result['attribute_price'] !== null ? (float) $result['attribute_price'] : 0, $id_currency);
             // If you want the default combination, please use NULL value instead
             if ($id_product_attribute !== false) {
                 $price += $attribute_price;
@@ -278,7 +271,7 @@ class SpecificPriceService
             // Customization price
             if ((int) $id_customization) {
                 /* @phpstan-ignore-next-line */
-                $price += Tools::convertPrice(Customization::getCustomizationPrice($id_customization), $id_currency);
+                $price += \Tools::convertPrice(\Customization::getCustomizationPrice($id_customization), $id_currency);
             }
         }
 
@@ -287,7 +280,7 @@ class SpecificPriceService
         $address->id_state = $id_state;
         $address->postcode = $zipcode;
 
-        $tax_manager = TaxManagerFactory::getManager($address, (string) Product::getIdTaxRulesGroupByIdProduct((int) $id_product, $context));
+        $tax_manager = \TaxManagerFactory::getManager($address, (string) \Product::getIdTaxRulesGroupByIdProduct((int) $id_product, $context));
         $product_tax_calculator = $tax_manager->getTaxCalculator();
 
         // Add Tax
@@ -296,22 +289,22 @@ class SpecificPriceService
         }
 
         // Eco Tax
-        if (($result['ecotax'] || isset($result['attribute_ecotax']))) {
+        if ($result['ecotax'] || isset($result['attribute_ecotax'])) {
             $ecotax = $result['ecotax'];
             if (isset($result['attribute_ecotax']) && $result['attribute_ecotax'] > 0) {
                 $ecotax = $result['attribute_ecotax'];
             }
 
             if ($id_currency) {
-                $ecotax = Tools::convertPrice($ecotax, $id_currency);
+                $ecotax = \Tools::convertPrice($ecotax, $id_currency);
             }
             if ($use_tax) {
                 static $psEcotaxTaxRulesGroupId = null;
                 if ($psEcotaxTaxRulesGroupId === null) {
-                    $psEcotaxTaxRulesGroupId = (int) Configuration::get('PS_ECOTAX_TAX_RULES_GROUP_ID');
+                    $psEcotaxTaxRulesGroupId = (int) \Configuration::get('PS_ECOTAX_TAX_RULES_GROUP_ID');
                 }
                 // reinit the tax manager for ecotax handling
-                $tax_manager = TaxManagerFactory::getManager(
+                $tax_manager = \TaxManagerFactory::getManager(
                     $address,
                     $psEcotaxTaxRulesGroupId
                 );
@@ -329,7 +322,7 @@ class SpecificPriceService
                 $reduction_amount = $specific_price['reduction'];
 
                 if (!$specific_price['id_currency']) {
-                    $reduction_amount = Tools::convertPrice($reduction_amount, $id_currency);
+                    $reduction_amount = \Tools::convertPrice($reduction_amount, $id_currency);
                 }
 
                 $specific_price_reduction = $reduction_amount;
@@ -353,21 +346,21 @@ class SpecificPriceService
 
         // Group reduction
         if ($use_group_reduction) {
-            $reduction_from_category = GroupReduction::getValueForProduct($id_product, $id_group);
+            $reduction_from_category = \GroupReduction::getValueForProduct($id_product, $id_group);
             if ($reduction_from_category !== false) {
                 $group_reduction = $price * (float) $reduction_from_category;
             } else { // apply group reduction if there is no group reduction for this category
-                $group_reduction = (($reduc = Group::getReductionByIdGroup($id_group)) != 0) ? ($price * $reduc / 100) : 0;
+                $group_reduction = (($reduc = \Group::getReductionByIdGroup($id_group)) != 0) ? ($price * $reduc / 100) : 0;
             }
 
             $price -= $group_reduction;
         }
 
         if ($only_reduc) {
-            return Tools::ps_round($specific_price_reduction, $decimals);
+            return \Tools::ps_round($specific_price_reduction, $decimals);
         }
 
-        $price = Tools::ps_round((float) $price, $decimals);
+        $price = \Tools::ps_round((float) $price, $decimals);
 
         if ($price < 0) {
             $price = 0;
@@ -385,7 +378,7 @@ class SpecificPriceService
      */
     private function getSpecificPrice($specificPriceId)
     {
-        if (!SpecificPrice::isFeatureActive()) {
+        if (!\SpecificPrice::isFeatureActive()) {
             return [];
         }
 
@@ -397,6 +390,6 @@ class SpecificPriceService
 
         $query .= ' ORDER BY `id_product_attribute` DESC, `id_cart` DESC, `from_quantity` DESC, `id_specific_price_rule` ASC, `to` DESC, `from` DESC';
 
-        return Db::getInstance((bool) _PS_USE_SQL_SLAVE_)->getRow($query);
+        return \Db::getInstance((bool) _PS_USE_SQL_SLAVE_)->getRow($query);
     }
 }

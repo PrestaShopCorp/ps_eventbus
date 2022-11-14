@@ -2,9 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Formatter;
 
-use DateTime;
-use Exception;
-
 class DateFormatter
 {
     /**
@@ -15,8 +12,8 @@ class DateFormatter
     public function convertToIso8061($date)
     {
         try {
-            return (new DateTime($date))->format(DateTime::ISO8601);
-        } catch (Exception $e) {
+            return (new \DateTime($date))->format(\DateTime::ISO8601);
+        } catch (\Exception $e) {
             return $date;
         }
     }

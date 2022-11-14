@@ -16,7 +16,6 @@ use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
 use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
-use Product;
 use Yandex\Allure\Adapter\Annotation\Features;
 use Yandex\Allure\Adapter\Annotation\Stories;
 use Yandex\Allure\Adapter\Annotation\Title;
@@ -38,7 +37,7 @@ class IncrementalSynchronizationTest extends BaseTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $product = new Product(1);
+        $product = new \Product(1);
         $product->setCarriers([1, 2]);
         /* @var EventbusSyncRepository $syncRepository */
         $this->syncRepository = $this->container->getService(EventbusSyncRepository::class);

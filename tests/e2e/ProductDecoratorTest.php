@@ -305,7 +305,7 @@ class ProductDecoratorTest extends BaseTestCase
         $linkMock->method('getProductLink')->willReturn('https://test.link/1-0-product.html');
         $linkMock->method('getImageLink')->willReturnCallback(
             function ($linkRewrite, $id) {
-                return "https://test.link/1-${id}-product.jpg";
+                return "https://test.link/1-{$id}-product.jpg";
             });
 
         $shopMock = $this->createMock(Shop::class);

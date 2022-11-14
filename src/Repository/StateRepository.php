@@ -2,16 +2,10 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Db;
-use DbQuery;
-use mysqli_result;
-use PDOStatement;
-use PrestaShopDatabaseException;
-
 class StateRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
@@ -20,17 +14,17 @@ class StateRepository
      */
     private $stateIsoCodeCache = [];
 
-    public function __construct(Db $db)
+    public function __construct(\Db $db)
     {
         $this->db = $db;
     }
 
     /**
-     * @return DbQuery
+     * @return \DbQuery
      */
     private function getBaseQuery()
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->from('state', 's');
 
@@ -41,9 +35,9 @@ class StateRepository
      * @param int $zoneId
      * @param bool $active
      *
-     * @return array|bool|mysqli_result|PDOStatement|resource|null
+     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getStateIsoCodesByZoneId($zoneId, $active = true)
     {

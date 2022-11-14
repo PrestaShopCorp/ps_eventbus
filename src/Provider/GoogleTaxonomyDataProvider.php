@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Provider;
 
-use Context;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Repository\GoogleTaxonomyRepository;
 
@@ -13,11 +12,11 @@ class GoogleTaxonomyDataProvider implements PaginatedApiDataProviderInterface
      */
     private $googleTaxonomyRepository;
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
 
-    public function __construct(GoogleTaxonomyRepository $googleTaxonomyRepository, Context $context)
+    public function __construct(GoogleTaxonomyRepository $googleTaxonomyRepository, \Context $context)
     {
         $this->googleTaxonomyRepository = $googleTaxonomyRepository;
         $this->context = $context;

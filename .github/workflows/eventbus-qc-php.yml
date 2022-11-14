@@ -11,6 +11,7 @@ jobs:
   php-linter:
     name: PHP Syntax check
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     strategy:
       matrix:
         php_version: ["7.2", "7.3", "7.4", "8.0", "8.1"]
@@ -23,6 +24,7 @@ jobs:
   composer-validate:
     name: Composer validate
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -32,6 +34,7 @@ jobs:
   php-cs-fixer:
     name: PHP-CS-FIXER
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -40,14 +43,13 @@ jobs:
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
-      - name: Install dependencies
-        run: composer install
       - name: Run PHP-CS-Fixer
         run: make lint
 
   phpstan:
     name: PHPStan
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     strategy:
       matrix:
         presta_version: ["1.7.8.7"]
@@ -59,14 +61,13 @@ jobs:
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
-      - name: Install dependencies
-        run: composer install
       - name: PHPStan PrestaShop 1.7.8.7
-        run: PS_VERSION="1.7.8.7" PHP_VERSION="8.1" make docker-phpstan
+        run: PS_VERSION="1.7.8.7" make phpstan
 
   phpunit:
     name: PHP Unit
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -75,21 +76,31 @@ jobs:
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
-      - name: Install dependencies
-        run: composer install
       - name: PHP unit with PHP 8.1
-        run: PHP_VERSION="8.1" make docker-phpunit
+        run: make phpunit
 
-      # - name: 📊 Step 5 - Collect Allure files and generate allure-report folder
-      #   run: |
-      #     make allure-report
-      # - name: 🎁 Step 6 - Publishing Allure artifact to GitHub Actions
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: allure-report
-      #     path: allure-report
-      # - name: 🎁 Step 7 - Publishing Code coverage report to GitHub Actions
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: code-coverage-report
-      #     path: tests/tmp/code-coverage-report
+  coverage:
+    name: Generate the code coverage
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Cache vendor folder
+        uses: actions/cache@v1
+        with:
+          path: vendor
+          key: php-${{ hashFiles('composer.lock') }}
+      - name: PHP unit with PHP 8.1
+        run: PHP_VERSION="8.1" make docker-phpunit-coverage
+      - name: 🎁 Publishing Allure artifact to GitHub Actions
+        uses: actions/upload-artifact@v2
+        with:
+          name: allure-reports
+          path: allure-reports
+      - name: 🎁 Publishing Code coverage report to GitHub Actions
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-reports
+          path: coverage-reports

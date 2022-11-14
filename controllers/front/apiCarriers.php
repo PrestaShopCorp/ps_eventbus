@@ -9,9 +9,9 @@ class ps_EventbusApiCarriersModuleFrontController extends AbstractApiController
     public $type = Config::COLLECTION_CARRIERS;
 
     /**
-     * @throws PrestaShopException
-     *
      * @return void
+     *
+     * @throws PrestaShopException
      */
     public function postProcess()
     {

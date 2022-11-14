@@ -2,19 +2,17 @@
 
 namespace PrestaShop\Module\PsEventbus\Decorator;
 
-use Context;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Repository\BundleRepository;
 use PrestaShop\Module\PsEventbus\Repository\CategoryRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\ProductRepository;
-use PrestaShopException;
 
 class ProductDecorator
 {
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
     /**
@@ -39,7 +37,7 @@ class ProductDecorator
     private $bundleRepository;
 
     public function __construct(
-        Context $context,
+        \Context $context,
         LanguageRepository $languageRepository,
         ProductRepository $productRepository,
         CategoryRepository $categoryRepository,
@@ -59,9 +57,9 @@ class ProductDecorator
      * @param string $langIso
      * @param int $langId
      *
-     * @throws \PrestaShopDatabaseException
-     *
      * @return void
+     *
+     * @throws \PrestaShopDatabaseException
      */
     public function decorateProducts(array &$products, $langIso, $langId)
     {
@@ -115,7 +113,7 @@ class ProductDecorator
                 $this->context->shop->id,
                 $product['id_attribute']
             );
-        } catch (PrestaShopException $e) {
+        } catch (\PrestaShopException $e) {
             $product['link'] = '';
         }
     }
@@ -258,9 +256,9 @@ class ProductDecorator
      * @param array $products
      * @param int $langId
      *
-     * @throws \PrestaShopDatabaseException
-     *
      * @return void
+     *
+     * @throws \PrestaShopDatabaseException
      */
     private function addFeatureValues(array &$products, $langId)
     {
@@ -276,9 +274,9 @@ class ProductDecorator
      * @param array $products
      * @param int $langId
      *
-     * @throws \PrestaShopDatabaseException
-     *
      * @return void
+     *
+     * @throws \PrestaShopDatabaseException
      */
     private function addAttributeValues(array &$products, $langId)
     {
@@ -293,9 +291,9 @@ class ProductDecorator
     /**
      * @param array $products
      *
-     * @throws \PrestaShopDatabaseException
-     *
      * @return void
+     *
+     * @throws \PrestaShopDatabaseException
      */
     private function addImages(array &$products)
     {

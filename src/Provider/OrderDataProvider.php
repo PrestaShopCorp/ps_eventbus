@@ -2,14 +2,11 @@
 
 namespace PrestaShop\Module\PsEventbus\Provider;
 
-use Context;
-use Language;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderRepository;
-use PrestaShopDatabaseException;
 
 class OrderDataProvider implements PaginatedApiDataProviderInterface
 {
@@ -18,7 +15,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      */
     private $orderRepository;
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
     /**
@@ -35,7 +32,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     private $orderHistoryRepository;
 
     public function __construct(
-        Context $context,
+        \Context $context,
         OrderRepository $orderRepository,
         OrderDetailsRepository $orderDetailsRepository,
         ArrayFormatter $arrayFormatter,
@@ -55,7 +52,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getFormattedData($offset, $limit, $langIso)
     {
@@ -67,7 +64,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             return [];
         }
 
-        $langId = (int) Language::getIdByIso($langIso);
+        $langId = (int) \Language::getIdByIso($langIso);
         $this->castOrderValues($orders, $langId);
 
         $orderDetails = $this->getOrderDetails($orders, $shopId);
@@ -104,13 +101,13 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
-        $langId = (int) Language::getIdByIso($langIso);
+        $langId = (int) \Language::getIdByIso($langIso);
         $orders = $this->orderRepository->getOrdersIncremental($limit, $shopId, $objectIds);
 
         if (!is_array($orders) || empty($orders)) {
@@ -120,7 +117,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         $orderDetails = $this->getOrderDetails($orders, $shopId);
         $orderStatuses = $this->getOrderStatuses($orders, $langId);
 
-        $this->castOrderValues($orders, (int) Language::getIdByIso($langIso));
+        $this->castOrderValues($orders, (int) \Language::getIdByIso($langIso));
 
         $orders = array_map(function ($order) {
             return [
@@ -139,7 +136,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     private function getOrderDetails(array $orders, $shopId)
     {
@@ -174,7 +171,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return array|array[]
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     private function getOrderStatuses(array $orders, $langId)
     {
@@ -200,7 +197,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return void
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     private function castOrderValues(array &$orders, int $langId)
     {
@@ -230,7 +227,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return bool
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     private function castIsPaidValue(array $orders, array $order, int $langId)
     {

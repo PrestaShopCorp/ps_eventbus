@@ -9,9 +9,9 @@ class ps_EventbusApiCustomProductCarriersModuleFrontController extends AbstractA
     public $type = Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS;
 
     /**
-     * @throws PrestaShopException
-     *
      * @return void
+     *
+     * @throws PrestaShopException
      */
     public function postProcess()
     {

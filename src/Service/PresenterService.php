@@ -2,11 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use Configuration;
-use ModuleCore;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
-use Tools;
 
 class PresenterService
 {
@@ -53,7 +50,7 @@ class PresenterService
     }
 
     /**
-     * @param object|ModuleCore|false $object
+     * @param object|\ModuleCore|false $object
      *
      * @return array
      */
@@ -93,13 +90,13 @@ class PresenterService
     }
 
     /**
-     * @param ModuleCore $module
+     * @param \ModuleCore $module
      * @param array $requiredConsents
      * @param array $optionalConsents
      *
      * @return array
      */
-    public function expose(ModuleCore $module, $requiredConsents = [], $optionalConsents = [])
+    public function expose(\ModuleCore $module, $requiredConsents = [], $optionalConsents = [])
     {
         $requiredConsents = $this->enforceMandatoryConsents($requiredConsents);
         if ($this->psAccountsService == null) {
@@ -110,13 +107,13 @@ class PresenterService
                 'requiredConsents' => $requiredConsents,
                 'optionalConsents' => $optionalConsents,
                 'module' => array_merge([
-                    'logoUrl' => Tools::getHttpHost(true) . '/modules/' . $module->name . '/logo.png',
+                    'logoUrl' => \Tools::getHttpHost(true) . '/modules/' . $module->name . '/logo.png',
                 ], $this->convertObjectToArray($module)),
                 'shop' => [
                     /* @phpstan-ignore-next-line */
                     'id' => $this->psAccountsService->getShopUuid(),
-                    'name' => Configuration::get('PS_SHOP_NAME'),
-                    'url' => Tools::getHttpHost(true),
+                    'name' => \Configuration::get('PS_SHOP_NAME'),
+                    'url' => \Tools::getHttpHost(true),
                 ],
                 'psEventbusModule' => $this->convertObjectToArray(\Module::getInstanceByName('ps_eventbus')),
             ];

@@ -20,11 +20,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
-use Configuration;
-use Exception;
-use Module;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
-use Raven_Client;
 
 /**
  * Handle Error.
@@ -32,15 +28,15 @@ use Raven_Client;
 class ErrorHandler implements ErrorHandlerInterface
 {
     /**
-     * @var ?Raven_Client
+     * @var ?\Raven_Client
      */
     protected $client;
 
-    public function __construct(Module $module, PsAccounts $accountsService, string $sentryDsn, string $sentryEnv)
+    public function __construct(\Module $module, PsAccounts $accountsService, string $sentryDsn, string $sentryEnv)
     {
-        $psAccounts = Module::getInstanceByName('ps_accounts');
+        $psAccounts = \Module::getInstanceByName('ps_accounts');
         try {
-            $this->client = new Raven_Client(
+            $this->client = new \Raven_Client(
                 $sentryDsn,
                 [
                     'level' => 'warning',
@@ -50,28 +46,28 @@ class ErrorHandler implements ErrorHandlerInterface
                         'ps_accounts_version' => $psAccounts ? $psAccounts->version : false,
                         'php_version' => phpversion(),
                         'prestashop_version' => _PS_VERSION_,
-                        'ps_eventbus_is_enabled' => Module::isEnabled($module->name),
-                        'ps_eventbus_is_installed' => Module::isInstalled($module->name),
+                        'ps_eventbus_is_enabled' => \Module::isEnabled($module->name),
+                        'ps_eventbus_is_installed' => \Module::isInstalled($module->name),
                         'env' => $sentryEnv,
                     ],
                 ]
             );
             /** @var string $configurationPsShopEmail */
-            $configurationPsShopEmail = Configuration::get('PS_SHOP_EMAIL');
+            $configurationPsShopEmail = \Configuration::get('PS_SHOP_EMAIL');
             $this->client->set_user_data($accountsService->getPsAccountsService()->getShopUuid(), $configurationPsShopEmail);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
         }
     }
 
     /**
-     * @param Exception $error
+     * @param \Exception $error
      * @param mixed $code
      * @param bool|null $throw
      * @param array|null $data
      *
      * @return void
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function handle($error, $code = null, $throw = true, $data = null)
     {

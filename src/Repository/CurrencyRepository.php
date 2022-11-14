@@ -2,8 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Currency;
-
 class CurrencyRepository
 {
     /**
@@ -11,7 +9,7 @@ class CurrencyRepository
      */
     public function getCurrenciesIsoCodes()
     {
-        $currencies = Currency::getCurrencies();
+        $currencies = \Currency::getCurrencies();
 
         return array_map(function ($currency) {
             return $currency['iso_code'];
@@ -23,8 +21,8 @@ class CurrencyRepository
      */
     public function getDefaultCurrencyIsoCode()
     {
-        $currency = Currency::getDefaultCurrency();
+        $currency = \Currency::getDefaultCurrency();
 
-        return $currency instanceof Currency ? $currency->iso_code : '';
+        return $currency instanceof \Currency ? $currency->iso_code : '';
     }
 }

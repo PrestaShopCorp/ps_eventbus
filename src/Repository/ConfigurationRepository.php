@@ -15,6 +15,6 @@ class ConfigurationRepository
      */
     public function get($key)
     {
-        return Configuration::get($key);
+        return \Configuration::get($key);
     }
 }

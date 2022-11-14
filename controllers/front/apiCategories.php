@@ -9,9 +9,9 @@ class ps_EventbusApiCategoriesModuleFrontController extends AbstractApiControlle
     public $type = Config::COLLECTION_CATEGORIES;
 
     /**
-     * @throws PrestaShopException
-     *
      * @return void
+     *
+     * @throws PrestaShopException
      */
     public function postProcess()
     {
