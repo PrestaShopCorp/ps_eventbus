@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d2231d145597e007a4cfc813d64747be",
+    "content-hash": "1b27c71dedb1b9624823585deeaed803",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -571,16 +571,16 @@
         },
         {
             "name": "prestashop/module-lib-guzzle-adapter",
-            "version": "v0.4",
+            "version": "v0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PrestaShopCorp/module-lib-guzzle-adapter.git",
-                "reference": "914e993c37010e2dbd9c4b5032f729656dcec7d3"
+                "reference": "e832ee996ce0eeae665e0590b6cff30ba00ed8d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PrestaShopCorp/module-lib-guzzle-adapter/zipball/914e993c37010e2dbd9c4b5032f729656dcec7d3",
-                "reference": "914e993c37010e2dbd9c4b5032f729656dcec7d3",
+                "url": "https://api.github.com/repos/PrestaShopCorp/module-lib-guzzle-adapter/zipball/e832ee996ce0eeae665e0590b6cff30ba00ed8d3",
+                "reference": "e832ee996ce0eeae665e0590b6cff30ba00ed8d3",
                 "shasum": ""
             },
             "require": {
@@ -619,9 +619,9 @@
             "description": "Plug modules to the Guzzle client available on a running shop",
             "support": {
                 "issues": "https://github.com/PrestaShopCorp/module-lib-guzzle-adapter/issues",
-                "source": "https://github.com/PrestaShopCorp/module-lib-guzzle-adapter/tree/v0.4"
+                "source": "https://github.com/PrestaShopCorp/module-lib-guzzle-adapter/tree/v0.5"
             },
-            "time": "2022-06-20T15:14:10+00:00"
+            "time": "2022-08-31T10:11:27+00:00"
         },
         {
             "name": "prestashop/module-lib-service-container",
