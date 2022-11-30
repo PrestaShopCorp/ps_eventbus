@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * @param Ps_eventbus $module
  *

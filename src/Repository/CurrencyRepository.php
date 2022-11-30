@@ -19,6 +19,7 @@ class CurrencyRepository
         $this->db = $db;
         $this->context = $context;
     }
+
     /**
      * @return array
      */
@@ -41,7 +42,7 @@ class CurrencyRepository
         return $currency instanceof \Currency ? $currency->iso_code : '';
     }
 
-        /**
+    /**
      * @param int $offset
      * @param int $limit
      * @param string $langIso
@@ -102,8 +103,6 @@ class CurrencyRepository
         return $this->db->executeS($query);
     }
 
-
-
     /**
      * @param int $shopId
      * @param string $langIso
@@ -119,7 +118,6 @@ class CurrencyRepository
         return $query;
     }
 
-
     /**
      * @param \DbQuery $query
      *
@@ -129,6 +127,4 @@ class CurrencyRepository
     {
         $query->select('c.id_currency, cl.name, c.iso_code, c.conversion_rate, c.deleted, c.active');
     }
-
-
 }

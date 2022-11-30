@@ -28,5 +28,4 @@ class CurrencyDecorator
         $currency['deleted'] = (bool) $currency['deleted'];
         $currency['active'] = (bool) $currency['active'];
     }
-
 }
