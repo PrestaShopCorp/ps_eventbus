@@ -341,19 +341,19 @@ class Ps_eventbus extends Module
      *
      * @return void
      */
-    // public function hookActionObjectCategoryDeleteAfter($parameters)
-    // {
-    //     $category = $parameters['object'];
-    //     /** @var int $categoryId */
-    //     $categoryId = $category->id;
+    public function hookActionObjectCategoryDeleteAfter($parameters)
+    {
+        $category = $parameters['object'];
+        /** @var int $categoryId */
+        $categoryId = $category->id;
 
-    //     $this->insertDeletedObject(
-    //         $categoryId,
-    //         PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CATEGORIES,
-    //         date(DATE_ATOM),
-    //         $this->shopId
-    //     );
-    // }
+        $this->insertDeletedObject(
+            $categoryId,
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CATEGORIES,
+            date(DATE_ATOM),
+            $this->shopId
+        );
+    }
 
     /**
      * @param array $parameters
