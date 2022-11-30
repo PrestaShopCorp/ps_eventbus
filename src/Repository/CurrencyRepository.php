@@ -10,11 +10,6 @@ class CurrencyRepository
     private $db;
 
     /**
-     * @var array
-     */
-    private $categoryLangCache;
-
-    /**
      * @var \Context
      */
     private $context;
