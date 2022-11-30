@@ -14,6 +14,10 @@ services:
     class: PrestaShop\Module\PsEventbus\Decorator\CategoryDecorator
     public: true
 
+  PrestaShop\Module\PsEventbus\Decorator\CurrencyDecorator:
+    class: PrestaShop\Module\PsEventbus\Decorator\CurrencyDecorator
+    public: true
+
   PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator
     public: true

@@ -1,8 +1,4 @@
 services:
-  PrestaShop\Module\PsEventbus\Repository\CurrencyRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\CurrencyRepository
-    public: true
-
   PrestaShop\Module\PsEventbus\Repository\LanguageRepository:
     class: PrestaShop\Module\PsEventbus\Repository\LanguageRepository
     public: true
@@ -20,6 +16,13 @@ services:
 
   PrestaShop\Module\PsEventbus\Repository\CategoryRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CategoryRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
+      - '@ps_eventbus.context'
+
+  PrestaShop\Module\PsEventbus\Repository\CurrencyRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CurrencyRepository
     public: true
     arguments:
       - '@ps_eventbus.db'
