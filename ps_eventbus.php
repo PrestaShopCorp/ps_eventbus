@@ -69,6 +69,8 @@ class Ps_eventbus extends Module
         'actionObjectCategoryAddAfter',
         'actionObjectCategoryUpdateAfter',
         'actionObjectCategoryDeleteAfter',
+        'actionObjectCurrencyAddAfter',
+        'actionObjectCurrencyUpdateAfter',
         'actionObjectOrderAddAfter',
         'actionObjectOrderUpdateAfter',
         'actionObjectCartAddAfter',
@@ -339,17 +341,57 @@ class Ps_eventbus extends Module
      *
      * @return void
      */
-    public function hookActionObjectCategoryDeleteAfter($parameters)
-    {
-        $category = $parameters['object'];
-        /** @var int $categoryId */
-        $categoryId = $category->id;
+    // public function hookActionObjectCategoryDeleteAfter($parameters)
+    // {
+    //     $category = $parameters['object'];
+    //     /** @var int $categoryId */
+    //     $categoryId = $category->id;
 
-        $this->insertDeletedObject(
-            $categoryId,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CATEGORIES,
+    //     $this->insertDeletedObject(
+    //         $categoryId,
+    //         PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CATEGORIES,
+    //         date(DATE_ATOM),
+    //         $this->shopId
+    //     );
+    // }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectCurrencyAddAfter($parameters)
+    {
+        $currency = $parameters['object'];
+        /** @var int $currencyId */
+        $currencyId = $currency->id;
+
+        $this->insertIncrementalSyncObject(
+            $currencyId,
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CURRENCIES,
             date(DATE_ATOM),
-            $this->shopId
+            $this->shopId,
+            true
+        );
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectCurrencyUpdateAfter($parameters)
+    {
+        $currency = $parameters['object'];
+        /** @var int $currencyId */
+        $currencyId = $currency->id;
+
+        $this->insertIncrementalSyncObject(
+            $currencyId,
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CURRENCIES,
+            date(DATE_ATOM),
+            $this->shopId,
+            true
         );
     }
 
