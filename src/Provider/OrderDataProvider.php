@@ -279,12 +279,15 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             $castedOrderStatus['id_order_history'] = (int) $orderStatus['id_order_history'];
             $castedOrderStatus['name'] = (string) $orderStatus['name'];
             $castedOrderStatus['template'] = (string) $orderStatus['template'];
-            $castedOrderStatus['date_add'] = (string) $orderStatus['date_add'];
+            $date = new \DateTime($orderStatus['date_add']);
+            $castedOrderStatus['date_add'] = $date->format(\DateTime::W3C);
             $castedOrderStatus['is_validated'] = (bool) $orderStatus['logable'];
             $castedOrderStatus['is_delivered'] = (bool) $orderStatus['delivery'];
             $castedOrderStatus['is_shipped'] = (bool) $orderStatus['shipped'];
             $castedOrderStatus['is_paid'] = (bool) $orderStatus['paid'];
             $castedOrderStatus['is_deleted'] = (bool) $orderStatus['deleted'];
+            $castedOrderStatus['created_at'] = $castedOrderStatus['date_add'];
+            $castedOrderStatus['updated_at'] = $castedOrderStatus['date_add'];
             $castedOrderStatuses[] = $castedOrderStatus;
         }
 
