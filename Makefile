@@ -91,11 +91,15 @@ prestashop/prestashop-${PS_VERSION}: prestashop composer.phar
 	@./composer.phar -d ./prestashop/prestashop-${PS_VERSION} install
 
 # target: test                                   - Static and unit testing
-test: composer-validate lint php-lint phpstan phpunit
+test: composer-validate lint php-lint phpstan phpunit translation-validate
 
 # target: composer-validate                      - Validates composer.json and composer.lock
 composer-validate: vendor
 	@./composer.phar validate --no-check-publish
+
+# target: translation-validate                   - Validates the translation files in translations/ directory
+translation-validate: 
+	php tests/translation.test.php
 
 # target: lint                                   - Lint the code and expose errors
 lint: vendor/bin/php-cs-fixer
