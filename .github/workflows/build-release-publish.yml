@@ -148,7 +148,7 @@ jobs:
         with:
           version: tags/${{ github.event.release.tag_name }}
           file: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}.zip
-          token: ${{ secrets.JARVIS_TOKEN }}
+          token: ${{ secrets.GA_ACCESS_TOKEN }}
 
       - name: Prepare publishing tool
         run: |
