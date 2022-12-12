@@ -35,6 +35,6 @@ class CategoryDecorator
      */
     private function formatDescription(array &$category)
     {
-        $category['description'] = md5($category['description']);
+        $category['description'] = base64_encode($category['description']);
     }
 }
