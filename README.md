@@ -44,6 +44,7 @@ Open routes are:
 - `/apiCarriers`
 - `/apiCarts`
 - `/apiCategories`
+- `/apiCurrencies`
 - `/apiInfo`
 - `/apiModules`
 - `/apiOrders`
