@@ -7,7 +7,7 @@ WORKDIR /src
 RUN apt-get update -qqy \
   && apt-get -qqy install make git;
 
-RUN pecl install -f xdebug \
+RUN pecl install -f xdebug-3.1.6 \
   && docker-php-ext-enable xdebug;
 
 RUN useradd -rm -s /bin/sh -u 1000 php
