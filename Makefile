@@ -135,10 +135,13 @@ docker-test: docker-lint docker-phpstan docker-phpunit
 
 # target: docker-lint                            - Lint the code in docker
 docker-lint:
-	docker run --rm -w /src \
-	-v $(shell pwd):/src \
-	${TESTING_DOCKER_IMAGE} \
-	-c "make lint";
+	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
+	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} lint;
+
+# target: docker-lint-fix                        - Lint and fix the code in docker
+docker-lint-fix:
+	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
+	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} lint-fix;
 
 # target: docker-lint                            - Lint the code with php in docker
 docker-php-lint:
