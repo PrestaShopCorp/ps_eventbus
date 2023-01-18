@@ -694,6 +694,20 @@ class Carrier implements \JsonSerializable
 
     public function jsonSerialize()
     {
+        /**
+         * Hide this, the time to fix it
+         * otherwise the HTML in the JSON will cause the request to be discarded cloud-side:
+         * 
+         * <br />
+         * <b>Warning</b>:  Array to string conversion in <b>/var/www/html/modules/ps_eventbus/src/DTO/Carrier.php</b> on line <b>724</b><br />
+         * 
+         * Which at the time of this writing correspond to this line:
+         *   'delay' => (string) $this->getDelay(),
+         * 
+         * @TODO clean this up please.
+         */
+        error_reporting(E_ALL ^ E_WARNING); 
+        
         $return = [];
 
         $return[] = [
