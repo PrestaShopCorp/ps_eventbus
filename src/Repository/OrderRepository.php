@@ -67,14 +67,13 @@ class OrderRepository
      */
     public function getRemainingOrderCount($offset, $shopId)
     {
-        $query = new \DbQuery();
+        $orders = $this->getOrders($offset, 1, $shopId);
 
-        $query->select('COUNT(o.id_order) as count')
-            ->from(self::ORDERS_TABLE, 'o')
-            ->where('o.id_shop = ' . (int) $shopId)
-            ->limit(1, $offset);
+        if (!is_array($orders) || empty($orders)) {
+            return 0;
+        }
 
-        return (int) $this->db->getValue($query);
+        return count($orders);
     }
 
     /**
