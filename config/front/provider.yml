@@ -28,6 +28,13 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\CurrencyRepository'
       - '@PrestaShop\Module\PsEventbus\Decorator\CurrencyDecorator'
 
+  PrestaShop\Module\PsEventbus\Provider\CustomerDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\CustomerDataProvider
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\CustomerRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\CustomerDecorator'
+
   PrestaShop\Module\PsEventbus\Provider\OrderDataProvider:
     class: PrestaShop\Module\PsEventbus\Provider\OrderDataProvider
     public: true

@@ -18,6 +18,10 @@ services:
     class: PrestaShop\Module\PsEventbus\Decorator\CurrencyDecorator
     public: true
 
+  PrestaShop\Module\PsEventbus\Decorator\CustomerDecorator:
+    class: PrestaShop\Module\PsEventbus\Decorator\CustomerDecorator
+    public: true
+
   PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator
     public: true

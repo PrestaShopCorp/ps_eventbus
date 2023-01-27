@@ -32,6 +32,7 @@ class Config
     public const COLLECTION_CURRENCIES = 'currencies';
     public const COLLECTION_SPECIFIC_PRICES = 'specific_prices';
     public const COLLECTION_CUSTOM_PRODUCT_CARRIERS = 'custom_product_carriers';
+    public const COLLECTION_CUSTOMERS = 'customers';
     public const COLLECTION_TAXONOMIES = 'taxonomies';
     public const COLLECTION_MODULES = 'modules';
     public const COLLECTION_ORDERS = 'orders';

@@ -21,6 +21,13 @@ services:
       - '@ps_eventbus.db'
       - '@ps_eventbus.context'
 
+  PrestaShop\Module\PsEventbus\Repository\CustomerRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CustomerRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
+      - '@ps_eventbus.context'
+
   PrestaShop\Module\PsEventbus\Repository\CurrencyRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CurrencyRepository
     public: true
