@@ -70,6 +70,9 @@ class Ps_eventbus extends Module
         'actionObjectCategoryAddAfter',
         'actionObjectCategoryUpdateAfter',
         'actionObjectCategoryDeleteAfter',
+        'actionObjectCustomerAddAfter',
+        'actionObjectCustomerUpdateAfter',
+        'actionObjectCustomerDeleteAfter',
         'actionObjectCurrencyAddAfter',
         'actionObjectCurrencyUpdateAfter',
         'actionObjectOrderAddAfter',
@@ -351,6 +354,65 @@ class Ps_eventbus extends Module
         $this->insertDeletedObject(
             $categoryId,
             PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CATEGORIES,
+            date(DATE_ATOM),
+            $this->shopId
+        );
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectCustomerAddAfter($parameters)
+    {
+        $customer = $parameters['object'];
+        /** @var int $customerId */
+        $customerId = $customer->id;
+
+        $this->insertIncrementalSyncObject(
+            $customerId,
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CUSTOMERS,
+            date(DATE_ATOM),
+            $this->shopId,
+            true
+        );
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectCustomerUpdateAfter($parameters)
+    {
+        $customer = $parameters['object'];
+        /** @var int $customerId */
+        $customerId = $customer->id;
+
+        $this->insertIncrementalSyncObject(
+            $customerId,
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CUSTOMERS,
+            date(DATE_ATOM),
+            $this->shopId,
+            true
+        );
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectCustomerDeleteAfter($parameters)
+    {
+        $customer = $parameters['object'];
+        /** @var int $customerId */
+        $customerId = $customer->id;
+
+        $this->insertDeletedObject(
+            $customerId,
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CUSTOMERS,
             date(DATE_ATOM),
             $this->shopId
         );
