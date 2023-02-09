@@ -223,7 +223,7 @@ class Ps_eventbus extends Module
             date(DATE_ATOM),
             $this->shopId
         );
-  }
+    }
 
     /**
      * @param array $parameters
@@ -561,8 +561,6 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCarrierUpdateAfter($parameters)
     {
-
-
         /** @var Carrier $carrier */
         $carrier = $parameters['object'];
         /** @var int $carrierId */
