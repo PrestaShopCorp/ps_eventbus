@@ -151,7 +151,6 @@ class CarrierRepository
         );
         $query->where('c.id_carrier IN (' . implode(',', array_map('intval', $carrierIds)) . ')');
         $query->where('cs.id_shop = ' . (int) $this->context->shop->id);
-        $query->where('c.deleted = 0');
 
         return $this->db->executeS($query);
     }
@@ -178,7 +177,6 @@ class CarrierRepository
             'eis.id_object = c.id_carrier AND eis.type = "' . Config::COLLECTION_CARRIERS . '" AND eis.id_shop = cs.id_shop AND eis.lang_iso = cl.id_lang'
         );
         $query->where('cs.id_shop = ' . (int) $this->context->shop->id);
-        $query->where('c.deleted = 0');
         $query->orderBy('c.id_carrier');
         $query->limit($limit, $offset);
 
