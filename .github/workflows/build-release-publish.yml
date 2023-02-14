@@ -25,31 +25,6 @@ jobs:
           name: ${{ github.event.repository.name }}
           path: ./
 
-  clean-artifacts:
-    name: Clean previous artifacts
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get release info
-        id: release_info
-        uses: toolmantim/release-drafter@v5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
-        with:
-          version: "${{ steps.tagger.outputs.tag }}"
-          name: "${{ steps.tagger.outputs.tag }}"
-
-      - name: Clean existing assets
-        shell: bash
-        run: |
-          curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s 2.14.1
-          assets=`bin/hub api -t repos/${{ github.repository }}/releases/${{ steps.release_info.outputs.id }}/assets | awk '/\].url/ { print $2 }'`
-          for asset in $assets
-          do
-            bin/hub api -X DELETE $asset
-          done
-        env:
-          GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
-
   upload_release_asset_production:
     name: Upload the production zip asset to the release
     runs-on: ubuntu-latest
