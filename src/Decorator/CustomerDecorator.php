@@ -28,6 +28,9 @@ class CustomerDecorator
         $customer['id_lang'] = (int) $customer['id_lang'];
 
         $customer['newsletter'] = (bool) $customer['newsletter'];
+        $date = new \DateTime($customer['newsletter_date_add']);
+        $customer['newsletter_date_add'] = $date->format(\DateTime::W3C);
+
         $customer['optin'] = (bool) $customer['optin'];
         $customer['active'] = (bool) $customer['active'];
         $customer['is_guest'] = (bool) $customer['is_guest'];
