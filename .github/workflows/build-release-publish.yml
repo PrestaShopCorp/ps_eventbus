@@ -7,6 +7,7 @@ jobs:
   build:
     name: Build the base artifact
     runs-on: ubuntu-latest
+    if: github.event.release.draft == false
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -25,35 +26,10 @@ jobs:
           name: ${{ github.event.repository.name }}
           path: ./
 
-  clean-artifacts:
-    name: Clean previous artifacts
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get release info
-        id: release_info
-        uses: toolmantim/release-drafter@v5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
-        with:
-          version: "${{ steps.tagger.outputs.tag }}"
-          name: "${{ steps.tagger.outputs.tag }}"
-
-      - name: Clean existing assets
-        shell: bash
-        run: |
-          curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s 2.14.1
-          assets=`bin/hub api -t repos/${{ github.repository }}/releases/${{ steps.release_info.outputs.id }}/assets | awk '/\].url/ { print $2 }'`
-          for asset in $assets
-          do
-            bin/hub api -X DELETE $asset
-          done
-        env:
-          GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
-
   upload_release_asset_production:
     name: Upload the production zip asset to the release
     runs-on: ubuntu-latest
-    needs: [build, clean-artifacts]
+    needs: [build]
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v1
@@ -81,7 +57,7 @@ jobs:
   upload_release_asset_integration:
     name: Upload the integration zip asset to the release
     runs-on: ubuntu-latest
-    needs: [build, clean-artifacts]
+    needs: [build]
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v1
@@ -109,7 +85,7 @@ jobs:
   upload_release_asset_preproduction:
     name: Upload the preproduction zip asset to the release
     runs-on: ubuntu-latest
-    needs: [build, clean-artifacts]
+    needs: [build]
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v1
