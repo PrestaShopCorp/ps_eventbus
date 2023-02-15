@@ -55,7 +55,7 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
     public function getFormattedData($offset, $limit, $langIso)
     {
         $language = new \Language();
-        $currency = new \Currency((int)$this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
+        $currency = new \Currency((int) $this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
 
         $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
         /** @var array $carriers */
@@ -84,7 +84,7 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
         }
 
         $language = new \Language();
-        $currency = new \Currency((int)$this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
+        $currency = new \Currency((int) $this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
 
         $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
 
