@@ -42,8 +42,6 @@ class CurrencyDataProvider implements PaginatedApiDataProviderInterface
         }
         $this->currencyDecorator->decorateCurrencies($currencies);
 
-        // echo "FullSync";
-        // var_dump($currencies);
         return array_map(function ($currency) {
             return [
                 'id' => $currency['id_currency'],
@@ -81,9 +79,6 @@ class CurrencyDataProvider implements PaginatedApiDataProviderInterface
             return [];
         }
         $this->currencyDecorator->decorateCurrencies($currencies);
-
-        // echo "Incremental sync";
-        // var_dump($currencies);
 
         return array_map(function ($currency) {
             return [
