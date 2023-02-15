@@ -151,6 +151,7 @@ class CarrierRepository
         );
         $query->where('c.id_carrier IN (' . implode(',', array_map('intval', $carrierIds)) . ')');
         $query->where('cs.id_shop = ' . (int) $this->context->shop->id);
+        $query->groupBy('c.id_reference, c.id_carrier HAVING c.id_carrier=(select max(id_carrier) from ps_carrier c2 WHERE c2.id_reference=c.id_reference)');
 
         return $this->db->executeS($query);
     }
@@ -177,7 +178,7 @@ class CarrierRepository
             'eis.id_object = c.id_carrier AND eis.type = "' . Config::COLLECTION_CARRIERS . '" AND eis.id_shop = cs.id_shop AND eis.lang_iso = cl.id_lang'
         );
         $query->where('cs.id_shop = ' . (int) $this->context->shop->id);
-        $query->orderBy('c.id_carrier');
+        $query->where('deleted=0');
         $query->limit($limit, $offset);
 
         return $this->db->executeS($query);

@@ -55,10 +55,11 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
     public function getFormattedData($offset, $limit, $langIso)
     {
         $language = new \Language();
-        $currency = new \Currency();
+        $currency = new \Currency($this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
 
+        $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
         /** @var array $carriers */
-        $carriers = $this->carrierRepository->getAllCarrierProperties($offset, $limit, $language->id);
+        $carriers = $this->carrierRepository->getAllCarrierProperties($offset, $limit, $langId);
 
         /** @var string $configurationPsWeightUnit */
         $configurationPsWeightUnit = $this->configurationRepository->get('PS_WEIGHT_UNIT');
@@ -83,10 +84,13 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
         }
 
         $language = new \Language();
-        $currency = new \Currency();
+        $currency = new \Currency($this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
+
+        $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
+
         $carrierIds = array_column($shippingIncremental, 'id_object');
         /** @var array $carriers */
-        $carriers = $this->carrierRepository->getCarrierProperties($carrierIds, $language->id);
+        $carriers = $this->carrierRepository->getCarrierProperties($carrierIds, $langId);
 
         /** @var string $configurationPsWeightUnit */
         $configurationPsWeightUnit = $this->configurationRepository->get('PS_WEIGHT_UNIT');
