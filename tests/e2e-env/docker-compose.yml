@@ -1,0 +1,76 @@
+services:
+  mysql:
+    image: mariadb:${DOCKER_VERSION_MARIADB:?See e2e-env/.env.dist}
+    env_file:
+      - ./prestashop.env
+    environment:
+      - TZ=UTC
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'mysqladmin',
+          'ping',
+          '--host=localhost',
+          '--user=root',
+          '--password=prestashop',
+        ]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 5s
+    ports:
+      - ${HOST_PORT_BIND_MYSQL:?See e2e-env/.env.dist}:3306
+
+  prestashop:
+    image: prestashop/prestashop:${DOCKER_VERSION_PRESTASHOP:?See e2e-env/.env.dist}
+    depends_on:
+      - ps-accounts-downloader
+      - mysql
+      - ngrok
+    env_file:
+      - ./prestashop.env
+      - ./.env
+    healthcheck:
+      test: [ 'CMD-SHELL', 'curl -sf http://localhost:80 || exit 1' ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5m
+    volumes:
+      - ./ps_scripts:/ps_scripts:ro
+      - incoming-modules:/ps-modules:rw
+      - ../..:/var/www/html/modules/ps_eventbus:rw
+    command: /ps_scripts/docker_tweak.sh
+    ports:
+      - ${HOST_PORT_BIND_PRESTASHOP:?See e2e-env/.env.dist}:80
+    
+  ngrok:
+    extends:
+      file: ./ngrok/docker-compose.yml
+      service: ngrok
+    env_file:
+      - .env
+    ports:
+      - ${HOST_PORT_BIND_NGROK:?See e2e-env/.env.dist}:4040
+
+  ps-accounts-downloader:
+    build:
+      context: .
+      dockerfile: asset-downloader.dockerfile
+    restart: 'no'
+    volumes:
+      - incoming-modules:/ps-modules:rw
+    env_file:
+      - .env
+    environment:
+      GITHUB_REPOSITORY: PrestaShopCorp/ps_accounts
+      TARGET_VERSION: $PS_ACCOUNTS_VERSION
+      TARGET_ASSET: ps_accounts.zip
+      FINAL_ASSET: ps_accounts-${PS_ACCOUNTS_VERSION}.zip
+      ASSET_PATH: /ps-modules
+
+volumes:
+  incoming-modules:
+    driver: local
+

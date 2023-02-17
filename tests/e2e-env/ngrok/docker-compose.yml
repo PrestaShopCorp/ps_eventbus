@@ -1,0 +1,7 @@
+services:
+  ngrok:
+    build:
+      context: .
+      dockerfile: ngrok.dockerfile
+    volumes:
+      - ./ngrok.yml:/etc/ngrok.yml:ro
