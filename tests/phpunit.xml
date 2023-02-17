@@ -11,5 +11,14 @@
     <testsuite name="Ps eventbus Tests">
       <directory>./unit</directory>
     </testsuite>
+   <!--  <testsuite name="E2E">
+      <directory>./e2e</directory>
+    </testsuite> -->
+   <!--  <testsuite name="Synchronization">
+      <directory>./System/Tests/Synchronization</directory>
+    </testsuite>
+    <testsuite name="Providers">
+      <directory>./System/Tests/Provider</directory>
+    </testsuite> -->
   </testsuites>
 </phpunit>
