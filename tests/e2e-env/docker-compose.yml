@@ -70,6 +70,13 @@ services:
       FINAL_ASSET: ps_accounts-${PS_ACCOUNTS_VERSION}.zip
       ASSET_PATH: /ps-modules
 
+  phpmyadmin:
+    image: phpmyadmin:latest
+    env_file:
+      - ./prestashop.env
+    ports:
+      - ${HOST_PORT_BIND_PHP_MY_ADMIN:?See e2e-env/.env.dist}:80
+
 volumes:
   incoming-modules:
     driver: local
