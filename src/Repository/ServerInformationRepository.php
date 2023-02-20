@@ -84,7 +84,7 @@ class ServerInformationRepository
     public function getServerInformation($langIso = '')
     {
         $langId = !empty($langIso) ? (int) \Language::getIdByIso($langIso) : null;
-        $timezone = $this->configurationRepository->get('PS_TIMEZONE');
+        $timezone = (string) $this->configurationRepository->get('PS_TIMEZONE');
         $createdAt = (new \DateTime($this->createdAt, new \DateTimeZone($timezone)))->format('Y-m-d\TH:i:sO');
 
         return [

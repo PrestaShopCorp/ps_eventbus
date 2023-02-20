@@ -42,7 +42,7 @@ class CustomerDecorator
 
         $customer['newsletter'] = (bool) $customer['newsletter'];
 
-        $timezone = $this->configurationRepository->get('PS_TIMEZONE');
+        $timezone = (string) $this->configurationRepository->get('PS_TIMEZONE');
         $customer['newsletter_date_add'] = (new \DateTime($customer['newsletter_date_add'], new \DateTimeZone($timezone)))->format('Y-m-d\TH:i:sO');
 
         $customer['optin'] = (bool) $customer['optin'];
