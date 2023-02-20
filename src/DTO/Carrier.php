@@ -587,9 +587,7 @@ class Carrier implements \JsonSerializable
      */
     public function setDelay($delay)
     {
-        // data come as an array with one element at index 1 !?!
-        $this->delay = $delay[1];
-
+        $this->delay = $delay;
         return $this;
     }
 
