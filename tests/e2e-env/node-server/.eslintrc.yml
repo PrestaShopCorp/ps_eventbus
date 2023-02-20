@@ -1,0 +1,50 @@
+---
+root: true
+plugins:
+  - '@typescript-eslint'
+  - prettier
+  - deprecation
+  - import
+  - unicorn
+extends:
+  - eslint:recommended
+  - plugin:@typescript-eslint/recommended
+  - plugin:import/recommended
+  - plugin:import/typescript
+  - plugin:prettier/recommended
+rules:
+  '@typescript-eslint/interface-name-prefix': 'off'
+  '@typescript-eslint/explicit-module-boundary-types': 'off'
+  '@typescript-eslint/no-explicit-any': 'off'
+  unicorn/filename-case:
+    - error
+    - case: kebabCase
+  deprecation/deprecation: warn
+  import/no-unresolved: error
+  import/no-extraneous-dependencies:
+    - error
+    - devDependencies:
+        - '**/*.spec.ts'
+        - '**/*.e2e-spec.ts'
+        - '**/*.mock.ts'
+
+ignorePatterns:
+  - 'dist/'
+  - 'node_modules/'
+  - 'coverage/'
+parser: '@typescript-eslint/parser'
+parserOptions:
+  sourceType: module
+  project: tsconfig.json
+settings:
+  import/parsers:
+    '@typescript-eslint/parser':
+      - '.ts'
+  import/resolver:
+    typescript:
+      project: tsconfig.json
+overrides:
+  - files:
+      - '*.yaml'
+      - '*.yml'
+    parser: yaml-eslint-parser

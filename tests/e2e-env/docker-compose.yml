@@ -70,6 +70,19 @@ services:
       FINAL_ASSET: ps_accounts-${PS_ACCOUNTS_VERSION}.zip
       ASSET_PATH: /ps-modules
 
+  accounts-shop-linker:
+    image: alpine:latest
+    env_file:
+      - .env
+      - ./prestashop.env
+    restart: 'no'
+    depends_on:
+      prestashop:
+        condition: service_healthy
+    volumes:
+      - ./ps_scripts/auto_onboard_accounts.sh:/run.sh:ro
+    entrypoint: ['sh', '/run.sh']
+
   phpmyadmin:
     image: phpmyadmin:latest
     env_file:
