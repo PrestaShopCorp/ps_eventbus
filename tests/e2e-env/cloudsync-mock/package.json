@@ -1,9 +1,11 @@
 {
   "version": "1.0.0",
+  "name": "cloudsync-mock",
   "type": "module",
   "main": "dist/app.js",
   "scripts": {
-    "start": "npx swc ./src -d dist && node dist/app.js"
+    "start": "node dist/app.js",
+    "build": "npx swc ./src -d dist"
   },
   "dependencies": {
     "supertest": "^6.3.3"

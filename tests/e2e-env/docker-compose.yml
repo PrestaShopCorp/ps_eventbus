@@ -21,6 +21,8 @@ services:
       start_period: 5s
     ports:
       - ${HOST_PORT_BIND_MYSQL:?See e2e-env/.env.dist}:3306
+    networks:
+      - prestashop
 
   prestashop:
     image: prestashop/prestashop:${DOCKER_VERSION_PRESTASHOP:?See e2e-env/.env.dist}
@@ -44,7 +46,16 @@ services:
     command: /ps_scripts/docker_tweak.sh
     ports:
       - ${HOST_PORT_BIND_PRESTASHOP:?See e2e-env/.env.dist}:80
+    networks:
+      - prestashop
     
+  ps_eventbus_config:
+    image: alpine:latest
+    volumes:
+      - ../..:/var/www/html/modules/ps_eventbus:rw
+      - ./parameters.yml:/parameters.yml
+    command: cp /parameters.yml /var/www/html/modules/ps_eventbus/config/parameters.yml
+  
   ngrok:
     extends:
       file: ./ngrok/docker-compose.yml
@@ -53,6 +64,8 @@ services:
       - .env
     ports:
       - ${HOST_PORT_BIND_NGROK:?See e2e-env/.env.dist}:4040
+    networks:
+      - prestashop
 
   ps-accounts-downloader:
     build:
@@ -82,6 +95,8 @@ services:
     volumes:
       - ./ps_scripts/auto_onboard_accounts.sh:/run.sh:ro
     entrypoint: ['sh', '/run.sh']
+    networks:
+      - prestashop
 
   phpmyadmin:
     image: phpmyadmin:latest
@@ -89,8 +104,24 @@ services:
       - ./prestashop.env
     ports:
       - ${HOST_PORT_BIND_PHP_MY_ADMIN:?See e2e-env/.env.dist}:80
+    networks:
+      - prestashop
+
+  # this service is to work the cloudsync-mock on tets/e2e-env. All images should be working
+  cloudsync-mock:
+    build: 
+      context: ./cloudsync-mock
+      dockerfile: Dockerfile
+    depends_on:
+      accounts-shop-linker:
+        condition: service_completed_successfully
+    networks:
+      - prestashop
 
 volumes:
   incoming-modules:
     driver: local
 
+networks:
+  prestashop:
+    driver: bridge
