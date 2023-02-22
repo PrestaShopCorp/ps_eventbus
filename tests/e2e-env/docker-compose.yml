@@ -107,8 +107,8 @@ services:
     networks:
       - prestashop
 
-  # this service is to work the cloudsync-mock on tets/e2e-env. All images should be working
   cloudsync-mock:
+    container_name: cloudsync-mock
     build: 
       context: ./cloudsync-mock
       dockerfile: Dockerfile
@@ -117,6 +117,18 @@ services:
         condition: service_completed_successfully
     networks:
       - prestashop
+
+  cloudsync-mock-test:
+    container_name: cloudsync-mock-test
+    # restart: 'no'
+    build: 
+      context: ./cloudsync-mock
+      dockerfile: Dockerfile
+    depends_on:
+      - cloudsync-mock
+    networks:
+      - prestashop
+    command: test
 
 volumes:
   incoming-modules:

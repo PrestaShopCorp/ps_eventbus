@@ -4,8 +4,13 @@
   "type": "module",
   "main": "dist/app.js",
   "scripts": {
+    "build": "npx swc ./src -d dist",
+    "start:dev": "npx swc ./src -w -d dist",
     "start": "node dist/app.js",
-    "build": "npx swc ./src -d dist"
+    "test": "npx jest",
+    "docker:build": "docker compose -f ../docker-compose.yml build cloudsync-mock cloudsync-mock-test",
+    "docker:up": "docker compose -f ../docker-compose.yml up -d --wait",
+    "docker:down": "docker compose -f ../docker-compose.yml down"
   },
   "dependencies": {
     "supertest": "^6.3.3"
@@ -25,6 +30,7 @@
     "@typescript-eslint/parser": "^5.48.1",
     "@yarnpkg/plugin-workspace-tools": "^4.0.0-rc.35",
     "@yarnpkg/sdks": "^3.0.0-rc.35",
+    "chokidar": "^3.5.3",
     "eslint": "^8.31.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-import-resolver-typescript": "^3.5.3",
