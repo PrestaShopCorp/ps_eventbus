@@ -14,6 +14,7 @@ extends:
   - plugin:prettier/recommended
 rules:
   '@typescript-eslint/interface-name-prefix': 'off'
+  '@typescript-eslint/explicit-function-return-type': 'off'
   '@typescript-eslint/explicit-module-boundary-types': 'off'
   '@typescript-eslint/no-explicit-any': 'off'
   unicorn/filename-case:
@@ -26,7 +27,6 @@ rules:
     - devDependencies:
         - '**/*.spec.ts'
         - '**/*.e2e-spec.ts'
-        - '**/*.mock.ts'
 
 ignorePatterns:
   - 'dist/'
@@ -35,14 +35,17 @@ ignorePatterns:
 parser: '@typescript-eslint/parser'
 parserOptions:
   sourceType: module
-  project: tsconfig.json
+  project: ./tsconfig.json
 settings:
   import/parsers:
     '@typescript-eslint/parser':
       - '.ts'
   import/resolver:
     typescript:
-      project: tsconfig.json
+      project: ./tsconfig.json
+env:
+  node: true
+  jest: true
 overrides:
   - files:
       - '*.yaml'
