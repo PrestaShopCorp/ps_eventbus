@@ -58,7 +58,7 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
     {
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
-        $wishlists = $this->wishlistRepository->getWishlists($offset, $limit, $shopId);
+        $wishlists = $this->wishlistRepository->getWishlists($offset, $limit, $langIso);
 
         if (empty($wishlists)) {
             return [];
@@ -90,7 +90,7 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
 
-        return (int) $this->wishlistRepository->getRemainingWishlistsCount($offset, $shopId);
+        return (int) $this->wishlistRepository->getRemainingWishlistsCount($offset, $langIso);
     }
 
     /**
@@ -106,7 +106,7 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
         $langId = (int) \Language::getIdByIso($langIso);
-        $wishlists = $this->wishlistRepository->getWishlistsIncremental($limit, $shopId, $objectIds);
+        $wishlists = $this->wishlistRepository->getWishlistsIncremental($limit, $langIso, $objectIds);
 
         if (!is_array($wishlists) || empty($wishlists)) {
             return [];
@@ -129,7 +129,6 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
 
     /**
      * @param array $wishlists
-     * @param int $shopId
      *
      * @return array
      *

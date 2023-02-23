@@ -325,7 +325,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectWishlistUpdateAfter($parameters)
     {
-        /** @var Wishlist $wishlist */
+        /** @var WishList $wishlist */
         $wishlist = $parameters['object'];
         /** @var int $wishlistId */
         $wishlistId = $wishlist->id;

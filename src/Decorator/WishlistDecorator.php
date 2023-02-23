@@ -44,7 +44,7 @@ class WishlistDecorator
     }
 
     /**
-     * @param array $wishlist
+     * @param array $wishlistProduct
      *
      * @return void
      */

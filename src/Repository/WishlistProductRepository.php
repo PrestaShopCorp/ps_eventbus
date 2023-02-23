@@ -15,7 +15,7 @@ class WishlistProductRepository
     }
 
     /**
-     * @param string $langIso
+     * @param array $wishlistIds
      *
      * @return \DbQuery
      */
@@ -29,9 +29,7 @@ class WishlistProductRepository
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
-     * @param string $langIso
+     * @param array $wishlistIds
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
