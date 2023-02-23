@@ -181,3 +181,16 @@ services:
     public: true
     arguments:
       - '@ps_eventbus.db'
+
+  PrestaShop\Module\PsEventbus\Repository\WishlistRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\WishlistRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
+      - '@ps_eventbus.context'
+
+  PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'

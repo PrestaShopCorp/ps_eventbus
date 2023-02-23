@@ -44,4 +44,6 @@ class Config
     public const COLLECTION_SHOPS = 'shops';
     public const COLLECTION_THEMES = 'themes';
     public const COLLECTION_BUNDLES = 'bundles';
+    public const COLLECTION_WISHLISTS = 'wishlists';
+    public const COLLECTION_WISHLIST_PRODUCTS = 'wishlist_products';
 }
