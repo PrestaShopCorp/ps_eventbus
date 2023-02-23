@@ -107,16 +107,16 @@ services:
     networks:
       - prestashop
 
-  cloudsync-mock:
-    container_name: cloudsync-mock
-    build: 
-      context: ./cloudsync-mock
-      dockerfile: Dockerfile
-    depends_on:
-      accounts-shop-linker:
-        condition: service_completed_successfully
-    networks:
-      - prestashop
+  # cloudsync-mock:
+  #   container_name: cloudsync-mock
+  #   build: 
+  #     context: ./cloudsync-mock
+  #     dockerfile: Dockerfile
+  #   depends_on:
+  #     accounts-shop-linker:
+  #       condition: service_completed_successfully
+  #   networks:
+  #     - prestashop
 
   cloudsync-mock-test:
     container_name: cloudsync-mock-test
@@ -125,7 +125,8 @@ services:
       context: ./cloudsync-mock
       dockerfile: Dockerfile
     depends_on:
-      - cloudsync-mock
+      accounts-shop-linker:
+        condition: service_completed_successfully
     networks:
       - prestashop
     command: test

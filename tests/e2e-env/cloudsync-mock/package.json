@@ -8,7 +8,7 @@
     "start:dev": "npx swc ./src -w -d dist",
     "start": "node dist/app.js",
     "test": "npx jest",
-    "docker:build": "docker compose -f ../docker-compose.yml build cloudsync-mock cloudsync-mock-test",
+    "docker:build": "docker compose -f ../docker-compose.yml build cloudsync-mock-test",
     "docker:up": "docker compose -f ../docker-compose.yml up -d --wait",
     "docker:down": "docker compose -f ../docker-compose.yml down"
   },
