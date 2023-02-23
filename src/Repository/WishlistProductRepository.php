@@ -9,12 +9,7 @@ class WishlistProductRepository
      */
     private $db;
 
-    /**
-     * @var \Context
-     */
-    private $context;
-
-    public function __construct(\Db $db, \Context $context)
+    public function __construct(\Db $db)
     {
         $this->db = $db;
     }
@@ -24,10 +19,11 @@ class WishlistProductRepository
      *
      * @return \DbQuery
      */
-    public function getBaseQuery($langIso)
+    public function getBaseQuery(array &$wishlistIds)
     {
         $query = new \DbQuery();
         $query->from('wishlist_product', 'wp');
+        $query->where('wp.id_wishlist IN(' . implode(',', array_map('intval', $wishlistIds)) . ')');
 
         return $query;
     }
@@ -41,13 +37,11 @@ class WishlistProductRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getWishlistProducts($offset, $limit, $langIso)
+    public function getWishlistProducts(array &$wishlistIds)
     {
-        $query = $this->getBaseQuery($langIso);
+        $query = $this->getBaseQuery($wishlistIds);
 
         $this->addSelectParameters($query);
-
-        $query->limit($limit, $offset);
 
         return $this->db->executeS($query);
     }

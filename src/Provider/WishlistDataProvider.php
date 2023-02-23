@@ -8,7 +8,7 @@ use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository;
 use PrestaShop\Module\PsEventbus\Repository\WishlistRepository;
 
-class OrderDataProvider implements PaginatedApiDataProviderInterface
+class WishlistDataProvider implements PaginatedApiDataProviderInterface
 {
     /**
      * @var \Context
@@ -64,14 +64,13 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             return [];
         }
 
-        $wishlistProducts = $this->getWishlistProducts($wishlists, $shopId);
+        $wishlistProducts = $this->getWishlistProducts($wishlists);
 
         $this->wishlistDecorator->decorateWishlists($wishlists);
-        $this->wishlistDecorator->decorateWishlistProducts($wishlistProducts);
 
-        $wishlists = array_map(function ($wishlists) {
+        $wishlists = array_map(function ($wishlist) {
             return [
-                'id' => $wishlists['id_wishlist'],
+                'id' => $wishlist['id_wishlist'],
                 'collection' => Config::COLLECTION_WISHLISTS,
                 'properties' => $wishlist,
             ];
@@ -91,7 +90,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
 
-        return (int) $this->wishlistRepository->getRemainingWishlistCount($offset, $shopId);
+        return (int) $this->wishlistRepository->getRemainingWishlistsCount($offset, $shopId);
     }
 
     /**
@@ -113,10 +112,9 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             return [];
         }
 
-        $wishlistProducts = $this->getWishlistProducts($wishlists, $shopId);
+        $wishlistProducts = $this->getWishlistProducts($wishlists);
 
         $this->wishlistDecorator->decorateWishlists($wishlists);
-        $this->wishlistDecorator->decorateWishlistProducts($wishlistProducts);
 
         $wishlists = array_map(function ($wishlist) {
             return [
@@ -137,7 +135,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @throws \PrestaShopDatabaseException
      */
-    private function getWishlistProducts(array $wishlists, $shopId)
+    private function getWishlistProducts(array &$wishlists)
     {
         if (empty($wishlists)) {
             return [];
@@ -145,11 +143,13 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
 
         $wishlistIds = $this->arrayFormatter->formatValueArray($wishlists, 'id_wishlist');
 
-        $wishlistProducts = $this->wishlistProductRepository->getWishlistProducts($wishlistIds, $shopId);
+        $wishlistProducts = $this->wishlistProductRepository->getWishlistProducts($wishlistIds);
 
         if (!is_array($wishlistProducts) || empty($wishlistProducts)) {
             return [];
         }
+
+        $this->wishlistDecorator->decorateWishlistProducts($wishlistProducts);
 
         $wishlistProducts = array_map(function ($wishlistProduct) {
             return [

@@ -68,7 +68,7 @@ class WishlistRepository
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
         $query = $this->getBaseQuery($shopId, $langIso)
-            ->select('(COUNT(c.id_wishlist) - ' . (int) $offset . ') as count');
+            ->select('(COUNT(w.id_wishlist) - ' . (int) $offset . ') as count');
 
         return (int) $this->db->getValue($query);
     }
@@ -90,7 +90,7 @@ class WishlistRepository
 
         $this->addSelectParameters($query);
 
-        $query->where('c.id_wishlist IN(' . implode(',', array_map('intval', $wishlistIds)) . ')')
+        $query->where('w.id_wishlist IN(' . implode(',', array_map('intval', $wishlistIds)) . ')')
             ->limit($limit);
 
         return $this->db->executeS($query);

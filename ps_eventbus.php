@@ -339,7 +339,6 @@ class Ps_eventbus extends Module
         );
     }
 
-
     /**
      * @param array $parameters
      *
