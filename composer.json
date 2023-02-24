@@ -31,13 +31,14 @@
     "ext-json": "*",
     "monolog/monolog": "1.25.3",
     "prestashop/module-lib-service-container": "^2.0",
-    "prestashop/module-lib-guzzle-adapter": "^0.4",
+    "prestashop/module-lib-guzzle-adapter": "^0.5",
     "prestashop/prestashop-accounts-installer": "^1.0.0",
     "sentry/sentry": "^1.11.0"
   },
   "require-dev": {
-    "prestashop/php-dev-tools": "^4.2",
+    "prestashop/php-dev-tools": "^4.3",
     "phpunit/phpunit": "^9.5",
+    "phpunit/php-code-coverage": "^9.2",
     "phpstan/phpstan": "^1.8.8",
     "friendsofphp/php-cs-fixer": "^3.11.0",
     "allure-framework/allure-phpunit": "^v1.5.0",

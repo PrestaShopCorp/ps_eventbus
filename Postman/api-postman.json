@@ -12,9 +12,7 @@
       "name": "upload",
       "id": "85d4083b-254b-4579-8e82-d865124b45fb",
       "protocolProfileBehavior": {
-        "disabledSystemHeaders": {
-
-        }
+        "disabledSystemHeaders": {}
       },
       "request": {
         "auth": {
@@ -44,18 +42,14 @@
         },
         "url": "clap-proxy.eu.ngrok.io/upload/1"
       },
-      "response": [
-
-      ]
+      "response": []
     },
     {
       "name": "healthcheck (proxy-api)",
       "id": "55338393-207e-402b-a66e-1a870b855916",
       "protocolProfileBehavior": {
         "disableBodyPruning": true,
-        "disabledSystemHeaders": {
-
-        }
+        "disabledSystemHeaders": {}
       },
       "request": {
         "auth": {
@@ -85,18 +79,14 @@
         },
         "url": "http://localhost:8080/healthcheck"
       },
-      "response": [
-
-      ]
+      "response": []
     },
     {
       "name": "healthcheck (proxy-api) Copy",
       "id": "acb606be-94e9-4382-be17-62d652350561",
       "protocolProfileBehavior": {
         "disableBodyPruning": true,
-        "disabledSystemHeaders": {
-
-        }
+        "disabledSystemHeaders": {}
       },
       "request": {
         "auth": {
@@ -126,18 +116,14 @@
         },
         "url": "http://localhost:8080/healthcheck"
       },
-      "response": [
-
-      ]
+      "response": []
     },
     {
       "name": "Healthcheck",
       "id": "46db17e2-be54-402f-95c5-b5ac7404114d",
       "protocolProfileBehavior": {
         "disableBodyPruning": true,
-        "disabledSystemHeaders": {
-
-        }
+        "disabledSystemHeaders": {}
       },
       "request": {
         "auth": {
@@ -168,12 +154,8 @@
         "url": {
           "raw": "https://{{shop_url}}/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck",
           "protocol": "https",
-          "host": [
-            "{{shop_url}}"
-          ],
-          "path": [
-            "index.php"
-          ],
+          "host": ["{{shop_url}}"],
+          "path": ["index.php"],
           "query": [
             {
               "key": "fc",
@@ -190,17 +172,13 @@
           ]
         }
       },
-      "response": [
-
-      ]
+      "response": []
     },
     {
       "name": "delete",
       "id": "458f24d0-58d2-4382-a527-f9a75cd90fcf",
       "protocolProfileBehavior": {
-        "disabledSystemHeaders": {
-
-        }
+        "disabledSystemHeaders": {}
       },
       "request": {
         "auth": {
@@ -230,27 +208,19 @@
         },
         "url": "clap-proxy.eu.ngrok.io/delete/1"
       },
-      "response": [
-
-      ]
+      "response": []
     },
     {
       "name": "ApiDeletedObjects",
       "id": "d7f99c09-f22d-4c1a-8775-a23e548bb8b7",
       "request": {
         "method": "GET",
-        "header": [
-
-        ],
+        "header": [],
         "url": {
           "raw": "https://{{shop_url}}/index.php?fc=module&module=ps_eventbus&controller=apiDeletedObjects&job_id={{job_id}}&limit=50&full={{full}}",
           "protocol": "https",
-          "host": [
-            "{{shop_url}}"
-          ],
-          "path": [
-            "index.php"
-          ],
+          "host": ["{{shop_url}}"],
+          "path": ["index.php"],
           "query": [
             {
               "key": "fc",
@@ -279,27 +249,19 @@
           ]
         }
       },
-      "response": [
-
-      ]
+      "response": []
     },
     {
       "name": "CustomPrices",
       "id": "4d6dd1e9-c16d-4f6b-b6f2-a11c9cfd81e0",
       "request": {
         "method": "GET",
-        "header": [
-
-        ],
+        "header": [],
         "url": {
           "raw": "https://{{shop_url}}/index.php?fc=module&module=ps_eventbus&controller=apiCustomPrices&job_id={{job_id}}&limit=50&full={{full}}",
           "protocol": "https",
-          "host": [
-            "{{shop_url}}"
-          ],
-          "path": [
-            "index.php"
-          ],
+          "host": ["{{shop_url}}"],
+          "path": ["index.php"],
           "query": [
             {
               "key": "fc",
@@ -328,27 +290,19 @@
           ]
         }
       },
-      "response": [
-
-      ]
+      "response": []
     },
     {
       "name": "SpecificPrices",
       "id": "bd866faa-1893-49a8-b04d-dc52ab924f5f",
       "request": {
         "method": "GET",
-        "header": [
-
-        ],
+        "header": [],
         "url": {
           "raw": "https://{{shop_url}}/index.php?fc=module&module=ps_eventbus&controller=apiSpecificPrices&job_id={{job_id}}&limit={{limit}}&full={{full}}",
           "protocol": "https",
-          "host": [
-            "{{shop_url}}"
-          ],
-          "path": [
-            "index.php"
-          ],
+          "host": ["{{shop_url}}"],
+          "path": ["index.php"],
           "query": [
             {
               "key": "fc",
@@ -377,27 +331,19 @@
           ]
         }
       },
-      "response": [
-
-      ]
+      "response": []
     },
     {
       "name": "apiProducts (and bundles)",
       "id": "8f52dba6-40e0-44b7-98f1-cfcf63bd5634",
       "request": {
         "method": "GET",
-        "header": [
-
-        ],
+        "header": [],
         "url": {
           "raw": "https://{{shop_url}}/index.php?fc=module&module=ps_eventbus&controller=apiProducts&job_id={{job_id}}&limit=50&full={{full}}",
           "protocol": "https",
-          "host": [
-            "{{shop_url}}"
-          ],
-          "path": [
-            "index.php"
-          ],
+          "host": ["{{shop_url}}"],
+          "path": ["index.php"],
           "query": [
             {
               "key": "fc",
@@ -426,27 +372,19 @@
           ]
         }
       },
-      "response": [
-
-      ]
+      "response": []
     },
     {
       "name": "apiCarrier",
       "id": "07cf79d7-760b-4bbe-a308-99606b496420",
       "request": {
         "method": "GET",
-        "header": [
-
-        ],
+        "header": [],
         "url": {
           "raw": "https://{{shop_url}}/index.php?fc=module&module=ps_eventbus&controller=apiCarrier&job_id={{job_id}}&limit=50&full={{full}}",
           "protocol": "https",
-          "host": [
-            "{{shop_url}}"
-          ],
-          "path": [
-            "index.php"
-          ],
+          "host": ["{{shop_url}}"],
+          "path": ["index.php"],
           "query": [
             {
               "key": "fc",
@@ -475,27 +413,19 @@
           ]
         }
       },
-      "response": [
-
-      ]
+      "response": []
     },
     {
       "name": "apiCarriers <-",
       "id": "482fd695-50de-463d-a782-306ea25a4a6b",
       "request": {
         "method": "GET",
-        "header": [
-
-        ],
+        "header": [],
         "url": {
           "raw": "https://{{shop_url}}/index.php?fc=module&module=ps_eventbus&controller=apiCarriers&job_id={{job_id}}&limit={{limit}}&full={{full}}",
           "protocol": "https",
-          "host": [
-            "{{shop_url}}"
-          ],
-          "path": [
-            "index.php"
-          ],
+          "host": ["{{shop_url}}"],
+          "path": ["index.php"],
           "query": [
             {
               "key": "fc",
@@ -524,27 +454,19 @@
           ]
         }
       },
-      "response": [
-
-      ]
+      "response": []
     },
     {
       "name": "apiCustomProductCarrier",
       "id": "138c1167-5eb6-4d06-b7e4-7b058a4c079d",
       "request": {
         "method": "GET",
-        "header": [
-
-        ],
+        "header": [],
         "url": {
           "raw": "https://{{shop_url}}/index.php?fc=module&module=ps_eventbus&controller=apiCustomProductCarriers&job_id={{job_id}}&limit=50&full={{full}}",
           "protocol": "https",
-          "host": [
-            "{{shop_url}}"
-          ],
-          "path": [
-            "index.php"
-          ],
+          "host": ["{{shop_url}}"],
+          "path": ["index.php"],
           "query": [
             {
               "key": "fc",
@@ -573,27 +495,19 @@
           ]
         }
       },
-      "response": [
-
-      ]
+      "response": []
     },
     {
       "name": "apiCarts",
       "id": "1a4e0c6d-4308-4e3e-93c9-57417239f9e3",
       "request": {
         "method": "GET",
-        "header": [
-
-        ],
+        "header": [],
         "url": {
           "raw": "https://{{shop_url}}/index.php?fc=module&module=ps_eventbus&controller=apiCarts&job_id={{job_id}}&limit=50&full={{full}}",
           "protocol": "https",
-          "host": [
-            "{{shop_url}}"
-          ],
-          "path": [
-            "index.php"
-          ],
+          "host": ["{{shop_url}}"],
+          "path": ["index.php"],
           "query": [
             {
               "key": "fc",
@@ -622,27 +536,19 @@
           ]
         }
       },
-      "response": [
-
-      ]
+      "response": []
     },
     {
       "name": "apiShopinfo",
       "id": "b6d4fdad-4f4d-4ea6-a6d0-8f840c894e39",
       "request": {
         "method": "GET",
-        "header": [
-
-        ],
+        "header": [],
         "url": {
           "raw": "https://{{shop_url}}/index.php?fc=module&module=ps_eventbus&controller=apiInfo&job_id={{job_id}}&limit=50&full={{full}}",
           "protocol": "https",
-          "host": [
-            "{{shop_url}}"
-          ],
-          "path": [
-            "index.php"
-          ],
+          "host": ["{{shop_url}}"],
+          "path": ["index.php"],
           "query": [
             {
               "key": "fc",
@@ -671,27 +577,19 @@
           ]
         }
       },
-      "response": [
-
-      ]
+      "response": []
     },
     {
       "name": "apiOrders",
       "id": "ae327684-1d5c-45d9-8f96-82c807ea7807",
       "request": {
         "method": "GET",
-        "header": [
-
-        ],
+        "header": [],
         "url": {
           "raw": "https://{{shop_url}}/index.php?fc=module&module=ps_eventbus&controller=apiOrders&job_id={{job_id}}&limit=50&full={{full}}",
           "protocol": "https",
-          "host": [
-            "{{shop_url}}"
-          ],
-          "path": [
-            "index.php"
-          ],
+          "host": ["{{shop_url}}"],
+          "path": ["index.php"],
           "query": [
             {
               "key": "fc",
@@ -720,27 +618,19 @@
           ]
         }
       },
-      "response": [
-
-      ]
+      "response": []
     },
     {
       "name": "Modules",
       "id": "c369db95-42bb-4d0c-bfa1-2cc1aff24087",
       "request": {
         "method": "GET",
-        "header": [
-
-        ],
+        "header": [],
         "url": {
           "raw": "https://{{shop_url}}/index.php?fc=module&module=ps_eventbus&controller=apiModules&job_id={{job_id}}&limit=50&full={{full}}",
           "protocol": "https",
-          "host": [
-            "{{shop_url}}"
-          ],
-          "path": [
-            "index.php"
-          ],
+          "host": ["{{shop_url}}"],
+          "path": ["index.php"],
           "query": [
             {
               "key": "fc",
@@ -769,27 +659,19 @@
           ]
         }
       },
-      "response": [
-
-      ]
+      "response": []
     },
     {
       "name": "Categories",
       "id": "9b1796d5-cd9e-416d-b7b8-a9452a0529b9",
       "request": {
         "method": "GET",
-        "header": [
-
-        ],
+        "header": [],
         "url": {
           "raw": "https://{{shop_url}}/index.php?fc=module&module=ps_eventbus&controller=apiCategories&job_id={{job_id}}&limit=50&full={{full}}",
           "protocol": "https",
-          "host": [
-            "{{shop_url}}"
-          ],
-          "path": [
-            "index.php"
-          ],
+          "host": ["{{shop_url}}"],
+          "path": ["index.php"],
           "query": [
             {
               "key": "fc",
@@ -818,85 +700,17 @@
           ]
         }
       },
-      "response": [
-
-      ]
+      "response": []
     },
     {
       "name": "apiThemes",
       "id": "74b04e86-601d-4f4e-a450-73c1c11641cc",
       "request": {
         "method": "GET",
-        "header": [
-
-        ],
+        "header": [],
         "url": null
       },
-      "response": [
-
-      ]
-    },
-    {
-      "name": "apiMerchantConsent",
-      "id": "675fb1b2-a41c-4c81-ae28-45b22ec4c033",
-      "request": {
-        "method": "GET",
-        "header": [
-
-        ],
-        "url": {
-          "raw": "https://{{shop_url}}/index.php?fc=module&module=ps_eventbus&controller=apiMerchantConsent&job_id={{job_id}}&limit=50&full={{full}}&accepted=\"['shopInfo', 'orders', 'products']\"&revoked=[]&module_consent=ps_capital",
-          "protocol": "https",
-          "host": [
-            "{{shop_url}}"
-          ],
-          "path": [
-            "index.php"
-          ],
-          "query": [
-            {
-              "key": "fc",
-              "value": "module"
-            },
-            {
-              "key": "module",
-              "value": "ps_eventbus"
-            },
-            {
-              "key": "controller",
-              "value": "apiMerchantConsent"
-            },
-            {
-              "key": "job_id",
-              "value": "{{job_id}}"
-            },
-            {
-              "key": "limit",
-              "value": "50"
-            },
-            {
-              "key": "full",
-              "value": "{{full}}"
-            },
-            {
-              "key": "accepted",
-              "value": "\"['shopInfo', 'orders', 'products']\""
-            },
-            {
-              "key": "revoked",
-              "value": "[]"
-            },
-            {
-              "key": "module_consent",
-              "value": "ps_capital"
-            }
-          ]
-        },
-        "description": "apiMerchantConsent"
-      },
-      "response": [
-
-      ]
+      "response": []
     }
   ]
 }

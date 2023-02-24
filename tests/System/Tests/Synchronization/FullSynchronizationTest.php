@@ -6,15 +6,17 @@ use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Provider\CarrierDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CartDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CategoryDataProvider;
+use PrestaShop\Module\PsEventbus\Provider\CurrencyDataProvider;
+use PrestaShop\Module\PsEventbus\Provider\CustomerDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CustomPriceDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\CustomProductCarrierDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\ModuleDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\OrderDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Provider\ProductDataProvider;
+use PrestaShop\Module\PsEventbus\Provider\WishlistDataProvider;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
 use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
-use Product;
 use Yandex\Allure\Adapter\Annotation\Features;
 use Yandex\Allure\Adapter\Annotation\Stories;
 use Yandex\Allure\Adapter\Annotation\Title;
@@ -31,7 +33,7 @@ class FullSynchronizationTest extends BaseTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $product = new Product(1);
+        $product = new \Product(1);
         $product->setCarriers([1, 2]);
     }
 
@@ -57,6 +59,18 @@ class FullSynchronizationTest extends BaseTestCase
             /** @var PaginatedApiDataProviderInterface $provider */
             $provider = $this->container->getService(CategoryDataProvider::class);
             $this->handle($provider, Config::COLLECTION_CATEGORIES);
+        });
+
+        $this->executeStep('apiCustomers', function () {
+            /** @var PaginatedApiDataProviderInterface $provider */
+            $provider = $this->container->getService(CustomerDataProvider::class);
+            $this->handle($provider, Config::COLLECTION_CUSTOMERS);
+        });
+
+        $this->executeStep('apiCurrencies', function () {
+            /** @var PaginatedApiDataProviderInterface $provider */
+            $provider = $this->container->getService(CurrencyDataProvider::class);
+            $this->handle($provider, Config::COLLECTION_CURRENCIES);
         });
 
         $this->executeStep('apiModules', function () {
@@ -87,6 +101,12 @@ class FullSynchronizationTest extends BaseTestCase
             /** @var PaginatedApiDataProviderInterface $provider */
             $provider = $this->container->getService(CustomProductCarrierDataProvider::class);
             $this->handle($provider, Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS);
+        });
+
+        $this->executeStep('apiWishlists', function () {
+            /** @var PaginatedApiDataProviderInterface $provider */
+            $provider = $this->container->getService(WishlistDataProvider::class);
+            $this->handle($provider, Config::COLLECTION_WISHLISTS);
         });
     }
 

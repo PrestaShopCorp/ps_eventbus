@@ -19,5 +19,6 @@ composer-setup.php
 
 # Tests
 tests/tmp
+coverage-reports
+allure-reports
 tests/.phpunit.result.cache
-allure-report

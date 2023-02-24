@@ -9,9 +9,9 @@ class ps_EventbusApiSpecificPricesModuleFrontController extends AbstractApiContr
     public $type = Config::COLLECTION_SPECIFIC_PRICES;
 
     /**
-     * @throws PrestaShopException
-     *
      * @return void
+     *
+     * @throws PrestaShopException
      */
     public function postProcess()
     {

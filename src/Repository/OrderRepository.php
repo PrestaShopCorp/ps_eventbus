@@ -2,20 +2,16 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Db;
-use DbQuery;
-use PrestaShopDatabaseException;
-
 class OrderRepository
 {
     public const ORDERS_TABLE = 'orders';
 
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
-    public function __construct(Db $db)
+    public function __construct(\Db $db)
     {
         $this->db = $db;
     }
@@ -23,11 +19,11 @@ class OrderRepository
     /**
      * @param int $shopId
      *
-     * @return DbQuery
+     * @return \DbQuery
      */
     public function getBaseQuery($shopId)
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
         $query->from(self::ORDERS_TABLE, 'o')
             ->leftJoin('currency', 'c', 'o.id_currency = c.id_currency')
             ->leftJoin('order_slip', 'os', 'o.id_order = os.id_order')
@@ -50,7 +46,7 @@ class OrderRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getOrders($offset, $limit, $shopId)
     {
@@ -71,13 +67,13 @@ class OrderRepository
      */
     public function getRemainingOrderCount($offset, $shopId)
     {
-        $query = new DbQuery();
+        $orders = $this->getOrders($offset, 1, $shopId);
 
-        $query->select('(COUNT(o.id_order) - ' . (int) $offset . ') as count')
-            ->from(self::ORDERS_TABLE, 'o')
-            ->where('o.id_shop = ' . (int) $shopId);
+        if (!is_array($orders) || empty($orders)) {
+            return 0;
+        }
 
-        return (int) $this->db->getValue($query);
+        return count($orders);
     }
 
     /**
@@ -87,7 +83,7 @@ class OrderRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getOrdersIncremental($limit, $shopId, $orderIds)
     {
@@ -104,11 +100,11 @@ class OrderRepository
     }
 
     /**
-     * @param DbQuery $query
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(DbQuery $query)
+    private function addSelectParameters(\DbQuery $query)
     {
         $query->select('o.id_order, o.reference, o.id_customer, o.id_cart, o.current_state,
          o.conversion_rate, o.total_paid_tax_excl, o.total_paid_tax_incl,

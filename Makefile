@@ -74,14 +74,14 @@ composer.phar:
 vendor: composer.phar
 	./composer.phar install --no-dev -o;
 
-vendor/bin/php-cs-fixer:
-	./composer.phar install
+vendor/bin/php-cs-fixer: composer.phar
+	./composer.phar install --ignore-platform-reqs
 
-vendor/bin/phpunit:
-	./composer.phar install
+vendor/bin/phpunit: composer.phar
+	./composer.phar install --ignore-platform-reqs
 
-vendor/bin/phpstan:
-	./composer.phar install
+vendor/bin/phpstan: composer.phar
+	./composer.phar install --ignore-platform-reqs
 
 prestashop:
 	@mkdir -p ./prestashop
@@ -91,31 +91,39 @@ prestashop/prestashop-${PS_VERSION}: prestashop composer.phar
 	@./composer.phar -d ./prestashop/prestashop-${PS_VERSION} install
 
 # target: test                                   - Static and unit testing
-test: composer-validate lint php-lint phpstan phpunit
+test: composer-validate lint php-lint phpstan phpunit translation-validate
 
 # target: composer-validate                      - Validates composer.json and composer.lock
 composer-validate: vendor
 	@./composer.phar validate --no-check-publish
 
+# target: translation-validate                   - Validates the translation files in translations/ directory
+translation-validate: 
+	php tests/translation.test.php
+
 # target: lint                                   - Lint the code and expose errors
 lint: vendor/bin/php-cs-fixer
 	@vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no;
+
+# target: lint-fix                               - Lint the code and fix it
+lint-fix: vendor/bin/php-cs-fixer
+	@vendor/bin/php-cs-fixer fix --using-cache=no;
 
 # target: php-lint                               - Use php linter to check the code
 php-lint:
 	@git ls-files | grep -E '.*\.(php)' | xargs -n1 php -l -n | (! grep -v "No syntax errors" );
 	@echo "php $(shell php -r 'echo PHP_VERSION;') lint passed";
 
-# target: lint-fix                               - Lint the code and fix it
-lint-fix:
-	@vendor/bin/php-cs-fixer fix --using-cache=no;
+# target: phpunit                                - Run phpunit tests
+phpunit: vendor/bin/phpunit
+	vendor/bin/phpunit --configuration=./tests/phpunit.xml;
 
-# target: phpunit                                - Run phpunit
-phpunit: prestashop/prestashop-${PS_VERSION} vendor/bin/phpunit
-	@_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpunit ./tests/unit;
+# target: phpunit-coverage                       - Run phpunit with coverage and allure
+phpunit-coverage: vendor/bin/phpunit
+	php -dxdebug.mode=coverage vendor/bin/phpunit --coverage-html ./coverage-reports/coverage-html --configuration=./tests/phpunit-coverage.xml;
 
 # target: phpstan                                - Run phpstan
-phpstan: prestashop/prestashop-${PS_VERSION} vendor/bin/phpstan
+phpstan: vendor/bin/phpstan prestashop/prestashop-${PS_VERSION}
 	_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
 
 # target: phpstan-baseline                       - Generate a phpstan baseline to ignore all errors
@@ -127,10 +135,13 @@ docker-test: docker-lint docker-phpstan docker-phpunit
 
 # target: docker-lint                            - Lint the code in docker
 docker-lint:
-	docker run --rm -w /src \
-	-v $(shell pwd):/src \
-	${TESTING_DOCKER_IMAGE} \
-	-c "make lint";
+	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
+	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} lint;
+
+# target: docker-lint-fix                        - Lint and fix the code in docker
+docker-lint-fix:
+	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
+	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} lint-fix;
 
 # target: docker-lint                            - Lint the code with php in docker
 docker-php-lint:
@@ -141,6 +152,11 @@ docker-php-lint:
 docker-phpunit: prestashop/prestashop-${PS_VERSION}
 	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
 	docker run --rm -e _PS_ROOT_DIR_=/src/prestashop/prestashop-${PS_VERSION} -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpunit;
+
+# target: docker-phpunit                         - Run phpunit in docker
+docker-phpunit-coverage: prestashop/prestashop-${PS_VERSION}
+	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
+	docker run --rm -e _PS_ROOT_DIR_=/src/prestashop/prestashop-${PS_VERSION} -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpunit-coverage;
 
 # target: docker-phpstan                         - Run phpstan in docker
 docker-phpstan: prestashop/prestashop-${PS_VERSION}
@@ -169,7 +185,3 @@ allure:
 
 allure-report:
 	./node_modules/.bin/allure generate build/allure-results/
-
-# target: phpstan-baseline                        - Generate a phpstan baseline to ignore all errors
-phpstan-baseline: prestashop/prestashop-${PS_VERSION} vendor/bin/phpstan
-	_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpstan analyse --generate-baseline --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;

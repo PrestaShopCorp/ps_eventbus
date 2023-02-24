@@ -2,19 +2,17 @@
 
 namespace PrestaShop\Module\PsEventbus\Decorator;
 
-use Context;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Repository\BundleRepository;
 use PrestaShop\Module\PsEventbus\Repository\CategoryRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\ProductRepository;
-use PrestaShopException;
 
 class ProductDecorator
 {
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
     /**
@@ -39,7 +37,7 @@ class ProductDecorator
     private $bundleRepository;
 
     public function __construct(
-        Context $context,
+        \Context $context,
         LanguageRepository $languageRepository,
         ProductRepository $productRepository,
         CategoryRepository $categoryRepository,
@@ -59,9 +57,9 @@ class ProductDecorator
      * @param string $langIso
      * @param int $langId
      *
-     * @throws \PrestaShopDatabaseException
-     *
      * @return void
+     *
+     * @throws \PrestaShopDatabaseException
      */
     public function decorateProducts(array &$products, $langIso, $langId)
     {
@@ -115,7 +113,7 @@ class ProductDecorator
                 $this->context->shop->id,
                 $product['id_attribute']
             );
-        } catch (PrestaShopException $e) {
+        } catch (\PrestaShopException $e) {
             $product['link'] = '';
         }
     }
@@ -208,7 +206,7 @@ class ProductDecorator
         $product['mpn'] = isset($product['mpn']) ? (string) $product['mpn'] : '';
         $product['ean'] = (string) $product['ean'];
         $product['upc'] = (string) $product['upc'];
-        $product['is_default_attribute'] = $product['id_attribute'] === 0 ? true : $product['is_default_attribute'] === '1';
+        $product['is_default_attribute'] = $product['id_attribute'] === 0 ? true : $product['is_default_attribute'] == 1;
         $product['available_for_order'] = $product['available_for_order'] == '1';
         $product['available_date'] = (string) $product['available_date'];
         $product['is_bundle'] = $product['is_bundle'] == '1';
@@ -258,9 +256,9 @@ class ProductDecorator
      * @param array $products
      * @param int $langId
      *
-     * @throws \PrestaShopDatabaseException
-     *
      * @return void
+     *
+     * @throws \PrestaShopDatabaseException
      */
     private function addFeatureValues(array &$products, $langId)
     {
@@ -276,9 +274,9 @@ class ProductDecorator
      * @param array $products
      * @param int $langId
      *
-     * @throws \PrestaShopDatabaseException
-     *
      * @return void
+     *
+     * @throws \PrestaShopDatabaseException
      */
     private function addAttributeValues(array &$products, $langId)
     {
@@ -293,9 +291,9 @@ class ProductDecorator
     /**
      * @param array $products
      *
-     * @throws \PrestaShopDatabaseException
-     *
      * @return void
+     *
+     * @throws \PrestaShopDatabaseException
      */
     private function addImages(array &$products)
     {
@@ -313,14 +311,14 @@ class ProductDecorator
             });
 
             foreach ($productImages as $productImage) {
-                if ($productImage['cover'] === '1') {
+                if ($productImage['cover'] == 1) {
                     $coverImageId = $productImage['id_image'];
                     break;
                 }
             }
 
             // Product is without attributes -> get product images
-            if ($product['id_attribute'] === '0') {
+            if ($product['id_attribute'] == 0) {
                 $productImageIds = $this->arrayFormatter->formatValueArray($productImages, 'id_image');
             } else {
                 $productAttributeImages = array_filter($attributeImages, function ($image) use ($product) {

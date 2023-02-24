@@ -2,15 +2,13 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use Context;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
-use PrestaShopDatabaseException;
 
 class DeletedObjectsService
 {
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
     /**
@@ -22,7 +20,7 @@ class DeletedObjectsService
      */
     private $proxyService;
 
-    public function __construct(Context $context, DeletedObjectsRepository $deletedObjectsRepository, ProxyServiceInterface $proxyService)
+    public function __construct(\Context $context, DeletedObjectsRepository $deletedObjectsRepository, ProxyServiceInterface $proxyService)
     {
         $this->context = $context;
         $this->deletedObjectsRepository = $deletedObjectsRepository;
@@ -31,12 +29,13 @@ class DeletedObjectsService
 
     /**
      * @param string $jobId
+     * @param int $scriptStartTime
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException|EnvVarException
+     * @throws \PrestaShopDatabaseException|EnvVarException
      */
-    public function handleDeletedObjectsSync($jobId)
+    public function handleDeletedObjectsSync($jobId, $scriptStartTime)
     {
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
@@ -50,7 +49,7 @@ class DeletedObjectsService
 
         $data = $this->formatData($deletedObjects);
 
-        $response = $this->proxyService->delete($jobId, $data);
+        $response = $this->proxyService->delete($jobId, $data, $scriptStartTime);
 
         if ($response['httpCode'] == 200) {
             foreach ($data as $dataItem) {

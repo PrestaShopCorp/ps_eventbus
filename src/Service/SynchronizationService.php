@@ -8,7 +8,6 @@ use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
-use PrestaShopDatabaseException;
 
 class SynchronizationService
 {
@@ -54,7 +53,7 @@ class SynchronizationService
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException|EnvVarException|ApiException
+     * @throws \PrestaShopDatabaseException|EnvVarException|ApiException
      */
     public function handleFullSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $langIso, $offset, $limit, $dateNow, $scriptStartTime, bool $isFull)
     {
@@ -95,7 +94,7 @@ class SynchronizationService
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException|EnvVarException
+     * @throws \PrestaShopDatabaseException|EnvVarException
      */
     public function handleIncrementalSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $limit, $langIso, $scriptStartTime, bool $isFull)
     {

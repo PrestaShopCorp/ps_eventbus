@@ -67,3 +67,7 @@ services:
   PrestaShop\Module\PsEventbus\Service\SpecificPriceService:
     class: PrestaShop\Module\PsEventbus\Service\SpecificPriceService
     public: true
+
+  PrestaShop\Module\PsEventbus\Service\PresenterService:
+    class: PrestaShop\Module\PsEventbus\Service\PresenterService
+    public: true

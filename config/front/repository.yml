@@ -1,8 +1,4 @@
 services:
-  PrestaShop\Module\PsEventbus\Repository\CurrencyRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\CurrencyRepository
-    public: true
-
   PrestaShop\Module\PsEventbus\Repository\LanguageRepository:
     class: PrestaShop\Module\PsEventbus\Repository\LanguageRepository
     public: true
@@ -20,6 +16,20 @@ services:
 
   PrestaShop\Module\PsEventbus\Repository\CategoryRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CategoryRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
+      - '@ps_eventbus.context'
+
+  PrestaShop\Module\PsEventbus\Repository\CustomerRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CustomerRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
+      - '@ps_eventbus.context'
+
+  PrestaShop\Module\PsEventbus\Repository\CurrencyRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CurrencyRepository
     public: true
     arguments:
       - '@ps_eventbus.db'
@@ -43,7 +53,6 @@ services:
     arguments:
       - '@ps_eventbus.db'
       - '@ps_eventbus.context'
-      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
 
   PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository
@@ -51,7 +60,6 @@ services:
     arguments:
       - '@ps_eventbus.db'
       - '@ps_eventbus.context'
-      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
 
   PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository
@@ -66,13 +74,6 @@ services:
       - '@PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
       - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
       - { EVENT_BUS_SYNC_API_URL: '%ps_eventbus.sync_api_url%', EVENT_BUS_PROXY_API_URL: '%ps_eventbus.proxy_api_url%' }
-
-  PrestaShop\Module\PsEventbus\Repository\MerchantConsentRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\MerchantConsentRepository
-    public: true
-    arguments:
-      - '@ps_eventbus.db'
-      - '@PrestaShop\Module\PsEventbus\Service\CacheService'
 
   PrestaShop\Module\PsEventbus\Repository\ThemeRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ThemeRepository
@@ -177,6 +178,19 @@ services:
 
   PrestaShop\Module\PsEventbus\Repository\BundleRepository:
     class: PrestaShop\Module\PsEventbus\Repository\BundleRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
+
+  PrestaShop\Module\PsEventbus\Repository\WishlistRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\WishlistRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
+      - '@ps_eventbus.context'
+
+  PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository
     public: true
     arguments:
       - '@ps_eventbus.db'

@@ -29,8 +29,10 @@ class Config
     public const COLLECTION_CARTS = 'carts';
     public const COLLECTION_CART_PRODUCTS = 'cart_products';
     public const COLLECTION_CATEGORIES = 'categories';
+    public const COLLECTION_CURRENCIES = 'currencies';
     public const COLLECTION_SPECIFIC_PRICES = 'specific_prices';
     public const COLLECTION_CUSTOM_PRODUCT_CARRIERS = 'custom_product_carriers';
+    public const COLLECTION_CUSTOMERS = 'customers';
     public const COLLECTION_TAXONOMIES = 'taxonomies';
     public const COLLECTION_MODULES = 'modules';
     public const COLLECTION_ORDERS = 'orders';
@@ -42,5 +44,6 @@ class Config
     public const COLLECTION_SHOPS = 'shops';
     public const COLLECTION_THEMES = 'themes';
     public const COLLECTION_BUNDLES = 'bundles';
-    public const COLLECTION_MERCHANT_CONSENT = 'merchant_consents';
+    public const COLLECTION_WISHLISTS = 'wishlists';
+    public const COLLECTION_WISHLIST_PRODUCTS = 'wishlist_products';
 }

@@ -2,14 +2,11 @@
 
 namespace PrestaShop\Module\PsEventbus\Provider;
 
-use Context;
-use Language;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderRepository;
-use PrestaShopDatabaseException;
 
 class OrderDataProvider implements PaginatedApiDataProviderInterface
 {
@@ -18,7 +15,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      */
     private $orderRepository;
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
     /**
@@ -35,7 +32,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     private $orderHistoryRepository;
 
     public function __construct(
-        Context $context,
+        \Context $context,
         OrderRepository $orderRepository,
         OrderDetailsRepository $orderDetailsRepository,
         ArrayFormatter $arrayFormatter,
@@ -55,7 +52,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getFormattedData($offset, $limit, $langIso)
     {
@@ -67,7 +64,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             return [];
         }
 
-        $langId = (int) Language::getIdByIso($langIso);
+        $langId = (int) \Language::getIdByIso($langIso);
         $this->castOrderValues($orders, $langId);
 
         $orderDetails = $this->getOrderDetails($orders, $shopId);
@@ -104,12 +101,13 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
+        $langId = (int) \Language::getIdByIso($langIso);
         $orders = $this->orderRepository->getOrdersIncremental($limit, $shopId, $objectIds);
 
         if (!is_array($orders) || empty($orders)) {
@@ -117,8 +115,9 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         }
 
         $orderDetails = $this->getOrderDetails($orders, $shopId);
+        $orderStatuses = $this->getOrderStatuses($orders, $langId);
 
-        $this->castOrderValues($orders, (int) Language::getIdByIso($langIso));
+        $this->castOrderValues($orders, (int) \Language::getIdByIso($langIso));
 
         $orders = array_map(function ($order) {
             return [
@@ -128,7 +127,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             ];
         }, $orders);
 
-        return array_merge($orders, $orderDetails);
+        return array_merge($orders, $orderDetails, $orderStatuses);
     }
 
     /**
@@ -137,7 +136,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     private function getOrderDetails(array $orders, $shopId)
     {
@@ -172,7 +171,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return array|array[]
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     private function getOrderStatuses(array $orders, $langId)
     {
@@ -198,7 +197,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return void
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     private function castOrderValues(array &$orders, int $langId)
     {
@@ -211,7 +210,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             $order['total_paid_tax_excl'] = (float) $order['total_paid_tax_excl'];
             $order['refund'] = (float) $order['refund'];
             $order['refund_tax_excl'] = (float) $order['refund_tax_excl'];
-            $order['new_customer'] = $order['new_customer'] === '1';
+            $order['new_customer'] = $order['new_customer'] == 1;
             $order['is_paid'] = $this->castIsPaidValue($orders, $order, $langId);
             $order['shipping_cost'] = (float) $order['shipping_cost'];
             $order['total_paid_tax'] = $order['total_paid_tax_incl'] - $order['total_paid_tax_excl'];
@@ -228,7 +227,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return bool
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     private function castIsPaidValue(array $orders, array $order, int $langId)
     {
@@ -280,12 +279,15 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             $castedOrderStatus['id_order_history'] = (int) $orderStatus['id_order_history'];
             $castedOrderStatus['name'] = (string) $orderStatus['name'];
             $castedOrderStatus['template'] = (string) $orderStatus['template'];
-            $castedOrderStatus['date_add'] = (string) $orderStatus['date_add'];
+            $date = new \DateTime($orderStatus['date_add']);
+            $castedOrderStatus['date_add'] = $date->format(\DateTime::W3C);
             $castedOrderStatus['is_validated'] = (bool) $orderStatus['logable'];
             $castedOrderStatus['is_delivered'] = (bool) $orderStatus['delivery'];
             $castedOrderStatus['is_shipped'] = (bool) $orderStatus['shipped'];
             $castedOrderStatus['is_paid'] = (bool) $orderStatus['paid'];
             $castedOrderStatus['is_deleted'] = (bool) $orderStatus['deleted'];
+            $castedOrderStatus['created_at'] = $castedOrderStatus['date_add'];
+            $castedOrderStatus['updated_at'] = $castedOrderStatus['date_add'];
             $castedOrderStatuses[] = $castedOrderStatus;
         }
 

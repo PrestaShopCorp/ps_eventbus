@@ -2,9 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Controller;
 
-use DateTime;
-use Exception;
-use ModuleFrontController;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
@@ -21,12 +18,8 @@ use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
 use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleNotInstalledException;
 use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleVersionException;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
-use PrestaShopDatabaseException;
-use PrestaShopException;
-use Ps_eventbus;
-use Tools;
 
-abstract class AbstractApiController extends ModuleFrontController
+abstract class AbstractApiController extends \ModuleFrontController
 {
     /**
      * Endpoint name
@@ -69,7 +62,7 @@ abstract class AbstractApiController extends ModuleFrontController
      */
     private $synchronizationService;
     /**
-     * @var Ps_eventbus
+     * @var \Ps_eventbus
      */
     public $module;
     /**
@@ -115,7 +108,7 @@ abstract class AbstractApiController extends ModuleFrontController
 
         try {
             $this->authorize();
-        } catch (PrestaShopDatabaseException $exception) {
+        } catch (\PrestaShopDatabaseException $exception) {
             $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
         } catch (EnvVarException $exception) {
@@ -130,24 +123,24 @@ abstract class AbstractApiController extends ModuleFrontController
     /**
      * @return void
      *
-     * @throws PrestaShopDatabaseException|EnvVarException|FirebaseException
+     * @throws \PrestaShopDatabaseException|EnvVarException|FirebaseException
      */
     private function authorize()
     {
         /** @var string $jobId */
-        $jobId = Tools::getValue('job_id', 'empty_job_id');
+        $jobId = \Tools::getValue('job_id', 'empty_job_id');
 
         $authorizationResponse = $this->authorizationService->authorizeCall($jobId);
 
         if (is_array($authorizationResponse)) {
             $this->exitWithResponse($authorizationResponse);
         } elseif (!$authorizationResponse) {
-            throw new PrestaShopDatabaseException('Failed saving job id to database');
+            throw new \PrestaShopDatabaseException('Failed saving job id to database');
         }
 
         try {
             $token = $this->psAccountsService->getOrRefreshToken();
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             throw new FirebaseException($exception->getMessage());
         }
 
@@ -164,20 +157,20 @@ abstract class AbstractApiController extends ModuleFrontController
     protected function handleDataSync(PaginatedApiDataProviderInterface $dataProvider)
     {
         /** @var string $jobId */
-        $jobId = Tools::getValue('job_id');
+        $jobId = \Tools::getValue('job_id');
         /** @var string $langIso */
-        $langIso = Tools::getValue('lang_iso', $this->languageRepository->getDefaultLanguageIsoCode());
+        $langIso = \Tools::getValue('lang_iso', $this->languageRepository->getDefaultLanguageIsoCode());
         /** @var int $limit */
-        $limit = Tools::getValue('limit', 50);
+        $limit = \Tools::getValue('limit', 50);
 
         if ($limit < 0) {
             $this->exitWithExceptionMessage(new QueryParamsException('Invalid URL Parameters', Config::INVALID_URL_QUERY));
         }
 
         /** @var bool $initFullSync */
-        $initFullSync = Tools::getValue('full', 0) == 1;
+        $initFullSync = \Tools::getValue('full', 0) == 1;
 
-        $dateNow = (new DateTime())->format(DateTime::ATOM);
+        $dateNow = (new \DateTime())->format(\DateTime::ATOM);
         $offset = 0;
         $incrementalSync = false;
         $response = [];
@@ -235,7 +228,7 @@ abstract class AbstractApiController extends ModuleFrontController
                 ],
                 $response
             );
-        } catch (PrestaShopDatabaseException $exception) {
+        } catch (\PrestaShopDatabaseException $exception) {
             $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
         } catch (EnvVarException $exception) {
@@ -244,7 +237,7 @@ abstract class AbstractApiController extends ModuleFrontController
         } catch (FirebaseException $exception) {
             $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
         }
@@ -259,7 +252,7 @@ abstract class AbstractApiController extends ModuleFrontController
      *
      * @return void
      *
-     * @throws PrestaShopException
+     * @throws \PrestaShopException
      */
     public function ajaxDie($value = null, $controller = null, $method = null)
     {
@@ -279,15 +272,15 @@ abstract class AbstractApiController extends ModuleFrontController
     }
 
     /**
-     * @param Exception $exception
+     * @param \Exception $exception
      *
      * @return void
      */
-    protected function exitWithExceptionMessage(Exception $exception)
+    protected function exitWithExceptionMessage(\Exception $exception)
     {
         $code = $exception->getCode() == 0 ? 500 : $exception->getCode();
 
-        if ($exception instanceof PrestaShopDatabaseException) {
+        if ($exception instanceof \PrestaShopDatabaseException) {
             $code = Config::DATABASE_QUERY_ERROR_CODE;
         } elseif ($exception instanceof EnvVarException) {
             $code = Config::ENV_MISCONFIGURED_ERROR_CODE;

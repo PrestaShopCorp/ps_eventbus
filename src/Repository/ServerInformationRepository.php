@@ -2,19 +2,11 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
-use Db;
-use DbQuery;
-use Exception;
-use Language;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsAccounts\Api\Client\AccountsClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
-use PrestaShopDatabaseException;
-use Ps_accounts;
-use Ps_eventbus;
 
 class ServerInformationRepository
 {
@@ -31,11 +23,11 @@ class ServerInformationRepository
      */
     private $configurationRepository;
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
     /**
@@ -60,8 +52,8 @@ class ServerInformationRepository
     private $errorHandler;
 
     public function __construct(
-        Context $context,
-        Db $db,
+        \Context $context,
+        \Db $db,
         CurrencyRepository $currencyRepository,
         LanguageRepository $languageRepository,
         ConfigurationRepository $configurationRepository,
@@ -91,14 +83,16 @@ class ServerInformationRepository
      */
     public function getServerInformation($langIso = '')
     {
-        $langId = !empty($langIso) ? (int) Language::getIdByIso($langIso) : null;
+        $langId = !empty($langIso) ? (int) \Language::getIdByIso($langIso) : null;
+        $timezone = (string) $this->configurationRepository->get('PS_TIMEZONE');
+        $createdAt = (new \DateTime($this->createdAt, new \DateTimeZone($timezone)))->format('Y-m-d\TH:i:sO');
 
         return [
             [
                 'id' => '1',
                 'collection' => Config::COLLECTION_SHOPS,
                 'properties' => [
-                    'created_at' => $this->createdAt,
+                    'created_at' => $createdAt,
                     'cms_version' => _PS_VERSION_,
                     'url_is_simplified' => $this->configurationRepository->get('PS_REWRITING_SETTINGS') == '1',
                     'cart_is_persistent' => $this->configurationRepository->get('PS_CART_FOLLOWING') == '1',
@@ -110,7 +104,7 @@ class ServerInformationRepository
                     'distance_unit' => $this->configurationRepository->get('PS_BASE_DISTANCE_UNIT'),
                     'volume_unit' => $this->configurationRepository->get('PS_VOLUME_UNIT'),
                     'dimension_unit' => $this->configurationRepository->get('PS_DIMENSION_UNIT'),
-                    'timezone' => $this->configurationRepository->get('PS_TIMEZONE'),
+                    'timezone' => $timezone,
                     'is_order_return_enabled' => $this->configurationRepository->get('PS_ORDER_RETURN') == '1',
                     'order_return_nb_days' => (int) $this->configurationRepository->get('PS_ORDER_RETURN_NB_DAYS'),
                     'php_version' => phpversion(),
@@ -146,13 +140,13 @@ class ServerInformationRepository
                     $tokenValid = true;
                 }
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->errorHandler->handle($e);
             $tokenIsSet = false;
         }
 
-        foreach (Ps_eventbus::REQUIRED_TABLES as $requiredTable) {
-            $query = new DbQuery();
+        foreach (\Ps_eventbus::REQUIRED_TABLES as $requiredTable) {
+            $query = new \DbQuery();
 
             $query->select('*')
                 ->from($requiredTable)
@@ -160,7 +154,7 @@ class ServerInformationRepository
 
             try {
                 $this->db->executeS($query);
-            } catch (PrestaShopDatabaseException $e) {
+            } catch (\PrestaShopDatabaseException $e) {
                 $allTablesInstalled = false;
                 break;
             }
@@ -174,8 +168,8 @@ class ServerInformationRepository
 
         return [
             'prestashop_version' => _PS_VERSION_,
-            'ps_eventbus_version' => Ps_eventbus::VERSION,
-            'ps_accounts_version' => defined('Ps_accounts::VERSION') ? Ps_accounts::VERSION : false, /* @phpstan-ignore-line */
+            'ps_eventbus_version' => \Ps_eventbus::VERSION,
+            'ps_accounts_version' => defined('Ps_accounts::VERSION') ? \Ps_accounts::VERSION : false, /* @phpstan-ignore-line */
             'php_version' => $phpVersion,
             'ps_account' => $tokenIsSet,
             'is_valid_jwt' => $tokenValid,

@@ -2,9 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Builder;
 
-use Carrier;
-use Currency;
-use Language;
 use PrestaShop\Module\PsEventbus\DTO\Carrier as EventBusCarrier;
 use PrestaShop\Module\PsEventbus\DTO\CarrierDetail;
 use PrestaShop\Module\PsEventbus\DTO\CarrierTax;
@@ -13,8 +10,6 @@ use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\CountryRepository;
 use PrestaShop\Module\PsEventbus\Repository\StateRepository;
 use PrestaShop\Module\PsEventbus\Repository\TaxRepository;
-use RangePrice;
-use RangeWeight;
 
 class CarrierBuilder
 {
@@ -59,8 +54,8 @@ class CarrierBuilder
 
     /**
      * @param array $carriers
-     * @param Language $lang
-     * @param Currency $currency
+     * @param int $langId
+     * @param \Currency $currency
      * @param string $weightUnit
      *
      * @return array
@@ -68,12 +63,12 @@ class CarrierBuilder
      * @throws \PrestaShopDatabaseException
      * @throws \PrestaShopException
      */
-    public function buildCarriers(array $carriers, Language $lang, Currency $currency, $weightUnit)
+    public function buildCarriers(array $carriers, int $langId, \Currency $currency, $weightUnit)
     {
         $eventBusCarriers = [];
         foreach ($carriers as $carrier) {
             $eventBusCarriers[] = $this->buildCarrier(
-                new Carrier($carrier['id_carrier'], $lang->id),
+                new \Carrier($carrier['id_carrier'], $langId),
                 $currency->iso_code,
                 $weightUnit,
                 $carrier['update_date']
@@ -92,7 +87,7 @@ class CarrierBuilder
     }
 
     /**
-     * @param Carrier $carrier
+     * @param \Carrier $carrier
      * @param string $currencyIsoCode
      * @param string $weightUnit
      * @param string $updateDate
@@ -102,7 +97,7 @@ class CarrierBuilder
      * @throws \PrestaShopDatabaseException
      * @throws \PrestaShopException
      */
-    public function buildCarrier(Carrier $carrier, $currencyIsoCode, $weightUnit, $updateDate)
+    public function buildCarrier(\Carrier $carrier, $currencyIsoCode, $weightUnit, $updateDate)
     {
         $eventBusCarrier = new EventBusCarrier();
         $freeShippingStartsAtPrice = (float) $this->configurationRepository->get('PS_SHIPPING_FREE_PRICE');
@@ -171,15 +166,15 @@ class CarrierBuilder
     }
 
     /**
-     * @param Carrier $carrier
-     * @param RangeWeight|RangePrice $range
+     * @param \Carrier $carrier
+     * @param \RangeWeight|\RangePrice $range
      * @param array $zone
      *
      * @return false|CarrierDetail
      *
      * @throws \PrestaShopDatabaseException
      */
-    private function buildCarrierDetails(Carrier $carrier, $range, array $zone)
+    private function buildCarrierDetails(\Carrier $carrier, $range, array $zone)
     {
         /** @var int $rangeId */
         $rangeId = $range->id;
@@ -208,7 +203,7 @@ class CarrierBuilder
     }
 
     /**
-     * @param Carrier $carrier
+     * @param \Carrier $carrier
      * @param int $zoneId
      * @param int $rangeId
      *
@@ -216,7 +211,7 @@ class CarrierBuilder
      *
      * @throws \PrestaShopDatabaseException
      */
-    private function buildCarrierTaxes(Carrier $carrier, $zoneId, $rangeId)
+    private function buildCarrierTaxes(\Carrier $carrier, $zoneId, $rangeId)
     {
         $taxRulesGroupId = (int) $carrier->getIdTaxRulesGroup();
         /** @var array $carrierTaxesByZone */

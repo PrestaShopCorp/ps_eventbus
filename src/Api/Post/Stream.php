@@ -3,8 +3,6 @@
 namespace PrestaShop\Module\PsEventbus\Api\Post;
 
 use GuzzleHttp\Psr7\PumpStream;
-use InvalidArgumentException;
-use Iterator;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -49,12 +47,12 @@ class Stream implements StreamInterface
      * This factory accepts the same associative array of options as described
      * in the constructor.
      *
-     * @param resource|string|StreamInterface|Iterator $resource Entity body data
+     * @param resource|string|StreamInterface|\Iterator $resource Entity body data
      * @param array $options Additional options
      *
      * @return \GuzzleHttp\Psr7\Stream|PumpStream|Stream|StreamInterface
      *
-     * @throws InvalidArgumentException if the $resource arg is not valid
+     * @throws \InvalidArgumentException if the $resource arg is not valid
      */
     public static function factory($resource = '', array $options = [])
     {
@@ -84,7 +82,7 @@ class Stream implements StreamInterface
             return new PumpStream($resource, $options);
         }
 
-        if ($resource instanceof Iterator) {
+        if ($resource instanceof \Iterator) {
             return new PumpStream(function () use ($resource) {
                 if (!$resource->valid()) {
                     return false;
@@ -97,7 +95,7 @@ class Stream implements StreamInterface
             }, $options);
         }
 
-        throw new InvalidArgumentException('Invalid resource type: ' . gettype($resource));
+        throw new \InvalidArgumentException('Invalid resource type: ' . gettype($resource));
     }
 
     /**
@@ -204,8 +202,8 @@ class Stream implements StreamInterface
 
         $stats = fstat($this->stream);
         if (
-          /* @phpstan-ignore-next-line */
-          isset($stats['size'])
+            /* @phpstan-ignore-next-line */
+            isset($stats['size'])
         ) {
             $this->size = $stats['size'];
 

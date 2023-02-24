@@ -2,39 +2,32 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Carrier;
-use Context;
-use Db;
-use DbQuery;
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShopDatabaseException;
-use RangePrice;
-use RangeWeight;
 
 class CarrierRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
 
-    public function __construct(Db $db, Context $context)
+    public function __construct(\Db $db, \Context $context)
     {
         $this->db = $db;
         $this->context = $context;
     }
 
     /**
-     * @param Carrier $carrierObj
+     * @param \Carrier $carrierObj
      *
      * @return array|false
      */
-    public function getDeliveryPriceByRange(Carrier $carrierObj)
+    public function getDeliveryPriceByRange(\Carrier $carrierObj)
     {
         $rangeTable = $carrierObj->getRangeTable();
         switch ($rangeTable) {
@@ -48,16 +41,16 @@ class CarrierRepository
     }
 
     /**
-     * @param Carrier $carrierObj
+     * @param \Carrier $carrierObj
      * @param string $rangeTable
      *
      * @return array
      */
     private function getCarrierByPriceRange(
-        Carrier $carrierObj,
+        \Carrier $carrierObj,
         $rangeTable
     ) {
-        $deliveryPriceByRange = Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrierObj->id);
+        $deliveryPriceByRange = \Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrierObj->id);
 
         $filteredRanges = [];
         foreach ($deliveryPriceByRange as $range) {
@@ -71,16 +64,16 @@ class CarrierRepository
     }
 
     /**
-     * @param Carrier $carrierObj
+     * @param \Carrier $carrierObj
      * @param string $rangeTable
      *
      * @return array
      */
     private function getCarrierByWeightRange(
-        Carrier $carrierObj,
+        \Carrier $carrierObj,
         $rangeTable
     ) {
-        $deliveryPriceByRange = Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrierObj->id);
+        $deliveryPriceByRange = \Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrierObj->id);
 
         $filteredRanges = [];
         foreach ($deliveryPriceByRange as $range) {
@@ -103,12 +96,12 @@ class CarrierRepository
      */
     public function getShippingIncremental($type, $langIso)
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
         $query->from(IncrementalSyncRepository::INCREMENTAL_SYNC_TABLE, 'aic');
         $query->leftJoin(EventbusSyncRepository::TYPE_SYNC_TABLE_NAME, 'ts', 'ts.type = aic.type');
-        $query->where('aic.type = "' . (string) $type . '"');
-        $query->where('ts.id_shop = ' . (string) $this->context->shop->id);
-        $query->where('ts.lang_iso = "' . (string) $langIso . '"');
+        $query->where('aic.type = "' . pSQL($type) . '"');
+        $query->where('ts.id_shop = ' . (int) $this->context->shop->id);
+        $query->where('ts.lang_iso = "' . pSQL($langIso) . '"');
 
         return $this->db->executeS($query);
     }
@@ -116,7 +109,7 @@ class CarrierRepository
     /**
      * @param array $deliveryPriceByRange
      *
-     * @return false|RangeWeight|RangePrice
+     * @return false|\RangeWeight|\RangePrice
      *
      * @throws \PrestaShopDatabaseException
      * @throws \PrestaShopException
@@ -124,10 +117,10 @@ class CarrierRepository
     public function getCarrierRange(array $deliveryPriceByRange)
     {
         if (isset($deliveryPriceByRange['id_range_weight'])) {
-            return new RangeWeight($deliveryPriceByRange['id_range_weight']);
+            return new \RangeWeight($deliveryPriceByRange['id_range_weight']);
         }
         if (isset($deliveryPriceByRange['id_range_price'])) {
-            return new RangePrice($deliveryPriceByRange['id_range_price']);
+            return new \RangePrice($deliveryPriceByRange['id_range_price']);
         }
 
         return false;
@@ -139,14 +132,14 @@ class CarrierRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getCarrierProperties($carrierIds, $langId)
     {
         if (!$carrierIds) {
             return [];
         }
-        $query = new DbQuery();
+        $query = new \DbQuery();
         $query->from('carrier', 'c');
         $query->select('c.*, cl.delay, eis.created_at as update_date');
         $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
@@ -158,7 +151,7 @@ class CarrierRepository
         );
         $query->where('c.id_carrier IN (' . implode(',', array_map('intval', $carrierIds)) . ')');
         $query->where('cs.id_shop = ' . (int) $this->context->shop->id);
-        $query->where('c.deleted = 0');
+        $query->groupBy('c.id_reference, c.id_carrier HAVING c.id_carrier=(select max(id_carrier) from ps_carrier c2 WHERE c2.id_reference=c.id_reference)');
 
         return $this->db->executeS($query);
     }
@@ -170,11 +163,11 @@ class CarrierRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getAllCarrierProperties($offset, $limit, $langId)
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
         $query->from('carrier', 'c');
         $query->select('c.id_carrier, IFNULL(eis.created_at, CURRENT_DATE()) as update_date');
         $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
@@ -185,8 +178,7 @@ class CarrierRepository
             'eis.id_object = c.id_carrier AND eis.type = "' . Config::COLLECTION_CARRIERS . '" AND eis.id_shop = cs.id_shop AND eis.lang_iso = cl.id_lang'
         );
         $query->where('cs.id_shop = ' . (int) $this->context->shop->id);
-        $query->where('c.deleted = 0');
-        $query->orderBy('c.id_carrier');
+        $query->where('deleted=0');
         $query->limit($limit, $offset);
 
         return $this->db->executeS($query);
@@ -198,7 +190,7 @@ class CarrierRepository
      *
      * @return int
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getRemainingCarriersCount($offset, $langId)
     {

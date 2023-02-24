@@ -9,9 +9,9 @@ class ps_EventbusApiGoogleTaxonomiesModuleFrontController extends AbstractApiCon
     public $type = Config::COLLECTION_TAXONOMIES;
 
     /**
-     * @throws PrestaShopException
-     *
      * @return void
+     *
+     * @throws PrestaShopException
      */
     public function postProcess()
     {

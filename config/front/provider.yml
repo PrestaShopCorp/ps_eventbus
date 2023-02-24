@@ -21,6 +21,20 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\CategoryRepository'
       - '@PrestaShop\Module\PsEventbus\Decorator\CategoryDecorator'
 
+  PrestaShop\Module\PsEventbus\Provider\CurrencyDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\CurrencyDataProvider
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\CurrencyRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\CurrencyDecorator'
+
+  PrestaShop\Module\PsEventbus\Provider\CustomerDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\CustomerDataProvider
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\CustomerRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\CustomerDecorator'
+
   PrestaShop\Module\PsEventbus\Provider\OrderDataProvider:
     class: PrestaShop\Module\PsEventbus\Provider\OrderDataProvider
     public: true
@@ -66,3 +80,13 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository'
+
+  PrestaShop\Module\PsEventbus\Provider\WishlistDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\WishlistDataProvider
+    public: true
+    arguments:
+      - '@ps_eventbus.context'
+      - '@PrestaShop\Module\PsEventbus\Repository\WishlistRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\WishlistDecorator'
+      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'

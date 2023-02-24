@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 2007-2020 PrestaShop.
  *
@@ -40,12 +41,12 @@ class Ps_eventbus extends Module
     /**
      * @var string
      */
-    public const VERSION = 'x.y.z';
+    const VERSION = 'x.y.z';
 
     /**
      * @var array
      */
-    public const REQUIRED_TABLES = [
+    const REQUIRED_TABLES = [
         'eventbus_type_sync',
         'eventbus_job',
         'eventbus_deleted_objects',
@@ -69,6 +70,11 @@ class Ps_eventbus extends Module
         'actionObjectCategoryAddAfter',
         'actionObjectCategoryUpdateAfter',
         'actionObjectCategoryDeleteAfter',
+        'actionObjectCustomerAddAfter',
+        'actionObjectCustomerUpdateAfter',
+        'actionObjectCustomerDeleteAfter',
+        'actionObjectCurrencyAddAfter',
+        'actionObjectCurrencyUpdateAfter',
         'actionObjectOrderAddAfter',
         'actionObjectOrderUpdateAfter',
         'actionObjectCartAddAfter',
@@ -82,6 +88,9 @@ class Ps_eventbus extends Module
         'actionObjectStateAddAfter',
         'actionObjectStateUpdateAfter',
         'actionObjectStateDeleteAfter',
+        'actionObjectWishlistAddAfter',
+        'actionObjectWishlistUpdateAfter',
+        'actionObjectWishlistDeleteAfter',
         'actionObjectZoneAddAfter',
         'actionObjectZoneUpdateAfter',
         'actionObjectZoneDeleteAfter',
@@ -165,7 +174,7 @@ class Ps_eventbus extends Module
     public function install()
     {
         if (!$this->isPhpVersionCompliant()) {
-            $this->_errors[] = $this->l('This requires PHP 7.1 to work properly. Please upgrade your server configuration.');
+            $this->_errors[] = $this->l('This requires PHP 7.2.5 to work properly. Please upgrade your server configuration.');
 
             // We return true during the installation of PrestaShop to not stop the whole process,
             // Otherwise we warn properly the installation failed.
@@ -279,6 +288,62 @@ class Ps_eventbus extends Module
      *
      * @return void
      */
+    public function hookActionObjectWishlistDeleteAfter($parameters)
+    {
+        $product = $parameters['object'];
+
+        $this->insertDeletedObject(
+            $product->id,
+            Config::COLLECTION_WISHLISTS,
+            date(DATE_ATOM),
+            $this->shopId
+        );
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectWishlistAddAfter($parameters)
+    {
+        $product = $parameters['object'];
+
+        $this->insertIncrementalSyncObject(
+            $product->id,
+            Config::COLLECTION_WISHLISTS,
+            date(DATE_ATOM),
+            $this->shopId,
+            true
+        );
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectWishlistUpdateAfter($parameters)
+    {
+        /** @var WishList $wishlist */
+        $wishlist = $parameters['object'];
+        /** @var int $wishlistId */
+        $wishlistId = $wishlist->id;
+
+        $this->insertIncrementalSyncObject(
+            $wishlistId,
+            Config::COLLECTION_WISHLISTS,
+            date(DATE_ATOM),
+            $this->shopId,
+            true
+        );
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
     public function hookActionObjectCombinationDeleteAfter($parameters)
     {
         /** @var Combination $combination */
@@ -350,6 +415,105 @@ class Ps_eventbus extends Module
             PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CATEGORIES,
             date(DATE_ATOM),
             $this->shopId
+        );
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectCustomerAddAfter($parameters)
+    {
+        $customer = $parameters['object'];
+        /** @var int $customerId */
+        $customerId = $customer->id;
+
+        $this->insertIncrementalSyncObject(
+            $customerId,
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CUSTOMERS,
+            date(DATE_ATOM),
+            $this->shopId,
+            true
+        );
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectCustomerUpdateAfter($parameters)
+    {
+        $customer = $parameters['object'];
+        /** @var int $customerId */
+        $customerId = $customer->id;
+
+        $this->insertIncrementalSyncObject(
+            $customerId,
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CUSTOMERS,
+            date(DATE_ATOM),
+            $this->shopId,
+            true
+        );
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectCustomerDeleteAfter($parameters)
+    {
+        $customer = $parameters['object'];
+        /** @var int $customerId */
+        $customerId = $customer->id;
+
+        $this->insertDeletedObject(
+            $customerId,
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CUSTOMERS,
+            date(DATE_ATOM),
+            $this->shopId
+        );
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectCurrencyAddAfter($parameters)
+    {
+        $currency = $parameters['object'];
+        /** @var int $currencyId */
+        $currencyId = $currency->id;
+
+        $this->insertIncrementalSyncObject(
+            $currencyId,
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CURRENCIES,
+            date(DATE_ATOM),
+            $this->shopId,
+            true
+        );
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectCurrencyUpdateAfter($parameters)
+    {
+        $currency = $parameters['object'];
+        /** @var int $currencyId */
+        $currencyId = $currency->id;
+
+        $this->insertIncrementalSyncObject(
+            $currencyId,
+            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CURRENCIES,
+            date(DATE_ATOM),
+            $this->shopId,
+            true
         );
     }
 

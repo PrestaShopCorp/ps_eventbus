@@ -10,9 +10,9 @@ class ps_EventbusApiInfoModuleFrontController extends AbstractApiController
     public $type = Config::COLLECTION_SHOPS;
 
     /**
-     * @throws PrestaShopException
-     *
      * @return void
+     *
+     * @throws PrestaShopException
      */
     public function postProcess()
     {

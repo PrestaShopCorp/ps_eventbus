@@ -2,17 +2,14 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Db;
-use DbQuery;
-
 class ShopRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
-    public function __construct(Db $db)
+    public function __construct(\Db $db)
     {
         $this->db = $db;
     }
@@ -22,7 +19,7 @@ class ShopRepository
      */
     public function getMultiShopCount()
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->select('COUNT(id_shop)')
             ->from('shop')
@@ -36,7 +33,7 @@ class ShopRepository
      */
     public function getCreatedAt()
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->select('date_add as created_at')
           ->from('configuration')
@@ -46,11 +43,13 @@ class ShopRepository
     }
 
     /**
+     * Gives back the first iso_code registered, which correspond to the default country of this shop
+     *
      * @return string
      */
     public function getShopCountryCode()
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->select('iso_code')
           ->from('country')

@@ -5,7 +5,6 @@ namespace PrestaShop\Module\PsEventbus\Service;
 use PrestaShop\Module\PsEventbus\Api\EventBusSyncClient;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
-use PrestaShopDatabaseException;
 
 class ApiAuthorizationService
 {
@@ -33,7 +32,7 @@ class ApiAuthorizationService
      *
      * @return array|bool
      *
-     * @throws PrestaShopDatabaseException|EnvVarException
+     * @throws \PrestaShopDatabaseException|EnvVarException
      */
     public function authorizeCall($jobId)
     {

@@ -7,5 +7,7 @@ vendor
 composer.json
 composer.lock
 ps_eventbus.php
+logo.png
 config.xml
+LICENCE
 README.md

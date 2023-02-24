@@ -10,8 +10,6 @@ use PrestaShop\Module\PsEventbus\Repository\CountryRepository;
 use PrestaShop\Module\PsEventbus\Repository\StateRepository;
 use PrestaShop\Module\PsEventbus\Repository\TaxRepository;
 use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
-use RangePrice;
-use RangeWeight;
 use Yandex\Allure\Adapter\Annotation\Features;
 use Yandex\Allure\Adapter\Annotation\Stories;
 use Yandex\Allure\Adapter\Annotation\Title;
@@ -30,7 +28,7 @@ class CarrierBuilderTest extends BaseTestCase
      *
      * @dataProvider buildCarrierDataProvider
      *
-     * @param Carrier $carrier
+     * @param \Carrier $carrier
      * @param string $currency
      * @param string $weightUnit
      * @param float $freeShippingAtPrice
@@ -46,7 +44,7 @@ class CarrierBuilderTest extends BaseTestCase
      * @throws \PrestaShopException
      */
     public function testBuildCarrier(
-        Carrier $carrier,
+        \Carrier $carrier,
         string $currency,
         string $weightUnit,
         float $freeShippingAtPrice,
@@ -308,7 +306,7 @@ class CarrierBuilderTest extends BaseTestCase
                     ],
                     [
                         'collection' => (string) $carrierDetailsCollection,
-                        'id' => $carrierReference . '-' . $firstZoneId . '-' . 'range_price' . '-' . $rangePriceId,
+                        'id' => $carrierReference . '-' . $firstZoneId . '-range_price-' . $rangePriceId,
                         'properties' => [
                             'id_reference' => (string) $carrierReference,
                             'id_carrier_detail' => (string) $rangePriceId,
@@ -399,7 +397,7 @@ class CarrierBuilderTest extends BaseTestCase
                     ],
                     [
                         'collection' => (string) $carrierDetailsCollection,
-                        'id' => $carrierReference . '-' . $firstZoneId . '-' . 'range_weight' . '-' . $rangeWeightId,
+                        'id' => $carrierReference . '-' . $firstZoneId . '-range_weight-' . $rangeWeightId,
                         'properties' => [
                             'id_reference' => (string) $carrierReference,
                             'id_carrier_detail' => (string) $rangeWeightId,
@@ -453,7 +451,7 @@ class CarrierBuilderTest extends BaseTestCase
         $delay,
         $rangeTable
     ) {
-        $carrier = $this->getMockBuilder(Carrier::class)
+        $carrier = $this->getMockBuilder(\Carrier::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -483,7 +481,7 @@ class CarrierBuilderTest extends BaseTestCase
 
     private function createMockedRangePrice($id, $delimiter1, $delimiter2)
     {
-        $rangePrice = $this->getMockBuilder(RangePrice::class)
+        $rangePrice = $this->getMockBuilder(\RangePrice::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -496,7 +494,7 @@ class CarrierBuilderTest extends BaseTestCase
 
     private function createMockedRangeWeight($id, $delimiter1, $delimiter2)
     {
-        $rangePrice = $this->getMockBuilder(RangeWeight::class)
+        $rangePrice = $this->getMockBuilder(\RangeWeight::class)
             ->disableOriginalConstructor()
             ->getMock();
 

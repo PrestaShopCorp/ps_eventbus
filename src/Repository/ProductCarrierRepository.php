@@ -2,40 +2,29 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
-use Db;
-use DbQuery;
-use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
-use PrestaShopDatabaseException;
-
 class ProductCarrierRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
-    /**
-     * @var ArrayFormatter
-     */
-    private $arrayFormatter;
 
-    public function __construct(Db $db, Context $context, ArrayFormatter $arrayFormatter)
+    public function __construct(\Db $db, \Context $context)
     {
         $this->db = $db;
         $this->context = $context;
-        $this->arrayFormatter = $arrayFormatter;
     }
 
     /**
-     * @return DbQuery
+     * @return \DbQuery
      */
     private function getBaseQuery()
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->from('product_carrier', 'pc');
         $query->where('pc.id_shop = ' . (int) $this->context->shop->id);
@@ -49,7 +38,7 @@ class ProductCarrierRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getProductCarriers($offset, $limit)
     {
@@ -69,7 +58,7 @@ class ProductCarrierRepository
      *
      * @return int
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getRemainingProductCarriersCount($offset)
     {
@@ -92,7 +81,7 @@ class ProductCarrierRepository
      */
     public function getProductCarrierIncremental($type, $langIso)
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
         $query->from(IncrementalSyncRepository::INCREMENTAL_SYNC_TABLE, 'aic');
         $query->leftJoin(EventbusSyncRepository::TYPE_SYNC_TABLE_NAME, 'ts', 'ts.type = aic.type');
         $query->where('aic.type = "' . (string) $type . '"');
@@ -107,28 +96,28 @@ class ProductCarrierRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getProductCarriersProperties(array $productIds)
     {
         if (!$productIds) {
             return [];
         }
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->select('pc.*')
             ->from('product_carrier', 'pc')
-            ->where('pc.id_product IN (' . $this->arrayFormatter->arrayToString($productIds, ',') . ')');
+            ->where('pc.id_product IN (' . implode(',', array_map('intval', $productIds)) . ')');
 
         return $this->db->executeS($query);
     }
 
     /**
-     * @param DbQuery $query
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(DbQuery $query)
+    private function addSelectParameters(\DbQuery $query)
     {
         $query->select('pc.id_carrier_reference, pc.id_product');
     }

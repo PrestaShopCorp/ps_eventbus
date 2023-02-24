@@ -21,7 +21,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use Link;
 use PrestaShop\Module\PsEventbus\Api\Post\MultipartBody;
 use PrestaShop\Module\PsEventbus\Api\Post\PostFileApi;
 use PrestaShop\Module\PsEventbus\Config\Config;
@@ -29,7 +28,6 @@ use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
 use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleNotInstalledException;
 use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleVersionException;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
-use Ps_eventbus;
 
 /**
  * Construct the client used to make call to Segment API
@@ -41,21 +39,21 @@ class EventBusProxyClient extends GenericClient
      */
     private $baseUrl;
     /**
-     * @var Ps_eventbus
+     * @var \Ps_eventbus
      */
     private $module;
 
     /**
-     * @param Link $link
+     * @param \Link $link
      * @param PsAccounts $psAccounts
      * @param string $baseUrl
-     * @param Ps_eventbus $module
+     * @param \Ps_eventbus $module
      *
      * @throws ModuleNotInstalledException
      * @throws ModuleVersionException
      * @throws \Exception
      */
-    public function __construct(Link $link, PsAccounts $psAccounts, $baseUrl, $module)
+    public function __construct(\Link $link, PsAccounts $psAccounts, $baseUrl, $module)
     {
         $this->module = $module;
         $this->baseUrl = $baseUrl;
@@ -115,11 +113,14 @@ class EventBusProxyClient extends GenericClient
     /**
      * @param string $jobId
      * @param string $compressedData
+     * @param int $scriptStartTime
      *
      * @return array
      */
-    public function uploadDelete($jobId, $compressedData)
+    public function uploadDelete(string $jobId, string $compressedData, int $scriptStartTime)
     {
+        $timeout = Config::PROXY_TIMEOUT - (time() - $scriptStartTime);
+
         $route = $this->baseUrl . "/delete/$jobId";
 
         $this->setRoute($route);
@@ -127,17 +128,19 @@ class EventBusProxyClient extends GenericClient
         $file = new PostFileApi(
             'file',
             $compressedData,
-            'file.gz'
+            'file'
         );
+
+        $multipartBody = new MultipartBody([], [$file], 'ps_eventbus_boundary');
 
         $response = $this->post([
             'headers' => [
-                'Content-Type' => 'binary/octet-stream',
+                'Content-Type' => 'multipart/form-data; boundary=ps_eventbus_boundary',
                 'ps-eventbus-version' => $this->module->version,
+                'Content-Length' => $file->getContent()->getSize(),
+                'timeout' => $timeout,
             ],
-            'body' => [
-                'file' => $file,
-            ],
+            'body' => $multipartBody->getContents(),
         ]);
 
         if (is_array($response)) {

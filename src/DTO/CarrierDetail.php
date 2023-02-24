@@ -2,9 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\DTO;
 
-use JsonSerializable;
-
-class CarrierDetail implements JsonSerializable
+class CarrierDetail implements \JsonSerializable
 {
     /**
      * @var string

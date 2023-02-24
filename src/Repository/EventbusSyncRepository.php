@@ -2,11 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
-use Db;
-use DbQuery;
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShopDatabaseException;
 
 class EventbusSyncRepository
 {
@@ -14,15 +10,15 @@ class EventbusSyncRepository
     public const JOB_TABLE_NAME = 'eventbus_job';
 
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
 
-    public function __construct(Db $db, Context $context)
+    public function __construct(\Db $db, \Context $context)
     {
         $this->db = $db;
         $this->context = $context;
@@ -52,7 +48,7 @@ class EventbusSyncRepository
         );
 
         if (!$result) {
-            throw new PrestaShopDatabaseException('Failed to insert type sync', Config::DATABASE_INSERT_ERROR_CODE);
+            throw new \PrestaShopDatabaseException('Failed to insert type sync', Config::DATABASE_INSERT_ERROR_CODE);
         }
 
         return $result;
@@ -84,7 +80,7 @@ class EventbusSyncRepository
      */
     public function findJobById($jobId)
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
         $query->select('*')
             ->from(self::JOB_TABLE_NAME)
             ->where('job_id = "' . pSQL($jobId) . '"');
@@ -100,7 +96,7 @@ class EventbusSyncRepository
      */
     public function findTypeSync($type, $langIso = null)
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
         $query->select('*')
             ->from(self::TYPE_SYNC_TABLE_NAME)
             ->where('type = "' . pSQL($type) . '"')
@@ -130,7 +126,7 @@ class EventbusSyncRepository
             ],
             'type = "' . pSQL($type) . '"
             AND lang_iso = "' . pSQL((string) $langIso) . '"
-            AND id_shop = ' . $this->context->shop->id
+            AND id_shop = ' . (int) $this->context->shop->id
         );
     }
 }
