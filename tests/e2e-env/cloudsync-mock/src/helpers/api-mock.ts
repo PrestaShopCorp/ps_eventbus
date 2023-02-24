@@ -1,53 +1,62 @@
 import express from "express";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const fileParser = require("express-multipart-file-parser");
 
-export async function startSyncApi() {
-    const SYNC_API_PORT = 3232;
-
-    const syncApi = express();
-    const server = syncApi.listen(SYNC_API_PORT, () => {
-        console.log(`sync-api running on :${SYNC_API_PORT}`);
-    });
-
-    syncApi.get('/', function(req, res) {
-        res.status(200).end()
-    });
-    syncApi.get('/job/:id', function(req, res) {
-        console.log(`request to sync-api jobid = ${req.params.id}`)
-        const jobId = req.params.id;
-
-        if(jobId.startsWith('valid-job-')) {
-            res.status(201).end()
-        } else {
-            res.status(500).end()
-        }   
-    });
-
-    return server;
+class Server {
+  private server: any;
+  api: any;
+  port: number;
+  constructor(port: number) {
+    this.api = express();
+    this.port = port;
+    this.api.use(fileParser);
+    this.api.use(this.middleware.bind(this));
+    this.server = this.api.listen(this.port);
+  }
+  middleware(req, res, next) {
+    this.requestData(req);
+    next();
+  }
+  requestData(req: any) {
+    console.log("req");
+  }
+  public async close() {
+    return this.server.close();
+  }
 }
 
-export async function startProxyApi() {
-
-    const PROXY_API_PORT = 3333;
-    
-    const proxyApi =  express();
-    const server = proxyApi.listen(PROXY_API_PORT, () => {
-        console.log(`proxy-api running on ${PROXY_API_PORT}`);
+export class SyncApi extends Server {
+  constructor(port: number) {
+    super(port);
+    this.api.get("/", function (req, res) {
+      res.status(200).end();
     });
-    proxyApi.get('/', function(req, res) {
-        res.status(200).end()
+    this.api.get("/job/:id", function (req, res) {
+      const jobId = req.params.id;
+      if (jobId.startsWith("valid-job-")) {
+        res.status(201).end();
+      } else {
+        res.status(500).end();
+      }
     });
-    proxyApi.post('/upload/:job_id', function(req, res) {
-        console.log(`request to proxy-api jobid = ${req.params.job_id}`)
-        const jobId = req.params.job_id;
-
-        if(jobId.startsWith('valid-job-')) {
-            res.status(201).end()
-        } else {
-            res.status(500).end()
-        }
-    });
-    
-    return server;
+  }
 }
 
-export default { startSyncApi, startProxyApi}
+export class ProxyApi extends Server {
+  constructor(port: number) {
+    super(port);
+    this.api.get("/", function (req, res) {
+      res.status(200).end();
+    });
+    this.api.post("/upload/:job_id", function (req, res) {
+      const jobId = req.params.job_id;
+      if (jobId.startsWith("valid-job-")) {
+        res.status(201).end();
+      } else {
+        res.status(500).end();
+      }
+    });
+  }
+}
+
+export default { SyncApi, ProxyApi };
