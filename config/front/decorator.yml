@@ -37,3 +37,7 @@ services:
     arguments:
       - '@ps_eventbus.context'
       - '@PrestaShop\Module\PsEventbus\Service\SpecificPriceService'
+
+  PrestaShop\Module\PsEventbus\Decorator\WishlistDecorator:
+    class: PrestaShop\Module\PsEventbus\Decorator\WishlistDecorator
+    public: true

@@ -126,7 +126,7 @@ class EventbusSyncRepository
             ],
             'type = "' . pSQL($type) . '"
             AND lang_iso = "' . pSQL((string) $langIso) . '"
-            AND id_shop = ' . $this->context->shop->id
+            AND id_shop = ' . (int) $this->context->shop->id
         );
     }
 }
