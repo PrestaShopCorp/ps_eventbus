@@ -7,12 +7,17 @@
     "build": "npx swc ./src -d dist",
     "start:dev": "npx swc ./src -w -d dist",
     "start": "node dist/app.js",
+    "lint": "npx eslint '{src,e2e}/**/*.{ts,js}'",
+    "lint:fix": "npx eslint '{src,e2e}/**/*.{ts,js}' --fix",
     "test": "npx jest",
     "docker:build": "docker compose -f ../docker-compose.yml build cloudsync-mock-test",
     "docker:up": "docker compose -f ../docker-compose.yml up -d --wait",
     "docker:down": "docker compose -f ../docker-compose.yml down"
   },
   "dependencies": {
+    "@jest/globals": "^29.4.3",
+    "@types/express": "^4.17.17",
+    "express-multipart-file-parser": "^0.1.2",
     "supertest": "^6.3.3"
   },
   "engines": {
