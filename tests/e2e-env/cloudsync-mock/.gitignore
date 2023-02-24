@@ -48,7 +48,7 @@ playwright/.cache/
 *.launch
 .settings/
 *.sublime-workspace
-.vscode/*
+.vscode/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
