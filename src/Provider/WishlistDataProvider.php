@@ -36,7 +36,7 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
         WishlistRepository $wishlistRepository,
         WishlistProductRepository $wishlistProductRepository,
         WishlistDecorator $wishlistDecorator,
-        ArrayFormatter $arrayFormatter,
+        ArrayFormatter $arrayFormatter
     ) {
         $this->context = $context;
         $this->wishlistRepository = $wishlistRepository;
