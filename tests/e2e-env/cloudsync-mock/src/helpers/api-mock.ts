@@ -51,6 +51,8 @@ export class ProxyApi extends Server {
     this.api.post("/upload/:job_id", function (req, res) {
       const jobId = req.params.job_id;
       if (jobId.startsWith("valid-job-")) {
+        //voir pour compter le nombre de lignes dans le fichier qui doit correspondre au nombre d'items
+        console.log(req.files[0].buffer.toString())
         res.status(201).end();
       } else {
         res.status(500).end();
