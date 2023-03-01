@@ -3,7 +3,7 @@
 /**
  * @return bool
  */
-function upgrade_module_1_10_0($module)
+function upgrade_module_1_10_3($module)
 {
     $module->registerhook('actionObjectWishlistAddAfter');
     $module->registerhook('actionObjectWishlistUpdateAfter');
