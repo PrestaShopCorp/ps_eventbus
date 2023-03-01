@@ -8,12 +8,12 @@ services:
     healthcheck:
       test:
         [
-          'CMD',
-          'mysqladmin',
-          'ping',
-          '--host=localhost',
-          '--user=root',
-          '--password=prestashop',
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "--host=localhost",
+          "--user=root",
+          "--password=prestashop",
         ]
       interval: 5s
       timeout: 10s
@@ -27,14 +27,12 @@ services:
   prestashop:
     image: prestashop/prestashop:${DOCKER_VERSION_PRESTASHOP:?See e2e-env/.env.dist}
     depends_on:
-      - ps-accounts-downloader
       - mysql
-      - ngrok
     env_file:
       - ./prestashop.env
       - ./.env
     healthcheck:
-      test: [ 'CMD-SHELL', 'curl -sf http://localhost:80 || exit 1' ]
+      test: ["CMD-SHELL", "curl -sf http://localhost:80 || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -43,60 +41,23 @@ services:
       - ./ps_scripts:/ps_scripts:ro
       - incoming-modules:/ps-modules:rw
       - ../..:/var/www/html/modules/ps_eventbus:rw
+
     command: /ps_scripts/docker_tweak.sh
     ports:
       - ${HOST_PORT_BIND_PRESTASHOP:?See e2e-env/.env.dist}:80
     networks:
       - prestashop
-    
+
   ps_eventbus_config:
     image: alpine:latest
     volumes:
       - ../..:/var/www/html/modules/ps_eventbus:rw
       - ./parameters.yml:/parameters.yml
-    command: cp /parameters.yml /var/www/html/modules/ps_eventbus/config/parameters.yml
-  
-  ngrok:
-    extends:
-      file: ./ngrok/docker-compose.yml
-      service: ngrok
-    env_file:
-      - .env
-    ports:
-      - ${HOST_PORT_BIND_NGROK:?See e2e-env/.env.dist}:4040
-    networks:
-      - prestashop
-
-  ps-accounts-downloader:
-    build:
-      context: .
-      dockerfile: asset-downloader.dockerfile
-    restart: 'no'
-    volumes:
-      - incoming-modules:/ps-modules:rw
-    env_file:
-      - .env
-    environment:
-      GITHUB_REPOSITORY: PrestaShopCorp/ps_accounts
-      TARGET_VERSION: $PS_ACCOUNTS_VERSION
-      TARGET_ASSET: ps_accounts.zip
-      FINAL_ASSET: ps_accounts-${PS_ACCOUNTS_VERSION}.zip
-      ASSET_PATH: /ps-modules
-
-  accounts-shop-linker:
-    image: alpine:latest
-    env_file:
-      - .env
-      - ./prestashop.env
-    restart: 'no'
-    depends_on:
-      prestashop:
-        condition: service_healthy
-    volumes:
-      - ./ps_scripts/auto_onboard_accounts.sh:/run.sh:ro
-    entrypoint: ['sh', '/run.sh']
-    networks:
-      - prestashop
+      # TODO CHeck this
+      - ./ps-accounts-installer.mock.php:/var/www/html/modules/ps_eventbus/src/:rw
+      - ./common.yml.mock.phpo:/var/www/html/modules/ps_eventbus/config/common.yml
+      - ./switch-on-mock.sh
+    command: ./switch-on-mock.sh
 
   phpmyadmin:
     image: phpmyadmin:latest
@@ -107,26 +68,14 @@ services:
     networks:
       - prestashop
 
-  # cloudsync-mock:
-  #   container_name: cloudsync-mock
-  #   build: 
-  #     context: ./cloudsync-mock
-  #     dockerfile: Dockerfile
-  #   depends_on:
-  #     accounts-shop-linker:
-  #       condition: service_completed_successfully
-  #   networks:
-  #     - prestashop
-
   cloudsync-mock-test:
     container_name: cloudsync-mock-test
-    # restart: 'no'
-    build: 
+    restart: "no"
+    build:
       context: ./cloudsync-mock
       dockerfile: Dockerfile
     depends_on:
-      accounts-shop-linker:
-        condition: service_completed_successfully
+      - prestashop
     networks:
       - prestashop
     command: test

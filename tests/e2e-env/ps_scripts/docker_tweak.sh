@@ -5,8 +5,6 @@ export DEBIAN_FRONTEND=noninteractive
 
 echo "============ START E2E TWEAK ============"
 
-./configure_ngrok.sh
-
 echo "============ REGISTER POST INSTALL SCRIPTS ============"
 mkdir -p /tmp/post-install-scripts/
 cp ./install_modules.sh /tmp/post-install-scripts/1-install_modules.sh
