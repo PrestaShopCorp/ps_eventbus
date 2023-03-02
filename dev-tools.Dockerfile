@@ -6,8 +6,8 @@ FROM --platform=${BUILDPLATFORM} php:${PHP_VERSION}-alpine as dev-tools
 WORKDIR /src
 
 # See https://xdebug.org/docs/compat and https://xdebug.org/docs/install and https://xdebug.org/download/historical
-ENV PCRE_DEV="autoconf g++ make linux-headers"
-RUN apk add -U $PCRE_DEV && \
+ENV PCRE_DEV="autoconf g++ linux-headers"
+RUN apk add -U make $PCRE_DEV && \
   case $PHP_VERSION in \
   7.1*) export XDEBUG_VERSION="2.9.8";; \
   7*) export XDEBUG_VERSION="3.1.6";; \
