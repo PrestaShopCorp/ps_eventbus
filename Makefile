@@ -89,7 +89,7 @@ prestashop:
 prestashop/prestashop-${PS_VERSION}: prestashop composer.phar
 	@if [ ! -d "prestashop/prestashop-${PS_VERSION}" ]; then \
 		git clone --depth 1 --branch ${PS_VERSION} https://github.com/PrestaShop/PrestaShop.git prestashop/prestashop-${PS_VERSION}; \
-		./composer.phar -d ./prestashop/prestashop-${PS_VERSION} install
+		./composer.phar -d ./prestashop/prestashop-${PS_VERSION} install; \
 	fi;
 
 # target: test                                   - Static and unit testing
