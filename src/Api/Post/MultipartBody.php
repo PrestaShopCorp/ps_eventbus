@@ -13,8 +13,16 @@ class MultipartBody implements StreamInterface
 {
     use StreamDecoratorTrait;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $boundary;
+
+
+    /**
+     * @var AppendStream
+     */
+    private $stream;
 
     /**
      * @param array $fields associative array of field names to values where
@@ -30,7 +38,7 @@ class MultipartBody implements StreamInterface
               $boundary = null
     ) {
         $this->boundary = $boundary ?: uniqid();
-        $this->createStream($fields, $files);
+        $this->stream = $this->createStream($fields, $files);
     }
 
     /**

@@ -42,8 +42,6 @@ class SyncApiClient
     /**
      * @see https://docs.guzzlephp.org/en/stable/quickstart.html-
      *
-     * @param int $startTime @optional start time in seconds since epoch
-     *
      * @return HttpClientInterface
      */
     private function getClient()
