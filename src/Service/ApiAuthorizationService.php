@@ -2,8 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use PrestaShop\Module\PsEventbus\Api\EventBusSyncClient;
-use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
+use PrestaShop\Module\PsEventbus\Api\SyncApiClient;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 
 class ApiAuthorizationService
@@ -11,43 +10,43 @@ class ApiAuthorizationService
     /**
      * @var EventbusSyncRepository
      */
-    private $eventbusSyncStateRepository;
+    private $eventbusSyncRepository;
+
     /**
-     * @var EventBusSyncClient
+     * @var SyncApiClient
      */
-    private $eventBusSyncClient;
+    private $syncApiClient;
 
     public function __construct(
-        EventbusSyncRepository $eventbusSyncStateRepository,
-        EventBusSyncClient $eventBusSyncClient
+        EventbusSyncRepository $eventbusSyncRepository,
+        SyncApiClient $syncApiClient
     ) {
-        $this->eventbusSyncStateRepository = $eventbusSyncStateRepository;
-        $this->eventBusSyncClient = $eventBusSyncClient;
+        $this->eventbusSyncRepository = $eventbusSyncRepository;
+        $this->syncApiClient = $syncApiClient;
     }
 
     /**
-     * Authorizes if the call to endpoint is legit and creates sync state if needed
+     * Authorizes and cache job ids
      *
      * @param string $jobId
      *
      * @return array|bool
-     *
-     * @throws \PrestaShopDatabaseException|EnvVarException
      */
     public function authorizeCall($jobId)
     {
-        $job = $this->eventbusSyncStateRepository->findJobById($jobId);
-
+        // Check if job already exist
+        $job = $this->eventbusSyncRepository->findJobById($jobId);
         if ($job) {
             return true;
         }
 
-        $jobValidationResponse = $this->eventBusSyncClient->validateJobId($jobId);
-
-        if (is_array($jobValidationResponse) && (int) $jobValidationResponse['httpCode'] === 201) {
-            return $this->eventbusSyncStateRepository->insertJob($jobId, date(DATE_ATOM));
+        // Check the jobId validity to avoid Dnial Of Service
+        $jobValidationResponse = $this->syncApiClient->validateJobId($jobId);
+        if (!is_array($jobValidationResponse) || (int) $jobValidationResponse['httpCode'] !== 201) {
+            return false;
         }
 
-        return $jobValidationResponse;
+        // Cache the valid jobId
+        return $this->eventbusSyncRepository->insertJob($jobId, date(DATE_ATOM));
     }
 }
