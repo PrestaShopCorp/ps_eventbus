@@ -66,7 +66,7 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
         /** @var EventBusCarrier[] $eventBusCarriers */
         $eventBusCarriers = $this->carrierBuilder->buildCarriers(
             $carriers,
-            $language,
+            $langId,
             $currency,
             $configurationPsWeightUnit
         );
@@ -97,7 +97,7 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
         /** @var EventBusCarrier[] $eventBusCarriers */
         $eventBusCarriers = $this->carrierBuilder->buildCarriers(
             $carriers,
-            $language,
+            $langId,
             $currency,
             $configurationPsWeightUnit
         );
