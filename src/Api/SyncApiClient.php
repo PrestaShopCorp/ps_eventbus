@@ -11,7 +11,7 @@ use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 class SyncApiClient
 {
     /**
-     * @var string 
+     * @var string
      */
     private $syncApiUrl;
 
@@ -46,7 +46,8 @@ class SyncApiClient
      *
      * @return HttpClientInterface
      */
-    private function getClient() {
+    private function getClient()
+    {
         return (new ClientFactory())->getClient([
             'allow_redirects' => true,
             'base_uri' => $this->syncApiUrl,

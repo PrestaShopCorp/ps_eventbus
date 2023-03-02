@@ -13,7 +13,7 @@ use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 class CollectorApiClient
 {
     /**
-     * @var string 
+     * @var string
      */
     private $collectorApiUrl;
 
@@ -48,7 +48,8 @@ class CollectorApiClient
      *
      * @return HttpClientInterface
      */
-    private function getClient(int $startTime = null) {
+    private function getClient(int $startTime = null)
+    {
         return (new ClientFactory())->getClient([
             'allow_redirects' => true,
             'base_uri' => $this->collectorApiUrl,
@@ -151,7 +152,7 @@ class CollectorApiClient
     private function getRemainingTime(int $startTime = null)
     {
         // default to maximum timeout
-        if (is_null($startTime)) { 
+        if (is_null($startTime)) {
             return Config::COLLECTOR_MAX_TIMEOUT;
         }
 
