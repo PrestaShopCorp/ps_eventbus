@@ -54,7 +54,7 @@ class CarrierBuilder
 
     /**
      * @param array $carriers
-     * @param \Language $lang
+     * @param int $langId
      * @param \Currency $currency
      * @param string $weightUnit
      *
@@ -63,12 +63,12 @@ class CarrierBuilder
      * @throws \PrestaShopDatabaseException
      * @throws \PrestaShopException
      */
-    public function buildCarriers(array $carriers, \Language $lang, \Currency $currency, $weightUnit)
+    public function buildCarriers(array $carriers, int $langId, \Currency $currency, $weightUnit)
     {
         $eventBusCarriers = [];
         foreach ($carriers as $carrier) {
             $eventBusCarriers[] = $this->buildCarrier(
-                new \Carrier($carrier['id_carrier'], $lang->id),
+                new \Carrier($carrier['id_carrier'], $langId),
                 $currency->iso_code,
                 $weightUnit,
                 $carrier['update_date']

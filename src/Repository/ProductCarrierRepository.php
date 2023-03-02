@@ -2,8 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
-
 class ProductCarrierRepository
 {
     /**
@@ -14,16 +12,11 @@ class ProductCarrierRepository
      * @var \Context
      */
     private $context;
-    /**
-     * @var ArrayFormatter
-     */
-    private $arrayFormatter;
 
-    public function __construct(\Db $db, \Context $context, ArrayFormatter $arrayFormatter)
+    public function __construct(\Db $db, \Context $context)
     {
         $this->db = $db;
         $this->context = $context;
-        $this->arrayFormatter = $arrayFormatter;
     }
 
     /**
@@ -114,7 +107,7 @@ class ProductCarrierRepository
 
         $query->select('pc.*')
             ->from('product_carrier', 'pc')
-            ->where('pc.id_product IN (' . $this->arrayFormatter->arrayToString($productIds, ',') . ')');
+            ->where('pc.id_product IN (' . implode(',', array_map('intval', $productIds)) . ')');
 
         return $this->db->executeS($query);
     }

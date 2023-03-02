@@ -80,3 +80,13 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository'
+
+  PrestaShop\Module\PsEventbus\Provider\WishlistDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\WishlistDataProvider
+    public: true
+    arguments:
+      - '@ps_eventbus.context'
+      - '@PrestaShop\Module\PsEventbus\Repository\WishlistRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\WishlistDecorator'
+      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
