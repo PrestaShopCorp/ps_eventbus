@@ -16,7 +16,7 @@ RUN apk add -U $PCRE_DEV && \
   pecl channel-update pecl.php.net && \ 
   pecl install xdebug-${XDEBUG_VERSION} && \
   docker-php-ext-enable xdebug && \
-  apk delete $PCRE_DEV;
+  apk del $PCRE_DEV;
 
 RUN adduser -H -D -s /bin/sh -u 1000 php
 USER php
