@@ -10,6 +10,7 @@ use Yandex\Allure\Adapter\Annotation\Title;
 
 /**
  * @Features("authorization")
+ *
  * @Stories("api authorization service")
  */
 class ApiAuthorizationServiceTest extends BaseTestCase
@@ -41,6 +42,7 @@ class ApiAuthorizationServiceTest extends BaseTestCase
 
     /**
      * @Stories("api authorization service")
+     *
      * @Title("testAuthorizeCallSucceeds")
      */
     public function testAuthorizeCallSucceeds()

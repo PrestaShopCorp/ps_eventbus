@@ -16,6 +16,7 @@ use Yandex\Allure\Adapter\Annotation\Title;
 
 /**
  * @Features("synchronization")
+ *
  * @Stories("carrier builder")
  */
 class CarrierBuilderTest extends BaseTestCase
@@ -24,6 +25,7 @@ class CarrierBuilderTest extends BaseTestCase
 
     /**
      * @Stories("carrier builder")
+     *
      * @Title("testBuildCarrier")
      *
      * @dataProvider buildCarrierDataProvider

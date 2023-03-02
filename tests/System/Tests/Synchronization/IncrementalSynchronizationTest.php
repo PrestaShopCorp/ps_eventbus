@@ -26,6 +26,7 @@ use Yandex\Allure\Adapter\Support\StepSupport;
 
 /**
  * @Features("synchronization")
+ *
  * @Stories("incremental synchronization")
  */
 class IncrementalSynchronizationTest extends BaseTestCase
@@ -48,6 +49,7 @@ class IncrementalSynchronizationTest extends BaseTestCase
 
     /**
      * @Stories("incremental synchronization")
+     *
      * @Title("testIncrementalSync")
      */
     public function testIncrementalSync()
