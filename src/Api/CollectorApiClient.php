@@ -13,9 +13,9 @@ use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 class CollectorApiClient
 {
     /**
-     * @var HttpClientInterface
+     * @var string 
      */
-    private $client;
+    private $collectorApiUrl;
 
     /**
      * @var \Ps_eventbus
@@ -38,13 +38,23 @@ class CollectorApiClient
     {
         $this->module = $module;
         $this->jwt = $psAccounts->getPsAccountsService()->getOrRefreshToken();
+        $this->collectorApiUrl = $collectorApiUrl;
+    }
 
-        // @see https://docs.guzzlephp.org/en/stable/quickstart.html
-        $this->client = (new ClientFactory())->getClient([
+    /**
+     * @see https://docs.guzzlephp.org/en/stable/quickstart.html-
+     *
+     * @param int $startTime @optional start time in seconds since epoch
+     *
+     * @return HttpClientInterface
+     */
+    private function getClient(int $startTime = null) {
+        return (new ClientFactory())->getClient([
             'allow_redirects' => true,
-            'base_uri' => $collectorApiUrl,
+            'base_uri' => $this->collectorApiUrl,
             'connect_timeout' => 3,
             'http_errors' => false,
+            'timeout' => $this->getRemainingTime($startTime),
         ]);
     }
 
@@ -67,21 +77,18 @@ class CollectorApiClient
             'POST',
             '/upload/' . $jobId,
             [
-                'timeout' => $this->getRemainingTime($startTime),
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Authorization' => "Bearer $this->jwt",
-                    'Content-Length' => $file->getContent()->getSize(),
-                    'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
-                    'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
-                    'User-Agent' => 'ps-eventbus/' . $this->module->version,
-                ],
+                'Accept' => 'application/json',
+                'authorization' => 'Bearer' . $this->jwt,
+                'Content-Length' => $file->getContent()->getSize(),
+                'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
+                'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
+                'User-Agent' => 'ps-eventbus/' . $this->module->version,
             ],
             $multipartBody->getContents()
         );
 
         // Send request and parse response
-        $rawResponse = $this->client->sendRequest($request);
+        $rawResponse = $this->getClient($startTime)->sendRequest($request);
         $jsonResponse = json_decode($rawResponse->getBody()->getContents(), true);
         $response = [
             'status' => substr((string) $rawResponse->getStatusCode(), 0, 1) === '2',
@@ -111,20 +118,17 @@ class CollectorApiClient
             'POST',
             '/delete/' . $jobId,
             [
-                'timeout' => $this->getRemainingTime($startTime),
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Authorization' => "Bearer $this->jwt",
-                    'Content-Length' => $file->getContent()->getSize(),
-                    'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
-                    'User-Agent' => 'ps-eventbus/' . $this->module->version,
-                ],
+                'Accept' => 'application/json',
+                'authorization' => 'Bearer' . $this->jwt,
+                'Content-Length' => $file->getContent()->getSize(),
+                'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
+                'User-Agent' => 'ps-eventbus/' . $this->module->version,
             ],
             $multipartBody->getContents()
         );
 
         // Send request and parse response
-        $rawResponse = $this->client->sendRequest($request);
+        $rawResponse = $this->getClient($startTime)->sendRequest($request);
         $jsonResponse = json_decode($rawResponse->getBody()->getContents(), true);
         $response = [
             'status' => substr((string) $rawResponse->getStatusCode(), 0, 1) === '2',
@@ -140,17 +144,27 @@ class CollectorApiClient
      * Get the remaining time of execution for the request. We keep a margin
      * of 1.5s to parse and answser our own client
      *
-     * @param int $startTime in seconds since epoch
+     * @param int $startTime @optional start time in seconds since epoch
      *
      * @return float
      */
-    public function getRemainingTime(int $startTime)
+    private function getRemainingTime(int $startTime = null)
     {
-        $remainingTime = time() - $startTime;
-        if ($remainingTime <= 0) {
-            return 0;
+        // default to maximum timeout
+        if (is_null($startTime)) { 
+            return Config::COLLECTOR_MAX_TIMEOUT;
         }
 
+        $remainingTime = time() - $startTime;
+
+        // negative remaining time means an immediate timeout (0 means infinity)
+        // @see https://docs.guzzlephp.org/en/stable/request-options.html?highlight=timeout#timeout
+        if ($remainingTime <= 0) {
+            return 0.1;
+        }
+
+        // an extra 1.5s is arbitrary substracted
+        // to keep time for the JSON parsing and state propagation in MySQL
         return $remainingTime - Config::COLLECTOR_MAX_TIMEOUT - 1.5;
     }
 }

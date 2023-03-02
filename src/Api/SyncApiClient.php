@@ -11,9 +11,9 @@ use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 class SyncApiClient
 {
     /**
-     * @var HttpClientInterface
+     * @var string 
      */
-    private $client;
+    private $syncApiUrl;
 
     /**
      * @var \Ps_eventbus
@@ -32,17 +32,27 @@ class SyncApiClient
      * @param string $syncApiUrl
      * @param \Ps_eventbus $module
      */
-    public function __construct(PsAccounts $psAccounts, $syncApiUrl, $module)
+    public function __construct($psAccounts, $syncApiUrl, $module)
     {
         $this->module = $module;
         $this->jwt = $psAccounts->getPsAccountsService()->getOrRefreshToken();
+        $this->syncApiUrl = $syncApiUrl;
+    }
 
-        // @see https://docs.guzzlephp.org/en/stable/quickstart.html
-        $this->client = (new ClientFactory())->getClient([
+    /**
+     * @see https://docs.guzzlephp.org/en/stable/quickstart.html-
+     *
+     * @param int $startTime @optional start time in seconds since epoch
+     *
+     * @return HttpClientInterface
+     */
+    private function getClient() {
+        return (new ClientFactory())->getClient([
             'allow_redirects' => true,
-            'base_uri' => $syncApiUrl,
+            'base_uri' => $this->syncApiUrl,
             'connect_timeout' => 3,
             'http_errors' => false,
+            'timeout' => Config::SYNC_API_MAX_TIMEOUT,
         ]);
     }
 
@@ -53,17 +63,14 @@ class SyncApiClient
      */
     public function validateJobId($jobId)
     {
-        $rawResponse = $this->client->sendRequest(
+        $rawResponse = $this->getClient()->sendRequest(
             new Request(
                 'GET',
                 '/job/' . $jobId,
                 [
-                    'timeout' => Config::SYNC_API_MAX_TIMEOUT,
-                    'headers' => [
-                        'Accept' => 'application/json',
-                        'Authorization' => "Bearer $this->jwt",
-                        'User-Agent' => 'ps-eventbus/' . $this->module->version,
-                    ],
+                    'Accept' => 'application/json',
+                    'authorization' => 'Bearer' . $this->jwt,
+                    'User-Agent' => 'ps-eventbus/' . $this->module->version,
                 ]
             )
         );
