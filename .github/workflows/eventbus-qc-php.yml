@@ -79,28 +79,28 @@ jobs:
       - name: PHP unit with PHP 8.1
         run: make phpunit
 
-  coverage:
-    name: Generate the code coverage
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Cache vendor folder
-        uses: actions/cache@v1
-        with:
-          path: vendor
-          key: php-${{ hashFiles('composer.lock') }}
-      - name: PHP unit with coverage
-        run: make phpunit-coverage
-      - name: 🎁 Publishing Allure artifact to GitHub Actions
-        uses: actions/upload-artifact@v2
-        with:
-          name: allure-reports
-          path: allure-reports
-      - name: 🎁 Publishing Code coverage report to GitHub Actions
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage-reports
-          path: coverage-reports
+  # coverage:
+  #   name: Generate the code coverage
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 15
+  #   if: github.ref == 'refs/heads/main'
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #     - name: Cache vendor folder
+  #       uses: actions/cache@v1
+  #       with:
+  #         path: vendor
+  #         key: php-${{ hashFiles('composer.lock') }}
+  #     - name: PHP unit with coverage
+  #       run: make phpunit-coverage
+  #     - name: 🎁 Publishing Allure artifact to GitHub Actions
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: allure-reports
+  #         path: allure-reports
+  #     - name: 🎁 Publishing Code coverage report to GitHub Actions
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: coverage-reports
+  #         path: coverage-reports
