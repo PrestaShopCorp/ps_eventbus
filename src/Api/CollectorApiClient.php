@@ -78,7 +78,7 @@ class CollectorApiClient
             '/upload/' . $jobId,
             [
                 'Accept' => 'application/json',
-                'authorization' => 'Bearer' . $this->jwt,
+                'authorization' => 'Bearer ' . $this->jwt,
                 'Content-Length' => $file->getContent()->getSize(),
                 'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
                 'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
@@ -119,7 +119,7 @@ class CollectorApiClient
             '/delete/' . $jobId,
             [
                 'Accept' => 'application/json',
-                'authorization' => 'Bearer' . $this->jwt,
+                'authorization' => 'Bearer ' . $this->jwt,
                 'Content-Length' => $file->getContent()->getSize(),
                 'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
                 'User-Agent' => 'ps-eventbus/' . $this->module->version,
