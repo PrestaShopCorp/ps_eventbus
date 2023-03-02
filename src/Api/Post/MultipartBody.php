@@ -18,7 +18,6 @@ class MultipartBody implements StreamInterface
      */
     private $boundary;
 
-
     /**
      * @var AppendStream
      */
