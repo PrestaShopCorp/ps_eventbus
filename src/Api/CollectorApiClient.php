@@ -87,7 +87,7 @@ class CollectorApiClient
             'status' => substr((string) $rawResponse->getStatusCode(), 0, 1) === '2',
             'httpCode' => $rawResponse->getStatusCode(),
             'body' => $jsonResponse,
-            'upload_url' => $request->getUri()
+            'upload_url' => $request->getUri(),
         ];
 
         return $response;
@@ -130,7 +130,7 @@ class CollectorApiClient
             'status' => substr((string) $rawResponse->getStatusCode(), 0, 1) === '2',
             'httpCode' => $rawResponse->getStatusCode(),
             'body' => $jsonResponse,
-            'upload_url' => $request->getUri()
+            'upload_url' => $request->getUri(),
         ];
 
         return $response;
