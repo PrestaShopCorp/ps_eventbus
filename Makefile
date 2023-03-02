@@ -87,8 +87,10 @@ prestashop:
 	@mkdir -p ./prestashop
 
 prestashop/prestashop-${PS_VERSION}: prestashop composer.phar
-	@git clone --depth 1 --branch ${PS_VERSION} https://github.com/PrestaShop/PrestaShop.git prestashop/prestashop-${PS_VERSION};
-	@./composer.phar -d ./prestashop/prestashop-${PS_VERSION} install
+	@if [ ! -d "prestashop/prestashop-${PS_VERSION}" ]; then \
+		git clone --depth 1 --branch ${PS_VERSION} https://github.com/PrestaShop/PrestaShop.git prestashop/prestashop-${PS_VERSION}; \
+		./composer.phar -d ./prestashop/prestashop-${PS_VERSION} install
+	fi;
 
 # target: test                                   - Static and unit testing
 test: composer-validate lint php-lint phpstan phpunit translation-validate
@@ -153,7 +155,7 @@ docker-phpunit: prestashop/prestashop-${PS_VERSION}
 	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
 	docker run --rm -e _PS_ROOT_DIR_=/src/prestashop/prestashop-${PS_VERSION} -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpunit;
 
-# target: docker-phpunit                         - Run phpunit in docker
+# target: docker-phpunit-coverage                - Run phpunit in docker
 docker-phpunit-coverage: prestashop/prestashop-${PS_VERSION}
 	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
 	docker run --rm -e _PS_ROOT_DIR_=/src/prestashop/prestashop-${PS_VERSION} -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpunit-coverage;
