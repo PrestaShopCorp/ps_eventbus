@@ -6,7 +6,7 @@ PACKAGE ?= ps_eventbus-${VERSION}
 BUILDPLATFORM ?= linux/amd64
 TESTING_DOCKER_IMAGE ?= ps-eventbus-testing:latest
 TESTING_DOCKER_BASE_IMAGE ?= phpdockerio/php80-cli
-PHP_VERSION ?= 8.1
+PHP_VERSION ?= 8.2
 PS_VERSION ?= 1.7.8.7
 PS_ROOT_DIR ?= $(shell pwd)/prestashop/prestashop-${PS_VERSION}
 
@@ -103,11 +103,11 @@ translation-validate:
 
 # target: lint                                   - Lint the code and expose errors
 lint: vendor/bin/php-cs-fixer
-	@vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no;
+	@PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no;
 
 # target: lint-fix                               - Lint the code and fix it
 lint-fix: vendor/bin/php-cs-fixer
-	@vendor/bin/php-cs-fixer fix --using-cache=no;
+	@PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --using-cache=no;
 
 # target: php-lint                               - Use php linter to check the code
 php-lint:
@@ -180,8 +180,11 @@ all-tests-actions-177:
 	make bps177
 	docker exec -i prestashop-177 sh -c "cd /var/www/html/modules/ps_eventbus && php vendor/bin/phpunit -c tests/phpunit.xml"
 
-allure:
-	./node_modules/.bin/allure serve build/allure-results/
+# Fixme: add "allure-framework/allure-phpunit" in composer.json to solve this.
+# Currently failing to resolve devDeps:
+#   - allure-framework/allure-phpunit v2.1.0 requires phpunit/phpunit ^9 -> found phpunit/phpunit[9.0.0, ..., 9.6.4] but it conflicts with your root composer.json require (^10.0.14).
+# allure:
+# 	./node_modules/.bin/allure serve build/allure-results/
 
-allure-report:
-	./node_modules/.bin/allure generate build/allure-results/
+# allure-report:
+# 	./node_modules/.bin/allure generate build/allure-results/
