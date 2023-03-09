@@ -68,7 +68,7 @@ class SyncApiClient
                 '/job/' . $jobId,
                 [
                     'Accept' => 'application/json',
-                    'authorization' => 'Bearer ' . $this->jwt,
+                    'Authorization' => 'Bearer ' . $this->jwt,
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                 ]
             )

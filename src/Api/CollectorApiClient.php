@@ -79,7 +79,7 @@ class CollectorApiClient
             '/upload/' . $jobId,
             [
                 'Accept' => 'application/json',
-                'authorization' => 'Bearer ' . $this->jwt,
+                'Authorization' => 'Bearer ' . $this->jwt,
                 'Content-Length' => $file->getContent()->getSize(),
                 'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
                 'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
@@ -120,7 +120,7 @@ class CollectorApiClient
             '/delete/' . $jobId,
             [
                 'Accept' => 'application/json',
-                'authorization' => 'Bearer ' . $this->jwt,
+                'Authorization' => 'Bearer ' . $this->jwt,
                 'Content-Length' => $file->getContent()->getSize(),
                 'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
                 'User-Agent' => 'ps-eventbus/' . $this->module->version,
@@ -151,21 +151,27 @@ class CollectorApiClient
      */
     private function getRemainingTime(int $startTime = null)
     {
-        // default to maximum timeout
+        /*
+         * Default to maximum timeout
+         */
         if (is_null($startTime)) {
             return Config::COLLECTOR_MAX_TIMEOUT;
         }
 
         $remainingTime = time() - $startTime;
 
-        // negative remaining time means an immediate timeout (0 means infinity)
-        // @see https://docs.guzzlephp.org/en/stable/request-options.html?highlight=timeout#timeout
+        /*
+         * Negative remaining time means an immediate timeout (0 means infinity)
+         * @see https://docs.guzzlephp.org/en/stable/request-options.html?highlight=timeout#timeout
+         */
         if ($remainingTime <= 0) {
             return 0.1;
         }
 
-        // an extra 1.5s is arbitrary substracted
-        // to keep time for the JSON parsing and state propagation in MySQL
+        /*
+         * An extra 1.5s is arbitrary substracted
+         * to keep time for the JSON parsing and state propagation in MySQL
+         */
         return $remainingTime - Config::COLLECTOR_MAX_TIMEOUT - 1.5;
     }
 }
