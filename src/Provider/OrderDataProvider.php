@@ -362,7 +362,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
-     * @param array $orderDetails
+     * @param array $orderCartRules
      *
      * @return void
      */
