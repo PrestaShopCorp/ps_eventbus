@@ -51,6 +51,7 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\CartRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\CartProductRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\CartRuleRepository'
 
   PrestaShop\Module\PsEventbus\Provider\GoogleTaxonomyDataProvider:
     class: PrestaShop\Module\PsEventbus\Provider\GoogleTaxonomyDataProvider
