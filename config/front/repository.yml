@@ -101,6 +101,12 @@ services:
     arguments:
       - '@ps_eventbus.db'
 
+  PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
+
   PrestaShop\Module\PsEventbus\Repository\CartRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CartRepository
     public: true
@@ -120,7 +126,6 @@ services:
     public: true
     arguments:
       - '@ps_eventbus.db'
-      - '@ps_eventbus.context'
 
   PrestaShop\Module\PsEventbus\Repository\GoogleTaxonomyRepository:
     class: PrestaShop\Module\PsEventbus\Repository\GoogleTaxonomyRepository

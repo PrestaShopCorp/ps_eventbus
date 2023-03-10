@@ -4,8 +4,8 @@ namespace PrestaShop\Module\PsEventbus\Provider;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Repository\CartProductRepository;
-use PrestaShop\Module\PsEventbus\Repository\CartRuleRepository;
 use PrestaShop\Module\PsEventbus\Repository\CartRepository;
+use PrestaShop\Module\PsEventbus\Repository\CartRuleRepository;
 
 class CartDataProvider implements PaginatedApiDataProviderInterface
 {
@@ -166,7 +166,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
         return [];
     }
 
-        /**
+    /**
      * @return array
      *
      * @throws \PrestaShopDatabaseException
@@ -190,10 +190,11 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
                 ];
             }, $cartRules);
         }
+
         return [];
     }
 
-        /**
+    /**
      * @param array $cartRules
      *
      * @return void
@@ -207,7 +208,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
             $cartRule['quantity_per_user'] = (int) $cartRule['quantity_per_user'];
             $cartRule['priority'] = (int) $cartRule['priority'];
             $cartRule['partial_use'] = (bool) $cartRule['partial_use'];
-            $cartRule['minimum_amount'] = $cartRule['minimum_amount'];
+            $cartRule['minimum_amount'] = (float) $cartRule['minimum_amount'];
             $cartRule['minimum_amount_tax'] = (bool) $cartRule['minimum_amount_tax'];
             $cartRule['minimum_amount_currency'] = (int) $cartRule['minimum_amount_currency'];
             $cartRule['minimum_amount_shipping'] = (bool) $cartRule['minimum_amount_shipping'];
@@ -218,8 +219,8 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
             $cartRule['product_restriction'] = (bool) $cartRule['product_restriction'];
             $cartRule['shop_restriction'] = (bool) $cartRule['shop_restriction'];
             $cartRule['free_shipping'] = (bool) $cartRule['free_shipping'];
-            $cartRule['reduction_percent'] = $cartRule['reduction_percent'];
-            $cartRule['reduction_amount'] = $cartRule['reduction_amount'];
+            $cartRule['reduction_percent'] = (float) $cartRule['reduction_percent'];
+            $cartRule['reduction_amount'] = (float) $cartRule['reduction_amount'];
             $cartRule['reduction_tax'] = (bool) $cartRule['reduction_tax'];
             $cartRule['reduction_currency'] = (int) $cartRule['reduction_currency'];
             $cartRule['reduction_product'] = (int) $cartRule['reduction_product'];
@@ -230,5 +231,4 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
             $cartRule['active'] = (bool) $cartRule['active'];
         }
     }
-
 }

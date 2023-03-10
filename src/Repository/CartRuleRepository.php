@@ -8,15 +8,10 @@ class CartRuleRepository
      * @var \Db
      */
     private $db;
-    /**
-     * @var \Context
-     */
-    private $context;
 
-    public function __construct(\Db $db, \Context $context)
+    public function __construct(\Db $db)
     {
         $this->db = $db;
-        $this->context = $context;
     }
 
     /**

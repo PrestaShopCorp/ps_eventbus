@@ -39,6 +39,7 @@ class Config
     public const COLLECTION_ORDERS = 'orders';
     public const COLLECTION_ORDER_DETAILS = 'order_details';
     public const COLLECTION_ORDER_STATUS_HISTORY = 'order_status_history';
+    public const COLLECTION_ORDER_CART_RULES = 'order_cart_rules';
     public const COLLECTION_PRODUCTS = 'products';
     public const COLLECTION_PRODUCT_ATTRIBUTES = 'attributes';
     public const COLLECTION_DELETED = 'deleted';
