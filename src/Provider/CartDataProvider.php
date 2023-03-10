@@ -58,7 +58,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
             ];
         }, $carts);
 
-        return array_merge($carts, $cartProducts);
+        return array_merge($carts, $cartProducts, $cartRules);
     }
 
     /**
@@ -175,7 +175,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
     {
         $cartRules = $this->cartRuleRepository->getCartRules();
 
-        if (!is_array($cartProducts) || empty($cartProducts)) {
+        if (!is_array($cartRules) || empty($cartRules)) {
             return [];
         }
 

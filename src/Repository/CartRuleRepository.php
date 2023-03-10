@@ -35,7 +35,7 @@ class CartRuleRepository
     {
         $query = $this->getBaseQuery();
 
-        $query->select('cr.id_cart_rule,cr.id_customer, cr.code, cr.date_from AS from,cr.date_toAS to,cr.description,cr.quantity,
+        $query->select('cr.id_cart_rule,cr.id_customer, cr.code, cr.date_from AS "from",cr.date_to AS "to",cr.description,cr.quantity,
         cr.quantity_per_user,cr.priority,cr.partial_use,cr.minimum_amount,cr.minimum_amount_tax,cr.minimum_amount_currency,
         cr.minimum_amount_shipping,cr.country_restriction,cr.carrier_restriction,cr.group_restriction,cr.cart_rule_restriction,
         cr.product_restriction,cr.shop_restriction,cr.free_shipping,cr.reduction_percent,cr.reduction_amount,cr.reduction_tax,
