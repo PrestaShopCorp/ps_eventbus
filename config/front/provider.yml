@@ -44,6 +44,7 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
       - '@PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository'
 
   PrestaShop\Module\PsEventbus\Provider\CartDataProvider:
     class: PrestaShop\Module\PsEventbus\Provider\CartDataProvider
@@ -51,6 +52,7 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\CartRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\CartProductRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\CartRuleRepository'
 
   PrestaShop\Module\PsEventbus\Provider\GoogleTaxonomyDataProvider:
     class: PrestaShop\Module\PsEventbus\Provider\GoogleTaxonomyDataProvider

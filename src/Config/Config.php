@@ -30,6 +30,7 @@ class Config
     public const COLLECTION_CARRIERS = 'carriers';
     public const COLLECTION_CARTS = 'carts';
     public const COLLECTION_CART_PRODUCTS = 'cart_products';
+    public const COLLECTION_CART_RULES = 'cart_rules';
     public const COLLECTION_CATEGORIES = 'categories';
     public const COLLECTION_CURRENCIES = 'currencies';
     public const COLLECTION_SPECIFIC_PRICES = 'specific_prices';
@@ -40,6 +41,7 @@ class Config
     public const COLLECTION_ORDERS = 'orders';
     public const COLLECTION_ORDER_DETAILS = 'order_details';
     public const COLLECTION_ORDER_STATUS_HISTORY = 'order_status_history';
+    public const COLLECTION_ORDER_CART_RULES = 'order_cart_rules';
     public const COLLECTION_PRODUCTS = 'products';
     public const COLLECTION_PRODUCT_ATTRIBUTES = 'attributes';
     public const COLLECTION_DELETED = 'deleted';
