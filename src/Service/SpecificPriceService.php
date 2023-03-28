@@ -2,6 +2,9 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
+use PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository;
+
+
 use Address;
 use Cart;
 use Combination;
@@ -18,6 +21,15 @@ class SpecificPriceService
 {
     /** @var array */
     private static $_pricesLevel2;
+
+    /**
+     * @var SpecificPriceRepository
+     */
+    private $specificPriceRepository;
+    public function __construct(SpecificPriceRepository $specificPriceRepository)
+    {
+        $this->specificPriceRepository = $specificPriceRepository;
+    }
 
     /**
      * @param int $productId
@@ -382,14 +394,6 @@ class SpecificPriceService
             return [];
         }
 
-        $query = '
-        SELECT *
-          FROM `' . _DB_PREFIX_ . 'specific_price`
-          WHERE
-                  `id_specific_price` = ' . (int) $specificPriceId;
-
-        $query .= ' ORDER BY `id_product_attribute` DESC, `id_cart` DESC, `from_quantity` DESC, `id_specific_price_rule` ASC, `to` DESC, `from` DESC';
-
-        return \Db::getInstance((bool) _PS_USE_SQL_SLAVE_)->getRow($query);
+        return $this->specificPriceRepository->getSpecificPrice($specificPriceId);
     }
 }
