@@ -4,7 +4,6 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 
 class SpecificPriceRepository
 {
-
     public const TABLE_NAME = 'specific_price';
 
     /**
@@ -24,9 +23,9 @@ class SpecificPriceRepository
     {
         $query = new \DbQuery();
         $query->from(self::TABLE_NAME, 'sp');
+
         return $query;
     }
-
 
     /**
      * @param int $specificPrice
@@ -45,9 +44,8 @@ class SpecificPriceRepository
         $this->addSelectParameters($query);
         $query->where('sp.id_specific_price= ' . (int) $specificPriceId);
 
-        return$this->db->getRow($query);
-    }    
-
+        return $this->db->getRow($query);
+    }
 
     /**
      * @param \DbQuery $query

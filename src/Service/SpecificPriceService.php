@@ -2,9 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository;
-
-
 use Address;
 use Cart;
 use Combination;
@@ -12,6 +9,7 @@ use Context;
 use Customer;
 use Customization;
 use Group;
+use PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository;
 use Product;
 use Shop;
 use SpecificPrice;
@@ -26,6 +24,7 @@ class SpecificPriceService
      * @var SpecificPriceRepository
      */
     private $specificPriceRepository;
+
     public function __construct(SpecificPriceRepository $specificPriceRepository)
     {
         $this->specificPriceRepository = $specificPriceRepository;
