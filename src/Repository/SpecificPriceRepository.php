@@ -43,7 +43,7 @@ class SpecificPriceRepository
 
         $query = $this->getBaseQuery();
         $this->addSelectParameters($query);
-        $query->where('ps.id_specific_price= ' . (int) $specificPriceId);
+        $query->where('sp.id_specific_price= ' . (int) $specificPriceId);
 
         return $this->db->executeS($query);
     }    
@@ -56,7 +56,7 @@ class SpecificPriceRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('ps.id_specific_price, ps.id_specific_price_rule, ps.id_cart, ps.id_product, ps.id_shop, ps.id_shop_group, ps.id_currency, ps.id_country, 
-        ps.id_country, ps.id_customer, ps.id_product_attribute, ps.price, ps.from_quantity, ps.reduction, ps.reduction_tax, ps.reduction_type, ps.from, ps.to');
+        $query->select('sp.id_specific_price, sp.id_specific_price_rule, sp.id_cart, sp.id_product, sp.id_shop, sp.id_shop_group, sp.id_currency, sp.id_country, 
+        sp.id_country, sp.id_customer, sp.id_product_attribute, sp.price, sp.from_quantity, sp.reduction, sp.reduction_tax, sp.reduction_type, sp.from, sp.to');
     }
 }
