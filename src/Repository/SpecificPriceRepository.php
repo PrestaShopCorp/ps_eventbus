@@ -31,7 +31,7 @@ class SpecificPriceRepository
     /**
      * @param int $specificPrice
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -45,7 +45,7 @@ class SpecificPriceRepository
         $this->addSelectParameters($query);
         $query->where('sp.id_specific_price= ' . (int) $specificPriceId);
 
-        return $this->db->executeS($query);
+        return$this->db->getRow($query);
     }    
 
 
