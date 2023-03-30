@@ -225,6 +225,7 @@ abstract class AbstractApiController extends \ModuleFrontController
                 [
                     'job_id' => $jobId,
                     'object_type' => $this->type,
+                    'syncType' => $incrementalSync ? "incremental" : "full",
                 ],
                 $response
             );
