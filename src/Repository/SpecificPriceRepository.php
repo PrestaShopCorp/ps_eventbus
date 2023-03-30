@@ -28,9 +28,9 @@ class SpecificPriceRepository
     }
 
     /**
-     * @param int $specificPrice
+     * @param int $specificPriceId
      *
-     * @return array|\mysqli_result|\PDOStatement|resource|null
+     * @return array|bool|false|object|null
      *
      * @throws \PrestaShopDatabaseException
      */

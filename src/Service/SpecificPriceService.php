@@ -385,7 +385,7 @@ class SpecificPriceService
      *
      * @param int $specificPriceId
      *
-     * @return array|bool|object|null
+     * @return array|bool|false|object|null
      */
     private function getSpecificPrice($specificPriceId)
     {
