@@ -91,6 +91,9 @@ class Ps_eventbus extends Module
         'actionObjectWishlistAddAfter',
         'actionObjectWishlistUpdateAfter',
         'actionObjectWishlistDeleteAfter',
+        'actionObjectStoreAddAfter',
+        'actionObjectStoreUpdateAfter',
+        'actionObjectStoreDeleteAfter',
         'actionObjectZoneAddAfter',
         'actionObjectZoneUpdateAfter',
         'actionObjectZoneDeleteAfter',
@@ -333,6 +336,62 @@ class Ps_eventbus extends Module
         $this->insertIncrementalSyncObject(
             $wishlistId,
             Config::COLLECTION_WISHLISTS,
+            date(DATE_ATOM),
+            $this->shopId,
+            true
+        );
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectStoreDeleteAfter($parameters)
+    {
+        $product = $parameters['object'];
+
+        $this->insertDeletedObject(
+            $product->id,
+            Config::COLLECTION_STORES,
+            date(DATE_ATOM),
+            $this->shopId
+        );
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectStoreAddAfter($parameters)
+    {
+        $product = $parameters['object'];
+
+        $this->insertIncrementalSyncObject(
+            $product->id,
+            Config::COLLECTION_STORES,
+            date(DATE_ATOM),
+            $this->shopId,
+            true
+        );
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectStoreUpdateAfter($parameters)
+    {
+        /** @var WishList $wishlist */
+        $store = $parameters['object'];
+        /** @var int $wishlistId */
+        $storeId = $store->id;
+
+        $this->insertIncrementalSyncObject(
+            $storeId,
+            Config::COLLECTION_STORES,
             date(DATE_ATOM),
             $this->shopId,
             true

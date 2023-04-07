@@ -44,6 +44,7 @@ class Config
     public const COLLECTION_PRODUCT_ATTRIBUTES = 'attributes';
     public const COLLECTION_DELETED = 'deleted';
     public const COLLECTION_SHOPS = 'shops';
+    public const COLLECTION_STORES = 'stores';
     public const COLLECTION_THEMES = 'themes';
     public const COLLECTION_BUNDLES = 'bundles';
     public const COLLECTION_WISHLISTS = 'wishlists';
