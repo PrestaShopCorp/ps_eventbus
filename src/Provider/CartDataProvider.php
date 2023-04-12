@@ -121,6 +121,8 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
 
         $this->castCartValues($carts);
 
+        $cartRules = $this->getCartRules();
+
         $carts = array_map(function ($cart) {
             return [
                 'id' => $cart['id_cart'],
@@ -129,7 +131,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
             ];
         }, $carts);
 
-        return array_merge($carts, $cartProducts);
+        return array_merge($carts, $cartProducts, $cartRules);
     }
 
     /**
