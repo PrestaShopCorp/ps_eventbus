@@ -384,9 +384,9 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectStoreUpdateAfter($parameters)
     {
-        /** @var WishList $wishlist */
+        /** @var Store $store */
         $store = $parameters['object'];
-        /** @var int $wishlistId */
+        /** @var int $storeId */
         $storeId = $store->id;
 
         $this->insertIncrementalSyncObject(
