@@ -22,7 +22,7 @@ class StoreRepository
     }
 
     /**
-     * @param int $langIso
+     * @param string $langIso
      *
      * @return \DbQuery
      */
@@ -44,7 +44,7 @@ class StoreRepository
     /**
      * @param int $offset
      * @param int $limit
-     * @param int $langIso
+     * @param string $langIso
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
@@ -63,7 +63,7 @@ class StoreRepository
 
     /**
      * @param int $offset
-     * @param int $langIso
+     * @param string $langIso
      *
      * @return int
      */
@@ -80,7 +80,7 @@ class StoreRepository
 
     /**
      * @param int $limit
-     * @param int $langIso
+     * @param string $langIso
      * @param array $storeIds
      *
      * @return array
