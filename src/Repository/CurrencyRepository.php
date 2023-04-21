@@ -21,7 +21,7 @@ class CurrencyRepository
     }
 
     /**
-     * @return bool
+     * @return mixed
      */
     private function isLangAvailable()
     {
