@@ -20,8 +20,9 @@ class CurrencyRepository
         $this->context = $context;
     }
 
-    private function isLangAvailable() {
-     return \Tools::version_compare(_PS_VERSION_, '1.7.6', '>=');
+    private function isLangAvailable()
+    {
+        return \Tools::version_compare(_PS_VERSION_, '1.7.6', '>=');
     }
 
     /**
@@ -117,8 +118,9 @@ class CurrencyRepository
     {
         $query = new \DbQuery();
         $query->from('currency', 'c');
-        if ($this->isLangAvailable())
+        if ($this->isLangAvailable()) {
             $query->innerJoin('currency_lang', 'cl', 'cl.id_currency = c.id_currency');
+        }
 
         return $query;
     }
@@ -130,9 +132,10 @@ class CurrencyRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        if ($this->isLangAvailable())
-          $query->select('c.id_currency, cl.name, c.iso_code, c.conversion_rate, c.deleted, c.active');
-        else
-          $query->select('c.id_currency, \'\' as name, c.iso_code, c.conversion_rate, c.deleted, c.active');
-      }
+        if ($this->isLangAvailable()) {
+            $query->select('c.id_currency, cl.name, c.iso_code, c.conversion_rate, c.deleted, c.active');
+        } else {
+            $query->select('c.id_currency, \'\' as name, c.iso_code, c.conversion_rate, c.deleted, c.active');
+        }
+    }
 }

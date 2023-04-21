@@ -219,3 +219,16 @@ services:
     arguments:
       - '@ps_eventbus.db'
       - '@ps_eventbus.context'
+
+  PrestaShop\Module\PsEventbus\Repository\StockRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\StockRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
+      - '@ps_eventbus.context'
+
+  PrestaShop\Module\PsEventbus\Repository\StockMvtRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\StockMvtRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'

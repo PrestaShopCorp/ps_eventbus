@@ -49,4 +49,6 @@ class Config
     public const COLLECTION_BUNDLES = 'bundles';
     public const COLLECTION_WISHLISTS = 'wishlists';
     public const COLLECTION_WISHLIST_PRODUCTS = 'wishlist_products';
+    public const COLLECTION_STOCKS = 'stocks';
+    public const COLLECTION_STOCK_MVTS = 'stock_movements';
 }
