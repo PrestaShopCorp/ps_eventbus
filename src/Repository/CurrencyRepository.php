@@ -20,6 +20,9 @@ class CurrencyRepository
         $this->context = $context;
     }
 
+    /**
+     * @return bool
+     */
     private function isLangAvailable()
     {
         return \Tools::version_compare(_PS_VERSION_, '1.7.6', '>=');

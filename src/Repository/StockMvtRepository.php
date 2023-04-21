@@ -15,7 +15,6 @@ class StockMvtRepository
     }
 
     /**
-     * @param int $shopId
      * @param string $langIso
      *
      * @return \DbQuery
