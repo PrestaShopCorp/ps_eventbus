@@ -73,13 +73,13 @@ class StockRepository
 
     /**
      * @param int $limit
-     * @param array $stockIds
+     * @param array $productIds
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getStocksIncremental($limit, $stockIds)
+    public function getStocksIncremental($limit, $productIds)
     {
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
@@ -87,7 +87,7 @@ class StockRepository
 
         $this->addSelectParameters($query);
 
-        $query->where('sa.id_stock_available IN(' . implode(',', array_map('intval', $stockIds)) . ')')
+        $query->where('sa.id_product IN(' . implode(',', array_map('intval', $productIds)) . ')')
             ->limit($limit);
 
         return $this->db->executeS($query);
