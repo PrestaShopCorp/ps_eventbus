@@ -296,7 +296,7 @@ class Ps_eventbus extends Module
         );
 
         $this->insertIncrementalSyncObject(
-            $product->id,
+            $productId,
             Config::COLLECTION_STOCKS,
             date(DATE_ATOM),
             $this->shopId,
