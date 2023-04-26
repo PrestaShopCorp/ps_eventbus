@@ -99,3 +99,12 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\StoreRepository'
       - '@PrestaShop\Module\PsEventbus\Decorator\StoreDecorator'
+
+  PrestaShop\Module\PsEventbus\Provider\StockDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\StockDataProvider
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\StockRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\StockMvtRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\StockDecorator'
+      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
