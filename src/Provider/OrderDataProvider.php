@@ -376,7 +376,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             $orderCartRule['value'] = (float) $orderCartRule['value'];
             $orderCartRule['value_tax_excl'] = (float) $orderCartRule['value_tax_excl'];
             $orderCartRule['free_shipping'] = (bool) $orderCartRule['free_shipping'];
-            $orderCartRule['deleted'] = (bool) $orderCartRule['deleted'];
+            $orderCartRule['deleted'] = isset($orderCartRule['deleted']) ? (bool) $orderCartRule['deleted'] : false;
         }
     }
 }
