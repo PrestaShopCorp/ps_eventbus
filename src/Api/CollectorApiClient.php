@@ -151,17 +151,19 @@ class CollectorApiClient
     private function getRemainingTime(int $startTime = null)
     {
         /*
+         * An extra 1.5s to be arbitrary substracted
+         * to keep time for the JSON parsing and state propagation in MySQL
+         */
+        $extraOpsTime = 1.5;
+
+        /*
          * Default to maximum timeout
          */
         if (is_null($startTime)) {
-            return (int) ini_get('max_execution_time');
+            return (int) ini_get('max_execution_time') - $extraOpsTime;
         }
 
-        /*
-         * An extra 1.5s is arbitrary substracted
-         * to keep time for the JSON parsing and state propagation in MySQL
-         */
-        $remainingTime = (int) ini_get('max_execution_time') - (time() - $startTime) - 1.5;
+        $remainingTime = (int) ini_get('max_execution_time') - $extraOpsTime - (time() - $startTime);
 
         /*
          * Negative remaining time means an immediate timeout (0 means infinity)

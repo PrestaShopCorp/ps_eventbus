@@ -13,6 +13,7 @@ use Yandex\Allure\Adapter\Annotation\Title;
 
 /**
  * @Features("dataProvider")
+ *
  * @Stories("carrier data provider")
  */
 class CarrierDataProviderTest extends BaseTestCase
@@ -29,6 +30,7 @@ class CarrierDataProviderTest extends BaseTestCase
 
     /**
      * @Stories("carrier data provider")
+     *
      * @Title("testDataProviders")
      *
      * @dataProvider getDataProviderInfo
