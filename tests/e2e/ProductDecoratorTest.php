@@ -13,7 +13,6 @@ use Yandex\Allure\Adapter\Annotation\Title;
 
 /**
  * @Features("decorator")
- *
  * @Stories("product decorator")
  */
 class ProductDecoratorTest extends BaseTestCase
@@ -25,7 +24,6 @@ class ProductDecoratorTest extends BaseTestCase
 
     /**
      * @Stories("product decorator")
-     *
      * @Title("testDecorateProducts")
      */
     public function testDecorateProducts()
@@ -185,7 +183,6 @@ class ProductDecoratorTest extends BaseTestCase
 
     /**
      * @Stories("product decorator")
-     *
      * @Title("testDecorateProducts")
      */
     public function testDecorateProductsWithCombination()

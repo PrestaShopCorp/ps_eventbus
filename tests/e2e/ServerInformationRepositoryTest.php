@@ -14,7 +14,6 @@ use Yandex\Allure\Adapter\Annotation\Title;
 
 /**
  * @Features("repository")
- *
  * @Stories("server information repository")
  */
 class ServerInformationRepositoryTest extends BaseTestCase
@@ -80,7 +79,6 @@ class ServerInformationRepositoryTest extends BaseTestCase
 
     /**
      * @Stories("server information repository")
-     *
      * @Title("testGetServerInformation")
      */
     public function testGetServerInformation()
