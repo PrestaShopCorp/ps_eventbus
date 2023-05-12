@@ -154,14 +154,14 @@ class CollectorApiClient
          * Default to maximum timeout
          */
         if (is_null($startTime)) {
-            return ini_get('max_execution_time');
+            return (int) ini_get('max_execution_time');
         }
 
         /*
          * An extra 1.5s is arbitrary substracted
          * to keep time for the JSON parsing and state propagation in MySQL
          */
-        $remainingTime = ini_get('max_execution_time') - (time() - $startTime) - 1.5;
+        $remainingTime = (int) ini_get('max_execution_time') - (time() - $startTime) - 1.5;
 
         /*
          * Negative remaining time means an immediate timeout (0 means infinity)
