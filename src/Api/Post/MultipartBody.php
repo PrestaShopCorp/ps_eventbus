@@ -34,7 +34,7 @@ class MultipartBody implements StreamInterface
     public function __construct(
         array $fields = [],
         array $files = [],
-              $boundary = null
+        $boundary = null
     ) {
         $this->boundary = $boundary ?: uniqid();
         $this->stream = $this->createStream($fields, $files);
