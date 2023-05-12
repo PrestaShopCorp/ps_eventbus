@@ -66,6 +66,8 @@ services:
 
   PrestaShop\Module\PsEventbus\Service\SpecificPriceService:
     class: PrestaShop\Module\PsEventbus\Service\SpecificPriceService
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository'
     public: true
 
   PrestaShop\Module\PsEventbus\Service\PresenterService:

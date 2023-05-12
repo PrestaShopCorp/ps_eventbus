@@ -41,3 +41,15 @@ services:
   PrestaShop\Module\PsEventbus\Decorator\WishlistDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\WishlistDecorator
     public: true
+
+  PrestaShop\Module\PsEventbus\Decorator\StoreDecorator:
+    class: PrestaShop\Module\PsEventbus\Decorator\StoreDecorator
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
+
+  PrestaShop\Module\PsEventbus\Decorator\StockDecorator:
+    class: PrestaShop\Module\PsEventbus\Decorator\StockDecorator
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'

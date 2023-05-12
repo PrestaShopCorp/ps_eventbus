@@ -91,6 +91,11 @@ class Ps_eventbus extends Module
         'actionObjectWishlistAddAfter',
         'actionObjectWishlistUpdateAfter',
         'actionObjectWishlistDeleteAfter',
+        'actionObjectStockAddAfter',
+        'actionObjectStockUpdateAfter',
+        'actionObjectStoreAddAfter',
+        'actionObjectStoreUpdateAfter',
+        'actionObjectStoreDeleteAfter',
         'actionObjectZoneAddAfter',
         'actionObjectZoneUpdateAfter',
         'actionObjectZoneDeleteAfter',
@@ -252,6 +257,14 @@ class Ps_eventbus extends Module
             $this->shopId,
             false
         );
+
+        $this->insertIncrementalSyncObject(
+            $product->id,
+            Config::COLLECTION_STOCKS,
+            date(DATE_ATOM),
+            $this->shopId,
+            false
+        );
     }
 
     /**
@@ -277,6 +290,14 @@ class Ps_eventbus extends Module
         $this->insertIncrementalSyncObject(
             $productId,
             Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
+            date(DATE_ATOM),
+            $this->shopId,
+            false
+        );
+
+        $this->insertIncrementalSyncObject(
+            $productId,
+            Config::COLLECTION_STOCKS,
             date(DATE_ATOM),
             $this->shopId,
             false
@@ -333,6 +354,100 @@ class Ps_eventbus extends Module
         $this->insertIncrementalSyncObject(
             $wishlistId,
             Config::COLLECTION_WISHLISTS,
+            date(DATE_ATOM),
+            $this->shopId,
+            true
+        );
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectStockAddAfter($parameters)
+    {
+        $stock = $parameters['object'];
+
+        $this->insertIncrementalSyncObject(
+            $stock->id,
+            Config::COLLECTION_STOCKS,
+            date(DATE_ATOM),
+            $this->shopId,
+            true
+        );
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectStockUpdateAfter($parameters)
+    {
+        $stock = $parameters['object'];
+        /** @var int $stockId */
+        $stockId = $stock->id;
+
+        $this->insertIncrementalSyncObject(
+            $stockId,
+            Config::COLLECTION_STOCKS,
+            date(DATE_ATOM),
+            $this->shopId,
+            true
+        );
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectStoreDeleteAfter($parameters)
+    {
+        $product = $parameters['object'];
+
+        $this->insertDeletedObject(
+            $product->id,
+            Config::COLLECTION_STORES,
+            date(DATE_ATOM),
+            $this->shopId
+        );
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectStoreAddAfter($parameters)
+    {
+        $product = $parameters['object'];
+
+        $this->insertIncrementalSyncObject(
+            $product->id,
+            Config::COLLECTION_STORES,
+            date(DATE_ATOM),
+            $this->shopId,
+            true
+        );
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectStoreUpdateAfter($parameters)
+    {
+        /** @var Store $store */
+        $store = $parameters['object'];
+        /** @var int $storeId */
+        $storeId = $store->id;
+
+        $this->insertIncrementalSyncObject(
+            $storeId,
+            Config::COLLECTION_STORES,
             date(DATE_ATOM),
             $this->shopId,
             true
