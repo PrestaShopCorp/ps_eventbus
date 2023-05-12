@@ -52,7 +52,6 @@ class CollectorApiClient
     {
         return (new ClientFactory())->getClient([
             'allow_redirects' => true,
-            'base_uri' => $this->collectorApiUrl,
             'connect_timeout' => 3,
             'http_errors' => false,
             'timeout' => $this->getRemainingTime($startTime),
@@ -76,7 +75,7 @@ class CollectorApiClient
         $multipartBody = new MultipartBody([], [$file], Config::COLLECTOR_MULTIPART_BOUNDARY);
         $request = new Request(
             'POST',
-            '/upload/' . $jobId,
+            $this->collectorApiUrl . '/upload/' . $jobId,
             [
                 'Accept' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->jwt,
@@ -117,7 +116,7 @@ class CollectorApiClient
         $multipartBody = new MultipartBody([], [$file], Config::COLLECTOR_MULTIPART_BOUNDARY);
         $request = new Request(
             'POST',
-            '/delete/' . $jobId,
+            $this->collectorApiUrl . '/delete/' . $jobId,
             [
                 'Accept' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->jwt,
@@ -155,10 +154,14 @@ class CollectorApiClient
          * Default to maximum timeout
          */
         if (is_null($startTime)) {
-            return Config::COLLECTOR_MAX_TIMEOUT;
+            return ini_get('max_execution_time');
         }
 
-        $remainingTime = time() - $startTime;
+        /*
+         * An extra 1.5s is arbitrary substracted
+         * to keep time for the JSON parsing and state propagation in MySQL
+         */
+        $remainingTime = ini_get('max_execution_time') - (time() - $startTime) - 1.5;
 
         /*
          * Negative remaining time means an immediate timeout (0 means infinity)
@@ -168,10 +171,6 @@ class CollectorApiClient
             return 0.1;
         }
 
-        /*
-         * An extra 1.5s is arbitrary substracted
-         * to keep time for the JSON parsing and state propagation in MySQL
-         */
-        return $remainingTime - Config::COLLECTOR_MAX_TIMEOUT - 1.5;
+        return $remainingTime;
     }
 }

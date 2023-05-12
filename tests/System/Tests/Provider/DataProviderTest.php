@@ -19,7 +19,6 @@ use Yandex\Allure\Adapter\Support\StepSupport;
 
 /**
  * @Features("dataProvider")
- *
  * @Stories("data provider")
  */
 class DataProviderTest extends BaseTestCase
@@ -28,7 +27,6 @@ class DataProviderTest extends BaseTestCase
 
     /**
      * @Stories("data provider")
-     *
      * @Title("testDataProviders")
      */
     public function testDataProviders()

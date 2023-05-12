@@ -48,7 +48,6 @@ class SyncApiClient
     {
         return (new ClientFactory())->getClient([
             'allow_redirects' => true,
-            'base_uri' => $this->syncApiUrl,
             'connect_timeout' => 3,
             'http_errors' => false,
             'timeout' => Config::SYNC_API_MAX_TIMEOUT,
@@ -65,7 +64,7 @@ class SyncApiClient
         $rawResponse = $this->getClient()->sendRequest(
             new Request(
                 'GET',
-                '/job/' . $jobId,
+                $this->syncApiUrl . '/job/' . $jobId,
                 [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . $this->jwt,

@@ -25,7 +25,6 @@ use Yandex\Allure\Adapter\Support\StepSupport;
 
 /**
  * @Features("synchronization")
- *
  * @Stories("full synchronization")
  */
 class FullSynchronizationTest extends BaseTestCase
@@ -41,7 +40,6 @@ class FullSynchronizationTest extends BaseTestCase
 
     /**
      * @Stories("full synchronization")
-     *
      * @Title("testFullSync")
      */
     public function testFullSync()
