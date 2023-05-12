@@ -13,8 +13,15 @@ class MultipartBody implements StreamInterface
 {
     use StreamDecoratorTrait;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $boundary;
+
+    /**
+     * @var AppendStream
+     */
+    private $stream;
 
     /**
      * @param array $fields associative array of field names to values where

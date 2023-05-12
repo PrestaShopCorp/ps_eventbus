@@ -34,5 +34,6 @@ parameters:
     - '#Cannot call method execute\(\) on mysqli_stmt\|PDOStatement\|false.#'
     - '#Parameter \#1 \$restriction of method DbQueryCore::where\(\) expects string, int\|string given.#'
     - '#Method PrestaShop\\Module\\PsEventbus\\Repository\\MerchantConsentRepository::getConsentByShopId\(\) should return array but returns array\|mysqli_result\|PDOStatement\|resource\|false\|null.#'
+    - '#Property PrestaShop\\Module\\PsEventbus\\Api\\Post\\MultipartBody::\$stream is never read, only written.#'
 
   level: 9

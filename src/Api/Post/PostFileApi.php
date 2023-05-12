@@ -11,10 +11,13 @@ class PostFileApi implements PostFileInterface
 {
     /** @var string */
     private $name;
+
     /** @var string|null */
     private $filename;
+
     /** @var StreamInterface|MultipartBody|mixed */
     private $content;
+
     /** @var array */
     private $headers = [];
 
