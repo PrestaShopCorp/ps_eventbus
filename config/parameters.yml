@@ -1,3 +1,5 @@
+# Note: this file is here for documentation purpose
+# It will be overrided by the Makefile
 parameters:
   ps_eventbus.proxy_api_url: "https://eventbus-proxy.psessentials.net"
   ps_eventbus.sync_api_url: "https://eventbus-sync.psessentials.net"

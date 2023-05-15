@@ -145,7 +145,7 @@ docker-lint-fix:
 	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
 	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} lint-fix;
 
-# target: docker-lint                            - Lint the code with php in docker
+# target: docker-php-lint                        - Lint the code with php in docker
 docker-php-lint:
 	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
 	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} php-lint;

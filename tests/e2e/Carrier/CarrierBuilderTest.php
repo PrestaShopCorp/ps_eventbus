@@ -51,11 +51,11 @@ class CarrierBuilderTest extends BaseTestCase
         string $weightUnit,
         float $freeShippingAtPrice,
         float $freeShippingAtWeight,
-                $mockedDeliveryBy,
-                $mockedCountryIsoCode,
-                $mockedStateIsoCode,
-                $mockedCarrierTaxesByZone,
-                $mockedCarrierRange,
+        $mockedDeliveryBy,
+        $mockedCountryIsoCode,
+        $mockedStateIsoCode,
+        $mockedCarrierTaxesByZone,
+        $mockedCarrierRange,
         array $expected
     ) {
         $carrierRepo = $this->createCarrierRepositoryMock($mockedDeliveryBy, $mockedCarrierRange);
