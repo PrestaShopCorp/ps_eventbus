@@ -70,12 +70,13 @@ class CollectorApiClient
      */
     public function upload(string $jobId, string $data, int $startTime, bool $fullSyncRequested = false)
     {
+        $url = $this->collectorApiUrl . '/upload/' . $jobId;
         // Prepare request
         $file = new PostFileApi('file', $data, 'file');
         $multipartBody = new MultipartBody([], [$file], Config::COLLECTOR_MULTIPART_BOUNDARY);
         $request = new Request(
             'POST',
-            $this->collectorApiUrl . '/upload/' . $jobId,
+            $url,
             [
                 'Accept' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->jwt,
@@ -94,7 +95,7 @@ class CollectorApiClient
             'status' => substr((string) $rawResponse->getStatusCode(), 0, 1) === '2',
             'httpCode' => $rawResponse->getStatusCode(),
             'body' => $jsonResponse,
-            'upload_url' => $request->getUri(),
+            'upload_url' => $url,
         ];
 
         return $response;
@@ -111,12 +112,13 @@ class CollectorApiClient
      */
     public function uploadDelete(string $jobId, string $data, int $startTime)
     {
+        $url = $this->collectorApiUrl . '/delete/' . $jobId;
         // Prepare request
         $file = new PostFileApi('file', $data, 'file');
         $multipartBody = new MultipartBody([], [$file], Config::COLLECTOR_MULTIPART_BOUNDARY);
         $request = new Request(
             'POST',
-            $this->collectorApiUrl . '/delete/' . $jobId,
+            $url,
             [
                 'Accept' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->jwt,
@@ -134,7 +136,7 @@ class CollectorApiClient
             'status' => substr((string) $rawResponse->getStatusCode(), 0, 1) === '2',
             'httpCode' => $rawResponse->getStatusCode(),
             'body' => $jsonResponse,
-            'upload_url' => $request->getUri(),
+            'upload_url' => $url,
         ];
 
         return $response;
