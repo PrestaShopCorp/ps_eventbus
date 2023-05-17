@@ -94,7 +94,6 @@ class ServerInformationRepository
         $filename = './robots.txt';
 
         if (file_exists($filename)) {
-            $file_creation_date = filectime($filename);
             $folderCreatedAt = (new \DateTime(date('Y-m-d H:i:s', filectime($filename)), new \DateTimeZone('Europe/Paris')))->format('Y-m-d\TH:i:sO');
         }
 
