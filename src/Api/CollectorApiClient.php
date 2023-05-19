@@ -3,7 +3,6 @@
 namespace PrestaShop\Module\PsEventbus\Api;
 
 use GuzzleHttp\Psr7\Request;
-use PrestaShop\Module\PsEventbus\Config\Config;
 use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
 use Prestashop\ModuleLibGuzzleAdapter\Interfaces\HttpClientInterface;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
