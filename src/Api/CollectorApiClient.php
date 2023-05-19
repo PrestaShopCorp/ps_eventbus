@@ -3,8 +3,6 @@
 namespace PrestaShop\Module\PsEventbus\Api;
 
 use GuzzleHttp\Psr7\Request;
-use PrestaShop\Module\PsEventbus\Api\Post\MultipartBody;
-use PrestaShop\Module\PsEventbus\Api\Post\PostFileApi;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
 use Prestashop\ModuleLibGuzzleAdapter\Interfaces\HttpClientInterface;
@@ -72,20 +70,18 @@ class CollectorApiClient
     {
         $url = $this->collectorApiUrl . '/upload/' . $jobId;
         // Prepare request
-        $file = new PostFileApi('file', $data, 'file');
-        $multipartBody = new MultipartBody([], [$file], Config::COLLECTOR_MULTIPART_BOUNDARY);
         $request = new Request(
             'POST',
             $url,
             [
                 'Accept' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->jwt,
-                'Content-Length' => $file->getContent()->getSize(),
-                'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
+                'Content-Length' => strlen($data),
+                'Content-Type' => 'application/x-www-form-urlencoded',
                 'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
                 'User-Agent' => 'ps-eventbus/' . $this->module->version,
             ],
-            $multipartBody->getContents()
+            'lines=' . urlencode($data)
         );
 
         // Send request and parse response
@@ -114,19 +110,17 @@ class CollectorApiClient
     {
         $url = $this->collectorApiUrl . '/delete/' . $jobId;
         // Prepare request
-        $file = new PostFileApi('file', $data, 'file');
-        $multipartBody = new MultipartBody([], [$file], Config::COLLECTOR_MULTIPART_BOUNDARY);
         $request = new Request(
             'POST',
             $url,
             [
                 'Accept' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->jwt,
-                'Content-Length' => $file->getContent()->getSize(),
-                'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
+                'Content-Length' => strlen($data),
+                'Content-Type' => 'application/x-www-form-urlencoded',
                 'User-Agent' => 'ps-eventbus/' . $this->module->version,
             ],
-            $multipartBody->getContents()
+            'lines=' . urlencode($data)
         );
 
         // Send request and parse response
