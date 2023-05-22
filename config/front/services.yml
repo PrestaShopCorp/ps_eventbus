@@ -36,7 +36,7 @@ services:
     class: PrestaShop\Module\PsEventbus\Service\ProxyService
     public: true
     arguments:
-      - '@PrestaShop\Module\PsEventbus\Api\EventBusProxyClient'
+      - '@PrestaShop\Module\PsEventbus\Api\CollectorApiClient'
       - '@PrestaShop\Module\PsEventbus\Formatter\JsonFormatter'
       - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
 
@@ -45,13 +45,13 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository'
-      - '@PrestaShop\Module\PsEventbus\Api\EventBusSyncClient'
+      - '@PrestaShop\Module\PsEventbus\Api\SyncApiClient'
 
   PrestaShop\Module\PsEventbus\Service\DeletedObjectsService:
     class: PrestaShop\Module\PsEventbus\Service\DeletedObjectsService
     public: true
     arguments:
-      - '@ps_eventbus.context'
+      - "@ps_eventbus.context"
       - '@PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository'
       - '@PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface'
 

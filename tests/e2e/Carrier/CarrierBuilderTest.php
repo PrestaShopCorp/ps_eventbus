@@ -16,6 +16,7 @@ use Yandex\Allure\Adapter\Annotation\Title;
 
 /**
  * @Features("synchronization")
+ *
  * @Stories("carrier builder")
  */
 class CarrierBuilderTest extends BaseTestCase
@@ -24,6 +25,7 @@ class CarrierBuilderTest extends BaseTestCase
 
     /**
      * @Stories("carrier builder")
+     *
      * @Title("testBuildCarrier")
      *
      * @dataProvider buildCarrierDataProvider
@@ -49,11 +51,11 @@ class CarrierBuilderTest extends BaseTestCase
         string $weightUnit,
         float $freeShippingAtPrice,
         float $freeShippingAtWeight,
-                $mockedDeliveryBy,
-                $mockedCountryIsoCode,
-                $mockedStateIsoCode,
-                $mockedCarrierTaxesByZone,
-                $mockedCarrierRange,
+        $mockedDeliveryBy,
+        $mockedCountryIsoCode,
+        $mockedStateIsoCode,
+        $mockedCarrierTaxesByZone,
+        $mockedCarrierRange,
         array $expected
     ) {
         $carrierRepo = $this->createCarrierRepositoryMock($mockedDeliveryBy, $mockedCarrierRange);
