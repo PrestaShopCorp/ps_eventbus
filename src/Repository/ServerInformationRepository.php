@@ -86,6 +86,16 @@ class ServerInformationRepository
         $langId = !empty($langIso) ? (int) \Language::getIdByIso($langIso) : null;
         $timezone = (string) $this->configurationRepository->get('PS_TIMEZONE');
         $createdAt = (new \DateTime($this->createdAt, new \DateTimeZone($timezone)))->format('Y-m-d\TH:i:sO');
+        $folderCreatedAt = null;
+
+        /* This file is created on installation and never modified.
+        As php doesn't allow to retrieve the creation date of a file or folder,
+        we use the modification date of this file to get the installation date of the shop */
+        $filename = './robots.txt';
+
+        if (file_exists($filename)) {
+            $folderCreatedAt = (new \DateTime(date('Y-m-d H:i:s', (int) filectime($filename)), new \DateTimeZone('Europe/Paris')))->format('Y-m-d\TH:i:sO');
+        }
 
         return [
             [
@@ -93,6 +103,7 @@ class ServerInformationRepository
                 'collection' => Config::COLLECTION_SHOPS,
                 'properties' => [
                     'created_at' => $createdAt,
+                    'folder_created_at' => $folderCreatedAt,
                     'cms_version' => _PS_VERSION_,
                     'url_is_simplified' => $this->configurationRepository->get('PS_REWRITING_SETTINGS') == '1',
                     'cart_is_persistent' => $this->configurationRepository->get('PS_CART_FOLLOWING') == '1',
