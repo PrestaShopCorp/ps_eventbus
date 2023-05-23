@@ -91,7 +91,7 @@ class ServerInformationRepository
         /* This file is created on installation and never modified.
         As php doesn't allow to retrieve the creation date of a file or folder,
         we use the modification date of this file to get the installation date of the shop */
-        $filename = './robots.txt';
+        $filename = './img/admin/enabled.gif';
 
         if (file_exists($filename)) {
             $folderCreatedAt = (new \DateTime(date('Y-m-d H:i:s', (int) filectime($filename)), new \DateTimeZone('Europe/Paris')))->format('Y-m-d\TH:i:sO');
