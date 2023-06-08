@@ -59,31 +59,18 @@ class CollectorApiClient
      * Push some ShopContents to CloudSync
      *
      * @param string $jobId
-     * @param string $data
+     * @param array $data
      * @param int $startTime in seconds since epoch
      * @param bool $fullSyncRequested
      *
      * @return array
      */
-    public function upload(string $jobId, string $data, int $startTime, bool $fullSyncRequested = false)
+    public function upload(string $jobId, array $data, int $startTime, bool $fullSyncRequested = false)
     {
         $url = $this->collectorApiUrl . '/upload/' . $jobId;
-        // Prepare request
-        $request = new Request(
-            'POST',
-            $url,
-            [
-                'Accept' => 'application/json',
-                'Authorization' => 'Bearer ' . $this->jwt,
-                'Content-Length' => strlen($data),
-                'Content-Type' => 'application/x-www-form-urlencoded',
-                'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
-                'User-Agent' => 'ps-eventbus/' . $this->module->version,
-            ],
-            'lines=' . urlencode($data)
-        );
-
-        // Send request and parse response
+        $request = $this->postJson($url, $data, [
+            'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
+        ]);
         $rawResponse = $this->getClient($startTime)->sendRequest($request);
         $jsonResponse = json_decode($rawResponse->getBody()->getContents(), true);
         $response = [
@@ -100,29 +87,15 @@ class CollectorApiClient
      * Push information about removed ShopContents to CloudSync
      *
      * @param string $jobId
-     * @param string $data
+     * @param array $data
      * @param int $startTime in seconds since epoch
      *
      * @return array
      */
-    public function uploadDelete(string $jobId, string $data, int $startTime)
+    public function uploadDelete(string $jobId, array $data, int $startTime)
     {
         $url = $this->collectorApiUrl . '/delete/' . $jobId;
-        // Prepare request
-        $request = new Request(
-            'POST',
-            $url,
-            [
-                'Accept' => 'application/json',
-                'Authorization' => 'Bearer ' . $this->jwt,
-                'Content-Length' => strlen($data),
-                'Content-Type' => 'application/x-www-form-urlencoded',
-                'User-Agent' => 'ps-eventbus/' . $this->module->version,
-            ],
-            'lines=' . urlencode($data)
-        );
-
-        // Send request and parse response
+        $request = $this->postJson($url, $data);
         $rawResponse = $this->getClient($startTime)->sendRequest($request);
         $jsonResponse = json_decode($rawResponse->getBody()->getContents(), true);
         $response = [
@@ -133,6 +106,43 @@ class CollectorApiClient
         ];
 
         return $response;
+    }
+
+    /**
+     * Forge a request to POST serialized JSON
+     * @param string $url
+     * @param array $data
+     * @param array $extraHeaders (optional)
+     * 
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    private function postJson(string $url, array $data, array $extraHeaders = [])
+    {
+        $headers = array_merge ($extraHeaders, [
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $this->jwt,
+            'Content-Type' => 'application/json',
+            'User-Agent' => 'ps-eventbus/' . $this->module->version,
+        ]);
+
+        $jsonData = json_encode($data, JSON_UNESCAPED_SLASHES);
+
+        if (extension_loaded('zlib')) {
+            $encodedData = gzencode($jsonData);
+            if (!$encodedData) {
+                throw new \Exception('Failed encoding data to GZIP');
+            }
+            $headers['Content-Encoding'] = 'gzip';
+            $jsonData = $encodedData;
+        }
+        $headers['Content-Length'] = strlen($jsonData);
+
+        return new Request(
+            'POST',
+            $url,
+            $headers,
+            $data
+        );
     }
 
     /**

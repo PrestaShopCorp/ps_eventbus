@@ -15,19 +15,15 @@ class ProxyService implements ProxyServiceInterface
      * @var CollectorApiClient
      */
     private $eventBusProxyClient;
-    /**
-     * @var JsonFormatter
-     */
-    private $jsonFormatter;
+
     /**
      * @var ErrorHandlerInterface
      */
     private $errorHandler;
 
-    public function __construct(CollectorApiClient $eventBusProxyClient, JsonFormatter $jsonFormatter, ErrorHandlerInterface $errorHandler)
+    public function __construct(CollectorApiClient $eventBusProxyClient, ErrorHandlerInterface $errorHandler)
     {
         $this->eventBusProxyClient = $eventBusProxyClient;
-        $this->jsonFormatter = $jsonFormatter;
         $this->errorHandler = $errorHandler;
     }
 
@@ -43,17 +39,13 @@ class ProxyService implements ProxyServiceInterface
      */
     public function upload($jobId, $data, $scriptStartTime, bool $isFull = false)
     {
-        $dataJson = $this->jsonFormatter->formatNewlineJsonString($data);
-
         try {
-            $response = $this->eventBusProxyClient->upload($jobId, $dataJson, $scriptStartTime, $isFull);
+            $response = $this->eventBusProxyClient->upload($jobId, $data, $scriptStartTime, $isFull);
         } catch (ClientException $exception) {
             $this->errorHandler->handle($exception);
-
             return ['error' => $exception->getMessage()];
         } catch (ConnectException $exception) {
             $this->errorHandler->handle($exception);
-
             return ['error' => $exception->getMessage()];
         }
 
@@ -71,13 +63,13 @@ class ProxyService implements ProxyServiceInterface
      */
     public function delete($jobId, $data, $scriptStartTime)
     {
-        $dataJson = $this->jsonFormatter->formatNewlineJsonString($data);
-
         try {
-            $response = $this->eventBusProxyClient->uploadDelete($jobId, $dataJson, $scriptStartTime);
+            $response = $this->eventBusProxyClient->uploadDelete($jobId, $data, $scriptStartTime);
         } catch (ClientException $exception) {
             $this->errorHandler->handle($exception);
-
+            return ['error' => $exception->getMessage()];
+        } catch (ConnectException $exception) {
+            $this->errorHandler->handle($exception);
             return ['error' => $exception->getMessage()];
         }
 
