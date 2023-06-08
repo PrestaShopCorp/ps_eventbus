@@ -19,7 +19,7 @@ help:
 
 # target: build                                  - Clean up the repository
 clean:
-	git -c core.excludesfile=/dev/null clean -X -d -f
+	git clean -dXf -e '!.config*' -e '!.env*' -e '!.idea'
 
 # target: version                                - Replace version in files
 version:
