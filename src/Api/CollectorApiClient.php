@@ -68,6 +68,7 @@ class CollectorApiClient
     public function upload(string $jobId, string $data, int $startTime, bool $fullSyncRequested = false)
     {
         $url = $this->collectorApiUrl . '/upload/' . $jobId;
+        $payload = 'lines=' . urlencode($data);
         // Prepare request
         $request = new Request(
             'POST',
@@ -75,12 +76,12 @@ class CollectorApiClient
             [
                 'Accept' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->jwt,
-                'Content-Length' => strlen($data),
+                'Content-Length' => strlen($payload),
                 'Content-Type' => 'application/x-www-form-urlencoded',
                 'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
                 'User-Agent' => 'ps-eventbus/' . $this->module->version,
             ],
-            'lines=' . urlencode($data)
+            $payload
         );
 
         // Send request and parse response
@@ -108,6 +109,7 @@ class CollectorApiClient
     public function uploadDelete(string $jobId, string $data, int $startTime)
     {
         $url = $this->collectorApiUrl . '/delete/' . $jobId;
+        $payload = 'lines=' . urlencode($data);
         // Prepare request
         $request = new Request(
             'POST',
@@ -115,11 +117,11 @@ class CollectorApiClient
             [
                 'Accept' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->jwt,
-                'Content-Length' => strlen($data),
+                'Content-Length' => strlen($payload),
                 'Content-Type' => 'application/x-www-form-urlencoded',
                 'User-Agent' => 'ps-eventbus/' . $this->module->version,
             ],
-            'lines=' . urlencode($data)
+            $payload
         );
 
         // Send request and parse response
