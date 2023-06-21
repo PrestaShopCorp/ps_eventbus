@@ -1,0 +1,5 @@
+parameters:
+  ps_eventbus.proxy_api_url: "http://cloudsync-mock-test:3333"
+  ps_eventbus.sync_api_url: "http://cloudsync-mock-test:3232"
+  ps_eventbus.sentry_dsn: "https://sentry-id@stuff.ingest.sentry.io/stuff"
+  ps_eventbus.sentry_env: "development"

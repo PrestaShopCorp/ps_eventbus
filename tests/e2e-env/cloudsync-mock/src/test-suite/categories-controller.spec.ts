@@ -21,6 +21,7 @@ describe("CategoriesController", () => {
   const controller = "apiCategories";
   const endpoint = `/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5`;
 
+  // @TODO: what about multishop testing?
   beforeAll(async () => {
     syncApi = new SyncApi(3232);
     syncApiRequestData = jest.spyOn(syncApi, "requestData");
