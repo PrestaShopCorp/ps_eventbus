@@ -1,10 +1,10 @@
-FROM node:18.12-alpine
+FROM node:18.16-alpine
 
 WORKDIR /home/node
 ADD . /home/node
-RUN yarn install
-
+RUN npm install -g pnpm \
+  && pnpm install
 
 # USER node
-ENTRYPOINT [ "yarn" ]
-CMD ["test"]
+ENTRYPOINT [ "pnpm" ]
+CMD [ "test" ]

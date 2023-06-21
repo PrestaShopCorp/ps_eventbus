@@ -20,10 +20,6 @@
     "express-multipart-file-parser": "^0.1.2",
     "supertest": "^6.3.3"
   },
-  "engines": {
-    "node": ">=18.12.0",
-    "yarn": ">=3.2.0"
-  },
   "devDependencies": {
     "@swc/cli": "^0.1.59",
     "@swc/core": "^1.3.26",
@@ -33,8 +29,6 @@
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.48.1",
     "@typescript-eslint/parser": "^5.48.1",
-    "@yarnpkg/plugin-workspace-tools": "^4.0.0-rc.35",
-    "@yarnpkg/sdks": "^3.0.0-rc.35",
     "chokidar": "^3.5.3",
     "eslint": "^8.31.0",
     "eslint-config-prettier": "^8.6.0",
@@ -62,5 +56,8 @@
     "typescript": "^4.9.4",
     "yaml-eslint-parser": "^1.1.0"
   },
-  "packageManager": "yarn@3.4.1"
+  "engines": {
+    "node": ">=18",
+    "pnpm": ">=8"
+  }
 }
