@@ -2,8 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
-
 class ProductRepository
 {
     /**
@@ -14,12 +12,8 @@ class ProductRepository
      * @var \Db
      */
     private $db;
-    /**
-     * @var ArrayFormatter
-     */
-    private $arrayFormatter;
 
-    public function __construct(\Db $db, \Context $context, ArrayFormatter $arrayFormatter)
+    public function __construct(\Db $db, \Context $context)
     {
         $this->db = $db;
         $this->context = $context;
@@ -29,7 +23,6 @@ class ProductRepository
                 $this->context->employee = new \Employee($employees[0]['id_employee']);
             }
         }
-        $this->arrayFormatter = $arrayFormatter;
     }
 
     /**
@@ -123,7 +116,7 @@ class ProductRepository
             ->leftJoin('attribute', 'a', 'a.id_attribute = pac.id_attribute')
             ->leftJoin('attribute_group_lang', 'agl', 'agl.id_attribute_group = a.id_attribute_group AND agl.id_lang = ' . (int) $langId)
             ->leftJoin('attribute_lang', 'al', 'al.id_attribute = pac.id_attribute AND al.id_lang = agl.id_lang')
-            ->where('pas.id_product_attribute IN (' . $this->arrayFormatter->arrayToString($attributeIds, ',') . ') AND pas.id_shop = ' . (int) $this->context->shop->id);
+            ->where('pas.id_product_attribute IN (' . implode(',', array_map('intval', $attributeIds)) . ') AND pas.id_shop = ' . (int) $this->context->shop->id);
 
         $attributes = $this->db->executeS($query);
 
@@ -160,7 +153,7 @@ class ProductRepository
             ->from('feature_product', 'fp')
             ->leftJoin('feature_lang', 'fl', 'fl.id_feature = fp.id_feature AND fl.id_lang = ' . (int) $langId)
             ->leftJoin('feature_value_lang', 'fvl', 'fvl.id_feature_value = fp.id_feature_value AND fvl.id_lang = fl.id_lang')
-            ->where('fp.id_product IN (' . $this->arrayFormatter->arrayToString($productIds, ',') . ')');
+            ->where('fp.id_product IN (' . implode(',', array_map('intval', $productIds)) . ')');
 
         $features = $this->db->executeS($query);
 
@@ -194,7 +187,7 @@ class ProductRepository
 
         $query->select('imgs.id_product, imgs.id_image, IFNULL(imgs.cover, 0) as cover')
             ->from('image_shop', 'imgs')
-            ->where('imgs.id_shop = ' . (int) $this->context->shop->id . ' AND imgs.id_product IN (' . $this->arrayFormatter->arrayToString($productIds, ',') . ')');
+            ->where('imgs.id_shop = ' . (int) $this->context->shop->id . ' AND imgs.id_product IN (' . implode(',', array_map('intval', $productIds)) . ')');
 
         $result = $this->db->executeS($query);
 
@@ -217,7 +210,7 @@ class ProductRepository
 
         $query->select('id_product_attribute, id_image')
             ->from('product_attribute_image', 'pai')
-            ->where('pai.id_product_attribute IN (' . $this->arrayFormatter->arrayToString($attributeIds, ',') . ')');
+            ->where('pai.id_product_attribute IN (' . implode(',', array_map('intval', $attributeIds)) . ')');
 
         $result = $this->db->executeS($query);
 

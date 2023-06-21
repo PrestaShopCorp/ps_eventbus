@@ -10,6 +10,7 @@ use Yandex\Allure\Adapter\Annotation\Title;
 
 /**
  * @Features("decorator")
+ *
  * @Stories("specific price decorator")
  */
 class SpecificPriceDecoratorTest extends BaseTestCase
@@ -21,6 +22,7 @@ class SpecificPriceDecoratorTest extends BaseTestCase
 
     /**
      * @Stories("specific price decorator")
+     *
      * @Title("testDecorateSpecificPrice")
      *
      * @dataProvider getSpecificPrices

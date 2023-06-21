@@ -6,7 +6,7 @@ PACKAGE ?= ps_eventbus-${VERSION}
 BUILDPLATFORM ?= linux/amd64
 TESTING_DOCKER_IMAGE ?= ps-eventbus-testing:latest
 TESTING_DOCKER_BASE_IMAGE ?= phpdockerio/php80-cli
-PHP_VERSION ?= 8.1
+PHP_VERSION ?= 8.2
 PS_VERSION ?= 1.7.8.7
 PS_ROOT_DIR ?= $(shell pwd)/prestashop/prestashop-${PS_VERSION}
 
@@ -87,8 +87,10 @@ prestashop:
 	@mkdir -p ./prestashop
 
 prestashop/prestashop-${PS_VERSION}: prestashop composer.phar
-	@git clone --depth 1 --branch ${PS_VERSION} https://github.com/PrestaShop/PrestaShop.git prestashop/prestashop-${PS_VERSION};
-	@./composer.phar -d ./prestashop/prestashop-${PS_VERSION} install
+	@if [ ! -d "prestashop/prestashop-${PS_VERSION}" ]; then \
+		git clone --depth 1 --branch ${PS_VERSION} https://github.com/PrestaShop/PrestaShop.git prestashop/prestashop-${PS_VERSION}; \
+		./composer.phar -d ./prestashop/prestashop-${PS_VERSION} install; \
+	fi;
 
 # target: test                                   - Static and unit testing
 test: composer-validate lint php-lint phpstan phpunit translation-validate
@@ -103,11 +105,11 @@ translation-validate:
 
 # target: lint                                   - Lint the code and expose errors
 lint: vendor/bin/php-cs-fixer
-	@vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no;
+	@PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no;
 
 # target: lint-fix                               - Lint the code and fix it
 lint-fix: vendor/bin/php-cs-fixer
-	@vendor/bin/php-cs-fixer fix --using-cache=no;
+	@PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --using-cache=no;
 
 # target: php-lint                               - Use php linter to check the code
 php-lint:
@@ -143,7 +145,7 @@ docker-lint-fix:
 	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
 	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} lint-fix;
 
-# target: docker-lint                            - Lint the code with php in docker
+# target: docker-php-lint                        - Lint the code with php in docker
 docker-php-lint:
 	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
 	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} php-lint;
@@ -153,7 +155,7 @@ docker-phpunit: prestashop/prestashop-${PS_VERSION}
 	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
 	docker run --rm -e _PS_ROOT_DIR_=/src/prestashop/prestashop-${PS_VERSION} -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpunit;
 
-# target: docker-phpunit                         - Run phpunit in docker
+# target: docker-phpunit-coverage                - Run phpunit in docker
 docker-phpunit-coverage: prestashop/prestashop-${PS_VERSION}
 	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
 	docker run --rm -e _PS_ROOT_DIR_=/src/prestashop/prestashop-${PS_VERSION} -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpunit-coverage;
@@ -180,8 +182,11 @@ all-tests-actions-177:
 	make bps177
 	docker exec -i prestashop-177 sh -c "cd /var/www/html/modules/ps_eventbus && php vendor/bin/phpunit -c tests/phpunit.xml"
 
-allure:
-	./node_modules/.bin/allure serve build/allure-results/
+# Fixme: add "allure-framework/allure-phpunit" in composer.json to solve this.
+# Currently failing to resolve devDeps:
+#   - allure-framework/allure-phpunit v2.1.0 requires phpunit/phpunit ^9 -> found phpunit/phpunit[9.0.0, ..., 9.6.4] but it conflicts with your root composer.json require (^10.0.14).
+# allure:
+# 	./node_modules/.bin/allure serve build/allure-results/
 
-allure-report:
-	./node_modules/.bin/allure generate build/allure-results/
+# allure-report:
+# 	./node_modules/.bin/allure generate build/allure-results/

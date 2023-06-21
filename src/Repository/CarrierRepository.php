@@ -99,9 +99,9 @@ class CarrierRepository
         $query = new \DbQuery();
         $query->from(IncrementalSyncRepository::INCREMENTAL_SYNC_TABLE, 'aic');
         $query->leftJoin(EventbusSyncRepository::TYPE_SYNC_TABLE_NAME, 'ts', 'ts.type = aic.type');
-        $query->where('aic.type = "' . (string) $type . '"');
-        $query->where('ts.id_shop = ' . (string) $this->context->shop->id);
-        $query->where('ts.lang_iso = "' . (string) $langIso . '"');
+        $query->where('aic.type = "' . pSQL($type) . '"');
+        $query->where('ts.id_shop = ' . (int) $this->context->shop->id);
+        $query->where('ts.lang_iso = "' . pSQL($langIso) . '"');
 
         return $this->db->executeS($query);
     }
@@ -151,7 +151,7 @@ class CarrierRepository
         );
         $query->where('c.id_carrier IN (' . implode(',', array_map('intval', $carrierIds)) . ')');
         $query->where('cs.id_shop = ' . (int) $this->context->shop->id);
-        $query->groupBy('c.id_reference, c.id_carrier HAVING c.id_carrier=(select max(id_carrier) from ps_carrier c2 WHERE c2.id_reference=c.id_reference)');
+        $query->groupBy('c.id_reference, c.id_carrier HAVING c.id_carrier=(select max(id_carrier) FROM ' . _DB_PREFIX_ . 'carrier c2 WHERE c2.id_reference=c.id_reference)');
 
         return $this->db->executeS($query);
     }

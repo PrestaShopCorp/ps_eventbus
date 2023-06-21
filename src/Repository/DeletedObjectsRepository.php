@@ -87,8 +87,8 @@ class DeletedObjectsRepository
         return $this->db->delete(
             self::DELETED_OBJECTS_TABLE,
             'type = "' . pSQL($type) . '"
-            AND id_shop = ' . $shopId . '
-            AND id_object IN(' . implode(',', $objectIds) . ')'
+            AND id_shop = ' . (int) $shopId . '
+            AND id_object IN(' . implode(',', array_map('intval', $objectIds)) . ')'
         );
     }
 }

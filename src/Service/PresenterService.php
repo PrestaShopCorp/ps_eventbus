@@ -114,6 +114,7 @@ class PresenterService
                     'id' => $this->psAccountsService->getShopUuid(),
                     'name' => \Configuration::get('PS_SHOP_NAME'),
                     'url' => \Tools::getHttpHost(true),
+                    'lang' => \Context::getContext()->language->iso_code,
                 ],
                 'psEventbusModule' => $this->convertObjectToArray(\Module::getInstanceByName('ps_eventbus')),
             ];

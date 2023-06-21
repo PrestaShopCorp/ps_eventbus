@@ -44,6 +44,7 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
       - '@PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository'
 
   PrestaShop\Module\PsEventbus\Provider\CartDataProvider:
     class: PrestaShop\Module\PsEventbus\Provider\CartDataProvider
@@ -51,6 +52,7 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\CartRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\CartProductRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\CartRuleRepository'
 
   PrestaShop\Module\PsEventbus\Provider\GoogleTaxonomyDataProvider:
     class: PrestaShop\Module\PsEventbus\Provider\GoogleTaxonomyDataProvider
@@ -80,3 +82,29 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository'
+
+  PrestaShop\Module\PsEventbus\Provider\WishlistDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\WishlistDataProvider
+    public: true
+    arguments:
+      - '@ps_eventbus.context'
+      - '@PrestaShop\Module\PsEventbus\Repository\WishlistRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\WishlistDecorator'
+      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
+
+  PrestaShop\Module\PsEventbus\Provider\StoreDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\StoreDataProvider
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\StoreRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\StoreDecorator'
+
+  PrestaShop\Module\PsEventbus\Provider\StockDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\StockDataProvider
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\StockRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\StockMvtRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\StockDecorator'
+      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'

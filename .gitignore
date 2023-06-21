@@ -22,3 +22,4 @@ tests/tmp
 coverage-reports
 allure-reports
 tests/.phpunit.result.cache
+.phpunit.cache/
