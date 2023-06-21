@@ -3,9 +3,10 @@ import express from "express";
 const fileParser = require("express-multipart-file-parser");
 
 class Server {
-  private server: any;
-  api: any;
+  protected readonly server: any;
+  protected readonly api: any;
   port: number;
+
   constructor(port: number) {
     this.api = express();
     this.port = port;
@@ -18,7 +19,7 @@ class Server {
     next();
   }
   requestData(req: any) {
-    console.log("req");
+    console.log("req", req);
   }
   public async close() {
     return this.server.close();
@@ -52,7 +53,7 @@ export class ProxyApi extends Server {
       const jobId = req.params.job_id;
       if (jobId.startsWith("valid-job-")) {
         //voir pour compter le nombre de lignes dans le fichier qui doit correspondre au nombre d'items
-        console.log(req.files[0].buffer.toString())
+        console.log(req.files[0].buffer.toString());
         res.status(201).end();
       } else {
         res.status(500).end();

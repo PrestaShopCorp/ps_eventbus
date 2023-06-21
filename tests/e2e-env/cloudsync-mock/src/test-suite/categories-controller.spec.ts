@@ -9,10 +9,11 @@ import {
 } from "@jest/globals";
 import request from "supertest";
 import { ProxyApi, SyncApi } from "../helpers/api-mock";
+import configTest from "./config.test";
 
 const controller = "apiCategories";
 
-const url = "http://prestashop";
+const url = configTest.prestashopUrl;
 const endpoint = `/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5`;
 describe("CategoriesController", () => {
   let syncApi;

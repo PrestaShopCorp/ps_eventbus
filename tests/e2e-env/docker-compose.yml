@@ -1,4 +1,27 @@
 services:
+  prestashop:
+    image: prestashop/prestashop:${DOCKER_VERSION_PRESTASHOP:?See e2e-env/.env.dist}
+    depends_on:
+      - mysql
+    env_file:
+      - ./prestashop.env
+      - ./.env
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:80 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5m
+    volumes:
+      - ./ps_scripts:/ps_scripts:ro
+      - incoming-modules:/ps-modules:rw
+      - ../..:/var/www/html/modules/ps_eventbus:rw
+    command: /ps_scripts/docker_tweak.sh
+    ports:
+      - ${HOST_PORT_BIND_PRESTASHOP:?See e2e-env/.env.dist}:80
+    networks:
+      - prestashop
+
   mysql:
     image: mariadb:${DOCKER_VERSION_MARIADB:?See e2e-env/.env.dist}
     env_file:
@@ -24,27 +47,12 @@ services:
     networks:
       - prestashop
 
-  prestashop:
-    image: prestashop/prestashop:${DOCKER_VERSION_PRESTASHOP:?See e2e-env/.env.dist}
-    depends_on:
-      - mysql
+  phpmyadmin:
+    image: phpmyadmin:latest
     env_file:
       - ./prestashop.env
-      - ./.env
-    healthcheck:
-      test: ["CMD-SHELL", "curl -sf http://localhost:80 || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 5m
-    volumes:
-      - ./ps_scripts:/ps_scripts:ro
-      - incoming-modules:/ps-modules:rw
-      - ../..:/var/www/html/modules/ps_eventbus:rw
-
-    command: /ps_scripts/docker_tweak.sh
     ports:
-      - ${HOST_PORT_BIND_PRESTASHOP:?See e2e-env/.env.dist}:80
+      - ${HOST_PORT_BIND_PHP_MY_ADMIN:?See e2e-env/.env.dist}:80
     networks:
       - prestashop
 
@@ -59,26 +67,19 @@ services:
       - ./switch-on-mock.sh
     command: ./switch-on-mock.sh
 
-  phpmyadmin:
-    image: phpmyadmin:latest
-    env_file:
-      - ./prestashop.env
-    ports:
-      - ${HOST_PORT_BIND_PHP_MY_ADMIN:?See e2e-env/.env.dist}:80
-    networks:
-      - prestashop
-
   cloudsync-mock-test:
     container_name: cloudsync-mock-test
     restart: "no"
     build:
       context: ./cloudsync-mock
       dockerfile: Dockerfile
+    command: test
+    environment:
+      RUN_IN_DOCKER: 1
     depends_on:
       - prestashop
     networks:
       - prestashop
-    command: test
 
 volumes:
   incoming-modules:
