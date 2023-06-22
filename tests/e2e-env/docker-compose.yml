@@ -66,9 +66,11 @@ services:
     command: test
     environment:
       - RUN_IN_DOCKER=1
+    ## warning: comment this if you want to manually retry the tests to save time
     depends_on:
       prestashop:
         condition: service_healthy
+    ## end of warning
     networks:
       - prestashop
 
