@@ -11,7 +11,7 @@
     "lint": "npx eslint '{src,e2e}/**/*.{ts,js}'",
     "lint:fix": "npx eslint '{src,e2e}/**/*.{ts,js}' --fix",
     "test": "npx jest",
-    "docker:build": "docker compose -f ../docker-compose.yml build cloudsync-mock-test",
+    "docker:build": "docker compose -f ../docker-compose.yml build ps-eventbus-tests",
     "docker:up": "docker compose -f ../docker-compose.yml up -d --wait",
     "docker:down": "docker compose -f ../docker-compose.yml down"
   },

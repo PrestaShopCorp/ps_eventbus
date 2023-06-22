@@ -17,7 +17,7 @@ services:
       - ../..:/var/www/html/modules/ps_eventbus:rw
       - ./parameters.e2e.yml:/var/www/html/modules/ps_eventbus/config/parameters.yml
       - ./common.e2e.yml:/var/www/html/modules/ps_eventbus/config/common.yml
-      - ./ps-accounts.mock.php:/var/www/html/modules/ps_eventbus/PsAccountsMock.php
+      - ./ps_accounts.mock.php:/var/www/html/modules/ps_eventbus/PsAccountsMock.php
     command: /ps_scripts/docker_tweak.sh
     ports:
       - ${HOST_PORT_BIND_PRESTASHOP:?See e2e-env/.env.dist}:80
@@ -58,8 +58,7 @@ services:
     networks:
       - prestashop
 
-  cloudsync-mock-test:
-    container_name: cloudsync-mock-test
+  ps-eventbus-tests:
     restart: "no"
     build:
       context: ./cloudsync-mock
