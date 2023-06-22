@@ -15,14 +15,6 @@ services:
     arguments:
       - "ps_eventbus"
 
-  PrestaShop\PsAccountsInstaller\Installer\Installer:
-    class: PrestaShop\PsAccountsInstaller\Installer\Installer
-    public: true
-    arguments:
-      - "5.3.0"
-
   PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts:
-    class: PsAccountsMock
+    class: "Ps_accounts_mock"
     public: true
-    arguments:
-      - '@PrestaShop\PsAccountsInstaller\Installer\Installer'
