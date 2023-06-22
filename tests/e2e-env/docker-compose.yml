@@ -64,6 +64,8 @@ services:
       context: ./cloudsync-mock
       dockerfile: Dockerfile
     command: test
+    volumes:
+      - ./cloudsync-mock:/home/node:ro
     environment:
       - RUN_IN_DOCKER=1
     ## warning: comment this if you want to manually retry the tests to save time
