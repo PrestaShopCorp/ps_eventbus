@@ -58,14 +58,14 @@ services:
     networks:
       - prestashop
 
-  ps-eventbus-tests:
+  tests:
     restart: "no"
     build:
       context: ./cloudsync-mock
       dockerfile: Dockerfile
     command: test
     environment:
-      RUN_IN_DOCKER: 1
+      - RUN_IN_DOCKER=1
     depends_on:
       prestashop:
         condition: service_healthy
