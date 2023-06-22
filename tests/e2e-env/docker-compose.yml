@@ -14,10 +14,10 @@ services:
       start_period: 5m
     volumes:
       - ./ps_scripts:/ps_scripts:ro
-      - ../..:/var/www/html/modules/ps_eventbus:rw
+      - ../..:/var/www/html/modules/ps_eventbus/:rw
       - ./parameters.e2e.yml:/var/www/html/modules/ps_eventbus/config/parameters.yml
       - ./common.e2e.yml:/var/www/html/modules/ps_eventbus/config/common.yml
-      - ./ps_accounts.mock.php:/var/www/html/modules/ps_eventbus/PsAccountsMock.php
+      - ./ps_accounts.mock.php:/var/www/html/modules/ps_eventbus/ps_accounts.mock.php
     command: /ps_scripts/docker_tweak.sh
     ports:
       - ${HOST_PORT_BIND_PRESTASHOP:?See e2e-env/.env.dist}:80
