@@ -227,7 +227,7 @@ class Ps_eventbus extends Module
     public function hookActionObjectImageDeleteAfter($parameters)
     {
         $image = $parameters['object'];
-        if (array_key_exists('id_product', $image)) {
+        if (isset($image->id_product)) {
             $this->insertIncrementalSyncObject(
                 $image->id_product,
                 Config::COLLECTION_PRODUCTS,
@@ -246,7 +246,7 @@ class Ps_eventbus extends Module
     public function hookActionObjectImageAddAfter($parameters)
     {
         $image = $parameters['object'];
-        if (array_key_exists('id_product', $image)) {
+        if (isset($image->id_product)) {
             $this->insertIncrementalSyncObject(
                 $image->id_product,
                 Config::COLLECTION_PRODUCTS,
@@ -265,7 +265,7 @@ class Ps_eventbus extends Module
     public function hookActionObjectImageUpdateAfter($parameters)
     {
         $image = $parameters['object'];
-        if (array_key_exists('id_product', $image)) {
+        if (isset($image->id_product)) {
             $this->insertIncrementalSyncObject(
                 $image->id_product,
                 Config::COLLECTION_PRODUCTS,
