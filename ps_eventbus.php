@@ -238,7 +238,7 @@ class Ps_eventbus extends Module
         }
     }
 
-        /**
+    /**
      * @param array $parameters
      *
      * @return void
@@ -257,7 +257,7 @@ class Ps_eventbus extends Module
         }
     }
 
-        /**
+    /**
      * @param array $parameters
      *
      * @return void
