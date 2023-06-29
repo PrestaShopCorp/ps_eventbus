@@ -64,52 +64,55 @@ class Ps_eventbus extends Module
      * @var array
      */
     private $hookToInstall = [
-        'actionObjectProductAddAfter',
-        'actionObjectProductUpdateAfter',
-        'actionObjectProductDeleteAfter',
-        'actionObjectCategoryAddAfter',
-        'actionObjectCategoryUpdateAfter',
-        'actionObjectCategoryDeleteAfter',
-        'actionObjectCustomerAddAfter',
-        'actionObjectCustomerUpdateAfter',
-        'actionObjectCustomerDeleteAfter',
-        'actionObjectCurrencyAddAfter',
-        'actionObjectCurrencyUpdateAfter',
-        'actionObjectOrderAddAfter',
-        'actionObjectOrderUpdateAfter',
+        'actionObjectCarrierAddAfter',
+        'actionObjectCarrierDeleteAfter',
+        'actionObjectCarrierUpdateAfter',
         'actionObjectCartAddAfter',
         'actionObjectCartUpdateAfter',
-        'actionObjectCarrierAddAfter',
-        'actionObjectCarrierUpdateAfter',
-        'actionObjectCarrierDeleteAfter',
+        'actionObjectCategoryAddAfter',
+        'actionObjectCategoryDeleteAfter',
+        'actionObjectCategoryUpdateAfter',
+        'actionObjectCombinationDeleteAfter',
         'actionObjectCountryAddAfter',
-        'actionObjectCountryUpdateAfter',
         'actionObjectCountryDeleteAfter',
+        'actionObjectCountryUpdateAfter',
+        'actionObjectCurrencyAddAfter',
+        'actionObjectCurrencyUpdateAfter',
+        'actionObjectCustomerAddAfter',
+        'actionObjectCustomerDeleteAfter',
+        'actionObjectCustomerUpdateAfter',
+        'actionObjectImageAddAfter',
+        'actionObjectImageDeleteAfter',
+        'actionObjectImageUpdateAfter',
+        'actionObjectOrderAddAfter',
+        'actionObjectOrderUpdateAfter',
+        'actionObjectProductAddAfter',
+        'actionObjectProductDeleteAfter',
+        'actionObjectProductUpdateAfter',
+        'actionObjectSpecificPriceAddAfter',
+        'actionObjectSpecificPriceDeleteAfter',
+        'actionObjectSpecificPriceUpdateAfter',
         'actionObjectStateAddAfter',
-        'actionObjectStateUpdateAfter',
         'actionObjectStateDeleteAfter',
-        'actionObjectWishlistAddAfter',
-        'actionObjectWishlistUpdateAfter',
-        'actionObjectWishlistDeleteAfter',
+        'actionObjectStateUpdateAfter',
         'actionObjectStockAddAfter',
         'actionObjectStockUpdateAfter',
         'actionObjectStoreAddAfter',
-        'actionObjectStoreUpdateAfter',
         'actionObjectStoreDeleteAfter',
-        'actionObjectZoneAddAfter',
-        'actionObjectZoneUpdateAfter',
-        'actionObjectZoneDeleteAfter',
+        'actionObjectStoreUpdateAfter',
         'actionObjectTaxAddAfter',
-        'actionObjectTaxUpdateAfter',
         'actionObjectTaxDeleteAfter',
         'actionObjectTaxRulesGroupAddAfter',
-        'actionObjectTaxRulesGroupUpdateAfter',
         'actionObjectTaxRulesGroupDeleteAfter',
+        'actionObjectTaxRulesGroupUpdateAfter',
+        'actionObjectTaxUpdateAfter',
+        'actionObjectWishlistAddAfter',
+        'actionObjectWishlistDeleteAfter',
+        'actionObjectWishlistUpdateAfter',
+        'actionObjectZoneAddAfter',
+        'actionObjectZoneDeleteAfter',
+        'actionObjectZoneUpdateAfter',
         'actionShippingPreferencesPageSave',
-        'actionObjectSpecificPriceAddAfter',
-        'actionObjectSpecificPriceUpdateAfter',
-        'actionObjectSpecificPriceDeleteAfter',
-        'actionObjectCombinationDeleteAfter',
     ];
 
     /**
@@ -214,6 +217,63 @@ class Ps_eventbus extends Module
     public function getService($serviceName)
     {
         return $this->serviceContainer->getService($serviceName);
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectImageDeleteAfter($parameters)
+    {
+        $image = $parameters['object'];
+        if (array_key_exists('id_product', $image)) {
+            $this->insertIncrementalSyncObject(
+                $image->id_product,
+                Config::COLLECTION_PRODUCTS,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
+    }
+
+        /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectImageAddAfter($parameters)
+    {
+        $image = $parameters['object'];
+        if (array_key_exists('id_product', $image)) {
+            $this->insertIncrementalSyncObject(
+                $image->id_product,
+                Config::COLLECTION_PRODUCTS,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
+    }
+
+        /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectImageUpdateAfter($parameters)
+    {
+        $image = $parameters['object'];
+        if (array_key_exists('id_product', $image)) {
+            $this->insertIncrementalSyncObject(
+                $image->id_product,
+                Config::COLLECTION_PRODUCTS,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
     }
 
     /**
