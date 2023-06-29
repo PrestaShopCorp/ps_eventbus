@@ -4,6 +4,16 @@
 
 `ps_eventbus` is a module companion for CloudSync.
 
+## Compatibility matrix
+
+| PrestaShop platform | PS EventBus    |
+| ------------------- | -------------- |
+| 8.0                 | 2.x - PHP 7.1+ |
+| 1.7.0-1.7.8         | 2.x - PHP 7.1+ |
+| 1.6.1.x             | No             |
+
+PS Accounts compatibility matrix [can be viewed here](https://github.com/PrestaShopCorp/ps_accounts#compatibility-matrix).
+
 ## Use
 
 ```sh
@@ -29,13 +39,3 @@ make docker-<stuff>    # same as above, but within a docker container
 ```
 
 > Note: you will need [xdebug](https://xdebug.org/) if you want to generate the code-coverage of this project. You may install it with: `pecl install -f xdebug`.
-
-## Compatibility matrix
-
-| PrestaShop platform | PS EventBus    |
-| ------------------- | -------------- |
-| 8.0                 | 2.x - PHP 7.1+ |
-| 1.7.0-1.7.8         | 2.x - PHP 7.1+ |
-| 1.6.1.x             | No             |
-
-PS Accounts compatibility matrix [can be viewed here](https://github.com/PrestaShopCorp/ps_accounts#compatibility-matrix).
