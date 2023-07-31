@@ -42,14 +42,17 @@
     "prestashop/prestashop-accounts-installer": "^1.0.0",
     "sentry/sentry": "^1.11.0",
     "php-http/message": "<1.15.0",
-    "psr/http-message": "<1.1"
+    "psr/http-message": "<1.1",
+    "symfony/config": "^3.4",
+    "symfony/dependency-injection": "^3.4",
+    "symfony/yaml": "^3.4"
   },
   "require-dev": {
-    "prestashop/php-dev-tools": "^4.3",
-    "phpunit/phpunit": "^10.1.3",
-    "phpunit/php-code-coverage": "^10.1.1",
-    "phpstan/phpstan": "^1.10.15",
-    "friendsofphp/php-cs-fixer": "^3.16.0",
-    "phpseclib/phpseclib": "^3.0.19"
+    "prestashop/php-dev-tools": "<4.3",
+    "phpunit/phpunit": "<10.1.3",
+    "phpunit/php-code-coverage": "<10.1.1",
+    "phpstan/phpstan": "<1.10.15",
+    "friendsofphp/php-cs-fixer": "<3.16.0",
+    "phpseclib/phpseclib": "<3.0.19"
   }
 }
