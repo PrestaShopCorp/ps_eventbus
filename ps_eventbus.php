@@ -228,6 +228,7 @@ class Ps_eventbus extends Module
     {
         $image = $parameters['object'];
         if (isset($image->id_product)) {
+            $this->sendLiveSync(['products'], $image->id_product, 'delete');
             $this->insertIncrementalSyncObject(
                 $image->id_product,
                 Config::COLLECTION_PRODUCTS,
@@ -247,6 +248,7 @@ class Ps_eventbus extends Module
     {
         $image = $parameters['object'];
         if (isset($image->id_product)) {
+            $this->sendLiveSync(['products'], $image->id_product, 'upsert');
             $this->insertIncrementalSyncObject(
                 $image->id_product,
                 Config::COLLECTION_PRODUCTS,
@@ -266,6 +268,7 @@ class Ps_eventbus extends Module
     {
         $image = $parameters['object'];
         if (isset($image->id_product)) {
+            $this->sendLiveSync(['products'], $image->id_product, 'upsert');
             $this->insertIncrementalSyncObject(
                 $image->id_product,
                 Config::COLLECTION_PRODUCTS,
@@ -285,12 +288,15 @@ class Ps_eventbus extends Module
     {
         $product = $parameters['object'];
 
-        $this->insertDeletedObject(
-            $product->id,
-            Config::COLLECTION_PRODUCTS,
-            date(DATE_ATOM),
-            $this->shopId
-        );
+        if (isset($product->id)) {
+            $this->sendLiveSync(['products'], $product->id, 'delete');
+            $this->insertDeletedObject(
+                $product->id,
+                Config::COLLECTION_PRODUCTS,
+                date(DATE_ATOM),
+                $this->shopId
+            );
+        }
     }
 
     /**
@@ -301,30 +307,33 @@ class Ps_eventbus extends Module
     public function hookActionObjectProductAddAfter($parameters)
     {
         $product = $parameters['object'];
+        if (isset($product->id)) {
+            $this->sendLiveSync(['products', 'custom-product-carriers', 'stocks'], $product->id, 'upsert');
 
-        $this->insertIncrementalSyncObject(
-            $product->id,
-            Config::COLLECTION_PRODUCTS,
-            date(DATE_ATOM),
-            $this->shopId,
-            true
-        );
+            $this->insertIncrementalSyncObject(
+                $product->id,
+                Config::COLLECTION_PRODUCTS,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
 
-        $this->insertIncrementalSyncObject(
-            $product->id,
-            Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
-            date(DATE_ATOM),
-            $this->shopId,
-            false
-        );
+            $this->insertIncrementalSyncObject(
+                $product->id,
+                Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
+                date(DATE_ATOM),
+                $this->shopId,
+                false
+            );
 
-        $this->insertIncrementalSyncObject(
-            $product->id,
-            Config::COLLECTION_STOCKS,
-            date(DATE_ATOM),
-            $this->shopId,
-            false
-        );
+            $this->insertIncrementalSyncObject(
+                $product->id,
+                Config::COLLECTION_STOCKS,
+                date(DATE_ATOM),
+                $this->shopId,
+                false
+            );
+        }
     }
 
     /**
@@ -336,32 +345,34 @@ class Ps_eventbus extends Module
     {
         /** @var Product $product */
         $product = $parameters['object'];
-        /** @var int $productId */
-        $productId = $product->id;
 
-        $this->insertIncrementalSyncObject(
-            $productId,
-            Config::COLLECTION_PRODUCTS,
-            date(DATE_ATOM),
-            $this->shopId,
-            true
-        );
+        if (isset($product->id)) {
+            $this->sendLiveSync(['products', 'custom-product-carriers', 'stocks'], $product->id, 'upsert');
 
-        $this->insertIncrementalSyncObject(
-            $productId,
-            Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
-            date(DATE_ATOM),
-            $this->shopId,
-            false
-        );
+            $this->insertIncrementalSyncObject(
+                $product->id,
+                Config::COLLECTION_PRODUCTS,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
 
-        $this->insertIncrementalSyncObject(
-            $productId,
-            Config::COLLECTION_STOCKS,
-            date(DATE_ATOM),
-            $this->shopId,
-            false
-        );
+            $this->insertIncrementalSyncObject(
+                $product->id,
+                Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
+                date(DATE_ATOM),
+                $this->shopId,
+                false
+            );
+
+            $this->insertIncrementalSyncObject(
+                $product->id,
+                Config::COLLECTION_STOCKS,
+                date(DATE_ATOM),
+                $this->shopId,
+                false
+            );
+        }
     }
 
     /**
@@ -371,14 +382,17 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectWishlistDeleteAfter($parameters)
     {
-        $product = $parameters['object'];
+        $wishlist = $parameters['object'];
+        if (isset($wishlist->id)) {
+            $this->sendLiveSync(['wishlists'], $wishlist->id, 'delete');
 
-        $this->insertDeletedObject(
-            $product->id,
-            Config::COLLECTION_WISHLISTS,
-            date(DATE_ATOM),
-            $this->shopId
-        );
+            $this->insertDeletedObject(
+                $wishlist->id,
+                Config::COLLECTION_WISHLISTS,
+                date(DATE_ATOM),
+                $this->shopId
+            );
+        }
     }
 
     /**
@@ -388,15 +402,18 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectWishlistAddAfter($parameters)
     {
-        $product = $parameters['object'];
+        $wishlist = $parameters['object'];
+        if (isset($wishlist->id)) {
+            $this->sendLiveSync(['wishlists'], $wishlist->id, 'upsert');
 
-        $this->insertIncrementalSyncObject(
-            $product->id,
-            Config::COLLECTION_WISHLISTS,
-            date(DATE_ATOM),
-            $this->shopId,
-            true
-        );
+            $this->insertIncrementalSyncObject(
+                $wishlist->id,
+                Config::COLLECTION_WISHLISTS,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
     }
 
     /**
@@ -406,18 +423,18 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectWishlistUpdateAfter($parameters)
     {
-        /** @var WishList $wishlist */
         $wishlist = $parameters['object'];
-        /** @var int $wishlistId */
-        $wishlistId = $wishlist->id;
+        if (isset($wishlist->id)) {
+            $this->sendLiveSync(['wishlists'], $wishlist->id, 'upsert');
 
-        $this->insertIncrementalSyncObject(
-            $wishlistId,
-            Config::COLLECTION_WISHLISTS,
-            date(DATE_ATOM),
-            $this->shopId,
-            true
-        );
+            $this->insertIncrementalSyncObject(
+                $wishlist->id,
+                Config::COLLECTION_WISHLISTS,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
     }
 
     /**
@@ -428,14 +445,17 @@ class Ps_eventbus extends Module
     public function hookActionObjectStockAddAfter($parameters)
     {
         $stock = $parameters['object'];
+        if (isset($stock->id)) {
+            $this->sendLiveSync(['stocks'], $stock->id, 'upsert');
 
-        $this->insertIncrementalSyncObject(
-            $stock->id,
-            Config::COLLECTION_STOCKS,
-            date(DATE_ATOM),
-            $this->shopId,
-            true
-        );
+            $this->insertIncrementalSyncObject(
+                $stock->id,
+                Config::COLLECTION_STOCKS,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
     }
 
     /**
@@ -446,16 +466,17 @@ class Ps_eventbus extends Module
     public function hookActionObjectStockUpdateAfter($parameters)
     {
         $stock = $parameters['object'];
-        /** @var int $stockId */
-        $stockId = $stock->id;
+        if (isset($stock->id)) {
+            $this->sendLiveSync(['stocks'], $stock->id, 'upsert');
 
-        $this->insertIncrementalSyncObject(
-            $stockId,
-            Config::COLLECTION_STOCKS,
-            date(DATE_ATOM),
-            $this->shopId,
-            true
-        );
+            $this->insertIncrementalSyncObject(
+                $stock->id,
+                Config::COLLECTION_STOCKS,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
     }
 
     /**
@@ -466,13 +487,16 @@ class Ps_eventbus extends Module
     public function hookActionObjectStoreDeleteAfter($parameters)
     {
         $product = $parameters['object'];
+        if (isset($product->id)) {
+            $this->sendLiveSync(['stores'], $product->id, 'delete');
 
-        $this->insertDeletedObject(
-            $product->id,
-            Config::COLLECTION_STORES,
-            date(DATE_ATOM),
-            $this->shopId
-        );
+            $this->insertDeletedObject(
+                $product->id,
+                Config::COLLECTION_STORES,
+                date(DATE_ATOM),
+                $this->shopId
+            );
+        }
     }
 
     /**
@@ -483,14 +507,17 @@ class Ps_eventbus extends Module
     public function hookActionObjectStoreAddAfter($parameters)
     {
         $product = $parameters['object'];
+        if (isset($product->id)) {
+            $this->sendLiveSync(['stores'], $product->id, 'upsert');
 
-        $this->insertIncrementalSyncObject(
-            $product->id,
-            Config::COLLECTION_STORES,
-            date(DATE_ATOM),
-            $this->shopId,
-            true
-        );
+            $this->insertIncrementalSyncObject(
+                $product->id,
+                Config::COLLECTION_STORES,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
     }
 
     /**
@@ -500,18 +527,18 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectStoreUpdateAfter($parameters)
     {
-        /** @var Store $store */
         $store = $parameters['object'];
-        /** @var int $storeId */
-        $storeId = $store->id;
+        if (isset($store->id)) {
+            $this->sendLiveSync(['stores'], $store->id, 'upsert');
 
-        $this->insertIncrementalSyncObject(
-            $storeId,
-            Config::COLLECTION_STORES,
-            date(DATE_ATOM),
-            $this->shopId,
-            true
-        );
+            $this->insertIncrementalSyncObject(
+                $store->id,
+                Config::COLLECTION_STORES,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
     }
 
     /**
@@ -523,15 +550,17 @@ class Ps_eventbus extends Module
     {
         /** @var Combination $combination */
         $combination = $parameters['object'];
-        /** @var int $combinationId */
-        $combinationId = $combination->id;
 
-        $this->insertDeletedObject(
-            $combinationId,
-            Config::COLLECTION_PRODUCT_ATTRIBUTES,
-            date(DATE_ATOM),
-            $this->shopId
-        );
+        if (isset($combination->id)) {
+            $this->sendLiveSync(['products'], $combination->id, 'delete');
+
+            $this->insertDeletedObject(
+                $combination->id,
+                Config::COLLECTION_PRODUCT_ATTRIBUTES,
+                date(DATE_ATOM),
+                $this->shopId
+            );
+        }
     }
 
     /**
@@ -542,16 +571,18 @@ class Ps_eventbus extends Module
     public function hookActionObjectCategoryAddAfter($parameters)
     {
         $category = $parameters['object'];
-        /** @var int $categoryId */
-        $categoryId = $category->id;
 
-        $this->insertIncrementalSyncObject(
-            $categoryId,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CATEGORIES,
-            date(DATE_ATOM),
-            $this->shopId,
-            true
-        );
+        if (isset($category->id)) {
+            $this->sendLiveSync(['categories'], $category->id, 'upsert');
+
+            $this->insertIncrementalSyncObject(
+                $category->id,
+                Config::COLLECTION_CATEGORIES,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
     }
 
     /**
@@ -562,16 +593,18 @@ class Ps_eventbus extends Module
     public function hookActionObjectCategoryUpdateAfter($parameters)
     {
         $category = $parameters['object'];
-        /** @var int $categoryId */
-        $categoryId = $category->id;
 
-        $this->insertIncrementalSyncObject(
-            $categoryId,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CATEGORIES,
-            date(DATE_ATOM),
-            $this->shopId,
-            true
-        );
+        if (isset($category->id)) {
+            $this->sendLiveSync(['categories'], $category->id, 'upsert');
+
+            $this->insertIncrementalSyncObject(
+                $category->id,
+                Config::COLLECTION_CATEGORIES,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
     }
 
     /**
@@ -582,15 +615,17 @@ class Ps_eventbus extends Module
     public function hookActionObjectCategoryDeleteAfter($parameters)
     {
         $category = $parameters['object'];
-        /** @var int $categoryId */
-        $categoryId = $category->id;
 
-        $this->insertDeletedObject(
-            $categoryId,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CATEGORIES,
-            date(DATE_ATOM),
-            $this->shopId
-        );
+        if (isset($category->id)) {
+            $this->sendLiveSync(['categories'], $category->id, 'delete');
+
+            $this->insertDeletedObject(
+                $category->id,
+                Config::COLLECTION_CATEGORIES,
+                date(DATE_ATOM),
+                $this->shopId
+            );
+        }
     }
 
     /**
@@ -601,16 +636,18 @@ class Ps_eventbus extends Module
     public function hookActionObjectCustomerAddAfter($parameters)
     {
         $customer = $parameters['object'];
-        /** @var int $customerId */
-        $customerId = $customer->id;
 
-        $this->insertIncrementalSyncObject(
-            $customerId,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CUSTOMERS,
-            date(DATE_ATOM),
-            $this->shopId,
-            true
-        );
+        if (isset($customer->id)) {
+            $this->sendLiveSync(['customers'], $customer->id, 'upsert');
+
+            $this->insertIncrementalSyncObject(
+                $customer->id,
+                Config::COLLECTION_CUSTOMERS,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
     }
 
     /**
@@ -621,16 +658,18 @@ class Ps_eventbus extends Module
     public function hookActionObjectCustomerUpdateAfter($parameters)
     {
         $customer = $parameters['object'];
-        /** @var int $customerId */
-        $customerId = $customer->id;
 
-        $this->insertIncrementalSyncObject(
-            $customerId,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CUSTOMERS,
-            date(DATE_ATOM),
-            $this->shopId,
-            true
-        );
+        if (isset($customer->id)) {
+            $this->sendLiveSync(['customers'], $customer->id, 'upsert');
+
+            $this->insertIncrementalSyncObject(
+                $customer->id,
+                Config::COLLECTION_CUSTOMERS,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
     }
 
     /**
@@ -641,15 +680,17 @@ class Ps_eventbus extends Module
     public function hookActionObjectCustomerDeleteAfter($parameters)
     {
         $customer = $parameters['object'];
-        /** @var int $customerId */
-        $customerId = $customer->id;
 
-        $this->insertDeletedObject(
-            $customerId,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CUSTOMERS,
-            date(DATE_ATOM),
-            $this->shopId
-        );
+        if (isset($customer->id)) {
+            $this->sendLiveSync(['customers'], $customer->id, 'delete');
+
+            $this->insertDeletedObject(
+                $customer->id,
+                Config::COLLECTION_CUSTOMERS,
+                date(DATE_ATOM),
+                $this->shopId
+            );
+        }
     }
 
     /**
@@ -660,16 +701,18 @@ class Ps_eventbus extends Module
     public function hookActionObjectCurrencyAddAfter($parameters)
     {
         $currency = $parameters['object'];
-        /** @var int $currencyId */
-        $currencyId = $currency->id;
 
-        $this->insertIncrementalSyncObject(
-            $currencyId,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CURRENCIES,
-            date(DATE_ATOM),
-            $this->shopId,
-            true
-        );
+        if (isset($currency->id)) {
+            $this->sendLiveSync(['currencies'], $currency->id, 'upsert');
+
+            $this->insertIncrementalSyncObject(
+                $currency->id,
+                Config::COLLECTION_CURRENCIES,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
     }
 
     /**
@@ -680,16 +723,18 @@ class Ps_eventbus extends Module
     public function hookActionObjectCurrencyUpdateAfter($parameters)
     {
         $currency = $parameters['object'];
-        /** @var int $currencyId */
-        $currencyId = $currency->id;
 
-        $this->insertIncrementalSyncObject(
-            $currencyId,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CURRENCIES,
-            date(DATE_ATOM),
-            $this->shopId,
-            true
-        );
+        if (isset($currency->id)) {
+            $this->sendLiveSync(['currencies'], $currency->id, 'upsert');
+
+            $this->insertIncrementalSyncObject(
+                $currency->id,
+                Config::COLLECTION_CURRENCIES,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
     }
 
     /**
@@ -700,15 +745,17 @@ class Ps_eventbus extends Module
     public function hookActionObjectCartAddAfter($parameters)
     {
         $cart = $parameters['object'];
-        /** @var int $cartId */
-        $cartId = $cart->id;
 
-        $this->insertIncrementalSyncObject(
-            $cartId,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARTS,
-            date(DATE_ATOM),
-            $this->shopId
-        );
+        if (isset($cart->id)) {
+            $this->sendLiveSync(['carts'], $cart->id, 'upsert');
+
+            $this->insertIncrementalSyncObject(
+                $cart->id,
+                Config::COLLECTION_CARTS,
+                date(DATE_ATOM),
+                $this->shopId
+            );
+        }
     }
 
     /**
@@ -719,15 +766,17 @@ class Ps_eventbus extends Module
     public function hookActionObjectCartUpdateAfter($parameters)
     {
         $cart = $parameters['object'];
-        /** @var int $cartId */
-        $cartId = $cart->id;
 
-        $this->insertIncrementalSyncObject(
-            $cartId,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARTS,
-            date(DATE_ATOM),
-            $this->shopId
-        );
+        if (isset($cart->id)) {
+            $this->sendLiveSync(['carts'], $cart->id, 'upsert');
+
+            $this->insertIncrementalSyncObject(
+                $cart->id,
+                Config::COLLECTION_CARTS,
+                date(DATE_ATOM),
+                $this->shopId
+            );
+        }
     }
 
     /**
@@ -738,15 +787,17 @@ class Ps_eventbus extends Module
     public function hookActionObjectOrderAddAfter($parameters)
     {
         $order = $parameters['object'];
-        /** @var int $orderId */
-        $orderId = $order->id;
 
-        $this->insertIncrementalSyncObject(
-            $orderId,
-            Config::COLLECTION_ORDERS,
-            date(DATE_ATOM),
-            $this->shopId
-        );
+        if (isset($order->id)) {
+            $this->sendLiveSync(['orders'], $order->id, 'upsert');
+
+            $this->insertIncrementalSyncObject(
+                $order->id,
+                Config::COLLECTION_ORDERS,
+                date(DATE_ATOM),
+                $this->shopId
+            );
+        }
     }
 
     /**
@@ -757,15 +808,17 @@ class Ps_eventbus extends Module
     public function hookActionObjectOrderUpdateAfter($parameters)
     {
         $order = $parameters['object'];
-        /** @var int $orderId */
-        $orderId = $order->id;
 
-        $this->insertIncrementalSyncObject(
-            $orderId,
-            Config::COLLECTION_ORDERS,
-            date(DATE_ATOM),
-            $this->shopId
-        );
+        if (isset($order->id)) {
+            $this->sendLiveSync(['orders'], $order->id, 'upsert');
+
+            $this->insertIncrementalSyncObject(
+                $order->id,
+                Config::COLLECTION_ORDERS,
+                date(DATE_ATOM),
+                $this->shopId
+            );
+        }
     }
 
     /**
@@ -777,15 +830,17 @@ class Ps_eventbus extends Module
     {
         /** @var Carrier $carrier */
         $carrier = $parameters['object'];
-        /** @var int $carrierId */
-        $carrierId = $carrier->id;
 
-        $this->insertIncrementalSyncObject(
-            $carrierId,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIERS,
-            date(DATE_ATOM),
-            $this->shopId
-        );
+        if (isset($carrier->id)) {
+            $this->sendLiveSync(['carriers'], $carrier->id, 'upsert');
+
+            $this->insertIncrementalSyncObject(
+                $carrier->id,
+                Config::COLLECTION_CARRIERS,
+                date(DATE_ATOM),
+                $this->shopId
+            );
+        }
     }
 
     /**
@@ -797,15 +852,17 @@ class Ps_eventbus extends Module
     {
         /** @var Carrier $carrier */
         $carrier = $parameters['object'];
-        /** @var int $carrierId */
-        $carrierId = $carrier->id;
 
-        $this->insertIncrementalSyncObject(
-            $carrierId,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIERS,
-            date(DATE_ATOM),
-            $this->shopId
-        );
+        if (isset($carrier->id)) {
+            $this->sendLiveSync(['carriers'], $carrier->id, 'upsert');
+
+            $this->insertIncrementalSyncObject(
+                $carrier->id,
+                Config::COLLECTION_CARRIERS,
+                date(DATE_ATOM),
+                $this->shopId
+            );
+        }
     }
 
     /**
@@ -817,15 +874,17 @@ class Ps_eventbus extends Module
     {
         /** @var Carrier $carrier */
         $carrier = $parameters['object'];
-        /** @var int $carrierId */
-        $carrierId = $carrier->id;
 
-        $this->insertIncrementalSyncObject(
-            $carrierId,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIERS,
-            date(DATE_ATOM),
-            $this->shopId
-        );
+        if (isset($carrier->id)) {
+            $this->sendLiveSync(['carriers'], $carrier->id, 'delete');
+
+            $this->insertIncrementalSyncObject(
+                $carrier->id,
+                Config::COLLECTION_CARRIERS,
+                date(DATE_ATOM),
+                $this->shopId
+            );
+        }
     }
 
     /**
@@ -835,7 +894,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIERS,
+            Config::COLLECTION_CARRIERS,
             date(DATE_ATOM),
             $this->shopId
         );
@@ -848,7 +907,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIERS,
+            Config::COLLECTION_CARRIERS,
             date(DATE_ATOM),
             $this->shopId
         );
@@ -861,7 +920,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIERS,
+            Config::COLLECTION_CARRIERS,
             date(DATE_ATOM),
             $this->shopId
         );
@@ -874,7 +933,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIERS,
+            Config::COLLECTION_CARRIERS,
             date(DATE_ATOM),
             $this->shopId
         );
@@ -887,7 +946,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIERS,
+            Config::COLLECTION_CARRIERS,
             date(DATE_ATOM),
             $this->shopId
         );
@@ -900,7 +959,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIERS,
+            Config::COLLECTION_CARRIERS,
             date(DATE_ATOM),
             $this->shopId
         );
@@ -913,7 +972,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIERS,
+            Config::COLLECTION_CARRIERS,
             date(DATE_ATOM),
             $this->shopId
         );
@@ -926,7 +985,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIERS,
+            Config::COLLECTION_CARRIERS,
             date(DATE_ATOM),
             $this->shopId
         );
@@ -939,7 +998,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIERS,
+            Config::COLLECTION_CARRIERS,
             date(DATE_ATOM),
             $this->shopId
         );
@@ -952,7 +1011,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIERS,
+            Config::COLLECTION_CARRIERS,
             date(DATE_ATOM),
             $this->shopId
         );
@@ -965,7 +1024,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIERS,
+            Config::COLLECTION_CARRIERS,
             date(DATE_ATOM),
             $this->shopId
         );
@@ -978,7 +1037,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIERS,
+            Config::COLLECTION_CARRIERS,
             date(DATE_ATOM),
             $this->shopId
         );
@@ -991,7 +1050,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIERS,
+            Config::COLLECTION_CARRIERS,
             date(DATE_ATOM),
             $this->shopId
         );
@@ -1004,7 +1063,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIERS,
+            Config::COLLECTION_CARRIERS,
             date(DATE_ATOM),
             $this->shopId
         );
@@ -1017,7 +1076,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIERS,
+            Config::COLLECTION_CARRIERS,
             date(DATE_ATOM),
             $this->shopId
         );
@@ -1030,7 +1089,7 @@ class Ps_eventbus extends Module
     {
         $this->insertIncrementalSyncObject(
             0,
-            PrestaShop\Module\PsEventbus\Config\Config::COLLECTION_CARRIERS,
+            Config::COLLECTION_CARRIERS,
             date(DATE_ATOM),
             $this->shopId
         );
@@ -1047,14 +1106,15 @@ class Ps_eventbus extends Module
         $specificPrice = $parameters['object'];
 
         if ($specificPrice instanceof SpecificPrice) {
-            /** @var int $specificPriceId */
-            $specificPriceId = $specificPrice->id;
-            $this->insertIncrementalSyncObject(
-                $specificPriceId,
-                Config::COLLECTION_SPECIFIC_PRICES,
-                date(DATE_ATOM),
-                $this->shopId
-            );
+            if (isset($specificPrice->id)) {
+                $this->sendLiveSync(['specific-prices'], $specificPrice->id, 'upsert');
+                $this->insertIncrementalSyncObject(
+                    $specificPrice->id,
+                    Config::COLLECTION_SPECIFIC_PRICES,
+                    date(DATE_ATOM),
+                    $this->shopId
+                );
+            }
         }
     }
 
@@ -1069,14 +1129,15 @@ class Ps_eventbus extends Module
         $specificPrice = $parameters['object'];
 
         if ($specificPrice instanceof SpecificPrice) {
-            /** @var int $specificPriceId */
-            $specificPriceId = $specificPrice->id;
-            $this->insertIncrementalSyncObject(
-                $specificPriceId,
-                Config::COLLECTION_SPECIFIC_PRICES,
-                date(DATE_ATOM),
-                $this->shopId
-            );
+            if (isset($specificPrice->id)) {
+                $this->sendLiveSync(['specific-prices'], $specificPrice->id, 'upsert');
+                $this->insertIncrementalSyncObject(
+                    $specificPrice->id,
+                    Config::COLLECTION_SPECIFIC_PRICES,
+                    date(DATE_ATOM),
+                    $this->shopId
+                );
+            }
         }
     }
 
@@ -1091,14 +1152,35 @@ class Ps_eventbus extends Module
         $specificPrice = $parameters['object'];
 
         if ($specificPrice instanceof SpecificPrice) {
-            /** @var int $specificPriceId */
-            $specificPriceId = $specificPrice->id;
-            $this->insertDeletedObject(
-                $specificPriceId,
-                Config::COLLECTION_SPECIFIC_PRICES,
-                date(DATE_ATOM),
-                $this->shopId
-            );
+            if (isset($specificPrice->id)) {
+                $this->sendLiveSync(['specific-prices'], $specificPrice->id, 'delete');
+                $this->insertDeletedObject(
+                    $specificPrice->id,
+                    Config::COLLECTION_SPECIFIC_PRICES,
+                    date(DATE_ATOM),
+                    $this->shopId
+                );
+            }
+        }
+    }
+
+    /**
+     * @param array $shopContents
+     * @param int $shopContentId
+     * @param string $action
+     *
+     * @return void
+     */
+    private function sendLiveSync($shopContents, $shopContentId, $action)
+    {
+        if ((int) $shopContentId === 0) {
+            return;
+        }
+        try {
+            /** @var \PrestaShop\Module\PsEventbus\Api\SyncApiClient $syncApiClient */
+            $syncApiClient = $this->getService(\PrestaShop\Module\PsEventbus\Api\SyncApiClient::class);
+            $res = $syncApiClient->liveSync($shopContents, (int) $shopContentId, $action);
+        } catch (\Exception $e) {
         }
     }
 
