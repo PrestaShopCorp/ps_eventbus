@@ -4,8 +4,9 @@ namespace PrestaShop\Module\PsEventbus\Provider;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\ProductDecorator;
-use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\ProductRepository;
+use PrestaShop\Module\PsEventbus\Provider\ProductSupplierDataProvider;
+use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 
 class ProductDataProvider implements PaginatedApiDataProviderInterface
 {
@@ -18,6 +19,10 @@ class ProductDataProvider implements PaginatedApiDataProviderInterface
      */
     private $productDecorator;
     /**
+     * @var ProductSupplierDataProvider
+     */
+    private $productSupplierDataProvider;
+    /**
      * @var LanguageRepository
      */
     private $languageRepository;
@@ -25,10 +30,12 @@ class ProductDataProvider implements PaginatedApiDataProviderInterface
     public function __construct(
         ProductRepository $productRepository,
         ProductDecorator $productDecorator,
+        ProductSupplierDataProvider $productSupplierDataProvider,
         LanguageRepository $languageRepository
     ) {
         $this->productRepository = $productRepository;
         $this->productDecorator = $productDecorator;
+        $this->productSupplierDataProvider = $productSupplierDataProvider;
         $this->languageRepository = $languageRepository;
     }
 
@@ -55,6 +62,8 @@ class ProductDataProvider implements PaginatedApiDataProviderInterface
 
         $bundles = $this->productDecorator->getBundles($products);
 
+        $productSuppliers = $this->productSupplierDataProvider->getFormattedData($offset, $limit, $langIso);
+
         $products = array_map(function ($product) {
             return [
                 'id' => $product['unique_product_id'],
@@ -63,7 +72,7 @@ class ProductDataProvider implements PaginatedApiDataProviderInterface
             ];
         }, $products);
 
-        return array_merge($products, $bundles);
+        return array_merge($products, $bundles, $productSuppliers);
     }
 
     /**
@@ -102,7 +111,9 @@ class ProductDataProvider implements PaginatedApiDataProviderInterface
             return [];
         }
 
-        $orderDetails = $this->productDecorator->getBundles($products);
+        $bundles = $this->productDecorator->getBundles($products);
+
+        $productSuppliers = $this->productSupplierDataProvider->getFormattedDataIncremental($limit, $langIso, $objectIds);
 
         $products = array_map(function ($product) {
             return [
@@ -112,6 +123,6 @@ class ProductDataProvider implements PaginatedApiDataProviderInterface
             ];
         }, $products);
 
-        return array_merge($products, $orderDetails);
+        return array_merge($products, $bundles, $productSuppliers);
     }
 }

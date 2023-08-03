@@ -246,3 +246,9 @@ services:
     arguments:
       - '@ps_eventbus.db'
       - '@ps_eventbus.context'
+
+  PrestaShop\Module\PsEventbus\Repository\ProductSupplierRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ProductSupplierRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'

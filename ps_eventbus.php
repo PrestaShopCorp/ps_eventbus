@@ -457,14 +457,6 @@ class Ps_eventbus extends Module
                 $this->shopId,
                 false
             );
-
-            $this->insertIncrementalSyncObject(
-                $product->id,
-                Config::COLLECTION_PRODUCT_SUPPLIERS,
-                date(DATE_ATOM),
-                $this->shopId,
-                false
-            );
         }
     }
 
@@ -500,14 +492,6 @@ class Ps_eventbus extends Module
             $this->insertIncrementalSyncObject(
                 $product->id,
                 Config::COLLECTION_STOCKS,
-                date(DATE_ATOM),
-                $this->shopId,
-                false
-            );
-
-            $this->insertIncrementalSyncObject(
-                $product->id,
-                Config::COLLECTION_PRODUCT_SUPPLIERS,
                 date(DATE_ATOM),
                 $this->shopId,
                 false
