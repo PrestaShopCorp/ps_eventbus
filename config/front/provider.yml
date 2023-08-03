@@ -108,3 +108,10 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\StockMvtRepository'
       - '@PrestaShop\Module\PsEventbus\Decorator\StockDecorator'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
+
+  PrestaShop\Module\PsEventbus\Provider\ManufacturerDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\ManufacturerDataProvider
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\ManufacturerRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\ManufacturerDecorator'

@@ -232,3 +232,10 @@ services:
     public: true
     arguments:
       - '@ps_eventbus.db'
+
+  PrestaShop\Module\PsEventbus\Repository\ManufacturerRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ManufacturerRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
+      - '@ps_eventbus.context'

@@ -52,6 +52,9 @@ class Config
     public const COLLECTION_WISHLIST_PRODUCTS = 'wishlist_products';
     public const COLLECTION_STOCKS = 'stocks';
     public const COLLECTION_STOCK_MVTS = 'stock_movements';
+    public const COLLECTION_MANUFACTURERS = 'manufacturers';
+    public const COLLECTION_SUPPLIERS = 'suppliers';
+    public const COLLECTION_PRODUCT_SUPPLIERS = 'product_suppliers';
 
     /**
      * @param mixed $message
