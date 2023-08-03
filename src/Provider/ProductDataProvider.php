@@ -4,9 +4,8 @@ namespace PrestaShop\Module\PsEventbus\Provider;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\ProductDecorator;
-use PrestaShop\Module\PsEventbus\Repository\ProductRepository;
-use PrestaShop\Module\PsEventbus\Provider\ProductSupplierDataProvider;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
+use PrestaShop\Module\PsEventbus\Repository\ProductRepository;
 
 class ProductDataProvider implements PaginatedApiDataProviderInterface
 {
