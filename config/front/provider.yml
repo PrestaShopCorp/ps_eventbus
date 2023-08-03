@@ -115,3 +115,10 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\ManufacturerRepository'
       - '@PrestaShop\Module\PsEventbus\Decorator\ManufacturerDecorator'
+
+  PrestaShop\Module\PsEventbus\Provider\SupplierDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\SupplierDataProvider
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\SupplierRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\SupplierDecorator'

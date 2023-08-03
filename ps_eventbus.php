@@ -103,6 +103,9 @@ class Ps_eventbus extends Module
         'actionObjectStoreAddAfter',
         'actionObjectStoreDeleteAfter',
         'actionObjectStoreUpdateAfter',
+        'actionObjectSupplierAddAfter',
+        'actionObjectSupplierDeleteAfter',
+        'actionObjectSupplierUpdateAfter',
         'actionObjectTaxAddAfter',
         'actionObjectTaxDeleteAfter',
         'actionObjectTaxRulesGroupAddAfter',
@@ -296,8 +299,7 @@ class Ps_eventbus extends Module
                 $manufacturer->id,
                 Config::COLLECTION_MANUFACTURERS,
                 date(DATE_ATOM),
-                $this->shopId,
-                true
+                $this->shopId
             );
         }
     }
@@ -356,8 +358,7 @@ class Ps_eventbus extends Module
                 $supplier->id,
                 Config::COLLECTION_SUPPLIERS,
                 date(DATE_ATOM),
-                $this->shopId,
-                true
+                $this->shopId
             );
         }
     }
