@@ -234,7 +234,7 @@ class Ps_eventbus extends Module
     {
         $image = $parameters['object'];
         if (isset($image->id_product)) {
-            $this->sendLiveSync(['products'], $image->id_product, 'delete');
+            // $this->sendLiveSync(['products'], $image->id_product, 'delete');
             $this->insertIncrementalSyncObject(
                 $image->id_product,
                 Config::COLLECTION_PRODUCTS,
@@ -254,7 +254,7 @@ class Ps_eventbus extends Module
     {
         $image = $parameters['object'];
         if (isset($image->id_product)) {
-            $this->sendLiveSync(['products'], $image->id_product, 'upsert');
+            // $this->sendLiveSync(['products'], $image->id_product, 'upsert');
             $this->insertIncrementalSyncObject(
                 $image->id_product,
                 Config::COLLECTION_PRODUCTS,
@@ -274,7 +274,7 @@ class Ps_eventbus extends Module
     {
         $image = $parameters['object'];
         if (isset($image->id_product)) {
-            $this->sendLiveSync(['products'], $image->id_product, 'upsert');
+            // $this->sendLiveSync(['products'], $image->id_product, 'upsert');
             $this->insertIncrementalSyncObject(
                 $image->id_product,
                 Config::COLLECTION_PRODUCTS,
@@ -413,7 +413,7 @@ class Ps_eventbus extends Module
         $product = $parameters['object'];
 
         if (isset($product->id)) {
-            $this->sendLiveSync(['products'], $product->id, 'delete');
+            // $this->sendLiveSync(['products'], $product->id, 'delete');
             $this->insertDeletedObject(
                 $product->id,
                 Config::COLLECTION_PRODUCTS,
@@ -432,7 +432,7 @@ class Ps_eventbus extends Module
     {
         $product = $parameters['object'];
         if (isset($product->id)) {
-            $this->sendLiveSync(['products', 'custom-product-carriers', 'stocks'], $product->id, 'upsert');
+            // $this->sendLiveSync(['products', 'custom-product-carriers', 'stocks'], $product->id, 'upsert');
 
             $this->insertIncrementalSyncObject(
                 $product->id,
@@ -471,7 +471,7 @@ class Ps_eventbus extends Module
         $product = $parameters['object'];
 
         if (isset($product->id)) {
-            $this->sendLiveSync(['products', 'custom-product-carriers', 'stocks'], $product->id, 'upsert');
+            // $this->sendLiveSync(['products', 'custom-product-carriers', 'stocks'], $product->id, 'upsert');
 
             $this->insertIncrementalSyncObject(
                 $product->id,
@@ -508,7 +508,7 @@ class Ps_eventbus extends Module
     {
         $wishlist = $parameters['object'];
         if (isset($wishlist->id)) {
-            $this->sendLiveSync(['wishlists'], $wishlist->id, 'delete');
+            // $this->sendLiveSync(['wishlists'], $wishlist->id, 'delete');
 
             $this->insertDeletedObject(
                 $wishlist->id,
@@ -528,7 +528,7 @@ class Ps_eventbus extends Module
     {
         $wishlist = $parameters['object'];
         if (isset($wishlist->id)) {
-            $this->sendLiveSync(['wishlists'], $wishlist->id, 'upsert');
+            // $this->sendLiveSync(['wishlists'], $wishlist->id, 'upsert');
 
             $this->insertIncrementalSyncObject(
                 $wishlist->id,
@@ -549,7 +549,7 @@ class Ps_eventbus extends Module
     {
         $wishlist = $parameters['object'];
         if (isset($wishlist->id)) {
-            $this->sendLiveSync(['wishlists'], $wishlist->id, 'upsert');
+            // $this->sendLiveSync(['wishlists'], $wishlist->id, 'upsert');
 
             $this->insertIncrementalSyncObject(
                 $wishlist->id,
@@ -570,7 +570,7 @@ class Ps_eventbus extends Module
     {
         $stock = $parameters['object'];
         if (isset($stock->id)) {
-            $this->sendLiveSync(['stocks'], $stock->id, 'upsert');
+            // $this->sendLiveSync(['stocks'], $stock->id, 'upsert');
 
             $this->insertIncrementalSyncObject(
                 $stock->id,
@@ -591,7 +591,7 @@ class Ps_eventbus extends Module
     {
         $stock = $parameters['object'];
         if (isset($stock->id)) {
-            $this->sendLiveSync(['stocks'], $stock->id, 'upsert');
+            // $this->sendLiveSync(['stocks'], $stock->id, 'upsert');
 
             $this->insertIncrementalSyncObject(
                 $stock->id,
@@ -612,7 +612,7 @@ class Ps_eventbus extends Module
     {
         $product = $parameters['object'];
         if (isset($product->id)) {
-            $this->sendLiveSync(['stores'], $product->id, 'delete');
+            // $this->sendLiveSync(['stores'], $product->id, 'delete');
 
             $this->insertDeletedObject(
                 $product->id,
@@ -632,7 +632,7 @@ class Ps_eventbus extends Module
     {
         $product = $parameters['object'];
         if (isset($product->id)) {
-            $this->sendLiveSync(['stores'], $product->id, 'upsert');
+            // $this->sendLiveSync(['stores'], $product->id, 'upsert');
 
             $this->insertIncrementalSyncObject(
                 $product->id,
@@ -653,7 +653,7 @@ class Ps_eventbus extends Module
     {
         $store = $parameters['object'];
         if (isset($store->id)) {
-            $this->sendLiveSync(['stores'], $store->id, 'upsert');
+            // $this->sendLiveSync(['stores'], $store->id, 'upsert');
 
             $this->insertIncrementalSyncObject(
                 $store->id,
@@ -676,7 +676,7 @@ class Ps_eventbus extends Module
         $combination = $parameters['object'];
 
         if (isset($combination->id)) {
-            $this->sendLiveSync(['products'], $combination->id, 'delete');
+            // $this->sendLiveSync(['products'], $combination->id, 'delete');
 
             $this->insertDeletedObject(
                 $combination->id,
@@ -697,7 +697,7 @@ class Ps_eventbus extends Module
         $category = $parameters['object'];
 
         if (isset($category->id)) {
-            $this->sendLiveSync(['categories'], $category->id, 'upsert');
+            // $this->sendLiveSync(['categories'], $category->id, 'upsert');
 
             $this->insertIncrementalSyncObject(
                 $category->id,
@@ -719,7 +719,7 @@ class Ps_eventbus extends Module
         $category = $parameters['object'];
 
         if (isset($category->id)) {
-            $this->sendLiveSync(['categories'], $category->id, 'upsert');
+            // $this->sendLiveSync(['categories'], $category->id, 'upsert');
 
             $this->insertIncrementalSyncObject(
                 $category->id,
@@ -741,7 +741,7 @@ class Ps_eventbus extends Module
         $category = $parameters['object'];
 
         if (isset($category->id)) {
-            $this->sendLiveSync(['categories'], $category->id, 'delete');
+            // $this->sendLiveSync(['categories'], $category->id, 'delete');
 
             $this->insertDeletedObject(
                 $category->id,
@@ -762,7 +762,7 @@ class Ps_eventbus extends Module
         $customer = $parameters['object'];
 
         if (isset($customer->id)) {
-            $this->sendLiveSync(['customers'], $customer->id, 'upsert');
+            // $this->sendLiveSync(['customers'], $customer->id, 'upsert');
 
             $this->insertIncrementalSyncObject(
                 $customer->id,
@@ -784,7 +784,7 @@ class Ps_eventbus extends Module
         $customer = $parameters['object'];
 
         if (isset($customer->id)) {
-            $this->sendLiveSync(['customers'], $customer->id, 'upsert');
+            // $this->sendLiveSync(['customers'], $customer->id, 'upsert');
 
             $this->insertIncrementalSyncObject(
                 $customer->id,
@@ -806,7 +806,7 @@ class Ps_eventbus extends Module
         $customer = $parameters['object'];
 
         if (isset($customer->id)) {
-            $this->sendLiveSync(['customers'], $customer->id, 'delete');
+            // $this->sendLiveSync(['customers'], $customer->id, 'delete');
 
             $this->insertDeletedObject(
                 $customer->id,
@@ -827,7 +827,7 @@ class Ps_eventbus extends Module
         $currency = $parameters['object'];
 
         if (isset($currency->id)) {
-            $this->sendLiveSync(['currencies'], $currency->id, 'upsert');
+            // $this->sendLiveSync(['currencies'], $currency->id, 'upsert');
 
             $this->insertIncrementalSyncObject(
                 $currency->id,
@@ -849,7 +849,7 @@ class Ps_eventbus extends Module
         $currency = $parameters['object'];
 
         if (isset($currency->id)) {
-            $this->sendLiveSync(['currencies'], $currency->id, 'upsert');
+            // $this->sendLiveSync(['currencies'], $currency->id, 'upsert');
 
             $this->insertIncrementalSyncObject(
                 $currency->id,
@@ -871,7 +871,7 @@ class Ps_eventbus extends Module
         $cart = $parameters['object'];
 
         if (isset($cart->id)) {
-            $this->sendLiveSync(['carts'], $cart->id, 'upsert');
+            // $this->sendLiveSync(['carts'], $cart->id, 'upsert');
 
             $this->insertIncrementalSyncObject(
                 $cart->id,
@@ -892,7 +892,7 @@ class Ps_eventbus extends Module
         $cart = $parameters['object'];
 
         if (isset($cart->id)) {
-            $this->sendLiveSync(['carts'], $cart->id, 'upsert');
+            // $this->sendLiveSync(['carts'], $cart->id, 'upsert');
 
             $this->insertIncrementalSyncObject(
                 $cart->id,
@@ -913,7 +913,7 @@ class Ps_eventbus extends Module
         $order = $parameters['object'];
 
         if (isset($order->id)) {
-            $this->sendLiveSync(['orders'], $order->id, 'upsert');
+            // $this->sendLiveSync(['orders'], $order->id, 'upsert');
 
             $this->insertIncrementalSyncObject(
                 $order->id,
@@ -934,7 +934,7 @@ class Ps_eventbus extends Module
         $order = $parameters['object'];
 
         if (isset($order->id)) {
-            $this->sendLiveSync(['orders'], $order->id, 'upsert');
+            // $this->sendLiveSync(['orders'], $order->id, 'upsert');
 
             $this->insertIncrementalSyncObject(
                 $order->id,
@@ -956,7 +956,7 @@ class Ps_eventbus extends Module
         $carrier = $parameters['object'];
 
         if (isset($carrier->id)) {
-            $this->sendLiveSync(['carriers'], $carrier->id, 'upsert');
+            // $this->sendLiveSync(['carriers'], $carrier->id, 'upsert');
 
             $this->insertIncrementalSyncObject(
                 $carrier->id,
@@ -978,7 +978,7 @@ class Ps_eventbus extends Module
         $carrier = $parameters['object'];
 
         if (isset($carrier->id)) {
-            $this->sendLiveSync(['carriers'], $carrier->id, 'upsert');
+            // $this->sendLiveSync(['carriers'], $carrier->id, 'upsert');
 
             $this->insertIncrementalSyncObject(
                 $carrier->id,
@@ -1000,7 +1000,7 @@ class Ps_eventbus extends Module
         $carrier = $parameters['object'];
 
         if (isset($carrier->id)) {
-            $this->sendLiveSync(['carriers'], $carrier->id, 'delete');
+            // $this->sendLiveSync(['carriers'], $carrier->id, 'delete');
 
             $this->insertIncrementalSyncObject(
                 $carrier->id,
@@ -1231,7 +1231,7 @@ class Ps_eventbus extends Module
 
         if ($specificPrice instanceof SpecificPrice) {
             if (isset($specificPrice->id)) {
-                $this->sendLiveSync(['specific-prices'], $specificPrice->id, 'upsert');
+                // $this->sendLiveSync(['specific-prices'], $specificPrice->id, 'upsert');
                 $this->insertIncrementalSyncObject(
                     $specificPrice->id,
                     Config::COLLECTION_SPECIFIC_PRICES,
@@ -1254,7 +1254,7 @@ class Ps_eventbus extends Module
 
         if ($specificPrice instanceof SpecificPrice) {
             if (isset($specificPrice->id)) {
-                $this->sendLiveSync(['specific-prices'], $specificPrice->id, 'upsert');
+                // $this->sendLiveSync(['specific-prices'], $specificPrice->id, 'upsert');
                 $this->insertIncrementalSyncObject(
                     $specificPrice->id,
                     Config::COLLECTION_SPECIFIC_PRICES,
@@ -1277,7 +1277,7 @@ class Ps_eventbus extends Module
 
         if ($specificPrice instanceof SpecificPrice) {
             if (isset($specificPrice->id)) {
-                $this->sendLiveSync(['specific-prices'], $specificPrice->id, 'delete');
+                // $this->sendLiveSync(['specific-prices'], $specificPrice->id, 'delete');
                 $this->insertDeletedObject(
                     $specificPrice->id,
                     Config::COLLECTION_SPECIFIC_PRICES,
@@ -1288,25 +1288,25 @@ class Ps_eventbus extends Module
         }
     }
 
-    /**
-     * @param array $shopContents
-     * @param int $shopContentId
-     * @param string $action
-     *
-     * @return void
-     */
-    private function sendLiveSync($shopContents, $shopContentId, $action)
-    {
-        if ((int) $shopContentId === 0) {
-            return;
-        }
-        try {
-            /** @var \PrestaShop\Module\PsEventbus\Api\SyncApiClient $syncApiClient */
-            $syncApiClient = $this->getService(\PrestaShop\Module\PsEventbus\Api\SyncApiClient::class);
-            $res = $syncApiClient->liveSync($shopContents, (int) $shopContentId, $action);
-        } catch (\Exception $e) {
-        }
-    }
+    // /**
+    //  * @param array $shopContents
+    //  * @param int $shopContentId
+    //  * @param string $action
+    //  *
+    //  * @return void
+    //  */
+    // private function sendLiveSync($shopContents, $shopContentId, $action)
+    // {
+    //     if ((int) $shopContentId === 0) {
+    //         return;
+    //     }
+    //     try {
+    //         /** @var \PrestaShop\Module\PsEventbus\Api\SyncApiClient $syncApiClient */
+    //         $syncApiClient = $this->getService(\PrestaShop\Module\PsEventbus\Api\SyncApiClient::class);
+    //         $res = $syncApiClient->liveSync($shopContents, (int) $shopContentId, $action);
+    //     } catch (\Exception $e) {
+    //     }
+    // }
 
     /**
      * @param int $objectId
