@@ -294,7 +294,7 @@ class Ps_eventbus extends Module
     {
         $manufacturer = $parameters['object'];
         if (isset($manufacturer->id)) {
-            $this->sendLiveSync(['manufacturers'], $manufacturer->id, 'delete');
+            // $this->sendLiveSync(['manufacturers'], $manufacturer->id, 'delete');
             $this->insertDeletedObject(
                 $manufacturer->id,
                 Config::COLLECTION_MANUFACTURERS,
@@ -313,7 +313,7 @@ class Ps_eventbus extends Module
     {
         $manufacturer = $parameters['object'];
         if (isset($manufacturer->id)) {
-            $this->sendLiveSync(['manufacturers'], $manufacturer->id, 'upsert');
+            // $this->sendLiveSync(['manufacturers'], $manufacturer->id, 'upsert');
             $this->insertIncrementalSyncObject(
                 $manufacturer->id,
                 Config::COLLECTION_MANUFACTURERS,
@@ -333,7 +333,7 @@ class Ps_eventbus extends Module
     {
         $manufacturer = $parameters['object'];
         if (isset($manufacturer->id)) {
-            $this->sendLiveSync(['manufacturers'], $manufacturer->id, 'upsert');
+            // $this->sendLiveSync(['manufacturers'], $manufacturer->id, 'upsert');
             $this->insertIncrementalSyncObject(
                 $manufacturer->id,
                 Config::COLLECTION_MANUFACTURERS,
@@ -353,7 +353,7 @@ class Ps_eventbus extends Module
     {
         $supplier = $parameters['object'];
         if (isset($supplier->id)) {
-            $this->sendLiveSync(['suppliers'], $supplier->id, 'delete');
+            // $this->sendLiveSync(['suppliers'], $supplier->id, 'delete');
             $this->insertDeletedObject(
                 $supplier->id,
                 Config::COLLECTION_SUPPLIERS,
@@ -372,7 +372,7 @@ class Ps_eventbus extends Module
     {
         $supplier = $parameters['object'];
         if (isset($supplier->id)) {
-            $this->sendLiveSync(['suppliers'], $supplier->id, 'upsert');
+            // $this->sendLiveSync(['suppliers'], $supplier->id, 'upsert');
             $this->insertIncrementalSyncObject(
                 $supplier->id,
                 Config::COLLECTION_SUPPLIERS,
@@ -392,7 +392,7 @@ class Ps_eventbus extends Module
     {
         $supplier = $parameters['object'];
         if (isset($supplier->id)) {
-            $this->sendLiveSync(['suppliers'], $supplier->id, 'upsert');
+            // $this->sendLiveSync(['suppliers'], $supplier->id, 'upsert');
             $this->insertIncrementalSyncObject(
                 $supplier->id,
                 Config::COLLECTION_SUPPLIERS,
