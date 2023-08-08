@@ -53,3 +53,21 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
+
+  PrestaShop\Module\PsEventbus\Decorator\ManufacturerDecorator:
+    class: PrestaShop\Module\PsEventbus\Decorator\ManufacturerDecorator
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
+
+  PrestaShop\Module\PsEventbus\Decorator\SupplierDecorator:
+    class: PrestaShop\Module\PsEventbus\Decorator\SupplierDecorator
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
+
+  PrestaShop\Module\PsEventbus\Decorator\ProductSupplierDecorator:
+    class: PrestaShop\Module\PsEventbus\Decorator\ProductSupplierDecorator
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'

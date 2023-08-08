@@ -57,7 +57,7 @@ class StockMvtRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('sm.id_stock_mvt, sm.id_stock, sm.id_order, sm.id_supply_order, sm.id_stock_mvt_reason, smrl.name,
+        $query->select('sm.id_stock_mvt, sm.id_stock, sm.id_order, sm.id_supply_order, sm.id_stock_mvt_reason, smrl.name, smrl.id_lang,
         sm.id_employee, sm.employee_lastname, sm.employee_firstname, sm.physical_quantity, sm.date_add, sm.sign, sm.price_te,
         sm.last_wa, sm.current_wa, sm.referer, smr.deleted');
     }

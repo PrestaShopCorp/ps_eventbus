@@ -84,6 +84,9 @@ class Ps_eventbus extends Module
         'actionObjectImageAddAfter',
         'actionObjectImageDeleteAfter',
         'actionObjectImageUpdateAfter',
+        'actionObjectManufacturerAddAfter',
+        'actionObjectManufacturerDeleteAfter',
+        'actionObjectManufacturerUpdateAfter',
         'actionObjectOrderAddAfter',
         'actionObjectOrderUpdateAfter',
         'actionObjectProductAddAfter',
@@ -100,6 +103,9 @@ class Ps_eventbus extends Module
         'actionObjectStoreAddAfter',
         'actionObjectStoreDeleteAfter',
         'actionObjectStoreUpdateAfter',
+        'actionObjectSupplierAddAfter',
+        'actionObjectSupplierDeleteAfter',
+        'actionObjectSupplierUpdateAfter',
         'actionObjectTaxAddAfter',
         'actionObjectTaxDeleteAfter',
         'actionObjectTaxRulesGroupAddAfter',
@@ -272,6 +278,124 @@ class Ps_eventbus extends Module
             $this->insertIncrementalSyncObject(
                 $image->id_product,
                 Config::COLLECTION_PRODUCTS,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectManufacturerDeleteAfter($parameters)
+    {
+        $manufacturer = $parameters['object'];
+        if (isset($manufacturer->id)) {
+            // $this->sendLiveSync(['manufacturers'], $manufacturer->id, 'delete');
+            $this->insertDeletedObject(
+                $manufacturer->id,
+                Config::COLLECTION_MANUFACTURERS,
+                date(DATE_ATOM),
+                $this->shopId
+            );
+        }
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectManufacturerAddAfter($parameters)
+    {
+        $manufacturer = $parameters['object'];
+        if (isset($manufacturer->id)) {
+            // $this->sendLiveSync(['manufacturers'], $manufacturer->id, 'upsert');
+            $this->insertIncrementalSyncObject(
+                $manufacturer->id,
+                Config::COLLECTION_MANUFACTURERS,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectManufacturerUpdateAfter($parameters)
+    {
+        $manufacturer = $parameters['object'];
+        if (isset($manufacturer->id)) {
+            // $this->sendLiveSync(['manufacturers'], $manufacturer->id, 'upsert');
+            $this->insertIncrementalSyncObject(
+                $manufacturer->id,
+                Config::COLLECTION_MANUFACTURERS,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectSupplierDeleteAfter($parameters)
+    {
+        $supplier = $parameters['object'];
+        if (isset($supplier->id)) {
+            // $this->sendLiveSync(['suppliers'], $supplier->id, 'delete');
+            $this->insertDeletedObject(
+                $supplier->id,
+                Config::COLLECTION_SUPPLIERS,
+                date(DATE_ATOM),
+                $this->shopId
+            );
+        }
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectSupplierAddAfter($parameters)
+    {
+        $supplier = $parameters['object'];
+        if (isset($supplier->id)) {
+            // $this->sendLiveSync(['suppliers'], $supplier->id, 'upsert');
+            $this->insertIncrementalSyncObject(
+                $supplier->id,
+                Config::COLLECTION_SUPPLIERS,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectSupplierUpdateAfter($parameters)
+    {
+        $supplier = $parameters['object'];
+        if (isset($supplier->id)) {
+            // $this->sendLiveSync(['suppliers'], $supplier->id, 'upsert');
+            $this->insertIncrementalSyncObject(
+                $supplier->id,
+                Config::COLLECTION_SUPPLIERS,
                 date(DATE_ATOM),
                 $this->shopId,
                 true

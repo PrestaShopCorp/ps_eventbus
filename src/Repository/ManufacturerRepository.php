@@ -2,7 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-class CurrencyRepository
+class ManufacturerRepository
 {
     /**
      * @var \Db
@@ -21,36 +21,6 @@ class CurrencyRepository
     }
 
     /**
-     * @return mixed
-     */
-    private function isLangAvailable()
-    {
-        return \Tools::version_compare(_PS_VERSION_, '1.7.6', '>=');
-    }
-
-    /**
-     * @return array
-     */
-    public function getCurrenciesIsoCodes()
-    {
-        $currencies = \Currency::getCurrencies();
-
-        return array_map(function ($currency) {
-            return $currency['iso_code'];
-        }, $currencies);
-    }
-
-    /**
-     * @return string
-     */
-    public function getDefaultCurrencyIsoCode()
-    {
-        $currency = \Currency::getDefaultCurrency();
-
-        return $currency instanceof \Currency ? $currency->iso_code : '';
-    }
-
-    /**
      * @param int $offset
      * @param int $limit
      * @param string $langIso
@@ -59,7 +29,7 @@ class CurrencyRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getCurrencies($offset, $limit, $langIso)
+    public function getManufacturers($offset, $limit, $langIso)
     {
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
@@ -78,12 +48,12 @@ class CurrencyRepository
      *
      * @return int
      */
-    public function getRemainingCurrenciesCount($offset, $langIso)
+    public function getRemainingManufacturersCount($offset, $langIso)
     {
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
         $query = $this->getBaseQuery($shopId, $langIso)
-            ->select('(COUNT(c.id_currency) - ' . (int) $offset . ') as count');
+            ->select('(COUNT(ma.id_manufacturer) - ' . (int) $offset . ') as count');
 
         return (int) $this->db->getValue($query);
     }
@@ -91,13 +61,13 @@ class CurrencyRepository
     /**
      * @param int $limit
      * @param string $langIso
-     * @param array $currencyIds
+     * @param array $manufacturerIds
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getCurrenciesIncremental($limit, $langIso, $currencyIds)
+    public function getManufacturersIncremental($limit, $langIso, $manufacturerIds)
     {
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
@@ -105,7 +75,7 @@ class CurrencyRepository
 
         $this->addSelectParameters($query);
 
-        $query->where('c.id_currency IN(' . implode(',', array_map('intval', $currencyIds)) . ')')
+        $query->where('ma.id_manufacturer IN(' . implode(',', array_map('intval', $manufacturerIds)) . ')')
             ->limit($limit);
 
         return $this->db->executeS($query);
@@ -119,11 +89,12 @@ class CurrencyRepository
      */
     public function getBaseQuery($shopId, $langIso)
     {
+        /** @var int $langId */
+        $langId = (int) \Language::getIdByIso($langIso);
         $query = new \DbQuery();
-        $query->from('currency', 'c');
-        if ($this->isLangAvailable()) {
-            $query->innerJoin('currency_lang', 'cl', 'cl.id_currency = c.id_currency');
-        }
+        $query->from('manufacturer', 'ma')
+            ->innerJoin('manufacturer_lang', 'mal', 'ma.id_manufacturer = mal.id_manufacturer AND mal.id_lang = ' . (int) $langId)
+            ->innerJoin('manufacturer_shop', 'mas', 'ma.id_manufacturer = mas.id_manufacturer AND mas.id_shop = ' . (int) $shopId);
 
         return $query;
     }
@@ -135,10 +106,7 @@ class CurrencyRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        if ($this->isLangAvailable()) {
-            $query->select('c.id_currency, cl.name, c.iso_code, c.conversion_rate, c.deleted, c.precision, c.active');
-        } else {
-            $query->select('c.id_currency, \'\' as name, c.iso_code, c.conversion_rate, c.deleted, c.precision, c.active');
-        }
+        $query->select('ma.id_manufacturer, ma.name, ma.date_add as created_at, ma.date_upd as updated_at, ma.active, mal.id_lang,
+      mal.description, mal.short_description, mal.meta_title, mal.meta_keywords, mal.meta_description, mas.id_shop');
     }
 }
