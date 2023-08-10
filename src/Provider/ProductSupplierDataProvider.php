@@ -19,7 +19,7 @@ class ProductSupplierDataProvider implements PaginatedApiDataProviderInterface
 
     public function __construct(
         ProductSupplierRepository $productSupplierRepository,
-        ProductSupplierDecorator $productSupplierDecorator,
+        ProductSupplierDecorator $productSupplierDecorator
     ) {
         $this->productSupplierRepository = $productSupplierRepository;
         $this->productSupplierDecorator = $productSupplierDecorator;
