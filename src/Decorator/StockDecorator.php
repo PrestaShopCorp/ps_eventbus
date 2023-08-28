@@ -81,6 +81,7 @@ class StockDecorator
         $stockMvt['id_order'] = (int) $stockMvt['id_order'];
         $stockMvt['id_supply_order'] = (int) $stockMvt['id_supply_order'];
         $stockMvt['id_stock_mvt_reason'] = (int) $stockMvt['id_stock_mvt_reason'];
+        $stockMvt['id_lang'] = (int) $stockMvt['id_lang'];
         $stockMvt['id_employee'] = (int) $stockMvt['id_employee'];
         $stockMvt['physical_quantity'] = (int) $stockMvt['physical_quantity'];
         $stockMvt['date_add'] = $date;

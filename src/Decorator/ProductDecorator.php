@@ -195,6 +195,8 @@ class ProductDecorator
     private function castPropertyValues(array &$product)
     {
         $product['id_product'] = (int) $product['id_product'];
+        $product['id_manufacturer'] = (int) $product['id_manufacturer'];
+        $product['id_supplier'] = (int) $product['id_supplier'];
         $product['id_attribute'] = (int) $product['id_attribute'];
         $product['id_category_default'] = (int) $product['id_category_default'];
         $product['quantity'] = (int) $product['quantity'];
