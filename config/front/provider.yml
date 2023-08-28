@@ -130,3 +130,10 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\SupplierRepository'
       - '@PrestaShop\Module\PsEventbus\Decorator\SupplierDecorator'
+
+  PrestaShop\Module\PsEventbus\Provider\LanguageDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\LanguageDataProvider
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\LanguageDecorator'
