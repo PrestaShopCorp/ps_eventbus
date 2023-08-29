@@ -69,7 +69,7 @@ zip-prod: vendor dist .config.prod.yml
 	@$(call zip_it,.config.prod.yml,${PACKAGE}.zip)
 
 # target: build                                  - Setup PHP & Node.js locally
-build: vendor
+build: vendor tools-vendor
 
 composer.phar:
 	@php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');";
@@ -81,16 +81,18 @@ composer.phar:
 
 vendor: composer.phar
 	./composer.phar install --no-dev -o;
-	cd tools/ && ./composer.phar install --dev -o;
 
-vendor/bin/php-cs-fixer: composer.phar
-	./tools/composer.phar install --ignore-platform-reqs
+tools-vendor: composer.phar
+	cd tools/ && ./composer.phar install --no-dev -o;
 
-vendor/bin/phpunit: composer.phar
-	./composer.phar install --ignore-platform-reqs
+tools/vendor/bin/php-cs-fixer: composer.phar
+	cd tools/ && ./composer.phar install --ignore-platform-reqs
 
-vendor/bin/phpstan: composer.phar
-	./composer.phar install --ignore-platform-reqs
+tools/vendor/bin/phpunit: composer.phar
+	cd tools/ && ./composer.phar install --ignore-platform-reqs
+
+tools/vendor/bin/phpstan: composer.phar
+	cd tools/ && ./composer.phar install --ignore-platform-reqs
 
 prestashop:
 	@mkdir -p ./prestashop
@@ -135,10 +137,12 @@ phpunit-coverage: tools/vendor/bin/phpunit
 
 # target: phpstan                                - Run phpstan
 phpstan: tools/vendor/bin/phpstan prestashop/prestashop-${PS_VERSION}
+	sed -i -e 's|/vendor|/tools/vendor|g' ./tools/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
 	_PS_ROOT_DIR_=${PS_ROOT_DIR} tools/vendor/bin/phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
 
 # target: phpstan-baseline                       - Generate a phpstan baseline to ignore all errors
 phpstan-baseline: prestashop/prestashop-${PS_VERSION} tools/vendor/bin/phpstan
+	sed -i -e 's|/vendor|/tools/vendor|g' ./tools/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
 	_PS_ROOT_DIR_=${PS_ROOT_DIR} tools/vendor/bin/phpstan analyse --generate-baseline --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
 
 # target: docker-test                            - Static and unit testing in docker
