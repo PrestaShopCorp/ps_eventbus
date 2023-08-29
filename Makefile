@@ -81,6 +81,7 @@ composer.phar:
 
 vendor: composer.phar
 	./composer.phar install --no-dev -o;
+	./tools/composer.phar install --no-dev -o;
 
 vendor/bin/php-cs-fixer: composer.phar
 	./tools/composer.phar install --ignore-platform-reqs
