@@ -21,7 +21,7 @@ class PayloadDecorator
      *
      * @return void
      */
-    public function convertDateFormat(array & $payload)
+    public function convertDateFormat(array &$payload)
     {
         foreach ($payload as &$payloadItem) {
             if (isset($payloadItem['properties']['created_at'])) {

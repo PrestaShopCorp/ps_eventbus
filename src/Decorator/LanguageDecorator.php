@@ -30,7 +30,7 @@ class LanguageDecorator
      *
      * @return void
      */
-    public function decorateLanguages(array & $languages)
+    public function decorateLanguages(array &$languages)
     {
         foreach ($languages as &$language) {
             $this->castPropertyValues($language);
@@ -42,7 +42,7 @@ class LanguageDecorator
      *
      * @return void
      */
-    private function castPropertyValues(array & $language)
+    private function castPropertyValues(array &$language)
     {
         $language['id_lang'] = (int) $language['id_lang'];
         $language['active'] = (bool) $language['active'];

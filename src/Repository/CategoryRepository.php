@@ -93,7 +93,7 @@ class CategoryRepository
      *
      * @return void
      */
-    private function buildCategoryPaths($categoriesWithParentsInfo, $currentCategoryId, & $categories)
+    private function buildCategoryPaths($categoriesWithParentsInfo, $currentCategoryId, &$categories)
     {
         foreach ($categoriesWithParentsInfo as $category) {
             if ($category['id_category'] == $currentCategoryId) {

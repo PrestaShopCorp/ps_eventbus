@@ -10,7 +10,7 @@ class PresenterService
     /**
      * @var PsAccountsService|null
      */
-    private $psAccountsService = null;
+    private $psAccountsService;
 
     public function __construct()
     {

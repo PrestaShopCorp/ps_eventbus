@@ -73,14 +73,14 @@ class SpecificPriceService
         $specificPriceId,
         $usetax = true,
         $usereduc = true,
-        Context $context = null,
+        \Context $context = null,
         $decimals = 6,
         $divisor = null,
         $only_reduc = false,
         $id_customer = null,
         $id_cart = null,
         $id_address = null,
-        & $specific_price_output = null,
+        &$specific_price_output = null,
         $use_group_reduction = true
     ) {
         if (!$context) {
@@ -182,7 +182,7 @@ class SpecificPriceService
         $decimals,
         $only_reduc,
         $use_reduc,
-        & $specific_price,
+        &$specific_price,
         $use_group_reduction,
         $id_customization = 0
     ) {

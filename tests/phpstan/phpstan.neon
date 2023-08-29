@@ -1,5 +1,5 @@
 includes:
-  - %currentWorkingDirectory%/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
+  - %currentWorkingDirectory%/tools/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
 
 parameters:
   paths:

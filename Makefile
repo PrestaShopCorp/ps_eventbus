@@ -105,16 +105,16 @@ composer-validate: vendor
 	@./composer.phar validate --no-check-publish
 
 # target: translation-validate                   - Validates the translation files in translations/ directory
-translation-validate: 
+translation-validate:
 	php tests/translation.test.php
 
 # target: lint                                   - Lint the code and expose errors
-lint: vendor/bin/php-cs-fixer
-	@PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no;
+lint: tools/vendor/bin/php-cs-fixer
+	@PHP_CS_FIXER_IGNORE_ENV=1 tools/vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no;
 
 # target: lint-fix                               - Lint the code and fix it
-lint-fix: vendor/bin/php-cs-fixer
-	@PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --using-cache=no;
+lint-fix: tools/vendor/bin/php-cs-fixer
+	@PHP_CS_FIXER_IGNORE_ENV=1 tools/vendor/bin/php-cs-fixer fix --using-cache=no;
 
 # target: php-lint                               - Use php linter to check the code
 php-lint:
@@ -122,20 +122,20 @@ php-lint:
 	@echo "php $(shell php -r 'echo PHP_VERSION;') lint passed";
 
 # target: phpunit                                - Run phpunit tests
-phpunit: vendor/bin/phpunit
-	vendor/bin/phpunit --configuration=./tests/phpunit.xml;
+phpunit: tools/vendor/bin/phpunit
+	tools/vendor/bin/phpunit --configuration=./tests/phpunit.xml;
 
 # target: phpunit-coverage                       - Run phpunit with coverage and allure
-phpunit-coverage: vendor/bin/phpunit
-	php -dxdebug.mode=coverage vendor/bin/phpunit --coverage-html ./coverage-reports/coverage-html --configuration=./tests/phpunit-coverage.xml;
+phpunit-coverage: tools/vendor/bin/phpunit
+	php -dxdebug.mode=coverage tools/vendor/bin/phpunit --coverage-html ./coverage-reports/coverage-html --configuration=./tests/phpunit-coverage.xml;
 
 # target: phpstan                                - Run phpstan
-phpstan: vendor/bin/phpstan prestashop/prestashop-${PS_VERSION}
-	_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
+phpstan: tools/vendor/bin/phpstan prestashop/prestashop-${PS_VERSION}
+	_PS_ROOT_DIR_=${PS_ROOT_DIR} tools/vendor/bin/phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
 
 # target: phpstan-baseline                       - Generate a phpstan baseline to ignore all errors
-phpstan-baseline: prestashop/prestashop-${PS_VERSION} vendor/bin/phpstan
-	_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpstan analyse --generate-baseline --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
+phpstan-baseline: prestashop/prestashop-${PS_VERSION} tools/vendor/bin/phpstan
+	_PS_ROOT_DIR_=${PS_ROOT_DIR} tools/vendor/bin/phpstan analyse --generate-baseline --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
 
 # target: docker-test                            - Static and unit testing in docker
 docker-test: docker-lint docker-phpstan docker-phpunit
@@ -185,7 +185,7 @@ run-docker-actions-177:
 all-tests-actions-177:
 	make rda177
 	make bps177
-	docker exec -i prestashop-177 sh -c "cd /var/www/html/modules/ps_eventbus && php vendor/bin/phpunit -c tests/phpunit.xml"
+	docker exec -i prestashop-177 sh -c "cd /var/www/html/modules/ps_eventbus && php tools/vendor/bin/phpunit -c tests/phpunit.xml"
 
 # Fixme: add "allure-framework/allure-phpunit" in composer.json to solve this.
 # Currently failing to resolve devDeps:
