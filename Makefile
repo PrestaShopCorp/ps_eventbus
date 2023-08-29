@@ -73,20 +73,23 @@ build: vendor
 
 composer.phar:
 	@php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');";
+	@php -r "copy('https://getcomposer.org/installer', 'tools/composer-setup.php');";
 	@php composer-setup.php;
+	@php tools/composer-setup.php;
 	@php -r "unlink('composer-setup.php');";
+	@php -r "unlink('tools/composer-setup.php');";
 
 vendor: composer.phar
 	./composer.phar install --no-dev -o;
 
 vendor/bin/php-cs-fixer: composer.phar
-	./composer.phar install --ignore-platform-reqs
+	./tools/composer.phar install --ignore-platform-reqs
 
 vendor/bin/phpunit: composer.phar
-	./composer.phar install --ignore-platform-reqs
+	./tools/composer.phar install --ignore-platform-reqs
 
 vendor/bin/phpstan: composer.phar
-	./composer.phar install --ignore-platform-reqs
+	./tools/composer.phar install --ignore-platform-reqs
 
 prestashop:
 	@mkdir -p ./prestashop
