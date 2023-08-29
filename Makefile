@@ -75,22 +75,22 @@ composer.phar:
 	@php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');";
 	@php -r "copy('https://getcomposer.org/installer', 'tools/composer-setup.php');";
 	@php composer-setup.php;
-	@php tools/composer-setup.php;
+	@php tools/composer-setup.php --install-dir tools;
 	@php -r "unlink('composer-setup.php');";
 	@php -r "unlink('tools/composer-setup.php');";
 
 vendor: composer.phar
 	./composer.phar install --no-dev -o;
-	./tools/composer.phar install --no-dev -o;
+	cd tools/ && ./composer.phar install --dev -o;
 
 vendor/bin/php-cs-fixer: composer.phar
 	./tools/composer.phar install --ignore-platform-reqs
 
 vendor/bin/phpunit: composer.phar
-	./tools/composer.phar install --ignore-platform-reqs
+	./composer.phar install --ignore-platform-reqs
 
 vendor/bin/phpstan: composer.phar
-	./tools/composer.phar install --ignore-platform-reqs
+	./composer.phar install --ignore-platform-reqs
 
 prestashop:
 	@mkdir -p ./prestashop
