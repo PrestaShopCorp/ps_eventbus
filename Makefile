@@ -86,12 +86,15 @@ tools-vendor: composer.phar
 	cd tools/ && ./composer.phar install --no-dev -o;
 
 tools/vendor/bin/php-cs-fixer: composer.phar
+	./composer.phar install --ignore-platform-reqs
 	cd tools/ && ./composer.phar install --ignore-platform-reqs
 
 tools/vendor/bin/phpunit: composer.phar
+	./composer.phar install --ignore-platform-reqs
 	cd tools/ && ./composer.phar install --ignore-platform-reqs
 
 tools/vendor/bin/phpstan: composer.phar
+	./composer.phar install --ignore-platform-reqs
 	cd tools/ && ./composer.phar install --ignore-platform-reqs
 
 prestashop:
