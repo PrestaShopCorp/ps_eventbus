@@ -77,7 +77,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return void
      */
-    private function castCartValues(array &$carts)
+    private function castCartValues(array & $carts)
     {
         foreach ($carts as &$cart) {
             $cart['id_cart'] = (string) $cart['id_cart'];
@@ -89,7 +89,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return void
      */
-    private function castCartProductValues(array &$cartProducts)
+    private function castCartProductValues(array & $cartProducts)
     {
         foreach ($cartProducts as &$cartProduct) {
             $cartProduct['id_cart_product'] = (string) "{$cartProduct['id_cart']}-{$cartProduct['id_product']}-{$cartProduct['id_product_attribute']}";
@@ -201,7 +201,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return void
      */
-    private function castCartRuleValues(array &$cartRules)
+    private function castCartRuleValues(array & $cartRules)
     {
         foreach ($cartRules as &$cartRule) {
             $cartRule['id_cart_rule'] = (int) $cartRule['id_cart_rule'];

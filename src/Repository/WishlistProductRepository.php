@@ -19,7 +19,7 @@ class WishlistProductRepository
      *
      * @return \DbQuery
      */
-    public function getBaseQuery(array &$wishlistIds)
+    public function getBaseQuery(array & $wishlistIds)
     {
         $query = new \DbQuery();
         $query->from('wishlist_product', 'wp');
@@ -35,7 +35,7 @@ class WishlistProductRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getWishlistProducts(array &$wishlistIds)
+    public function getWishlistProducts(array & $wishlistIds)
     {
         $query = $this->getBaseQuery($wishlistIds);
 

@@ -23,7 +23,7 @@ class CustomPriceDecorator
         $this->priceService = $priceService;
     }
 
-    public function decorateSpecificPrices(array &$specificPrices): void
+    public function decorateSpecificPrices(array & $specificPrices): void
     {
         foreach ($specificPrices as &$specificPrice) {
             $this->addTotalPrice($specificPrice);
@@ -32,7 +32,7 @@ class CustomPriceDecorator
         }
     }
 
-    private function addTotalPrice(array &$specificPrice): void
+    private function addTotalPrice(array & $specificPrice): void
     {
         $this->context->country = new \Country($specificPrice['id_country']);
         $this->context->currency = new \Currency($specificPrice['id_currency']);
@@ -71,7 +71,7 @@ class CustomPriceDecorator
         );
     }
 
-    private function castPropertyValues(array &$specificPrice): void
+    private function castPropertyValues(array & $specificPrice): void
     {
         $specificPrice['id_specific_price'] = (int) $specificPrice['id_specific_price'];
         $specificPrice['id_product'] = (int) $specificPrice['id_product'];
@@ -111,7 +111,7 @@ class CustomPriceDecorator
         }
     }
 
-    private function setShopId(array &$specificPrice): void
+    private function setShopId(array & $specificPrice): void
     {
         if ($specificPrice['id_shop']) {
             $specificPrice['id_shop'] = $this->context->shop->id;

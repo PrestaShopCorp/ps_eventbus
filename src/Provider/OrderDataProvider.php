@@ -233,7 +233,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @throws \PrestaShopDatabaseException
      */
-    private function castOrderValues(array &$orders, int $langId)
+    private function castOrderValues(array & $orders, int $langId)
     {
         foreach ($orders as &$order) {
             $order['id_order'] = (int) $order['id_order'];
@@ -285,7 +285,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return void
      */
-    private function castOrderDetailValues(array &$orderDetails)
+    private function castOrderDetailValues(array & $orderDetails)
     {
         foreach ($orderDetails as &$orderDetail) {
             $orderDetail['id_order_detail'] = (int) $orderDetail['id_order_detail'];
@@ -303,7 +303,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         }
     }
 
-    private function castOrderStatuses(array &$orderStatuses): array
+    private function castOrderStatuses(array & $orderStatuses): array
     {
         $castedOrderStatuses = [];
         foreach ($orderStatuses as $orderStatus) {
@@ -333,7 +333,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return void
      */
-    private function castAddressIsoCodes(&$orderDetail)
+    private function castAddressIsoCodes(& $orderDetail)
     {
         if (!$orderDetail['address_iso']) {
             $orderDetail['invoice_country_code'] = null;
@@ -366,7 +366,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return void
      */
-    private function castOrderCartRulesValues(array &$orderCartRules)
+    private function castOrderCartRulesValues(array & $orderCartRules)
     {
         foreach ($orderCartRules as &$orderCartRule) {
             $orderCartRule['id_order_cart_rule'] = (int) $orderCartRule['id_order_cart_rule'];

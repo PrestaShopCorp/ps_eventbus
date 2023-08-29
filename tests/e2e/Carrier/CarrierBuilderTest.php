@@ -46,7 +46,7 @@ class CarrierBuilderTest extends BaseTestCase
      * @throws \PrestaShopException
      */
     public function testBuildCarrier(
-        \Carrier $carrier,
+        Carrier $carrier,
         string $currency,
         string $weightUnit,
         float $freeShippingAtPrice,
