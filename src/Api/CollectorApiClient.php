@@ -110,15 +110,16 @@ class CollectorApiClient
 
     /**
      * Forge a request to POST serialized JSON
+     *
      * @param string $url
      * @param array $data
      * @param array $extraHeaders (optional)
-     * 
+     *
      * @return \GuzzleHttp\Psr7\Request
      */
     private function postJson(string $url, array $data, array $extraHeaders = [])
     {
-        $headers = array_merge ($extraHeaders, [
+        $headers = array_merge($extraHeaders, [
             'Accept' => 'application/json',
             'Authorization' => 'Bearer ' . $this->jwt,
             'Content-Type' => 'application/json',
