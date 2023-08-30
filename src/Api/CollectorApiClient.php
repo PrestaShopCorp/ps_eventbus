@@ -126,7 +126,7 @@ class CollectorApiClient
             'User-Agent' => 'ps-eventbus/' . $this->module->version,
         ]);
 
-        $jsonData = json_encode($data, JSON_UNESCAPED_SLASHES);
+        $jsonData = (string) json_encode($data, JSON_UNESCAPED_SLASHES) ?: '{}';
 
         if (extension_loaded('zlib')) {
             $encodedData = gzencode($jsonData);
