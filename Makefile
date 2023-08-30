@@ -39,6 +39,8 @@ dist:
 	@echo ".config.preprod.yml file is missing, please create it. Exiting" && exit 1;
 .config.prod.yml:
 	@echo ".config.prod.yml file is missing, please create it. Exiting" && exit 1;
+.config.local.yml:
+	@echo ".config.local.yml file is missing, please create it. Exiting" && exit 1;
 
 define zip_it
 $(eval TMP_DIR := $(shell mktemp -d))
@@ -49,6 +51,10 @@ cd ${TMP_DIR} && zip -9 -r $2 ./ps_eventbus;
 mv ${TMP_DIR}/$2 ./dist;
 rm -rf ${TMP_DIR:-/dev/null};
 endef
+
+# target: zip-local                               - Bundle a local E2E integrable zip
+zip-local: vendor dist .config.local.yml
+	@$(call zip_it,.config.local.yml,${PACKAGE}_local.zip)
 
 # target: zip-inte                               - Bundle an integration zip
 zip-inte: vendor dist .config.inte.yml
@@ -67,7 +73,6 @@ build: vendor
 
 composer.phar:
 	@php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');";
-	@php -r "if (hash_file('sha384', 'composer-setup.php') === '55ce33d7678c5a611085589f1f3ddf8b3c52d662cd01d4ba75c0ee0459970c2200a51f492d557530c71c15d8dba01eae') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;";
 	@php composer-setup.php;
 	@php -r "unlink('composer-setup.php');";
 

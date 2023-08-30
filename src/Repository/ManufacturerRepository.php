@@ -2,7 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-class LanguageRepository
+class ManufacturerRepository
 {
     /**
      * @var \Db
@@ -29,7 +29,7 @@ class LanguageRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getLanguagesSync($offset, $limit, $langIso)
+    public function getManufacturers($offset, $limit, $langIso)
     {
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
@@ -48,12 +48,12 @@ class LanguageRepository
      *
      * @return int
      */
-    public function getRemainingLanguagesCount($offset, $langIso)
+    public function getRemainingManufacturersCount($offset, $langIso)
     {
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
         $query = $this->getBaseQuery($shopId, $langIso)
-            ->select('(COUNT(la.id_lang) - ' . (int) $offset . ') as count');
+            ->select('(COUNT(ma.id_manufacturer) - ' . (int) $offset . ') as count');
 
         return (int) $this->db->getValue($query);
     }
@@ -61,13 +61,13 @@ class LanguageRepository
     /**
      * @param int $limit
      * @param string $langIso
-     * @param array $languageIds
+     * @param array $manufacturerIds
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getLanguagesIncremental($limit, $langIso, $languageIds)
+    public function getManufacturersIncremental($limit, $langIso, $manufacturerIds)
     {
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
@@ -75,7 +75,7 @@ class LanguageRepository
 
         $this->addSelectParameters($query);
 
-        $query->where('la.id_lang IN(' . implode(',', array_map('intval', $languageIds)) . ')')
+        $query->where('ma.id_manufacturer IN(' . implode(',', array_map('intval', $manufacturerIds)) . ')')
             ->limit($limit);
 
         return $this->db->executeS($query);
@@ -89,9 +89,12 @@ class LanguageRepository
      */
     public function getBaseQuery($shopId, $langIso)
     {
+        /** @var int $langId */
+        $langId = (int) \Language::getIdByIso($langIso);
         $query = new \DbQuery();
-        $query->from('lang', 'la')
-            ->innerJoin('lang_shop', 'las', 'la.id_lang = las.id_lang AND las.id_shop = ' . (int) $shopId);
+        $query->from('manufacturer', 'ma')
+            ->innerJoin('manufacturer_lang', 'mal', 'ma.id_manufacturer = mal.id_manufacturer AND mal.id_lang = ' . (int) $langId)
+            ->innerJoin('manufacturer_shop', 'mas', 'ma.id_manufacturer = mas.id_manufacturer AND mas.id_shop = ' . (int) $shopId);
 
         return $query;
     }
@@ -103,52 +106,7 @@ class LanguageRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('la.id_lang, la.name, la.active, la.iso_code, la.language_code, la.locale, la.date_format_lite,
-      la.date_format_full, la.is_rtl, las.id_shop');
-    }
-
-    /**
-     * @return array
-     */
-    public function getLanguagesIsoCodes()
-    {
-        /** @var array $languages */
-        $languages = \Language::getLanguages();
-
-        return array_map(function ($language) {
-            return $language['iso_code'];
-        }, $languages);
-    }
-
-    /**
-     * @return string
-     */
-    public function getDefaultLanguageIsoCode()
-    {
-        $language = \Language::getLanguage((int) \Configuration::get('PS_LANG_DEFAULT'));
-
-        if (is_array($language)) {
-            return $language['iso_code'];
-        }
-
-        return '';
-    }
-
-    /**
-     * @param string $isoCode
-     *
-     * @return int
-     */
-    public function getLanguageIdByIsoCode($isoCode)
-    {
-        return (int) \Language::getIdByIso($isoCode);
-    }
-
-    /**
-     * @return array
-     */
-    public function getLanguages()
-    {
-        return \Language::getLanguages();
+        $query->select('ma.id_manufacturer, ma.name, ma.date_add as created_at, ma.date_upd as updated_at, ma.active, mal.id_lang,
+      mal.description, mal.short_description, mal.meta_title, mal.meta_keywords, mal.meta_description, mas.id_shop');
     }
 }

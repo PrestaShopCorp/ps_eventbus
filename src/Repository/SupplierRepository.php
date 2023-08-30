@@ -2,7 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-class LanguageRepository
+class SupplierRepository
 {
     /**
      * @var \Db
@@ -29,7 +29,7 @@ class LanguageRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getLanguagesSync($offset, $limit, $langIso)
+    public function getSuppliers($offset, $limit, $langIso)
     {
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
@@ -48,12 +48,12 @@ class LanguageRepository
      *
      * @return int
      */
-    public function getRemainingLanguagesCount($offset, $langIso)
+    public function getRemainingSuppliersCount($offset, $langIso)
     {
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
         $query = $this->getBaseQuery($shopId, $langIso)
-            ->select('(COUNT(la.id_lang) - ' . (int) $offset . ') as count');
+            ->select('(COUNT(su.id_supplier) - ' . (int) $offset . ') as count');
 
         return (int) $this->db->getValue($query);
     }
@@ -61,13 +61,13 @@ class LanguageRepository
     /**
      * @param int $limit
      * @param string $langIso
-     * @param array $languageIds
+     * @param array $supplierIds
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getLanguagesIncremental($limit, $langIso, $languageIds)
+    public function getSuppliersIncremental($limit, $langIso, $supplierIds)
     {
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
@@ -75,7 +75,7 @@ class LanguageRepository
 
         $this->addSelectParameters($query);
 
-        $query->where('la.id_lang IN(' . implode(',', array_map('intval', $languageIds)) . ')')
+        $query->where('su.id_supplier IN(' . implode(',', array_map('intval', $supplierIds)) . ')')
             ->limit($limit);
 
         return $this->db->executeS($query);
@@ -89,9 +89,12 @@ class LanguageRepository
      */
     public function getBaseQuery($shopId, $langIso)
     {
+        /** @var int $langId */
+        $langId = (int) \Language::getIdByIso($langIso);
         $query = new \DbQuery();
-        $query->from('lang', 'la')
-            ->innerJoin('lang_shop', 'las', 'la.id_lang = las.id_lang AND las.id_shop = ' . (int) $shopId);
+        $query->from('supplier', 'su')
+            ->innerJoin('supplier_lang', 'sul', 'su.id_supplier = sul.id_supplier AND sul.id_lang = ' . (int) $langId)
+            ->innerJoin('supplier_shop', 'sus', 'su.id_supplier = sus.id_supplier AND sus.id_shop = ' . (int) $shopId);
 
         return $query;
     }
@@ -103,52 +106,7 @@ class LanguageRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('la.id_lang, la.name, la.active, la.iso_code, la.language_code, la.locale, la.date_format_lite,
-      la.date_format_full, la.is_rtl, las.id_shop');
-    }
-
-    /**
-     * @return array
-     */
-    public function getLanguagesIsoCodes()
-    {
-        /** @var array $languages */
-        $languages = \Language::getLanguages();
-
-        return array_map(function ($language) {
-            return $language['iso_code'];
-        }, $languages);
-    }
-
-    /**
-     * @return string
-     */
-    public function getDefaultLanguageIsoCode()
-    {
-        $language = \Language::getLanguage((int) \Configuration::get('PS_LANG_DEFAULT'));
-
-        if (is_array($language)) {
-            return $language['iso_code'];
-        }
-
-        return '';
-    }
-
-    /**
-     * @param string $isoCode
-     *
-     * @return int
-     */
-    public function getLanguageIdByIsoCode($isoCode)
-    {
-        return (int) \Language::getIdByIso($isoCode);
-    }
-
-    /**
-     * @return array
-     */
-    public function getLanguages()
-    {
-        return \Language::getLanguages();
+        $query->select('su.id_supplier, su.name, su.date_add as created_at, su.date_upd as updated_at, su.active, sul.id_lang,
+      sul.description, sul.meta_title, sul.meta_keywords, sul.meta_description, sus.id_shop');
     }
 }

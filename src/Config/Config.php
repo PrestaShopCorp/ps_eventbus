@@ -52,4 +52,18 @@ class Config
     public const COLLECTION_WISHLIST_PRODUCTS = 'wishlist_products';
     public const COLLECTION_STOCKS = 'stocks';
     public const COLLECTION_STOCK_MVTS = 'stock_movements';
+    public const COLLECTION_MANUFACTURERS = 'manufacturers';
+    public const COLLECTION_SUPPLIERS = 'suppliers';
+    public const COLLECTION_PRODUCT_SUPPLIERS = 'product_suppliers';
+    public const COLLECTION_LANGUAGES = 'languages';
+
+    /**
+     * @param mixed $message
+     *
+     * @return void
+     */
+    public static function dev_log($message)
+    {
+        file_put_contents('/var/www/html/php.log', $message . PHP_EOL, FILE_APPEND);
+    }
 }

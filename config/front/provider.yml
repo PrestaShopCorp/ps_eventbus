@@ -6,12 +6,20 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\ModuleRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
 
+  PrestaShop\Module\PsEventbus\Provider\ProductSupplierDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\ProductSupplierDataProvider
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\ProductSupplierRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\ProductSupplierDecorator'
+
   PrestaShop\Module\PsEventbus\Provider\ProductDataProvider:
     class: PrestaShop\Module\PsEventbus\Provider\ProductDataProvider
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\ProductRepository'
       - '@PrestaShop\Module\PsEventbus\Decorator\ProductDecorator'
+      - '@PrestaShop\Module\PsEventbus\Provider\ProductSupplierDataProvider'
       - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
 
   PrestaShop\Module\PsEventbus\Provider\CategoryDataProvider:
@@ -108,3 +116,24 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\StockMvtRepository'
       - '@PrestaShop\Module\PsEventbus\Decorator\StockDecorator'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
+
+  PrestaShop\Module\PsEventbus\Provider\ManufacturerDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\ManufacturerDataProvider
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\ManufacturerRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\ManufacturerDecorator'
+
+  PrestaShop\Module\PsEventbus\Provider\SupplierDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\SupplierDataProvider
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\SupplierRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\SupplierDecorator'
+
+  PrestaShop\Module\PsEventbus\Provider\LanguageDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\LanguageDataProvider
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\LanguageDecorator'
