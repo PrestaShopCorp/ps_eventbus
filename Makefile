@@ -73,29 +73,26 @@ build: vendor tools-vendor
 
 composer.phar:
 	@php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');";
-	@php -r "copy('https://getcomposer.org/installer', 'tools/composer-setup.php');";
 	@php composer-setup.php;
-	@php tools/composer-setup.php --install-dir tools;
 	@php -r "unlink('composer-setup.php');";
-	@php -r "unlink('tools/composer-setup.php');";
 
 vendor: composer.phar
 	./composer.phar install --no-dev -o;
 
 tools-vendor: composer.phar
-	cd tools/ && ./composer.phar install -o;
+	./composer.phar install --working-dir tools -o;
 
 tools/vendor/bin/php-cs-fixer: composer.phar
 	./composer.phar install --ignore-platform-reqs
-	cd tools/ && ./composer.phar install --ignore-platform-reqs
+	./composer.phar install --working-dir tools --ignore-platform-reqs
 
 tools/vendor/bin/phpunit: composer.phar
 	./composer.phar install --ignore-platform-reqs
-	cd tools/ && ./composer.phar install --ignore-platform-reqs
+	./composer.phar install --working-dir tools --ignore-platform-reqs
 
 tools/vendor/bin/phpstan: composer.phar
 	./composer.phar install --ignore-platform-reqs
-	cd tools/ && ./composer.phar install --ignore-platform-reqs
+	./composer.phar install --working-dir tools --ignore-platform-reqs
 
 prestashop:
 	@mkdir -p ./prestashop
