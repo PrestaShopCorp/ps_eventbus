@@ -10,7 +10,7 @@
 | ------------------- | -------------- |
 | 8.0                 | 2.x - PHP 7.1+ |
 | 1.7.0-1.7.8         | 2.x - PHP 7.1+ |
-| 1.6.1.x             | No             |
+| 1.6.1.x24+          | 2.4+ - PHP 7.1+|
 
 PS Accounts compatibility matrix [can be viewed here](https://github.com/PrestaShopCorp/ps_accounts#compatibility-matrix).
 
