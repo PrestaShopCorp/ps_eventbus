@@ -141,7 +141,7 @@ class CollectorApiClient
             'POST',
             $url,
             $headers,
-            $data
+            $jsonData
         );
     }
 
