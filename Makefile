@@ -52,7 +52,7 @@ mv ${TMP_DIR}/$2 ./dist;
 rm -rf ${TMP_DIR:-/dev/null};
 endef
 
-# target: zip-local                               - Bundle a local E2E integrable zip
+# target: zip-local                              - Bundle a local E2E integrable zip
 zip-local: vendor dist .config.local.yml
 	@$(call zip_it,.config.local.yml,${PACKAGE}_local.zip)
 
@@ -105,7 +105,7 @@ composer-validate: vendor
 	@./composer.phar validate --no-check-publish
 
 # target: translation-validate                   - Validates the translation files in translations/ directory
-translation-validate: 
+translation-validate:
 	php tests/translation.test.php
 
 # target: lint                                   - Lint the code and expose errors
