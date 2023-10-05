@@ -1339,7 +1339,8 @@ class Ps_eventbus extends Module
              /** @var \PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient $liveSyncApiClient */
              $liveSyncApiClient = $this->getService(\PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient::class);
              $liveSyncApiClient->liveSync($shopContents, (int) $shopContentId, $action);
-         } catch (\Exception $e) {}
+         } catch (\Exception $e) {
+         }
      }
 
     /**

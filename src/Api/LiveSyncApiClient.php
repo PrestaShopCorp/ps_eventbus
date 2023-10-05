@@ -36,7 +36,7 @@ class LiveSyncApiClient
 
     /**
      * @param PsAccounts $psAccounts
-     * @param string $syncApiUrl
+     * @param string $liveSyncApiUrl
      * @param \Ps_eventbus $module
      */
     public function __construct($psAccounts, $liveSyncApiUrl, $module)
