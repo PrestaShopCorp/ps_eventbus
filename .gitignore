@@ -23,3 +23,12 @@ coverage-reports
 allure-reports
 tests/.phpunit.result.cache
 .phpunit.cache/
+
+# Jetbrains
+.idea
+
+# Sonar
+.scannerwork
+sonar-project.properties
+
+*.cache
