@@ -315,7 +315,7 @@ class Ps_eventbus extends Module
     public function hookActionObjectLanguageAddAfter($parameters)
     {
         $language = $parameters['object'];
-        if (isset($language->id) && isset($image->id_product)) {
+        if (isset($language->id) && isset($language->id_product)) {
             $this->sendLiveSync(['languages'], $language->id_product, 'upsert');
             $this->insertIncrementalSyncObject(
                 $language->id,
@@ -335,7 +335,7 @@ class Ps_eventbus extends Module
     public function hookActionObjectLanguageUpdateAfter($parameters)
     {
         $language = $parameters['object'];
-        if (isset($language->id) && isset($image->id_product)) {
+        if (isset($language->id) && isset($language->id_product)) {
             $this->sendLiveSync(['languages'], $language->id_product, 'upsert');
             $this->insertIncrementalSyncObject(
                 $language->id,
