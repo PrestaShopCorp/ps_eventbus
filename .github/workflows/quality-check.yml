@@ -17,7 +17,7 @@ jobs:
         php_version: ["7.1", "7.2", "7.3", "7.4", "8.0", "8.1", "8.2"]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: PHP syntax checker ${{ matrix.php_version }}
         run: PHP_VERSION=${{ matrix.php_version }} make docker-php-lint
 
