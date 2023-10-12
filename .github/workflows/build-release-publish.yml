@@ -21,7 +21,7 @@ jobs:
           VERSION: ${{ github.event.release.tag_name }}
 
       - name: Create & upload artifact
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ github.event.repository.name }}
           path: ./
@@ -45,7 +45,7 @@ jobs:
           CONFIG_FILE: ${{ secrets.PS_EVENTBUS_PRODUCTION_CONFIG }}
 
       - name: Publish the production zip
-        uses: actions/upload-release-asset@v1.0.1
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
         with:
@@ -73,7 +73,7 @@ jobs:
           CONFIG_FILE: ${{ secrets.PS_EVENTBUS_INTEGRATION_CONFIG }}
 
       - name: Publish the integration zip
-        uses: actions/upload-release-asset@v1.0.1
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
         with:
@@ -101,7 +101,7 @@ jobs:
           CONFIG_FILE: ${{ secrets.PS_EVENTBUS_PREPRODUCTION_CONFIG }}
 
       - name: Publish the preprod zip
-        uses: actions/upload-release-asset@v1.0.1
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
         with:

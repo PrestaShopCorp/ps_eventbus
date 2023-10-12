@@ -95,12 +95,12 @@ jobs:
   #     - name: PHP unit with coverage
   #       run: make phpunit-coverage
   #     - name: 🎁 Publishing Allure artifact to GitHub Actions
-  #       uses: actions/upload-artifact@v2
+  #       uses: actions/upload-artifact@v3
   #       with:
   #         name: allure-reports
   #         path: allure-reports
   #     - name: 🎁 Publishing Code coverage report to GitHub Actions
-  #       uses: actions/upload-artifact@v2
+  #       uses: actions/upload-artifact@v3
   #       with:
   #         name: coverage-reports
   #         path: coverage-reports
