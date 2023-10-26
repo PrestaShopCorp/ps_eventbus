@@ -37,7 +37,7 @@ class EmployeeDecorator
      */
     private function castPropertyValues(array &$employee)
     {
-        $employee['id_customer'] = (int) $employee['id_employee'];
+        $employee['id_employee'] = (int) $employee['id_employee'];
         $employee['id_profile'] = (int) $employee['id_profile'];
         $employee['id_lang'] = (int) $employee['id_lang'];
 
