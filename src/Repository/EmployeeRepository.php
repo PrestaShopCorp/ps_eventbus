@@ -59,7 +59,7 @@ class EmployeeRepository
      *
      * @return int
      */
-    public function getRemainingEmployeesCount($offset, $langIso)
+    public function getRemainingEmployeesCount($offset)
     {
         $query = $this->getBaseQuery()
             ->select('(COUNT(e.id_employee) - ' . (int) $offset . ') as count');
@@ -76,7 +76,7 @@ class EmployeeRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getEmployeesIncremental($limit, $langIso, $employeeIds)
+    public function getEmployeesIncremental($limit, $employeeIds)
     {
         $query = $this->getBaseQuery();
 
