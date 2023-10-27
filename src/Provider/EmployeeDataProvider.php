@@ -59,7 +59,7 @@ class EmployeeDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getRemainingObjectsCount($offset, $langIso)
     {
-        return (int) $this->employeeRepository->getRemainingEmployeesCount($offset, $langIso);
+        return (int) $this->employeeRepository->getRemainingEmployeesCount($offset);
     }
 
     /**
@@ -73,7 +73,7 @@ class EmployeeDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
-        $employees = $this->employeeRepository->getEmployeesIncremental($limit, $langIso, $objectIds);
+        $employees = $this->employeeRepository->getEmployeesIncremental($limit, $objectIds);
 
         if (!is_array($employees)) {
             return [];

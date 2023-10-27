@@ -61,9 +61,7 @@ class EmployeeRepository
      */
     public function getRemainingEmployeesCount($offset, $langIso)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId, $langIso)
+        $query = $this->getBaseQuery()
             ->select('(COUNT(e.id_employee) - ' . (int) $offset . ') as count');
 
         return (int) $this->db->getValue($query);
@@ -80,9 +78,7 @@ class EmployeeRepository
      */
     public function getEmployeesIncremental($limit, $langIso, $employeeIds)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId, $langIso);
+        $query = $this->getBaseQuery();
 
         $this->addSelectParameters($query);
 
