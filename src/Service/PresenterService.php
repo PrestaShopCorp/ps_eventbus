@@ -79,7 +79,7 @@ class PresenterService
      */
     private function enforceMandatoryConsents($consents)
     {
-        $mandatories = ['info', 'modules', 'themes'];
+        $mandatories = ['info'];
         foreach ($mandatories as $consent) {
             if (!in_array($consent, $consents)) {
                 array_unshift($consents, $consent);
