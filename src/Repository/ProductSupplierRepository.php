@@ -20,9 +20,7 @@ class ProductSupplierRepository
     public function getBaseQuery()
     {
         $query = new \DbQuery();
-        $query->from('product_supplier', 'ps')
-        ->innerJoin('product', 'p', 'p.id_product = ps.id_product');
-
+        $query->from('product_supplier', 'ps');
         return $query;
     }
 
@@ -86,6 +84,6 @@ class ProductSupplierRepository
     private function addSelectParameters(\DbQuery $query)
     {
         $query->select('ps.id_product_supplier, ps.id_product, ps.id_product_attribute, ps.id_supplier, ps.product_supplier_reference,
-        ps.product_supplier_price_te, ps.id_currency, p.date_add AS created_at, p.date_upd as updated_at');
+        ps.product_supplier_price_te, ps.id_currency');
     }
 }

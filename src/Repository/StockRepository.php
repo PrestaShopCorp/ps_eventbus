@@ -29,7 +29,6 @@ class StockRepository
     {
         $query = new \DbQuery();
         $query->from('stock_available', 'sa')
-        ->innerJoin('product', 'p', 'p.id_product = sa.id_product')
         ->where('sa.id_shop = ' . (int) $shopId);
 
         return $query;
@@ -101,7 +100,6 @@ class StockRepository
     private function addSelectParameters(\DbQuery $query)
     {
         $query->select('sa.id_stock_available, sa.id_product, sa.id_product_attribute, sa.id_shop, sa.id_shop_group,
-        sa.quantity, sa.physical_quantity, sa.reserved_quantity, sa.depends_on_stock, sa.out_of_stock, sa.location,
-        p.date_add AS created_at, p.date_upd as updated_at');
+        sa.quantity, sa.physical_quantity, sa.reserved_quantity, sa.depends_on_stock, sa.out_of_stock, sa.location');
     }
 }
