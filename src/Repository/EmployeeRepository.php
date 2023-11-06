@@ -55,7 +55,6 @@ class EmployeeRepository
 
     /**
      * @param int $offset
-     * @param string $langIso
      *
      * @return int
      */
@@ -69,7 +68,6 @@ class EmployeeRepository
 
     /**
      * @param int $limit
-     * @param string $langIso
      * @param array $employeeIds
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
