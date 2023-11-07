@@ -82,6 +82,7 @@ abstract class AbstractApiController extends \ModuleFrontController
 
     public function __construct() {
         parent::__construct();
+
         $configurationRepository = $this->module->getService(\PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository::class);
         $this->timezone = (string) $configurationRepository->get('PS_TIMEZONE');
 
