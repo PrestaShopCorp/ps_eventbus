@@ -21,6 +21,7 @@ class ProductSupplierRepository
     {
         $query = new \DbQuery();
         $query->from('product_supplier', 'ps');
+
         return $query;
     }
 
