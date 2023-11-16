@@ -39,7 +39,7 @@ jobs:
       - name: Bundle the production zip
         run: |
           cd ${{ github.event.repository.name }}
-          echo "$CONFIG_FILE" >> .config.prod.yml
+          echo "$CONFIG_FILE" > .config.prod.yml
           make zip-prod
         env:
           CONFIG_FILE: ${{ secrets.PS_EVENTBUS_PRODUCTION_CONFIG }}
@@ -67,7 +67,7 @@ jobs:
       - name: Bundle the integration zip
         run: |
           cd ${{ github.event.repository.name }}
-          echo "$CONFIG_FILE" >> .config.inte.yml
+          echo "$CONFIG_FILE" > .config.inte.yml
           make zip-inte
         env:
           CONFIG_FILE: ${{ secrets.PS_EVENTBUS_INTEGRATION_CONFIG }}
@@ -95,7 +95,7 @@ jobs:
       - name: Bundle the pre-production zip
         run: |
           cd ${{ github.event.repository.name }}
-          echo "$CONFIG_FILE" >> .config.preprod.yml
+          echo "$CONFIG_FILE" > .config.preprod.yml
           make zip-preprod
         env:
           CONFIG_FILE: ${{ secrets.PS_EVENTBUS_PREPRODUCTION_CONFIG }}
