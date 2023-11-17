@@ -1,8 +1,11 @@
 #!/bin/bash
-cd "$(dirname "$0")" || exit 1
+[ -z "$1" ] && {
+  echo "Error: Please provide a path to apply this script. Example if you are at the root of the git project: $0 ./" >&2;
+  exit 1;
+}
 
-SRC_DIR="../../src"
-CONFIG_DIR="../../config"
+SRC_DIR="$1/src"
+CONFIG_DIR="$1/config"
 
 SED_PARAMS=()
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -12,7 +15,7 @@ else
 fi
 
 mkdir -p "$SRC_DIR/Mock"
-cp ./PSAccounts.php "$SRC_DIR/Mock/PsAccounts.php"
+cp "$(dirname "$0")/PsAccounts.php" "$SRC_DIR/Mock/PsAccounts.php"
 
 # I could not just inject my PsAccounts mock with the "class" attribute in Yaml
 # so dumb me thought: replace the naming everywhere it will work
