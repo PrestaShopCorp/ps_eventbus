@@ -75,9 +75,18 @@ abstract class AbstractApiController extends \ModuleFrontController
      */
     public $errorHandler;
 
+    /**
+     * @var string
+     */
+    private $timezone;
+
     public function __construct()
     {
         parent::__construct();
+
+        /** @var \PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository $configurationRepository */
+        $configurationRepository = $this->module->getService(\PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository::class);
+        $this->timezone = (string) $configurationRepository->get('PS_TIMEZONE');
 
         $this->ajax = true;
         $this->content_only = true;
@@ -170,7 +179,7 @@ abstract class AbstractApiController extends \ModuleFrontController
         /** @var bool $initFullSync */
         $initFullSync = \Tools::getValue('full', 0) == 1;
 
-        $dateNow = (new \DateTime())->format(\DateTime::ATOM);
+        $dateNow = (new \DateTime('now', new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
         $offset = 0;
         $incrementalSync = false;
         $response = [];
