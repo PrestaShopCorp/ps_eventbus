@@ -39,8 +39,6 @@ dist:
 	@echo ".config.preprod.yml file is missing, please create it. Exiting" && exit 1;
 .config.prod.yml:
 	@echo ".config.prod.yml file is missing, please create it. Exiting" && exit 1;
-.config.local.yml:
-	@echo ".config.local.yml file is missing, please create it. Exiting" && exit 1;
 
 define zip_it
 $(eval TMP_DIR := $(shell mktemp -d))
@@ -51,10 +49,6 @@ cd ${TMP_DIR} && zip -9 -r $2 ./ps_eventbus;
 mv ${TMP_DIR}/$2 ./dist;
 rm -rf ${TMP_DIR:-/dev/null};
 endef
-
-# target: zip-local                              - Bundle a local E2E integrable zip
-zip-local: vendor dist .config.local.yml
-	@$(call zip_it,.config.local.yml,${PACKAGE}_local.zip)
 
 # target: zip-inte                               - Bundle an integration zip
 zip-inte: vendor dist .config.inte.yml
