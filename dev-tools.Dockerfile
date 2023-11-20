@@ -1,7 +1,7 @@
 ARG BUILDPLATFORM=linux/amd64
 ARG PHP_VERSION=8.2
 
-FROM --platform=${BUILDPLATFORM} php:${PHP_VERSION}-alpine as dev-tools
+FROM --platform=${BUILDPLATFORM} php:${PHP_VERSION}-alpine AS dev-tools
 
 WORKDIR /src
 
@@ -13,7 +13,7 @@ RUN apk add -U make $PCRE_DEV && \
   7*) export XDEBUG_VERSION="3.1.6";; \
   *) export XDEBUG_VERSION="3.2.0";; \
   esac; \
-  pecl channel-update pecl.php.net && \ 
+  pecl channel-update pecl.php.net && \
   pecl install xdebug-${XDEBUG_VERSION} && \
   docker-php-ext-enable xdebug && \
   apk del $PCRE_DEV;
