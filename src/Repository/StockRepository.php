@@ -29,7 +29,8 @@ class StockRepository
     {
         $query = new \DbQuery();
         $query->from('stock_available', 'sa')
-        ->where('sa.id_shop = ' . (int) $shopId);
+            ->innerJoin('product', 'p', 'p.id_product = sa.id_product')
+            ->where('sa.id_shop = ' . (int) $shopId);
 
         return $query;
     }
