@@ -1,7 +1,8 @@
 # Note: this file is here for documentation purpose
-# It will be overrided by the Makefile
+# It will be overridden by the Makefile
 parameters:
   ps_eventbus.proxy_api_url: "https://eventbus-proxy.psessentials.net"
   ps_eventbus.sync_api_url: "https://eventbus-sync.psessentials.net"
+  ps_eventbus.live_sync_api_url: "https://api.cloudsync.prestashop.com/live-sync/v1"
   ps_eventbus.sentry_dsn: "https://sentry-id@stuff.ingest.sentry.io/stuff"
   ps_eventbus.sentry_env: "development"
