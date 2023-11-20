@@ -1,4 +1,4 @@
-.PHONY: help build version zip zip-inte zip-preprod zip-prod build test composer-validate lint php-lint lint-fix phpunit phpstan phpstan-baseline docker-test docker-lint docker-lint docker-phpunit docker-phpstan
+.PHONY: help build version zip zip-inte zip-preprod zip-prod zip-e2e build test composer-validate lint php-lint lint-fix phpunit phpstan phpstan-baseline docker-test docker-lint docker-lint docker-phpunit docker-phpstan
 PHP = $(shell command -v php >/dev/null 2>&1 || { echo >&2 "PHP is not installed."; exit 1; } && which php)
 VERSION ?= $(shell git describe --tags 2> /dev/null || echo "0.0.0")
 SEM_VERSION ?= $(shell echo ${VERSION} | sed 's/^v//')
@@ -39,6 +39,8 @@ dist:
 	@echo ".config.preprod.yml file is missing, please create it. Exiting" && exit 1;
 .config.prod.yml:
 	@echo ".config.prod.yml file is missing, please create it. Exiting" && exit 1;
+.config.e2e.yml:
+	@echo ".config.e2e.yml file is missing, please create it. Exiting" && exit 1;
 
 define zip_it
 $(eval TMP_DIR := $(shell mktemp -d))
@@ -49,6 +51,12 @@ cd ${TMP_DIR} && zip -9 -r $2 ./ps_eventbus;
 mv ${TMP_DIR}/$2 ./dist;
 rm -rf ${TMP_DIR:-/dev/null};
 endef
+
+# target: zip-e2e                               - Bundle a local E2E integrable zip
+zip-e2e: vendor dist .config.e2e.yml
+	./tests/Mocks/apply-ps-accounts-mock.sh
+	@$(call zip_it,.config.e2e.yml,${PACKAGE}_e2e.zip)
+	./tests/Mocks/revert-ps-accounts-mock.sh
 
 # target: zip-inte                               - Bundle an integration zip
 zip-inte: vendor dist .config.inte.yml
