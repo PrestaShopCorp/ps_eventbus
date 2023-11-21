@@ -39,9 +39,13 @@ class CartRuleRepository
         cr.quantity_per_user,cr.priority,cr.partial_use,cr.minimum_amount,cr.minimum_amount_tax,cr.minimum_amount_currency,
         cr.minimum_amount_shipping,cr.country_restriction,cr.carrier_restriction,cr.group_restriction,cr.cart_rule_restriction,
         cr.product_restriction,cr.shop_restriction,cr.free_shipping,cr.reduction_percent,cr.reduction_amount,cr.reduction_tax,
-        cr.reduction_currency,cr.reduction_product,cr.reduction_exclude_special,cr.gift_product,cr.gift_product_attribute,
+        cr.reduction_currency,cr.reduction_product,cr.gift_product,cr.gift_product_attribute,
         cr.highlight,cr.active,cr.date_add AS created_at,cr.date_upd AS updated_at');
 
+        if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+            $query->select('cr.reduction_exclude_special');
+        }
+        
         return $this->db->executeS($query);
     }
 }

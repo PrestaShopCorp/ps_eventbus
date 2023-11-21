@@ -136,9 +136,12 @@ class CurrencyRepository
     private function addSelectParameters(\DbQuery $query)
     {
         if ($this->isLangAvailable()) {
-            $query->select('c.id_currency, cl.name, c.iso_code, c.conversion_rate, c.deleted, c.precision, c.active');
+            $query->select('c.id_currency, cl.name, c.iso_code, c.conversion_rate, c.deleted, c.active');
         } else {
-            $query->select('c.id_currency, \'\' as name, c.iso_code, c.conversion_rate, c.deleted, c.precision, c.active');
+            $query->select('c.id_currency, \'\' as name, c.iso_code, c.conversion_rate, c.deleted, c.active');
+        }
+        if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+            $query->select('c.precision, ');
         }
     }
 }
