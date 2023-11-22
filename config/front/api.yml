@@ -7,6 +7,14 @@ services:
       - "%ps_eventbus.sync_api_url%"
       - "@ps_eventbus"
 
+  PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient:
+    class: PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient
+    public: true
+    arguments:
+      - '@PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
+      - "%ps_eventbus.live_sync_api_url%"
+      - "@ps_eventbus"
+
   PrestaShop\Module\PsEventbus\Api\CollectorApiClient:
     class: PrestaShop\Module\PsEventbus\Api\CollectorApiClient
     public: true

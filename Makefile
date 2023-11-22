@@ -107,7 +107,7 @@ composer-validate: vendor
 	@./composer.phar validate --no-check-publish
 
 # target: translation-validate                   - Validates the translation files in translations/ directory
-translation-validate: 
+translation-validate:
 	php tests/translation.test.php
 
 # target: lint                                   - Lint the code and expose errors

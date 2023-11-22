@@ -43,6 +43,5 @@ class ProductSupplierDecorator
         $productSupplier['product_supplier_price_te'] = (float) $productSupplier['product_supplier_price_te'];
         $productSupplier['id_currency'] = (int) $productSupplier['id_currency'];
         $productSupplier['created_at'] = (new \DateTime($productSupplier['created_at'], new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
-        $productSupplier['updated_at'] = (new \DateTime($productSupplier['updated_at'], new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
     }
 }

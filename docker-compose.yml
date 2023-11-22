@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3"
 
 services:
     php:
@@ -9,7 +9,7 @@ services:
         environment:
             _PS_ROOT_DIR_: /var/www/html
     node:
-        image: node:10.16
+        image: node:lts-alpine
         volumes:
             - ./:/var/www/html
         working_dir: /var/www/html
@@ -24,7 +24,7 @@ services:
         environment:
             MYSQL_ROOT_PASSWORD: prestashop
             MYSQL_DATABASE: prestashop
-        restart: always
+        restart: unless-stopped
         healthcheck:
             test: "mysqladmin ping -h127.0.0.1 -uroot -pprestashop --silent"
             interval: 10s
