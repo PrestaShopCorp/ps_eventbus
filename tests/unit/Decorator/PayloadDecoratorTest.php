@@ -9,6 +9,7 @@ use Yandex\Allure\Adapter\Annotation\Title;
 
 /**
  * @Features("decorator")
+ *
  * @Stories("payload decorator")
  */
 class PayloadDecoratorTest extends BaseTestCase
@@ -20,6 +21,7 @@ class PayloadDecoratorTest extends BaseTestCase
 
     /**
      * @Stories("payload  decorator")
+     *
      * @Title("testPayloadDecorator")
      */
     public function testPayloadDecorator()

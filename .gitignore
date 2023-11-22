@@ -1,5 +1,9 @@
 .env
 .config*.yml
+!.config.inte.yml
+!.config.preprod.yml
+!.config.prod.yml
+!.config.e2e.yml
 dist/
 vendor/
 prestashop/
@@ -22,3 +26,13 @@ tests/tmp
 coverage-reports
 allure-reports
 tests/.phpunit.result.cache
+.phpunit.cache/
+
+# Jetbrains
+.idea
+
+# Sonar
+.scannerwork
+sonar-project.properties
+
+*.cache

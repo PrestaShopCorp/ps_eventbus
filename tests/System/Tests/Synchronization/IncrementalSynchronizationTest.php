@@ -14,6 +14,7 @@ use PrestaShop\Module\PsEventbus\Provider\ModuleDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\OrderDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Provider\ProductDataProvider;
+use PrestaShop\Module\PsEventbus\Provider\StoreDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\WishlistDataProvider;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
@@ -26,6 +27,7 @@ use Yandex\Allure\Adapter\Support\StepSupport;
 
 /**
  * @Features("synchronization")
+ *
  * @Stories("incremental synchronization")
  */
 class IncrementalSynchronizationTest extends BaseTestCase
@@ -48,6 +50,7 @@ class IncrementalSynchronizationTest extends BaseTestCase
 
     /**
      * @Stories("incremental synchronization")
+     *
      * @Title("testIncrementalSync")
      */
     public function testIncrementalSync()
@@ -133,6 +136,14 @@ class IncrementalSynchronizationTest extends BaseTestCase
             /** @var PaginatedApiDataProviderInterface $provider */
             $provider = $this->container->getService(CustomProductCarrierDataProvider::class);
             $this->handle($provider, Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS);
+        });
+
+        $this->executeStep('apiStores', function () use ($incrementalSyncRepository) {
+            $this->syncRepository->insertTypeSync(Config::COLLECTIONSTORES, 0, date(DATE_ATOM), 'en');
+            $incrementalSyncRepository->insertIncrementalObject(1, Config::COLLECTION_STORES, date(DATE_ATOM), 1, 'en');
+            /** @var PaginatedApiDataProviderInterface $provider */
+            $provider = $this->container->getService(StoreDataProvider::class);
+            $this->handle($provider, Config::COLLECTION_STORES);
         });
 
         $this->executeStep('apiWishlists', function () use ($incrementalSyncRepository) {

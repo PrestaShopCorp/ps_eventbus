@@ -8,6 +8,7 @@ use Yandex\Allure\Adapter\Annotation\Title;
 
 /**
  * @Features("formatter")
+ *
  * @Stories("json formatter")
  */
 class JsonFormatterTest extends BaseTestCase
@@ -25,6 +26,7 @@ class JsonFormatterTest extends BaseTestCase
 
     /**
      * @Stories("json formatter")
+     *
      * @Title("testFormatNewlineJsonString")
      */
     public function testFormatNewlineJsonString()

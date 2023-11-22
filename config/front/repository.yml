@@ -2,6 +2,9 @@ services:
   PrestaShop\Module\PsEventbus\Repository\LanguageRepository:
     class: PrestaShop\Module\PsEventbus\Repository\LanguageRepository
     public: true
+    arguments:
+      - '@ps_eventbus.db'
+      - '@ps_eventbus.context'
 
   PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository
@@ -73,7 +76,7 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
       - '@PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
       - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
-      - { EVENT_BUS_SYNC_API_URL: '%ps_eventbus.sync_api_url%', EVENT_BUS_PROXY_API_URL: '%ps_eventbus.proxy_api_url%' }
+      - { EVENT_BUS_SYNC_API_URL: '%ps_eventbus.sync_api_url%', EVENT_BUS_LIVE_SYNC_API_URL: '%ps_eventbus.live_sync_api_url%', EVENT_BUS_PROXY_API_URL: '%ps_eventbus.proxy_api_url%' }
 
   PrestaShop\Module\PsEventbus\Repository\ThemeRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ThemeRepository
@@ -101,6 +104,12 @@ services:
     arguments:
       - '@ps_eventbus.db'
 
+  PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
+
   PrestaShop\Module\PsEventbus\Repository\CartRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CartRepository
     public: true
@@ -114,6 +123,12 @@ services:
     arguments:
       - '@ps_eventbus.db'
       - '@ps_eventbus.context'
+
+  PrestaShop\Module\PsEventbus\Repository\CartRuleRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CartRuleRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
 
   PrestaShop\Module\PsEventbus\Repository\GoogleTaxonomyRepository:
     class: PrestaShop\Module\PsEventbus\Repository\GoogleTaxonomyRepository
@@ -191,6 +206,52 @@ services:
 
   PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository:
     class: PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
+
+  PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
+
+  PrestaShop\Module\PsEventbus\Repository\StoreRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\StoreRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
+      - '@ps_eventbus.context'
+
+  PrestaShop\Module\PsEventbus\Repository\StockRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\StockRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
+      - '@ps_eventbus.context'
+
+  PrestaShop\Module\PsEventbus\Repository\StockMvtRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\StockMvtRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
+
+  PrestaShop\Module\PsEventbus\Repository\ManufacturerRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ManufacturerRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
+      - '@ps_eventbus.context'
+
+  PrestaShop\Module\PsEventbus\Repository\SupplierRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\SupplierRepository
+    public: true
+    arguments:
+      - '@ps_eventbus.db'
+      - '@ps_eventbus.context'
+
+  PrestaShop\Module\PsEventbus\Repository\ProductSupplierRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ProductSupplierRepository
     public: true
     arguments:
       - '@ps_eventbus.db'

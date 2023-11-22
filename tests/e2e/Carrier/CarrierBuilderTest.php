@@ -16,14 +16,14 @@ use Yandex\Allure\Adapter\Annotation\Title;
 
 /**
  * @Features("synchronization")
+ *
  * @Stories("carrier builder")
  */
 class CarrierBuilderTest extends BaseTestCase
 {
-    public const UPDATE_DATE = '2020-10-10 10:00:00';
-
     /**
      * @Stories("carrier builder")
+     *
      * @Title("testBuildCarrier")
      *
      * @dataProvider buildCarrierDataProvider
@@ -49,11 +49,11 @@ class CarrierBuilderTest extends BaseTestCase
         string $weightUnit,
         float $freeShippingAtPrice,
         float $freeShippingAtWeight,
-                $mockedDeliveryBy,
-                $mockedCountryIsoCode,
-                $mockedStateIsoCode,
-                $mockedCarrierTaxesByZone,
-                $mockedCarrierRange,
+        $mockedDeliveryBy,
+        $mockedCountryIsoCode,
+        $mockedStateIsoCode,
+        $mockedCarrierTaxesByZone,
+        $mockedCarrierRange,
         array $expected
     ) {
         $carrierRepo = $this->createCarrierRepositoryMock($mockedDeliveryBy, $mockedCarrierRange);
@@ -67,7 +67,7 @@ class CarrierBuilderTest extends BaseTestCase
         $configurationRepository = $this->createConfigurationRepositoryMock($freeShippingAtPrice, $freeShippingAtWeight);
 
         $carrierBuilder = new CarrierBuilder($carrierRepo, $countryRepo, $stateRepo, $taxRepository, $configurationRepository);
-        $carrierLine = $carrierBuilder->buildCarrier($carrier, $currency, $weightUnit, self::UPDATE_DATE);
+        $carrierLine = $carrierBuilder->buildCarrier($carrier, $currency, $weightUnit);
 
         $this->assertEquals($expected, $carrierLine->jsonSerialize());
     }
@@ -239,7 +239,6 @@ class CarrierBuilderTest extends BaseTestCase
                             'delay' => $freeCarrierDelay,
                             'currency' => $currency,
                             'weight_unit' => $weightUnit,
-                            'updated_at' => self::UPDATE_DATE,
                         ],
                     ],
                 ],
@@ -301,7 +300,6 @@ class CarrierBuilderTest extends BaseTestCase
                             'delay' => $carrierDelay,
                             'currency' => $currency,
                             'weight_unit' => $weightUnit,
-                            'updated_at' => self::UPDATE_DATE,
                         ],
                     ],
                     [
@@ -392,7 +390,6 @@ class CarrierBuilderTest extends BaseTestCase
                             'delay' => $carrierDelay,
                             'currency' => $currency,
                             'weight_unit' => $weightUnit,
-                            'updated_at' => self::UPDATE_DATE,
                         ],
                     ],
                     [

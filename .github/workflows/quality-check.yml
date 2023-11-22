@@ -14,10 +14,10 @@ jobs:
     timeout-minutes: 15
     strategy:
       matrix:
-        php_version: ["7.2", "7.3", "7.4", "8.0", "8.1"]
+        php_version: ["7.1", "7.2", "7.3", "7.4", "8.0", "8.1", "8.2"]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: PHP syntax checker ${{ matrix.php_version }}
         run: PHP_VERSION=${{ matrix.php_version }} make docker-php-lint
 
@@ -39,7 +39,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Cache vendor folder
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
@@ -57,7 +57,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Cache vendor folder
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
@@ -72,35 +72,35 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Cache vendor folder
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
-      - name: PHP unit with PHP 8.1
+      - name: PHP unit
         run: make phpunit
 
-  coverage:
-    name: Generate the code coverage
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Cache vendor folder
-        uses: actions/cache@v1
-        with:
-          path: vendor
-          key: php-${{ hashFiles('composer.lock') }}
-      - name: PHP unit with coverage
-        run: make phpunit-coverage
-      - name: 🎁 Publishing Allure artifact to GitHub Actions
-        uses: actions/upload-artifact@v2
-        with:
-          name: allure-reports
-          path: allure-reports
-      - name: 🎁 Publishing Code coverage report to GitHub Actions
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage-reports
-          path: coverage-reports
+  # coverage:
+  #   name: Generate the code coverage
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 15
+  #   if: github.ref == 'refs/heads/main'
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #     - name: Cache vendor folder
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: vendor
+  #         key: php-${{ hashFiles('composer.lock') }}
+  #     - name: PHP unit with coverage
+  #       run: make phpunit-coverage
+  #     - name: 🎁 Publishing Allure artifact to GitHub Actions
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: allure-reports
+  #         path: allure-reports
+  #     - name: 🎁 Publishing Code coverage report to GitHub Actions
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: coverage-reports
+  #         path: coverage-reports

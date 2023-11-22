@@ -21,6 +21,14 @@ class CurrencyRepository
     }
 
     /**
+     * @return mixed
+     */
+    private function isLangAvailable()
+    {
+        return \Tools::version_compare(_PS_VERSION_, '1.7.6', '>=');
+    }
+
+    /**
      * @return array
      */
     public function getCurrenciesIsoCodes()
@@ -112,8 +120,10 @@ class CurrencyRepository
     public function getBaseQuery($shopId, $langIso)
     {
         $query = new \DbQuery();
-        $query->from('currency', 'c')
-            ->innerJoin('currency_lang', 'cl', 'cl.id_currency = c.id_currency');
+        $query->from('currency', 'c');
+        if ($this->isLangAvailable()) {
+            $query->innerJoin('currency_lang', 'cl', 'cl.id_currency = c.id_currency');
+        }
 
         return $query;
     }
@@ -125,6 +135,10 @@ class CurrencyRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('c.id_currency, cl.name, c.iso_code, c.conversion_rate, c.deleted, c.active');
+        if ($this->isLangAvailable()) {
+            $query->select('c.id_currency, cl.name, c.iso_code, c.conversion_rate, c.deleted, c.precision, c.active');
+        } else {
+            $query->select('c.id_currency, \'\' as name, c.iso_code, c.conversion_rate, c.deleted, c.precision, c.active');
+        }
     }
 }

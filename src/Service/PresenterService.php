@@ -73,23 +73,6 @@ class PresenterService
     }
 
     /**
-     * @param array $consents
-     *
-     * @return array
-     */
-    private function enforceMandatoryConsents($consents)
-    {
-        $mandatories = ['info', 'modules', 'themes'];
-        foreach ($mandatories as $consent) {
-            if (!in_array($consent, $consents)) {
-                array_unshift($consents, $consent);
-            }
-        }
-
-        return $consents;
-    }
-
-    /**
      * @param \ModuleCore $module
      * @param array $requiredConsents
      * @param array $optionalConsents
@@ -98,7 +81,9 @@ class PresenterService
      */
     public function expose(\ModuleCore $module, $requiredConsents = [], $optionalConsents = [])
     {
-        $requiredConsents = $this->enforceMandatoryConsents($requiredConsents);
+        if (!in_array('info', $requiredConsents)) {
+            array_unshift($requiredConsents, 'info');
+        }
         if ($this->psAccountsService == null) {
             return [];
         } else {
@@ -114,6 +99,7 @@ class PresenterService
                     'id' => $this->psAccountsService->getShopUuid(),
                     'name' => \Configuration::get('PS_SHOP_NAME'),
                     'url' => \Tools::getHttpHost(true),
+                    'lang' => \Context::getContext()->language->iso_code,
                 ],
                 'psEventbusModule' => $this->convertObjectToArray(\Module::getInstanceByName('ps_eventbus')),
             ];
