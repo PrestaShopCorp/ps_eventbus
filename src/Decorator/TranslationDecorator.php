@@ -2,29 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Decorator;
 
-use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
-use PrestaShop\Module\PsEventbus\Repository\ShopRepository;
-
 class TranslationDecorator
 {
-    /**
-     * @var string
-     */
-    private $timezone;
-
-    /**
-     * @var string
-     */
-    private $createdAt;
-
-    public function __construct(
-        ConfigurationRepository $configurationRepository,
-        ShopRepository $shopRepository
-    ) {
-        $this->timezone = (string) $configurationRepository->get('PS_TIMEZONE');
-        $this->createdAt = $shopRepository->getCreatedAt();
-    }
-
     /**
      * @param array $translations
      *
