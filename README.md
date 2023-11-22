@@ -1,16 +1,16 @@
 # PS EventBus
 
-[![Quality Control](https://github.com/PrestaShopCorp/ps_eventbus/actions/workflows/eventbus-qc-php.yml/badge.svg)](https://github.com/PrestaShopCorp/ps_eventbus/actions/workflows/eventbus-qc-php.yml)
+[![Quality Check](https://github.com/PrestaShopCorp/ps_eventbus/actions/workflows/quality-check.yml/badge.svg)](https://github.com/PrestaShopCorp/ps_eventbus/actions/workflows/quality-check.yml)
 
 `ps_eventbus` is a module companion for CloudSync.
 
 ## Compatibility matrix
 
-| PrestaShop platform | PS EventBus     |
-| ------------------- | --------------- |
-| 8.0                 | 2.x - PHP 7.1+  |
-| 1.7.0-1.7.8         | 2.x - PHP 7.1+  |
-| 1.6.1.x24+          | 2.4+ - PHP 7.1+ |
+| PrestaShop platform | PHP     | PS EventBus |
+| ------------------- | ------- | ----------- |
+| 8.0                 | 7.1+    | From 2.x    |
+| 1.7.0-1.7.8         | 7.1+    | From 2.x    |
+| 1.6.1.24            | PHP 7.1 | From 3.x    |
 
 PS Accounts compatibility matrix [can be viewed here](https://github.com/PrestaShopCorp/ps_accounts#compatibility-matrix).
 
@@ -23,7 +23,7 @@ make version     # update the package configuration to the current version
 make zip         # make a zip ready to be tested in PrestaShop (see ./dist)
 ```
 
-> Pro tip: prefix all you make commands with the variables you want to override. Ie: `VERSION=v1.2.3-rc4 make version` to set the package do the desired version.
+> Pro-tip: prefix all you make commands with the variables you want to override. Ie: `VERSION=v1.2.3-rc4 make version` to set the package do the desired version.
 
 ## Testing
 

@@ -53,7 +53,7 @@ mv ${TMP_DIR}/$2 ./dist;
 rm -rf ${TMP_DIR:-/dev/null};
 endef
 
-# target: zip-e2e                               - Bundle a local E2E integrable zip
+# target: zip-e2e                                - Bundle a local E2E integrable zip
 zip-e2e: vendor dist .config.e2e.yml
 	@$(call zip_it,.config.e2e.yml,${PACKAGE}_e2e.zip)
 

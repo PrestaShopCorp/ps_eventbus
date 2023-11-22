@@ -2,7 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-class StockRepository
+class TranslationRepository
 {
     /**
      * @var \Db
@@ -28,8 +28,8 @@ class StockRepository
     public function getBaseQuery($shopId)
     {
         $query = new \DbQuery();
-        $query->from('stock_available', 'sa')
-            ->where('sa.id_shop = ' . (int) $shopId);
+        $query->from('translation', 'c')
+            ->where('c.id_shop = ' . (int) $shopId);
 
         return $query;
     }
@@ -42,7 +42,7 @@ class StockRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getStocks($offset, $limit)
+    public function getTranslations($offset, $limit)
     {
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
@@ -60,25 +60,25 @@ class StockRepository
      *
      * @return int
      */
-    public function getRemainingStocksCount($offset)
+    public function getRemainingTranslationsCount($offset)
     {
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
         $query = $this->getBaseQuery($shopId)
-            ->select('(COUNT(sa.id_stock_available) - ' . (int) $offset . ') as count');
+            ->select('(COUNT(c.id_translation) - ' . (int) $offset . ') as count');
 
         return (int) $this->db->getValue($query);
     }
 
     /**
      * @param int $limit
-     * @param array $productIds
+     * @param array $translationIds
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getStocksIncremental($limit, $productIds)
+    public function getTranslationsIncremental($limit, $translationIds)
     {
         /** @var int $shopId */
         $shopId = $this->context->shop->id;
@@ -86,7 +86,7 @@ class StockRepository
 
         $this->addSelectParameters($query);
 
-        $query->where('sa.id_product IN(' . implode(',', array_map('intval', $productIds)) . ')')
+        $query->where('c.id_translation IN(' . implode(',', array_map('intval', $translationIds)) . ')')
             ->limit($limit);
 
         return $this->db->executeS($query);
@@ -99,7 +99,6 @@ class StockRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('sa.id_stock_available, sa.id_product, sa.id_product_attribute, sa.id_shop, sa.id_shop_group,
-        sa.quantity, sa.physical_quantity, sa.reserved_quantity, sa.depends_on_stock, sa.out_of_stock, sa.location');
+        $query->select('c.id_translation, c.id_lang, c.key, c.translation, c.domain, c.theme');
     }
 }

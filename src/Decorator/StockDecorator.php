@@ -51,8 +51,6 @@ class StockDecorator
         $stock['reserved_quantity'] = (int) $stock['reserved_quantity'];
         $stock['depends_on_stock'] = (bool) $stock['depends_on_stock'];
         $stock['out_of_stock'] = (bool) $stock['out_of_stock'];
-        $stock['created_at'] = (new \DateTime($stock['created_at'], new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
-        $stock['updated_at'] = (new \DateTime($stock['updated_at'], new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
     }
 
     /**

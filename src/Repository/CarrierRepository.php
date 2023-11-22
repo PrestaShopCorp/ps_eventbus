@@ -2,8 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShop\Module\PsEventbus\Config\Config;
-
 class CarrierRepository
 {
     /**
@@ -141,17 +139,11 @@ class CarrierRepository
         }
         $query = new \DbQuery();
         $query->from('carrier', 'c');
-        $query->select('c.*, cl.delay, eis.created_at as update_date');
+        $query->select('c.*, cl.delay');
         $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
         $query->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier');
-        $query->leftJoin(
-            'eventbus_incremental_sync',
-            'eis',
-            'eis.id_object = c.id_carrier AND eis.type = "' . Config::COLLECTION_CARRIERS . '" AND eis.id_shop = cs.id_shop AND eis.lang_iso = cl.id_lang'
-        );
         $query->where('c.id_carrier IN (' . implode(',', array_map('intval', $carrierIds)) . ')');
         $query->where('cs.id_shop = ' . (int) $this->context->shop->id);
-        $query->groupBy('c.id_reference, c.id_carrier HAVING c.id_carrier=(select max(id_carrier) FROM ' . _DB_PREFIX_ . 'carrier c2 WHERE c2.id_reference=c.id_reference)');
 
         return $this->db->executeS($query);
     }
@@ -169,14 +161,9 @@ class CarrierRepository
     {
         $query = new \DbQuery();
         $query->from('carrier', 'c');
-        $query->select('c.id_carrier, IFNULL(eis.created_at, CURRENT_DATE()) as update_date');
+        $query->select('c.id_carrier');
         $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
         $query->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier');
-        $query->leftJoin(
-            'eventbus_incremental_sync',
-            'eis',
-            'eis.id_object = c.id_carrier AND eis.type = "' . Config::COLLECTION_CARRIERS . '" AND eis.id_shop = cs.id_shop AND eis.lang_iso = cl.id_lang'
-        );
         $query->where('cs.id_shop = ' . (int) $this->context->shop->id);
         $query->where('deleted=0');
         $query->limit($limit, $offset);
