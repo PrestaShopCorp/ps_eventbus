@@ -57,6 +57,7 @@ class Config
     public const COLLECTION_PRODUCT_SUPPLIERS = 'product_suppliers';
     public const COLLECTION_LANGUAGES = 'languages';
     public const COLLECTION_EMPLOYEES = 'employees';
+    public const COLLECTION_TRANSLATIONS = 'translations';
 
     /**
      * @param mixed $message
