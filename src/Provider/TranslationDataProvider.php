@@ -35,7 +35,7 @@ class TranslationDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getFormattedData($offset, $limit, $langIso)
     {
-        $translations = $this->translationRepository->getTranslationsSync($offset, $limit);
+        $translations = $this->translationRepository->getTranslations($offset, $limit);
 
         if (!is_array($translations)) {
             return [];
