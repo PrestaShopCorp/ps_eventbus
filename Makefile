@@ -47,16 +47,15 @@ $(eval TMP_DIR := $(shell mktemp -d))
 mkdir -p ${TMP_DIR}/ps_eventbus;
 cp -r $(shell cat .zip-contents) ${TMP_DIR}/ps_eventbus;
 cp $1 ${TMP_DIR}/ps_eventbus/config/parameters.yml;
+if [ $1 = ".config.e2e.yml" ]; then ./tests/Mocks/apply-ps-accounts-mock.sh ${TMP_DIR}/ps_eventbus; fi
 cd ${TMP_DIR} && zip -9 -r $2 ./ps_eventbus;
 mv ${TMP_DIR}/$2 ./dist;
 rm -rf ${TMP_DIR:-/dev/null};
 endef
 
-# target: zip-e2e                               - Bundle a local E2E integrable zip
+# target: zip-e2e                                - Bundle a local E2E integrable zip
 zip-e2e: vendor dist .config.e2e.yml
-	./tests/Mocks/apply-ps-accounts-mock.sh
 	@$(call zip_it,.config.e2e.yml,${PACKAGE}_e2e.zip)
-	./tests/Mocks/revert-ps-accounts-mock.sh
 
 # target: zip-inte                               - Bundle an integration zip
 zip-inte: vendor dist .config.inte.yml
