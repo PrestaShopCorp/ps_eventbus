@@ -100,7 +100,7 @@ prestashop:
 
 prestashop/prestashop-${PS_VERSION}: prestashop composer.phar
 	@if [ ! -d "prestashop/prestashop-${PS_VERSION}" ]; then \
-		git clone --depth 1 --branch ${PS_VERSION} https://github.com/PrestaShop/PrestaShop.git prestashop/prestashop-${PS_VERSION}; \
+		git clone --depth 1 --branch ${PS_VERSION} https://github.com/PrestaShop/PrestaShop.git prestashop/prestashop-${PS_VERSION} > /dev/null; \
 		if [ "${PS_VERSION}" != "1.6.1.24" ]; then \
 			./composer.phar -d ./prestashop/prestashop-${PS_VERSION} install; \
     fi \
