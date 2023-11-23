@@ -2,8 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShopException;
-
 class ProductCarrierRepository
 {
     /**
@@ -26,7 +24,7 @@ class ProductCarrierRepository
         $this->context = $context;
 
         if (!$this->context->shop) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $this->shopId = (int) $this->context->shop->id;

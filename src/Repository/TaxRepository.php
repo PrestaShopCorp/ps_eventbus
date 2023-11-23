@@ -2,8 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShopException;
-
 class TaxRepository
 {
     /**
@@ -33,13 +31,13 @@ class TaxRepository
     private function getBaseQuery()
     {
         if (!$this->context->shop) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $shopId = (int) $this->context->shop->id;
 
         if (!$this->context->language) {
-            throw new PrestaShopException('No language context');
+            throw new \PrestaShopException('No language context');
         }
 
         $language = (int) $this->context->language->id;

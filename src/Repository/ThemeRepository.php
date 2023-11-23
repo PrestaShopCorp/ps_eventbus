@@ -4,7 +4,6 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\PrestaShop\Core\Addon\Theme\ThemeManagerBuilder;
-use PrestaShopException;
 
 class ThemeRepository
 {
@@ -30,7 +29,7 @@ class ThemeRepository
     {
         if (version_compare(_PS_VERSION_, '1.7', '>')) {
             if (!$this->context->shop) {
-                throw new PrestaShopException('No shop context');
+                throw new \PrestaShopException('No shop context');
             }
 
             $themeRepository = (new ThemeManagerBuilder($this->context, $this->db))

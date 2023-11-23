@@ -4,7 +4,6 @@ namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
-use PrestaShopException;
 
 class PresenterService
 {
@@ -91,7 +90,7 @@ class PresenterService
             $language = \Context::getContext()->language;
 
             if ($language == null) {
-                throw new PrestaShopException('No language context');
+                throw new \PrestaShopException('No language context');
             }
 
             return [

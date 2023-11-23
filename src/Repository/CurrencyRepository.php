@@ -97,7 +97,6 @@ class CurrencyRepository
     }
 
     /**
-     *
      * @return \DbQuery
      */
     public function getBaseQuery()

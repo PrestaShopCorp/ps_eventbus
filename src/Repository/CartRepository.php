@@ -2,8 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShopException;
-
 class CartRepository
 {
     /**
@@ -27,7 +25,7 @@ class CartRepository
     private function getBaseQuery()
     {
         if (!$this->context->shop) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $shopId = (int) $this->context->shop->id;

@@ -4,7 +4,6 @@ namespace PrestaShop\Module\PsEventbus\Service;
 
 use Context;
 use PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository;
-use PrestaShopException;
 
 class SpecificPriceService
 {
@@ -118,7 +117,7 @@ class SpecificPriceService
         }
 
         if (!$context->shop) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $shopId = (int) $context->shop->id;

@@ -2,8 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShopException;
-
 class ProductRepository
 {
     /**
@@ -32,7 +30,7 @@ class ProductRepository
         }
 
         if (!$this->context->shop) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $this->shopId = (int) $this->context->shop->id;
@@ -46,7 +44,7 @@ class ProductRepository
     private function getBaseQuery($langId)
     {
         if (!$this->context->shop) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $shopIdGroup = (int) $this->context->shop->id_shop_group;

@@ -8,7 +8,6 @@ use PrestaShop\Module\PsEventbus\Repository\BundleRepository;
 use PrestaShop\Module\PsEventbus\Repository\CategoryRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\ProductRepository;
-use PrestaShopException;
 
 class ProductDecorator
 {
@@ -58,7 +57,7 @@ class ProductDecorator
         $this->bundleRepository = $bundleRepository;
 
         if (!$this->context->shop) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $this->shopId = (int) $this->context->shop->id;
@@ -117,7 +116,7 @@ class ProductDecorator
     {
         try {
             if (!$this->context->link) {
-                throw new PrestaShopException('No link context');
+                throw new \PrestaShopException('No link context');
             }
 
             $product['link'] = $this->context->link->getProductLink(
@@ -355,7 +354,7 @@ class ProductDecorator
             $productImageIds = array_diff($productImageIds, [$coverImageId]);
 
             if ($this->context->link === null) {
-                throw new PrestaShopException('No link context');
+                throw new \PrestaShopException('No link context');
             }
 
             $link = $this->context->link;

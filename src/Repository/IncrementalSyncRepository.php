@@ -3,7 +3,6 @@
 namespace PrestaShop\Module\PsEventbus\Repository;
 
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
-use PrestaShopException;
 
 class IncrementalSyncRepository
 {
@@ -34,7 +33,7 @@ class IncrementalSyncRepository
         $this->errorHandler = $errorHandler;
 
         if (!$this->context->shop) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $this->shopId = (int) $this->context->shop->id;

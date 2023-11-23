@@ -8,7 +8,6 @@ use PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderRepository;
-use PrestaShopException;
 
 class OrderDataProvider implements PaginatedApiDataProviderInterface
 {
@@ -58,7 +57,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         $this->orderCartRuleRepository = $orderCartRuleRepository;
 
         if (!$this->context->shop) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $this->shopId = (int) $this->context->shop->id;

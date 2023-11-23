@@ -4,7 +4,6 @@ namespace PrestaShop\Module\PsEventbus\Provider;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Repository\GoogleTaxonomyRepository;
-use PrestaShopException;
 
 class GoogleTaxonomyDataProvider implements PaginatedApiDataProviderInterface
 {
@@ -28,7 +27,7 @@ class GoogleTaxonomyDataProvider implements PaginatedApiDataProviderInterface
         $this->context = $context;
 
         if (!$this->context->shop) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $this->shopId = (int) $this->context->shop->id;

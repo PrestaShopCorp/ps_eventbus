@@ -2,8 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShopException;
-
 class CountryRepository
 {
     /**
@@ -33,11 +31,11 @@ class CountryRepository
     private function getBaseQuery()
     {
         if (!$this->context->shop) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         if (!$this->context->language) {
-            throw new PrestaShopException('No language context');
+            throw new \PrestaShopException('No language context');
         }
 
         $query = new \DbQuery();

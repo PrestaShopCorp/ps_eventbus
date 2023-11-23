@@ -2,8 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Factory;
 
-use PrestaShopException;
-
 class ContextFactory
 {
     /**
@@ -22,9 +20,8 @@ class ContextFactory
         $language = \Context::getContext()->language;
 
         if ($language === null) {
-            throw new PrestaShopException('Context is null');
+            throw new \PrestaShopException('Context is null');
         }
-
 
         return $language;
     }
@@ -45,9 +42,8 @@ class ContextFactory
         $smarty = \Context::getContext()->smarty;
 
         if ($smarty === null) {
-            throw new PrestaShopException('Context is null');
+            throw new \PrestaShopException('Context is null');
         }
-
 
         return $smarty;
     }
@@ -60,9 +56,8 @@ class ContextFactory
         $shop = \Context::getContext()->shop;
 
         if ($shop === null) {
-            throw new PrestaShopException('Context is null');
+            throw new \PrestaShopException('Context is null');
         }
-
 
         return $shop;
     }
@@ -75,11 +70,11 @@ class ContextFactory
         $controller = \Context::getContext()->controller;
 
         if ($controller === null) {
-            throw new PrestaShopException('Context is null');
+            throw new \PrestaShopException('Context is null');
         }
 
         if (!($controller instanceof \AdminController) && !($controller instanceof \FrontController)) {
-            throw new PrestaShopException('Controller is not an instance of AdminController or FrontController');
+            throw new \PrestaShopException('Controller is not an instance of AdminController or FrontController');
         }
 
         return $controller;
@@ -93,9 +88,8 @@ class ContextFactory
         $cookie = \Context::getContext()->cookie;
 
         if ($cookie === null) {
-            throw new PrestaShopException('Context is null');
+            throw new \PrestaShopException('Context is null');
         }
-
 
         return $cookie;
     }
@@ -108,9 +102,8 @@ class ContextFactory
         $link = \Context::getContext()->link;
 
         if ($link === null) {
-            throw new PrestaShopException('Context is null');
+            throw new \PrestaShopException('Context is null');
         }
-
 
         return $link;
     }
