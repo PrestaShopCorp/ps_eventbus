@@ -38,4 +38,5 @@ parameters:
     - '#Caught class GuzzleHttp\\Ring\\Exception\\ConnectException not found#'
     - '#Call to method getMessage\(\) on an unknown class GuzzleHttp\\Ring\\Exception\\ConnectException.#'
     - '#Parameter \#2 \$type of static method TaxManagerFactoryCore::getManager\(\) expects string, int given.#'
+    - '#Method PrestaShop\\Module\\PsEventbus\\Factory\\ContextFactory::getController\(\) has invalid return type PrestaShopBundle\\Bridge\\AdminController\\LegacyControllerBridgeInterface.#'
   level: 9
