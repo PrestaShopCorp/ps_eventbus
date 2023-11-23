@@ -45,7 +45,7 @@ class CartRuleRepository
         if (version_compare(_PS_VERSION_, '1.7', '>=')) {
             $query->select('cr.reduction_exclude_special');
         }
-        
+
         return $this->db->executeS($query);
     }
 }

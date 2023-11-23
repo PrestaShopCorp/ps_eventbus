@@ -1323,25 +1323,25 @@ class Ps_eventbus extends Module
         }
     }
 
-     /**
-      * @param array $shopContents
-      * @param int $shopContentId
-      * @param string $action
-      *
-      * @return void
-      */
-     private function sendLiveSync($shopContents, $shopContentId, $action)
-     {
-         if ((int) $shopContentId === 0) {
-             return;
-         }
-         try {
-             /** @var \PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient $liveSyncApiClient */
-             $liveSyncApiClient = $this->getService(\PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient::class);
-             $liveSyncApiClient->liveSync($shopContents, (int) $shopContentId, $action);
-         } catch (\Exception $e) {
-         }
-     }
+    /**
+     * @param array $shopContents
+     * @param int $shopContentId
+     * @param string $action
+     *
+     * @return void
+     */
+    private function sendLiveSync($shopContents, $shopContentId, $action)
+    {
+        if ((int) $shopContentId === 0) {
+            return;
+        }
+        try {
+            /** @var \PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient $liveSyncApiClient */
+            $liveSyncApiClient = $this->getService(\PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient::class);
+            $liveSyncApiClient->liveSync($shopContents, (int) $shopContentId, $action);
+        } catch (\Exception $e) {
+        }
+    }
 
     /**
      * @param int $objectId
