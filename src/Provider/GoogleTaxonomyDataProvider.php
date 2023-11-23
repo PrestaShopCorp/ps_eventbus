@@ -16,17 +16,26 @@ class GoogleTaxonomyDataProvider implements PaginatedApiDataProviderInterface
      */
     private $context;
 
+    /**
+     * @var int
+     */
+    private $shopId;
+
     public function __construct(GoogleTaxonomyRepository $googleTaxonomyRepository, \Context $context)
     {
         $this->googleTaxonomyRepository = $googleTaxonomyRepository;
         $this->context = $context;
+
+        if ($this->context->shop === null) {
+            throw new \PrestaShopException('No shop context');
+        }
+
+        $this->shopId = (int) $this->context->shop->id;
     }
 
     public function getFormattedData($offset, $limit, $langIso)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $data = $this->googleTaxonomyRepository->getTaxonomyCategories($offset, $limit, $shopId);
+        $data = $this->googleTaxonomyRepository->getTaxonomyCategories($offset, $limit, $this->shopId);
 
         if (!is_array($data)) {
             return [];
@@ -46,10 +55,7 @@ class GoogleTaxonomyDataProvider implements PaginatedApiDataProviderInterface
 
     public function getRemainingObjectsCount($offset, $langIso)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-
-        return (int) $this->googleTaxonomyRepository->getRemainingTaxonomyRepositories($offset, $shopId);
+        return (int) $this->googleTaxonomyRepository->getRemainingTaxonomyRepositories($offset, $this->shopId);
     }
 
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)

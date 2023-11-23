@@ -52,7 +52,8 @@ jobs:
     timeout-minutes: 15
     strategy:
       matrix:
-        presta_version: ["1.7.8.7"]
+        ps_version: ["1.7.8.10", "8.1.1"]
+        # @TODO: "1.6.1.24" is temporarily disabled here
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -61,8 +62,8 @@ jobs:
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
-      - name: PHPStan PrestaShop 1.7.8.7
-        run: PS_VERSION="1.7.8.7" make phpstan
+      - name: PHPStan PrestaShop ${{ matrix.ps_version }}
+        run: PS_VERSION="${{ matrix.ps_version }}" make phpstan
 
   phpunit:
     name: PHP Unit

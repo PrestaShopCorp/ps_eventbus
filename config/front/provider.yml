@@ -47,7 +47,7 @@ services:
     class: PrestaShop\Module\PsEventbus\Provider\OrderDataProvider
     public: true
     arguments:
-      - '@ps_eventbus.context'
+      - "@ps_eventbus.context"
       - '@PrestaShop\Module\PsEventbus\Repository\OrderRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
@@ -67,7 +67,7 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\GoogleTaxonomyRepository'
-      - '@ps_eventbus.context'
+      - "@ps_eventbus.context"
 
   PrestaShop\Module\PsEventbus\Provider\CarrierDataProvider:
     class: PrestaShop\Module\PsEventbus\Provider\CarrierDataProvider
@@ -95,7 +95,6 @@ services:
     class: PrestaShop\Module\PsEventbus\Provider\WishlistDataProvider
     public: true
     arguments:
-      - '@ps_eventbus.context'
       - '@PrestaShop\Module\PsEventbus\Repository\WishlistRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository'
       - '@PrestaShop\Module\PsEventbus\Decorator\WishlistDecorator'

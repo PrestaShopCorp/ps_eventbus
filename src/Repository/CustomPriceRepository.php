@@ -26,20 +26,23 @@ class CustomPriceRepository
     }
 
     /**
-     * @param int $shopId
-     *
      * @return \DbQuery
      */
-    private function getBaseQuery($shopId)
+    private function getBaseQuery()
     {
+        if ($this->context->shop === null) {
+            throw new \PrestaShopException('No shop context');
+        }
+
+        $shopId = (int) $this->context->shop->id;
+
         $query = new \DbQuery();
 
         $query->from('specific_price', 'sp')
             ->leftJoin('country', 'c', 'c.id_country = sp.id_country')
-            ->leftJoin('currency', 'cur', 'cur.id_currency = sp.id_currency')
-        ;
+            ->leftJoin('currency', 'cur', 'cur.id_currency = sp.id_currency');
 
-        $query->where('sp.id_shop = 0 OR sp.id_shop = ' . (int) $shopId);
+        $query->where('sp.id_shop = 0 OR sp.id_shop = ' . $shopId);
 
         return $query;
     }
@@ -54,9 +57,7 @@ class CustomPriceRepository
      */
     public function getSpecificPrices($offset, $limit)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId);
+        $query = $this->getBaseQuery();
 
         $this->addSelectParameters($query);
 
@@ -76,9 +77,7 @@ class CustomPriceRepository
      */
     public function getRemainingSpecificPricesCount($offset)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId);
+        $query = $this->getBaseQuery();
 
         $query->select('(COUNT(sp.id_specific_price) - ' . (int) $offset . ') as count');
 
@@ -111,9 +110,7 @@ class CustomPriceRepository
      */
     public function getSpecificPricesIncremental($limit, $specificPriceIds)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId);
+        $query = $this->getBaseQuery();
 
         $this->addSelectParameters($query);
 

@@ -21,15 +21,19 @@ class TranslationRepository
     }
 
     /**
-     * @param int $shopId
-     *
      * @return \DbQuery
      */
-    public function getBaseQuery($shopId)
+    public function getBaseQuery()
     {
+        if ($this->context->shop === null) {
+            throw new \PrestaShopException('No shop context');
+        }
+
+        $shopId = (int) $this->context->shop->id;
+
         $query = new \DbQuery();
         $query->from('translation', 'c')
-            ->where('c.id_shop = ' . (int) $shopId);
+            ->where('c.id_shop = ' . $shopId);
 
         return $query;
     }
@@ -44,9 +48,7 @@ class TranslationRepository
      */
     public function getTranslations($offset, $limit)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId);
+        $query = $this->getBaseQuery();
 
         $this->addSelectParameters($query);
 
@@ -62,9 +64,7 @@ class TranslationRepository
      */
     public function getRemainingTranslationsCount($offset)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId)
+        $query = $this->getBaseQuery()
             ->select('(COUNT(c.id_translation) - ' . (int) $offset . ') as count');
 
         return (int) $this->db->getValue($query);
@@ -80,9 +80,7 @@ class TranslationRepository
      */
     public function getTranslationsIncremental($limit, $translationIds)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId);
+        $query = $this->getBaseQuery();
 
         $this->addSelectParameters($query);
 

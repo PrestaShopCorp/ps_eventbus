@@ -24,12 +24,18 @@ class EmployeeRepository
      */
     private function getBaseQuery()
     {
+        if ($this->context->shop === null) {
+            throw new \PrestaShopException('No shop context');
+        }
+
+        $shopId = (int) $this->context->shop->id;
+
         $query = new \DbQuery();
 
         $query->from('employee', 'e')
             ->leftJoin('employee_shop', 'es', 'es.id_employee = e.id_employee');
 
-        $query->where('c.id_shop = ' . (int) $this->context->shop->id);
+        $query->where('c.id_shop = ' . $shopId);
 
         return $query;
     }
