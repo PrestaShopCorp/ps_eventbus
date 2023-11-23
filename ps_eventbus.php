@@ -162,9 +162,13 @@ class Ps_eventbus extends Module
         require_once __DIR__ . '/vendor/autoload.php';
 
         $this->serviceContainer = new \PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer(
-            $this->name,
+            (string) $this->name,
             $this->getLocalPath()
         );
+
+        if (!$this->context->shop) {
+            throw new PrestaShopException('No shop context');
+        }
 
         $this->shopId = (int) $this->context->shop->id;
     }

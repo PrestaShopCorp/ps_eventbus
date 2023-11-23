@@ -2,6 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use PrestaShopException;
+
 class CategoryRepository
 {
     /**
@@ -26,19 +28,24 @@ class CategoryRepository
     }
 
     /**
-     * @param int $shopId
      * @param string $langIso
      *
      * @return \DbQuery
      */
-    public function getBaseQuery($shopId, $langIso)
+    public function getBaseQuery($langIso)
     {
+        if (!$this->context->shop) {
+            throw new PrestaShopException('No shop context');
+        }
+
+        $shopId = (int) $this->context->shop->id;
+
         $query = new \DbQuery();
         $query->from('category_shop', 'cs')
             ->innerJoin('category', 'c', 'cs.id_category = c.id_category')
             ->leftJoin('category_lang', 'cl', 'cl.id_category = cs.id_category')
             ->leftJoin('lang', 'l', 'l.id_lang = cl.id_lang')
-            ->where('cs.id_shop = ' . (int) $shopId)
+            ->where('cs.id_shop = ' . $shopId)
             ->where('cl.id_shop = cs.id_shop')
             ->where('l.iso_code = "' . pSQL($langIso) . '"');
 
@@ -149,9 +156,7 @@ class CategoryRepository
      */
     public function getCategories($offset, $limit, $langIso)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId, $langIso);
+        $query = $this->getBaseQuery($langIso);
 
         $this->addSelectParameters($query);
 
@@ -168,9 +173,7 @@ class CategoryRepository
      */
     public function getRemainingCategoriesCount($offset, $langIso)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId, $langIso)
+        $query = $this->getBaseQuery($langIso)
             ->select('(COUNT(cs.id_category) - ' . (int) $offset . ') as count');
 
         return (int) $this->db->getValue($query);
@@ -187,9 +190,7 @@ class CategoryRepository
      */
     public function getCategoriesIncremental($limit, $langIso, $categoryIds)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId, $langIso);
+        $query = $this->getBaseQuery($langIso);
 
         $this->addSelectParameters($query);
 

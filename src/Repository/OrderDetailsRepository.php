@@ -2,6 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use PrestaShopException;
+
 class OrderDetailsRepository
 {
     public const TABLE_NAME = 'order_detail';
@@ -26,10 +28,16 @@ class OrderDetailsRepository
      */
     public function getBaseQuery()
     {
+        if (!$this->context->shop) {
+            throw new PrestaShopException('No shop context');
+        }
+
+        $shopId = (int) $this->context->shop->id;
+
         $query = new \DbQuery();
 
         $query->from(self::TABLE_NAME, 'od')
-            ->where('od.id_shop = ' . (int) $this->context->shop->id);
+            ->where('od.id_shop = ' . $shopId);
 
         return $query;
     }

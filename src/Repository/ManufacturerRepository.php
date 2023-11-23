@@ -2,6 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use PrestaShopException;
+
 class ManufacturerRepository
 {
     /**
@@ -31,9 +33,7 @@ class ManufacturerRepository
      */
     public function getManufacturers($offset, $limit, $langIso)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId, $langIso);
+        $query = $this->getBaseQuery($langIso);
 
         $this->addSelectParameters($query);
 
@@ -50,9 +50,7 @@ class ManufacturerRepository
      */
     public function getRemainingManufacturersCount($offset, $langIso)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId, $langIso)
+        $query = $this->getBaseQuery($langIso)
             ->select('(COUNT(ma.id_manufacturer) - ' . (int) $offset . ') as count');
 
         return (int) $this->db->getValue($query);
@@ -69,9 +67,7 @@ class ManufacturerRepository
      */
     public function getManufacturersIncremental($limit, $langIso, $manufacturerIds)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId, $langIso);
+        $query = $this->getBaseQuery($langIso);
 
         $this->addSelectParameters($query);
 
@@ -82,19 +78,24 @@ class ManufacturerRepository
     }
 
     /**
-     * @param int $shopId
      * @param string $langIso
      *
      * @return \DbQuery
      */
-    public function getBaseQuery($shopId, $langIso)
+    public function getBaseQuery($langIso)
     {
+        if (!$this->context->shop) {
+            throw new PrestaShopException('No shop context');
+        }
+
+        $shopId = (int) $this->context->shop->id;
+
         /** @var int $langId */
         $langId = (int) \Language::getIdByIso($langIso);
         $query = new \DbQuery();
         $query->from('manufacturer', 'ma')
             ->innerJoin('manufacturer_lang', 'mal', 'ma.id_manufacturer = mal.id_manufacturer AND mal.id_lang = ' . (int) $langId)
-            ->innerJoin('manufacturer_shop', 'mas', 'ma.id_manufacturer = mas.id_manufacturer AND mas.id_shop = ' . (int) $shopId);
+            ->innerJoin('manufacturer_shop', 'mas', 'ma.id_manufacturer = mas.id_manufacturer AND mas.id_shop = ' . $shopId);
 
         return $query;
     }

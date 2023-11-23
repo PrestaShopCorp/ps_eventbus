@@ -2,6 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use PrestaShopException;
+
 class SupplierRepository
 {
     /**
@@ -31,9 +33,7 @@ class SupplierRepository
      */
     public function getSuppliers($offset, $limit, $langIso)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId, $langIso);
+        $query = $this->getBaseQuery($langIso);
 
         $this->addSelectParameters($query);
 
@@ -50,9 +50,7 @@ class SupplierRepository
      */
     public function getRemainingSuppliersCount($offset, $langIso)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId, $langIso)
+        $query = $this->getBaseQuery($langIso)
             ->select('(COUNT(su.id_supplier) - ' . (int) $offset . ') as count');
 
         return (int) $this->db->getValue($query);
@@ -69,9 +67,7 @@ class SupplierRepository
      */
     public function getSuppliersIncremental($limit, $langIso, $supplierIds)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId, $langIso);
+        $query = $this->getBaseQuery($langIso);
 
         $this->addSelectParameters($query);
 
@@ -82,19 +78,24 @@ class SupplierRepository
     }
 
     /**
-     * @param int $shopId
      * @param string $langIso
      *
      * @return \DbQuery
      */
-    public function getBaseQuery($shopId, $langIso)
+    public function getBaseQuery($langIso)
     {
+        if (!$this->context->shop) {
+            throw new PrestaShopException('No shop context');
+        }
+
+        $shopId = (int) $this->context->shop->id;
+
         /** @var int $langId */
         $langId = (int) \Language::getIdByIso($langIso);
         $query = new \DbQuery();
         $query->from('supplier', 'su')
             ->innerJoin('supplier_lang', 'sul', 'su.id_supplier = sul.id_supplier AND sul.id_lang = ' . (int) $langId)
-            ->innerJoin('supplier_shop', 'sus', 'su.id_supplier = sus.id_supplier AND sus.id_shop = ' . (int) $shopId);
+            ->innerJoin('supplier_shop', 'sus', 'su.id_supplier = sus.id_supplier AND sus.id_shop = ' . $shopId);
 
         return $query;
     }

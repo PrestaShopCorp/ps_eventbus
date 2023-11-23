@@ -76,7 +76,7 @@ class CollectorApiClient
             [
                 'Accept' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->jwt,
-                'Content-Length' => strlen($payload),
+                'Content-Length' => (string) strlen($payload),
                 'Content-Type' => 'application/x-www-form-urlencoded',
                 'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
                 'User-Agent' => 'ps-eventbus/' . $this->module->version,
@@ -117,7 +117,7 @@ class CollectorApiClient
             [
                 'Accept' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->jwt,
-                'Content-Length' => strlen($payload),
+                'Content-Length' => (string) strlen($payload),
                 'Content-Type' => 'application/x-www-form-urlencoded',
                 'User-Agent' => 'ps-eventbus/' . $this->module->version,
             ],

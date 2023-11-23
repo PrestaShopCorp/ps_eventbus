@@ -2,6 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use PrestaShopException;
+
 class WishlistRepository
 {
     /**
@@ -14,6 +16,7 @@ class WishlistRepository
      */
     private $context;
 
+
     public function __construct(\Db $db, \Context $context)
     {
         $this->db = $db;
@@ -21,16 +24,20 @@ class WishlistRepository
     }
 
     /**
-     * @param int $shopId
-     * @param string $langIso
      *
      * @return \DbQuery
      */
-    public function getBaseQuery($shopId, $langIso)
+    public function getBaseQuery()
     {
+        if (!$this->context->shop) {
+            throw new PrestaShopException('No shop context');
+        }
+
+        $shopId = (int) $this->context->shop->id;
+
         $query = new \DbQuery();
         $query->from('wishlist', 'w')
-            ->where('w.id_shop = ' . (int) $shopId);
+            ->where('w.id_shop = ' . $shopId);
 
         return $query;
     }
@@ -38,17 +45,14 @@ class WishlistRepository
     /**
      * @param int $offset
      * @param int $limit
-     * @param string $langIso
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getWishlists($offset, $limit, $langIso)
+    public function getWishlists($offset, $limit)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId, $langIso);
+        $query = $this->getBaseQuery();
 
         $this->addSelectParameters($query);
 
@@ -59,15 +63,12 @@ class WishlistRepository
 
     /**
      * @param int $offset
-     * @param string $langIso
      *
      * @return int
      */
-    public function getRemainingWishlistsCount($offset, $langIso)
+    public function getRemainingWishlistsCount($offset)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId, $langIso)
+        $query = $this->getBaseQuery()
             ->select('(COUNT(w.id_wishlist) - ' . (int) $offset . ') as count');
 
         return (int) $this->db->getValue($query);
@@ -75,18 +76,15 @@ class WishlistRepository
 
     /**
      * @param int $limit
-     * @param string $langIso
      * @param array $wishlistIds
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getWishlistsIncremental($limit, $langIso, $wishlistIds)
+    public function getWishlistsIncremental($limit, $wishlistIds)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId, $langIso);
+        $query = $this->getBaseQuery();
 
         $this->addSelectParameters($query);
 

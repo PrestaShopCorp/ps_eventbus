@@ -4,6 +4,7 @@ namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
+use PrestaShopException;
 
 class DeletedObjectsService
 {
@@ -37,8 +38,12 @@ class DeletedObjectsService
      */
     public function handleDeletedObjectsSync($jobId, $scriptStartTime)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
+        if (!$this->context->shop) {
+            throw new PrestaShopException('No shop context');
+        }
+
+        $shopId = (int) $this->context->shop->id;
+
         $deletedObjects = $this->deletedObjectsRepository->getDeletedObjectsGrouped($shopId);
 
         if (empty($deletedObjects)) {

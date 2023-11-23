@@ -3,6 +3,7 @@
 namespace PrestaShop\Module\PsEventbus\Decorator;
 
 use PrestaShop\Module\PsEventbus\Service\SpecificPriceService;
+use PrestaShopException;
 
 class CustomPriceDecorator
 {
@@ -113,6 +114,10 @@ class CustomPriceDecorator
 
     private function setShopId(array &$specificPrice): void
     {
+        if (!$this->context->shop) {
+            throw new PrestaShopException('No shop context');
+        }
+
         if ($specificPrice['id_shop']) {
             $specificPrice['id_shop'] = $this->context->shop->id;
         }

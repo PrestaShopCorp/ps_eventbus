@@ -2,6 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use PrestaShopException;
+
 class StoreRepository
 {
     public const STORES_TABLE = 'store';
@@ -28,6 +30,10 @@ class StoreRepository
      */
     public function getBaseQuery($langIso)
     {
+        if (!$this->context->shop) {
+            throw new PrestaShopException('No shop context');
+        }
+
         $shopId = (int) $this->context->shop->id;
         $langId = (int) \Language::getIdByIso($langIso);
 

@@ -34,7 +34,7 @@ class CustomerDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getFormattedData($offset, $limit, $langIso)
     {
-        $customers = $this->customerRepository->getCustomers($offset, $limit, $langIso);
+        $customers = $this->customerRepository->getCustomers($offset, $limit);
 
         if (!is_array($customers)) {
             return [];
@@ -59,7 +59,7 @@ class CustomerDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getRemainingObjectsCount($offset, $langIso)
     {
-        return (int) $this->customerRepository->getRemainingCustomersCount($offset, $langIso);
+        return (int) $this->customerRepository->getRemainingCustomersCount($offset);
     }
 
     /**
@@ -73,7 +73,7 @@ class CustomerDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
-        $customers = $this->customerRepository->getCustomersIncremental($limit, $langIso, $objectIds);
+        $customers = $this->customerRepository->getCustomersIncremental($limit, $objectIds);
 
         if (!is_array($customers)) {
             return [];

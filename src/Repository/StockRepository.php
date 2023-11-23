@@ -2,6 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use PrestaShopException;
+
 class StockRepository
 {
     /**
@@ -21,12 +23,17 @@ class StockRepository
     }
 
     /**
-     * @param int $shopId
      *
      * @return \DbQuery
      */
-    public function getBaseQuery($shopId)
+    public function getBaseQuery()
     {
+        if (!$this->context->shop) {
+            throw new PrestaShopException('No shop context');
+        }
+
+        $shopId = (int) $this->context->shop->id;
+
         $query = new \DbQuery();
         $query->from('stock_available', 'sa')
             ->where('sa.id_shop = ' . (int) $shopId);
@@ -44,9 +51,7 @@ class StockRepository
      */
     public function getStocks($offset, $limit)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId);
+        $query = $this->getBaseQuery();
 
         $this->addSelectParameters($query);
 
@@ -62,9 +67,7 @@ class StockRepository
      */
     public function getRemainingStocksCount($offset)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId)
+        $query = $this->getBaseQuery()
             ->select('(COUNT(sa.id_stock_available) - ' . (int) $offset . ') as count');
 
         return (int) $this->db->getValue($query);
@@ -80,9 +83,7 @@ class StockRepository
      */
     public function getStocksIncremental($limit, $productIds)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId);
+        $query = $this->getBaseQuery();
 
         $this->addSelectParameters($query);
 

@@ -2,6 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use PrestaShopException;
+
 class ProductCarrierRepository
 {
     /**
@@ -13,10 +15,21 @@ class ProductCarrierRepository
      */
     private $context;
 
+    /**
+     * @var int
+     */
+    private $shopId;
+
     public function __construct(\Db $db, \Context $context)
     {
         $this->db = $db;
         $this->context = $context;
+
+        if (!$this->context->shop) {
+            throw new PrestaShopException('No shop context');
+        }
+
+        $this->shopId = (int) $this->context->shop->id;
     }
 
     /**
@@ -27,7 +40,7 @@ class ProductCarrierRepository
         $query = new \DbQuery();
 
         $query->from('product_carrier', 'pc');
-        $query->where('pc.id_shop = ' . (int) $this->context->shop->id);
+        $query->where('pc.id_shop = ' . $this->shopId);
 
         return $query;
     }
@@ -85,7 +98,7 @@ class ProductCarrierRepository
         $query->from(IncrementalSyncRepository::INCREMENTAL_SYNC_TABLE, 'aic');
         $query->leftJoin(EventbusSyncRepository::TYPE_SYNC_TABLE_NAME, 'ts', 'ts.type = aic.type');
         $query->where('aic.type = "' . (string) $type . '"');
-        $query->where('ts.id_shop = ' . (string) $this->context->shop->id);
+        $query->where('ts.id_shop = ' . $this->shopId);
         $query->where('ts.lang_iso = "' . (string) $langIso . '"');
 
         return $this->db->executeS($query);

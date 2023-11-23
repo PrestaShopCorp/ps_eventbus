@@ -2,6 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use PrestaShopException;
+
 class TaxRepository
 {
     /**
@@ -30,6 +32,18 @@ class TaxRepository
      */
     private function getBaseQuery()
     {
+        if (!$this->context->shop) {
+            throw new PrestaShopException('No shop context');
+        }
+
+        $shopId = (int) $this->context->shop->id;
+
+        if (!$this->context->language) {
+            throw new PrestaShopException('No language context');
+        }
+
+        $language = (int) $this->context->language->id;
+
         $query = new \DbQuery();
 
         $query->from('tax', 't')
@@ -37,8 +51,8 @@ class TaxRepository
             ->innerJoin('tax_rules_group', 'trg', 'trg.id_tax_rules_group = tr.id_tax_rules_group')
             ->innerJoin('tax_rules_group_shop', 'trgs', 'trgs.id_tax_rules_group = tr.id_tax_rules_group')
             ->innerJoin('tax_lang', 'tl', 'tl.id_tax = t.id_tax')
-            ->where('trgs.id_shop = ' . (int) $this->context->shop->id)
-            ->where('tl.id_lang = ' . (int) $this->context->language->id);
+            ->where('trgs.id_shop = ' . $shopId)
+            ->where('tl.id_lang = ' . $language);
 
         return $query;
     }

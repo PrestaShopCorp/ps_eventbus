@@ -2,6 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use PrestaShopException;
+
 class ProductRepository
 {
     /**
@@ -13,6 +15,11 @@ class ProductRepository
      */
     private $db;
 
+    /**
+     * @var int
+     */
+    private $shopId;
+
     public function __construct(\Db $db, \Context $context)
     {
         $this->db = $db;
@@ -23,29 +30,40 @@ class ProductRepository
                 $this->context->employee = new \Employee($employees[0]['id_employee']);
             }
         }
+
+        if (!$this->context->shop) {
+            throw new PrestaShopException('No shop context');
+        }
+
+        $this->shopId = (int) $this->context->shop->id;
     }
 
     /**
-     * @param \Shop $shop
      * @param int $langId
      *
      * @return \DbQuery
      */
-    private function getBaseQuery(\Shop $shop, $langId)
+    private function getBaseQuery($langId)
     {
+        if (!$this->context->shop) {
+            throw new PrestaShopException('No shop context');
+        }
+
+        $shopIdGroup = (int) $this->context->shop->id_shop_group;
+
         $query = new \DbQuery();
 
         $query->from('product', 'p')
-            ->innerJoin('product_shop', 'ps', 'ps.id_product = p.id_product AND ps.id_shop = ' . (int) $shop->id)
+            ->innerJoin('product_shop', 'ps', 'ps.id_product = p.id_product AND ps.id_shop = ' . $this->shopId)
             ->innerJoin('product_lang', 'pl', 'pl.id_product = ps.id_product AND pl.id_shop = ps.id_shop AND pl.id_lang = ' . (int) $langId)
             ->leftJoin('product_attribute_shop', 'pas', 'pas.id_product = p.id_product AND pas.id_shop = ps.id_shop')
             ->leftJoin('product_attribute', 'pa', 'pas.id_product_attribute = pa.id_product_attribute')
             ->leftJoin('category_lang', 'cl', 'ps.id_category_default = cl.id_category AND ps.id_shop = cl.id_shop AND cl.id_lang = ' . (int) $langId)
             ->leftJoin('manufacturer', 'm', 'p.id_manufacturer = m.id_manufacturer');
 
-        if ($shop->getGroup()->share_stock) {
+        if ($this->context->shop->getGroup()->share_stock) {
             $query->leftJoin('stock_available', 'sa', 'sa.id_product = p.id_product AND
-             sa.id_product_attribute = IFNULL(pas.id_product_attribute, 0) AND sa.id_shop_group = ' . (int) $shop->id_shop_group);
+             sa.id_product_attribute = IFNULL(pas.id_product_attribute, 0) AND sa.id_shop_group = ' . $shopIdGroup);
         } else {
             $query->leftJoin('stock_available', 'sa', 'sa.id_product = p.id_product AND
              sa.id_product_attribute = IFNULL(pas.id_product_attribute, 0) AND sa.id_shop = ps.id_shop');
@@ -65,7 +83,7 @@ class ProductRepository
      */
     public function getProducts($offset, $limit, $langId)
     {
-        $query = $this->getBaseQuery($this->context->shop, $langId);
+        $query = $this->getBaseQuery($langId);
 
         $this->addSelectParameters($query);
 
@@ -116,7 +134,7 @@ class ProductRepository
             ->leftJoin('attribute', 'a', 'a.id_attribute = pac.id_attribute')
             ->leftJoin('attribute_group_lang', 'agl', 'agl.id_attribute_group = a.id_attribute_group AND agl.id_lang = ' . (int) $langId)
             ->leftJoin('attribute_lang', 'al', 'al.id_attribute = pac.id_attribute AND al.id_lang = agl.id_lang')
-            ->where('pas.id_product_attribute IN (' . implode(',', array_map('intval', $attributeIds)) . ') AND pas.id_shop = ' . (int) $this->context->shop->id);
+            ->where('pas.id_product_attribute IN (' . implode(',', array_map('intval', $attributeIds)) . ') AND pas.id_shop = ' . $this->shopId);
 
         $attributes = $this->db->executeS($query);
 
@@ -187,7 +205,7 @@ class ProductRepository
 
         $query->select('imgs.id_product, imgs.id_image, IFNULL(imgs.cover, 0) as cover')
             ->from('image_shop', 'imgs')
-            ->where('imgs.id_shop = ' . (int) $this->context->shop->id . ' AND imgs.id_product IN (' . implode(',', array_map('intval', $productIds)) . ')');
+            ->where('imgs.id_shop = ' . $this->shopId . ' AND imgs.id_product IN (' . implode(',', array_map('intval', $productIds)) . ')');
 
         $result = $this->db->executeS($query);
 
@@ -221,7 +239,7 @@ class ProductRepository
      * @param int $productId
      * @param int $attributeId
      *
-     * @return float
+     * @return float|null
      */
     public function getPriceTaxExcluded($productId, $attributeId)
     {
@@ -232,7 +250,7 @@ class ProductRepository
      * @param int $productId
      * @param int $attributeId
      *
-     * @return float
+     * @return float|null
      */
     public function getPriceTaxIncluded($productId, $attributeId)
     {
@@ -243,7 +261,7 @@ class ProductRepository
      * @param int $productId
      * @param int $attributeId
      *
-     * @return float
+     * @return float|null
      */
     public function getSalePriceTaxExcluded($productId, $attributeId)
     {
@@ -254,7 +272,7 @@ class ProductRepository
      * @param int $productId
      * @param int $attributeId
      *
-     * @return float
+     * @return float|null
      */
     public function getSalePriceTaxIncluded($productId, $attributeId)
     {
@@ -272,7 +290,7 @@ class ProductRepository
      */
     public function getProductsIncremental($limit, $langId, $productIds)
     {
-        $query = $this->getBaseQuery($this->context->shop, $langId);
+        $query = $this->getBaseQuery($langId);
 
         $this->addSelectParameters($query);
 
@@ -305,11 +323,10 @@ class ProductRepository
             $query->select('p.mpn');
         }
 
-        $query->select('p.width, p.height, p.depth, p.additional_shipping_cost');
+        $query->select('p.width, p.height, p.depth, p.additional_delivery_times, p.additional_shipping_cost');
+        $query->select('pl.delivery_in_stock, pl.delivery_out_stock');
 
         if (version_compare(_PS_VERSION_, '1.7', '>=')) {
-            $query->select('p.additional_delivery_times');
-            $query->select('pl.delivery_in_stock, pl.delivery_out_stock');
             $query->select('IFNULL(NULLIF(pa.isbn, ""), p.isbn) as isbn');
         }
     }

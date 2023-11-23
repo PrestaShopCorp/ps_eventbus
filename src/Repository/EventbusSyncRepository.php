@@ -3,6 +3,7 @@
 namespace PrestaShop\Module\PsEventbus\Repository;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShopException;
 
 class EventbusSyncRepository
 {
@@ -18,10 +19,21 @@ class EventbusSyncRepository
      */
     private $context;
 
+    /**
+     * @var int
+     */
+    private $shopId;
+
     public function __construct(\Db $db, \Context $context)
     {
         $this->db = $db;
         $this->context = $context;
+
+        if (!$this->context->shop) {
+            throw new PrestaShopException('No shop context');
+        }
+
+        $this->shopId = (int) $this->context->shop->id;
     }
 
     /**
@@ -39,7 +51,7 @@ class EventbusSyncRepository
         $result = $this->db->insert(
             self::TYPE_SYNC_TABLE_NAME,
             [
-                'id_shop' => (int) $this->context->shop->id,
+                'id_shop' => $this->shopId,
                 'type' => pSQL((string) $type),
                 'offset' => (int) $offset,
                 'last_sync_date' => pSQL((string) $lastSyncDate),
@@ -101,7 +113,7 @@ class EventbusSyncRepository
             ->from(self::TYPE_SYNC_TABLE_NAME)
             ->where('type = "' . pSQL($type) . '"')
             ->where('lang_iso = "' . pSQL((string) $langIso) . '"')
-            ->where('id_shop = ' . (int) $this->context->shop->id);
+            ->where('id_shop = ' . $this->shopId);
 
         return $this->db->getRow($query);
     }
@@ -126,7 +138,7 @@ class EventbusSyncRepository
             ],
             'type = "' . pSQL($type) . '"
             AND lang_iso = "' . pSQL((string) $langIso) . '"
-            AND id_shop = ' . (int) $this->context->shop->id
+            AND id_shop = ' . $this->shopId
         );
     }
 }

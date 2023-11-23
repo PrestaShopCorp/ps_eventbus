@@ -8,6 +8,7 @@ use PrestaShop\Module\PsEventbus\Repository\BundleRepository;
 use PrestaShop\Module\PsEventbus\Repository\CategoryRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\ProductRepository;
+use PrestaShopException;
 
 class ProductDecorator
 {
@@ -36,6 +37,11 @@ class ProductDecorator
      */
     private $bundleRepository;
 
+    /**
+     * @var int
+     */
+    private $shopId;
+
     public function __construct(
         \Context $context,
         LanguageRepository $languageRepository,
@@ -50,6 +56,12 @@ class ProductDecorator
         $this->categoryRepository = $categoryRepository;
         $this->arrayFormatter = $arrayFormatter;
         $this->bundleRepository = $bundleRepository;
+
+        if (!$this->context->shop) {
+            throw new PrestaShopException('No shop context');
+        }
+
+        $this->shopId = (int) $this->context->shop->id;
     }
 
     /**
@@ -104,13 +116,17 @@ class ProductDecorator
     private function addLink(array &$product)
     {
         try {
+            if (!$this->context->link) {
+                throw new PrestaShopException('No link context');
+            }
+
             $product['link'] = $this->context->link->getProductLink(
                 $product,
                 null,
                 null,
                 null,
                 $this->languageRepository->getLanguageIdByIsoCode($product['iso_code']),
-                $this->context->shop->id,
+                $this->shopId,
                 $product['id_attribute']
             );
         } catch (\PrestaShopException $e) {
@@ -175,12 +191,10 @@ class ProductDecorator
      */
     private function addCategoryTree(array &$product)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
         $categoryPaths = $this->categoryRepository->getCategoryPaths(
             $product['id_category_default'],
             $this->languageRepository->getLanguageIdByIsoCode($product['iso_code']),
-            $shopId
+            $this->shopId
         );
 
         $product['category_path'] = $categoryPaths['category_path'];
@@ -340,15 +354,21 @@ class ProductDecorator
 
             $productImageIds = array_diff($productImageIds, [$coverImageId]);
 
+            if ($this->context->link === null) {
+                throw new PrestaShopException('No link context');
+            }
+
+            $link = $this->context->link;
+
             $product['images'] = $this->arrayFormatter->arrayToString(
-                array_map(function ($imageId) use ($product) {
-                    return $this->context->link->getImageLink($product['link_rewrite'], (string) $imageId);
+                array_map(function ($imageId) use ($product, $link) {
+                    return $link->getImageLink($product['link_rewrite'], (string) $imageId);
                 }, $productImageIds)
             );
 
             $product['cover'] = $coverImageId == '0' ?
                 '' :
-                $this->context->link->getImageLink($product['link_rewrite'], (string) $coverImageId);
+                $link->getImageLink($product['link_rewrite'], (string) $coverImageId);
         }
     }
 }
