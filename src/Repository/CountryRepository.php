@@ -30,11 +30,11 @@ class CountryRepository
      */
     private function getBaseQuery()
     {
-        if ($this->context->shop === null) {
+        if ($this->context->shop == null) {
             throw new \PrestaShopException('No shop context');
         }
 
-        if (!$this->context->language) {
+        if ($this->context->language == null) {
             throw new \PrestaShopException('No language context');
         }
 

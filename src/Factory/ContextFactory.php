@@ -19,7 +19,7 @@ class ContextFactory
     {
         $language = \Context::getContext()->language;
 
-        if ($language === null) {
+        if ($language == null) {
             throw new \PrestaShopException('Context is null');
         }
 
@@ -41,7 +41,7 @@ class ContextFactory
     {
         $smarty = \Context::getContext()->smarty;
 
-        if ($smarty === null) {
+        if ($smarty == null) {
             throw new \PrestaShopException('Context is null');
         }
 
@@ -55,7 +55,7 @@ class ContextFactory
     {
         $shop = \Context::getContext()->shop;
 
-        if ($shop === null) {
+        if ($shop == null) {
             throw new \PrestaShopException('Context is null');
         }
 
@@ -69,7 +69,7 @@ class ContextFactory
     {
         $controller = \Context::getContext()->controller;
 
-        if ($controller === null) {
+        if ($controller == null) {
             throw new \PrestaShopException('Context is null');
         }
 
@@ -87,7 +87,7 @@ class ContextFactory
     {
         $cookie = \Context::getContext()->cookie;
 
-        if ($cookie === null) {
+        if ($cookie == null) {
             throw new \PrestaShopException('Context is null');
         }
 
@@ -101,7 +101,7 @@ class ContextFactory
     {
         $link = \Context::getContext()->link;
 
-        if ($link === null) {
+        if ($link == null) {
             throw new \PrestaShopException('Context is null');
         }
 

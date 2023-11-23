@@ -115,7 +115,7 @@ class ProductDecorator
     private function addLink(array &$product)
     {
         try {
-            if (!$this->context->link) {
+            if ($this->context->link === null) {
                 throw new \PrestaShopException('No link context');
             }
 
