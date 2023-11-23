@@ -63,7 +63,7 @@ class ContextFactory
     }
 
     /**
-     * @return \AdminController|\FrontController
+     * @return \AdminController|\FrontController|\PrestaShopBundle\Bridge\AdminController\LegacyControllerBridgeInterface|null
      */
     public static function getController()
     {
@@ -71,14 +71,6 @@ class ContextFactory
 
         if ($controller == null) {
             throw new \PrestaShopException('Context is null');
-        }
-
-        if (($controller instanceof \AdminController) == null) {
-            throw new \PrestaShopException('Controller is not an instance of AdminController');
-        }
-
-        if (($controller instanceof \FrontController) == null) {
-            throw new \PrestaShopException('Controller is not an instance of FrontController');
         }
 
         return $controller;
