@@ -69,7 +69,9 @@ Dev requirements:
 
 - PHP 8.2.12
 - PHP Extensions
-  - DOM
-  - SimpleXML
+  - [DOM](https://www.php.net/manual/en/book.dom.php)
+  - [SimpleXML](https://www.php.net/manual/en/book.simplexml.php)
+  - [gd](https://www.php.net/manual/en/book.image.php)
+  - [zip](https://www.php.net/manual/en/book.zip.php)
 
 Or an up to dat [Docker engine](https://docs.docker.com/engine/install).
