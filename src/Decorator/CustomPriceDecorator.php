@@ -113,7 +113,7 @@ class CustomPriceDecorator
 
     private function setShopId(array &$specificPrice): void
     {
-        if (!$this->context->shop) {
+        if ($this->context->shop === null) {
             throw new \PrestaShopException('No shop context');
         }
 

@@ -29,7 +29,7 @@ class ProductRepository
             }
         }
 
-        if (!$this->context->shop) {
+        if ($this->context->shop === null) {
             throw new \PrestaShopException('No shop context');
         }
 
@@ -43,7 +43,7 @@ class ProductRepository
      */
     private function getBaseQuery($langId)
     {
-        if (!$this->context->shop) {
+        if ($this->context->shop === null) {
             throw new \PrestaShopException('No shop context');
         }
 

@@ -28,7 +28,7 @@ class ThemeRepository
     public function getThemes()
     {
         if (version_compare(_PS_VERSION_, '1.7', '>')) {
-            if (!$this->context->shop) {
+            if ($this->context->shop === null) {
                 throw new \PrestaShopException('No shop context');
             }
 

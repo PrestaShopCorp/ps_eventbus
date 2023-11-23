@@ -56,7 +56,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         $this->orderHistoryRepository = $orderHistoryRepository;
         $this->orderCartRuleRepository = $orderCartRuleRepository;
 
-        if (!$this->context->shop) {
+        if ($this->context->shop === null) {
             throw new \PrestaShopException('No shop context');
         }
 

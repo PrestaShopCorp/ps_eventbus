@@ -37,7 +37,7 @@ class DeletedObjectsService
      */
     public function handleDeletedObjectsSync($jobId, $scriptStartTime)
     {
-        if (!$this->context->shop) {
+        if ($this->context->shop === null) {
             throw new \PrestaShopException('No shop context');
         }
 

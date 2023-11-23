@@ -166,7 +166,7 @@ class Ps_eventbus extends Module
             $this->getLocalPath()
         );
 
-        if (!$this->context->shop) {
+        if ($this->context->shop === null) {
             throw new PrestaShopException('No shop context');
         }
 

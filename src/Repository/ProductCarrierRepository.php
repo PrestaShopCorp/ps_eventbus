@@ -23,7 +23,7 @@ class ProductCarrierRepository
         $this->db = $db;
         $this->context = $context;
 
-        if (!$this->context->shop) {
+        if ($this->context->shop === null) {
             throw new \PrestaShopException('No shop context');
         }
 

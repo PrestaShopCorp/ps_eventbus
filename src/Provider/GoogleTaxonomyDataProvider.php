@@ -26,7 +26,7 @@ class GoogleTaxonomyDataProvider implements PaginatedApiDataProviderInterface
         $this->googleTaxonomyRepository = $googleTaxonomyRepository;
         $this->context = $context;
 
-        if (!$this->context->shop) {
+        if ($this->context->shop === null) {
             throw new \PrestaShopException('No shop context');
         }
 

@@ -32,7 +32,7 @@ class IncrementalSyncRepository
         $this->context = $context;
         $this->errorHandler = $errorHandler;
 
-        if (!$this->context->shop) {
+        if ($this->context->shop === null) {
             throw new \PrestaShopException('No shop context');
         }
 
