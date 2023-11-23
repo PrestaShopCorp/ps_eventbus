@@ -6,11 +6,11 @@
 
 ## Compatibility matrix
 
-| PrestaShop platform | PHP     | PS EventBus |
-| ------------------- | ------- | ----------- |
-| 8.0                 | 7.1+    | From 2.x    |
-| 1.7.0-1.7.8         | 7.1+    | From 2.x    |
-| 1.6.1.24            | 7.1     | From 3.x    |
+| PrestaShop platform | PHP  | PS EventBus |
+| ------------------- | ---- | ----------- |
+| 8.0                 | 7.1+ | From 2.x    |
+| 1.7.0-1.7.8         | 7.1+ | From 2.x    |
+| 1.6.1.24            | 7.1  | From 3.x    |
 
 PS Accounts compatibility matrix [can be viewed here](https://github.com/PrestaShopCorp/ps_accounts#compatibility-matrix).
 
@@ -62,3 +62,14 @@ curl -s -L "$BASE_URL/index.php?fc=module&module=ps_eventbus&controller=apiHealt
   "httpCode": 200
 }
 ```
+
+## Contribute
+
+Dev requirements:
+
+- PHP 8.2.12
+- PHP Extensions
+  - DOM
+  - SimpleXML
+
+Or an up to dat [Docker engine](https://docs.docker.com/engine/install).
