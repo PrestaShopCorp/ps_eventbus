@@ -7,7 +7,7 @@ BUILDPLATFORM ?= linux/amd64
 TESTING_DOCKER_IMAGE ?= ps-eventbus-testing:latest
 TESTING_DOCKER_BASE_IMAGE ?= phpdockerio/php80-cli
 PHP_VERSION ?= 8.2
-PS_VERSION ?= 1.7.8.7
+PS_VERSION ?= 8.1.1
 PS_ROOT_DIR ?= $(shell pwd)/prestashop/prestashop-${PS_VERSION}
 
 # target: default                                - Calling build by default
