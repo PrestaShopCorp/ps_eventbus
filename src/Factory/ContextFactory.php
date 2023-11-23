@@ -73,8 +73,12 @@ class ContextFactory
             throw new \PrestaShopException('Context is null');
         }
 
-        if (!($controller instanceof \AdminController) && !($controller instanceof \FrontController)) {
-            throw new \PrestaShopException('Controller is not an instance of AdminController or FrontController');
+        if (($controller instanceof \AdminController) == null) {
+            throw new \PrestaShopException('Controller is not an instance of AdminController');
+        }
+
+        if (($controller instanceof \FrontController) == null) {
+            throw new \PrestaShopException('Controller is not an instance of FrontController');
         }
 
         return $controller;

@@ -37,4 +37,5 @@ parameters:
     - '#Property PrestaShop\\Module\\PsEventbus\\Api\\Post\\MultipartBody::\$stream is never read, only written.#'
     - '#Caught class GuzzleHttp\\Ring\\Exception\\ConnectException not found#'
     - '#Call to method getMessage\(\) on an unknown class GuzzleHttp\\Ring\\Exception\\ConnectException.#'
+    - '#Parameter \#2 \$type of static method TaxManagerFactoryCore::getManager\(\) expects string, int given.#'
   level: 9

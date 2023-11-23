@@ -116,7 +116,7 @@ class SpecificPriceService
             $usetax = false;
         }
 
-        if (!$context->shop) {
+        if ($context->shop == null) {
             throw new \PrestaShopException('No shop context');
         }
 
