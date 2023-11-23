@@ -74,4 +74,4 @@ Dev requirements:
   - [gd](https://www.php.net/manual/en/book.image.php)
   - [zip](https://www.php.net/manual/en/book.zip.php)
 
-Or an up to dat [Docker engine](https://docs.docker.com/engine/install).
+Or an up to date [Docker engine](https://docs.docker.com/engine/install).
