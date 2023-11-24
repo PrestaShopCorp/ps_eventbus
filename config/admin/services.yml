@@ -2,3 +2,11 @@ imports:
   - { resource: ../common.yml }
   - { resource: ../front/repository.yml }
   - { resource: ../front/services.yml }
+  - { resource: ../helpers.yml }
+
+services:
+  ps_eventbus.service.presenter:
+    class: 'PrestaShop\Module\Ps_eventbus\Service\PresenterService'
+    arguments:
+      - "@ps_eventbus.helper.module"
+    public: true

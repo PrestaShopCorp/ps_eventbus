@@ -1,0 +1,6 @@
+services:
+  ps_eventbus.helper.module:
+    class: 'PrestaShop\Module\Ps_eventbus\Helper\ModuleHelper'
+    arguments:
+      - "@ps_eventbus"
+    public: true

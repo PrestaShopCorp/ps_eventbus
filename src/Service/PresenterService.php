@@ -3,7 +3,10 @@
 namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
+use PrestaShop\Module\Ps_eventbus\Helper\ModuleHelper;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
+use Ps_eventbus;
+use Symfony\Component\HttpFoundation\Response;
 
 class PresenterService
 {
@@ -12,8 +15,15 @@ class PresenterService
      */
     private $psAccountsService;
 
-    public function __construct()
+    /**
+     * @var ModuleHelper
+     */
+    private $moduleHelper;
+
+    public function __construct(ModuleHelper $moduleHelper)
     {
+        $this->moduleHelper = $moduleHelper;
+
         $moduleManager = ModuleManagerBuilder::getInstance();
         if (!$moduleManager) {
             return;
@@ -108,6 +118,7 @@ class PresenterService
                     'lang' => $language->iso_code,
                 ],
                 'psEventbusModule' => $this->convertObjectToArray(\Module::getInstanceByName('ps_eventbus')),
+                'updatePsEvenbusUrl' => $this->moduleHelper->getUpdateLink('ps_eventbus'),
             ];
         }
     }
