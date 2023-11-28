@@ -41,7 +41,7 @@ class ModuleHelper
 
     /**
      * Check if Ps_Mbo is installed
-     * 
+     *
      * @return bool
      */
     private function checkIfPsMBOIsInstalled()
@@ -53,13 +53,14 @@ class ModuleHelper
 
     /**
      * Install Ps_Mbo
-     * 
+     *
      * @return bool
      */
     private function installPsMBO()
     {
         try {
             $mboInstaller = new MBOInstaller(_PS_VERSION_);
+
             return $mboInstaller->installModule();
         } catch (\Exception $e) {
             throw new \Exception('Error while installing MBO module');
