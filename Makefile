@@ -4,10 +4,9 @@ VERSION ?= $(shell git describe --tags 2> /dev/null || echo "0.0.0")
 SEM_VERSION ?= $(shell echo ${VERSION} | sed 's/^v//')
 PACKAGE ?= ps_eventbus-${VERSION}
 BUILDPLATFORM ?= linux/amd64
-TESTING_DOCKER_IMAGE ?= ps-eventbus-testing:latest
-TESTING_DOCKER_BASE_IMAGE ?= phpdockerio/php80-cli
-PHP_VERSION ?= 8.2
-PS_VERSION ?= 8.1.1
+PHP_VERSION ?= 8.1
+PS_VERSION ?= 8.1.2
+TESTING_IMAGE ?= prestashop/prestashop-flashlight:${PS_VERSION}-${PHP_VERSION}
 PS_ROOT_DIR ?= $(shell pwd)/prestashop/prestashop-${PS_VERSION}
 
 # target: default                                - Calling build by default
@@ -53,6 +52,14 @@ mv ${TMP_DIR}/$2 ./dist;
 rm -rf ${TMP_DIR:-/dev/null};
 endef
 
+define make_in_docker
+docker run \
+--env _PS_ROOT_DIR_=/var/www/html \
+--workdir /var/www/html/modules/ps_eventbus \
+--volume $(shell pwd):/var/www/html/modules/ps_eventbus:rw \
+--entrypoint make ${TESTING_IMAGE} "$1"
+endef
+
 # target: zip-e2e                                - Bundle a local E2E integrable zip
 zip-e2e: vendor dist .config.e2e.yml
 	@$(call zip_it,.config.e2e.yml,${PACKAGE}_e2e.zip)
@@ -84,15 +91,12 @@ tools-vendor: composer.phar
 	./composer.phar install --working-dir tools -o;
 
 tools/vendor/bin/php-cs-fixer: composer.phar
-	./composer.phar install --ignore-platform-reqs
 	./composer.phar install --working-dir tools --ignore-platform-reqs
 
 tools/vendor/bin/phpunit: composer.phar
-	./composer.phar install --ignore-platform-reqs
 	./composer.phar install --working-dir tools --ignore-platform-reqs
 
 tools/vendor/bin/phpstan: composer.phar
-	./composer.phar install --ignore-platform-reqs
 	./composer.phar install --working-dir tools --ignore-platform-reqs
 
 prestashop:
@@ -143,6 +147,9 @@ phpstan: tools/vendor/bin/phpstan prestashop/prestashop-${PS_VERSION}
 	sed -i -e 's|%currentWorkingDirectory%/vendor|%currentWorkingDirectory%/tools/vendor|g' ./tools/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
 	_PS_ROOT_DIR_=${PS_ROOT_DIR} tools/vendor/bin/phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
 
+phpstan-simple:
+	phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
+
 # target: phpstan-baseline                       - Generate a phpstan baseline to ignore all errors
 phpstan-baseline: prestashop/prestashop-${PS_VERSION} tools/vendor/bin/phpstan
 	sed -i -e 's|%currentWorkingDirectory%/vendor|%currentWorkingDirectory%/tools/vendor|g' ./tools/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
@@ -153,50 +160,27 @@ docker-test: docker-lint docker-phpstan docker-phpunit
 
 # target: docker-lint                            - Lint the code in docker
 docker-lint:
-	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
-	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} lint;
+	@$(call make_in_docker,lint)
 
 # target: docker-lint-fix                        - Lint and fix the code in docker
 docker-lint-fix:
-	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
-	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} lint-fix;
+	@$(call make_in_docker,lint-fix)
 
 # target: docker-php-lint                        - Lint the code with php in docker
 docker-php-lint:
-	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
-	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} php-lint;
+	@$(call make_in_docker,php-lint)
 
 # target: docker-phpunit                         - Run phpunit in docker
-docker-phpunit: prestashop/prestashop-${PS_VERSION}
-	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
-	docker run --rm -e _PS_ROOT_DIR_=/src/prestashop/prestashop-${PS_VERSION} -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpunit;
+docker-phpunit:
+	@$(call make_in_docker,phpunit)
 
 # target: docker-phpunit-coverage                - Run phpunit in docker
-docker-phpunit-coverage: prestashop/prestashop-${PS_VERSION}
-	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
-	docker run --rm -e _PS_ROOT_DIR_=/src/prestashop/prestashop-${PS_VERSION} -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpunit-coverage;
+docker-phpunit-coverage:
+	@$(call make_in_docker,phpunit-coverage)
 
 # target: docker-phpstan                         - Run phpstan in docker
-docker-phpstan: prestashop/prestashop-${PS_VERSION}
-	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
-	docker run --rm -e _PS_ROOT_DIR_=/src/prestashop/prestashop-${PS_VERSION} -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpstan;
-
-bps177: build-ps-177
-ata177: all-tests-actions-177
-rda177: run-docker-actions-177
-build-ps-177:
-	docker exec -i prestashop-177 sh -c "rm -rf /var/www/html/install"
-	docker exec -i prestashop-177 sh -c "mv /var/www/html/admin /var/www/html/admin1"
-	mysql -h 127.0.0.1 -P 9001 --protocol=tcp -u root -pprestashop prestashop < $(shell pwd)/tests/System/Seed/Database/177.sql
-	docker exec -i prestashop-177 sh -c "cd /var/www/html && php  bin/console prestashop:module install eventBus"
-
-run-docker-actions-177:
-	docker-compose up -d --build --force-recreate prestashop-177
-
-all-tests-actions-177:
-	make rda177
-	make bps177
-	docker exec -i prestashop-177 sh -c "cd /var/www/html/modules/ps_eventbus && php tools/vendor/bin/phpunit -c tests/phpunit.xml"
+docker-phpstan:
+	@$(call make_in_docker,phpstan-simple)
 
 # Fixme: add "allure-framework/allure-phpunit" in composer.json to solve this.
 # Currently failing to resolve devDeps:
