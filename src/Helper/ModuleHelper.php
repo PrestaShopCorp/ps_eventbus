@@ -39,6 +39,11 @@ class ModuleHelper
             ]);
     }
 
+    /**
+     * Check if Ps_Mbo is installed
+     * 
+     * @return bool
+     */
     private function checkIfPsMBOIsInstalled()
     {
         $mboStatus = (new MBOPresenter())->present();
@@ -46,11 +51,16 @@ class ModuleHelper
         return $mboStatus['isInstalled'] == false && $mboStatus['isEnabled'];
     }
 
+    /**
+     * Install Ps_Mbo
+     * 
+     * @return bool
+     */
     private function installPsMBO()
     {
         try {
             $mboInstaller = new MBOInstaller(_PS_VERSION_);
-            $mboInstaller->installModule();
+            return $mboInstaller->installModule();
         } catch (\Exception $e) {
             throw new \Exception('Error while installing MBO module');
         }
