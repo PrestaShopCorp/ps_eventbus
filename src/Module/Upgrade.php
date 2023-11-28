@@ -8,18 +8,18 @@ use Ps_eventbus;
 class Upgrade
 {
     /**
-     * @var Ps_eventbus
+     * @var \Ps_eventbus
      */
     private $module;
 
     /**
      * Install constructor.
      *
-     * @param Ps_eventbus $module
+     * @param \Ps_eventbus $module
      *
      * @return void
      */
-    public function __construct(Ps_eventbus $module)
+    public function __construct(\Ps_eventbus $module)
     {
         $this->module = $module;
     }

@@ -2,17 +2,16 @@
 
 namespace PrestaShop\Module\Ps_eventbus\Helper;
 
-use PrestaShopBundle\Service\Routing\Router;
-use Ps_eventbus;
-use Prestashop\ModuleLibMboInstaller\Presenter as MBOPresenter;
 use Prestashop\ModuleLibMboInstaller\Installer as MBOInstaller;
+use Prestashop\ModuleLibMboInstaller\Presenter as MBOPresenter;
+use PrestaShopBundle\Service\Routing\Router;
 
 class ModuleHelper
 {
-    /** @var Ps_eventbus */
+    /** @var \Ps_eventbus */
     private $module;
 
-    public function __construct(Ps_eventbus $module)
+    public function __construct(\Ps_eventbus $module)
     {
         $this->module = $module;
     }
@@ -42,7 +41,7 @@ class ModuleHelper
 
     private function checkIfPsMBOIsInstalled()
     {
-        $mboStatus = (new MBOPresenter)->present();
+        $mboStatus = (new MBOPresenter())->present();
 
         return $mboStatus['isInstalled'] == false && $mboStatus['isEnabled'];
     }

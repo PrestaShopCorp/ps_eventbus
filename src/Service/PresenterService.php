@@ -5,8 +5,6 @@ namespace PrestaShop\Module\PsEventbus\Service;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\Ps_eventbus\Helper\ModuleHelper;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
-use Ps_eventbus;
-use Symfony\Component\HttpFoundation\Response;
 
 class PresenterService
 {
