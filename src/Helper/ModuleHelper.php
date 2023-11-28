@@ -4,6 +4,8 @@ namespace PrestaShop\Module\Ps_eventbus\Helper;
 
 use PrestaShopBundle\Service\Routing\Router;
 use Ps_eventbus;
+use Prestashop\ModuleLibMboInstaller\Presenter as MBOPresenter;
+use Prestashop\ModuleLibMboInstaller\Installer as MBOInstaller;
 
 class ModuleHelper
 {
@@ -24,6 +26,10 @@ class ModuleHelper
      */
     public function getUpdateLink(string $moduleName)
     {
+        if ($this->checkIfPsMBOIsInstalled()) {
+            $this->installPsMBO();
+        }
+
         /** @var Router $router * */
         $router = $this->module->getService('router');
 
@@ -32,5 +38,22 @@ class ModuleHelper
                 'action' => 'upgrade',
                 'module_name' => $moduleName,
             ]);
+    }
+
+    private function checkIfPsMBOIsInstalled()
+    {
+        $mboStatus = (new MBOPresenter)->present();
+
+        return $mboStatus['isInstalled'] == false && $mboStatus['isEnabled'];
+    }
+
+    private function installPsMBO()
+    {
+        try {
+            $mboInstaller = new MBOInstaller(_PS_VERSION_);
+            $mboInstaller->installModule();
+        } catch (\Exception $e) {
+            throw new \Exception('Error while installing MBO module');
+        }
     }
 }
