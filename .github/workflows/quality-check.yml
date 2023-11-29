@@ -19,7 +19,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: PHP syntax checker ${{ matrix.php_version }}
-        run: PHP_VERSION=${{ matrix.php_version }} make docker-php-lint
+        run: make docker-php-lint
+        env:
+          PHP_VERSION: ${{ matrix.php_version }}
+          TESTING_IMAGE: prestashop/prestashop-flashlight:php-${{ env.PHP_VERSION }}
 
   composer-validate:
     name: Composer validate
