@@ -1,16 +1,9 @@
 services:
   prestashop:
-    # image: prestashop/prestashop:${DOCKER_VERSION_PRESTASHOP:?See e2e-env/.env.dist}
-    image: prestashop/flashlight:8.1.0-8.1
+    image: ${DOCKER_IMAGE_PRESTASHOP:?See e2e-env/.env.dist}
     env_file:
       - ./prestashop.env
       - ./.env
-    healthcheck:
-      test: ["CMD-SHELL", "curl -Isf http://localhost:80/robots.txt || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 10
-      start_period: 5s
     depends_on:
       mysql:
         condition: service_healthy
@@ -18,7 +11,6 @@ services:
       - ./ps_scripts:/ps_scripts:ro
       - ./Shop.php:/var/www/html/classes/shop/Shop.php:ro
       - ../..:/var/www/html/modules/ps_eventbus:rw
-      # - incoming-modules:/ps-modules:rw
     environment:
       - PS_DOMAIN=localhost:8000
       - DEBUG_MODE=true
@@ -52,17 +44,6 @@ services:
     networks:
       - prestashop
 
-  # ps_eventbus_config:
-  #   image: alpine:latest
-  #   volumes:
-  #     - ../..:/var/www/html/modules/ps_eventbus:rw
-  #     - ./parameters.yml:/parameters.yml
-  #     # TODO CHeck this
-  #     - ./ps-accounts-installer.mock.php:/var/www/html/modules/ps_eventbus/src/:rw
-  #     - ./common.yml.mock.phpo:/var/www/html/modules/ps_eventbus/config/common.yml
-  #     - ./switch-on-mock.sh
-  #   command: ./switch-on-mock.sh
-
   phpmyadmin:
     image: phpmyadmin:latest
     env_file:
@@ -83,10 +64,6 @@ services:
     networks:
       - prestashop
     command: test
-
-volumes:
-  incoming-modules:
-    driver: local
 
 networks:
   prestashop:
