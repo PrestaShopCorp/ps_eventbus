@@ -8,6 +8,7 @@ PHP_VERSION ?= 8.1
 PS_VERSION ?= 8.1.2
 TESTING_IMAGE ?= prestashop/prestashop-flashlight:${PS_VERSION}-${PHP_VERSION}
 PS_ROOT_DIR ?= $(shell pwd)/prestashop/prestashop-${PS_VERSION}
+export PATH := ./vendor/bin:./tools/vendor/bin:$(PATH)
 
 # target: default                                - Calling build by default
 default: build
@@ -52,12 +53,12 @@ mv ${TMP_DIR}/$2 ./dist;
 rm -rf ${TMP_DIR:-/dev/null};
 endef
 
-define make_in_docker
+define in_docker
 docker run \
 --env _PS_ROOT_DIR_=/var/www/html \
 --workdir /var/www/html/modules/ps_eventbus \
 --volume $(shell pwd):/var/www/html/modules/ps_eventbus:rw \
---entrypoint make ${TESTING_IMAGE} "$1"
+--entrypoint "$1" ${TESTING_IMAGE} "$2"
 endef
 
 # target: zip-e2e                                - Bundle a local E2E integrable zip
@@ -90,15 +91,6 @@ vendor: composer.phar
 tools-vendor: composer.phar
 	./composer.phar install --working-dir tools -o;
 
-tools/vendor/bin/php-cs-fixer: composer.phar
-	./composer.phar install --working-dir tools --ignore-platform-reqs
-
-tools/vendor/bin/phpunit: composer.phar
-	./composer.phar install --working-dir tools --ignore-platform-reqs
-
-tools/vendor/bin/phpstan: composer.phar
-	./composer.phar install --working-dir tools --ignore-platform-reqs
-
 prestashop:
 	@mkdir -p ./prestashop
 
@@ -121,66 +113,53 @@ composer-validate: vendor
 translation-validate:
 	php tests/translation.test.php
 
-# target: lint                                   - Lint the code and expose errors
-lint: tools/vendor/bin/php-cs-fixer
-	@PHP_CS_FIXER_IGNORE_ENV=1 tools/vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no;
+# target: lint (or docker-lint)                  - Lint the code and expose errors
+lint:
+	@PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --dry-run --diff --using-cache=no;
+docker-lint:
+	@$(call in_docker,make,lint)
 
-# target: lint-fix                               - Lint the code and fix it
-lint-fix: tools/vendor/bin/php-cs-fixer
-	@PHP_CS_FIXER_IGNORE_ENV=1 tools/vendor/bin/php-cs-fixer fix --using-cache=no;
+# target: lint-fix (or docker-lint-fix)          - Lint the code and fix it
+lint-fix:
+	@PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --using-cache=no;
+docker-lint-fix:
+	@$(call in_docker,make,lint-fix)
 
-# target: php-lint                               - Use php linter to check the code
+# target: php-lint (or docker-php-lint)          - Lint the code with the php linter
 php-lint:
 	@git ls-files | grep -E '.*\.(php)' | xargs -n1 php -l -n | (! grep -v "No syntax errors" );
 	@echo "php $(shell php -r 'echo PHP_VERSION;') lint passed";
+docker-php-lint:
+	@$(call in_docker,make,php-lint)
 
-# target: phpunit                                - Run phpunit tests
-phpunit: tools/vendor/bin/phpunit
-	tools/vendor/bin/phpunit --configuration=./tests/phpunit.xml;
+# target: phpunit (or docker-phpunit)            - Run phpunit tests
+phpunit:
+	phpunit --configuration=./tests/phpunit.xml;
+docker-phpunit:
+	@$(call in_docker,make,phpunit)
 
-# target: phpunit-coverage                       - Run phpunit with coverage and allure
-phpunit-coverage: tools/vendor/bin/phpunit
-	php -dxdebug.mode=coverage tools/vendor/bin/phpunit --coverage-html ./coverage-reports/coverage-html --configuration=./tests/phpunit-coverage.xml;
+# target: phpunit-cov (or docker-phpunit-cov)    - Run phpunit with coverage and allure
+phpunit-cov:
+	php -dxdebug.mode=coverage phpunit --coverage-html ./coverage-reports/coverage-html --configuration=./tests/phpunit-cov.xml;
+docker-phpunit-cov:
+	@$(call in_docker,make,phpunit-cov)
 
-# target: phpstan                                - Run phpstan
-phpstan: tools/vendor/bin/phpstan prestashop/prestashop-${PS_VERSION}
+# target: phpstan (or docker-phpstan)            - Run phpstan
+phpstan: prestashop/prestashop-${PS_VERSION}
 	sed -i -e 's|%currentWorkingDirectory%/vendor|%currentWorkingDirectory%/tools/vendor|g' ./tools/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
-	_PS_ROOT_DIR_=${PS_ROOT_DIR} tools/vendor/bin/phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
-
+	_PS_ROOT_DIR_=${PS_ROOT_DIR} phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
+docker-phpstan:
+	@$(call in_docker,make,phpstan-simple)
 phpstan-simple:
 	phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
 
 # target: phpstan-baseline                       - Generate a phpstan baseline to ignore all errors
-phpstan-baseline: prestashop/prestashop-${PS_VERSION} tools/vendor/bin/phpstan
+phpstan-baseline: prestashop/prestashop-${PS_VERSION} phpstan
 	sed -i -e 's|%currentWorkingDirectory%/vendor|%currentWorkingDirectory%/tools/vendor|g' ./tools/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
-	_PS_ROOT_DIR_=${PS_ROOT_DIR} tools/vendor/bin/phpstan analyse --generate-baseline --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
+	_PS_ROOT_DIR_=${PS_ROOT_DIR} phpstan analyse --generate-baseline --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
 
 # target: docker-test                            - Static and unit testing in docker
 docker-test: docker-lint docker-phpstan docker-phpunit
-
-# target: docker-lint                            - Lint the code in docker
-docker-lint:
-	@$(call make_in_docker,lint)
-
-# target: docker-lint-fix                        - Lint and fix the code in docker
-docker-lint-fix:
-	@$(call make_in_docker,lint-fix)
-
-# target: docker-php-lint                        - Lint the code with php in docker
-docker-php-lint:
-	@$(call make_in_docker,php-lint)
-
-# target: docker-phpunit                         - Run phpunit in docker
-docker-phpunit:
-	@$(call make_in_docker,phpunit)
-
-# target: docker-phpunit-coverage                - Run phpunit in docker
-docker-phpunit-coverage:
-	@$(call make_in_docker,phpunit-coverage)
-
-# target: docker-phpstan                         - Run phpstan in docker
-docker-phpstan:
-	@$(call make_in_docker,phpstan-simple)
 
 # Fixme: add "allure-framework/allure-phpunit" in composer.json to solve this.
 # Currently failing to resolve devDeps:

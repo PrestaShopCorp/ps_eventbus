@@ -32,10 +32,10 @@ make lint              # linting the code with vendor/bin/php-cs-fixer
 make lint-fix          # linting and fixing the code with vendor/bin/php-cs-fixer
 make php-lint          # linting with php
 make phpunit           # unit testing with vendor/bin/phpunit
-make phpunit-coverage  # unit testing as above but with code coverage
+make phpunit-cov  # unit testing as above but with code coverage
 make phpstan           # linting the code with PrestaShop and vendor/bin/phpstan
 
-make docker-<stuff>    # same as above, but within a docker container
+make docker-<stuff>    # same as above, but in a docker container
 ```
 
 > Note: you will need [xdebug](https://xdebug.org/) if you want to generate the code-coverage of this project. You may install it with: `pecl install -f xdebug`.
