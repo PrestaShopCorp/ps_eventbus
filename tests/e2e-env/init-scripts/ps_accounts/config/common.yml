@@ -1,0 +1,16 @@
+services:
+  ps_accounts.module:
+    class: Ps_accounts
+    public: true
+    factory: ["Module", "getInstanceByName"]
+    arguments:
+      - "ps_accounts"
+
+  ps_accounts.context:
+    class: Context
+    public: true
+    factory: ["Context", "getContext"]
+
+  PrestaShop\Module\PsAccounts\Service\PsAccountsService:
+    class: PrestaShop\Module\PsAccounts\Service\PsAccountsService
+    public: true

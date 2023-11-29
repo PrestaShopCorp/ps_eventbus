@@ -1,0 +1,34 @@
+{
+  "name": "prestashopcorp/ps_accounts",
+  "description": "PS Accounts mock",
+  "type": "prestashop-module",
+  "authors": [
+    {
+      "name": "CloudSync",
+      "email": "cloudsync-support@prestashop.com",
+      "homepage": "https://prestashop.com",
+      "role": "Developer"
+    }
+  ],
+  "license": "AFL-3.0",
+  "config": {
+    "preferred-install": "dist",
+    "platform": {
+      "php": "7.1"
+    },
+    "optimize-autoloader": true,
+    "prepend-autoloader": false,
+    "platform-check": false
+  },
+  "autoload": {
+    "classmap": [
+      "ps_accounts.php"
+    ],
+    "psr-4": {
+      "PrestaShop\\Module\\PsEventbus\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=7.1"
+  }
+}

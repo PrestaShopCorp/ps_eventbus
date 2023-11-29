@@ -1,0 +1,5 @@
+imports:
+  - { resource: common.yml }
+
+parameters:
+  ps_accounts.are_you_a_mock: true
