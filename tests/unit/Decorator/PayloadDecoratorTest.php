@@ -2,7 +2,7 @@
 
 use PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator;
 use PrestaShop\Module\PsEventbus\Formatter\DateFormatter;
-use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
+use PHPUnit\Framework\TestCase;
 use Yandex\Allure\Adapter\Annotation\Features;
 use Yandex\Allure\Adapter\Annotation\Stories;
 use Yandex\Allure\Adapter\Annotation\Title;
@@ -12,13 +12,8 @@ use Yandex\Allure\Adapter\Annotation\Title;
  *
  * @Stories("payload decorator")
  */
-class PayloadDecoratorTest extends BaseTestCase
+class PayloadDecoratorTest extends TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
     /**
      * @Stories("payload  decorator")
      *

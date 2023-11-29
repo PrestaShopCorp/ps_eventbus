@@ -1,8 +1,18 @@
-<?xml version="1.0"?>
-<phpunit bootstrap="../vendor/autoload.php" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" beStrictAboutChangesToGlobalState="true" beStrictAboutOutputDuringTests="true" colors="true" executionOrder="random" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd" cacheDirectory=".phpunit.cache">
+<phpunit
+  bootstrap="bootstrap.php"
+  beStrictAboutChangesToGlobalState="true"
+  beStrictAboutOutputDuringTests="true"
+  cacheResult ="false"
+  colors="true"
+  executionOrder="random"
+  stopOnFailure="true">
+  <php>
+      <env name="KERNEL_CLASS" value="AppKernel" />
+      <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak"/>
+  </php>
   <testsuites>
-    <testsuite name="Ps eventbus Tests">
-      <directory>./unit</directory>
+    <testsuite name="Unit">
+      <directory>.</directory>
     </testsuite>
   </testsuites>
 </phpunit>
