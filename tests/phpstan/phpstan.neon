@@ -1,5 +1,5 @@
 includes:
-  - %currentWorkingDirectory%/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
+  - %currentWorkingDirectory%/tools/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
 
 parameters:
   paths:
@@ -34,5 +34,9 @@ parameters:
     - '#Cannot call method execute\(\) on mysqli_stmt\|PDOStatement\|false.#'
     - '#Parameter \#1 \$restriction of method DbQueryCore::where\(\) expects string, int\|string given.#'
     - '#Method PrestaShop\\Module\\PsEventbus\\Repository\\MerchantConsentRepository::getConsentByShopId\(\) should return array but returns array\|mysqli_result\|PDOStatement\|resource\|false\|null.#'
-
+    - '#Property PrestaShop\\Module\\PsEventbus\\Api\\Post\\MultipartBody::\$stream is never read, only written.#'
+    - '#Caught class GuzzleHttp\\Ring\\Exception\\ConnectException not found#'
+    - '#Call to method getMessage\(\) on an unknown class GuzzleHttp\\Ring\\Exception\\ConnectException.#'
+    - '#Parameter \#2 \$type of static method TaxManagerFactoryCore::getManager\(\) expects string, int given.#'
+    - '#Method PrestaShop\\Module\\PsEventbus\\Factory\\ContextFactory::getController\(\) has invalid return type PrestaShopBundle\\Bridge\\AdminController\\LegacyControllerBridgeInterface.#'
   level: 9

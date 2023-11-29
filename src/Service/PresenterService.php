@@ -10,7 +10,7 @@ class PresenterService
     /**
      * @var PsAccountsService|null
      */
-    private $psAccountsService = null;
+    private $psAccountsService;
 
     public function __construct()
     {
@@ -73,23 +73,6 @@ class PresenterService
     }
 
     /**
-     * @param array $consents
-     *
-     * @return array
-     */
-    private function enforceMandatoryConsents($consents)
-    {
-        $mandatories = ['info', 'modules', 'themes'];
-        foreach ($mandatories as $consent) {
-            if (!in_array($consent, $consents)) {
-                array_unshift($consents, $consent);
-            }
-        }
-
-        return $consents;
-    }
-
-    /**
      * @param \ModuleCore $module
      * @param array $requiredConsents
      * @param array $optionalConsents
@@ -98,10 +81,18 @@ class PresenterService
      */
     public function expose(\ModuleCore $module, $requiredConsents = [], $optionalConsents = [])
     {
-        $requiredConsents = $this->enforceMandatoryConsents($requiredConsents);
+        if (!in_array('info', $requiredConsents)) {
+            array_unshift($requiredConsents, 'info');
+        }
         if ($this->psAccountsService == null) {
             return [];
         } else {
+            $language = \Context::getContext()->language;
+
+            if ($language == null) {
+                throw new \PrestaShopException('No language context');
+            }
+
             return [
                 'jwt' => $this->psAccountsService->getOrRefreshToken(),
                 'requiredConsents' => $requiredConsents,
@@ -114,6 +105,7 @@ class PresenterService
                     'id' => $this->psAccountsService->getShopUuid(),
                     'name' => \Configuration::get('PS_SHOP_NAME'),
                     'url' => \Tools::getHttpHost(true),
+                    'lang' => $language->iso_code,
                 ],
                 'psEventbusModule' => $this->convertObjectToArray(\Module::getInstanceByName('ps_eventbus')),
             ];

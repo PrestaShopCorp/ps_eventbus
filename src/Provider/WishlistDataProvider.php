@@ -11,10 +11,6 @@ use PrestaShop\Module\PsEventbus\Repository\WishlistRepository;
 class WishlistDataProvider implements PaginatedApiDataProviderInterface
 {
     /**
-     * @var \Context
-     */
-    private $context;
-    /**
      * @var WishlistRepository
      */
     private $wishlistRepository;
@@ -32,13 +28,11 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
     private $arrayFormatter;
 
     public function __construct(
-        \Context $context,
         WishlistRepository $wishlistRepository,
         WishlistProductRepository $wishlistProductRepository,
         WishlistDecorator $wishlistDecorator,
         ArrayFormatter $arrayFormatter
     ) {
-        $this->context = $context;
         $this->wishlistRepository = $wishlistRepository;
         $this->wishlistProductRepository = $wishlistProductRepository;
         $this->wishlistDecorator = $wishlistDecorator;
@@ -56,9 +50,7 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getFormattedData($offset, $limit, $langIso)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $wishlists = $this->wishlistRepository->getWishlists($offset, $limit, $langIso);
+        $wishlists = $this->wishlistRepository->getWishlists($offset, $limit);
 
         if (empty($wishlists)) {
             return [];
@@ -87,10 +79,7 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getRemainingObjectsCount($offset, $langIso)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-
-        return (int) $this->wishlistRepository->getRemainingWishlistsCount($offset, $langIso);
+        return (int) $this->wishlistRepository->getRemainingWishlistsCount($offset);
     }
 
     /**
@@ -103,10 +92,7 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $langId = (int) \Language::getIdByIso($langIso);
-        $wishlists = $this->wishlistRepository->getWishlistsIncremental($limit, $langIso, $objectIds);
+        $wishlists = $this->wishlistRepository->getWishlistsIncremental($limit, $objectIds);
 
         if (!is_array($wishlists) || empty($wishlists)) {
             return [];

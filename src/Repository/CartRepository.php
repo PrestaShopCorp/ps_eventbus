@@ -24,10 +24,16 @@ class CartRepository
      */
     private function getBaseQuery()
     {
+        if ($this->context->shop === null) {
+            throw new \PrestaShopException('No shop context');
+        }
+
+        $shopId = (int) $this->context->shop->id;
+
         $query = new \DbQuery();
 
         $query->from('cart', 'c')
-            ->where('c.id_shop = ' . (int) $this->context->shop->id);
+            ->where('c.id_shop = ' . $shopId);
 
         return $query;
     }

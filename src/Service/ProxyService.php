@@ -4,7 +4,7 @@ namespace PrestaShop\Module\PsEventbus\Service;
 
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Ring\Exception\ConnectException;
-use PrestaShop\Module\PsEventbus\Api\EventBusProxyClient;
+use PrestaShop\Module\PsEventbus\Api\CollectorApiClient;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
@@ -12,7 +12,7 @@ use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
 class ProxyService implements ProxyServiceInterface
 {
     /**
-     * @var EventBusProxyClient
+     * @var CollectorApiClient
      */
     private $eventBusProxyClient;
     /**
@@ -24,7 +24,7 @@ class ProxyService implements ProxyServiceInterface
      */
     private $errorHandler;
 
-    public function __construct(EventBusProxyClient $eventBusProxyClient, JsonFormatter $jsonFormatter, ErrorHandlerInterface $errorHandler)
+    public function __construct(CollectorApiClient $eventBusProxyClient, JsonFormatter $jsonFormatter, ErrorHandlerInterface $errorHandler)
     {
         $this->eventBusProxyClient = $eventBusProxyClient;
         $this->jsonFormatter = $jsonFormatter;
@@ -52,7 +52,7 @@ class ProxyService implements ProxyServiceInterface
 
             return ['error' => $exception->getMessage()];
         } catch (ConnectException $exception) {
-            $this->errorHandler->handle($exception);
+            $this->errorHandler->handle(new \Exception($exception));
 
             return ['error' => $exception->getMessage()];
         }

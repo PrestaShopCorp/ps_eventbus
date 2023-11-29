@@ -9,15 +9,17 @@ class CurrencyRepository
      */
     private $db;
 
-    /**
-     * @var \Context
-     */
-    private $context;
-
-    public function __construct(\Db $db, \Context $context)
+    public function __construct(\Db $db)
     {
         $this->db = $db;
-        $this->context = $context;
+    }
+
+    /**
+     * @return mixed
+     */
+    private function isLangAvailable()
+    {
+        return \Tools::version_compare(_PS_VERSION_, '1.7.6', '>=');
     }
 
     /**
@@ -45,17 +47,14 @@ class CurrencyRepository
     /**
      * @param int $offset
      * @param int $limit
-     * @param string $langIso
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getCurrencies($offset, $limit, $langIso)
+    public function getCurrencies($offset, $limit)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId, $langIso);
+        $query = $this->getBaseQuery();
 
         $this->addSelectParameters($query);
 
@@ -66,15 +65,12 @@ class CurrencyRepository
 
     /**
      * @param int $offset
-     * @param string $langIso
      *
      * @return int
      */
-    public function getRemainingCurrenciesCount($offset, $langIso)
+    public function getRemainingCurrenciesCount($offset)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId, $langIso)
+        $query = $this->getBaseQuery()
             ->select('(COUNT(c.id_currency) - ' . (int) $offset . ') as count');
 
         return (int) $this->db->getValue($query);
@@ -82,18 +78,15 @@ class CurrencyRepository
 
     /**
      * @param int $limit
-     * @param string $langIso
      * @param array $currencyIds
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getCurrenciesIncremental($limit, $langIso, $currencyIds)
+    public function getCurrenciesIncremental($limit, $currencyIds)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
-        $query = $this->getBaseQuery($shopId, $langIso);
+        $query = $this->getBaseQuery();
 
         $this->addSelectParameters($query);
 
@@ -104,16 +97,15 @@ class CurrencyRepository
     }
 
     /**
-     * @param int $shopId
-     * @param string $langIso
-     *
      * @return \DbQuery
      */
-    public function getBaseQuery($shopId, $langIso)
+    public function getBaseQuery()
     {
         $query = new \DbQuery();
-        $query->from('currency', 'c')
-            ->innerJoin('currency_lang', 'cl', 'cl.id_currency = c.id_currency');
+        $query->from('currency', 'c');
+        if ($this->isLangAvailable()) {
+            $query->innerJoin('currency_lang', 'cl', 'cl.id_currency = c.id_currency');
+        }
 
         return $query;
     }
@@ -125,6 +117,13 @@ class CurrencyRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('c.id_currency, cl.name, c.iso_code, c.conversion_rate, c.deleted, c.active');
+        if ($this->isLangAvailable()) {
+            $query->select('c.id_currency, cl.name, c.iso_code, c.conversion_rate, c.deleted, c.active');
+        } else {
+            $query->select('c.id_currency, \'\' as name, c.iso_code, c.conversion_rate, c.deleted, c.active');
+        }
+        if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+            $query->select('c.precision, ');
+        }
     }
 }

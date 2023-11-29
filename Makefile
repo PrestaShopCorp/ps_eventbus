@@ -1,4 +1,4 @@
-.PHONY: help build version zip zip-inte zip-preprod zip-prod build test composer-validate lint php-lint lint-fix phpunit phpstan phpstan-baseline docker-test docker-lint docker-lint docker-phpunit docker-phpstan
+.PHONY: help build version zip zip-inte zip-preprod zip-prod zip-e2e build test composer-validate lint php-lint lint-fix phpunit phpstan phpstan-baseline docker-test docker-lint docker-lint docker-phpunit docker-phpstan
 PHP = $(shell command -v php >/dev/null 2>&1 || { echo >&2 "PHP is not installed."; exit 1; } && which php)
 VERSION ?= $(shell git describe --tags 2> /dev/null || echo "0.0.0")
 SEM_VERSION ?= $(shell echo ${VERSION} | sed 's/^v//')
@@ -6,8 +6,8 @@ PACKAGE ?= ps_eventbus-${VERSION}
 BUILDPLATFORM ?= linux/amd64
 TESTING_DOCKER_IMAGE ?= ps-eventbus-testing:latest
 TESTING_DOCKER_BASE_IMAGE ?= phpdockerio/php80-cli
-PHP_VERSION ?= 8.1
-PS_VERSION ?= 1.7.8.7
+PHP_VERSION ?= 8.2
+PS_VERSION ?= 8.1.1
 PS_ROOT_DIR ?= $(shell pwd)/prestashop/prestashop-${PS_VERSION}
 
 # target: default                                - Calling build by default
@@ -39,16 +39,23 @@ dist:
 	@echo ".config.preprod.yml file is missing, please create it. Exiting" && exit 1;
 .config.prod.yml:
 	@echo ".config.prod.yml file is missing, please create it. Exiting" && exit 1;
+.config.e2e.yml:
+	@echo ".config.e2e.yml file is missing, please create it. Exiting" && exit 1;
 
 define zip_it
 $(eval TMP_DIR := $(shell mktemp -d))
 mkdir -p ${TMP_DIR}/ps_eventbus;
 cp -r $(shell cat .zip-contents) ${TMP_DIR}/ps_eventbus;
 cp $1 ${TMP_DIR}/ps_eventbus/config/parameters.yml;
+if [ $1 = ".config.e2e.yml" ]; then ./tests/Mocks/apply-ps-accounts-mock.sh ${TMP_DIR}/ps_eventbus; fi
 cd ${TMP_DIR} && zip -9 -r $2 ./ps_eventbus;
 mv ${TMP_DIR}/$2 ./dist;
 rm -rf ${TMP_DIR:-/dev/null};
 endef
+
+# target: zip-e2e                                - Bundle a local E2E integrable zip
+zip-e2e: vendor dist .config.e2e.yml
+	@$(call zip_it,.config.e2e.yml,${PACKAGE}_e2e.zip)
 
 # target: zip-inte                               - Bundle an integration zip
 zip-inte: vendor dist .config.inte.yml
@@ -63,32 +70,41 @@ zip-prod: vendor dist .config.prod.yml
 	@$(call zip_it,.config.prod.yml,${PACKAGE}.zip)
 
 # target: build                                  - Setup PHP & Node.js locally
-build: vendor
+build: vendor tools-vendor
 
 composer.phar:
 	@php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');";
-	@php -r "if (hash_file('sha384', 'composer-setup.php') === '55ce33d7678c5a611085589f1f3ddf8b3c52d662cd01d4ba75c0ee0459970c2200a51f492d557530c71c15d8dba01eae') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;";
 	@php composer-setup.php;
 	@php -r "unlink('composer-setup.php');";
 
 vendor: composer.phar
 	./composer.phar install --no-dev -o;
 
-vendor/bin/php-cs-fixer: composer.phar
-	./composer.phar install --ignore-platform-reqs
+tools-vendor: composer.phar
+	./composer.phar install --working-dir tools -o;
 
-vendor/bin/phpunit: composer.phar
+tools/vendor/bin/php-cs-fixer: composer.phar
 	./composer.phar install --ignore-platform-reqs
+	./composer.phar install --working-dir tools --ignore-platform-reqs
 
-vendor/bin/phpstan: composer.phar
+tools/vendor/bin/phpunit: composer.phar
 	./composer.phar install --ignore-platform-reqs
+	./composer.phar install --working-dir tools --ignore-platform-reqs
+
+tools/vendor/bin/phpstan: composer.phar
+	./composer.phar install --ignore-platform-reqs
+	./composer.phar install --working-dir tools --ignore-platform-reqs
 
 prestashop:
 	@mkdir -p ./prestashop
 
 prestashop/prestashop-${PS_VERSION}: prestashop composer.phar
-	@git clone --depth 1 --branch ${PS_VERSION} https://github.com/PrestaShop/PrestaShop.git prestashop/prestashop-${PS_VERSION};
-	@./composer.phar -d ./prestashop/prestashop-${PS_VERSION} install
+	@if [ ! -d "prestashop/prestashop-${PS_VERSION}" ]; then \
+		git clone --depth 1 --branch ${PS_VERSION} https://github.com/PrestaShop/PrestaShop.git prestashop/prestashop-${PS_VERSION} > /dev/null; \
+		if [ "${PS_VERSION}" != "1.6.1.24" ]; then \
+			./composer.phar -d ./prestashop/prestashop-${PS_VERSION} install; \
+    fi \
+	fi;
 
 # target: test                                   - Static and unit testing
 test: composer-validate lint php-lint phpstan phpunit translation-validate
@@ -98,16 +114,16 @@ composer-validate: vendor
 	@./composer.phar validate --no-check-publish
 
 # target: translation-validate                   - Validates the translation files in translations/ directory
-translation-validate: 
+translation-validate:
 	php tests/translation.test.php
 
 # target: lint                                   - Lint the code and expose errors
-lint: vendor/bin/php-cs-fixer
-	@vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no;
+lint: tools/vendor/bin/php-cs-fixer
+	@PHP_CS_FIXER_IGNORE_ENV=1 tools/vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no;
 
 # target: lint-fix                               - Lint the code and fix it
-lint-fix: vendor/bin/php-cs-fixer
-	@vendor/bin/php-cs-fixer fix --using-cache=no;
+lint-fix: tools/vendor/bin/php-cs-fixer
+	@PHP_CS_FIXER_IGNORE_ENV=1 tools/vendor/bin/php-cs-fixer fix --using-cache=no;
 
 # target: php-lint                               - Use php linter to check the code
 php-lint:
@@ -115,20 +131,22 @@ php-lint:
 	@echo "php $(shell php -r 'echo PHP_VERSION;') lint passed";
 
 # target: phpunit                                - Run phpunit tests
-phpunit: vendor/bin/phpunit
-	vendor/bin/phpunit --configuration=./tests/phpunit.xml;
+phpunit: tools/vendor/bin/phpunit
+	tools/vendor/bin/phpunit --configuration=./tests/phpunit.xml;
 
 # target: phpunit-coverage                       - Run phpunit with coverage and allure
-phpunit-coverage: vendor/bin/phpunit
-	php -dxdebug.mode=coverage vendor/bin/phpunit --coverage-html ./coverage-reports/coverage-html --configuration=./tests/phpunit-coverage.xml;
+phpunit-coverage: tools/vendor/bin/phpunit
+	php -dxdebug.mode=coverage tools/vendor/bin/phpunit --coverage-html ./coverage-reports/coverage-html --configuration=./tests/phpunit-coverage.xml;
 
 # target: phpstan                                - Run phpstan
-phpstan: vendor/bin/phpstan prestashop/prestashop-${PS_VERSION}
-	_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
+phpstan: tools/vendor/bin/phpstan prestashop/prestashop-${PS_VERSION}
+	sed -i -e 's|%currentWorkingDirectory%/vendor|%currentWorkingDirectory%/tools/vendor|g' ./tools/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
+	_PS_ROOT_DIR_=${PS_ROOT_DIR} tools/vendor/bin/phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
 
 # target: phpstan-baseline                       - Generate a phpstan baseline to ignore all errors
-phpstan-baseline: prestashop/prestashop-${PS_VERSION} vendor/bin/phpstan
-	_PS_ROOT_DIR_=${PS_ROOT_DIR} vendor/bin/phpstan analyse --generate-baseline --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
+phpstan-baseline: prestashop/prestashop-${PS_VERSION} tools/vendor/bin/phpstan
+	sed -i -e 's|%currentWorkingDirectory%/vendor|%currentWorkingDirectory%/tools/vendor|g' ./tools/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
+	_PS_ROOT_DIR_=${PS_ROOT_DIR} tools/vendor/bin/phpstan analyse --generate-baseline --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
 
 # target: docker-test                            - Static and unit testing in docker
 docker-test: docker-lint docker-phpstan docker-phpunit
@@ -143,7 +161,7 @@ docker-lint-fix:
 	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
 	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} lint-fix;
 
-# target: docker-lint                            - Lint the code with php in docker
+# target: docker-php-lint                        - Lint the code with php in docker
 docker-php-lint:
 	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
 	docker run --rm -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} php-lint;
@@ -153,7 +171,7 @@ docker-phpunit: prestashop/prestashop-${PS_VERSION}
 	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
 	docker run --rm -e _PS_ROOT_DIR_=/src/prestashop/prestashop-${PS_VERSION} -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpunit;
 
-# target: docker-phpunit                         - Run phpunit in docker
+# target: docker-phpunit-coverage                - Run phpunit in docker
 docker-phpunit-coverage: prestashop/prestashop-${PS_VERSION}
 	docker build --build-arg BUILDPLATFORM=${BUILDPLATFORM} --build-arg PHP_VERSION=${PHP_VERSION} -t ${TESTING_DOCKER_IMAGE} -f dev-tools.Dockerfile .;
 	docker run --rm -e _PS_ROOT_DIR_=/src/prestashop/prestashop-${PS_VERSION} -v $(shell pwd):/src ${TESTING_DOCKER_IMAGE} phpunit-coverage;
@@ -178,10 +196,13 @@ run-docker-actions-177:
 all-tests-actions-177:
 	make rda177
 	make bps177
-	docker exec -i prestashop-177 sh -c "cd /var/www/html/modules/ps_eventbus && php vendor/bin/phpunit -c tests/phpunit.xml"
+	docker exec -i prestashop-177 sh -c "cd /var/www/html/modules/ps_eventbus && php tools/vendor/bin/phpunit -c tests/phpunit.xml"
 
-allure:
-	./node_modules/.bin/allure serve build/allure-results/
+# Fixme: add "allure-framework/allure-phpunit" in composer.json to solve this.
+# Currently failing to resolve devDeps:
+#   - allure-framework/allure-phpunit v2.1.0 requires phpunit/phpunit ^9 -> found phpunit/phpunit[9.0.0, ..., 9.6.4] but it conflicts with your root composer.json require (^10.0.14).
+# allure:
+# 	./node_modules/.bin/allure serve build/allure-results/
 
-allure-report:
-	./node_modules/.bin/allure generate build/allure-results/
+# allure-report:
+# 	./node_modules/.bin/allure generate build/allure-results/

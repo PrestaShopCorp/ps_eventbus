@@ -23,10 +23,15 @@ class ModuleRepository
      */
     public function getBaseQuery()
     {
-        return (new \DbQuery())
+        $query = (new \DbQuery())
           ->from(self::MODULE_TABLE, 'm')
-          ->leftJoin(self::MODULE_TABLE_HISTORY, 'h', 'm.id_module = h.id_module')
           ->leftJoin(self::MODULE_SHOP, 'm_shop', 'm.id_module = m_shop.id_module');
+
+        if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+            $query = $query->leftJoin(self::MODULE_TABLE_HISTORY, 'h', 'm.id_module = h.id_module');
+        }
+
+        return $query;
     }
 
     /**
@@ -45,8 +50,13 @@ class ModuleRepository
          * The `active` field of the "ps_module" table has been deprecated, this is why we use the "ps_module_shop" table
          * to check if a module is active or not
         */
-        $query->select('m.id_module as module_id, name, version as module_version, IF(m_shop.enable_device, 1, 0) as active, date_add as created_at, date_upd as updated_at')
+        if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+            $query->select('m.id_module as module_id, name, version as module_version, IF(m_shop.enable_device, 1, 0) as active, date_add as created_at, date_upd as updated_at')
+                ->limit($limit, $offset);
+        } else {
+            $query->select('m.id_module as module_id, name, version as module_version, IF(m_shop.enable_device, 1, 0) as active')
             ->limit($limit, $offset);
+        }
 
         return $this->db->executeS($query);
     }

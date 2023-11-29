@@ -1,0 +1,6 @@
+parameters:
+  ps_eventbus.proxy_api_url: "https://eventbus-proxy.psessentials.net"
+  ps_eventbus.sync_api_url: "https://eventbus-sync.psessentials.net"
+  ps_eventbus.sentry_dsn: "https://457f191226df4b8f9a0d7bf6f250bab2@o298402.ingest.sentry.io/6066714"
+  ps_eventbus.sentry_env: "production"
+

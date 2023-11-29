@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -46,8 +47,8 @@ class ErrorHandler implements ErrorHandlerInterface
                         'ps_accounts_version' => $psAccounts ? $psAccounts->version : false,
                         'php_version' => phpversion(),
                         'prestashop_version' => _PS_VERSION_,
-                        'ps_eventbus_is_enabled' => \Module::isEnabled($module->name),
-                        'ps_eventbus_is_installed' => \Module::isInstalled($module->name),
+                        'ps_eventbus_is_enabled' => \Module::isEnabled((string) $module->name),
+                        'ps_eventbus_is_installed' => \Module::isInstalled((string) $module->name),
                         'env' => $sentryEnv,
                     ],
                 ]

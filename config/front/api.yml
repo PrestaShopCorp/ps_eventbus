@@ -1,17 +1,24 @@
 services:
-  PrestaShop\Module\PsEventbus\Api\EventBusSyncClient:
-    class: PrestaShop\Module\PsEventbus\Api\EventBusSyncClient
+  PrestaShop\Module\PsEventbus\Api\SyncApiClient:
+    class: PrestaShop\Module\PsEventbus\Api\SyncApiClient
     public: true
     arguments:
-      - '@ps_eventbus.link'
       - '@PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
-      - '%ps_eventbus.sync_api_url%'
+      - "%ps_eventbus.sync_api_url%"
+      - "@ps_eventbus"
 
-  PrestaShop\Module\PsEventbus\Api\EventBusProxyClient:
-    class: PrestaShop\Module\PsEventbus\Api\EventBusProxyClient
+  PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient:
+    class: PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient
     public: true
     arguments:
-      - '@ps_eventbus.link'
       - '@PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
-      - '%ps_eventbus.proxy_api_url%'
-      - '@ps_eventbus'
+      - "%ps_eventbus.live_sync_api_url%"
+      - "@ps_eventbus"
+
+  PrestaShop\Module\PsEventbus\Api\CollectorApiClient:
+    class: PrestaShop\Module\PsEventbus\Api\CollectorApiClient
+    public: true
+    arguments:
+      - '@PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
+      - "%ps_eventbus.proxy_api_url%"
+      - "@ps_eventbus"

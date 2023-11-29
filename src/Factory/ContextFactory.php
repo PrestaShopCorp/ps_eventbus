@@ -17,7 +17,13 @@ class ContextFactory
      */
     public static function getLanguage()
     {
-        return \Context::getContext()->language;
+        $language = \Context::getContext()->language;
+
+        if ($language == null) {
+            throw new \PrestaShopException('Context is null');
+        }
+
+        return $language;
     }
 
     /**
@@ -33,7 +39,13 @@ class ContextFactory
      */
     public static function getSmarty()
     {
-        return \Context::getContext()->smarty;
+        $smarty = \Context::getContext()->smarty;
+
+        if ($smarty == null) {
+            throw new \PrestaShopException('Context is null');
+        }
+
+        return $smarty;
     }
 
     /**
@@ -41,15 +53,27 @@ class ContextFactory
      */
     public static function getShop()
     {
-        return \Context::getContext()->shop;
+        $shop = \Context::getContext()->shop;
+
+        if ($shop == null) {
+            throw new \PrestaShopException('Context is null');
+        }
+
+        return $shop;
     }
 
     /**
-     * @return \AdminController|\FrontController
+     * @return \AdminController|\FrontController|\PrestaShopBundle\Bridge\AdminController\LegacyControllerBridgeInterface|null
      */
     public static function getController()
     {
-        return \Context::getContext()->controller;
+        $controller = \Context::getContext()->controller;
+
+        if ($controller == null) {
+            throw new \PrestaShopException('Context is null');
+        }
+
+        return $controller;
     }
 
     /**
@@ -57,7 +81,13 @@ class ContextFactory
      */
     public static function getCookie()
     {
-        return \Context::getContext()->cookie;
+        $cookie = \Context::getContext()->cookie;
+
+        if ($cookie == null) {
+            throw new \PrestaShopException('Context is null');
+        }
+
+        return $cookie;
     }
 
     /**
@@ -65,6 +95,12 @@ class ContextFactory
      */
     public static function getLink()
     {
-        return \Context::getContext()->link;
+        $link = \Context::getContext()->link;
+
+        if ($link == null) {
+            throw new \PrestaShopException('Context is null');
+        }
+
+        return $link;
     }
 }

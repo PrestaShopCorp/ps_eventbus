@@ -8,6 +8,7 @@ use Yandex\Allure\Adapter\Annotation\Title;
 
 /**
  * @Features("formatter")
+ *
  * @Stories("array formatter")
  */
 class ArrayFormatterTest extends BaseTestCase
@@ -25,6 +26,7 @@ class ArrayFormatterTest extends BaseTestCase
 
     /**
      * @Stories("array formatter")
+     *
      * @Title("testFormatArray")
      */
     public function testFormatArray()
@@ -40,6 +42,7 @@ class ArrayFormatterTest extends BaseTestCase
 
     /**
      * @Stories("arrayFormatter")
+     *
      * @Title("testFormatValueArrayTest")
      */
     public function testFormatValueArrayTest()

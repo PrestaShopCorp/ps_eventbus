@@ -2,8 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShop\Module\PsEventbus\Config\Config;
-
 class CarrierRepository
 {
     /**
@@ -16,10 +14,21 @@ class CarrierRepository
      */
     private $context;
 
+    /**
+     * @var int
+     */
+    private $shopId;
+
     public function __construct(\Db $db, \Context $context)
     {
         $this->db = $db;
         $this->context = $context;
+
+        if ($this->context->shop === null) {
+            throw new \PrestaShopException('No shop context');
+        }
+
+        $this->shopId = (int) $this->context->shop->id;
     }
 
     /**
@@ -100,7 +109,7 @@ class CarrierRepository
         $query->from(IncrementalSyncRepository::INCREMENTAL_SYNC_TABLE, 'aic');
         $query->leftJoin(EventbusSyncRepository::TYPE_SYNC_TABLE_NAME, 'ts', 'ts.type = aic.type');
         $query->where('aic.type = "' . pSQL($type) . '"');
-        $query->where('ts.id_shop = ' . (int) $this->context->shop->id);
+        $query->where('ts.id_shop = ' . $this->shopId);
         $query->where('ts.lang_iso = "' . pSQL($langIso) . '"');
 
         return $this->db->executeS($query);
@@ -141,17 +150,11 @@ class CarrierRepository
         }
         $query = new \DbQuery();
         $query->from('carrier', 'c');
-        $query->select('c.*, cl.delay, eis.created_at as update_date');
+        $query->select('c.*, cl.delay');
         $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
         $query->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier');
-        $query->leftJoin(
-            'eventbus_incremental_sync',
-            'eis',
-            'eis.id_object = c.id_carrier AND eis.type = "' . Config::COLLECTION_CARRIERS . '" AND eis.id_shop = cs.id_shop AND eis.lang_iso = cl.id_lang'
-        );
         $query->where('c.id_carrier IN (' . implode(',', array_map('intval', $carrierIds)) . ')');
-        $query->where('cs.id_shop = ' . (int) $this->context->shop->id);
-        $query->groupBy('c.id_reference, c.id_carrier HAVING c.id_carrier=(select max(id_carrier) from ps_carrier c2 WHERE c2.id_reference=c.id_reference)');
+        $query->where('cs.id_shop = ' . $this->shopId);
 
         return $this->db->executeS($query);
     }
@@ -169,15 +172,10 @@ class CarrierRepository
     {
         $query = new \DbQuery();
         $query->from('carrier', 'c');
-        $query->select('c.id_carrier, IFNULL(eis.created_at, CURRENT_DATE()) as update_date');
+        $query->select('c.id_carrier');
         $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
         $query->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier');
-        $query->leftJoin(
-            'eventbus_incremental_sync',
-            'eis',
-            'eis.id_object = c.id_carrier AND eis.type = "' . Config::COLLECTION_CARRIERS . '" AND eis.id_shop = cs.id_shop AND eis.lang_iso = cl.id_lang'
-        );
-        $query->where('cs.id_shop = ' . (int) $this->context->shop->id);
+        $query->where('cs.id_shop = ' . $this->shopId);
         $query->where('deleted=0');
         $query->limit($limit, $offset);
 

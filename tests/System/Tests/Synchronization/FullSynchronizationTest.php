@@ -14,6 +14,7 @@ use PrestaShop\Module\PsEventbus\Provider\ModuleDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\OrderDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Provider\ProductDataProvider;
+use PrestaShop\Module\PsEventbus\Provider\StoreDataProvider;
 use PrestaShop\Module\PsEventbus\Provider\WishlistDataProvider;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
 use PrestaShop\Module\PsEventbus\Tests\System\Tests\BaseTestCase;
@@ -24,6 +25,7 @@ use Yandex\Allure\Adapter\Support\StepSupport;
 
 /**
  * @Features("synchronization")
+ *
  * @Stories("full synchronization")
  */
 class FullSynchronizationTest extends BaseTestCase
@@ -39,6 +41,7 @@ class FullSynchronizationTest extends BaseTestCase
 
     /**
      * @Stories("full synchronization")
+     *
      * @Title("testFullSync")
      */
     public function testFullSync()
@@ -95,6 +98,12 @@ class FullSynchronizationTest extends BaseTestCase
             /** @var PaginatedApiDataProviderInterface $provider */
             $provider = $this->container->getService(CustomPriceDataProvider::class);
             $this->handle($provider, Config::COLLECTION_PRODUCTS);
+        });
+
+        $this->executeStep('apiStores', function () {
+            /** @var PaginatedApiDataProviderInterface $provider */
+            $provider = $this->container->getService(StoreDataProvider::class);
+            $this->handle($provider, Config::COLLECTION_STORES);
         });
 
         $this->executeStep('apiCustomProductCarriers', function () {

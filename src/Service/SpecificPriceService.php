@@ -2,22 +2,23 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use Address;
-use Cart;
-use Combination;
 use Context;
-use Customer;
-use Customization;
-use Group;
-use Product;
-use Shop;
-use SpecificPrice;
-use Tax;
+use PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository;
 
 class SpecificPriceService
 {
     /** @var array */
     private static $_pricesLevel2;
+
+    /**
+     * @var SpecificPriceRepository
+     */
+    private $specificPriceRepository;
+
+    public function __construct(SpecificPriceRepository $specificPriceRepository)
+    {
+        $this->specificPriceRepository = $specificPriceRepository;
+    }
 
     /**
      * @param int $productId
@@ -77,7 +78,7 @@ class SpecificPriceService
             $context = \Context::getContext();
         }
 
-        $cur_cart = $context->cart;
+        $cur_cart = (object) $context->cart;
 
         \Tools::displayParameterAsDeprecated('divisor');
 
@@ -106,15 +107,20 @@ class SpecificPriceService
             $usetax = false;
         }
 
-        if ($usetax != false
+        if (
+            $usetax != false
             && !empty($address->vat_number)
             && $address->id_country != \Configuration::get('VATNUMBER_COUNTRY')
-            && \Configuration::get('VATNUMBER_MANAGEMENT')) {
+            && \Configuration::get('VATNUMBER_MANAGEMENT')
+        ) {
             $usetax = false;
         }
 
-        /** @var int $shopId */
-        $shopId = $context->shop->id;
+        if ($context->shop == null) {
+            throw new \PrestaShopException('No shop context');
+        }
+
+        $shopId = (int) $context->shop->id;
 
         return $this->priceCalculation(
             $shopId,
@@ -280,7 +286,7 @@ class SpecificPriceService
         $address->id_state = $id_state;
         $address->postcode = $zipcode;
 
-        $tax_manager = \TaxManagerFactory::getManager($address, (string) \Product::getIdTaxRulesGroupByIdProduct((int) $id_product, $context));
+        $tax_manager = \TaxManagerFactory::getManager($address, \Product::getIdTaxRulesGroupByIdProduct((int) $id_product, $context));
         $product_tax_calculator = $tax_manager->getTaxCalculator();
 
         // Add Tax
@@ -374,7 +380,7 @@ class SpecificPriceService
      *
      * @param int $specificPriceId
      *
-     * @return array|bool|object|null
+     * @return array|bool|false|object|null
      */
     private function getSpecificPrice($specificPriceId)
     {
@@ -382,14 +388,6 @@ class SpecificPriceService
             return [];
         }
 
-        $query = '
-        SELECT *
-          FROM `' . _DB_PREFIX_ . 'specific_price`
-          WHERE
-                  `id_specific_price` = ' . (int) $specificPriceId;
-
-        $query .= ' ORDER BY `id_product_attribute` DESC, `id_cart` DESC, `from_quantity` DESC, `id_specific_price_rule` ASC, `to` DESC, `from` DESC';
-
-        return \Db::getInstance((bool) _PS_USE_SQL_SLAVE_)->getRow($query);
+        return $this->specificPriceRepository->getSpecificPrice($specificPriceId);
     }
 }

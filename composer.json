@@ -2,12 +2,19 @@
   "name": "prestashopcorp/ps_eventbus",
   "description": "PrestaShop EventBus is an enabler to help you share data with other modules",
   "type": "prestashop-module",
-  "author": "PrestaShop",
+  "authors": [
+    {
+      "name": "CloudSync",
+      "email": "cloudsync-support@prestashop.com",
+      "homepage": "https://prestashop.com",
+      "role": "Developer"
+    }
+  ],
   "license": "AFL-3.0",
   "config": {
     "preferred-install": "dist",
     "platform": {
-      "php": "7.2.5"
+      "php": "7.1"
     },
     "optimize-autoloader": true,
     "prepend-autoloader": false,
@@ -27,21 +34,17 @@
     }
   },
   "require": {
-    "php": ">=7.2.5",
+    "php": ">=7.1",
     "ext-json": "*",
-    "monolog/monolog": "1.25.3",
+    "monolog/monolog": "^1.27",
     "prestashop/module-lib-service-container": "^2.0",
-    "prestashop/module-lib-guzzle-adapter": "^0.5",
+    "prestashop/module-lib-guzzle-adapter": "v0.6",
     "prestashop/prestashop-accounts-installer": "^1.0.0",
-    "sentry/sentry": "^1.11.0"
-  },
-  "require-dev": {
-    "prestashop/php-dev-tools": "^4.3",
-    "phpunit/phpunit": "^9.5",
-    "phpunit/php-code-coverage": "^9.2",
-    "phpstan/phpstan": "^1.8.6",
-    "friendsofphp/php-cs-fixer": "^3.1.0",
-    "allure-framework/allure-phpunit": "^v1.5.0",
-    "phpseclib/phpseclib": "^2.0"
+    "sentry/sentry": "^1.11.0",
+    "php-http/message": "<1.15.0",
+    "psr/http-message": "<1.1",
+    "symfony/config": "^3.4",
+    "symfony/dependency-injection": "^3.4",
+    "symfony/yaml": "^3.4"
   }
 }
