@@ -9,8 +9,10 @@ services:
         condition: service_healthy
     volumes:
       - ../..:/var/www/html/modules/ps_eventbus:rw
+      - ./init-scripts:/tmp/init-scripts:ro
     environment:
       - PS_DOMAIN=localhost:8000
+      - INIT_SCRIPTS_DIR=/tmp/init-scripts
       - DEBUG_MODE=true
     ports:
       - ${HOST_PORT_BIND_PRESTASHOP:?See e2e-env/.env.dist}:80
