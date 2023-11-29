@@ -22,7 +22,7 @@ jobs:
         run: make docker-php-lint
         env:
           PHP_VERSION: ${{ matrix.php_version }}
-          TESTING_IMAGE: prestashop/prestashop-flashlight:php-${{ env.PHP_VERSION }}
+          TESTING_IMAGE: prestashop/prestashop-flashlight:php-${{ matrix.php_version }}
 
   composer-validate:
     name: Composer validate
