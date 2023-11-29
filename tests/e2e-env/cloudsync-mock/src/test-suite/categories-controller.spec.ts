@@ -12,8 +12,7 @@ import { CollectorApi, SyncApi } from '../helpers/api-mock';
 import { config } from '../helpers/config';
 
 const controller = 'apiCategories';
-const url = 'http://prestashop';
-const endpoint = `/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5`;
+const endpoint = `index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5`;
 
 describe('CategoriesController', () => {
   let syncApi;
@@ -35,30 +34,32 @@ describe('CategoriesController', () => {
   });
 
   it('should be defined', () => {
-    expect(url).toBeDefined();
+    expect(config.prestaShopBaseUrl).toBeDefined();
   });
 
-  it('should return 500 because job is invalid (sync-api response == 500)', async () => {
+  it('should return 500 with an invalid job id (sync-api status 500)', async () => {
     jest.setTimeout(10000);
-    const id = Date.now();
-    await request(url)
-      .get(`${endpoint}&job_id=invalid-job-${id}}`)
+    const jobId = `invalid-job-${Date.now()}`
+    await request(config.prestaShopBaseUrl)
+      .get(`${endpoint}&job_id=${jobId}`)
+      .set({ host: config.prestaShopHostHeader })
       .redirects(1)
       .expect('content-type', /json/)
       .expect(500);
 
     expect(syncApiRequestData).toHaveBeenCalledWith(
       expect.objectContaining({
-        url: expect.stringContaining(`invalid-job-${id}`),
+        url: expect.stringContaining(jobId),
       }),
     );
     expect(collectorApiRequestData).not.toHaveBeenCalled();
   });
 
-  it('should synchronize (sync-api and proxy-api response == 201)', async () => {
+  it('should synchronize (sync-api and proxy-api status 201)', async () => {
     const jobId = Date.now();
-    const req = await request(url)
+    const req = await request(config.prestaShopBaseUrl)
       .get(`${endpoint}&job_id=valid-job-${jobId}`)
+      .set({ host: config.prestaShopHostHeader })
       .redirects(1)
       .expect('content-type', /json/)
       .expect(201);

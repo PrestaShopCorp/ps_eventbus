@@ -52,14 +52,16 @@ services:
   cloudsync-mock-test:
     container_name: cloudsync-mock-test
     restart: "no"
+    depends_on:
+      prestashop:
+        condition: service_healthy
+      reverse-proxy:
+        condition: service_healthy
     build:
       context: ./cloudsync-mock
       dockerfile: Dockerfile
-    depends_on:
-      - prestashop
     networks:
       - prestashop
-    command: test
 
   reverse-proxy:
     image: nginx:stable-alpine
@@ -77,6 +79,8 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro,cached
     command: [nginx-debug, "-g", "daemon off;"]
+    networks:
+      - prestashop
     ports:
       - ${HOST_PORT_BIND_CLOUDSYNC_REVERSE_PROXY:?See e2e-env/.env.dist}:80
 
