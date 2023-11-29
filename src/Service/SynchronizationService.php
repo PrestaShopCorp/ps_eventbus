@@ -8,6 +8,7 @@ use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
+use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
 
 class SynchronizationService
 {
@@ -20,6 +21,10 @@ class SynchronizationService
      */
     private $incrementalSyncRepository;
     /**
+     * @var LiveSyncRepository
+     */
+    private $liveSyncRepository;
+    /**
      * @var ProxyServiceInterface
      */
     private $proxyService;
@@ -31,11 +36,13 @@ class SynchronizationService
     public function __construct(
         EventbusSyncRepository $eventbusSyncRepository,
         IncrementalSyncRepository $incrementalSyncRepository,
+        LiveSyncRepository $liveSyncRepository,
         ProxyServiceInterface $proxyService,
         PayloadDecorator $payloadDecorator
     ) {
         $this->eventbusSyncRepository = $eventbusSyncRepository;
         $this->incrementalSyncRepository = $incrementalSyncRepository;
+        $this->liveSyncRepository = $liveSyncRepository;
         $this->proxyService = $proxyService;
         $this->payloadDecorator = $payloadDecorator;
     }
@@ -127,6 +134,24 @@ class SynchronizationService
         $remainingObjects = $this->incrementalSyncRepository->getRemainingIncrementalObjects($type, $langIso);
 
         return $this->returnSyncResponse($data, $response, $remainingObjects);
+    }
+
+    public function debounceLiveSync($shopContents) 
+    {
+        $dateNow = date('Y-m-d H:i:s');
+        $lastChangeAt = $this->liveSyncRepository->getLastChangeAtByShopContent($shopContents);
+
+        if ($lastChangeAt !== null) {
+            $lastChangeAt = strtotime($lastChangeAt);
+            $dateNow = strtotime($dateNow);
+            $diff = $dateNow - $lastChangeAt;
+
+            if ($diff < 60 * 5) {
+                return false;
+            }
+
+            return $this->liveSyncRepository->upsertDebounce($shopContents, $dateNow);
+        }
     }
 
     /**
