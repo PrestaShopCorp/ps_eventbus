@@ -30,7 +30,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Run composer validate
         run: make composer-validate
 
@@ -40,7 +40,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Cache vendor folder
         uses: actions/cache@v3
         with:
@@ -59,7 +59,7 @@ jobs:
         # @TODO: "1.6.1.24" is temporarily disabled here
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Cache vendor folder
         uses: actions/cache@v3
         with:
@@ -74,7 +74,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Cache vendor folder
         uses: actions/cache@v3
         with:
@@ -90,7 +90,7 @@ jobs:
   #   if: github.ref == 'refs/heads/main'
   #   steps:
   #     - name: Checkout
-  #       uses: actions/checkout@v3
+  #       uses: actions/checkout@v4
   #     - name: Cache vendor folder
   #       uses: actions/cache@v3
   #       with:

@@ -139,15 +139,15 @@ docker-php-lint:
 	@$(call in_docker,make,php-lint)
 
 # target: phpunit (or docker-phpunit)            - Run phpunit tests
-phpunit:
+phpunit: tools/vendor
 	phpunit --configuration=./tests/phpunit.xml;
-docker-phpunit:
+docker-phpunit: tools/vendor
 	@$(call in_docker,make,phpunit)
 
 # target: phpunit-cov (or docker-phpunit-cov)    - Run phpunit with coverage and allure
-phpunit-cov:
+phpunit-cov: tools/vendor
 	php -dxdebug.mode=coverage phpunit --coverage-html ./coverage-reports/coverage-html --configuration=./tests/phpunit-cov.xml;
-docker-phpunit-cov:
+docker-phpunit-cov: tools/vendor
 	@$(call in_docker,make,phpunit-cov)
 
 # target: phpstan (or docker-phpstan)            - Run phpstan
