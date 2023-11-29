@@ -46,6 +46,7 @@ define zip_it
 $(eval TMP_DIR := $(shell mktemp -d))
 mkdir -p ${TMP_DIR}/ps_eventbus;
 cp -r $(shell cat .zip-contents) ${TMP_DIR}/ps_eventbus;
+./tools/vendor/bin/autoindex prestashop:add:index ${TMP_DIR}
 cp $1 ${TMP_DIR}/ps_eventbus/config/parameters.yml;
 if [ $1 = ".config.e2e.yml" ]; then ./tests/Mocks/apply-ps-accounts-mock.sh ${TMP_DIR}/ps_eventbus; fi
 cd ${TMP_DIR} && zip -9 -r $2 ./ps_eventbus;
