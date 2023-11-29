@@ -49,7 +49,7 @@ BASE_URL="http://localhost:8000"
 curl -s -L "$BASE_URL/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck" | jq .
 {
   "prestashop_version": "1.6.1.24",
-  "ps_eventbus_version": "x.y.z",
+  "ps_eventbus_version": "0.0.0",
   "ps_accounts_version": "5.6.2",
   "php_version": "7.1.33",
   "ps_account": true,
