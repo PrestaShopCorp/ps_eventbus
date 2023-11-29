@@ -58,7 +58,7 @@ docker run \
 --env _PS_ROOT_DIR_=/var/www/html \
 --workdir /var/www/html/modules/ps_eventbus \
 --volume $(shell pwd):/var/www/html/modules/ps_eventbus:rw \
---entrypoint "$1" ${TESTING_IMAGE} "$2"
+--entrypoint $1 ${TESTING_IMAGE} $2
 endef
 
 # target: zip-e2e                                - Bundle a local E2E integrable zip
@@ -88,8 +88,9 @@ composer.phar:
 vendor: composer.phar
 	./composer.phar install --no-dev -o;
 
-tools-vendor: composer.phar
+tools/vendor: composer.phar
 	./composer.phar install --working-dir tools -o;
+	sed -i -e 's|%currentWorkingDirectory%/vendor|%currentWorkingDirectory%/tools/vendor|g' ./tools/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
 
 prestashop:
 	@mkdir -p ./prestashop
@@ -114,15 +115,19 @@ translation-validate:
 	php tests/translation.test.php
 
 # target: lint (or docker-lint)                  - Lint the code and expose errors
-lint:
+lint: php-cs-fixer php-lint
+docker-lint: docker-php-cs-fixer docker-php-lint
+
+# target: php-cs-fixer (or php-cs-fixer-lint)    - Lint the code and expose errors
+php-cs-fixer: tools/vendor
 	@PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --dry-run --diff --using-cache=no;
-docker-lint:
+docker-php-cs-fixer: tools/vendor
 	@$(call in_docker,make,lint)
 
 # target: lint-fix (or docker-lint-fix)          - Lint the code and fix it
-lint-fix:
+php-cs-fixer-fix: tools/vendor
 	@PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --using-cache=no;
-docker-lint-fix:
+docker-lint-fix: tools/vendor
 	@$(call in_docker,make,lint-fix)
 
 # target: php-lint (or docker-php-lint)          - Lint the code with the php linter
@@ -145,17 +150,13 @@ docker-phpunit-cov:
 	@$(call in_docker,make,phpunit-cov)
 
 # target: phpstan (or docker-phpstan)            - Run phpstan
-phpstan: prestashop/prestashop-${PS_VERSION}
-	sed -i -e 's|%currentWorkingDirectory%/vendor|%currentWorkingDirectory%/tools/vendor|g' ./tools/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
+phpstan: tools/vendor prestashop/prestashop-${PS_VERSION}
 	_PS_ROOT_DIR_=${PS_ROOT_DIR} phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
-docker-phpstan:
-	@$(call in_docker,make,phpstan-simple)
-phpstan-simple:
-	phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
+docker-phpstan: tools/vendor
+	@$(call in_docker,phpstan,analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon)
 
 # target: phpstan-baseline                       - Generate a phpstan baseline to ignore all errors
 phpstan-baseline: prestashop/prestashop-${PS_VERSION} phpstan
-	sed -i -e 's|%currentWorkingDirectory%/vendor|%currentWorkingDirectory%/tools/vendor|g' ./tools/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
 	_PS_ROOT_DIR_=${PS_ROOT_DIR} phpstan analyse --generate-baseline --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
 
 # target: docker-test                            - Static and unit testing in docker
