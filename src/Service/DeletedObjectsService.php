@@ -37,8 +37,12 @@ class DeletedObjectsService
      */
     public function handleDeletedObjectsSync($jobId, $scriptStartTime)
     {
-        /** @var int $shopId */
-        $shopId = $this->context->shop->id;
+        if ($this->context->shop === null) {
+            throw new \PrestaShopException('No shop context');
+        }
+
+        $shopId = (int) $this->context->shop->id;
+
         $deletedObjects = $this->deletedObjectsRepository->getDeletedObjectsGrouped($shopId);
 
         if (empty($deletedObjects)) {

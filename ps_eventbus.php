@@ -152,7 +152,7 @@ class Ps_eventbus extends Module
         $this->displayName = $this->l('PrestaShop EventBus');
         $this->description = $this->l('Link your PrestaShop account to synchronize your shop data to a tech partner of your choice. Do not uninstall this module if you are already using a service, as it will prevent it from working.');
         $this->confirmUninstall = $this->l('This action will immediately prevent your PrestaShop services and Community services from working as they are using PrestaShop CloudSync for syncing.');
-        $this->ps_versions_compliancy = ['min' => '1.7', 'max' => _PS_VERSION_];
+        $this->ps_versions_compliancy = ['min' => '1.6', 'max' => _PS_VERSION_];
         $this->adminControllers = [];
         // If PHP is not compliant, we will not load composer and the autoloader
         if (!$this->isPhpVersionCompliant()) {
@@ -162,9 +162,13 @@ class Ps_eventbus extends Module
         require_once __DIR__ . '/vendor/autoload.php';
 
         $this->serviceContainer = new \PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer(
-            $this->name,
+            (string) $this->name,
             $this->getLocalPath()
         );
+
+        if ($this->context->shop === null) {
+            throw new PrestaShopException('No shop context');
+        }
 
         $this->shopId = (int) $this->context->shop->id;
     }
@@ -1323,25 +1327,25 @@ class Ps_eventbus extends Module
         }
     }
 
-     /**
-      * @param array $shopContents
-      * @param int $shopContentId
-      * @param string $action
-      *
-      * @return void
-      */
-     private function sendLiveSync($shopContents, $shopContentId, $action)
-     {
-         if ((int) $shopContentId === 0) {
-             return;
-         }
-         try {
-             /** @var \PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient $liveSyncApiClient */
-             $liveSyncApiClient = $this->getService(\PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient::class);
-             $liveSyncApiClient->liveSync($shopContents, (int) $shopContentId, $action);
-         } catch (\Exception $e) {
-         }
-     }
+    /**
+     * @param array $shopContents
+     * @param int $shopContentId
+     * @param string $action
+     *
+     * @return void
+     */
+    private function sendLiveSync($shopContents, $shopContentId, $action)
+    {
+        if ((int) $shopContentId === 0) {
+            return;
+        }
+        try {
+            /** @var \PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient $liveSyncApiClient */
+            $liveSyncApiClient = $this->getService(\PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient::class);
+            $liveSyncApiClient->liveSync($shopContents, (int) $shopContentId, $action);
+        } catch (\Exception $e) {
+        }
+    }
 
     /**
      * @param int $objectId

@@ -26,7 +26,9 @@ class CurrencyDecorator
         $currency['id_currency'] = (int) $currency['id_currency'];
         $currency['conversion_rate'] = (float) $currency['conversion_rate'];
         $currency['deleted'] = (bool) $currency['deleted'];
-        $currency['precision'] = (int) $currency['precision'];
         $currency['active'] = (bool) $currency['active'];
+        if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+            $currency['precision'] = (int) $currency['precision'];
+        }
     }
 }

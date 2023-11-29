@@ -2,18 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use Address;
-use Cart;
-use Combination;
 use Context;
-use Customer;
-use Customization;
-use Group;
 use PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository;
-use Product;
-use Shop;
-use SpecificPrice;
-use Tax;
 
 class SpecificPriceService
 {
@@ -88,7 +78,7 @@ class SpecificPriceService
             $context = \Context::getContext();
         }
 
-        $cur_cart = $context->cart;
+        $cur_cart = (object) $context->cart;
 
         \Tools::displayParameterAsDeprecated('divisor');
 
@@ -117,15 +107,20 @@ class SpecificPriceService
             $usetax = false;
         }
 
-        if ($usetax != false
+        if (
+            $usetax != false
             && !empty($address->vat_number)
             && $address->id_country != \Configuration::get('VATNUMBER_COUNTRY')
-            && \Configuration::get('VATNUMBER_MANAGEMENT')) {
+            && \Configuration::get('VATNUMBER_MANAGEMENT')
+        ) {
             $usetax = false;
         }
 
-        /** @var int $shopId */
-        $shopId = $context->shop->id;
+        if ($context->shop == null) {
+            throw new \PrestaShopException('No shop context');
+        }
+
+        $shopId = (int) $context->shop->id;
 
         return $this->priceCalculation(
             $shopId,
@@ -291,7 +286,7 @@ class SpecificPriceService
         $address->id_state = $id_state;
         $address->postcode = $zipcode;
 
-        $tax_manager = \TaxManagerFactory::getManager($address, (string) \Product::getIdTaxRulesGroupByIdProduct((int) $id_product, $context));
+        $tax_manager = \TaxManagerFactory::getManager($address, \Product::getIdTaxRulesGroupByIdProduct((int) $id_product, $context));
         $product_tax_calculator = $tax_manager->getTaxCalculator();
 
         // Add Tax

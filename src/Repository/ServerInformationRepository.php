@@ -97,6 +97,10 @@ class ServerInformationRepository
             $folderCreatedAt = (new \DateTime(date('Y-m-d H:i:s', (int) filectime($filename)), new \DateTimeZone('Europe/Paris')))->format('Y-m-d\TH:i:sO');
         }
 
+        if ($this->context->link === null) {
+            throw new \PrestaShopException('No link context');
+        }
+
         return [
             [
                 'id' => '1',
