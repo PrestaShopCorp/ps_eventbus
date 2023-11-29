@@ -8,7 +8,6 @@ services:
       mysql:
         condition: service_healthy
     volumes:
-      - ./Shop.php:/var/www/html/classes/shop/Shop.php:ro
       - ../..:/var/www/html/modules/ps_eventbus:rw
     environment:
       - PS_DOMAIN=localhost:8000
