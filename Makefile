@@ -79,7 +79,7 @@ zip-prod: vendor dist .config.prod.yml
 	@$(call zip_it,.config.prod.yml,${PACKAGE}.zip)
 
 # target: build                                  - Setup PHP & Node.js locally
-build: vendor tools-vendor
+build: vendor tools/vendor
 
 composer.phar:
 	@php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');";
@@ -89,7 +89,7 @@ composer.phar:
 vendor: composer.phar
 	./composer.phar install --no-dev -o;
 
-tools/vendor: vendor composer.phar
+tools/vendor: composer.phar
 	./composer.phar install --working-dir tools -o;
 	sed -i -e 's|%currentWorkingDirectory%/vendor|%currentWorkingDirectory%/tools/vendor|g' ./tools/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
 
