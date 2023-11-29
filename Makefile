@@ -89,7 +89,7 @@ composer.phar:
 vendor: composer.phar
 	./composer.phar install --no-dev -o;
 
-tools/vendor: composer.phar
+tools/vendor: vendor composer.phar
 	./composer.phar install --working-dir tools -o;
 	sed -i -e 's|%currentWorkingDirectory%/vendor|%currentWorkingDirectory%/tools/vendor|g' ./tools/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
 
