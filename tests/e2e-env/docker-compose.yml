@@ -8,7 +8,6 @@ services:
       mysql:
         condition: service_healthy
     volumes:
-      - ./ps_scripts:/ps_scripts:ro
       - ./Shop.php:/var/www/html/classes/shop/Shop.php:ro
       - ../..:/var/www/html/modules/ps_eventbus:rw
     environment:
@@ -21,10 +20,8 @@ services:
 
   mysql:
     image: mariadb:${DOCKER_VERSION_MARIADB:?See e2e-env/.env.dist}
-    env_file:
-      - ./prestashop.env
-    environment:
-      - TZ=UTC
+    container_name: prestashop-mysql
+    env_file: ./prestashop.env
     healthcheck:
       test:
         [
@@ -32,13 +29,12 @@ services:
           "mysqladmin",
           "ping",
           "--host=localhost",
-          "--user=root",
+          "--user=prestashop",
           "--password=prestashop",
         ]
       interval: 5s
       timeout: 10s
       retries: 5
-      start_period: 5s
     ports:
       - ${HOST_PORT_BIND_MYSQL:?See e2e-env/.env.dist}:3306
     networks:
