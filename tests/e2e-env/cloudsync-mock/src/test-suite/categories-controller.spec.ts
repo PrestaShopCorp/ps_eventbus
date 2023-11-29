@@ -1,12 +1,3 @@
-import {
-  afterAll,
-  afterEach,
-  beforeAll,
-  describe,
-  expect,
-  it,
-  jest,
-} from '@jest/globals';
 import request from 'supertest';
 import { CollectorApi, SyncApi } from '../helpers/api-mock';
 import { config } from '../helpers/config';
