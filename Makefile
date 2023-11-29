@@ -33,22 +33,17 @@ version:
 zip: zip-prod zip-preprod zip-inte
 dist:
 	@mkdir -p ./dist
-.config.inte.yml:
-	@echo ".config.inte.yml file is missing, please create it. Exiting" && exit 1;
-.config.preprod.yml:
-	@echo ".config.preprod.yml file is missing, please create it. Exiting" && exit 1;
-.config.prod.yml:
-	@echo ".config.prod.yml file is missing, please create it. Exiting" && exit 1;
-.config.e2e.yml:
-	@echo ".config.e2e.yml file is missing, please create it. Exiting" && exit 1;
 
 define zip_it
 $(eval TMP_DIR := $(shell mktemp -d))
 mkdir -p ${TMP_DIR}/ps_eventbus;
 cp -r $(shell cat .zip-contents) ${TMP_DIR}/ps_eventbus;
 ./tools/vendor/bin/autoindex prestashop:add:index ${TMP_DIR}
+if [ $1 = "./config/parameters.yml" ]; then
+./tests/Mocks/apply-ps-accounts-mock.sh ${TMP_DIR}/ps_eventbus;
+else
 cp $1 ${TMP_DIR}/ps_eventbus/config/parameters.yml;
-if [ $1 = ".config.e2e.yml" ]; then ./tests/Mocks/apply-ps-accounts-mock.sh ${TMP_DIR}/ps_eventbus; fi
+fi
 cd ${TMP_DIR} && zip -9 -r $2 ./ps_eventbus;
 mv ${TMP_DIR}/$2 ./dist;
 rm -rf ${TMP_DIR:-/dev/null};
@@ -63,19 +58,19 @@ docker run \
 endef
 
 # target: zip-e2e                                - Bundle a local E2E integrable zip
-zip-e2e: vendor dist .config.e2e.yml
-	@$(call zip_it,.config.e2e.yml,${PACKAGE}_e2e.zip)
+zip-e2e: vendor dist
+	@$(call zip_it,./config/parameters.yml,${PACKAGE}_e2e.zip)
 
 # target: zip-inte                               - Bundle an integration zip
-zip-inte: vendor dist .config.inte.yml
+zip-inte: vendor dist
 	@$(call zip_it,.config.inte.yml,${PACKAGE}_integration.zip)
 
 # target: zip-preprod                            - Bundle a preproduction zip
-zip-preprod: vendor dist .config.preprod.yml
+zip-preprod: vendor dist
 	@$(call zip_it,.config.preprod.yml,${PACKAGE}_preproduction.zip)
 
 # target: zip-prod                               - Bundle a production zip
-zip-prod: vendor dist .config.prod.yml
+zip-prod: vendor dist
 	@$(call zip_it,.config.prod.yml,${PACKAGE}.zip)
 
 # target: build                                  - Setup PHP & Node.js locally
