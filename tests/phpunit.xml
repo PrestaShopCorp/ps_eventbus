@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<phpunit bootstrap="../tools/vendor/autoload.php" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" beStrictAboutChangesToGlobalState="true" beStrictAboutOutputDuringTests="true" colors="true" executionOrder="random" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd" cacheDirectory=".phpunit.cache">
+<phpunit bootstrap="../vendor/autoload.php" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" beStrictAboutChangesToGlobalState="true" beStrictAboutOutputDuringTests="true" colors="true" executionOrder="random" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd" cacheDirectory=".phpunit.cache">
   <testsuites>
     <testsuite name="Ps eventbus Tests">
       <directory>./unit</directory>
