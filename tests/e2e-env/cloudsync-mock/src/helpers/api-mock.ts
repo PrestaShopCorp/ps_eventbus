@@ -1,6 +1,6 @@
-import express from "express";
+import express from 'express';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const fileParser = require("express-multipart-file-parser");
+const fileParser = require('express-multipart-file-parser');
 
 class Server {
   private server: any;
@@ -13,12 +13,12 @@ class Server {
     this.api.use(this.middleware.bind(this));
     this.server = this.api.listen(this.port);
   }
-  middleware(req, res, next) {
+  middleware(req, _res, next) {
     this.requestData(req);
     next();
   }
   requestData(req: any) {
-    console.log("req");
+    console.log('req', req);
   }
   public async close() {
     return this.server.close();
@@ -26,14 +26,14 @@ class Server {
 }
 
 export class SyncApi extends Server {
-  constructor(port: number) {
-    super(port);
-    this.api.get("/", function (req, res) {
+  constructor(port: string) {
+    super(parseInt(port));
+    this.api.get('/', (_req, res) => {
       res.status(200).end();
     });
-    this.api.get("/job/:id", function (req, res) {
+    this.api.get('/job/:id', (req, res) => {
       const jobId = req.params.id;
-      if (jobId.startsWith("valid-job-")) {
+      if (jobId.startsWith('valid-job-')) {
         res.status(201).end();
       } else {
         res.status(500).end();
@@ -42,15 +42,15 @@ export class SyncApi extends Server {
   }
 }
 
-export class ProxyApi extends Server {
-  constructor(port: number) {
-    super(port);
-    this.api.get("/", function (req, res) {
+export class CollectorApi extends Server {
+  constructor(port: string) {
+    super(parseInt(port));
+    this.api.get('/', (_req, res) => {
       res.status(200).end();
     });
-    this.api.post("/upload/:job_id", function (req, res) {
+    this.api.post('/upload/:job_id', (req, res) => {
       const jobId = req.params.job_id;
-      if (jobId.startsWith("valid-job-")) {
+      if (jobId.startsWith('valid-job-')) {
         res.status(201).end();
       } else {
         res.status(500).end();
@@ -59,4 +59,4 @@ export class ProxyApi extends Server {
   }
 }
 
-export default { SyncApi, ProxyApi };
+export default { SyncApi, CollectorApi };

@@ -1,22 +1,45 @@
 ---
 root: true
+env:
+  jest: true
+  es6: true
 plugins:
   - '@typescript-eslint'
-  - prettier
   - deprecation
   - import
   - unicorn
+  - prettier
 extends:
   - eslint:recommended
   - plugin:@typescript-eslint/recommended
   - plugin:import/recommended
   - plugin:import/typescript
   - plugin:prettier/recommended
+parser: '@typescript-eslint/parser'
+parserOptions:
+  sourceType: module
+  project: true
+ignorePatterns:
+  - 'dist/'
+  - 'node_modules/'
+  - 'coverage/'
+settings:
+  import/parsers:
+    '@typescript-eslint/parser':
+      - '.ts'
+  import/resolver:
+    typescript:
+      project: true
+    node:
+      project: true
 rules:
-  '@typescript-eslint/interface-name-prefix': 'off'
-  '@typescript-eslint/explicit-function-return-type': 'off'
-  '@typescript-eslint/explicit-module-boundary-types': 'off'
-  '@typescript-eslint/no-explicit-any': 'off'
+  'prettier/prettier': error
+  '@typescript-eslint/no-explicit-any': off
+  '@typescript-eslint/explicit-module-boundary-types': off
+  '@typescript-eslint/no-unused-vars':
+    - warn
+    - argsIgnorePattern: '^_'
+      varsIgnorePattern: '^_'
   unicorn/filename-case:
     - error
     - case: kebabCase
@@ -25,29 +48,7 @@ rules:
   import/no-extraneous-dependencies:
     - error
     - devDependencies:
-        - '**/*.spec.ts'
-        - '**/*.e2e-spec.ts'
-
-ignorePatterns:
-  - 'dist/'
-  - 'node_modules/'
-  - 'coverage/'
-parser: '@typescript-eslint/parser'
-parserOptions:
-  sourceType: module
-  project: tsconfig.json
-settings:
-  import/parsers:
-    '@typescript-eslint/parser':
-      - '.ts'
-  import/resolver:
-    typescript:
-      project: tsconfig.json
-env:
-  node: true
-  jest: true
-overrides:
-  - files:
-      - '*.yaml'
-      - '*.yml'
-    parser: yaml-eslint-parser
+        - '**/*.ts'
+      optionalDependencies:
+        - '**/*.ts'
+      peerDependencies: true

@@ -1,18 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es2021",
+    "target": "es2022",
     "outDir": "dist",
     "rootDir": "src",
+    "module": "CommonJS",
     "baseUrl": ".",
     "incremental": false,
-    "moduleResolution": "node",
     "removeComments": true,
-    "resolveJsonModule": true,
-    "sourceMap": true,
-    "declaration": true,
-    "esModuleInterop": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
   },
   "ts-node": {
     "require": ["tsconfig-paths/register"]
