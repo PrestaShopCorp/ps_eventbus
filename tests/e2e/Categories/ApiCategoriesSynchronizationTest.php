@@ -8,9 +8,8 @@ class CategoriesSyncTest extends BaseTestCase
 {
     public function testCategoriesSync()
     {
-        echo "Not implement yet";
+        echo 'Not implement yet';
 
         return 'Not implement yet';
     }
 }
-

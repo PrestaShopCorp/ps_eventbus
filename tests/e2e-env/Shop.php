@@ -111,7 +111,7 @@ class ShopCore extends ObjectModel
     protected static $context_id_shop_group;
 
     /** @var ShopGroup|null Context shop group kept as cache */
-    protected static $context_shop_group = null;
+    protected static $context_shop_group;
 
     /** @var bool|null is multistore activated */
     protected static $feature_active;
@@ -914,7 +914,7 @@ class ShopCore extends ObjectModel
     public static function getSharedShops($shop_id, $type)
     {
         if (!in_array($type, [Shop::SHARE_CUSTOMER, Shop::SHARE_ORDER, Shop::SHARE_STOCK])) {
-            die('Wrong argument ($type) in Shop::getSharedShops() method');
+            exit('Wrong argument ($type) in Shop::getSharedShops() method');
         }
 
         Shop::cacheShops();
