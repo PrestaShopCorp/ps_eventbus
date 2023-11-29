@@ -1339,17 +1339,11 @@ class Ps_eventbus extends Module
         if ((int) $shopContentId === 0) {
             return;
         }
-
-        /** @var \PrestaShop\Module\PsEventbus\Service\SynchronizationService $synchronizationService */
-        $synchronizationService = $this->getService(PrestaShop\Module\PsEventbus\Service\SynchronizationService::class);
-
-        if ($synchronizationService->debounceLiveSync($shopContents)) {
-            try {
-                /** @var \PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient $liveSyncApiClient */
-                $liveSyncApiClient = $this->getService(\PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient::class);
-                $liveSyncApiClient->liveSync($shopContents, (int) $shopContentId, $action);
-            } catch (\Exception $e) {
-            }
+        try {
+            /** @var \PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient $liveSyncApiClient */
+            $liveSyncApiClient = $this->getService(\PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient::class);
+            $liveSyncApiClient->liveSync($shopContents, (int) $shopContentId, $action);
+        } catch (\Exception $e) {
         }
     }
 
