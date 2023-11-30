@@ -1,4 +1,4 @@
-.PHONY: help build version zip zip-inte zip-preprod zip-prod zip-e2e build test composer-validate lint php-lint lint-fix phpunit phpstan phpstan-baseline docker-test docker-lint docker-lint docker-phpunit docker-phpstan
+.PHONY: help build version zip zip-e2e zip-inte zip-preprod zip-prod build test composer-validate translation-validate lint docker-lint lint-fix docker-fix-lint php-cs-fixer php-cs-fixer-lint lint-fix docker-lint-fix php-lint docker-php-lint phpunit docker-phpunit phpunit-cov docker-phpunit-cov phpstan docker-phpstan phpstan-baseline docker-test
 PHP = $(shell command -v php >/dev/null 2>&1 || { echo >&2 "PHP is not installed."; exit 1; } && which php)
 VERSION ?= $(shell git describe --tags 2> /dev/null || echo "0.0.0")
 SEM_VERSION ?= $(shell echo ${VERSION} | sed 's/^v//')
@@ -109,6 +109,10 @@ translation-validate:
 # target: lint (or docker-lint)                  - Lint the code and expose errors
 lint: php-cs-fixer php-lint
 docker-lint: docker-php-cs-fixer docker-php-lint
+
+# target: lint-fix (or docker-fix-lint)          - Automatically fix the linting errors
+lint-fix: php-cs-fixer-fix
+docker-lint-fix: docker-php-cs-fixer-fix
 
 # target: php-cs-fixer (or php-cs-fixer-lint)    - Lint the code and expose errors
 php-cs-fixer: tools/vendor
