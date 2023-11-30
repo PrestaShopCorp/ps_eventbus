@@ -25,7 +25,7 @@
       "ps_accounts.php"
     ],
     "psr-4": {
-      "PrestaShop\\Module\\PsEventbus\\": "src/"
+      "PrestaShop\\Module\\PsAccounts\\": "src/"
     }
   },
   "require": {

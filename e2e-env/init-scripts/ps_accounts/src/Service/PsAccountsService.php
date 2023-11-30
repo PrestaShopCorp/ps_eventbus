@@ -58,23 +58,3 @@ class PsAccountsService
         return true;
     }
 }
-
-class PsAccounts
-{
-    private $psAccountsMock;
-
-    public function __construct()
-    {
-        $this->psAccountsMock = new PsAccountsServiceMock();
-    }
-
-    public function getService()
-    {
-        return $this->psAccountsMock;
-    }
-
-    public function getPsAccountsService()
-    {
-        return $this->getService();
-    }
-}
