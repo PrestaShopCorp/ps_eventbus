@@ -17,7 +17,7 @@ default: build
 help:
 	@egrep "^#" Makefile
 
-# target: build                                  - Clean up the repository
+# target: clean                                  - Clean up the repository
 clean:
 	git -c core.excludesfile=/dev/null clean -X -d -f
 

@@ -1,9 +1,6 @@
 services:
   prestashop:
     image: ${DOCKER_IMAGE_PRESTASHOP:?See e2e-env/.env.dist}
-    env_file:
-      - ./prestashop.env
-      - ./.env
     depends_on:
       mysql:
         condition: service_healthy
@@ -22,7 +19,6 @@ services:
   mysql:
     image: mariadb:${DOCKER_VERSION_MARIADB:?See e2e-env/.env.dist}
     container_name: prestashop-mysql
-    env_file: ./prestashop.env
     healthcheck:
       test:
         [
@@ -36,6 +32,13 @@ services:
       interval: 5s
       timeout: 10s
       retries: 5
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=prestashop
+      - MYSQL_PASSWORD=prestashop
+      - MYSQL_ROOT_PASSWORD=prestashop
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=prestashop
     ports:
       - ${HOST_PORT_BIND_MYSQL:?See e2e-env/.env.dist}:3306
     networks:
@@ -43,10 +46,14 @@ services:
 
   phpmyadmin:
     image: phpmyadmin:latest
-    env_file:
-      - ./prestashop.env
     ports:
       - ${HOST_PORT_BIND_PHP_MY_ADMIN:?See e2e-env/.env.dist}:80
+    environment:
+      - PMA_HOST=mysql
+      - PMA_PORT=3306
+      - PMA_USER=prestashop
+      - PMA_PASSWORD=prestashop
+      - MYSQL_ROOT_PASSWORD=prestashop
     networks:
       - prestashop
 
