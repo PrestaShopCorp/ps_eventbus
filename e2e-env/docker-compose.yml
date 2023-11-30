@@ -8,7 +8,7 @@ services:
       mysql:
         condition: service_healthy
     volumes:
-      - ../..:/var/www/html/modules/ps_eventbus:rw
+      - ..:/var/www/html/modules/ps_eventbus:rw
       - ./init-scripts:/tmp/init-scripts:ro
     environment:
       - PS_DOMAIN=localhost:8000
