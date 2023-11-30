@@ -1343,11 +1343,13 @@ class Ps_eventbus extends Module
         /** @var \PrestaShop\Module\PsEventbus\Service\SynchronizationService $synchronizationService */
         $synchronizationService = $this->getService(PrestaShop\Module\PsEventbus\Service\SynchronizationService::class);
 
-        if ($synchronizationService->debounceLiveSync($shopContents)) {
+        $shopContentNeedsSync = $synchronizationService->debounceLiveSync($shopContents);
+
+        if (count($shopContentNeedsSync) > 0) {
             try {
                 /** @var \PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient $liveSyncApiClient */
                 $liveSyncApiClient = $this->getService(\PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient::class);
-                $liveSyncApiClient->liveSync($shopContents, (int) $shopContentId, $action);
+                $liveSyncApiClient->liveSync($shopContentNeedsSync, (int) $shopContentId, $action);
             } catch (\Exception $e) {
             }
         }
