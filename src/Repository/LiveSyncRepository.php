@@ -29,7 +29,7 @@ class LiveSyncRepository
             WHERE `eb_debounce`.`shop_content` = "' . pSQL($shopContent) . '"
             LIMIT 1
         ';
-        
+
         $result = $this->db->executeS($query);
 
         return $result ? $result[0]['last_change_at'] : null;
@@ -50,7 +50,7 @@ class LiveSyncRepository
             VALUES ("' . pSQL($shopContent) . '", "' . pSQL($lastChangeAt) . '")
             ON DUPLICATE KEY UPDATE `last_change_at` = "' . pSQL($lastChangeAt) . '"
         ';
-    
+
         return $this->db->execute($query);
     }
 }

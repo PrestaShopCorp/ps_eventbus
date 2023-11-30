@@ -136,7 +136,7 @@ class SynchronizationService
         return $this->returnSyncResponse($data, $response, $remainingObjects);
     }
 
-    public function debounceLiveSync($shopContents) 
+    public function debounceLiveSync($shopContents)
     {
         $dateNow = date('Y-m-d H:i:s');
         $lastChangeAt = $this->liveSyncRepository->getLastChangeAtByShopContent($shopContents);
