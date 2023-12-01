@@ -1,0 +1,6 @@
+ps_eventbus_api_resolver:
+  path: pseventbus/api/{query}
+  methods: [GET, POST]
+  defaults:
+    query: ""
+    _controller: 'PrestaShop\Module\PsEventbus\Controller\Admin\PsEventbusResolverController::resolve'

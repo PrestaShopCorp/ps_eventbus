@@ -2,11 +2,23 @@ imports:
   - { resource: ../common.yml }
   - { resource: ../front/repository.yml }
   - { resource: ../front/services.yml }
-  - { resource: ../helpers.yml }
 
 services:
   ps_eventbus.service.presenter:
-    class: 'PrestaShop\Module\Ps_eventbus\Service\PresenterService'
+    class: 'PrestaShop\Module\PsEventbus\Service\PresenterService'
     arguments:
       - "@ps_eventbus.helper.module"
     public: true
+
+  ps_eventbus.helper.module:
+    class: 'PrestaShop\Module\PsEventbus\Helper\ModuleHelper'
+    arguments:
+      - "@ps_eventbus"
+    public: true
+  
+  ps_eventbus.module.upgrade:
+    class: 'PrestaShop\Module\PsEventbus\Module\Upgrade'
+    arguments:
+      - "@ps_eventbus"
+    public: true
+

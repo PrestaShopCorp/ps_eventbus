@@ -3,7 +3,6 @@
 namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
-use PrestaShop\Module\Ps_eventbus\Helper\ModuleHelper;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 
 class PresenterService
@@ -13,15 +12,8 @@ class PresenterService
      */
     private $psAccountsService;
 
-    /**
-     * @var ModuleHelper
-     */
-    private $moduleHelper;
-
-    public function __construct(ModuleHelper $moduleHelper)
+    public function __construct()
     {
-        $this->moduleHelper = $moduleHelper;
-
         $moduleManager = ModuleManagerBuilder::getInstance();
         if (!$moduleManager) {
             return;
@@ -89,6 +81,9 @@ class PresenterService
      */
     public function expose(\ModuleCore $module, $requiredConsents = [], $optionalConsents = [])
     {
+        $module = \Module::getInstanceByName('ps_eventbus');
+        $moduleHelper = $module->getService('ps_eventbus.helper.module');
+
         if (!in_array('info', $requiredConsents)) {
             array_unshift($requiredConsents, 'info');
         }
@@ -116,7 +111,14 @@ class PresenterService
                     'lang' => $language->iso_code,
                 ],
                 'psEventbusModule' => $this->convertObjectToArray(\Module::getInstanceByName('ps_eventbus')),
-                'updatePsEvenbusUrl' => $this->moduleHelper->getUpdateLink('ps_eventbus'),
+                'modules_informations' => [
+                    'ps_eventbus' => $moduleHelper->buildModuleInformations(
+                        'ps_eventbus'
+                    ),
+                    'ps_mbo' => $moduleHelper->buildModuleInformations(
+                        'ps_mbo'
+                    ),
+                ]
             ];
         }
     }
