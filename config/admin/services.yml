@@ -6,8 +6,6 @@ imports:
 services:
   ps_eventbus.service.presenter:
     class: 'PrestaShop\Module\PsEventbus\Service\PresenterService'
-    arguments:
-      - "@ps_eventbus.helper.module"
     public: true
 
   ps_eventbus.helper.module:

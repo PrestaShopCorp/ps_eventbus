@@ -74,16 +74,19 @@ class PresenterService
     }
 
     /**
-     * @param \Ps_eventbus $module
+     * @param \ModuleCore $module
      * @param array $requiredConsents
      * @param array $optionalConsents
      *
      * @return array
      */
-    public function expose(\Ps_eventbus $module, $requiredConsents = [], $optionalConsents = [])
+    public function expose(\ModuleCore $module, $requiredConsents = [], $optionalConsents = [])
     {
+        /** @var \Ps_eventbus $psEventbusModule */
+        $psEventbusModule = \Module::getInstanceByName('ps_eventbus');
+
         /** @var ModuleHelper $moduleHelper */
-        $moduleHelper = $module->getService('ps_eventbus.helper.module');
+        $moduleHelper = $psEventbusModule->getService('ps_eventbus.helper.module');
 
         if (!in_array('info', $requiredConsents)) {
             array_unshift($requiredConsents, 'info');
