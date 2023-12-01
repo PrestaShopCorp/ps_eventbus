@@ -19,7 +19,7 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 
-namespace PrestaShop\Module\Ps_eventbus\Module;
+namespace PrestaShop\Module\PsEventbus\Module;
 
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 use Ps_eventbus;
@@ -27,18 +27,18 @@ use Ps_eventbus;
 class Upgrade
 {
     /**
-     * @var Ps_eventbus
+     * @var \Ps_eventbus
      */
     private $module;
 
     /**
      * Install constructor.
      *
-     * @param Ps_eventbus $module
+     * @param \Ps_eventbus $module
      *
      * @return void
      */
-    public function __construct(Ps_eventbus $module)
+    public function __construct(\Ps_eventbus $module)
     {
         $this->module = $module;
     }

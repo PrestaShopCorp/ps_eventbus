@@ -2,9 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Helper;
 
-use ModuleCore;
 use PrestaShopBundle\Service\Routing\Router;
-use Prestashop\ModuleLibMboInstaller\Installer as MBOInstaller;
+
 class ModuleHelper
 {
     /** @var \Ps_eventbus */
@@ -38,11 +37,11 @@ class ModuleHelper
     /**
      * @param string $moduleName
      *
-     * @return false|ModuleCore
+     * @return false|\ModuleCore
      */
     public function getInstanceByName(string $moduleName)
     {
-        return ModuleCore::getInstanceByName($moduleName);
+        return \ModuleCore::getInstanceByName($moduleName);
     }
 
     /**

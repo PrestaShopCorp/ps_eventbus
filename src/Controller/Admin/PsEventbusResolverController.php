@@ -22,21 +22,20 @@
 namespace PrestaShop\Module\PsEventbus\Controller\Admin;
 
 use PrestaShop\Module\PsEventbus\Module\Upgrade;
+use Prestashop\ModuleLibMboInstaller\Installer as MBOInstaller;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
-use Ps_eventbus;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Prestashop\ModuleLibMboInstaller\Installer as MBOInstaller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 class PsEventbusResolverController extends FrameworkBundleAdminController
 {
-    /** @var Ps_eventbus */
+    /** @var \Ps_eventbus */
     private $module;
 
     public function __construct()
     {
-        /** @var Ps_eventbus $psEventbus */
+        /** @var \Ps_eventbus $psEventbus */
         $psEventbus = \Module::getInstanceByName('ps_eventbus');
         $this->module = $psEventbus;
     }
