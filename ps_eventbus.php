@@ -41,7 +41,7 @@ class Ps_eventbus extends Module
     /**
      * @var string
      */
-    const VERSION = '0.0.0';
+    const VERSION = '2.3.2';
 
     /**
      * @var array
@@ -144,7 +144,7 @@ class Ps_eventbus extends Module
         $this->author = 'PrestaShop';
         $this->need_instance = 0;
         $this->bootstrap = true;
-        $this->version = '0.0.0';
+        $this->version = '2.3.2';
         $this->module_key = '7d76e08a13331c6c393755886ec8d5ce';
 
         parent::__construct();

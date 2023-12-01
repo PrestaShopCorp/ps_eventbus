@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Prestashop\ModuleLibMboInstaller\Installer as MBOInstaller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class MetricsResolverController extends FrameworkBundleAdminController
+class PsEventbusResolverController extends FrameworkBundleAdminController
 {
     /** @var Ps_eventbus */
     private $module;

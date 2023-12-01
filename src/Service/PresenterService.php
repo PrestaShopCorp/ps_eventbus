@@ -96,6 +96,17 @@ class PresenterService
                 throw new \PrestaShopException('No language context');
             }
 
+            $moduleInformations = [
+                'ps_eventbus' => $moduleHelper->buildModuleInformations(
+                    'ps_eventbus'
+                ),
+                'ps_mbo' => $moduleHelper->buildModuleInformations(
+                    'ps_mbo'
+                ),
+            ];
+            dump($moduleInformations);
+            die;
+
             return [
                 'jwt' => $this->psAccountsService->getOrRefreshToken(),
                 'requiredConsents' => $requiredConsents,

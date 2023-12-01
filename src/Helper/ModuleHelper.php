@@ -58,7 +58,7 @@ class ModuleHelper
             return '';
         }
         /** @var Router $router * */
-        $router = $this->module->getService('router');
+        $router = $this->module->get('router');
 
         if ($moduleName === 'ps_mbo') {
             return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
@@ -88,7 +88,7 @@ class ModuleHelper
         }
 
         /** @var Router $router * */
-        $router = $this->module->getService('router');
+        $router = $this->module->get('router');
 
         return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
             $router->generate('admin_module_manage_action', [
@@ -107,7 +107,7 @@ class ModuleHelper
     public function getUpdateLink(string $moduleName)
     {
         /** @var Router $router * */
-        $router = $this->module->getService('router');
+        $router = $this->module->get('router');
 
         return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
             $router->generate('admin_module_manage_action', [
