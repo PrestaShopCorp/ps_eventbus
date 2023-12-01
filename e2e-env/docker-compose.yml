@@ -68,6 +68,10 @@ services:
     build:
       context: ./cloudsync-mock
       dockerfile: Dockerfile
+    environment:
+      - RUN_IN_DOCKER=1
+    volumes:
+      - ./cloudsync-mock/src:/home/node/src:ro
     networks:
       - prestashop
 
