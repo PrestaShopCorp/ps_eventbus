@@ -40,5 +40,6 @@ CREATE TABLE IF NOT EXISTS `PREFIX_eventbus_incremental_sync`
 CREATE TABLE IF NOT EXISTS `PREFIX_eventbus_live_sync`
 (
     `shop_content`   VARCHAR(50) NOT NULL,
-    `last_change_at` DATETIME    NOT NULL,
-)
+    `last_change_at` DATETIME    NOT NULL
+) ENGINE = ENGINE_TYPE
+  DEFAULT CHARSET = utf8;

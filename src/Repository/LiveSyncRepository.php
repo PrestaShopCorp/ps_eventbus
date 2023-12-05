@@ -2,6 +2,10 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use mysqli_result;
+use PDOStatement;
+use PrestaShopDatabaseException;
+
 class LiveSyncRepository
 {
     /**
@@ -35,7 +39,7 @@ class LiveSyncRepository
 
         $result = $this->db->executeS($query);
 
-        if (is_array($result)) {
+        if (count($result) > 0) {
             return $result[0]['last_change_at'];
         }
 

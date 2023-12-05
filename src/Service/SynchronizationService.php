@@ -137,36 +137,29 @@ class SynchronizationService
     }
 
     /**
-     * @param array $shopContents
+     * @param string $shopContent
      *
-     * @return array
+     * @return bool
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function debounceLiveSync(array $shopContents)
+    public function debounceLiveSync(string $shopContent)
     {
         $dateNow = date('Y-m-d H:i:s');
-        $shopContentsUpdated = [];
 
-        foreach ($shopContents as $shopContent) {
-            $lastChangeAt = $this->liveSyncRepository->getLastChangeAtByShopContent($shopContent);
+        $lastChangeAt = $this->liveSyncRepository->getLastChangeAtByShopContent($shopContent);
 
-            if ($lastChangeAt !== null) {
-                $lastChangeAtInt = strtotime((string) $lastChangeAt);
-                $dateNowInt = strtotime((string) $dateNow);
-                $diff = $dateNowInt - $lastChangeAtInt;
+        $lastChangeAtInt = strtotime((string) $lastChangeAt === null ? $dateNow : $lastChangeAt);
+        $dateNowInt = strtotime((string) $dateNow);
+        $diff = $dateNowInt - $lastChangeAtInt;
 
-                if ($diff > 60 * 5) {
-                    $result = $this->liveSyncRepository->upsertDebounce($shopContent, $dateNow);
+        if ($diff > 60 * 5) {
+            $this->liveSyncRepository->upsertDebounce($shopContent, $dateNow);
 
-                    if ($result === true) {
-                        array_push($shopContentsUpdated, $shopContent);
-                    }
-                }
-            }
+            return true;
         }
 
-        return $shopContentsUpdated;
+        return false;
     }
 
     /**
