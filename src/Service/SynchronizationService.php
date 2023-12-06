@@ -143,19 +143,17 @@ class SynchronizationService
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function debounceLiveSync(string $shopContent)
+    public function debounceLiveSync(string $shopContentName)
     {
         $dateNow = date('Y-m-d H:i:s');
 
-        $lastChangeAt = $this->liveSyncRepository->getLastChangeAtByShopContent($shopContent);
+        $shopContent = $this->liveSyncRepository->getShopContentInfos($shopContentName);
 
-        $lastChangeAtInt = strtotime((string) $lastChangeAt == null ? (string) $dateNow : (string) $lastChangeAt);
-        $dateNowInt = strtotime((string) $dateNow);
-        $diff = $dateNowInt - $lastChangeAtInt;
+        $lastChangeAt = $shopContent != null ? (string) $shopContent['last_change_at'] : (string) $dateNow;
+        $diff = strtotime((string) $dateNow) - strtotime((string) $lastChangeAt);
 
-        if ($diff > 60 * 5) {
-            $this->liveSyncRepository->upsertDebounce($shopContent, $dateNow);
-
+        if ($shopContent == null || $diff > 60 * 5) {
+            $this->liveSyncRepository->upsertDebounce($shopContentName, $dateNow);
             return true;
         }
 
