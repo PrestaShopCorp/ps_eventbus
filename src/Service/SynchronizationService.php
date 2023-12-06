@@ -137,7 +137,7 @@ class SynchronizationService
     }
 
     /**
-     * @param string $shopContent
+     * @param string $shopContentName
      *
      * @return bool
      *
@@ -154,6 +154,7 @@ class SynchronizationService
 
         if ($shopContent == null || $diff > 60 * 5) {
             $this->liveSyncRepository->upsertDebounce($shopContentName, $dateNow);
+
             return true;
         }
 
