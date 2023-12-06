@@ -2,10 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use mysqli_result;
-use PDOStatement;
-use PrestaShopDatabaseException;
-
 class LiveSyncRepository
 {
     /**
