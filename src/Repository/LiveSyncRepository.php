@@ -39,7 +39,7 @@ class LiveSyncRepository
 
         $result = $this->db->executeS($query);
 
-        if (count($result) > 0) {
+        if (is_array($result) && count($result) > 0) {
             return $result[0]['last_change_at'];
         }
 
