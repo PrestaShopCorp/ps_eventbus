@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Copyright (c) 2007-2023 PrestaShop and Contributors
  *
