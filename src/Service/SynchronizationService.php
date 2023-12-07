@@ -147,7 +147,7 @@ class SynchronizationService
     {
         $dateNow = date('Y-m-d H:i:s');
 
-        $shopContent = $this->liveSyncRepository->getShopContentInfos($shopContentName);
+        $shopContent = $this->liveSyncRepository->getShopContentInfo($shopContentName);
 
         $lastChangeAt = $shopContent != null ? (string) $shopContent['last_change_at'] : (string) $dateNow;
         $diff = strtotime((string) $dateNow) - strtotime((string) $lastChangeAt);

@@ -24,7 +24,7 @@ class LiveSyncRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getShopContentInfos(string $shopContent)
+    public function getShopContentInfo(string $shopContent)
     {
         $query = '
             SELECT `eb_ls`.`shop_content`, `eb_ls`.`last_change_at`
