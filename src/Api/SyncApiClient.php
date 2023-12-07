@@ -108,7 +108,7 @@ class SyncApiClient
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                     'Content-Type' => 'application/json',
                 ],
-                '{"shopContents": ["' . $shopContent . '"], "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}'
+                '{"shopContents":' . json_encode($shopContent) . ', "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}'
             )
         );
 
