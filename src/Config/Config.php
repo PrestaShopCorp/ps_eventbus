@@ -58,7 +58,8 @@ class Config
     public const COLLECTION_LANGUAGES = 'languages';
     public const COLLECTION_EMPLOYEES = 'employees';
     public const COLLECTION_TRANSLATIONS = 'translations';
-
+    public const COLLECTION_IMAGES = 'images';
+    public const COLLECTION_IMAGE_TYPES = 'image_types';
     /**
      * @param mixed $message
      *

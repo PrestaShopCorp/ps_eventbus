@@ -42,6 +42,14 @@ services:
     public: true
     arguments:
       - "@ps_eventbus.db"
+      - "@ps_eventbus.context"
+
+  PrestaShop\Module\PsEventbus\Repository\ImageTypeRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ImageTypeRepository
+    public: true
+    arguments:
+      - "@ps_eventbus.db"
+      - "@ps_eventbus.context"
 
   PrestaShop\Module\PsEventbus\Repository\ModuleRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ModuleRepository
@@ -258,3 +266,10 @@ services:
     public: true
     arguments:
       - "@ps_eventbus.db"
+
+  PrestaShop\Module\PsEventbus\Repository\EmployeeRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\EmployeeRepository
+    public: true
+    arguments:
+      - "@ps_eventbus.db"
+      - "@ps_eventbus.context"

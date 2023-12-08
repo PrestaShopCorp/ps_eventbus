@@ -2,7 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-class ImageRepository
+class ImageTypeRepository
 {
     /**
      * @var \Db
@@ -21,9 +21,7 @@ class ImageRepository
     {
         $query = new \DbQuery();
 
-        $query->from('image', 'i')
-            ->leftJoin('image_lang', 'il', 'il.id_image = i.id_image')
-            ->leftJoin('image_shop', 'is', 'is.id_image = i.id_image');
+        $query->from('image_type', 'it');
 
         return $query;
     }
@@ -36,7 +34,7 @@ class ImageRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getImages($offset, $limit)
+    public function getImageTypes($offset, $limit)
     {
         $query = $this->getBaseQuery();
 
@@ -52,29 +50,29 @@ class ImageRepository
      *
      * @return int
      */
-    public function getRemainingImagesCount($offset)
+    public function getRemainingImageTypesCount($offset)
     {
         $query = $this->getBaseQuery()
-            ->select('(COUNT(it.id_image) - ' . (int) $offset . ') as count');
+            ->select('(COUNT(it.id_image_type) - ' . (int) $offset . ') as count');
 
         return (int) $this->db->getValue($query);
     }
 
     /**
      * @param int $limit
-     * @param array $imageIds
+     * @param array $imageTypeIds
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getImagesIncremental($limit, $imageIds)
+    public function getImageTypesIncremental($limit, $imageTypeIds)
     {
         $query = $this->getBaseQuery();
 
         $this->addSelectParameters($query);
 
-        $query->where('it.id_image IN(' . implode(',', array_map('intval', $imageIds)) . ')')
+        $query->where('it.id_image_type IN(' . implode(',', array_map('intval', $imageTypeIds)) . ')')
             ->limit($limit);
 
         return $this->db->executeS($query);
@@ -88,13 +86,15 @@ class ImageRepository
     private function addSelectParameters(\DbQuery $query)
     {
         $query->select('
-            it.id_image,
-            it.id_product,
-            it.id_lang,
-            it.id_shop,
-            it.position,
-            it.cover,
-            it.legend
+            it.id_image_type,
+            it.name,
+            it.width,
+            it.height,
+            it.products,
+            it.categories,
+            it.manufacturers,
+            it.suppliers,
+            it.stores
         ');
     }
 }
