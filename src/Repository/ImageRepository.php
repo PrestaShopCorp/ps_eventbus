@@ -80,7 +80,7 @@ class ImageRepository
         return $this->db->executeS($query);
     }
 
-     /**
+    /**
      * @param int $productId
      * @param int $shopId
      *
@@ -152,5 +152,4 @@ class ImageRepository
             it.legend
         ');
     }
-    
 }
