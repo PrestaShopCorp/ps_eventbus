@@ -1,0 +1,101 @@
+services:
+  prestashop:
+    image: ${DOCKER_IMAGE_PRESTASHOP:?See e2e-env/.env.dist}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ..:/var/www/html/modules/ps_eventbus:rw
+      - ./init-scripts:/tmp/init-scripts:ro
+    environment:
+      - PS_DOMAIN=localhost:8000
+      - INIT_SCRIPTS_DIR=/tmp/init-scripts
+      - DEBUG_MODE=true
+    ports:
+      - ${HOST_PORT_BIND_PRESTASHOP:?See e2e-env/.env.dist}:80
+    networks:
+      - prestashop
+
+  mysql:
+    image: mariadb:${DOCKER_VERSION_MARIADB:?See e2e-env/.env.dist}
+    container_name: prestashop-mysql
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "--host=localhost",
+          "--user=prestashop",
+          "--password=prestashop",
+        ]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=prestashop
+      - MYSQL_PASSWORD=prestashop
+      - MYSQL_ROOT_PASSWORD=prestashop
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=prestashop
+    ports:
+      - ${HOST_PORT_BIND_MYSQL:?See e2e-env/.env.dist}:3306
+    networks:
+      - prestashop
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - ${HOST_PORT_BIND_PHP_MY_ADMIN:?See e2e-env/.env.dist}:80
+    environment:
+      - PMA_HOST=mysql
+      - PMA_PORT=3306
+      - PMA_USER=prestashop
+      - PMA_PASSWORD=prestashop
+      - MYSQL_ROOT_PASSWORD=prestashop
+    networks:
+      - prestashop
+
+  cloudsync-mock-test:
+    container_name: cloudsync-mock-test
+    restart: "no"
+    depends_on:
+      prestashop:
+        condition: service_healthy
+      reverse-proxy:
+        condition: service_healthy
+    build:
+      context: ./cloudsync-mock
+      dockerfile: Dockerfile
+    environment:
+      - RUN_IN_DOCKER=1
+    volumes:
+      - ./cloudsync-mock/src:/home/node/src:ro
+    networks:
+      - prestashop
+
+  reverse-proxy:
+    image: nginx:stable-alpine
+    container_name: reverse-proxy
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget --quiet --tries=1 --spider http://localhost:80/nginx_status",
+        ]
+      interval: 10s
+      timeout: 2s
+      retries: 5
+      start_period: 1s
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro,cached
+    command: [nginx-debug, "-g", "daemon off;"]
+    networks:
+      - prestashop
+    ports:
+      - ${HOST_PORT_BIND_CLOUDSYNC_REVERSE_PROXY:?See e2e-env/.env.dist}:80
+
+networks:
+  prestashop:
+    driver: bridge
