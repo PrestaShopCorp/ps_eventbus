@@ -20,7 +20,7 @@
   </php>
   <testsuites>
     <testsuite name="Ps eventbus Tests">
-      <directory>./unit</directory>
+      <directory>unit</directory>
     </testsuite>
   </testsuites>
   <listeners>
