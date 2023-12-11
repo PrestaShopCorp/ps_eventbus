@@ -670,6 +670,10 @@
                 "package",
                 "prestashop"
             ],
+            "support": {
+                "issues": "https://github.com/PrestaShopCorp/module-lib-service-container/issues",
+                "source": "https://github.com/PrestaShopCorp/module-lib-service-container/tree/v2.0"
+            },
             "time": "2022-06-20T08:30:47+00:00"
         },
         {
