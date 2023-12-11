@@ -37,20 +37,6 @@ services:
     arguments:
       - "@ps_eventbus.db"
 
-  PrestaShop\Module\PsEventbus\Repository\ImageRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\ImageRepository
-    public: true
-    arguments:
-      - "@ps_eventbus.db"
-      - "@ps_eventbus.context"
-
-  PrestaShop\Module\PsEventbus\Repository\ImageTypeRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\ImageTypeRepository
-    public: true
-    arguments:
-      - "@ps_eventbus.db"
-      - "@ps_eventbus.context"
-
   PrestaShop\Module\PsEventbus\Repository\ModuleRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ModuleRepository
     public: true
@@ -273,3 +259,15 @@ services:
     arguments:
       - "@ps_eventbus.db"
       - "@ps_eventbus.context"
+  
+  PrestaShop\Module\PsEventbus\Repository\ImageRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ImageRepository
+    public: true
+    arguments:
+      - "@ps_eventbus.db"
+
+  PrestaShop\Module\PsEventbus\Repository\ImageTypeRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ImageTypeRepository
+    public: true
+    arguments:
+      - "@ps_eventbus.db"

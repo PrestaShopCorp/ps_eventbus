@@ -130,9 +130,32 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\SupplierRepository'
       - '@PrestaShop\Module\PsEventbus\Decorator\SupplierDecorator'
 
+  PrestaShop\Module\PsEventbus\Provider\EmployeeDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\EmployeeDataProvider
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\EmployeeRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\EmployeeDecorator'
+
   PrestaShop\Module\PsEventbus\Provider\LanguageDataProvider:
     class: PrestaShop\Module\PsEventbus\Provider\LanguageDataProvider
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
       - '@PrestaShop\Module\PsEventbus\Decorator\LanguageDecorator'
+
+  
+  PrestaShop\Module\PsEventbus\Provider\ImageDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\ImageDataProvider
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\ImageRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\ImageDecorator'
+
+  PrestaShop\Module\PsEventbus\Provider\ImageTypeDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\ImageTypeDataProvider
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\ImageTypeRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\ImageTypeDecorator'
+
