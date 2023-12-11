@@ -1,3 +1,0 @@
-imports:
-  - { resource: ../../../../config/admin/services.yml }
-  - { resource: ../overrides/services.yml }
