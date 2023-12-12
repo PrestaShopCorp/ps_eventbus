@@ -40,6 +40,7 @@ mkdir -p ${TMP_DIR}/ps_eventbus;
 cp -r $(shell cat .zip-contents) ${TMP_DIR}/ps_eventbus;
 ./tools/vendor/bin/autoindex prestashop:add:index ${TMP_DIR}
 cp $1 ${TMP_DIR}/ps_eventbus/config/parameters.yml;
+sed -i 's/0.0.0/1.9.0/g' ${TMP_DIR}/ps_eventbus/ps_eventbus.php;
 cd ${TMP_DIR} && zip -9 -r $2 ./ps_eventbus;
 mv ${TMP_DIR}/$2 ./dist;
 rm -rf ${TMP_DIR:-/dev/null};
