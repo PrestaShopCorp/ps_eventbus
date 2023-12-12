@@ -19,11 +19,10 @@ PS Accounts compatibility matrix [can be viewed here](https://github.com/PrestaS
 ```sh
 make help        # get help on how to use the awesome Makefile features
 make             # bundle all vendors required for the module to run
-make version     # update the package configuration to the current version
 make zip         # make a zip ready to be tested in PrestaShop (see ./dist)
 ```
 
-> Pro-tip: prefix all you make commands with the variables you want to override. Ie: `VERSION=v1.2.3-rc4 make version` to set the package to the desired version.
+> Pro-tip: prefix all you make commands with the variables you want to override. Ie: `VERSION=v1.2.3-rc4 make zip-prod` to set the zip package to the desired version.
 
 ## Testing
 
