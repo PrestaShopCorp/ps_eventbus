@@ -72,8 +72,29 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
 
+  PrestaShop\Module\PsEventbus\Decorator\EmployeeDecorator:
+    class: PrestaShop\Module\PsEventbus\Decorator\EmployeeDecorator
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
+
   PrestaShop\Module\PsEventbus\Decorator\LanguageDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\LanguageDecorator
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
+
+  PrestaShop\Module\PsEventbus\Decorator\ImageDecorator:
+    class: PrestaShop\Module\PsEventbus\Decorator\ImageDecorator
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
+
+  PrestaShop\Module\PsEventbus\Decorator\ImageTypeDecorator:
+    class: PrestaShop\Module\PsEventbus\Decorator\ImageTypeDecorator
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
