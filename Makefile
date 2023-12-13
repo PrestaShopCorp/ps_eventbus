@@ -10,34 +10,18 @@ TESTING_IMAGE ?= prestashop/prestashop-flashlight:${PS_VERSION}-${PHP_VERSION}
 PS_ROOT_DIR ?= $(shell pwd)/prestashop/prestashop-${PS_VERSION}
 export PATH := ./vendor/bin:./tools/vendor/bin:$(PATH)
 
-# target: default                                - Calling build by default
-default: build
-
-# target: help                                   - Get help on this file
-help:
-	@egrep "^#" Makefile
-
-# target: clean                                  - Clean up the repository
-clean:
-	git -c core.excludesfile=/dev/null clean -X -d -f
-
-# target: version                                - Replace version in files
-version:
-	@echo "...$(VERSION)..."
-	@sed -i.bak -e "s/\(VERSION = \).*/\1\'${SEM_VERSION}\';/" ps_eventbus.php
-	@sed -i.bak -e "s/\($this->version = \).*/\1\'${SEM_VERSION}\';/" ps_eventbus.php
-	@sed -i.bak -e "s|\(<version><!\[CDATA\[\)[0-9a-z.-]\{1,\}]]></version>|\1${SEM_VERSION}]]></version>|" config.xml
-	@rm -f ps_eventbus.php.bak config.xml.bak
-
-# target: zip                                    - Make zip bundles
-zip: zip-prod zip-preprod zip-inte
-dist:
-	@mkdir -p ./dist
+define replace_version
+sed -i.bak -e "s/\(VERSION = \).*/\1\'${2}\';/" ${1}/ps_eventbus.php
+sed -i.bak -e "s/\($this->version = \).*/\1\'${2}\';/" ${1}/ps_eventbus.php
+sed -i.bak -e "s|\(<version><!\[CDATA\[\)[0-9a-z.-]\{1,\}]]></version>|\1${2}]]></version>|" ${1}/config.xml
+rm -f ${1}/ps_eventbus.php.bak ${1}/config.xml.bak
+endef
 
 define zip_it
 $(eval TMP_DIR := $(shell mktemp -d))
 mkdir -p ${TMP_DIR}/ps_eventbus;
 cp -r $(shell cat .zip-contents) ${TMP_DIR}/ps_eventbus;
+$(call replace_version,${TMP_DIR}/ps_eventbus,${SEM_VERSION})
 ./tools/vendor/bin/autoindex prestashop:add:index ${TMP_DIR}
 cp $1 ${TMP_DIR}/ps_eventbus/config/parameters.yml;
 cd ${TMP_DIR} && zip -9 -r $2 ./ps_eventbus;
@@ -52,6 +36,26 @@ docker run \
 --volume $(shell pwd):/var/www/html/modules/ps_eventbus:rw \
 --entrypoint $1 ${TESTING_IMAGE} $2
 endef
+
+# target: default                                - Calling build by default
+default: build
+
+# target: help                                   - Get help on this file
+help:
+	@egrep "^#" Makefile
+
+# target: clean                                  - Clean up the repository
+clean:
+	git -c core.excludesfile=/dev/null clean -X -d -f
+
+# target: version                                - Replace version in files, CI only
+version:
+	@$(call replace_version,$(shell pwd),${SEM_VERSION})
+
+# target: zip                                    - Make zip bundles
+zip: zip-prod zip-preprod zip-inte
+dist:
+	@mkdir -p ./dist
 
 # target: zip-e2e                                - Bundle a local E2E integrable zip
 zip-e2e: vendor dist
