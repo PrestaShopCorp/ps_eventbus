@@ -51,6 +51,8 @@ class ModuleHelper
             return false;
         }
 
+        dump(\ModuleCore::needUpgrade($module));
+
         return \ModuleCore::needUpgrade($module) ?? false;
     }
 
