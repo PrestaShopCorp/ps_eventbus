@@ -1,6 +1,4 @@
 import express from 'express';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const fileParser = require('express-multipart-file-parser');
 
 class Server {
   private server: any;
@@ -9,7 +7,6 @@ class Server {
   constructor(port: number) {
     this.api = express();
     this.port = port;
-    this.api.use(fileParser);
     this.api.use(this.middleware.bind(this));
     this.server = this.api.listen(this.port);
   }
@@ -25,12 +22,14 @@ class Server {
   }
 }
 
-export class SyncApi extends Server {
+export class SyncApiServer extends Server {
   constructor(port: string) {
     super(parseInt(port));
+  
     this.api.get('/', (_req, res) => {
       res.status(200).end();
     });
+
     this.api.get('/job/:id', (req, res) => {
       const jobId = req.params.id;
       if (jobId.startsWith('valid-job-')) {
@@ -42,7 +41,7 @@ export class SyncApi extends Server {
   }
 }
 
-export class CollectorApi extends Server {
+export class CollectorApiServer extends Server {
   constructor(port: string) {
     super(parseInt(port));
     this.api.get('/', (_req, res) => {
@@ -59,4 +58,4 @@ export class CollectorApi extends Server {
   }
 }
 
-export default { SyncApi, CollectorApi };
+export default { SyncApiServer, CollectorApiServer };
