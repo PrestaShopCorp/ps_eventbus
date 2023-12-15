@@ -57,14 +57,8 @@ services:
     networks:
       - prestashop
 
-  cloudsync-mock-test:
-    container_name: cloudsync-mock-test
-    restart: "no"
-    depends_on:
-      prestashop:
-        condition: service_healthy
-      reverse-proxy:
-        condition: service_healthy
+  cloudsync-mock:
+    container_name: cloudsync-mock
     build:
       context: ./cloudsync-mock
       dockerfile: Dockerfile
