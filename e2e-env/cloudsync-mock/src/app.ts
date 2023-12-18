@@ -10,3 +10,4 @@ const collectorApi = new CollectorApiServer(
 syncApi.listen();
 collectorApi.listen();
 // liveSyncApi.listen();
+console.log("App is started");
