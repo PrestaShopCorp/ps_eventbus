@@ -1,13 +1,14 @@
 import express from "express";
 
 export class Server {
-  private server: any;
-  api: any;
+  server: any;
   port: number;
+  
   constructor(port: number) {
-    this.api = express();
+    this.server = express();
+    this.server.use(this.middleware.bind(this));
+    
     this.port = port;
-    this.api.use(this.middleware.bind(this));
   }
 
   middleware(req, _res, next) {
