@@ -1,4 +1,4 @@
-import { CollectorApiServer } from "./lib/collector";
+import { CollectorApiServer } from "./lib/collector-api";
 import { SyncApiServer } from "./lib/sync-api";
 
 const syncApi = new SyncApiServer(process.env.SYNC_API_PORT ?? "3232");
@@ -9,5 +9,6 @@ const collectorApi = new CollectorApiServer(
 
 syncApi.listen();
 collectorApi.listen();
+collectorApi.sendDataToWS({test: 'test'});
 // liveSyncApi.listen();
-console.log("App is started");
+
