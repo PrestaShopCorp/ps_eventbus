@@ -1,17 +1,10 @@
 {
-  "$schema": "https://json.schemastore.org/swcrc",
-  "sourceMaps": false,
   "jsc": {
     "parser": {
       "syntax": "typescript",
+      "tsx": false,
       "decorators": false,
       "dynamicImport": false
-    },
-    "target": "es2022",
-    "baseUrl": "./src"
-  },
-  "module": {
-    "type": "es6"
-  },
-  "minify": false
+    }
+  }
 }

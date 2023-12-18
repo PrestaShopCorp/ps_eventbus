@@ -2,6 +2,7 @@
   "name": "cloudsync-mock",
   "version": "0.0.0",
   "main": "dist/app.js",
+  "type": "module", 
   "private": true,
   "engines": {
     "yarn": "please use pnpm",
@@ -13,8 +14,7 @@
     "start": "node dist/app.js",
     "start:dev": "nodemon",
     "build": "npx swc ./src -d ./dist && pnpm fix-esm-js-ext",
-    "fix-esm-js-ext": "find ./dist -type f -name '*.js' -exec sed -i -E 's/import (.+) from (\\x22|\\x27)\\.(.+)\\/([a-zA-Z0-9_-]+)(\\.ts|\\.js)?(\\x22|\\x27)/import \\1 from \"\\3\\/\\4.js\"/g' {} \\;",
-    "clean": "rimraf ./dist",
+    "fix-esm-js-ext": "find ./dist -type f -name '*.js' -exec sed -i -E 's/import (.+) from (\\x22|\\x27)\\.\\/([^.]+)(\\.ts|\\.js)?(\\x22|\\x27)/import \\1 from \"\\.\\/\\3\\4.js\"/g' {} \\;",    "clean": "rimraf ./dist",
     "lint": "eslint 'src/**/*.ts'",
     "lint:fix": "eslint 'src/**/*.ts' --fix",
     "format": "prettier --check ./src/**/*",

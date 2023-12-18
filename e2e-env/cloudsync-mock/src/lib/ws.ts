@@ -11,6 +11,8 @@ export class Ws {
             Ws.instance = new Ws();
 
             Ws.server = new WebSocketServer({ port: 8080 });
+
+            console.log(`WS server started on port \x1b[96m8080\x1b[0m`);
         }
 
         return Ws.instance;
