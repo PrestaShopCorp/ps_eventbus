@@ -65,7 +65,11 @@ services:
     environment:
       - RUN_IN_DOCKER=1
     volumes:
-      - ./cloudsync-mock/src:/home/node/src:ro
+      - ./cloudsync-mock/dist:/home/node/src:ro
+    ports:
+      - ${SYNC_API_PORT:?See e2e-env/.env.dist}:3232
+      - ${COLLECTOR_API_PORT:?See e2e-env/.env.dist}:3333
+      - ${WS_PORT:?See e2e-env/.env.dist}:8080
     networks:
       - prestashop
 

@@ -11,4 +11,3 @@ syncApi.listen();
 collectorApi.listen();
 collectorApi.sendDataToWS({test: 'test'});
 // liveSyncApi.listen();
-

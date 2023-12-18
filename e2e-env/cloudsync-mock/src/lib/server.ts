@@ -10,6 +10,7 @@ export class Server {
 
   constructor(port: number) {
     this.api = express();
+    
     this.api.use(this.middleware.bind(this));
     this.port = port;
 
