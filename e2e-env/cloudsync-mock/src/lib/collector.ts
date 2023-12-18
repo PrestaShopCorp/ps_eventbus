@@ -1,5 +1,4 @@
 import { Server } from "./server";
-
 export class CollectorApiServer extends Server {
   constructor(port: string) {
     super(parseInt(port));

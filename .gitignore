@@ -7,7 +7,6 @@
 dist/
 vendor/
 prestashop/
-node_modules/
 phpstan-baseline.neon
 
 # Composer
@@ -24,9 +23,11 @@ composer-setup.php
 # Tests
 tests/tmp
 coverage-reports
+coverage
 allure-reports
 tests/.phpunit.result.cache
 .phpunit.cache/
+*.cache
 
 # Jetbrains
 .idea
@@ -35,4 +36,6 @@ tests/.phpunit.result.cache
 .scannerwork
 sonar-project.properties
 
-*.cache
+# Node.js
+node_modules
+.swc
