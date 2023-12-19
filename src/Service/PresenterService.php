@@ -115,11 +115,11 @@ class PresenterService
                     'lang' => $language->iso_code,
                 ],
                 'psEventbusModule' => $this->convertObjectToArray(\Module::getInstanceByName('ps_eventbus')),
-                'modulesInformations' => [
-                    'psEventbus' => $moduleHelper->buildModuleInformations(
+                'modulesInformation' => [
+                    'psEventbus' => $moduleHelper->buildModuleInformation(
                         'ps_eventbus'
                     ),
-                    'psMbo' => $moduleHelper->buildModuleInformations(
+                    'psMbo' => $moduleHelper->buildModuleInformation(
                         'ps_mbo'
                     ),
                 ],
