@@ -37,29 +37,6 @@ class ModuleHelper
     /**
      * @param string $moduleName
      *
-     * @return bool
-     */
-    public function isUpToDate(string $moduleName)
-    {
-        if (false === $this->isInstalled($moduleName)) {
-            return false;
-        }
-
-        $module = \ModuleCore::getInstanceByName($moduleName);
-
-        if (false === $module) {
-            return false;
-        }
-
-        dump(\ModuleCore::needUpgrade($module));
-        die;
-
-        return \ModuleCore::needUpgrade($module) ?? false;
-    }
-
-    /**
-     * @param string $moduleName
-     *
      * @return string
      */
     public function getDisplayName(string $moduleName)
@@ -194,7 +171,6 @@ class ModuleHelper
             'displayName' => $this->getDisplayName($moduleName),
             'isInstalled' => $this->isInstalled($moduleName),
             'isEnabled' => $this->isEnabled($moduleName),
-            'isUpToDate' => $this->isUpToDate($moduleName),
             'linkInstall' => $this->getInstallLink($moduleName),
             'linkEnable' => $this->getEnableLink($moduleName),
             'linkUpdate' => $this->getUpdateLink($moduleName),
