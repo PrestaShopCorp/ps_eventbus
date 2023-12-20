@@ -1,9 +1,8 @@
-import express from "express";
+import express, { Request, Response, Express, NextFunction } from "express";
 import { Ws } from "./ws";
 
-
 export class Server {
-  api: express.Express;
+  api: Express;
   port: number;
 
   wsServer: Ws;
@@ -17,13 +16,10 @@ export class Server {
     this.wsServer = Ws.getInstance();
   }
 
-  middleware(req: express.Request, res: express.Response, next: express.NextFunction) {
-    this.sendDataToWS(req);
-    next();
-  }
-
-  sendDataToWS(req: any) {
+  middleware(req: Request, res: Response, next: NextFunction) {
+    console.log(req);
     this.wsServer.sendDataToWS(req);
+    next();
   }
 
   public async listen() {

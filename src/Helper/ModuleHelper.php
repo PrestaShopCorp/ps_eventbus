@@ -76,6 +76,7 @@ class ModuleHelper
         if (true === $this->isInstalled($moduleName)) {
             return '';
         }
+
         /** @var Router $router * */
         $router = $this->module->get('router');
 
@@ -117,7 +118,7 @@ class ModuleHelper
     }
 
     /**
-     * returns the update link of the module if it is not enabled. If enabled, returns an empty string
+     * returns the update link of the module
      *
      * @param string $moduleName
      *
@@ -125,6 +126,8 @@ class ModuleHelper
      */
     public function getUpdateLink(string $moduleName)
     {
+        // need to check if module is up to date, if not, return empty string
+
         /** @var Router $router * */
         $router = $this->module->get('router');
 

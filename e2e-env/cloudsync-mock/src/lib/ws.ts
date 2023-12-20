@@ -18,13 +18,11 @@ export class Ws {
         return Ws.instance;
     }
 
-    public sendDataToWS(req: any) {
-        Ws.server.on('connection', function connection(ws) {
-            ws.on('message', function incoming(message) {
-                console.log('received: %s', message);
-            });
+    public sendDataToWS(request: any) {
+        console.log('request test');
 
-            ws.send('something');
+        Ws.server.on('connection', function connection(ws) {
+            ws.send('request test');
         });
     }
 }
