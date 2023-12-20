@@ -11,8 +11,10 @@ export class CollectorApiServer extends Server {
     this.api.post("/upload/:job_id", (req, res) => {
       const jobId = req.params.job_id;
       if (jobId.startsWith("valid-job-")) {
+        console.log("valid collector job received");
         res.status(201).end();
       } else {
+        console.log("invalid collector job received");
         res.status(500).end();
       }
     });

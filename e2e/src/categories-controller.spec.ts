@@ -17,7 +17,7 @@ describe('CategoriesController', () => {
   });
 
   it('should return 500 with an invalid job id (sync-api status 500)', async () => {
-    const moduleRequest = wsClient.listenRequestFromModule(10000);
+    const mockProbe = wsClient.registerMockProbe();
     const jobId = `invalid-job-${Date.now()}`;
 
     await request(testConfig.prestashopUrl)
@@ -25,10 +25,12 @@ describe('CategoriesController', () => {
       .set('Host', testConfig.prestaShopHostHeader)
       .redirects(1)
       .expect('content-type', /json/)
-      .expect(500);
+      .expect(454);
 
+    
+    const moduleRequest = await mockProbe;
 
-    console.log('moduleRequest', await moduleRequest);
+    console.log('moduleRequest', moduleRequest);
   });
 
   afterAll(() => {

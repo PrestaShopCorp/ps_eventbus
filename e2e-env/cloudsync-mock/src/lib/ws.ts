@@ -1,5 +1,5 @@
 import { WebSocketServer } from 'ws';
-
+import { Request } from "express";
 export class Ws {
     private static instance: Ws;
     private static server: WebSocketServer;
@@ -18,11 +18,18 @@ export class Ws {
         return Ws.instance;
     }
 
-    public sendDataToWS(request: any) {
-        console.log('request test');
+    public sendDataToWS(request: Request) {
+        const data = {
+            body: request.body,
+            headers: request.headers,
+            url: request.url,
+            query: request.query,
+        };
+
+        console.log(Ws.server.clients.size);
 
         Ws.server.on('connection', function connection(ws) {
-            ws.send('request test');
+            ws.send(JSON.stringify(data));
         });
     }
 }

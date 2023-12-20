@@ -17,7 +17,6 @@ export class Server {
   }
 
   middleware(req: Request, res: Response, next: NextFunction) {
-    console.log(req);
     this.wsServer.sendDataToWS(req);
     next();
   }

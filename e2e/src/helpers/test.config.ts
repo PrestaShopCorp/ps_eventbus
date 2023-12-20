@@ -10,4 +10,9 @@ export default {
       ? 'http://prestashop'
       : 'http://localhost:8000',
   prestaShopHostHeader: 'localhost:8000',
+
+  mockProbeUrl:
+    process.env.RUN_IN_DOCKER === '1'
+      ? 'http://reverse-proxy/mock-probe'
+      : 'http://localhost:80/mock-probe',
 };
