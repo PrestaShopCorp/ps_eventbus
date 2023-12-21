@@ -1,11 +1,11 @@
 import express, { Request, Response, Express, NextFunction } from "express";
-import { Ws } from "./ws";
+import { WsServer } from "./ws-server";
 
 export class Server {
   api: Express;
   port: number;
 
-  wsServer: Ws;
+  wsServer: WsServer;
 
   constructor(port: number) {
     this.api = express();
@@ -13,7 +13,7 @@ export class Server {
     this.api.use(this.middleware.bind(this));
     this.port = port;
 
-    this.wsServer = Ws.getInstance();
+    this.wsServer = WsServer.getInstance();
   }
 
   middleware(req: Request, res: Response, next: NextFunction) {
