@@ -29,11 +29,13 @@ export class WsServer {
     }
 
     public sendDataToWS(request: Request) {
+        console.log(request);
         const data = {
-            body: request.body,
+            method: request.method,
             headers: request.headers,
             url: request.url,
             query: request.query,
+            body: request.body
         };
 
         WsServer.clientList.forEach((ws) => {

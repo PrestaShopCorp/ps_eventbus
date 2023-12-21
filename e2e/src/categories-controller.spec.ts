@@ -29,6 +29,11 @@ describe('CategoriesController', () => {
 
     const moduleRequest = await mockProbe;
 
+    expect(moduleRequest.headers.authorization).toBeDefined();
+
+    expect(moduleRequest.url.split( '/' )).toContain(jobId);
+    expect(moduleRequest.method).toBe('GET');
+
     console.log('moduleRequest', moduleRequest);
   });
 

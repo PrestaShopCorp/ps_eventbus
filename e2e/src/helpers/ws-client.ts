@@ -1,10 +1,11 @@
 import WebSocket from 'ws';
 
 type MockProbeResponse = {
-    body: any;
-    headers: Array<string>;
-    baseUrl: string;
-    query: Record<string, unknown>;
+    method: string,
+    headers: Record<string, unknown>,
+    url: string,
+    query: string,
+    body: Record<string, unknown>
 }
 
 export class WsClient {
