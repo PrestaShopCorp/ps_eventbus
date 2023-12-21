@@ -16,7 +16,7 @@ describe('CategoriesController', () => {
     expect(testConfig.prestashopUrl).toBeDefined();
   });
 
-  it('should return 500 with an invalid job id (sync-api status 500)', async () => {
+  it('should return 454 with an invalid job id (sync-api status 454)', async () => {
     const mockProbe = wsClient.registerMockProbe();
     const jobId = `invalid-job-${Date.now()}`;
 
@@ -34,7 +34,28 @@ describe('CategoriesController', () => {
     expect(moduleRequest.url.split( '/' )).toContain(jobId);
     expect(moduleRequest.method).toBe('GET');
 
-    console.log('moduleRequest', moduleRequest);
+    //console.log('moduleRequest', moduleRequest);
+  });
+
+  it('should return 201 with an valid job id (sync-api status 454)', async () => {
+    const mockProbe = wsClient.registerMockProbe();
+    const jobId = `valid-job-${Date.now()}`;
+
+    await request(testConfig.prestashopUrl)
+      .get(`${endpoint}&job_id=${jobId}`)
+      .set('Host', testConfig.prestaShopHostHeader)
+      .redirects(1)
+      .expect('content-type', /json/)
+      .expect(200);
+
+    const moduleRequest = await mockProbe;
+
+    expect(moduleRequest.headers.authorization).toBeDefined();
+
+    expect(moduleRequest.url.split( '/' )).toContain(jobId);
+    expect(moduleRequest.method).toBe('GET');
+
+    //console.log('moduleRequest', moduleRequest);
   });
 
   afterAll(() => {

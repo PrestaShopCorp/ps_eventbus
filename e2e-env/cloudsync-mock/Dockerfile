@@ -10,4 +10,4 @@ RUN pnpm install
 RUN pnpm run build
 
 ENTRYPOINT [ "pnpm" ]
-CMD [ "start:dev" ]
+CMD [ "start" ]
