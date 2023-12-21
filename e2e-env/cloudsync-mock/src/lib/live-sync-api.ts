@@ -1,7 +1,7 @@
 import { Server } from "./server";
 
 export class LiveSyncApiServer extends Server {
-  constructor(port: string) {
+  public constructor(port: string) {
     super(parseInt(port));
 
     this.api.get("/", (_req, res) => {

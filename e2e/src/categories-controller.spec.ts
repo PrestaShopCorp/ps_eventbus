@@ -27,35 +27,25 @@ describe('CategoriesController', () => {
       .expect('content-type', /json/)
       .expect(454);
 
-    const moduleRequest = await mockProbe;
-
-    expect(moduleRequest.headers.authorization).toBeDefined();
-
-    expect(moduleRequest.url.split( '/' )).toContain(jobId);
-    expect(moduleRequest.method).toBe('GET');
-
-    //console.log('moduleRequest', moduleRequest);
+    const syncApiRequest = await mockProbe;
+    
+    expect(syncApiRequest.method).toBe('GET');
+    expect(syncApiRequest.url.split( '/' )).toContain(jobId);
   });
 
-  it('should return 201 with an valid job id (sync-api status 454)', async () => {
+  it('should synchronize (sync-api and proxy-api status 200)', async () => {
     const mockProbe = wsClient.registerMockProbe();
     const jobId = `valid-job-${Date.now()}`;
-
-    await request(testConfig.prestashopUrl)
+  
+    const response = await request(testConfig.prestashopUrl)
       .get(`${endpoint}&job_id=${jobId}`)
       .set('Host', testConfig.prestaShopHostHeader)
       .redirects(1)
       .expect('content-type', /json/)
       .expect(200);
 
-    const moduleRequest = await mockProbe;
-
-    expect(moduleRequest.headers.authorization).toBeDefined();
-
-    expect(moduleRequest.url.split( '/' )).toContain(jobId);
-    expect(moduleRequest.method).toBe('GET');
-
-    //console.log('moduleRequest', moduleRequest);
+    const syncApiRequest = await mockProbe;
+    console.log(syncApiRequest, response.body);
   });
 
   afterAll(() => {

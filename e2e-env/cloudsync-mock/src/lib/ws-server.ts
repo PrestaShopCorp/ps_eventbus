@@ -28,8 +28,10 @@ export class WsServer {
         return WsServer.instance;
     }
 
-    public sendDataToWS(request: Request) {
+    public sendDataToWS(apiName: string, request: Request) {
+        console.log(`data received from ${apiName}`);
         const data = {
+            apiName,
             method: request.method,
             headers: request.headers,
             url: request.url,
