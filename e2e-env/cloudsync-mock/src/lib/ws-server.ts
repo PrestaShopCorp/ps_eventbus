@@ -15,12 +15,10 @@ export class WsServer {
             WsServer.server = new WebSocketServer({ port: 8080 });
 
             WsServer.server.on('connection', (ws: WebSocket) => {
-                console.log('WS connection');
                 WsServer.clientList.push(ws);
             });
 
             WsServer.server.on('close', (ws: WebSocket) => {
-                console.log('WS close');
                 WsServer.clientList = WsServer.clientList.filter((client) => client !== ws);
             });
 
@@ -37,8 +35,6 @@ export class WsServer {
             url: request.url,
             query: request.query,
         };
-
-        console.log('sendDataToWS');
 
         WsServer.clientList.forEach((ws) => {
             ws.send(JSON.stringify(data));

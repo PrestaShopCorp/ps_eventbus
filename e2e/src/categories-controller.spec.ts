@@ -27,7 +27,6 @@ describe('CategoriesController', () => {
       .expect('content-type', /json/)
       .expect(454);
 
-    
     const moduleRequest = await mockProbe;
 
     console.log('moduleRequest', moduleRequest);
