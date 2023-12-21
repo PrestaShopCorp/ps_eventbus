@@ -29,7 +29,6 @@ export class WsServer {
     }
 
     public sendDataToWS(request: Request) {
-        console.log(request);
         const data = {
             method: request.method,
             headers: request.headers,

@@ -8,13 +8,20 @@ export class CollectorApiServer extends Server {
       res.status(200).end();
     });
 
-    this.api.post("/upload/:job_id", (req, res) => {
-      const jobId = req.params.job_id;
+    this.api.post("/upload/:jobid", (req, res) => {
+      const jobId = req.params.jobid;
       if (jobId.startsWith("valid-job-")) {
-        console.log("valid collector job received");
         res.status(201).end();
       } else {
-        console.log("invalid collector job received");
+        res.status(500).end();
+      }
+    });
+
+    this.api.post("/delete/:jobid", (req, res) => {
+      const jobId = req.params.jobid;
+      if (jobId.startsWith("valid-job-")) {
+        res.status(201).end();
+      } else {
         res.status(500).end();
       }
     });
