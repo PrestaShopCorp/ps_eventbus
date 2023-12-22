@@ -3,8 +3,9 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-      "test": "jest --config=jest.config.json",
-      "test:watch": "jest --config=jest.config.json --watchAll"
+      "test:e2e": "jest --config=jest.config.json",
+      "test:e2e:watch": "jest --config=jest.config.json --watchAll",
+      "test:e2e:detectOpenHandles": "jest --config=jest.config.json  --runInBand --detectOpenHandles "
     },
     "devDependencies": {
       "@jest/globals": "^29.7.0",
