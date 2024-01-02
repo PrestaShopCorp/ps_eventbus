@@ -83,6 +83,42 @@ jobs:
       - name: PHP unit
         run: make phpunit
 
+  e2e-tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Auth Docker GCP
+        uses: ./.github/actions/auth-docker-gcp
+        with:
+          gcp-registry: ${{ env.GCLOUD_REGISTRY }}
+          gcp-credentials: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+
+      - name: Install docker compose
+        run: |
+          DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+          mkdir -p $DOCKER_CONFIG/cli-plugins
+          rm -f $DOCKER_CONFIG/cli-plugins/docker-compose
+          curl -SL https://github.com/docker/compose/releases/download/${{ env.DOCKER_COMPOSE_VERSION }}/docker-compose-linux-x86_64 \
+          -o $DOCKER_CONFIG/cli-plugins/docker-compose
+          chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+
+      - name: Setup docker env
+        run: |
+          docker compose build
+          docker compose up -d
+        working-directory: e2e-env
+
+      - name: run e2e:tests
+        run: |
+          pnpm test:e2e
+        working-directory: e2e
+    
+
   # coverage:
   #   name: Generate the code coverage
   #   runs-on: ubuntu-latest
