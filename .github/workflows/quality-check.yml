@@ -101,14 +101,20 @@ jobs:
           -o $DOCKER_CONFIG/cli-plugins/docker-compose
           chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 
-      - name: Setup docker env
+      - name: Setup e2e-env
         run: |
           cp .env.dist .env
           docker compose build
           docker compose up -d
         working-directory: e2e-env
 
-      - name: run e2e:tests
+      - name: Install dependencies and setup e2e
+        run: |
+          npm install -g pnpm
+          pnpm install --no-optional
+        working-directory: e2e
+
+      - name: Run e2e:tests
         run: |
           pnpm test:e2e
         working-directory: e2e
