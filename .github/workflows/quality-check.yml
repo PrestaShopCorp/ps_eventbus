@@ -106,7 +106,7 @@ jobs:
           cp .env.dist .env
           docker compose build
           docker compose up --detach --wait
-          while ! nc -z localhost 8080; do sleep 1; done;
+          while ! nc -z localhost 8000; do sleep 1; done;
         working-directory: e2e-env
 
       - name: Install dependencies and setup e2e
