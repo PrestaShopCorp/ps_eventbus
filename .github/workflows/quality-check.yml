@@ -93,10 +93,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Auth Docker GCP
-        uses: ./.github/actions/auth-docker-gcp
-        with:
-          gcp-registry: ${{ env.GCLOUD_REGISTRY }}
-          gcp-credentials: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        run: echo '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' | docker login -u _json_key --password-stdin https://${{ env.GCLOUD_REGISTRY }}
 
       - name: Install docker compose
         run: |
