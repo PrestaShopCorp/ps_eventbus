@@ -20,7 +20,7 @@ describe('CategoriesController', () => {
   it('should return 454 with an invalid job id (sync-api status 454)', async () => {
     const probe = mockProbe.waitForMessages(1);
     const jobId = `invalid-job-${Date.now()}`;
-
+    console.log(testConfig.prestashopUrl, `${endpoint}&job_id=${jobId}`);
     await request(testConfig.prestashopUrl)
       .get(`${endpoint}&job_id=${jobId}`)
       .set('Host', testConfig.prestaShopHostHeader)
