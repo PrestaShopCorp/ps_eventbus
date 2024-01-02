@@ -92,9 +92,6 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v4
 
-      - name: Auth Docker GCP
-        run: echo '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' | docker login -u _json_key --password-stdin https://${{ env.GCLOUD_REGISTRY }}
-
       - name: Install docker compose
         run: |
           DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
