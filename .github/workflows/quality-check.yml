@@ -94,6 +94,12 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
+      - name: Cache vendor folder
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: php-${{ hashFiles('composer.lock') }}
+
       - name: Install docker compose
         run: |
           DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
