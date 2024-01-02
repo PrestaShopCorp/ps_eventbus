@@ -103,6 +103,7 @@ jobs:
 
       - name: Setup docker env
         run: |
+          cp .env.dist .env
           docker compose build
           docker compose up -d
         working-directory: e2e-env
