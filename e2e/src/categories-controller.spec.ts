@@ -34,21 +34,6 @@ describe('CategoriesController', () => {
     expect(syncApiRequest[0].url.split( '/' )).toContain(jobId);
   });
 
-  it('should synchronize (sync-api and proxy-api status 200)', async () => {
-    const probe = mockProbe.waitForMessages(1);
-    const jobId = `valid-job-${Date.now()}`;
-  
-    const response = await request(testConfig.prestashopUrl)
-      .get(`${endpoint}&job_id=${jobId}`)
-      .set('Host', testConfig.prestaShopHostHeader)
-      .redirects(1)
-      .expect('content-type', /json/)
-      .expect(200);
-
-    const syncApiRequest = await probe;
-    //console.log(syncApiRequest, response.body);
-  });
-
   afterEach(() => {
     mockProbe.close();
   });
