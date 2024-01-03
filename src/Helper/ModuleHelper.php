@@ -37,6 +37,26 @@ class ModuleHelper
     /**
      * @param string $moduleName
      *
+     * @return string
+     */
+    public function getDisplayName(string $moduleName)
+    {
+        if (false === $this->isInstalled($moduleName)) {
+            return '';
+        }
+
+        $module = \Module::getInstanceByName($moduleName);
+
+        if (false === $module) {
+            return '';
+        }
+
+        return $module->displayName;
+    }
+
+    /**
+     * @param string $moduleName
+     *
      * @return false|\ModuleCore
      */
     public function getInstanceByName(string $moduleName)
@@ -144,15 +164,16 @@ class ModuleHelper
      *
      * @return array
      */
-    public function buildModuleInformations(string $moduleName)
+    public function buildModuleInformation(string $moduleName)
     {
         return [
+            'technicalName' => $moduleName,
+            'displayName' => $this->getDisplayName($moduleName),
             'isInstalled' => $this->isInstalled($moduleName),
             'isEnabled' => $this->isEnabled($moduleName),
-            'linkEnable' => $this->getEnableLink($moduleName),
             'linkInstall' => $this->getInstallLink($moduleName),
+            'linkEnable' => $this->getEnableLink($moduleName),
             'linkUpdate' => $this->getUpdateLink($moduleName),
-            'version' => $this->getModuleVersion($moduleName),
         ];
     }
 }

@@ -13,10 +13,10 @@ class EmployeeRepository
      */
     private $db;
 
-    public function __construct(\Context $context, \Db $db)
+    public function __construct(\Db $db, \Context $context)
     {
-        $this->context = $context;
         $this->db = $db;
+        $this->context = $context;
     }
 
     /**
