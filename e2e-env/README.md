@@ -1,7 +1,5 @@
 # PS Eventbus E2E Env
 
-Description courte du projet.
-
 ## Table of Contents
 
 - [Introduction](#introduction)
