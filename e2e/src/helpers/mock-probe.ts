@@ -12,7 +12,6 @@ export class MockProbe {
     private wsConnection: WebSocket;
 
     public constructor() {
-        /* this.wsConnection = new WebSocket(testConfig.mockProbeUrl); */
         this.wsConnection = new WebSocket('ws://localhost:8080');
     }
 
@@ -22,13 +21,12 @@ export class MockProbe {
         return new Promise((resolve, reject) => {
             let timeout: NodeJS.Timeout;
 
-            this.wsConnection.on('message', async (data) => {
+            this.wsConnection.on('message', (data) => {
                 messageList.push(JSON.parse(data.toString()));
                 
                 if (messageList.length === expectedMessageCount) {
                     clearTimeout(timeout);
                     this.close();
-
                     resolve(messageList);
                 }
             });
@@ -41,7 +39,7 @@ export class MockProbe {
                 } else {
                     reject('No message received from mock probe');
                 }
-            }, 10000);
+            }, 5000);
         });
     }
 
