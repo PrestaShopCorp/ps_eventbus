@@ -5,16 +5,17 @@ import request from 'supertest';
 const controller = 'apiCategories';
 const endpoint = `/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5`;
 
-
 describe('CategoriesController', () => {
+  beforeAll(() => {
+    MockProbe.connect();
+  });
+
   it('should be defined', () => {
     expect(testConfig.prestashopUrl).toBeDefined();
   });
 
   it('should return 454 with an invalid job id (sync-api status 454)', async () => {
-    const mockProbe = new MockProbe();
-
-    const probe = mockProbe.waitForMessages(1);
+    const probe = MockProbe.waitForMessages(1);
     const jobId = `invalid-job-${Date.now()}`;
 
     await request(testConfig.prestashopUrl)
@@ -28,7 +29,9 @@ describe('CategoriesController', () => {
     
     expect(syncApiRequest[0].method).toBe('GET');
     expect(syncApiRequest[0].url.split( '/' )).toContain(jobId);
+  });
 
-    mockProbe.close();
+  afterAll(() => {
+    MockProbe.disconnect();
   });
 });

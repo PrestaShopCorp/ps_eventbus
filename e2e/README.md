@@ -23,13 +23,15 @@ const endpoint = `/index.php?fc=module&module=ps_eventbus&controller=${controlle
 describe('CategoriesController', () => {
   it('should return 454 with an invalid job id (sync-api status 454)', async () => {
     // instantiate the probe
-    mockProbe = new MockProbe();
+    beforeAll(() => {
+      MockProbe.connect();
+    });
 
     /**
      * initialize the connection with probe,
      * and pass into parameter the response count awaiting 
      */
-    const probe = mockProbe.waitForMessages(1);
+    const probe = MockProbe.waitForMessages(1);
     const jobId = `invalid-job-${Date.now()}`;
 
     // assert the result of request with supertest
@@ -44,14 +46,16 @@ describe('CategoriesController', () => {
      * await the stack of messages from probe
      * the probe return an Array
      */
-    await probe;
+    const syncApiRequest = await probe;
     
     // assert the request send from ps_eventbus to CloudSync API
-    expect(probe[0].method).toBe('GET');
-    expect(probe[0].url.split( '/' )).toContain(jobId);
+    expect(syncApiRequest[0].method).toBe('GET');
+    expect(syncApiRequest[0].url.split( '/' )).toContain(jobId);
 
     // Close the connection of probe
-    mockProbe.close();
+    afterAll(() => {
+      MockProbe.disconnect();
+    });
   });
 });
 ```
