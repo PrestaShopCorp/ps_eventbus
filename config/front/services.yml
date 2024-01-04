@@ -61,6 +61,7 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface'
       - '@PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator'
 
