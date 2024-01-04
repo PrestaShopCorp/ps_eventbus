@@ -5,7 +5,7 @@
     "scripts": {
       "test:e2e": "jest --config=jest.config.json --runInBand",
       "test:e2e:watch": "jest --config=jest.config.json --watchAll --runInBand",
-      "test:e2e:detectOpenHandles": "jest --config=jest.config.json  --runInBand --detectOpenHandles "
+      "test:e2e:detectOpenHandles": "jest --config=jest.config.json  --runInBand --detectOpenHandles"
     },
     "devDependencies": {
       "@jest/globals": "^29.7.0",
