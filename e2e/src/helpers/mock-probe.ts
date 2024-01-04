@@ -9,10 +9,14 @@ type MockProbeResponse = {
 }
 
 export class MockProbe {
-    private static wsConnection: WebSocket;
+    private static wsConnection: WebSocket|null = null;
     private static messageList = [];
 
     public static connect(): void {
+        if (MockProbe.wsConnection !== null) {
+            throw new Error('You have already one connection to wss, close before create new another !');
+        }
+
         MockProbe.wsConnection = new WebSocket('ws://localhost:8080');
         MockProbe.wsConnection.on('message', (message: RawData) => this.insertToMessageList(message));
     }
@@ -20,6 +24,7 @@ export class MockProbe {
     public static disconnect(): void {
         MockProbe.clearMessageList();
         MockProbe.wsConnection.close();
+        MockProbe.wsConnection = null;
     }
 
     public static async waitForMessages(expectedMessageCount = 1): Promise<Array<MockProbeResponse>> {
