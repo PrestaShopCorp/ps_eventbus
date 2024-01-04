@@ -1,5 +1,8 @@
 name: Quality Control
 
+env:
+  DOCKER_COMPOSE_VERSION: v2.23.3
+
 on:
   pull_request:
     types: [opened, reopened, synchronize]
@@ -83,28 +86,47 @@ jobs:
       - name: PHP unit
         run: make phpunit
 
-  # coverage:
-  #   name: Generate the code coverage
-  #   runs-on: ubuntu-latest
-  #   timeout-minutes: 15
-  #   if: github.ref == 'refs/heads/main'
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-  #     - name: Cache vendor folder
-  #       uses: actions/cache@v3
-  #       with:
-  #         path: vendor
-  #         key: php-${{ hashFiles('composer.lock') }}
-  #     - name: PHP unit with coverage
-  #       run: make phpunit-cov
-  #     - name: 🎁 Publishing Allure artifact to GitHub Actions
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: allure-reports
-  #         path: allure-reports
-  #     - name: 🎁 Publishing Code coverage report to GitHub Actions
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: coverage-reports
-  #         path: coverage-reports
+  e2e-tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Cache vendor folder
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: php-${{ hashFiles('composer.lock') }}
+
+      - name: Install docker compose
+        run: |
+          DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+          mkdir -p $DOCKER_CONFIG/cli-plugins
+          rm -f $DOCKER_CONFIG/cli-plugins/docker-compose
+          curl -SL https://github.com/docker/compose/releases/download/${{ env.DOCKER_COMPOSE_VERSION }}/docker-compose-linux-x86_64 \
+          -o $DOCKER_CONFIG/cli-plugins/docker-compose
+          chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+
+      - name: Setup e2e-env
+        run: |
+          cp .env.dist .env
+          docker compose build --no-cache
+          docker compose up --detach --wait
+          while ! nc -z localhost 8000; do sleep 1; done;
+        working-directory: e2e-env
+
+      - name: Install dependencies and setup e2e
+        run: |
+          npm install -g pnpm
+          pnpm install --no-optional
+        working-directory: e2e
+
+      - name: Run e2e:tests
+        run: |
+          pnpm test:e2e
+        working-directory: e2e
