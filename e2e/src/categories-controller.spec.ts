@@ -7,17 +7,13 @@ const endpoint = `/index.php?fc=module&module=ps_eventbus&controller=${controlle
 
 
 describe('CategoriesController', () => {
-  let mockProbe: MockProbe;
-
-  beforeEach(async () => {
-    mockProbe = new MockProbe();
-  });
-
   it('should be defined', () => {
     expect(testConfig.prestashopUrl).toBeDefined();
   });
 
   it('should return 454 with an invalid job id (sync-api status 454)', async () => {
+    const mockProbe = new MockProbe();
+
     const probe = mockProbe.waitForMessages(1);
     const jobId = `invalid-job-${Date.now()}`;
 
@@ -32,9 +28,7 @@ describe('CategoriesController', () => {
     
     expect(syncApiRequest[0].method).toBe('GET');
     expect(syncApiRequest[0].url.split( '/' )).toContain(jobId);
-  });
 
-  afterEach(() => {
     mockProbe.close();
   });
 });

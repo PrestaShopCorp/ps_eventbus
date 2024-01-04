@@ -21,18 +21,10 @@ const controller = 'apiCategories';
 const endpoint = `/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5`;
 
 describe('CategoriesController', () => {
-  let mockProbe: MockProbe;
-
-  beforeEach(async () => {
+  it('should return 454 with an invalid job id (sync-api status 454)', async () => {
     // instantiate the probe
     mockProbe = new MockProbe();
-  });
 
-  it('should be defined', () => {
-    expect(testConfig.prestashopUrl).toBeDefined();
-  });
-
-  it('should return 454 with an invalid job id (sync-api status 454)', async () => {
     /**
      * initialize the connection with probe,
      * and pass into parameter the response count awaiting 
@@ -52,14 +44,12 @@ describe('CategoriesController', () => {
      * await the stack of messages from probe
      * the probe return an Array
      */
-    const syncApiRequest = await probe;
+    await probe;
     
     // assert the request send from ps_eventbus to CloudSync API
-    expect(syncApiRequest[0].method).toBe('GET');
-    expect(syncApiRequest[0].url.split( '/' )).toContain(jobId);
-  });
+    expect(probe[0].method).toBe('GET');
+    expect(probe[0].url.split( '/' )).toContain(jobId);
 
-  afterEach(() => {
     // Close the connection of probe
     mockProbe.close();
   });
