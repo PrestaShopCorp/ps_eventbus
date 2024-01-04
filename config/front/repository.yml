@@ -271,3 +271,9 @@ services:
     public: true
     arguments:
       - "@ps_eventbus.db"
+      
+  PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository
+    public: true
+    arguments:
+      - "@ps_eventbus.db"

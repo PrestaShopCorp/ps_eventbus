@@ -90,13 +90,13 @@ class SyncApiClient
     }
 
     /**
-     * @param array $shopContents
+     * @param array $shopContent
      * @param int $shopContentId
      * @param string $action
      *
      * @return array
      */
-    public function liveSync($shopContents, $shopContentId, $action)
+    public function liveSync($shopContent, $shopContentId, $action)
     {
         $rawResponse = $this->getClient(3)->sendRequest(
             new Request(
@@ -108,7 +108,7 @@ class SyncApiClient
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                     'Content-Type' => 'application/json',
                 ],
-                '{"shopContents":' . json_encode($shopContents) . ', "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}'
+                '{"shopContents":' . json_encode($shopContent) . ', "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}'
             )
         );
 
