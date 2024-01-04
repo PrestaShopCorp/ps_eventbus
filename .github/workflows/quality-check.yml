@@ -1,5 +1,8 @@
 name: Quality Control
 
+env:
+  DOCKER_COMPOSE_VERSION: v2.23.3
+
 on:
   pull_request:
     types: [opened, reopened, synchronize]
@@ -105,7 +108,7 @@ jobs:
           DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
           mkdir -p $DOCKER_CONFIG/cli-plugins
           rm -f $DOCKER_CONFIG/cli-plugins/docker-compose
-          curl -SL https://github.com/docker/compose/releases/download/v2.23.3/docker-compose-linux-x86_64 \
+          curl -SL https://github.com/docker/compose/releases/download/${{ env.DOCKER_COMPOSE_VERSION }}/docker-compose-linux-x86_64 \
           -o $DOCKER_CONFIG/cli-plugins/docker-compose
           chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 
@@ -127,30 +130,3 @@ jobs:
         run: |
           pnpm test:e2e
         working-directory: e2e
-    
-
-  # coverage:
-  #   name: Generate the code coverage
-  #   runs-on: ubuntu-latest
-  #   timeout-minutes: 15
-  #   if: github.ref == 'refs/heads/main'
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-  #     - name: Cache vendor folder
-  #       uses: actions/cache@v3
-  #       with:
-  #         path: vendor
-  #         key: php-${{ hashFiles('composer.lock') }}
-  #     - name: PHP unit with coverage
-  #       run: make phpunit-cov
-  #     - name: 🎁 Publishing Allure artifact to GitHub Actions
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: allure-reports
-  #         path: allure-reports
-  #     - name: 🎁 Publishing Code coverage report to GitHub Actions
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: coverage-reports
-  #         path: coverage-reports

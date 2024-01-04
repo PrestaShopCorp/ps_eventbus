@@ -26,7 +26,7 @@ When a request reaches the mock, it utilizes WebSockets to transmit the said req
 1. Clone the repository.:
 
 ```bash
-git clone https://github.com/votre-utilisateur/votre-projet.git
+git clone https://github.com/PrestaShopCorp/ps_eventbus.git
 cd ps_eventbus/e2e-env
 ```
 
@@ -37,7 +37,7 @@ docker compose build --no-cache
 
 3. start docker environment:
 ```
-docker compose up -d
+docker compose up
 ```
 Or in detached mode:
 ```
