@@ -1,4 +1,4 @@
-import WebSocket from 'ws';
+import WebSocket, { RawData } from 'ws';
 
 type MockProbeResponse = {
     method: string,
@@ -9,49 +9,56 @@ type MockProbeResponse = {
 }
 
 export class MockProbe {
-    private wsConnection: WebSocket;
+    private static wsConnection: WebSocket|null = null;
+    private static messageList = [];
 
-    public constructor() {
-        this.wsConnection = new WebSocket('ws://localhost:8080');
+    public static connect(): void {
+        if (MockProbe.wsConnection !== null) {
+            throw new Error('You have already one connection to wss, close before create new another !');
+        }
+
+        MockProbe.wsConnection = new WebSocket('ws://localhost:8080');
+        MockProbe.wsConnection.on('message', (message: RawData) => this.insertToMessageList(message));
     }
 
-    public async waitForMessages(expectedMessageCount = 1): Promise<Array<MockProbeResponse>> {
-        const messageList = [];
+    public static disconnect(): void {
+        MockProbe.clearMessageList();
+        MockProbe.wsConnection.close();
+        MockProbe.wsConnection = null;
+    }
 
+    public static async waitForMessages(expectedMessageCount = 1): Promise<Array<MockProbeResponse>> {
         return new Promise((resolve, reject) => {
-            let timeout: NodeJS.Timeout;
-
-            this.wsConnection.on('message', (data) => {
-                messageList.push(JSON.parse(data.toString()));
+            let tryCount = 0;
+            let attempt = 10;
+            
+            const interval = setInterval(() => {
+                attempt++;
                 
-                if (messageList.length === expectedMessageCount) {
-                    clearTimeout(timeout);
-                    this.close();
-                    resolve(messageList);
-                }
-            });
+                if (MockProbe.messageList.length === expectedMessageCount) {
+                    clearInterval(interval);
+                    resolve(MockProbe.messageList);
 
-            timeout = setTimeout(() => {
-                this.close();
-
-                if (messageList.length) {
-                    resolve(messageList);
-                } else {
-                    reject('No message received from mock probe');
+                    MockProbe.clearMessageList();
                 }
-            }, 5000);
+
+                if (tryCount === attempt) {
+                    clearInterval(interval);
+                    reject('No sufficient message received from probe');
+
+                    MockProbe.clearMessageList();
+                }
+            }, 500)
         });
     }
 
-    public close() {
-        if (this.wsConnection.readyState === WebSocket.CONNECTING) {
-            // await connection is established and then terminate
-            // is needed for the case that the connection is established and is not used
-            this.wsConnection.on('open', () => this.wsConnection.terminate());
+    private static insertToMessageList(message: RawData): void {
+        MockProbe.messageList.push(
+            JSON.parse(message.toString())
+        );
+    }
 
-            return;
-        }
-
-        return this.wsConnection.close();
+    private static clearMessageList(): void {
+        MockProbe.messageList = [];
     }
 }

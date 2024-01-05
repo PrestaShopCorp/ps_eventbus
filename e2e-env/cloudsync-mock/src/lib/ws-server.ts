@@ -15,6 +15,9 @@ export class WsServer {
             WsServer.server = new WebSocketServer({ port: 8080 });
 
             WsServer.server.on('connection', (ws: WebSocket) => {
+                if (WsServer.server.clients.size > 1) {
+                    throw new Error('Too many connection to websocket server !');
+                }
                 WsServer.client = ws;
             });
 
