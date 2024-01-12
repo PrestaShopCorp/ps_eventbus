@@ -20,6 +20,7 @@ export class WsServer {
                 }
                 WsServer.client = ws;
             });
+            WsServer.server.on('error', err => { throw err } )
 
             console.log(`WS server started on port \x1b[96m8080\x1b[0m`);
         }
@@ -37,6 +38,9 @@ export class WsServer {
             body: request.body ?? {},
         };
 
-        WsServer.client.send(JSON.stringify(data));
+        // there may be no client if we're not runing an automated test suite
+        if( WsServer.client ) {
+          WsServer.client.send(JSON.stringify(data));
+        }
     }
 }

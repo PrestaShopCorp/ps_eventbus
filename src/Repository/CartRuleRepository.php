@@ -31,7 +31,7 @@ class CartRuleRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getCartRules()
+    public function getCartRules($limit, $offset)
     {
         $query = $this->getBaseQuery();
 
@@ -46,6 +46,17 @@ class CartRuleRepository
             $query->select('cr.reduction_exclude_special');
         }
 
+        $query->limit($limit, $offset);
+
         return $this->db->executeS($query);
     }
+
+  public function getRemainingCartRulesCount($offset)
+  {
+    $query = $this->getBaseQuery();
+
+    $query->select('(COUNT(c.id_cart_rule) - ' . (int) $offset . ') as count');
+
+    return (int) $this->db->getValue($query);
+  }
 }

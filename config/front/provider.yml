@@ -60,6 +60,11 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\CartRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\CartProductRepository'
+
+  PrestaShop\Module\PsEventbus\Provider\CartRuleDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\CartRuleDataProvider
+    public: true
+    arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\CartRuleRepository'
 
   PrestaShop\Module\PsEventbus\Provider\GoogleTaxonomyDataProvider:
@@ -144,7 +149,7 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
       - '@PrestaShop\Module\PsEventbus\Decorator\LanguageDecorator'
 
-  
+
   PrestaShop\Module\PsEventbus\Provider\ImageDataProvider:
     class: PrestaShop\Module\PsEventbus\Provider\ImageDataProvider
     public: true
