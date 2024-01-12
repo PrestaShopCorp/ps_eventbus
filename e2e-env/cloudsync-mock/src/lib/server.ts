@@ -17,7 +17,8 @@ export class Server {
       next();
     });
     this.api.use((req: Request, res: Response, next: NextFunction) => {
-      wsServer.sendDataToWS(this.constructor.name, req);
+      //TODO : make prettier
+      req.on('data', buf => console.log(buf.toString('utf8')));
       next();
     });
     this.port = port;

@@ -55,7 +55,7 @@ class CartRuleRepository
   {
     $query = $this->getBaseQuery();
 
-    $query->select('(COUNT(c.id_cart_rule) - ' . (int) $offset . ') as count');
+    $query->select('(COUNT(cr.id_cart_rule) - ' . (int) $offset . ') as count');
 
     return (int) $this->db->getValue($query);
   }
