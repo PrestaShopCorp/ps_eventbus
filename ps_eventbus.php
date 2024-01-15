@@ -68,6 +68,9 @@ class Ps_eventbus extends Module
         'actionObjectCarrierUpdateAfter',
         'actionObjectCartAddAfter',
         'actionObjectCartUpdateAfter',
+        'actionObjectCartRuleAddAfter',
+        'actionObjectCartRuleDeleteAfter',
+        'actionObjectCartRuleUpdateAfter',
         'actionObjectCategoryAddAfter',
         'actionObjectCategoryDeleteAfter',
         'actionObjectCategoryUpdateAfter',
@@ -949,6 +952,67 @@ class Ps_eventbus extends Module
                 $this->shopId
             );
         }
+    }
+
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectCartRuleAddAfter($parameters)
+    {
+      $cartRule = $parameters['object'];
+
+      if (isset($cart->id)) {
+        $this->sendLiveSync('cart_rules', $cartRule->id, 'upsert');
+        $this->insertIncrementalSyncObject(
+          $cartRule->id,
+          Config::COLLECTION_CART_RULES,
+          date(DATE_ATOM),
+          $this->shopId
+        );
+      }
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectCartRuleDeleteAfter($parameters)
+    {
+      $cartRule = $parameters['object'];
+
+      if (isset($cartRule->id)) {
+        $this->sendLiveSync('cart_rules', $cartRule->id, 'delete');
+        $this->insertIncrementalSyncObject(
+          $cartRule->id,
+          Config::COLLECTION_CART_RULES,
+          date(DATE_ATOM),
+          $this->shopId
+        );
+      }
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectCartRuleUpdateAfter($parameters)
+    {
+      $cartRule = $parameters['object'];
+
+      if (isset($cartRule->id)) {
+        $this->sendLiveSync('cart_rules', $cartRule->id, 'upsert');
+        $this->insertIncrementalSyncObject(
+          $cartRule->id,
+          Config::COLLECTION_CART_RULES,
+          date(DATE_ATOM),
+          $this->shopId
+        );
+      }
     }
 
     /**
