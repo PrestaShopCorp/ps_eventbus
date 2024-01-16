@@ -4,8 +4,6 @@ sql
 src
 upgrade
 vendor
-composer.json
-composer.lock
 ps_eventbus.php
 logo.png
 config.xml
