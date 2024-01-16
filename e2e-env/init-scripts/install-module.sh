@@ -27,9 +27,7 @@ ps_accounts_mock_install() {
 }
 
 ps_eventbus_install() {
-  MODULE_SRC="$PS_FOLDER/modules/ps_eventbus"
   [ ! -d "./modules/ps_eventbus/vendor" ] && error "please install composer dependencies first" 2
-  find "$MODULE_SRC" -not -path "$MODULE_SRC/.git/*" -exec chown www-data:www-data {} \;
   echo "* [ps_eventbus] cleaning tools/vendor..."
   rm -rf "./modules/ps_eventbus/tools/vendor"
   echo "* [ps_eventbus] installing the module..."
