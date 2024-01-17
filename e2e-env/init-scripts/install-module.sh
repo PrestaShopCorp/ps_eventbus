@@ -7,15 +7,33 @@
 #
 set -eu
 
-cd "$PS_FOLDER"
-echo "* [ps_eventbus] cleaning tools/vendor..."
-rm -rf "./modules/ps_eventbus/tools/vendor"
-echo "* [ps_eventbus] installing the module..."
-php -d memory_limit=-1 bin/console prestashop:module --no-interaction install "ps_eventbus"
+error() {
+  printf "\e[1;31m%s\e[0m\n" "${1:-Unknown error}"
+  exit "${2:-1}"
+}
 
-echo "* [ps_accounts_mock] downloading..."
-wget -q -O /tmp/ps_accounts.zip "https://github.com/PrestaShopCorp/ps_accounts_mock/releases/download/0.0.0/ps_accounts.zip"
-echo "* [ps_accounts_mock] unziping..."
-unzip -qq /tmp/ps_accounts.zip -d /var/www/html/modules
-echo "* [ps_accounts_mock] installing the module..."
-php -d memory_limit=-1 bin/console prestashop:module --no-interaction install "ps_accounts"
+run_user() {
+  sudo -g www-data -u www-data -- "$@"
+}
+
+ps_accounts_mock_install() {
+  echo "* [ps_accounts_mock] downloading..."
+  wget -q -O /tmp/ps_accounts.zip "https://github.com/PrestaShopCorp/ps_accounts_mock/releases/download/0.0.0/ps_accounts.zip"
+  echo "* [ps_accounts_mock] unziping..."
+  run_user unzip -qq /tmp/ps_accounts.zip -d /var/www/html/modules
+  echo "* [ps_accounts_mock] installing the module..."
+  cd "$PS_FOLDER"
+  run_user php -d memory_limit=-1 bin/console prestashop:module --no-interaction install "ps_accounts"
+}
+
+ps_eventbus_install() {
+  chown www-data:www-data ./modules/ps_eventbus/vendor
+  chown www-data:www-data ./modules/ps_eventbus/tools/vendor
+  run_user composer install -n -d ./modules/ps_eventbus
+  echo "* [ps_eventbus] installing the module..."
+  run_user php -d memory_limit=-1 bin/console prestashop:module --no-interaction install "ps_eventbus"
+}
+
+ps_accounts_mock_install
+ps_eventbus_install
+

@@ -7,10 +7,13 @@ services:
     volumes:
       - ..:/var/www/html/modules/ps_eventbus:rw
       - ./init-scripts:/tmp/init-scripts:ro
+      - /var/www/html/modules/ps_eventbus/vendor
+      - /var/www/html/modules/ps_eventbus/tools/vendor
     environment:
       - PS_DOMAIN=localhost:8000
-      - INIT_SCRIPTS_DIR=/tmp/init-scripts
+      - ON_INIT_SCRIPT_FAILURE=fail
       - DEBUG_MODE=true
+      - INIT_SCRIPTS_USER=root
     ports:
       - ${HOST_PORT_BIND_PRESTASHOP:?See e2e-env/.env.dist}:80
     networks:
