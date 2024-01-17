@@ -9,8 +9,9 @@ services:
       - ./init-scripts:/tmp/init-scripts:ro
     environment:
       - PS_DOMAIN=localhost:8000
-      - INIT_SCRIPTS_DIR=/tmp/init-scripts
+      - ON_INIT_SCRIPT_FAILURE=fail
       - DEBUG_MODE=true
+      - INIT_SCRIPTS_USER=root
     ports:
       - ${HOST_PORT_BIND_PRESTASHOP:?See e2e-env/.env.dist}:80
     networks:
