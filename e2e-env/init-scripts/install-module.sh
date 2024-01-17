@@ -27,9 +27,9 @@ ps_accounts_mock_install() {
 }
 
 ps_eventbus_install() {
-  [ ! -d "./modules/ps_eventbus/vendor" ] && error "please install composer dependencies first" 2
-  echo "* [ps_eventbus] cleaning tools/vendor..."
-  rm -rf "./modules/ps_eventbus/tools/vendor"
+  chown www-data:www-data ./modules/ps_eventbus/vendor
+  chown www-data:www-data ./modules/ps_eventbus/tools/vendor
+  run_user composer install -n -d ./modules/ps_eventbus
   echo "* [ps_eventbus] installing the module..."
   run_user php -d memory_limit=-1 bin/console prestashop:module --no-interaction install "ps_eventbus"
 }
