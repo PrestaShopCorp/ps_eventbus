@@ -954,7 +954,6 @@ class Ps_eventbus extends Module
         }
     }
 
-
     /**
      * @param array $parameters
      *
@@ -962,17 +961,17 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCartRuleAddAfter($parameters)
     {
-      $cartRule = $parameters['object'];
+        $cartRule = $parameters['object'];
 
-      if (isset($cartRule->id)) {
-        $this->sendLiveSync('cart_rules', $cartRule->id, 'upsert');
-        $this->insertIncrementalSyncObject(
-          $cartRule->id,
-          Config::COLLECTION_CART_RULES,
-          date(DATE_ATOM),
-          $this->shopId
-        );
-      }
+        if (isset($cartRule->id)) {
+            $this->sendLiveSync('cart_rules', $cartRule->id, 'upsert');
+            $this->insertIncrementalSyncObject(
+                $cartRule->id,
+                Config::COLLECTION_CART_RULES,
+                date(DATE_ATOM),
+                $this->shopId
+            );
+        }
     }
 
     /**
@@ -982,17 +981,17 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCartRuleDeleteAfter($parameters)
     {
-      $cartRule = $parameters['object'];
+        $cartRule = $parameters['object'];
 
-      if (isset($cartRule->id)) {
-        $this->sendLiveSync('cart_rules', $cartRule->id, 'delete');
-        $this->insertIncrementalSyncObject(
-          $cartRule->id,
-          Config::COLLECTION_CART_RULES,
-          date(DATE_ATOM),
-          $this->shopId
-        );
-      }
+        if (isset($cartRule->id)) {
+            $this->sendLiveSync('cart_rules', $cartRule->id, 'delete');
+            $this->insertIncrementalSyncObject(
+                $cartRule->id,
+                Config::COLLECTION_CART_RULES,
+                date(DATE_ATOM),
+                $this->shopId
+            );
+        }
     }
 
     /**
@@ -1002,17 +1001,17 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCartRuleUpdateAfter($parameters)
     {
-      $cartRule = $parameters['object'];
+        $cartRule = $parameters['object'];
 
-      if (isset($cartRule->id)) {
-        $this->sendLiveSync('cart_rules', $cartRule->id, 'upsert');
-        $this->insertIncrementalSyncObject(
-          $cartRule->id,
-          Config::COLLECTION_CART_RULES,
-          date(DATE_ATOM),
-          $this->shopId
-        );
-      }
+        if (isset($cartRule->id)) {
+            $this->sendLiveSync('cart_rules', $cartRule->id, 'upsert');
+            $this->insertIncrementalSyncObject(
+                $cartRule->id,
+                Config::COLLECTION_CART_RULES,
+                date(DATE_ATOM),
+                $this->shopId
+            );
+        }
     }
 
     /**

@@ -23,25 +23,25 @@ class CartRuleDataProvider implements PaginatedApiDataProviderInterface
 
     public function getFormattedData($offset, $limit, $langIso)
     {
-      $cartRules = $this->cartRuleRepository->getCartRules($limit, $offset);
+        $cartRules = $this->cartRuleRepository->getCartRules($limit, $offset);
 
-      if (!is_array($cartRules) || empty($cartRules)) {
+        if (!is_array($cartRules) || empty($cartRules)) {
+            return [];
+        }
+
+        $this->castCartRuleValues($cartRules);
+
+        if (is_array($cartRules)) {
+            return array_map(function ($cartRule) {
+                return [
+                  'id' => $cartRule['id_cart_rule'],
+                  'collection' => Config::COLLECTION_CART_RULES,
+                  'properties' => $cartRule,
+                ];
+            }, $cartRules);
+        }
+
         return [];
-      }
-
-      $this->castCartRuleValues($cartRules);
-
-      if (is_array($cartRules)) {
-        return array_map(function ($cartRule) {
-          return [
-            'id' => $cartRule['id_cart_rule'],
-            'collection' => Config::COLLECTION_CART_RULES,
-            'properties' => $cartRule,
-          ];
-        }, $cartRules);
-      }
-
-      return [];
     }
 
     /**
@@ -55,7 +55,6 @@ class CartRuleDataProvider implements PaginatedApiDataProviderInterface
         return (int) $this->cartRuleRepository->getRemainingCartRulesCount($offset);
     }
 
-
     /**
      * @param int $limit
      * @param string $langIso
@@ -67,21 +66,21 @@ class CartRuleDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
-      $cartRules = $this->cartRuleRepository->getCartRulesIncremental($limit, $objectIds);
+        $cartRules = $this->cartRuleRepository->getCartRulesIncremental($limit, $objectIds);
 
-      if (!is_array($cartRules)) {
-        return [];
-      }
+        if (!is_array($cartRules)) {
+            return [];
+        }
 
-      $this->castCartRuleValues($cartRules);
+        $this->castCartRuleValues($cartRules);
 
-      return array_map(function ($cartRule) {
-        return [
-          'id' => $cartRule['id_cart_rule'],
-          'collection' => Config::COLLECTION_CART_RULES,
-          'properties' => $cartRule,
-        ];
-      }, $cartRules);
+        return array_map(function ($cartRule) {
+            return [
+              'id' => $cartRule['id_cart_rule'],
+              'collection' => Config::COLLECTION_CART_RULES,
+              'properties' => $cartRule,
+            ];
+        }, $cartRules);
     }
 
     /**

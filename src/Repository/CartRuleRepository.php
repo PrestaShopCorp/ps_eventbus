@@ -51,30 +51,30 @@ class CartRuleRepository
         return $this->db->executeS($query);
     }
 
-  /**
-   * @param int $limit
-   * @param array $cartRuleIds
-   *
-   * @return array|bool|\mysqli_result|\PDOStatement|resource|null
-   *
-   * @throws \PrestaShopDatabaseException
-   */
-  public function getCartRulesIncremental($limit, $cartRuleIds)
-  {
-    $query = $this->getBaseQuery();
+    /**
+     * @param int $limit
+     * @param array $cartRuleIds
+     *
+     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getCartRulesIncremental($limit, $cartRuleIds)
+    {
+        $query = $this->getBaseQuery();
 
-    $query->where('cr.id_cart_rule IN(' . implode(',', array_map('intval', $cartRuleIds)) . ')')
-      ->limit($limit);
+        $query->where('cr.id_cart_rule IN(' . implode(',', array_map('intval', $cartRuleIds)) . ')')
+          ->limit($limit);
 
-    return $this->db->executeS($query);
-  }
+        return $this->db->executeS($query);
+    }
 
-  public function getRemainingCartRulesCount($offset)
-  {
-    $query = $this->getBaseQuery();
+    public function getRemainingCartRulesCount($offset)
+    {
+        $query = $this->getBaseQuery();
 
-    $query->select('(COUNT(cr.id_cart_rule) - ' . (int) $offset . ') as count');
+        $query->select('(COUNT(cr.id_cart_rule) - ' . (int) $offset . ') as count');
 
-    return (int) $this->db->getValue($query);
-  }
+        return (int) $this->db->getValue($query);
+    }
 }
