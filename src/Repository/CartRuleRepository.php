@@ -27,6 +27,9 @@ class CartRuleRepository
     }
 
     /**
+     * @param int $limit
+     * @param int $offset
+     *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
@@ -69,6 +72,11 @@ class CartRuleRepository
         return $this->db->executeS($query);
     }
 
+    /**
+     * @param int $offset
+     *
+     * @return int
+     */
     public function getRemainingCartRulesCount($offset)
     {
         $query = $this->getBaseQuery();

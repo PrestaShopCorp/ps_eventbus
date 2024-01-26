@@ -13,7 +13,7 @@ class CartRuleDataProvider implements PaginatedApiDataProviderInterface
     private $cartRuleRepository;
 
     /**
-     * @param CartRuleRepository $cartProductRepository
+     * @param CartRuleRepository $cartRuleRepository
      */
     public function __construct(
         CartRuleRepository $cartRuleRepository
