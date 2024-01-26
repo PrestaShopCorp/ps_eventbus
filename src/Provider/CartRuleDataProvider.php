@@ -67,7 +67,21 @@ class CartRuleDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
+      $cartRules = $this->cartRuleRepository->getCartRulesIncremental($limit, $objectIds);
+
+      if (!is_array($cartRules)) {
         return [];
+      }
+
+      $this->castCartRuleValues($cartRules);
+
+      return array_map(function ($cartRule) {
+        return [
+          'id' => $cartRule['id_cart_rule'],
+          'collection' => Config::COLLECTION_CART_RULES,
+          'properties' => $cartRule,
+        ];
+      }, $cartRules);
     }
 
     /**

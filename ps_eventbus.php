@@ -964,7 +964,7 @@ class Ps_eventbus extends Module
     {
       $cartRule = $parameters['object'];
 
-      if (isset($cart->id)) {
+      if (isset($cartRule->id)) {
         $this->sendLiveSync('cart_rules', $cartRule->id, 'upsert');
         $this->insertIncrementalSyncObject(
           $cartRule->id,
