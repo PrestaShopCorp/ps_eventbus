@@ -30,7 +30,7 @@ class CategoryRepository
      *
      * @return \DbQuery
      */
-    public function getBaseQuery($langIso)
+    private function getBaseQuery($langIso)
     {
         if ($this->context->shop === null) {
             throw new \PrestaShopException('No shop context');
@@ -196,6 +196,31 @@ class CategoryRepository
             ->limit($limit);
 
         return $this->db->executeS($query);
+    }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     * 
+     * @return array
+     * 
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit, $langIso)
+    {
+        $query = $this->getBaseQuery($langIso);
+
+        $this->addSelectParameters($query);
+
+        $query->limit($limit, $offset);
+
+        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+            
+        return [
+            'query' => $query->getQuery(),
+            'queryStringified' => $queryStringified
+        ];
     }
 
     /**
