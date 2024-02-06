@@ -2,7 +2,9 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-class CarrierRepository
+use PrestaShop\Module\PsEventbus\Interfaces\DebugQueryInterface;
+
+class CarrierRepository implements DebugQueryInterface
 {
     /**
      * @var \Db
@@ -199,5 +201,33 @@ class CarrierRepository
         }
 
         return count($carriers);
+    }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param int $langId
+     * 
+     * @return array
+     * 
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit, $langId)
+    {
+        $query = new \DbQuery();
+        $query->from('carrier', 'c');
+        $query->select('c.id_carrier');
+        $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
+        $query->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier');
+        $query->where('cs.id_shop = ' . $this->shopId);
+        $query->where('deleted=0');
+        $query->limit($limit, $offset);
+
+        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+            
+        return [
+            'query' => $query->getQuery(),
+            'queryStringified' => $queryStringified
+        ];
     }
 }
