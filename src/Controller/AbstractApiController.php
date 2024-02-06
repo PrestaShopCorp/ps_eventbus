@@ -165,6 +165,9 @@ abstract class AbstractApiController extends \ModuleFrontController
      */
     protected function handleDataSync(PaginatedApiDataProviderInterface $dataProvider)
     {
+         /** @var boolean  $debug */
+        $debug = \Tools::getValue('debug') == 1;
+
         /** @var string $jobId */
         $jobId = \Tools::getValue('job_id');
         /** @var string $langIso */
@@ -186,6 +189,18 @@ abstract class AbstractApiController extends \ModuleFrontController
 
         try {
             $typeSync = $this->eventbusSyncRepository->findTypeSync($this->type, $langIso);
+
+            if ($debug) {
+                $response = $dataProvider->getQueryForDebug($offset, $limit, $langIso);
+                
+                return array_merge(
+                    [
+                        'object_type' => $this->type,
+                        'syncType' => $incrementalSync ? 'incremental' : 'full',
+                    ],
+                    $response
+                );
+            }
 
             if ($typeSync !== false && is_array($typeSync)) {
                 $offset = (int) $typeSync['offset'];
