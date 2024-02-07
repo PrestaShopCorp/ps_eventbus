@@ -109,16 +109,14 @@ class ImageTypeRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('
-            it.id_image_type,
-            it.name,
-            it.width,
-            it.height,
-            it.products,
-            it.categories,
-            it.manufacturers,
-            it.suppliers,
-            it.stores
-        ');
+        $query->select('it.id_image_type');
+        $query->select('it.name');
+        $query->select('it.width');
+        $query->select('it.height');
+        $query->select('it.products');
+        $query->select('it.categories');
+        $query->select('it.manufacturers');
+        $query->select('it.suppliers');
+        $query->select('it.stores');
     }
 }

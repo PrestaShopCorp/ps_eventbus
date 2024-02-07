@@ -159,3 +159,10 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\ImageTypeRepository'
       - '@PrestaShop\Module\PsEventbus\Decorator\ImageTypeDecorator'
 
+  PrestaShop\Module\PsEventbus\Provider\TranslationDataProvider:
+    class: PrestaShop\Module\PsEventbus\Provider\TranslationDataProvider
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\TranslationRepository'
+      - '@PrestaShop\Module\PsEventbus\Decorator\TranslationDecorator'
+

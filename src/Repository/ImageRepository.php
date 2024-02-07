@@ -166,14 +166,12 @@ class ImageRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('
-            it.id_image,
-            it.id_product,
-            it.id_lang,
-            it.id_shop,
-            it.position,
-            it.cover,
-            it.legend
-        ');
+        $query->select('it.id_image');
+        $query->select('it.id_product');
+        $query->select('it.id_lang');
+        $query->select('it.id_shop');
+        $query->select('it.position');
+        $query->select('it.cover');
+        $query->select('it.legend');
     }
 }

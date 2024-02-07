@@ -271,6 +271,13 @@ services:
     public: true
     arguments:
       - "@ps_eventbus.db"
+  
+  PrestaShop\Module\PsEventbus\Repository\TranslationRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\TranslationRepository
+    public: true
+    arguments:
+      - "@ps_eventbus.db"
+      - "@ps_eventbus.context"
       
   PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository:
     class: PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository
