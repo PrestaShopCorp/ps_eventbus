@@ -121,4 +121,28 @@ class CustomPriceRepository
 
         return is_array($result) ? $result : [];
     }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * 
+     * @return array
+     * 
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit)
+    {
+        $query = $this->getBaseQuery();
+
+        $this->addSelectParameters($query);
+
+        $query->limit($limit, $offset);
+
+        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+            
+        return [
+            'query' => $query->getQuery(),
+            'queryStringified' => $queryStringified
+        ];
+    }
 }
