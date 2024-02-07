@@ -301,6 +301,31 @@ class ProductRepository
     }
 
     /**
+     * @param int $offset
+     * @param int $limit
+     * @param int $langId
+     * 
+     * @return array
+     * 
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit, $langId)
+    {
+        $query = $this->getBaseQuery($langId);
+
+        $this->addSelectParameters($query);
+
+        $query->limit($limit, $offset);
+
+        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+            
+        return [
+            'query' => $query->getQuery(),
+            'queryStringified' => $queryStringified
+        ];
+    }
+
+    /**
      * @param \DbQuery $query
      *
      * @return void
