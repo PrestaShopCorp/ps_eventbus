@@ -71,9 +71,10 @@ class CollectorApiClient
     public function upload(string $jobId, string $data, int $startTime, bool $fullSyncRequested = false)
     {
         $url = $this->collectorApiUrl . '/upload/' . $jobId;
-        $payload = 'lines=' . urlencode($data);
+
         // Prepare request
         $file = new PostFileApi('file', $data, 'file');
+        $contentSize = $file->getContent()->getSize();
         $multipartBody = new MultipartBody([], [$file], Config::COLLECTOR_MULTIPART_BOUNDARY);
         $request = new Request(
             'POST',
@@ -81,7 +82,7 @@ class CollectorApiClient
             [
                 'Accept' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->jwt,
-                'Content-Length' => $file->getContent()->getSize(),
+                'Content-Length' => $contentSize ? (string) $contentSize : '0',
                 'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
                 'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
                 'User-Agent' => 'ps-eventbus/' . $this->module->version,
@@ -116,6 +117,7 @@ class CollectorApiClient
         $url = $this->collectorApiUrl . '/delete/' . $jobId;
         // Prepare request
         $file = new PostFileApi('file', $data, 'file');
+        $contentSize = $file->getContent()->getSize();
         $multipartBody = new MultipartBody([], [$file], Config::COLLECTOR_MULTIPART_BOUNDARY);
         $request = new Request(
             'POST',
@@ -123,7 +125,7 @@ class CollectorApiClient
             [
                 'Accept' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->jwt,
-                'Content-Length' => $file->getContent()->getSize(),
+                'Content-Length' => $contentSize ? (string) $contentSize : '0',
                 'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
                 'User-Agent' => 'ps-eventbus/' . $this->module->version,
             ],
