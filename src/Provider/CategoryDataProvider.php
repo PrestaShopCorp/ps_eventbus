@@ -89,4 +89,18 @@ class CategoryDataProvider implements PaginatedApiDataProviderInterface
             ];
         }, $categories);
     }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit, $langIso)
+    {
+        return $this->categoryRepository->getQueryForDebug($offset, $limit, $langIso);
+    }
 }

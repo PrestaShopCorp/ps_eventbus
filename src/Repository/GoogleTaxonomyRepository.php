@@ -62,4 +62,28 @@ class GoogleTaxonomyRepository
 
         return (int) $this->db->getValue($query);
     }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param int $shopId
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit, $shopId)
+    {
+        $query = $this->getBaseQuery($shopId);
+
+        $query->select('cm.id_category, cm.google_category_id')
+            ->limit($limit, $offset);
+
+        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+
+        return array_merge(
+            (array) $query,
+            ['queryStringified' => $queryStringified]
+        );
+    }
 }

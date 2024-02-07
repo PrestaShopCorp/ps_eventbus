@@ -301,21 +301,45 @@ class ProductRepository
     }
 
     /**
+     * @param int $offset
+     * @param int $limit
+     * @param int $langId
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit, $langId)
+    {
+        $query = $this->getBaseQuery($langId);
+
+        $this->addSelectParameters($query);
+
+        $query->limit($limit, $offset);
+
+        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+
+        return array_merge(
+            (array) $query,
+            ['queryStringified' => $queryStringified]
+        );
+    }
+
+    /**
      * @param \DbQuery $query
      *
      * @return void
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('p.id_product, p.id_manufacturer, p.id_supplier, IFNULL(pas.id_product_attribute, 0) as id_attribute, pas.default_on as is_default_attribute,
-            pl.name, pl.description, pl.description_short, pl.link_rewrite, cl.name as default_category,
-            ps.id_category_default, IFNULL(NULLIF(pa.reference, ""), p.reference) as reference, IFNULL(NULLIF(pa.upc, ""), p.upc) as upc,
-            IFNULL(NULLIF(pa.ean13, ""), p.ean13) as ean, ps.condition, ps.visibility, ps.active, sa.quantity, m.name as manufacturer,
-            (p.weight + IFNULL(pas.weight, 0)) as weight, (ps.price + IFNULL(pas.price, 0)) as price_tax_excl,
-            p.date_add as created_at, p.date_upd as updated_at,
-            p.available_for_order, p.available_date, p.cache_is_pack as is_bundle, p.is_virtual,
-            p.unity, p.unit_price_ratio
-            ');
+        $query->select('p.id_product, p.id_manufacturer, p.id_supplier, IFNULL(pas.id_product_attribute, 0) as id_attribute, pas.default_on as is_default_attribute');
+        $query->select('pl.name, pl.description, pl.description_short, pl.link_rewrite, cl.name as default_category');
+        $query->select('ps.id_category_default, IFNULL(NULLIF(pa.reference, ""), p.reference) as reference, IFNULL(NULLIF(pa.upc, ""), p.upc) as upc');
+        $query->select('IFNULL(NULLIF(pa.ean13, ""), p.ean13) as ean, ps.condition, ps.visibility, ps.active, sa.quantity, m.name as manufacturer');
+        $query->select('(p.weight + IFNULL(pas.weight, 0)) as weight, (ps.price + IFNULL(pas.price, 0)) as price_tax_excl');
+        $query->select('p.date_add as created_at, p.date_upd as updated_at');
+        $query->select('p.available_for_order, p.available_date, p.cache_is_pack as is_bundle, p.is_virtual');
+        $query->select('p.unity, p.unit_price_ratio');
 
         if (property_exists(new \Product(), 'mpn')) {
             $query->select('p.mpn');

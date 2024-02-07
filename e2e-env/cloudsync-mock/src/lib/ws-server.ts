@@ -29,6 +29,8 @@ export class WsServer {
     }
 
     public sendDataToWS(apiName: string, request: Request) {
+        if (!WsServer.client) return;
+        
         const data = {
             apiName,
             method: request.method,

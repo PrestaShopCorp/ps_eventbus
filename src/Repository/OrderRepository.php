@@ -100,27 +100,50 @@ class OrderRepository
     }
 
     /**
+     * @param int $offset
+     * @param int $limit
+     * @param int $shopId
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit, $shopId)
+    {
+        $query = $this->getBaseQuery($shopId);
+
+        $this->addSelectParameters($query);
+
+        $query->limit((int) $limit, (int) $offset);
+
+        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+
+        return array_merge(
+            (array) $query,
+            ['queryStringified' => $queryStringified]
+        );
+    }
+
+    /**
      * @param \DbQuery $query
      *
      * @return void
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select(
-            'o.id_order, o.reference, o.id_customer, o.id_cart, o.current_state,
-         o.conversion_rate, o.total_paid_tax_excl, o.total_paid_tax_incl,
-         IF((SELECT so.id_order FROM `' . _DB_PREFIX_ . 'orders` so WHERE so.id_customer = o.id_customer AND so.id_order < o.id_order LIMIT 1) > 0, 0, 1) as new_customer,
-         c.iso_code as currency, SUM(os.total_products_tax_incl + os.total_shipping_tax_incl) as refund,
-         SUM(os.total_products_tax_excl + os.total_shipping_tax_excl) as refund_tax_excl, o.module as payment_module,
-         o.payment as payment_mode, o.total_paid_real, o.total_shipping as shipping_cost, o.date_add as created_at,
-         o.date_upd as updated_at, o.id_carrier,
-         o.payment as payment_name,
-         CONCAT(CONCAT("delivery", ":", cntd.iso_code), ",", CONCAT("invoice", ":", cnti.iso_code)) as address_iso,
-         o.valid as is_validated,
-         ost.paid as is_paid,
-         ost.shipped as is_shipped,
-         osl.name as status_label,
-         o.module as payment_name'
-        );
+        $query->select('o.id_order, o.reference, o.id_customer, o.id_cart, o.current_state');
+        $query->select('o.conversion_rate, o.total_paid_tax_excl, o.total_paid_tax_incl');
+        $query->select('IF((SELECT so.id_order FROM `' . _DB_PREFIX_ . 'orders` so WHERE so.id_customer = o.id_customer AND so.id_order < o.id_order LIMIT 1) > 0, 0, 1) as new_customer');
+        $query->select('c.iso_code as currency, SUM(os.total_products_tax_incl + os.total_shipping_tax_incl) as refund');
+        $query->select('SUM(os.total_products_tax_excl + os.total_shipping_tax_excl) as refund_tax_excl, o.module as payment_module');
+        $query->select('o.payment as payment_mode, o.total_paid_real, o.total_shipping as shipping_cost, o.date_add as created_at');
+        $query->select('o.date_upd as updated_at, o.id_carrier');
+        $query->select('o.payment as payment_name');
+        $query->select('CONCAT(CONCAT("delivery", ":", cntd.iso_code), ",", CONCAT("invoice", ":", cnti.iso_code)) as address_iso');
+        $query->select('o.valid as is_validated');
+        $query->select('ost.paid as is_paid');
+        $query->select('ost.shipped as is_shipped');
+        $query->select('osl.name as status_label');
+        $query->select('o.module as payment_name');
     }
 }

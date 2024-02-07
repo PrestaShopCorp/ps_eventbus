@@ -114,6 +114,20 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit, $langIso)
+    {
+        return $this->wishlistRepository->getQueryForDebug($offset, $limit);
+    }
+
+    /**
      * @param array $wishlists
      *
      * @return array

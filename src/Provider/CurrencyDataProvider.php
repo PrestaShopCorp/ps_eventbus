@@ -88,4 +88,18 @@ class CurrencyDataProvider implements PaginatedApiDataProviderInterface
             ];
         }, $currencies);
     }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit, $langIso)
+    {
+        return $this->currencyRepository->getQueryForDebug($offset, $limit);
+    }
 }

@@ -88,4 +88,18 @@ class ManufacturerDataProvider implements PaginatedApiDataProviderInterface
             ];
         }, $manufacturers);
     }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit, $langIso)
+    {
+        return $this->manufacturerRepository->getQueryForDebug($offset, $limit, $langIso);
+    }
 }
