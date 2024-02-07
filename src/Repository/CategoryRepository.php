@@ -216,11 +216,11 @@ class CategoryRepository
         $query->limit($limit, $offset);
 
         $queryStringified = preg_replace('/\s+/', ' ', $query->build());
-
-        return [
-            'query' => $query->getQuery(),
-            'queryStringified' => $queryStringified,
-        ];
+ 
+        return array_merge(
+            (array)$query,
+            ['queryStringified' => $queryStringified]
+        );
     }
 
     /**

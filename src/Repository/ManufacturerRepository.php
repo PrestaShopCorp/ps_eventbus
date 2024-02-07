@@ -117,10 +117,10 @@ class ManufacturerRepository
 
         $queryStringified = preg_replace('/\s+/', ' ', $query->build());
 
-        return [
-            'query' => $query->getQuery(),
-            'queryStringified' => $queryStringified,
-        ];
+        return array_merge(
+            (array)$query,
+            ['queryStringified' => $queryStringified]
+        );
     }
 
     /**
