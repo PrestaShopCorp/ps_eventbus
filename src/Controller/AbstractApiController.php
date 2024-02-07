@@ -165,7 +165,7 @@ abstract class AbstractApiController extends \ModuleFrontController
      */
     protected function handleDataSync(PaginatedApiDataProviderInterface $dataProvider)
     {
-         /** @var boolean  $debug */
+        /** @var bool $debug */
         $debug = \Tools::getValue('debug') == 1;
 
         /** @var string $jobId */
@@ -192,7 +192,7 @@ abstract class AbstractApiController extends \ModuleFrontController
 
             if ($debug) {
                 $response = $dataProvider->getQueryForDebug($offset, $limit, $langIso);
-                
+
                 return array_merge(
                     [
                         'object_type' => $this->type,

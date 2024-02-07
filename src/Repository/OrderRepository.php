@@ -103,9 +103,9 @@ class OrderRepository
      * @param int $offset
      * @param int $limit
      * @param string $shopId
-     * 
+     *
      * @return array
-     * 
+     *
      * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $shopId)
@@ -117,10 +117,10 @@ class OrderRepository
         $query->limit((int) $limit, (int) $offset);
 
         $queryStringified = preg_replace('/\s+/', ' ', $query->build());
-            
+
         return [
             'query' => $query->getQuery(),
-            'queryStringified' => $queryStringified
+            'queryStringified' => $queryStringified,
         ];
     }
 

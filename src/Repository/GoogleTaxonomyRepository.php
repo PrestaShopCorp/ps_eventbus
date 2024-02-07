@@ -67,9 +67,9 @@ class GoogleTaxonomyRepository
      * @param int $offset
      * @param int $limit
      * @param int $shopId
-     * 
+     *
      * @return array
-     * 
+     *
      * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $shopId)
@@ -80,10 +80,10 @@ class GoogleTaxonomyRepository
             ->limit($limit, $offset);
 
         $queryStringified = preg_replace('/\s+/', ' ', $query->build());
-            
+
         return [
             'query' => $query->getQuery(),
-            'queryStringified' => $queryStringified
+            'queryStringified' => $queryStringified,
         ];
     }
 }

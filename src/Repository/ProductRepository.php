@@ -304,9 +304,9 @@ class ProductRepository
      * @param int $offset
      * @param int $limit
      * @param int $langId
-     * 
+     *
      * @return array
-     * 
+     *
      * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $langId)
@@ -318,10 +318,10 @@ class ProductRepository
         $query->limit($limit, $offset);
 
         $queryStringified = preg_replace('/\s+/', ' ', $query->build());
-            
+
         return [
             'query' => $query->getQuery(),
-            'queryStringified' => $queryStringified
+            'queryStringified' => $queryStringified,
         ];
     }
 

@@ -81,9 +81,9 @@ class ImageTypeRepository
     /**
      * @param int $offset
      * @param int $limit
-     * 
+     *
      * @return array
-     * 
+     *
      * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit)
@@ -95,10 +95,10 @@ class ImageTypeRepository
         $query->limit($limit, $offset);
 
         $queryStringified = preg_replace('/\s+/', ' ', $query->build());
-            
+
         return [
             'query' => $query->getQuery(),
-            'queryStringified' => $queryStringified
+            'queryStringified' => $queryStringified,
         ];
     }
 

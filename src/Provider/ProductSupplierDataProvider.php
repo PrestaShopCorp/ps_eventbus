@@ -95,9 +95,9 @@ class ProductSupplierDataProvider implements PaginatedApiDataProviderInterface
      * @param int $offset
      * @param int $limit
      * @param string $langIso
-     * 
+     *
      * @return array
-     * 
+     *
      * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $langIso)

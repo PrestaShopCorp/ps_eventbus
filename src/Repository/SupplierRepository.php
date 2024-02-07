@@ -102,9 +102,9 @@ class SupplierRepository
      * @param int $offset
      * @param int $limit
      * @param string $langIso
-     * 
+     *
      * @return array
-     * 
+     *
      * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $langIso)
@@ -116,10 +116,10 @@ class SupplierRepository
         $query->limit($limit, $offset);
 
         $queryStringified = preg_replace('/\s+/', ' ', $query->build());
-            
+
         return [
             'query' => $query->getQuery(),
-            'queryStringified' => $queryStringified
+            'queryStringified' => $queryStringified,
         ];
     }
 

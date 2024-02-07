@@ -207,9 +207,9 @@ class CarrierRepository implements DebugQueryInterface
      * @param int $offset
      * @param int $limit
      * @param int $langId
-     * 
+     *
      * @return array
-     * 
+     *
      * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $langId)
@@ -224,10 +224,10 @@ class CarrierRepository implements DebugQueryInterface
         $query->limit($limit, $offset);
 
         $queryStringified = preg_replace('/\s+/', ' ', $query->build());
-            
+
         return [
             'query' => $query->getQuery(),
-            'queryStringified' => $queryStringified
+            'queryStringified' => $queryStringified,
         ];
     }
 }
