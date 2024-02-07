@@ -30,7 +30,7 @@ export class WsServer {
 
     public sendDataToWS(apiName: string, request: Request) {
         if (!WsServer.client) return;
-        
+
         const data = {
             apiName,
             method: request.method,
@@ -40,9 +40,6 @@ export class WsServer {
             body: request.body ?? {},
         };
 
-        // there may be no client if we're not runing an automated test suite
-        if( WsServer.client ) {
-          WsServer.client.send(JSON.stringify(data));
-        }
+        WsServer.client.send(JSON.stringify(data));
     }
 }

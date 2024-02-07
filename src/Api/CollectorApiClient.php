@@ -114,7 +114,6 @@ class CollectorApiClient
     public function uploadDelete(string $jobId, string $data, int $startTime)
     {
         $url = $this->collectorApiUrl . '/delete/' . $jobId;
-        $payload = 'lines=' . urlencode($data);
         // Prepare request
         $file = new PostFileApi('file', $data, 'file');
         $multipartBody = new MultipartBody([], [$file], Config::COLLECTOR_MULTIPART_BOUNDARY);
