@@ -3,6 +3,9 @@
 namespace PrestaShop\Module\PsEventbus\Api;
 
 use GuzzleHttp\Psr7\Request;
+use PrestaShop\Module\PsEventbus\Api\Post\MultipartBody;
+use PrestaShop\Module\PsEventbus\Api\Post\PostFileApi;
+use PrestaShop\Module\PsEventbus\Config\Config;
 use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
 use Prestashop\ModuleLibGuzzleAdapter\Interfaces\HttpClientInterface;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
@@ -70,18 +73,20 @@ class CollectorApiClient
         $url = $this->collectorApiUrl . '/upload/' . $jobId;
         $payload = 'lines=' . urlencode($data);
         // Prepare request
+        $file = new PostFileApi('file', $data, 'file');
+        $multipartBody = new MultipartBody([], [$file], Config::COLLECTOR_MULTIPART_BOUNDARY);
         $request = new Request(
             'POST',
             $url,
             [
                 'Accept' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->jwt,
-                'Content-Length' => (string) strlen($payload),
-                'Content-Type' => 'application/x-www-form-urlencoded',
+                'Content-Length' => $file->getContent()->getSize(),
+                'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
                 'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
                 'User-Agent' => 'ps-eventbus/' . $this->module->version,
             ],
-            $payload
+            $multipartBody->getContents()
         );
 
         // Send request and parse response
@@ -111,17 +116,19 @@ class CollectorApiClient
         $url = $this->collectorApiUrl . '/delete/' . $jobId;
         $payload = 'lines=' . urlencode($data);
         // Prepare request
+        $file = new PostFileApi('file', $data, 'file');
+        $multipartBody = new MultipartBody([], [$file], Config::COLLECTOR_MULTIPART_BOUNDARY);
         $request = new Request(
             'POST',
             $url,
             [
                 'Accept' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->jwt,
-                'Content-Length' => (string) strlen($payload),
-                'Content-Type' => 'application/x-www-form-urlencoded',
+                'Content-Length' => $file->getContent()->getSize(),
+                'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
                 'User-Agent' => 'ps-eventbus/' . $this->module->version,
             ],
-            $payload
+            $multipartBody->getContents()
         );
 
         // Send request and parse response
