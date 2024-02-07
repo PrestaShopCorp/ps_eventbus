@@ -123,8 +123,7 @@ class EmployeeRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('
-            e.id_employee,
+        $query->select('e.id_employee,
             e.id_profile,
             e.id_lang,
             e.email,

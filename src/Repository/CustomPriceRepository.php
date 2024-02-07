@@ -91,11 +91,9 @@ class CustomPriceRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('sp.id_specific_price, sp.id_product, sp.id_shop, sp.id_shop_group, sp.id_currency,
-            sp.id_country, sp.id_group, sp.id_customer, sp.id_product_attribute, sp.price, sp.from_quantity,
-            sp.reduction, sp.reduction_tax, sp.from, sp.to, sp.reduction_type
-        ');
-
+        $query->select('sp.id_specific_price, sp.id_product, sp.id_shop, sp.id_shop_group, sp.id_currency');
+        $query->select('sp.id_country, sp.id_group, sp.id_customer, sp.id_product_attribute, sp.price, sp.from_quantity');
+        $query->select('sp.reduction, sp.reduction_tax, sp.from, sp.to, sp.reduction_type');
         $query->select('c.iso_code as country');
         $query->select('cur.iso_code as currency');
     }

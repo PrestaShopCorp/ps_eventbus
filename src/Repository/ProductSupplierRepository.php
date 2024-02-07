@@ -108,7 +108,7 @@ class ProductSupplierRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('ps.id_product_supplier, ps.id_product, ps.id_product_attribute, ps.id_supplier, ps.product_supplier_reference,
-        ps.product_supplier_price_te, ps.id_currency');
+        $query->select('ps.id_product_supplier, ps.id_product, ps.id_product_attribute, ps.id_supplier, ps.product_supplier_reference');
+        $query->select('ps.product_supplier_price_te, ps.id_currency');
     }
 }

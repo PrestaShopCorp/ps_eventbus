@@ -230,8 +230,8 @@ class CategoryRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('CONCAT(cs.id_category, "-", l.iso_code) as unique_category_id, cs.id_category,
-         c.id_parent, cl.name, cl.description, cl.link_rewrite, cl.meta_title, cl.meta_keywords, cl.meta_description,
-         l.iso_code, c.date_add as created_at, c.date_upd as updated_at');
+        $query->select('CONCAT(cs.id_category, "-", l.iso_code) as unique_category_id, cs.id_category');
+        $query->select('c.id_parent, cl.name, cl.description, cl.link_rewrite, cl.meta_title, cl.meta_keywords, cl.meta_description');
+        $query->select('l.iso_code, c.date_add as created_at, c.date_upd as updated_at');
     }
 }

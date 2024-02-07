@@ -97,8 +97,8 @@ class LanguageRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('la.id_lang, la.name, la.active, la.iso_code, la.language_code, la.locale, la.date_format_lite,
-      la.date_format_full, la.is_rtl, las.id_shop');
+        $query->select('la.id_lang, la.name, la.active, la.iso_code, la.language_code, la.locale, la.date_format_lite');
+        $query->select('la.date_format_full, la.is_rtl, las.id_shop');
     }
 
     /**

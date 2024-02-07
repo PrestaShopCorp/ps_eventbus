@@ -121,7 +121,7 @@ class CustomerRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('c.id_customer, c.id_lang, c.email, c.newsletter, c.newsletter_date_add,
-         c.optin, c.active, c.is_guest, c.deleted, c.date_add as created_at, c.date_upd as updated_at');
+        $query->select('c.id_customer, c.id_lang, c.email, c.newsletter, c.newsletter_date_add');
+        $query->select('c.optin, c.active, c.is_guest, c.deleted, c.date_add as created_at, c.date_upd as updated_at');
     }
 }

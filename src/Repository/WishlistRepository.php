@@ -121,7 +121,7 @@ class WishlistRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('w.id_wishlist, w.id_customer, w.id_shop, w.id_shop_group, w.token, w.name, w.counter,
-      w.date_add AS created_at, w.date_upd as updated_at, w.default');
+        $query->select('w.id_wishlist, w.id_customer, w.id_shop, w.id_shop_group, w.token, w.name, w.counter');
+        $query->select('w.date_add AS created_at, w.date_upd as updated_at, w.default');
     }
 }
