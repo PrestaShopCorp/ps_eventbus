@@ -124,4 +124,20 @@ class ProductDataProvider implements PaginatedApiDataProviderInterface
 
         return array_merge($products, $bundles, $productSuppliers);
     }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     * 
+     * @return array
+     * 
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit, $langIso)
+    {
+        $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
+
+        return $this->productRepository->getQueryForDebug($offset, $limit, $langId);
+    }
 }
