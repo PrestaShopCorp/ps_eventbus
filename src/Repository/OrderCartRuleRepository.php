@@ -44,7 +44,7 @@ class OrderCartRuleRepository
         $query = $this->getBaseQuery();
 
         $query->select('ocr.id_order_cart_rule,ocr.id_order,ocr.id_cart_rule,ocr.id_order_invoice,ocr.name,ocr.value,ocr.value_tax_excl, ocr.free_shipping');
-    
+
         if (\Tools::version_compare(_PS_VERSION_, '1.7.7.0', '>=')) {
             $query->select('ocr.deleted');
         }
