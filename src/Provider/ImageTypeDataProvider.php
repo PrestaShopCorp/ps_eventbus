@@ -89,4 +89,18 @@ class ImageTypeDataProvider implements PaginatedApiDataProviderInterface
             ];
         }, $imageTypes);
     }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit, $langIso)
+    {
+        return $this->imageTypeRepository->getQueryForDebug($offset, $limit);
+    }
 }

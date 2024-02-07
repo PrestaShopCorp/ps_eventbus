@@ -99,3 +99,10 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
+
+  PrestaShop\Module\PsEventbus\Decorator\TranslationDecorator:
+    class: PrestaShop\Module\PsEventbus\Decorator\TranslationDecorator
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'

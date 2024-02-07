@@ -68,4 +68,18 @@ class CustomProductCarrierDataProvider implements PaginatedApiDataProviderInterf
     {
         return (int) $this->productCarrierRepository->getRemainingProductCarriersCount($offset);
     }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit, $langIso)
+    {
+        return $this->productCarrierRepository->getQueryForDebug($offset, $limit);
+    }
 }
