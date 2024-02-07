@@ -82,7 +82,7 @@ class GoogleTaxonomyRepository
         $queryStringified = preg_replace('/\s+/', ' ', $query->build());
 
         return array_merge(
-            (array)$query,
+            (array) $query,
             ['queryStringified' => $queryStringified]
         );
     }
