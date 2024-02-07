@@ -97,6 +97,7 @@ class ModuleRepository
         } else {
             $query->select('m.id_module as module_id, name, version as module_version, IF(m_shop.enable_device, 1, 0) as active')
             ->limit($limit, $offset);
+        }
 
         $queryStringified = preg_replace('/\s+/', ' ', $query->build());
             

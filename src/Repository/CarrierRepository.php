@@ -2,9 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShop\Module\PsEventbus\Interfaces\DebugQueryInterface;
-
-class CarrierRepository implements DebugQueryInterface
+class CarrierRepository
 {
     /**
      * @var \Db

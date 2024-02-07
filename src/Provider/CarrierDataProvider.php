@@ -5,13 +5,12 @@ namespace PrestaShop\Module\PsEventbus\Provider;
 use PrestaShop\Module\PsEventbus\Builder\CarrierBuilder;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\DTO\Carrier as EventBusCarrier;
-use PrestaShop\Module\PsEventbus\Interfaces\DebugQueryInterface;
-use PrestaShop\Module\PsEventbus\Interfaces\PaginatedApiDataProviderInterface;
+use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface as ProviderPaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
 use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 
-class CarrierDataProvider implements PaginatedApiDataProviderInterface, DebugQueryInterface
+class CarrierDataProvider implements ProviderPaginatedApiDataProviderInterface
 {
     /**
      * @var ConfigurationRepository
@@ -133,6 +132,6 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface, DebugQue
     {
         $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
 
-        $this->carrierRepository->getQueryForDebug($offset, $limit, $langId);
+        return $this->carrierRepository->getQueryForDebug($offset, $limit, $langId);
     }
 }

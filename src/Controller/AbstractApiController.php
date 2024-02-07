@@ -196,7 +196,6 @@ abstract class AbstractApiController extends \ModuleFrontController
                 return array_merge(
                     [
                         'object_type' => $this->type,
-                        'syncType' => $incrementalSync ? 'incremental' : 'full',
                     ],
                     $response
                 );

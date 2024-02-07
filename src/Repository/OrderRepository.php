@@ -102,7 +102,7 @@ class OrderRepository
     /**
      * @param int $offset
      * @param int $limit
-     * @param string $shopId
+     * @param int $shopId
      *
      * @return array
      *
