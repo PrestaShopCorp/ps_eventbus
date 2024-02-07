@@ -78,9 +78,9 @@ class ModuleRepository
     /**
      * @param int $offset
      * @param int $limit
-     * 
+     *
      * @return array
-     * 
+     *
      * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit)
@@ -100,10 +100,10 @@ class ModuleRepository
         }
 
         $queryStringified = preg_replace('/\s+/', ' ', $query->build());
-            
+
         return [
             'query' => $query->getQuery(),
-            'queryStringified' => $queryStringified
+            'queryStringified' => $queryStringified,
         ];
     }
 }
