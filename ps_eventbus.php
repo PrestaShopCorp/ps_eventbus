@@ -132,15 +132,31 @@ class Ps_eventbus extends Module
     private $serviceContainer;
 
     /**
-     * @var int
+     * @var int the unique shop identifier (uuid v4)
      */
     private $shopId;
+
+    /**
+     * @var int Defines the multistore compatibility level of the module
+     */
+    public $multistoreCompatibility = self::MULTISTORE_COMPATIBILITY_YES;
+
+    /**
+     * @var string contact email of the maintainers (please consider using github issues)
+     */
+    public $emailSupport;
+
+    /**
+     * @var string available terms of services
+     */
+    public $termsOfServiceUrl;
 
     /**
      * __construct.
      */
     public function __construct()
     {
+        // @see https://devdocs.prestashop-project.org/8/modules/concepts/module-class/
         $this->name = 'ps_eventbus';
         $this->tab = 'administration';
         $this->author = 'PrestaShop';
@@ -151,6 +167,9 @@ class Ps_eventbus extends Module
 
         parent::__construct();
 
+        $this->emailSupport = 'cloudsync-support@prestashop.com';
+        $this->termsOfServiceUrl =
+            'https://www.prestashop.com/en/prestashop-account-privacy';
         $this->displayName = $this->l('PrestaShop EventBus');
         $this->description = $this->l('Link your PrestaShop account to synchronize your shop data to a tech partner of your choice. Do not uninstall this module if you are already using a service, as it will prevent it from working.');
         $this->confirmUninstall = $this->l('This action will immediately prevent your PrestaShop services and Community services from working as they are using PrestaShop CloudSync for syncing.');
