@@ -1,4 +1,4 @@
-.PHONY: help build version zip zip-e2e zip-inte zip-preprod zip-prod build test composer-validate translation-validate lint docker-lint lint-fix docker-fix-lint php-cs-fixer php-cs-fixer-lint lint-fix docker-lint-fix php-lint docker-php-lint phpunit docker-phpunit phpunit-cov docker-phpunit-cov phpstan docker-phpstan phpstan-baseline docker-test
+.PHONY: help build version zip zip-e2e zip-inte zip-prod build test composer-validate translation-validate lint docker-lint lint-fix docker-fix-lint php-cs-fixer php-cs-fixer-lint lint-fix docker-lint-fix php-lint docker-php-lint phpunit docker-phpunit phpunit-cov docker-phpunit-cov phpstan docker-phpstan phpstan-baseline docker-test
 PHP = $(shell command -v php >/dev/null 2>&1 || { echo >&2 "PHP is not installed."; exit 1; } && which php)
 VERSION ?= $(shell git describe --tags 2> /dev/null || echo "v0.0.0")
 SEM_VERSION ?= $(shell echo ${VERSION} | sed 's/^v//')
@@ -53,7 +53,7 @@ version:
 	@$(call replace_version,$(shell pwd),${SEM_VERSION})
 
 # target: zip                                    - Make zip bundles
-zip: zip-prod zip-preprod zip-inte
+zip: zip-prod zip-inte
 dist:
 	@mkdir -p ./dist
 
@@ -64,10 +64,6 @@ zip-e2e: vendor dist
 # target: zip-inte                               - Bundle an integration zip
 zip-inte: vendor dist
 	@$(call zip_it,.config.inte.yml,${PACKAGE}_integration.zip)
-
-# target: zip-preprod                            - Bundle a preproduction zip
-zip-preprod: vendor dist
-	@$(call zip_it,.config.preprod.yml,${PACKAGE}_preproduction.zip)
 
 # target: zip-prod                               - Bundle a production zip
 zip-prod: vendor dist
