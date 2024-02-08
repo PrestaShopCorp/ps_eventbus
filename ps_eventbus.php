@@ -136,12 +136,12 @@ class Ps_eventbus extends Module
      */
     private $shopId;
 
-    /** 
+    /**
      * @var int Defines the multistore compatibility level of the module
      */
     public $multistoreCompatibility = self::MULTISTORE_COMPATIBILITY_YES;
 
-    /** 
+    /**
      * @var string contact email of the maintainers (please consider using github issues)
      */
     public $emailSupport;
