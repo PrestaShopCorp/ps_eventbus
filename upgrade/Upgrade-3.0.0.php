@@ -16,5 +16,9 @@ function upgrade_module_2_3_5($module)
 
     $db->execute($query);
 
+    $module->registerhook('actionObjectCartRuleAddAfter');
+    $module->registerhook('actionObjectCartRuleDeleteAfter');
+    $module->registerhook('actionObjectCartRuleUpdateAfter');
+
     return true;
 }

@@ -27,9 +27,23 @@ ps_accounts_mock_install() {
 }
 
 ps_eventbus_install() {
-  [ ! -d "./modules/ps_eventbus/vendor" ] && error "please install composer dependencies first" 2
-  echo "* [ps_eventbus] cleaning tools/vendor..."
-  rm -rf "./modules/ps_eventbus/tools/vendor"
+  # Some explanations are required here:
+  #
+  # If you look closer to the ./docker-compose.yml prestashop service, you will
+  # see multiple mounts on the same files:
+  # - ..:/var/www/html/modules/ps_eventbus:rw        => mount all the sources
+  # - /var/www/html/modules/ps_eventbus/vendor       => void the specific vendor dir, makint it empty
+  # - /var/www/html/modules/ps_eventbus/tools/vendor => void the specific vendor dev dir, making it empty
+  # 
+  # That said, we now want our container to have RW access on these directories, 
+  # and to install the required composer dependencies for the module to work.
+  #
+  # Other scenarios could be imagined, but this is the best way to avoid writes on a mounted volume,
+  # which would not work on a Linux environment (binding a volume), as opposed to a Windows or Mac one (NFS mount).
+  chown www-data:www-data ./modules/ps_eventbus/vendor
+  chown www-data:www-data ./modules/ps_eventbus/tools/vendor
+  run_user composer install -n -d ./modules/ps_eventbus
+
   echo "* [ps_eventbus] installing the module..."
   run_user php -d memory_limit=-1 bin/console prestashop:module --no-interaction install "ps_eventbus"
 }
