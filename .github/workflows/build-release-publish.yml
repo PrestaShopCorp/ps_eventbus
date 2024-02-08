@@ -21,10 +21,11 @@ jobs:
           VERSION: ${{ github.event.release.tag_name }}
 
       - name: Create & upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.repository.name }}
           path: ./
+          overwrite: true
 
   upload_release_asset_production:
     name: Upload the production zip asset to the release
@@ -32,14 +33,13 @@ jobs:
     needs: [build]
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ github.event.repository.name }}
+          path: ./
 
       - name: Bundle the production zip
-        run: |
-          cd ${{ github.event.repository.name }}
-          make zip-prod
+        run: make zip-prod
         env:
           CONFIG_FILE: ${{ secrets.PS_EVENTBUS_PRODUCTION_CONFIG }}
           VERSION: ${{ github.event.release.tag_name }}
@@ -60,14 +60,13 @@ jobs:
     needs: [build]
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ github.event.repository.name }}
+          path: ./
 
       - name: Bundle the integration zip
-        run: |
-          cd ${{ github.event.repository.name }}
-          make zip-inte
+        run: make zip-inte
 
       - name: Publish the integration zip
         uses: actions/upload-release-asset@v1
