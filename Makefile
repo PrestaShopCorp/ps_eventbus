@@ -58,15 +58,15 @@ dist:
 	@mkdir -p ./dist
 
 # target: zip-e2e                                - Bundle a local E2E integrable zip
-zip-e2e: vendor dist
+zip-e2e: vendor tools/vendor dist
 	@$(call zip_it,./config/parameters.yml,${PACKAGE}_e2e.zip)
 
 # target: zip-inte                               - Bundle an integration zip
-zip-inte: vendor dist
+zip-inte: vendor tools/vendor dist
 	@$(call zip_it,.config.inte.yml,${PACKAGE}_integration.zip)
 
 # target: zip-prod                               - Bundle a production zip
-zip-prod: vendor dist
+zip-prod: vendor tools/vendor dist
 	@$(call zip_it,.config.prod.yml,${PACKAGE}.zip)
 
 # target: build                                  - Setup PHP & Node.js locally

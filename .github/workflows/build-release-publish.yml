@@ -12,8 +12,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install composer dependencies
-        run: composer install --no-dev -o
+      - name: Install composer production dependencies
+        run: make vendor
 
       - name: Bump version
         run: make version
