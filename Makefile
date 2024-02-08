@@ -1,30 +1,30 @@
 .PHONY: help build version zip zip-e2e zip-inte zip-preprod zip-prod build test composer-validate translation-validate lint docker-lint lint-fix docker-fix-lint php-cs-fixer php-cs-fixer-lint lint-fix docker-lint-fix php-lint docker-php-lint phpunit docker-phpunit phpunit-cov docker-phpunit-cov phpstan docker-phpstan phpstan-baseline docker-test
 PHP = $(shell command -v php >/dev/null 2>&1 || { echo >&2 "PHP is not installed."; exit 1; } && which php)
-VERSION ?= $(shell git describe --tags 2> /dev/null || echo "0.0.0")
+VERSION ?= $(shell git describe --tags 2> /dev/null || echo "v0.0.0")
 SEM_VERSION ?= $(shell echo ${VERSION} | sed 's/^v//')
-PACKAGE ?= ps_eventbus-${VERSION}
-BUILDPLATFORM ?= linux/amd64
+MODULE_NAME = ps_eventbus
+PACKAGE ?= ${MODULE_NAME}-${VERSION}
 PHP_VERSION ?= 8.1
-PS_VERSION ?= 8.1.2
+PS_VERSION ?= 8.1.3
 TESTING_IMAGE ?= prestashop/prestashop-flashlight:${PS_VERSION}-${PHP_VERSION}
 PS_ROOT_DIR ?= $(shell pwd)/prestashop/prestashop-${PS_VERSION}
 export PATH := ./vendor/bin:./tools/vendor/bin:$(PATH)
 
 define replace_version
-sed -i.bak -e "s/\(VERSION = \).*/\1\'${2}\';/" ${1}/ps_eventbus.php
-sed -i.bak -e "s/\($this->version = \).*/\1\'${2}\';/" ${1}/ps_eventbus.php
+sed -i.bak -e "s/\(VERSION = \).*/\1\'${2}\';/" ${1}/${MODULE_NAME}.php
+sed -i.bak -e "s/\($this->version = \).*/\1\'${2}\';/" ${1}/${MODULE_NAME}.php
 sed -i.bak -e "s|\(<version><!\[CDATA\[\)[0-9a-z.-]\{1,\}]]></version>|\1${2}]]></version>|" ${1}/config.xml
-rm -f ${1}/ps_eventbus.php.bak ${1}/config.xml.bak
+rm -f ${1}/${MODULE_NAME}.php.bak ${1}/config.xml.bak
 endef
 
 define zip_it
 $(eval TMP_DIR := $(shell mktemp -d))
-mkdir -p ${TMP_DIR}/ps_eventbus;
-cp -r $(shell cat .zip-contents) ${TMP_DIR}/ps_eventbus;
-$(call replace_version,${TMP_DIR}/ps_eventbus,${SEM_VERSION})
+mkdir -p ${TMP_DIR}/${MODULE_NAME};
+cp -r $(shell cat .zip-contents) ${TMP_DIR}/${MODULE_NAME};
+$(call replace_version,${TMP_DIR}/${MODULE_NAME},${SEM_VERSION})
 ./tools/vendor/bin/autoindex prestashop:add:index ${TMP_DIR}
-cp $1 ${TMP_DIR}/ps_eventbus/config/parameters.yml;
-cd ${TMP_DIR} && zip -9 -r $2 ./ps_eventbus;
+cp $1 ${TMP_DIR}/${MODULE_NAME}/config/parameters.yml;
+cd ${TMP_DIR} && zip -9 -r $2 ./${MODULE_NAME};
 mv ${TMP_DIR}/$2 ./dist;
 rm -rf ${TMP_DIR:-/dev/null};
 endef
@@ -32,8 +32,8 @@ endef
 define in_docker
 docker run \
 --env _PS_ROOT_DIR_=/var/www/html \
---workdir /var/www/html/modules/ps_eventbus \
---volume $(shell pwd):/var/www/html/modules/ps_eventbus:rw \
+--workdir /var/www/html/modules/${MODULE_NAME} \
+--volume $(shell pwd):/var/www/html/modules/${MODULE_NAME}:rw \
 --entrypoint $1 ${TESTING_IMAGE} $2
 endef
 
@@ -105,6 +105,8 @@ test: composer-validate lint php-lint phpstan phpunit translation-validate
 # target: composer-validate                      - Validates composer.json and composer.lock
 composer-validate: vendor
 	@./composer.phar validate --no-check-publish
+docker-composer-validate:
+	@$(call in_docker,make,composer-validate)
 
 # target: translation-validate                   - Validates the translation files in translations/ directory
 translation-validate:
