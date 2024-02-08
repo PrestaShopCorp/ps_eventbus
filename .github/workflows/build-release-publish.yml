@@ -11,14 +11,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install all composer dependencies
-        run: make
-
-      - name: Bump version
-        run: make version
-        env:
-          VERSION: ${{ github.event.release.tag_name }}
-
       - name: Bundle the production zip
         run: make zip-prod
         env:
@@ -40,14 +32,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Install all composer dependencies
-        run: make
-
-      - name: Bump version
-        run: make version
-        env:
-          VERSION: ${{ github.event.release.tag_name }}
 
       - name: Bundle the integration zip
         run: make zip-inte
