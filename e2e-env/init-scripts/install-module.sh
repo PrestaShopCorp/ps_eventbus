@@ -45,6 +45,7 @@ ps_eventbus_install() {
   run_user composer install -n -d ./modules/ps_eventbus
 
   echo "* [ps_eventbus] installing the module..."
+  cd "$PS_FOLDER"
   run_user php -d memory_limit=-1 bin/console prestashop:module --no-interaction install "ps_eventbus"
 }
 
