@@ -1,4 +1,5 @@
 .PHONY: help build version zip zip-e2e zip-inte zip-prod build test composer-validate translation-validate lint docker-lint lint-fix docker-fix-lint php-cs-fixer php-cs-fixer-lint lint-fix docker-lint-fix php-lint docker-php-lint phpunit docker-phpunit phpunit-cov docker-phpunit-cov phpstan docker-phpstan phpstan-baseline docker-test
+SHELL=/bin/bash -o pipefail
 PHP = $(shell command -v php >/dev/null 2>&1 || { echo >&2 "PHP is not installed."; exit 1; } && which php)
 VERSION ?= $(shell git describe --tags 2> /dev/null || echo "v0.0.0")
 SEM_VERSION ?= $(shell echo ${VERSION} | sed 's/^v//')
@@ -130,7 +131,7 @@ docker-lint-fix: tools/vendor
 
 # target: php-lint (or docker-php-lint)          - Lint the code with the php linter
 php-lint:
-	@git ls-files | grep -E '.*\.(php)' | xargs -n1 php -l -n | (! grep -v "No syntax errors" );
+	@find . -type f -name '*.php' -not -path 'vendor' -and -path 'tools/vendor' -print0 | xargs -0 -n1 php -l -n | (! grep -v "No syntax errors" );
 	@echo "php $(shell php -r 'echo PHP_VERSION;') lint passed";
 docker-php-lint:
 	@$(call in_docker,make,php-lint)
