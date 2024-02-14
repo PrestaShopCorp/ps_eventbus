@@ -1,4 +1,3 @@
-.PHONY: help build version zip zip-e2e zip-inte zip-prod build test composer-validate translation-validate lint docker-lint lint-fix docker-fix-lint php-cs-fixer php-cs-fixer-lint lint-fix docker-lint-fix php-lint docker-php-lint phpunit docker-phpunit phpunit-cov docker-phpunit-cov phpstan docker-phpstan phpstan-baseline docker-test
 SHELL=/bin/bash -o pipefail
 PHP = $(shell command -v php >/dev/null 2>&1 || { echo >&2 "PHP is not installed."; exit 1; } && which php)
 VERSION ?= $(shell git describe --tags 2> /dev/null || echo "v0.0.0")
@@ -38,39 +37,46 @@ docker run \
 --entrypoint $1 ${TESTING_IMAGE} $2
 endef
 
-# target: default                                - Calling build by default
+# target: default                                              - Calling build by default
 default: build
 
-# target: help                                   - Get help on this file
+# target: help                                                 - Get help on this file
+.PHONY: help
 help:
 	@egrep "^#" Makefile
 
-# target: clean                                  - Clean up the repository
+# target: clean                                                - Clean up the repository
 clean:
 	git -c core.excludesfile=/dev/null clean -X -d -f
 
-# target: version                                - Replace version in files, CI only
+# target: version                                              - Replace version in files, CI only
+.PHONY: version
 version:
 	@$(call replace_version,$(shell pwd),${SEM_VERSION})
 
-# target: zip                                    - Make zip bundles
+# target: zip                                                  - Make zip bundles
+.PHONY: zip
 zip: zip-prod zip-inte
 dist:
 	@mkdir -p ./dist
 
-# target: zip-e2e                                - Bundle a local E2E integrable zip
+# target: zip-e2e                                              - Bundle a local E2E integrable zip
+.PHONY: zip-e2e
 zip-e2e: vendor tools/vendor dist
 	@$(call zip_it,./config/parameters.yml,${PACKAGE}_e2e.zip)
 
-# target: zip-inte                               - Bundle an integration zip
+# target: zip-inte                                             - Bundle an integration zip
+.PHONY: zip-inte
 zip-inte: vendor tools/vendor dist
 	@$(call zip_it,.config.inte.yml,${PACKAGE}_integration.zip)
 
-# target: zip-prod                               - Bundle a production zip
+# target: zip-prod                                             - Bundle a production zip
+.PHONY: zip-prod
 zip-prod: vendor tools/vendor dist
 	@$(call zip_it,.config.prod.yml,${PACKAGE}.zip)
 
-# target: build                                  - Setup PHP & Node.js locally
+# target: build                                                - Setup PHP & Node.js locally
+.PHONY: build
 build: vendor tools/vendor
 
 composer.phar:
@@ -96,76 +102,92 @@ prestashop/prestashop-${PS_VERSION}: prestashop composer.phar
     fi \
 	fi;
 
-# target: test                                   - Static and unit testing
+# target: test                                                 - Static and unit testing
+.PHONY: test
 test: composer-validate lint php-lint phpstan phpunit translation-validate
 
-# target: composer-validate                      - Validates composer.json and composer.lock
+# target: composer-validate (or docker-composer-validate)      - Validates composer.json and composer.lock
+.PHONY: composer-validate
 composer-validate: vendor
 	@./composer.phar validate --no-check-publish
 docker-composer-validate:
 	@$(call in_docker,make,composer-validate)
 
-# target: translation-validate                   - Validates the translation files in translations/ directory
+# target: translation-validate                                 - Validates the translation files in translations/ directory
+.PHONY: translation-validate
 translation-validate:
 	php tests/translation.test.php
 
-# target: lint (or docker-lint)                  - Lint the code and expose errors
+# target: lint (or docker-lint)                                - Lint the code and expose errors
+.PHONY: lint docker-lint
 lint: php-cs-fixer php-lint
 docker-lint: docker-php-cs-fixer docker-php-lint
 
-# target: lint-fix (or docker-fix-lint)          - Automatically fix the linting errors
+# target: lint-fix (or docker-lint-fix)                        - Automatically fix the linting errors
+.PHONY: lint-fix docker-lint-fix
 lint-fix: php-cs-fixer-fix
 docker-lint-fix: docker-php-cs-fixer-fix
 
-# target: php-cs-fixer (or php-cs-fixer-lint)    - Lint the code and expose errors
+# target: php-cs-fixer (or docker-php-cs-fixer)                - Lint the code and expose errors
+.PHONY: php-cs-fixer docker-php-cs-fixer  
 php-cs-fixer: tools/vendor
 	@PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --dry-run --diff --using-cache=no;
 docker-php-cs-fixer: tools/vendor
 	@$(call in_docker,make,lint)
 
-# target: lint-fix (or docker-lint-fix)          - Lint the code and fix it
+# target: php-cs-fixer-fix (or docker-php-cs-fixer-fix)        - Lint the code and fix it
+.PHONY: php-cs-fixer-fix docker-php-cs-fixer-fix
 php-cs-fixer-fix: tools/vendor
 	@PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --using-cache=no;
-docker-lint-fix: tools/vendor
+docker-php-cs-fixer-fix: tools/vendor
 	@$(call in_docker,make,lint-fix)
 
-# target: php-lint (or docker-php-lint)          - Lint the code with the php linter
+# target: php-lint (or docker-php-lint)                        - Lint the code with the php linter
+.PHONY: php-lint docker-php-lint
 php-lint:
 	@find . -type f -name '*.php' -not -path 'vendor' -and -path 'tools/vendor' -print0 | xargs -0 -n1 php -l -n | (! grep -v "No syntax errors" );
 	@echo "php $(shell php -r 'echo PHP_VERSION;') lint passed";
 docker-php-lint:
 	@$(call in_docker,make,php-lint)
 
-# target: phpunit (or docker-phpunit)            - Run phpunit tests
+# target: phpunit (or docker-phpunit)                          - Run phpunit tests
+.PHONY: phpunit docker-phpunit
 phpunit: tools/vendor
 	phpunit --configuration=./tests/phpunit.xml;
 docker-phpunit: tools/vendor
 	@$(call in_docker,make,phpunit)
 
-# target: phpunit-cov (or docker-phpunit-cov)    - Run phpunit with coverage and allure
+# target: phpunit-cov (or docker-phpunit-cov)                  - Run phpunit with coverage and allure
+.PHONY: phpunit-cov docker-phpunit-cov
 phpunit-cov: tools/vendor
 	php -dxdebug.mode=coverage phpunit --coverage-html ./coverage-reports/coverage-html --configuration=./tests/phpunit-cov.xml;
 docker-phpunit-cov: tools/vendor
 	@$(call in_docker,make,phpunit-cov)
 
-# target: phpstan (or docker-phpstan)            - Run phpstan
+# target: phpstan (or docker-phpstan)                          - Run phpstan
+.PHONY: phpstan docker-phpstan
 phpstan: tools/vendor prestashop/prestashop-${PS_VERSION}
 	_PS_ROOT_DIR_=${PS_ROOT_DIR} phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
 docker-phpstan: tools/vendor
 	@$(call in_docker,phpstan,analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon)
 
-# target: phpstan-baseline                       - Generate a phpstan baseline to ignore all errors
+# target: phpstan-baseline                                     - Generate a phpstan baseline to ignore all errors
+.PHONY: phpstan-baseline
 phpstan-baseline: prestashop/prestashop-${PS_VERSION} phpstan
 	_PS_ROOT_DIR_=${PS_ROOT_DIR} phpstan analyse --generate-baseline --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
 
-# target: docker-test                            - Static and unit testing in docker
+# target: docker-test                                          - Static and unit testing in docker
+.PHONY: docker-test
 docker-test: docker-lint docker-phpstan docker-phpunit
 
-# Fixme: add "allure-framework/allure-phpunit" in composer.json to solve this.
-# Currently failing to resolve devDeps:
-#   - allure-framework/allure-phpunit v2.1.0 requires phpunit/phpunit ^9 -> found phpunit/phpunit[9.0.0, ..., 9.6.4] but it conflicts with your root composer.json require (^10.0.14).
-# allure:
-# 	./node_modules/.bin/allure serve build/allure-results/
+define COMMENT
+Fixme: add "allure-framework/allure-phpunit" in composer.json to solve this.
+Currently failing to resolve devDeps:
+  - allure-framework/allure-phpunit v2.1.0 requires phpunit/phpunit ^9 -> found phpunit/phpunit[9.0.0, ..., 9.6.4] but it conflicts with your root composer.json require (^10.0.14).
+allure:
+	./node_modules/.bin/allure serve build/allure-results/
 
-# allure-report:
-# 	./node_modules/.bin/allure generate build/allure-results/
+allure-report:
+	./node_modules/.bin/allure generate build/allure-results/
+endef
+
