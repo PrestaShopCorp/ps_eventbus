@@ -1,64 +1,45 @@
-import WebSocket, { RawData } from 'ws';
+import {webSocket, WebSocketSubject} from "rxjs/webSocket";
+import {bufferCount, filter, lastValueFrom, map, Observable, take, timeout} from "rxjs";
 
 type MockProbeResponse = {
-    method: string,
-    headers: Record<string, unknown>,
-    url: string,
-    query: string,
-    body: Record<string, unknown>
+  method: string,
+  headers: Record<string, string>,
+  url: string,
+  query: Record<string, string>,
+  body: Record<string, any>
 }
 
 export class MockProbe {
-    private static wsConnection: WebSocket|null = null;
-    private static messageList = [];
+  private static wsConnection: WebSocketSubject<string>;
+  private $messages: Observable<MockProbeResponse>
 
-    public static connect(): void {
-        if (MockProbe.wsConnection !== null) {
-            throw new Error('You have already one connection to wss, close before create new another !');
+  /**
+   * connect the probe to the server.
+   * @param jobId filter only messages with the specified jobId
+   */
+  public connect(jobId = null) {
+    if(!MockProbe.wsConnection) {
+      MockProbe.wsConnection = new WebSocketSubject<string>('ws://localhost:8080');
+    }
+
+    this.$messages = MockProbe.wsConnection.pipe(
+      map(message => JSON.parse(message.toString()) as MockProbeResponse),
+      filter(message => {
+        if(jobId) {
+          // filter messages using jobId queryParam
+          return (message.query['job_id'] === jobId);
         }
+        // no filtering
+        return true;
+      })
+    )
+  }
 
-        MockProbe.wsConnection = new WebSocket('ws://localhost:8080');
-        MockProbe.wsConnection.on('message', (message: RawData) => this.insertToMessageList(message));
-    }
-
-    public static disconnect(): void {
-        MockProbe.clearMessageList();
-        MockProbe.wsConnection.close();
-        MockProbe.wsConnection = null;
-    }
-
-    public static async waitForMessages(expectedMessageCount = 1): Promise<Array<MockProbeResponse>> {
-        return new Promise((resolve, reject) => {
-            let tryCount = 0;
-            let attempt = 10;
-            
-            const interval = setInterval(() => {
-                attempt++;
-                
-                if (MockProbe.messageList.length === expectedMessageCount) {
-                    clearInterval(interval);
-                    resolve(MockProbe.messageList);
-
-                    MockProbe.clearMessageList();
-                }
-
-                if (tryCount === attempt) {
-                    clearInterval(interval);
-                    reject('No sufficient message received from probe');
-
-                    MockProbe.clearMessageList();
-                }
-            }, 500)
-        });
-    }
-
-    private static insertToMessageList(message: RawData): void {
-        MockProbe.messageList.push(
-            JSON.parse(message.toString())
-        );
-    }
-
-    private static clearMessageList(): void {
-        MockProbe.messageList = [];
-    }
+  public async waitForMessages(expectedMessageCount = 1): Promise<Array<MockProbeResponse>> {
+    return lastValueFrom(this.$messages.pipe(
+      bufferCount(expectedMessageCount),
+      take(1),
+      timeout(5000),
+    ))
+  }
 }

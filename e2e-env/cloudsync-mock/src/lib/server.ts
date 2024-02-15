@@ -1,19 +1,18 @@
-import express, { Request, Response, Express, NextFunction } from "express";
-import { WsServer } from "./ws-server";
+// @ts-expect-error Express is imported as commonjs module. Raises an error because there is no tsconfig.
+import express, {Request, Response, Express, NextFunction} from "express";
+import {WsServer} from "./ws-server";
 
 export class Server {
   api: Express;
   port: number;
 
-  wsServer: WsServer;
-
   public constructor(port: number) {
     this.api = express();
 
-    const wsServer = WsServer.getInstance();
+    const wsServer = new WsServer();
 
     this.api.use((req: Request, res: Response, next: NextFunction) => {
-     wsServer.sendDataToWS(this.constructor.name, req);
+      wsServer.sendDataToWS(this.constructor.name, req);
       next();
     });
     this.api.use((req: Request, res: Response, next: NextFunction) => {

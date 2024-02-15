@@ -15,4 +15,34 @@ export default {
     process.env.RUN_IN_DOCKER === '1'
       ? 'http://reverse-proxy/mock-probe'
       : 'http://localhost:80/mock-probe',
+
+  // list of controllers
+  controllers: [
+    "apiCarriers",
+    "apiCartRules",
+    "apiCarts",
+    "apiCategories",
+    "apiCurrencies",
+    "apiCustomers",
+    "apiCustomProductCarriers",
+    "apiDeletedObjects",
+    "apiEmployees",
+    "apiGoogleTaxonomies",
+    "apiHealthCheck",
+    "apiImages",
+    "apiImageTypes",
+    "apiInfo",
+    "apiLanguages",
+    "apiManufacturers",
+    "apiModules",
+    "apiOrders",
+    "apiProducts",
+    "apiSpecificPrices",
+    "apiStocks",
+    "apiStores",
+    "apiSuppliers",
+    "apiThemes",
+    "apiTranslations",
+    "apiWishlists",
+  ]
 };

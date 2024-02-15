@@ -2,7 +2,7 @@
   "name": "cloudsync-mock",
   "version": "0.0.0",
   "main": "dist/app.js",
-  "type": "module", 
+  "type": "module",
   "private": true,
   "engines": {
     "yarn": "please use pnpm",
