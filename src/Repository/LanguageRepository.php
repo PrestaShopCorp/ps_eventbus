@@ -97,8 +97,8 @@ class LanguageRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('la.id_lang, la.name, la.active, la.iso_code, la.language_code, la.locale, la.date_format_lite,
-      la.date_format_full, la.is_rtl, las.id_shop');
+        $query->select('la.id_lang, la.name, la.active, la.iso_code, la.language_code, la.locale, la.date_format_lite');
+        $query->select('la.date_format_full, la.is_rtl, las.id_shop');
     }
 
     /**
@@ -144,5 +144,29 @@ class LanguageRepository
     public function getLanguages()
     {
         return \Language::getLanguages();
+    }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit)
+    {
+        $query = $this->getBaseQuery();
+
+        $this->addSelectParameters($query);
+
+        $query->limit($limit, $offset);
+
+        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+
+        return array_merge(
+            (array) $query,
+            ['queryStringified' => $queryStringified]
+        );
     }
 }

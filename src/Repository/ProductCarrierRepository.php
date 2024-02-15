@@ -124,6 +124,30 @@ class ProductCarrierRepository
     }
 
     /**
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit)
+    {
+        $query = $this->getBaseQuery();
+
+        $this->addSelectParameters($query);
+
+        $query->limit($limit, $offset);
+
+        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+
+        return array_merge(
+            (array) $query,
+            ['queryStringified' => $queryStringified]
+        );
+    }
+
+    /**
      * @param \DbQuery $query
      *
      * @return void

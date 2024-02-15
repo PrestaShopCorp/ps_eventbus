@@ -93,31 +93,53 @@ class EmployeeRepository
     }
 
     /**
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit)
+    {
+        $query = $this->getBaseQuery();
+
+        $this->addSelectParameters($query);
+
+        $query->limit($limit, $offset);
+
+        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+
+        return array_merge(
+            (array) $query,
+            ['queryStringified' => $queryStringified]
+        );
+    }
+
+    /**
      * @param \DbQuery $query
      *
      * @return void
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('
-            e.id_employee,
-            e.id_profile,
-            e.id_lang,
-            e.email,
-            e.bo_color,
-            e.bo_theme,
-            e.bo_css,
-            e.default_tab,
-            e.bo_width,
-            e.bo_menu,
-            e.active,
-            e.optin,
-            e.id_last_order,
-            e.id_last_customer_message,
-            e.id_last_customer,
-            e.last_connection_date,
-            e.has_enabled_gravatar
-        ');
+        $query->select('e.id_employee');
+        $query->select('e.id_profile');
+        $query->select('e.id_lang');
+        $query->select('e.email');
+        $query->select('e.bo_color');
+        $query->select('e.bo_theme');
+        $query->select('e.bo_css');
+        $query->select('e.default_tab');
+        $query->select('e.bo_width');
+        $query->select('e.bo_menu');
+        $query->select('e.active');
+        $query->select('e.optin');
+        $query->select('e.id_last_order');
+        $query->select('e.id_last_customer_message');
+        $query->select('e.id_last_customer');
+        $query->select('e.last_connection_date');
+        $query->select('e.has_enabled_gravatar');
 
         $query->select('es.id_shop as id_shop');
     }

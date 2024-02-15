@@ -88,4 +88,18 @@ class SupplierDataProvider implements PaginatedApiDataProviderInterface
             ];
         }, $suppliers);
     }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit, $langIso)
+    {
+        return $this->supplierRepository->getQueryForDebug($offset, $limit, $langIso);
+    }
 }

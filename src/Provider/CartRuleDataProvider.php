@@ -13,7 +13,7 @@ class CartRuleDataProvider implements PaginatedApiDataProviderInterface
     private $cartRuleRepository;
 
     /**
-     * @param CartRuleRepository $cartProductRepository
+     * @param CartRuleRepository $cartRuleRepository
      */
     public function __construct(
         CartRuleRepository $cartRuleRepository
@@ -23,25 +23,25 @@ class CartRuleDataProvider implements PaginatedApiDataProviderInterface
 
     public function getFormattedData($offset, $limit, $langIso)
     {
-      $cartRules = $this->cartRuleRepository->getCartRules($limit, $offset);
+        $cartRules = $this->cartRuleRepository->getCartRules($limit, $offset);
 
-      if (!is_array($cartRules) || empty($cartRules)) {
+        if (!is_array($cartRules) || empty($cartRules)) {
+            return [];
+        }
+
+        $this->castCartRuleValues($cartRules);
+
+        if (is_array($cartRules)) {
+            return array_map(function ($cartRule) {
+                return [
+                  'id' => $cartRule['id_cart_rule'],
+                  'collection' => Config::COLLECTION_CART_RULES,
+                  'properties' => $cartRule,
+                ];
+            }, $cartRules);
+        }
+
         return [];
-      }
-
-      $this->castCartRuleValues($cartRules);
-
-      if (is_array($cartRules)) {
-        return array_map(function ($cartRule) {
-          return [
-            'id' => $cartRule['id_cart_rule'],
-            'collection' => Config::COLLECTION_CART_RULES,
-            'properties' => $cartRule,
-          ];
-        }, $cartRules);
-      }
-
-      return [];
     }
 
     /**
@@ -55,7 +55,6 @@ class CartRuleDataProvider implements PaginatedApiDataProviderInterface
         return (int) $this->cartRuleRepository->getRemainingCartRulesCount($offset);
     }
 
-
     /**
      * @param int $limit
      * @param string $langIso
@@ -67,7 +66,35 @@ class CartRuleDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
-        return [];
+        $cartRules = $this->cartRuleRepository->getCartRulesIncremental($limit, $objectIds);
+
+        if (!is_array($cartRules)) {
+            return [];
+        }
+
+        $this->castCartRuleValues($cartRules);
+
+        return array_map(function ($cartRule) {
+            return [
+              'id' => $cartRule['id_cart_rule'],
+              'collection' => Config::COLLECTION_CART_RULES,
+              'properties' => $cartRule,
+            ];
+        }, $cartRules);
+    }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit, $langIso)
+    {
+        return $this->cartRuleRepository->getQueryForDebug($limit, $offset);
     }
 
     /**

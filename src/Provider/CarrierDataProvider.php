@@ -5,11 +5,12 @@ namespace PrestaShop\Module\PsEventbus\Provider;
 use PrestaShop\Module\PsEventbus\Builder\CarrierBuilder;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\DTO\Carrier as EventBusCarrier;
+use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface as ProviderPaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
 use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 
-class CarrierDataProvider implements PaginatedApiDataProviderInterface
+class CarrierDataProvider implements ProviderPaginatedApiDataProviderInterface
 {
     /**
      * @var ConfigurationRepository
@@ -54,7 +55,6 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getFormattedData($offset, $limit, $langIso)
     {
-        $language = new \Language();
         $currency = new \Currency((int) $this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
 
         $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
@@ -83,7 +83,6 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
             return [];
         }
 
-        $language = new \Language();
         $currency = new \Currency((int) $this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
 
         $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
@@ -118,5 +117,21 @@ class CarrierDataProvider implements PaginatedApiDataProviderInterface
         $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
 
         return (int) $this->carrierRepository->getRemainingCarriersCount($offset, $langId);
+    }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit, $langIso)
+    {
+        $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
+
+        return $this->carrierRepository->getQueryForDebug($offset, $limit, $langId);
     }
 }

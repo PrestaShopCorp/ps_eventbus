@@ -89,4 +89,18 @@ class StoreDataProvider implements PaginatedApiDataProviderInterface
             ];
         }, $stores);
     }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit, $langIso)
+    {
+        return $this->storeRepository->getQueryForDebug($offset, $limit, $langIso);
+    }
 }

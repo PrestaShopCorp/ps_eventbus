@@ -23,7 +23,7 @@ export class WsServer {
    * @param request
    */
   public sendDataToWS(apiName: string, request: Request) {
-    const data = {
+    if (!WsServer.client) return;const data = {
       apiName,
       method: request.method,
       headers: request.headers,

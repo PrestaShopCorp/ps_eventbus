@@ -79,22 +79,44 @@ class ImageTypeRepository
     }
 
     /**
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit)
+    {
+        $query = $this->getBaseQuery();
+
+        $this->addSelectParameters($query);
+
+        $query->limit($limit, $offset);
+
+        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+
+        return array_merge(
+            (array) $query,
+            ['queryStringified' => $queryStringified]
+        );
+    }
+
+    /**
      * @param \DbQuery $query
      *
      * @return void
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('
-            it.id_image_type,
-            it.name,
-            it.width,
-            it.height,
-            it.products,
-            it.categories,
-            it.manufacturers,
-            it.suppliers,
-            it.stores
-        ');
+        $query->select('it.id_image_type');
+        $query->select('it.name');
+        $query->select('it.width');
+        $query->select('it.height');
+        $query->select('it.products');
+        $query->select('it.categories');
+        $query->select('it.manufacturers');
+        $query->select('it.suppliers');
+        $query->select('it.stores');
     }
 }

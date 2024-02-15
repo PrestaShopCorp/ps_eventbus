@@ -136,20 +136,42 @@ class ImageRepository
     }
 
     /**
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getQueryForDebug($offset, $limit)
+    {
+        $query = $this->getBaseQuery();
+
+        $this->addSelectParameters($query);
+
+        $query->limit($limit, $offset);
+
+        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+
+        return array_merge(
+            (array) $query,
+            ['queryStringified' => $queryStringified]
+        );
+    }
+
+    /**
      * @param \DbQuery $query
      *
      * @return void
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('
-            it.id_image,
-            it.id_product,
-            it.id_lang,
-            it.id_shop,
-            it.position,
-            it.cover,
-            it.legend
-        ');
+        $query->select('it.id_image');
+        $query->select('it.id_product');
+        $query->select('it.id_lang');
+        $query->select('it.id_shop');
+        $query->select('it.position');
+        $query->select('it.cover');
+        $query->select('it.legend');
     }
 }
