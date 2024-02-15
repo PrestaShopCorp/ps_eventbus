@@ -8,33 +8,44 @@ PHP_VERSION ?= 8.1
 PS_VERSION ?= 8.1.3
 TESTING_IMAGE ?= prestashop/prestashop-flashlight:${PS_VERSION}-${PHP_VERSION}
 PS_ROOT_DIR ?= $(shell pwd)/prestashop/prestashop-${PS_VERSION}
+PHP_SCOPER_DIR=php-scoper
 export PATH := ./vendor/bin:./tools/vendor/bin:$(PATH)
 
 define replace_version
-sed -i.bak -e "s/\(VERSION = \).*/\1\'${2}\';/" ${1}/${MODULE_NAME}.php
-sed -i.bak -e "s/\($this->version = \).*/\1\'${2}\';/" ${1}/${MODULE_NAME}.php
-sed -i.bak -e "s|\(<version><!\[CDATA\[\)[0-9a-z.-]\{1,\}]]></version>|\1${2}]]></version>|" ${1}/config.xml
-rm -f ${1}/${MODULE_NAME}.php.bak ${1}/config.xml.bak
+	sed -i.bak -e "s/\(VERSION = \).*/\1\'${2}\';/" ${1}/${MODULE_NAME}.php
+	sed -i.bak -e "s/\($this->version = \).*/\1\'${2}\';/" ${1}/${MODULE_NAME}.php
+	sed -i.bak -e "s|\(<version><!\[CDATA\[\)[0-9a-z.-]\{1,\}]]></version>|\1${2}]]></version>|" ${1}/config.xml
+	rm -f ${1}/${MODULE_NAME}.php.bak ${1}/config.xml.bak
 endef
 
 define zip_it
-$(eval TMP_DIR := $(shell mktemp -d))
-mkdir -p ${TMP_DIR}/${MODULE_NAME};
-cp -r $(shell cat .zip-contents) ${TMP_DIR}/${MODULE_NAME};
-$(call replace_version,${TMP_DIR}/${MODULE_NAME},${SEM_VERSION})
-./tools/vendor/bin/autoindex prestashop:add:index ${TMP_DIR}
-cp $1 ${TMP_DIR}/${MODULE_NAME}/config/parameters.yml;
-cd ${TMP_DIR} && zip -9 -r $2 ./${MODULE_NAME};
-mv ${TMP_DIR}/$2 ./dist;
-rm -rf ${TMP_DIR:-/dev/null};
+	$(eval TMP_DIR := $(shell mktemp -d))
+	mkdir -p ${TMP_DIR}/tmp;
+	cp -r $(shell cat .zip-contents) ${TMP_DIR}/tmp;
+	VERSION=${PACKAGE} TMP_FOLDER=${TMP_DIR}/tmp php php-scoper.phar add-prefix --output-dir=${TMP_DIR}/${MODULE_NAME} --force
+	$(call replace_version,${TMP_DIR}/${MODULE_NAME},${SEM_VERSION})
+	./tools/vendor/bin/autoindex prestashop:add:index ${TMP_DIR}
+	cp $1 ${TMP_DIR}/${MODULE_NAME}/config/parameters.yml;
+	cd ${TMP_DIR} && zip -9 -r $2 ./${MODULE_NAME};
+	mv ${TMP_DIR}/$2 ./dist;
+	rm -rf ${TMP_DIR:-/dev/null};
 endef
 
+define zip_it_temp
+	mkdir -p dist/tmp;
+	cp -r $(shell cat .zip-contents) dist/tmp;
+	VERSION=${PACKAGE} TMP_FOLDER=dist/tmp php php-scoper.phar add-prefix --output-dir=dist/${MODULE_NAME} --force
+	$(call replace_version,dist/${MODULE_NAME},${SEM_VERSION})
+	rm -rf dist/tmp
+endef
+
+
 define in_docker
-docker run \
---env _PS_ROOT_DIR_=/var/www/html \
---workdir /var/www/html/modules/${MODULE_NAME} \
---volume $(shell pwd):/var/www/html/modules/${MODULE_NAME}:rw \
---entrypoint $1 ${TESTING_IMAGE} $2
+	docker run \
+	--env _PS_ROOT_DIR_=/var/www/html \
+	--workdir /var/www/html/modules/${MODULE_NAME} \
+	--volume $(shell pwd):/var/www/html/modules/${MODULE_NAME}:rw \
+	--entrypoint $1 ${TESTING_IMAGE} $2
 endef
 
 # target: default                                              - Calling build by default
@@ -181,14 +192,17 @@ phpstan-baseline: prestashop/prestashop-${PS_VERSION} phpstan
 .PHONY: docker-test
 docker-test: docker-lint docker-phpstan docker-phpunit
 
-define COMMENT
-Fixme: add "allure-framework/allure-phpunit" in composer.json to solve this.
-Currently failing to resolve devDeps:
-  - allure-framework/allure-phpunit v2.1.0 requires phpunit/phpunit ^9 -> found phpunit/phpunit[9.0.0, ..., 9.6.4] but it conflicts with your root composer.json require (^10.0.14).
-allure:
-	./node_modules/.bin/allure serve build/allure-results/
+php-scoper.phar:
+	@php -r "copy('https://github.com/humbug/php-scoper/releases/latest/download/php-scoper.phar', 'php-scoper.phar');";
 
-allure-report:
-	./node_modules/.bin/allure generate build/allure-results/
+define COMMENT
+	Fixme: add "allure-framework/allure-phpunit" in composer.json to solve this.
+	Currently failing to resolve devDeps:
+	- allure-framework/allure-phpunit v2.1.0 requires phpunit/phpunit ^9 -> found phpunit/phpunit[9.0.0, ..., 9.6.4] but it conflicts with your root composer.json require (^10.0.14).
+	allure:
+		./node_modules/.bin/allure serve build/allure-results/
+
+	allure-report:
+		./node_modules/.bin/allure generate build/allure-results/
 endef
 
