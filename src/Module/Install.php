@@ -20,6 +20,9 @@
 
 namespace PrestaShop\Module\PsEventbus\Module;
 
+use PrestaShop\PrestaShop\Adapter\Entity\Db;
+use PrestaShop\PrestaShop\Adapter\Entity\Tools;
+
 class Install
 {
     public const PARENT_TAB_NAME = -1;
@@ -34,44 +37,10 @@ class Install
      */
     private $db;
 
-    public function __construct(\Ps_eventbus $module, \Db $db)
+    public function __construct(\Ps_eventbus $module, Db $db)
     {
         $this->module = $module;
         $this->db = $db;
-    }
-
-    /**
-     * installInMenu.
-     *
-     * @return bool
-     */
-    public function installInMenu()
-    {
-        foreach ($this->module->adminControllers as $controllerName) {
-            $tabId = (int) \Tab::getIdFromClassName($controllerName);
-
-            if (!$tabId) {
-                $tabId = null;
-            }
-
-            $tab = new \Tab($tabId);
-            $tab->active = (bool) self::TAB_ACTIVE;
-            $tab->class_name = $controllerName;
-            $tab->name = [];
-
-            foreach (\Language::getLanguages(true) as $lang) {
-                if (is_array($lang)) {
-                    $tab->name[$lang['id_lang']] = $this->module->displayName;
-                }
-            }
-
-            $tab->id_parent = (int) \Tab::getIdFromClassName((string) self::PARENT_TAB_NAME);
-            $tab->module = $this->module->name;
-
-            $tab->save();
-        }
-
-        return true;
     }
 
     /**
@@ -87,7 +56,7 @@ class Install
             return false;
         }
 
-        $sql = \Tools::file_get_contents($dbInstallFile);
+        $sql = Tools::file_get_contents($dbInstallFile);
 
         if (empty($sql) || !is_string($sql)) {
             return false;
@@ -120,7 +89,7 @@ class Install
             return;
         }
 
-        $sql = \Tools::file_get_contents($dbInstallFile);
+        $sql = Tools::file_get_contents($dbInstallFile);
 
         if (empty($sql) || !is_string($sql)) {
             return;

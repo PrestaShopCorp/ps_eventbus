@@ -2,6 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use PrestaShop\PrestaShop\Adapter\Entity\Configuration;
+
 class ConfigurationRepository
 {
     /**
@@ -13,6 +15,6 @@ class ConfigurationRepository
      */
     public function get($key)
     {
-        return \Configuration::get($key);
+        return Configuration::get($key);
     }
 }

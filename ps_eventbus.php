@@ -25,6 +25,8 @@
  */
 
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\PrestaShop\Adapter\Entity\Db;
+use PrestaShop\PrestaShop\Adapter\Entity\Module;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -139,7 +141,7 @@ class Ps_eventbus extends Module
     /**
      * @var int Defines the multistore compatibility level of the module
      */
-    public $multistoreCompatibility = self::MULTISTORE_COMPATIBILITY_YES;
+    public $multistoreCompatibility = Module::MULTISTORE_COMPATIBILITY_YES;
 
     /**
      * @var string contact email of the maintainers (please consider using github issues)
@@ -225,8 +227,7 @@ class Ps_eventbus extends Module
 
         $installer = new PrestaShop\Module\PsEventbus\Module\Install($this, Db::getInstance());
 
-        return $installer->installInMenu()
-            && $installer->installDatabaseTables()
+        return $installer->installDatabaseTables()
             && parent::install()
             && $this->registerHook($this->hookToInstall);
     }

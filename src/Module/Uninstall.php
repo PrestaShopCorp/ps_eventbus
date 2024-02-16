@@ -20,6 +20,10 @@
 
 namespace PrestaShop\Module\PsEventbus\Module;
 
+use PrestaShop\PrestaShop\Adapter\Entity\Db;
+use PrestaShop\PrestaShop\Adapter\Entity\Tools;
+use Tab;
+
 class Uninstall
 {
     /**
@@ -31,7 +35,7 @@ class Uninstall
      */
     private $db;
 
-    public function __construct(\Ps_eventbus $module, \Db $db)
+    public function __construct(\Ps_eventbus $module, Db $db)
     {
         $this->module = $module;
         $this->db = $db;
@@ -46,13 +50,13 @@ class Uninstall
     {
         // foreach( ['configure', 'hmac', 'ajax'] as $aliasController){
         foreach ($this->module->adminControllers as $controllerName) {
-            $tabId = (int) \Tab::getIdFromClassName($controllerName);
+            $tabId = (int) Tab::getIdFromClassName($controllerName);
 
             if (!$tabId) {
                 return true;
             }
 
-            $tab = new \Tab($tabId);
+            $tab = new Tab($tabId);
 
             return $tab->delete();
         }
@@ -71,7 +75,7 @@ class Uninstall
             return false;
         }
 
-        $sql = \Tools::file_get_contents($dbUninstallFile);
+        $sql = Tools::file_get_contents($dbUninstallFile);
 
         if (empty($sql) || !is_string($sql)) {
             return false;

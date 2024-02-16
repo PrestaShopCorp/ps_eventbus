@@ -15,11 +15,12 @@ use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService;
 use PrestaShop\Module\PsEventbus\Service\ProxyService;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
+use PrestaShop\PrestaShop\Adapter\Entity\ModuleFrontController;
 use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleNotInstalledException;
 use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleVersionException;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 
-abstract class AbstractApiController extends \ModuleFrontController
+abstract class AbstractApiController extends ModuleFrontController
 {
     /**
      * Endpoint name
