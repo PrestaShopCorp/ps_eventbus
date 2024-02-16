@@ -1,8 +1,9 @@
 import { Server } from "./server";
+import {WsServer} from "./ws-server";
 
 export class LiveSyncApiServer extends Server {
-  public constructor(port: string) {
-    super(parseInt(port));
+  public constructor(probe: WsServer) {
+    super( probe);
 
     this.api.get("/", (_req, res) => {
       res.status(200).end();

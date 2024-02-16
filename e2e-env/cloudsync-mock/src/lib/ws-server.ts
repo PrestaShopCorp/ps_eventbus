@@ -7,14 +7,14 @@ import {Request} from "express";
 export class WsServer {
   private server: WebSocketServer;
 
-  constructor() {
-    this.server = new WebSocketServer({port: 8080});
+  constructor(port: number) {
+    this.server = new WebSocketServer({port});
 
     this.server.on('error', err => {
       console.error(err);
     })
 
-    console.log(`WS server started on port \x1b[96m8080\x1b[0m`);
+    console.log(`Probe listening on port \x1b[96m${port}\x1b[0m`);
   }
 
   /**
@@ -23,7 +23,7 @@ export class WsServer {
    * @param request
    */
   public sendDataToWS(apiName: string, request: Request) {
-    if (!WsServer.client) return;const data = {
+    const data = {
       apiName,
       method: request.method,
       headers: request.headers,

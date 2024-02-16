@@ -1,13 +1,10 @@
-import { CollectorApiServer } from "./lib/collector-api";
-import { LiveSyncApiServer } from "./lib/live-sync-api";
-import { SyncApiServer } from "./lib/sync-api";
+import {CollectorApiServer} from "./lib/collector-api";
+import {LiveSyncApiServer} from "./lib/live-sync-api";
+import {SyncApiServer} from "./lib/sync-api";
+import {WsServer} from "./lib/ws-server";
 
-const syncApi = new SyncApiServer(process.env.SYNC_API_PORT ?? "3232");
-const collectorApi = new CollectorApiServer(
-  process.env.COLLECTOR_API_PORT ?? "3333"
-);
-const liveSyncApi = new LiveSyncApiServer(process.env.LIVE_SYNC_API_PORT ?? '3434');
+const probe = new WsServer(+process.env.PROBE_PORT || 8080)
 
-syncApi.listen();
-collectorApi.listen();
-liveSyncApi.listen();
+new SyncApiServer(probe).listen(+process.env.SYNC_API_PORT || 3232);
+new CollectorApiServer(probe).listen(+process.env.COLLECTOR_API_PORT || 3333);
+new LiveSyncApiServer(probe).listen(+process.env.LIVE_SYNC_API_PORT || 3434);

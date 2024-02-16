@@ -1,5 +1,8 @@
+import WebSocket, { RawData } from 'ws';
 import {webSocket, WebSocketSubject} from "rxjs/webSocket";
-import {bufferCount, filter, lastValueFrom, map, Observable, take, timeout} from "rxjs";
+import {bufferCount, catchError, filter, lastValueFrom, map, Observable, take, tap, timeout} from "rxjs";
+
+(global as any).WebSocket = WebSocket;
 
 type MockProbeResponse = {
   method: string,
@@ -10,20 +13,22 @@ type MockProbeResponse = {
 }
 
 export class MockProbe {
-  private static wsConnection: WebSocketSubject<string>;
-  private $messages: Observable<MockProbeResponse>
+  private static wsConnection: WebSocketSubject<MockProbeResponse>;
+
+  constructor() {
+    if(!MockProbe.wsConnection) {
+      MockProbe.wsConnection = new WebSocketSubject<MockProbeResponse>('ws://localhost:8080');
+    }
+  }
 
   /**
    * connect the probe to the server.
+   * @param expectedMessageCount how may messages to wait for before resolving
    * @param jobId filter only messages with the specified jobId
    */
-  public connect(jobId = null) {
-    if(!MockProbe.wsConnection) {
-      MockProbe.wsConnection = new WebSocketSubject<string>('ws://localhost:8080');
-    }
-
-    this.$messages = MockProbe.wsConnection.pipe(
-      map(message => JSON.parse(message.toString()) as MockProbeResponse),
+  public async waitForMessages(expectedMessageCount = 1, jobId = null): Promise<MockProbeResponse[]> {
+    const $messages = MockProbe.wsConnection.pipe(
+      tap(console.log),
       filter(message => {
         if(jobId) {
           // filter messages using jobId queryParam
@@ -31,15 +36,12 @@ export class MockProbe {
         }
         // no filtering
         return true;
-      })
-    )
-  }
-
-  public async waitForMessages(expectedMessageCount = 1): Promise<Array<MockProbeResponse>> {
-    return lastValueFrom(this.$messages.pipe(
+      }),
       bufferCount(expectedMessageCount),
       take(1),
       timeout(5000),
-    ))
+    )
+
+    return lastValueFrom($messages)
   }
 }
