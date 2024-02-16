@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 class ProductSupplierRepository
 {
     /**
-     * @var \Db
+     * @var PrestaShop\PrestaShop\Adapter\Entity\Db
      */
     private $db;
 
@@ -15,11 +15,11 @@ class ProductSupplierRepository
     }
 
     /**
-     * @return \DbQuery
+     * @return PrestaShop\PrestaShop\Adapter\Entity\DbQuery
      */
     public function getBaseQuery()
     {
-        $query = new \DbQuery();
+        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
         $query->from('product_supplier', 'ps');
 
         return $query;
@@ -31,7 +31,7 @@ class ProductSupplierRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getProductSuppliers($offset, $limit)
     {
@@ -63,7 +63,7 @@ class ProductSupplierRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getProductSuppliersIncremental($limit, $productIds)
     {
@@ -83,7 +83,7 @@ class ProductSupplierRepository
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit)
     {
@@ -102,7 +102,7 @@ class ProductSupplierRepository
     }
 
     /**
-     * @param \DbQuery $query
+     * @param PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
      *
      * @return void
      */

@@ -7,7 +7,7 @@ use PrestaShop\Module\PsEventbus\Service\SpecificPriceService;
 class CustomPriceDecorator
 {
     /**
-     * @var \Context
+     * @var PrestaShop\PrestaShop\Adapter\Entity\Context
      */
     private $context;
     /**
@@ -16,7 +16,7 @@ class CustomPriceDecorator
     private $priceService;
 
     public function __construct(
-        \Context $context,
+        PrestaShop\PrestaShop\Adapter\Entity\Context $context,
         SpecificPriceService $priceService
     ) {
         $this->context = $context;
@@ -34,8 +34,8 @@ class CustomPriceDecorator
 
     private function addTotalPrice(array &$specificPrice): void
     {
-        $this->context->country = new \Country($specificPrice['id_country']);
-        $this->context->currency = new \Currency($specificPrice['id_currency']);
+        $this->context->country = new PrestaShop\PrestaShop\Adapter\Entity\Country($specificPrice['id_country']);
+        $this->context->currency = new PrestaShop\PrestaShop\Adapter\Entity\Currency($specificPrice['id_currency']);
 
         $specificPrice['price_tax_included'] = $this->priceService->getSpecificProductPrice(
             $specificPrice['id_product'],
@@ -114,7 +114,7 @@ class CustomPriceDecorator
     private function setShopId(array &$specificPrice): void
     {
         if ($this->context->shop === null) {
-            throw new \PrestaShopException('No shop context');
+            throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
         }
 
         if ($specificPrice['id_shop']) {

@@ -133,19 +133,19 @@ abstract class AbstractApiController extends ModuleFrontController
     /**
      * @return void
      *
-     * @throws \PrestaShopDatabaseException|EnvVarException|FirebaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException|EnvVarException|FirebaseException
      */
     private function authorize()
     {
         /** @var string $jobId */
-        $jobId = \Tools::getValue('job_id', 'empty_job_id');
+        $jobId = PrestaShop\PrestaShop\Adapter\Entity\Tools::getValue('job_id', 'empty_job_id');
 
         $authorizationResponse = $this->authorizationService->authorizeCall($jobId);
 
         if (is_array($authorizationResponse)) {
             $this->exitWithResponse($authorizationResponse);
         } elseif (!$authorizationResponse) {
-            throw new \PrestaShopDatabaseException('Failed saving job id to database');
+            throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException('Failed saving job id to database');
         }
 
         try {
@@ -167,23 +167,23 @@ abstract class AbstractApiController extends ModuleFrontController
     protected function handleDataSync(PaginatedApiDataProviderInterface $dataProvider)
     {
         /** @var bool $debug */
-        $debug = \Tools::getValue('debug') == 1;
+        $debug = PrestaShop\PrestaShop\Adapter\Entity\Tools::getValue('debug') == 1;
 
         /** @var string $jobId */
-        $jobId = \Tools::getValue('job_id');
+        $jobId = PrestaShop\PrestaShop\Adapter\Entity\Tools::getValue('job_id');
         /** @var string $langIso */
-        $langIso = \Tools::getValue('lang_iso', $this->languageRepository->getDefaultLanguageIsoCode());
+        $langIso = PrestaShop\PrestaShop\Adapter\Entity\Tools::getValue('lang_iso', $this->languageRepository->getDefaultLanguageIsoCode());
         /** @var int $limit */
-        $limit = \Tools::getValue('limit', 50);
+        $limit = PrestaShop\PrestaShop\Adapter\Entity\Tools::getValue('limit', 50);
 
         if ($limit < 0) {
             $this->exitWithExceptionMessage(new QueryParamsException('Invalid URL Parameters', Config::INVALID_URL_QUERY));
         }
 
         /** @var bool $initFullSync */
-        $initFullSync = \Tools::getValue('full', 0) == 1;
+        $initFullSync = PrestaShop\PrestaShop\Adapter\Entity\Tools::getValue('full', 0) == 1;
 
-        $dateNow = (new \DateTime('now', new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
+        $dateNow = (new PrestaShop\PrestaShop\Adapter\Entity\DateTime('now', new PrestaShop\PrestaShop\Adapter\Entity\DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
         $offset = 0;
         $incrementalSync = false;
         $response = [];
@@ -277,7 +277,7 @@ abstract class AbstractApiController extends ModuleFrontController
      *
      * @return void
      *
-     * @throws \PrestaShopException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException
      */
     public function ajaxDie($value = null, $controller = null, $method = null)
     {
@@ -297,7 +297,7 @@ abstract class AbstractApiController extends ModuleFrontController
     }
 
     /**
-     * @param \Exception $exception
+     * @param PrestaShop\PrestaShop\Adapter\Entity\Exception $exception
      *
      * @return void
      */
@@ -305,7 +305,7 @@ abstract class AbstractApiController extends ModuleFrontController
     {
         $code = $exception->getCode() == 0 ? 500 : $exception->getCode();
 
-        if ($exception instanceof \PrestaShopDatabaseException) {
+        if ($exception instanceof PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException) {
             $code = Config::DATABASE_QUERY_ERROR_CODE;
         } elseif ($exception instanceof EnvVarException) {
             $code = Config::ENV_MISCONFIGURED_ERROR_CODE;

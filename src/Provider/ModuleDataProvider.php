@@ -81,7 +81,7 @@ class ModuleDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $langIso)
     {

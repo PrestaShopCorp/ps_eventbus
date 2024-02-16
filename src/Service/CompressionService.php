@@ -23,18 +23,18 @@ class CompressionService
      *
      * @return string
      *
-     * @throws \Exception
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\Exception
      */
     public function gzipCompressData($data)
     {
         if (!extension_loaded('zlib')) {
-            throw new \Exception('Zlib extension for PHP is not enabled');
+            throw new PrestaShop\PrestaShop\Adapter\Entity\Exception('Zlib extension for PHP is not enabled');
         }
 
         $dataJson = $this->jsonFormatter->formatNewlineJsonString($data);
 
         if (!$encodedData = gzencode($dataJson)) {
-            throw new \Exception('Failed encoding data to GZIP');
+            throw new PrestaShop\PrestaShop\Adapter\Entity\Exception('Failed encoding data to GZIP');
         }
 
         return $encodedData;

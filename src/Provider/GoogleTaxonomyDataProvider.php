@@ -12,7 +12,7 @@ class GoogleTaxonomyDataProvider implements PaginatedApiDataProviderInterface
      */
     private $googleTaxonomyRepository;
     /**
-     * @var \Context
+     * @var PrestaShop\PrestaShop\Adapter\Entity\Context
      */
     private $context;
 
@@ -21,13 +21,13 @@ class GoogleTaxonomyDataProvider implements PaginatedApiDataProviderInterface
      */
     private $shopId;
 
-    public function __construct(GoogleTaxonomyRepository $googleTaxonomyRepository, \Context $context)
+    public function __construct(GoogleTaxonomyRepository $googleTaxonomyRepository, PrestaShop\PrestaShop\Adapter\Entity\Context $context)
     {
         $this->googleTaxonomyRepository = $googleTaxonomyRepository;
         $this->context = $context;
 
         if ($this->context->shop === null) {
-            throw new \PrestaShopException('No shop context');
+            throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
         }
 
         $this->shopId = (int) $this->context->shop->id;
@@ -70,7 +70,7 @@ class GoogleTaxonomyDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $langIso)
     {

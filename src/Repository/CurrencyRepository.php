@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 class CurrencyRepository
 {
     /**
-     * @var \Db
+     * @var PrestaShop\PrestaShop\Adapter\Entity\Db
      */
     private $db;
 
@@ -19,7 +19,7 @@ class CurrencyRepository
      */
     private function isLangAvailable()
     {
-        return \Tools::version_compare(_PS_VERSION_, '1.7.6', '>=');
+        return PrestaShop\PrestaShop\Adapter\Entity\Tools::version_compare(_PS_VERSION_, '1.7.6', '>=');
     }
 
     /**
@@ -27,7 +27,7 @@ class CurrencyRepository
      */
     public function getCurrenciesIsoCodes()
     {
-        $currencies = \Currency::getCurrencies();
+        $currencies = PrestaShop\PrestaShop\Adapter\Entity\Currency::getCurrencies();
 
         return array_map(function ($currency) {
             return $currency['iso_code'];
@@ -39,9 +39,9 @@ class CurrencyRepository
      */
     public function getDefaultCurrencyIsoCode()
     {
-        $currency = \Currency::getDefaultCurrency();
+        $currency = PrestaShop\PrestaShop\Adapter\Entity\Currency::getDefaultCurrency();
 
-        return $currency instanceof \Currency ? $currency->iso_code : '';
+        return $currency instanceof PrestaShop\PrestaShop\Adapter\Entity\Currency ? $currency->iso_code : '';
     }
 
     /**
@@ -50,7 +50,7 @@ class CurrencyRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getCurrencies($offset, $limit)
     {
@@ -82,7 +82,7 @@ class CurrencyRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getCurrenciesIncremental($limit, $currencyIds)
     {
@@ -97,11 +97,11 @@ class CurrencyRepository
     }
 
     /**
-     * @return \DbQuery
+     * @return PrestaShop\PrestaShop\Adapter\Entity\DbQuery
      */
     public function getBaseQuery()
     {
-        $query = new \DbQuery();
+        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
         $query->from('currency', 'c');
         if ($this->isLangAvailable()) {
             $query->innerJoin('currency_lang', 'cl', 'cl.id_currency = c.id_currency');
@@ -116,7 +116,7 @@ class CurrencyRepository
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit)
     {
@@ -135,7 +135,7 @@ class CurrencyRepository
     }
 
     /**
-     * @param \DbQuery $query
+     * @param PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
      *
      * @return void
      */

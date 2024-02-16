@@ -9,11 +9,11 @@ class IncrementalSyncRepository
     public const INCREMENTAL_SYNC_TABLE = 'eventbus_incremental_sync';
 
     /**
-     * @var \Db
+     * @var PrestaShop\PrestaShop\Adapter\Entity\Db
      */
     private $db;
     /**
-     * @var \Context
+     * @var PrestaShop\PrestaShop\Adapter\Entity\Context
      */
     private $context;
     /**
@@ -26,14 +26,14 @@ class IncrementalSyncRepository
      */
     private $shopId;
 
-    public function __construct(\Db $db, \Context $context, ErrorHandlerInterface $errorHandler)
+    public function __construct(\Db $db, PrestaShop\PrestaShop\Adapter\Entity\Context $context, ErrorHandlerInterface $errorHandler)
     {
         $this->db = $db;
         $this->context = $context;
         $this->errorHandler = $errorHandler;
 
         if ($this->context->shop === null) {
-            throw new \PrestaShopException('No shop context');
+            throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
         }
 
         $this->shopId = (int) $this->context->shop->id;
@@ -62,11 +62,11 @@ class IncrementalSyncRepository
                 ],
                 false,
                 true,
-                \Db::ON_DUPLICATE_KEY
+                PrestaShop\PrestaShop\Adapter\Entity\Db::ON_DUPLICATE_KEY
             );
         } catch (\PrestaShopDatabaseException $e) {
             $this->errorHandler->handle(
-                new \PrestaShopDatabaseException('Failed to insert incremental object', $e->getCode(), $e)
+                new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException('Failed to insert incremental object', $e->getCode(), $e)
             );
 
             return false;
@@ -98,11 +98,11 @@ class IncrementalSyncRepository
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getIncrementalSyncObjectIds($type, $langIso, $limit)
     {
-        $query = new \DbQuery();
+        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
 
         $query->select('id_object')
             ->from(self::INCREMENTAL_SYNC_TABLE)
@@ -130,7 +130,7 @@ class IncrementalSyncRepository
      */
     public function getRemainingIncrementalObjects($type, $langIso)
     {
-        $query = new \DbQuery();
+        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
 
         $query->select('COUNT(id_object) as count')
             ->from(self::INCREMENTAL_SYNC_TABLE)

@@ -5,33 +5,33 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 class CustomerRepository
 {
     /**
-     * @var \Db
+     * @var PrestaShop\PrestaShop\Adapter\Entity\Db
      */
     private $db;
 
     /**
-     * @var \Context
+     * @var PrestaShop\PrestaShop\Adapter\Entity\Context
      */
     private $context;
 
-    public function __construct(\Db $db, \Context $context)
+    public function __construct(\Db $db, PrestaShop\PrestaShop\Adapter\Entity\Context $context)
     {
         $this->db = $db;
         $this->context = $context;
     }
 
     /**
-     * @return \DbQuery
+     * @return PrestaShop\PrestaShop\Adapter\Entity\DbQuery
      */
     public function getBaseQuery()
     {
         if ($this->context->shop === null) {
-            throw new \PrestaShopException('No shop context');
+            throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
         }
 
         $shopId = (int) $this->context->shop->id;
 
-        $query = new \DbQuery();
+        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
         $query->from('customer', 'c')
             ->where('c.id_shop = ' . $shopId);
 
@@ -44,7 +44,7 @@ class CustomerRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getCustomers($offset, $limit)
     {
@@ -76,7 +76,7 @@ class CustomerRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getCustomersIncremental($limit, $customerIds)
     {
@@ -96,7 +96,7 @@ class CustomerRepository
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit)
     {
@@ -115,7 +115,7 @@ class CustomerRepository
     }
 
     /**
-     * @param \DbQuery $query
+     * @param PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
      *
      * @return void
      */

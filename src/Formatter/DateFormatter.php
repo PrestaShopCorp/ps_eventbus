@@ -12,7 +12,7 @@ class DateFormatter
     public function convertToIso8061($date)
     {
         try {
-            return (new \DateTime($date))->format(\DateTime::ISO8601);
+            return (new PrestaShop\PrestaShop\Adapter\Entity\DateTime($date))->format(\DateTime::ISO8601);
         } catch (\Exception $e) {
             return $date;
         }

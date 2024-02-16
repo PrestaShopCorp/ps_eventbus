@@ -60,7 +60,7 @@ class SynchronizationService
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException|EnvVarException|ApiException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException|EnvVarException|ApiException
      */
     public function handleFullSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $langIso, $offset, $limit, $dateNow, $scriptStartTime, bool $isFull)
     {
@@ -101,7 +101,7 @@ class SynchronizationService
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException|EnvVarException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException|EnvVarException
      */
     public function handleIncrementalSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $limit, $langIso, $scriptStartTime, bool $isFull)
     {
@@ -141,7 +141,7 @@ class SynchronizationService
      *
      * @return bool
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function debounceLiveSync(string $shopContentName)
     {

@@ -7,32 +7,32 @@ class OrderDetailsRepository
     public const TABLE_NAME = 'order_detail';
 
     /**
-     * @var \Db
+     * @var PrestaShop\PrestaShop\Adapter\Entity\Db
      */
     private $db;
     /**
-     * @var \Context
+     * @var PrestaShop\PrestaShop\Adapter\Entity\Context
      */
     private $context;
 
-    public function __construct(\Db $db, \Context $context)
+    public function __construct(\Db $db, PrestaShop\PrestaShop\Adapter\Entity\Context $context)
     {
         $this->context = $context;
         $this->db = $db;
     }
 
     /**
-     * @return \DbQuery
+     * @return PrestaShop\PrestaShop\Adapter\Entity\DbQuery
      */
     public function getBaseQuery()
     {
         if ($this->context->shop === null) {
-            throw new \PrestaShopException('No shop context');
+            throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
         }
 
         $shopId = (int) $this->context->shop->id;
 
-        $query = new \DbQuery();
+        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
 
         $query->from(self::TABLE_NAME, 'od')
             ->where('od.id_shop = ' . $shopId);
@@ -46,7 +46,7 @@ class OrderDetailsRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getOrderDetails(array $orderIds, $shopId)
     {

@@ -5,12 +5,12 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 class CountryRepository
 {
     /**
-     * @var \Db
+     * @var PrestaShop\PrestaShop\Adapter\Entity\Db
      */
     private $db;
 
     /**
-     * @var \Context
+     * @var PrestaShop\PrestaShop\Adapter\Entity\Context
      */
     private $context;
 
@@ -19,26 +19,26 @@ class CountryRepository
      */
     private $countryIsoCodeCache = [];
 
-    public function __construct(\Db $db, \Context $context)
+    public function __construct(\Db $db, PrestaShop\PrestaShop\Adapter\Entity\Context $context)
     {
         $this->db = $db;
         $this->context = $context;
     }
 
     /**
-     * @return \DbQuery
+     * @return PrestaShop\PrestaShop\Adapter\Entity\DbQuery
      */
     private function getBaseQuery()
     {
         if ($this->context->shop == null) {
-            throw new \PrestaShopException('No shop context');
+            throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
         }
 
         if ($this->context->language == null) {
-            throw new \PrestaShopException('No language context');
+            throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No language context');
         }
 
-        $query = new \DbQuery();
+        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
 
         $query->from('country', 'c')
             ->innerJoin('country_shop', 'cs', 'cs.id_country = c.id_country')
@@ -55,7 +55,7 @@ class CountryRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getCountyIsoCodesByZoneId($zoneId, $active = true)
     {

@@ -5,12 +5,12 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 class CarrierRepository
 {
     /**
-     * @var \Db
+     * @var PrestaShop\PrestaShop\Adapter\Entity\Db
      */
     private $db;
 
     /**
-     * @var \Context
+     * @var PrestaShop\PrestaShop\Adapter\Entity\Context
      */
     private $context;
 
@@ -19,20 +19,20 @@ class CarrierRepository
      */
     private $shopId;
 
-    public function __construct(\Db $db, \Context $context)
+    public function __construct(\Db $db, PrestaShop\PrestaShop\Adapter\Entity\Context $context)
     {
         $this->db = $db;
         $this->context = $context;
 
         if ($this->context->shop === null) {
-            throw new \PrestaShopException('No shop context');
+            throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
         }
 
         $this->shopId = (int) $this->context->shop->id;
     }
 
     /**
-     * @param \Carrier $carrierObj
+     * @param PrestaShop\PrestaShop\Adapter\Entity\Carrier $carrierObj
      *
      * @return array|false
      */
@@ -50,16 +50,16 @@ class CarrierRepository
     }
 
     /**
-     * @param \Carrier $carrierObj
+     * @param PrestaShop\PrestaShop\Adapter\Entity\Carrier $carrierObj
      * @param string $rangeTable
      *
      * @return array
      */
     private function getCarrierByPriceRange(
-        \Carrier $carrierObj,
+        PrestaShop\PrestaShop\Adapter\Entity\Carrier $carrierObj,
         $rangeTable
     ) {
-        $deliveryPriceByRange = \Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrierObj->id);
+        $deliveryPriceByRange = PrestaShop\PrestaShop\Adapter\Entity\Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrierObj->id);
 
         $filteredRanges = [];
         foreach ($deliveryPriceByRange as $range) {
@@ -73,16 +73,16 @@ class CarrierRepository
     }
 
     /**
-     * @param \Carrier $carrierObj
+     * @param PrestaShop\PrestaShop\Adapter\Entity\Carrier $carrierObj
      * @param string $rangeTable
      *
      * @return array
      */
     private function getCarrierByWeightRange(
-        \Carrier $carrierObj,
+        PrestaShop\PrestaShop\Adapter\Entity\Carrier $carrierObj,
         $rangeTable
     ) {
-        $deliveryPriceByRange = \Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrierObj->id);
+        $deliveryPriceByRange = PrestaShop\PrestaShop\Adapter\Entity\Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrierObj->id);
 
         $filteredRanges = [];
         foreach ($deliveryPriceByRange as $range) {
@@ -101,11 +101,11 @@ class CarrierRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getShippingIncremental($type, $langIso)
     {
-        $query = new \DbQuery();
+        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
         $query->from(IncrementalSyncRepository::INCREMENTAL_SYNC_TABLE, 'aic');
         $query->leftJoin(EventbusSyncRepository::TYPE_SYNC_TABLE_NAME, 'ts', 'ts.type = aic.type');
         $query->where('aic.type = "' . pSQL($type) . '"');
@@ -120,16 +120,16 @@ class CarrierRepository
      *
      * @return false|\RangeWeight|\RangePrice
      *
-     * @throws \PrestaShopDatabaseException
-     * @throws \PrestaShopException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException
      */
     public function getCarrierRange(array $deliveryPriceByRange)
     {
         if (isset($deliveryPriceByRange['id_range_weight'])) {
-            return new \RangeWeight($deliveryPriceByRange['id_range_weight']);
+            return new PrestaShop\PrestaShop\Adapter\Entity\RangeWeight($deliveryPriceByRange['id_range_weight']);
         }
         if (isset($deliveryPriceByRange['id_range_price'])) {
-            return new \RangePrice($deliveryPriceByRange['id_range_price']);
+            return new PrestaShop\PrestaShop\Adapter\Entity\RangePrice($deliveryPriceByRange['id_range_price']);
         }
 
         return false;
@@ -141,14 +141,14 @@ class CarrierRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getCarrierProperties($carrierIds, $langId)
     {
         if (!$carrierIds) {
             return [];
         }
-        $query = new \DbQuery();
+        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
         $query->from('carrier', 'c');
         $query->select('c.*, cl.delay');
         $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
@@ -166,11 +166,11 @@ class CarrierRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getAllCarrierProperties($offset, $limit, $langId)
     {
-        $query = new \DbQuery();
+        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
         $query->from('carrier', 'c');
         $query->select('c.id_carrier');
         $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
@@ -188,7 +188,7 @@ class CarrierRepository
      *
      * @return int
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getRemainingCarriersCount($offset, $langId)
     {
@@ -208,11 +208,11 @@ class CarrierRepository
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $langId)
     {
-        $query = new \DbQuery();
+        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
         $query->from('carrier', 'c');
         $query->select('c.id_carrier');
         $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);

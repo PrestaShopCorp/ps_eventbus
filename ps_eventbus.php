@@ -197,7 +197,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @return \Context
+     * @return PrestaShop\PrestaShop\Adapter\Entity\Context
      */
     public function getContext()
     {

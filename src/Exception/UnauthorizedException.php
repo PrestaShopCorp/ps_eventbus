@@ -2,6 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Exception;
 
-class UnauthorizedException extends \Exception
+class UnauthorizedException extends PrestaShop\PrestaShop\Adapter\Entity\Exception
 {
 }

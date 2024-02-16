@@ -33,7 +33,7 @@ class Install
      */
     private $module;
     /**
-     * @var \Db
+     * @var PrestaShop\PrestaShop\Adapter\Entity\Db
      */
     private $db;
 

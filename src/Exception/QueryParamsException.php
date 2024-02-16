@@ -20,6 +20,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Exception;
 
-class QueryParamsException extends \Exception
+class QueryParamsException extends PrestaShop\PrestaShop\Adapter\Entity\Exception
 {
 }

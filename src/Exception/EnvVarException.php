@@ -20,6 +20,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Exception;
 
-class EnvVarException extends \Exception
+class EnvVarException extends PrestaShop\PrestaShop\Adapter\Entity\Exception
 {
 }

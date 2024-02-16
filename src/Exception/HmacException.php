@@ -20,6 +20,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Exception;
 
-class HmacException extends \Exception
+class HmacException extends PrestaShop\PrestaShop\Adapter\Entity\Exception
 {
 }

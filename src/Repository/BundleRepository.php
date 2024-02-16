@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 class BundleRepository
 {
     /**
-     * @var \Db
+     * @var PrestaShop\PrestaShop\Adapter\Entity\Db
      */
     private $db;
 
@@ -17,11 +17,11 @@ class BundleRepository
     /**
      * @param int $productPackId
      *
-     * @return \DbQuery
+     * @return PrestaShop\PrestaShop\Adapter\Entity\DbQuery
      */
     private function getBaseQuery($productPackId)
     {
-        $query = new \DbQuery();
+        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
 
         $query->from('pack', 'pac')
             ->innerJoin('product', 'p', 'p.id_product = pac.id_product_item');
@@ -36,7 +36,7 @@ class BundleRepository
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getBundleProducts($productPackId)
     {
@@ -50,7 +50,7 @@ class BundleRepository
     }
 
     /**
-     * @param \DbQuery $query
+     * @param PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
      *
      * @return void
      */

@@ -40,7 +40,7 @@ class SupplierDecorator
         $supplier['active'] = (bool) $supplier['active'];
         $supplier['id_lang'] = (int) $supplier['id_lang'];
         $supplier['id_shop'] = (int) $supplier['id_shop'];
-        $supplier['created_at'] = (new \DateTime($supplier['created_at'], new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
-        $supplier['updated_at'] = (new \DateTime($supplier['updated_at'], new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
+        $supplier['created_at'] = (new PrestaShop\PrestaShop\Adapter\Entity\DateTime($supplier['created_at'], new PrestaShop\PrestaShop\Adapter\Entity\DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
+        $supplier['updated_at'] = (new PrestaShop\PrestaShop\Adapter\Entity\DateTime($supplier['updated_at'], new PrestaShop\PrestaShop\Adapter\Entity\DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
     }
 }

@@ -7,7 +7,7 @@ class SpecificPriceRepository
     public const TABLE_NAME = 'specific_price';
 
     /**
-     * @var \Db
+     * @var PrestaShop\PrestaShop\Adapter\Entity\Db
      */
     private $db;
 
@@ -17,11 +17,11 @@ class SpecificPriceRepository
     }
 
     /**
-     * @return \DbQuery
+     * @return PrestaShop\PrestaShop\Adapter\Entity\DbQuery
      */
     public function getBaseQuery()
     {
-        $query = new \DbQuery();
+        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
         $query->from(self::TABLE_NAME, 'sp');
 
         return $query;
@@ -32,7 +32,7 @@ class SpecificPriceRepository
      *
      * @return array|bool|false|object|null
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getSpecificPrice(int $specificPriceId)
     {
@@ -48,7 +48,7 @@ class SpecificPriceRepository
     }
 
     /**
-     * @param \DbQuery $query
+     * @param PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
      *
      * @return void
      */

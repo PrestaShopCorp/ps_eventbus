@@ -5,100 +5,100 @@ namespace PrestaShop\Module\PsEventbus\Factory;
 class ContextFactory
 {
     /**
-     * @return \Context|null
+     * @return PrestaShop\PrestaShop\Adapter\Entity\Context|null
      */
     public static function getContext()
     {
-        return \Context::getContext();
+        return PrestaShop\PrestaShop\Adapter\Entity\Context::getContext();
     }
 
     /**
-     * @return \Language|\PrestaShopBundle\Install\Language
+     * @return PrestaShop\PrestaShop\Adapter\Entity\Language|\PrestaShopBundle\Install\Language
      */
     public static function getLanguage()
     {
-        $language = \Context::getContext()->language;
+        $language = PrestaShop\PrestaShop\Adapter\Entity\Context::getContext()->language;
 
         if ($language == null) {
-            throw new \PrestaShopException('Context is null');
+            throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('Context is null');
         }
 
         return $language;
     }
 
     /**
-     * @return \Currency|null
+     * @return PrestaShop\PrestaShop\Adapter\Entity\Currency|null
      */
     public static function getCurrency()
     {
-        return \Context::getContext()->currency;
+        return PrestaShop\PrestaShop\Adapter\Entity\Context::getContext()->currency;
     }
 
     /**
-     * @return \Smarty
+     * @return PrestaShop\PrestaShop\Adapter\Entity\Smarty
      */
     public static function getSmarty()
     {
-        $smarty = \Context::getContext()->smarty;
+        $smarty = PrestaShop\PrestaShop\Adapter\Entity\Context::getContext()->smarty;
 
         if ($smarty == null) {
-            throw new \PrestaShopException('Context is null');
+            throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('Context is null');
         }
 
         return $smarty;
     }
 
     /**
-     * @return \Shop
+     * @return PrestaShop\PrestaShop\Adapter\Entity\Shop
      */
     public static function getShop()
     {
-        $shop = \Context::getContext()->shop;
+        $shop = PrestaShop\PrestaShop\Adapter\Entity\Context::getContext()->shop;
 
         if ($shop == null) {
-            throw new \PrestaShopException('Context is null');
+            throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('Context is null');
         }
 
         return $shop;
     }
 
     /**
-     * @return \AdminController|\FrontController|\PrestaShopBundle\Bridge\AdminController\LegacyControllerBridgeInterface|null
+     * @return PrestaShop\PrestaShop\Adapter\Entity\AdminController|\FrontController|\PrestaShopBundle\Bridge\AdminController\LegacyControllerBridgeInterface|null
      */
     public static function getController()
     {
-        $controller = \Context::getContext()->controller;
+        $controller = PrestaShop\PrestaShop\Adapter\Entity\Context::getContext()->controller;
 
         if ($controller == null) {
-            throw new \PrestaShopException('Context is null');
+            throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('Context is null');
         }
 
         return $controller;
     }
 
     /**
-     * @return \Cookie
+     * @return PrestaShop\PrestaShop\Adapter\Entity\Cookie
      */
     public static function getCookie()
     {
-        $cookie = \Context::getContext()->cookie;
+        $cookie = PrestaShop\PrestaShop\Adapter\Entity\Context::getContext()->cookie;
 
         if ($cookie == null) {
-            throw new \PrestaShopException('Context is null');
+            throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('Context is null');
         }
 
         return $cookie;
     }
 
     /**
-     * @return \Link
+     * @return PrestaShop\PrestaShop\Adapter\Entity\Link
      */
     public static function getLink()
     {
-        $link = \Context::getContext()->link;
+        $link = PrestaShop\PrestaShop\Adapter\Entity\Context::getContext()->link;
 
         if ($link == null) {
-            throw new \PrestaShopException('Context is null');
+            throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('Context is null');
         }
 
         return $link;

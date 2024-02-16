@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 class ImageRepository
 {
     /**
-     * @var \Db
+     * @var PrestaShop\PrestaShop\Adapter\Entity\Db
      */
     private $db;
 
@@ -15,11 +15,11 @@ class ImageRepository
     }
 
     /**
-     * @return \DbQuery
+     * @return PrestaShop\PrestaShop\Adapter\Entity\DbQuery
      */
     private function getBaseQuery()
     {
-        $query = new \DbQuery();
+        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
 
         $query->from('image', 'i')
             ->leftJoin('image_lang', 'il', 'il.id_image = i.id_image')
@@ -34,7 +34,7 @@ class ImageRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getImages($offset, $limit)
     {
@@ -66,7 +66,7 @@ class ImageRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getImagesIncremental($limit, $imageIds)
     {
@@ -88,7 +88,7 @@ class ImageRepository
      */
     public function getProductCoverImage($productId, $shopId)
     {
-        $query = new \DbQuery();
+        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
 
         $query->select('imgs.id_image')
             ->from('image_shop', 'imgs')
@@ -107,11 +107,11 @@ class ImageRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getProductImages($productId, $attributeId, $shopId, $includeCover = false)
     {
-        $query = new \DbQuery();
+        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
 
         $query->select('imgs.id_image')
             ->from('image_shop', 'imgs')
@@ -141,7 +141,7 @@ class ImageRepository
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit)
     {
@@ -160,7 +160,7 @@ class ImageRepository
     }
 
     /**
-     * @param \DbQuery $query
+     * @param PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
      *
      * @return void
      */

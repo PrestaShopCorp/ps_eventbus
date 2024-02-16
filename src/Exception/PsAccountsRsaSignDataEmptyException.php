@@ -20,6 +20,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Exception;
 
-class PsAccountsRsaSignDataEmptyException extends \Exception
+class PsAccountsRsaSignDataEmptyException extends PrestaShop\PrestaShop\Adapter\Entity\Exception
 {
 }

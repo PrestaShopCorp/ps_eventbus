@@ -55,7 +55,7 @@ class EmployeeDecorator
         $employee['has_enable_gravatar'] = (bool) $employee['has_enable_gravatar'];
 
         $timezone = (string) $this->configurationRepository->get('PS_TIMEZONE');
-        $employee['last_connection_date'] = (new \DateTime($employee['last_connection_date'], new \DateTimeZone($timezone)))->format('Y-m-d\TH:i:sO');
+        $employee['last_connection_date'] = (new PrestaShop\PrestaShop\Adapter\Entity\DateTime($employee['last_connection_date'], new PrestaShop\PrestaShop\Adapter\Entity\DateTimeZone($timezone)))->format('Y-m-d\TH:i:sO');
     }
 
     /**

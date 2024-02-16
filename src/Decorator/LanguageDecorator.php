@@ -48,7 +48,7 @@ class LanguageDecorator
         $language['active'] = (bool) $language['active'];
         $language['is_rtl'] = (bool) $language['is_rtl'];
         $language['id_shop'] = (int) $language['id_shop'];
-        $language['created_at'] = (new \DateTime($this->createdAt, new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
-        $language['updated_at'] = (new \DateTime($this->createdAt, new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
+        $language['created_at'] = (new PrestaShop\PrestaShop\Adapter\Entity\DateTime($this->createdAt, new PrestaShop\PrestaShop\Adapter\Entity\DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
+        $language['updated_at'] = (new PrestaShop\PrestaShop\Adapter\Entity\DateTime($this->createdAt, new PrestaShop\PrestaShop\Adapter\Entity\DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
     }
 }

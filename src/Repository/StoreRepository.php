@@ -7,15 +7,15 @@ class StoreRepository
     public const STORES_TABLE = 'store';
 
     /**
-     * @var \Db
+     * @var PrestaShop\PrestaShop\Adapter\Entity\Db
      */
     private $db;
     /**
-     * @var \Context
+     * @var PrestaShop\PrestaShop\Adapter\Entity\Context
      */
     private $context;
 
-    public function __construct(\Db $db, \Context $context)
+    public function __construct(\Db $db, PrestaShop\PrestaShop\Adapter\Entity\Context $context)
     {
         $this->db = $db;
         $this->context = $context;
@@ -24,18 +24,18 @@ class StoreRepository
     /**
      * @param string $langIso
      *
-     * @return \DbQuery
+     * @return PrestaShop\PrestaShop\Adapter\Entity\DbQuery
      */
     public function getBaseQuery($langIso)
     {
         if ($this->context->shop === null) {
-            throw new \PrestaShopException('No shop context');
+            throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
         }
 
         $shopId = (int) $this->context->shop->id;
-        $langId = (int) \Language::getIdByIso($langIso);
+        $langId = (int) PrestaShop\PrestaShop\Adapter\Entity\Language::getIdByIso($langIso);
 
-        $query = new \DbQuery();
+        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
         if (version_compare(_PS_VERSION_, '1.7', '>=')) {
             $query->from(self::STORES_TABLE, 's')
                 ->leftJoin('store_lang', 'sl', 's.id_store = sl.id_store')
@@ -56,7 +56,7 @@ class StoreRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getStores($offset, $limit, $langIso)
     {
@@ -93,7 +93,7 @@ class StoreRepository
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getStoresIncremental($limit, $langIso, $storeIds)
     {
@@ -116,7 +116,7 @@ class StoreRepository
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $langIso)
     {
@@ -135,7 +135,7 @@ class StoreRepository
     }
 
     /**
-     * @param \DbQuery $query
+     * @param PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
      *
      * @return void
      */

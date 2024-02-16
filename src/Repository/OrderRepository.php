@@ -7,7 +7,7 @@ class OrderRepository
     public const ORDERS_TABLE = 'orders';
 
     /**
-     * @var \Db
+     * @var PrestaShop\PrestaShop\Adapter\Entity\Db
      */
     private $db;
 
@@ -19,11 +19,11 @@ class OrderRepository
     /**
      * @param int $shopId
      *
-     * @return \DbQuery
+     * @return PrestaShop\PrestaShop\Adapter\Entity\DbQuery
      */
     public function getBaseQuery($shopId)
     {
-        $query = new \DbQuery();
+        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
         $query->from(self::ORDERS_TABLE, 'o')
             ->leftJoin('currency', 'c', 'o.id_currency = c.id_currency')
             ->leftJoin('order_slip', 'os', 'o.id_order = os.id_order')
@@ -46,7 +46,7 @@ class OrderRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getOrders($offset, $limit, $shopId)
     {
@@ -83,7 +83,7 @@ class OrderRepository
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getOrdersIncremental($limit, $shopId, $orderIds)
     {
@@ -106,7 +106,7 @@ class OrderRepository
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $shopId)
     {
@@ -125,7 +125,7 @@ class OrderRepository
     }
 
     /**
-     * @param \DbQuery $query
+     * @param PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
      *
      * @return void
      */

@@ -36,7 +36,7 @@ class PsEventbusResolverController extends FrameworkBundleAdminController
     public function __construct()
     {
         /** @var \Ps_eventbus $psEventbus */
-        $psEventbus = \Module::getInstanceByName('ps_eventbus');
+        $psEventbus = PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName('ps_eventbus');
         $this->module = $psEventbus;
     }
 
@@ -48,7 +48,7 @@ class PsEventbusResolverController extends FrameworkBundleAdminController
      *
      * @return Response
      *
-     * @throws \Exception
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\Exception
      */
     public function resolve(Request $request, string $query)
     {
@@ -63,7 +63,7 @@ class PsEventbusResolverController extends FrameworkBundleAdminController
                 return $result;
             }
         } catch (\Throwable $th) {
-            throw new \Exception('#001 Message : ' . $th->getMessage());
+            throw new PrestaShop\PrestaShop\Adapter\Entity\Exception('#001 Message : ' . $th->getMessage());
         }
 
         return new Response('Not found', 404);

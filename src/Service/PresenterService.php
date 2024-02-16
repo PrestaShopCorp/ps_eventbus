@@ -21,7 +21,7 @@ class PresenterService
         }
         $moduleManager = $moduleManager->build();
         if ($moduleManager->isInstalled('ps_accounts')) {
-            $accountsModule = \Module::getInstanceByName('ps_accounts');
+            $accountsModule = PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName('ps_accounts');
             /* @phpstan-ignore-next-line */
             $accountService = $accountsModule->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
             $this->psAccountsService = $accountService;
@@ -74,7 +74,7 @@ class PresenterService
     }
 
     /**
-     * @param \ModuleCore $module
+     * @param PrestaShop\PrestaShop\Adapter\Entity\ModuleCore $module
      * @param array $requiredConsents
      * @param array $optionalConsents
      *
@@ -83,7 +83,7 @@ class PresenterService
     public function expose(\ModuleCore $module, $requiredConsents = [], $optionalConsents = [])
     {
         /** @var \Ps_eventbus $psEventbusModule */
-        $psEventbusModule = \Module::getInstanceByName('ps_eventbus');
+        $psEventbusModule = PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName('ps_eventbus');
 
         /** @var ModuleHelper $moduleHelper */
         $moduleHelper = $psEventbusModule->getService('ps_eventbus.helper.module');
@@ -94,10 +94,10 @@ class PresenterService
         if ($this->psAccountsService == null) {
             return [];
         } else {
-            $language = \Context::getContext()->language;
+            $language = PrestaShop\PrestaShop\Adapter\Entity\Context::getContext()->language;
 
             if ($language == null) {
-                throw new \PrestaShopException('No language context');
+                throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No language context');
             }
 
             return [
@@ -105,13 +105,13 @@ class PresenterService
                 'requiredConsents' => $requiredConsents,
                 'optionalConsents' => $optionalConsents,
                 'module' => array_merge([
-                    'logoUrl' => \Tools::getHttpHost(true) . '/modules/' . $module->name . '/logo.png',
+                    'logoUrl' => PrestaShop\PrestaShop\Adapter\Entity\Tools::getHttpHost(true) . '/modules/' . $module->name . '/logo.png',
                 ], $this->convertObjectToArray($module)),
                 'shop' => [
                     /* @phpstan-ignore-next-line */
                     'id' => $this->psAccountsService->getShopUuid(),
-                    'name' => \Configuration::get('PS_SHOP_NAME'),
-                    'url' => \Tools::getHttpHost(true),
+                    'name' => PrestaShop\PrestaShop\Adapter\Entity\Configuration::get('PS_SHOP_NAME'),
+                    'url' => PrestaShop\PrestaShop\Adapter\Entity\Tools::getHttpHost(true),
                     'lang' => $language->iso_code,
                 ],
                 'psEventbusModule' => $this->convertObjectToArray(\Module::getInstanceByName('ps_eventbus')),

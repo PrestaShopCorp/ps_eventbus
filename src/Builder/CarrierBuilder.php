@@ -55,20 +55,20 @@ class CarrierBuilder
     /**
      * @param array $carriers
      * @param int $langId
-     * @param \Currency $currency
+     * @param PrestaShop\PrestaShop\Adapter\Entity\Currency $currency
      * @param string $weightUnit
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
-     * @throws \PrestaShopException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException
      */
-    public function buildCarriers(array $carriers, int $langId, \Currency $currency, $weightUnit)
+    public function buildCarriers(array $carriers, int $langId, PrestaShop\PrestaShop\Adapter\Entity\Currency $currency, $weightUnit)
     {
         $eventBusCarriers = [];
         foreach ($carriers as $carrier) {
             $eventBusCarriers[] = $this->buildCarrier(
-                new \Carrier($carrier['id_carrier'], $langId),
+                new PrestaShop\PrestaShop\Adapter\Entity\Carrier($carrier['id_carrier'], $langId),
                 $currency->iso_code,
                 $weightUnit,
             );
@@ -86,14 +86,14 @@ class CarrierBuilder
     }
 
     /**
-     * @param \Carrier $carrier
+     * @param PrestaShop\PrestaShop\Adapter\Entity\Carrier $carrier
      * @param string $currencyIsoCode
      * @param string $weightUnit
      *
      * @return EventBusCarrier
      *
-     * @throws \PrestaShopDatabaseException
-     * @throws \PrestaShopException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException
      */
     public function buildCarrier(\Carrier $carrier, $currencyIsoCode, $weightUnit)
     {
@@ -163,13 +163,13 @@ class CarrierBuilder
     }
 
     /**
-     * @param \Carrier $carrier
-     * @param \RangeWeight|\RangePrice $range
+     * @param PrestaShop\PrestaShop\Adapter\Entity\Carrier $carrier
+     * @param PrestaShop\PrestaShop\Adapter\Entity\RangeWeight|\RangePrice $range
      * @param array $zone
      *
      * @return false|CarrierDetail
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     private function buildCarrierDetails(\Carrier $carrier, $range, array $zone)
     {
@@ -200,13 +200,13 @@ class CarrierBuilder
     }
 
     /**
-     * @param \Carrier $carrier
+     * @param PrestaShop\PrestaShop\Adapter\Entity\Carrier $carrier
      * @param int $zoneId
      * @param int $rangeId
      *
      * @return CarrierTax|null
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     private function buildCarrierTaxes(\Carrier $carrier, $zoneId, $rangeId)
     {
