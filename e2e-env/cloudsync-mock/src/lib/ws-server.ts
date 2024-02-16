@@ -29,6 +29,7 @@ export class WsServer {
       headers: request.headers,
       url: request.url,
       query: request.query,
+      params: request.params,
       body: request.body ?? {},
     };
 

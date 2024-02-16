@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "test:e2e": "jest --config=jest.config.json --runInBand",
-    "test:e2e:watch": "jest --config=jest.config.json --watchAll --runInBand",
-    "test:e2e:detectOpenHandles": "jest --config=jest.config.json  --runInBand --detectOpenHandles"
+    "test:e2e": "jest --config=jest.config.json",
+    "test:e2e:watch": "jest --config=jest.config.json --watchAll",
+    "test:e2e:detectOpenHandles": "jest --config=jest.config.json --detectOpenHandles"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
@@ -21,7 +21,9 @@
     "typescript": "^5.3.2",
     "@types/ws": "^8.5.10",
     "ws": "^8.16.0",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "ramda": "^0.29.1",
+    "@types/ramda": "^0.29.1"
   },
   "engines": {
     "yarn": "please use pnpm",

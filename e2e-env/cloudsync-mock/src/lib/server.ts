@@ -9,7 +9,10 @@ export class Server {
     this.api = express();
 
     this.api.use((req: Request, res: Response, next: NextFunction) => {
-      probe.sendDataToWS(this.constructor.name, req);
+      // send data to probe after parsing params
+      req.on('close', () => {
+        probe.sendDataToWS(this.constructor.name, req);
+      })
       next();
     });
 

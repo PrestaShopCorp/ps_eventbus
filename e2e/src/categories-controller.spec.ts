@@ -20,7 +20,7 @@ describe('CategoriesController', () => {
   it('should return 454 with an invalid job id (sync-api status 454)', async () => {
     const jobId = 'invalid-job-id'
 
-    const messages = probe.waitForMessages(1, jobId);
+    const messages = probe.waitForMessages(1, {params: {id: jobId}});
 
     const stuff = await request(testConfig.prestashopUrl)
       .get(`/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&job_id=${jobId}`)
