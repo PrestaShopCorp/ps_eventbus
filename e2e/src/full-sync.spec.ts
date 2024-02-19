@@ -6,6 +6,8 @@ import axios from "axios";
 
 expect.extend(matchers);
 
+// FIXME : jest worker trips on something and runs tests several times
+
 describe('Full Sync', () => {
   let testIndex = 0;
   let probe = new MockProbe();
@@ -55,7 +57,6 @@ describe('Full Sync', () => {
       const collectorRequest = await messages;
 
       // assert
-      expect(collectorRequest[0].method).toBe('POST');
       expect(collectorRequest[0].method).toBe('POST');
     });
   })
