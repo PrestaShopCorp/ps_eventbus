@@ -82,8 +82,12 @@ return [
     // For more see: https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#patchers
     'patchers' => [
         static function (string $filePath, string $prefix, string $contents): string {
-            // Change the contents here.
-
+            if (strpos($filePath, 'vendor/prestashop/')) {
+                /* $pattern = '/\s(\\)([A-Za-z]+)(?![A-Za-z\\])/'; */
+                $replacement = '\\PrestaShop\\PrestaShop\\Adapter\Entity';
+                $contents = preg_replace('/\\\\'. $prefix . '/', $replacement, $contents);
+            }
+    
             return $contents;
         },
     ],
@@ -92,8 +96,7 @@ return [
     //
     // For more information see: https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#excluded-symbols
     'exclude-namespaces' => [
-        'PrestaShop',
-        'Composer',
+        '\PrestaShop\PrestaShop',
         'Symfony'
         // 'Acme\Foo'                     // The Acme\Foo namespace (and sub-namespaces)
         // '~^PHPUnit\\\\Framework$~',    // The whole namespace PHPUnit\Framework (but not sub-namespaces)

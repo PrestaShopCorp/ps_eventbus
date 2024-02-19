@@ -26,17 +26,18 @@ define zip_it
 	$(call replace_version,${TMP_DIR}/${MODULE_NAME},${SEM_VERSION})
 	./tools/vendor/bin/autoindex prestashop:add:index ${TMP_DIR}
 	cp $1 ${TMP_DIR}/${MODULE_NAME}/config/parameters.yml;
+	cd ${TMP_DIR}/${MODULE_NAME} && composer dump-autoload;
 	cd ${TMP_DIR} && zip -9 -r $2 ./${MODULE_NAME};
 	mv ${TMP_DIR}/$2 ./dist;
 	rm -rf ${TMP_DIR:-/dev/null};
 endef
 
 define zip_it_temp
-	mkdir -p dist/tmp;
-	cp -r $(shell cat .zip-contents) dist/tmp;
-	VERSION=${PACKAGE} TMP_FOLDER=dist/tmp php php-scoper.phar add-prefix --output-dir=dist/${MODULE_NAME} --force
-	$(call replace_version,dist/${MODULE_NAME},${SEM_VERSION})
-	rm -rf dist/tmp
+	mkdir -p ./dist/tmp;
+	cp -r $(shell cat .zip-contents) ./dist/tmp;
+	VERSION=${PACKAGE} TMP_FOLDER=./dist/tmp php php-scoper.phar add-prefix --output-dir=./dist/${MODULE_NAME} --force
+	$(call replace_version,./dist/${MODULE_NAME},${SEM_VERSION});
+	rm -rf ./dist/tmp;
 endef
 
 
@@ -86,6 +87,9 @@ zip-inte: vendor tools/vendor dist
 .PHONY: zip-prod
 zip-prod: vendor tools/vendor dist
 	@$(call zip_it,.config.prod.yml,${PACKAGE}.zip)
+
+zip-test: vendor tools/vendor dist
+	@$(call zip_it_temp,.config.prod.yml,${PACKAGE}.zip)
 
 # target: build                                                - Setup PHP & Node.js locally
 .PHONY: build
