@@ -5,16 +5,16 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 class LanguageRepository
 {
     /**
-     * @var PrestaShop\PrestaShop\Adapter\Entity\Db
+     * @var \PrestaShop\PrestaShop\Adapter\Entity\Db
      */
     private $db;
 
     /**
-     * @var PrestaShop\PrestaShop\Adapter\Entity\Context
+     * @var \PrestaShop\PrestaShop\Adapter\Entity\Context
      */
     private $context;
 
-    public function __construct(\Db $db, PrestaShop\PrestaShop\Adapter\Entity\Context $context)
+    public function __construct(\Db $db, \PrestaShop\PrestaShop\Adapter\Entity\Context $context)
     {
         $this->db = $db;
         $this->context = $context;
@@ -26,7 +26,7 @@ class LanguageRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getLanguagesSync($offset, $limit)
     {
@@ -58,7 +58,7 @@ class LanguageRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getLanguagesIncremental($limit, $languageIds)
     {
@@ -73,17 +73,17 @@ class LanguageRepository
     }
 
     /**
-     * @return PrestaShop\PrestaShop\Adapter\Entity\DbQuery
+     * @return \PrestaShop\PrestaShop\Adapter\Entity\DbQuery
      */
     public function getBaseQuery()
     {
         if ($this->context->shop === null) {
-            throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
+            throw new \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
         }
 
         $shopId = (int) $this->context->shop->id;
 
-        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
+        $query = new \PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
         $query->from('lang', 'la')
             ->innerJoin('lang_shop', 'las', 'la.id_lang = las.id_lang AND las.id_shop = ' . $shopId);
 
@@ -91,7 +91,7 @@ class LanguageRepository
     }
 
     /**
-     * @param PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
+     * @param \PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
      *
      * @return void
      */
@@ -107,7 +107,7 @@ class LanguageRepository
     public function getLanguagesIsoCodes()
     {
         /** @var array $languages */
-        $languages = PrestaShop\PrestaShop\Adapter\Entity\Language::getLanguages();
+        $languages = \PrestaShop\PrestaShop\Adapter\Entity\Language::getLanguages();
 
         return array_map(function ($language) {
             return $language['iso_code'];
@@ -119,7 +119,7 @@ class LanguageRepository
      */
     public function getDefaultLanguageIsoCode()
     {
-        $language = PrestaShop\PrestaShop\Adapter\Entity\Language::getLanguage((int) PrestaShop\PrestaShop\Adapter\Entity\Configuration::get('PS_LANG_DEFAULT'));
+        $language = \PrestaShop\PrestaShop\Adapter\Entity\Language::getLanguage((int) \PrestaShop\PrestaShop\Adapter\Entity\Configuration::get('PS_LANG_DEFAULT'));
 
         if (is_array($language)) {
             return $language['iso_code'];
@@ -135,7 +135,7 @@ class LanguageRepository
      */
     public function getLanguageIdByIsoCode($isoCode)
     {
-        return (int) PrestaShop\PrestaShop\Adapter\Entity\Language::getIdByIso($isoCode);
+        return (int) \PrestaShop\PrestaShop\Adapter\Entity\Language::getIdByIso($isoCode);
     }
 
     /**
@@ -143,7 +143,7 @@ class LanguageRepository
      */
     public function getLanguages()
     {
-        return PrestaShop\PrestaShop\Adapter\Entity\Language::getLanguages();
+        return \PrestaShop\PrestaShop\Adapter\Entity\Language::getLanguages();
     }
 
     /**
@@ -152,7 +152,7 @@ class LanguageRepository
      *
      * @return array
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit)
     {

@@ -21,7 +21,7 @@ class ModuleHelper
      */
     public function isInstalled(string $moduleName)
     {
-        return PrestaShop\PrestaShop\Adapter\Entity\ModuleCore::isInstalled($moduleName);
+        return \PrestaShop\PrestaShop\Adapter\Entity\ModuleCore::isInstalled($moduleName);
     }
 
     /**
@@ -31,7 +31,7 @@ class ModuleHelper
      */
     public function isEnabled(string $moduleName)
     {
-        return PrestaShop\PrestaShop\Adapter\Entity\ModuleCore::isEnabled($moduleName);
+        return \PrestaShop\PrestaShop\Adapter\Entity\ModuleCore::isEnabled($moduleName);
     }
 
     /**
@@ -45,7 +45,7 @@ class ModuleHelper
             return '';
         }
 
-        $module = PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName($moduleName);
+        $module = \PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName($moduleName);
 
         if (false === $module) {
             return '';
@@ -61,7 +61,7 @@ class ModuleHelper
      */
     public function getInstanceByName(string $moduleName)
     {
-        return PrestaShop\PrestaShop\Adapter\Entity\ModuleCore::getInstanceByName($moduleName);
+        return \PrestaShop\PrestaShop\Adapter\Entity\ModuleCore::getInstanceByName($moduleName);
     }
 
     /**
@@ -151,7 +151,7 @@ class ModuleHelper
             return '0.0.0';
         }
 
-        $module = PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName($moduleName);
+        $module = \PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName($moduleName);
 
         if (false === $module) {
             return '0.0.0';

@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 class StockMvtRepository
 {
     /**
-     * @var PrestaShop\PrestaShop\Adapter\Entity\Db
+     * @var \PrestaShop\PrestaShop\Adapter\Entity\Db
      */
     private $db;
 
@@ -17,13 +17,13 @@ class StockMvtRepository
     /**
      * @param string $langIso
      *
-     * @return PrestaShop\PrestaShop\Adapter\Entity\DbQuery
+     * @return \PrestaShop\PrestaShop\Adapter\Entity\DbQuery
      */
     public function getBaseQuery($langIso)
     {
         /** @var int $langId */
-        $langId = (int) PrestaShop\PrestaShop\Adapter\Entity\Language::getIdByIso($langIso);
-        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
+        $langId = (int) \PrestaShop\PrestaShop\Adapter\Entity\Language::getIdByIso($langIso);
+        $query = new \PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
         $query->from('stock_mvt', 'sm')
             ->innerJoin('stock_mvt_reason', 'smr', 'sm.id_stock_mvt_reason = smr.id_stock_mvt_reason')
             ->innerJoin('stock_mvt_reason_lang', 'smrl', 'sm.id_stock_mvt_reason = smrl.id_stock_mvt_reason AND smrl.id_lang = ' . (int) $langId);
@@ -37,7 +37,7 @@ class StockMvtRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getStockMvts($langIso, $stockIds)
     {
@@ -51,7 +51,7 @@ class StockMvtRepository
     }
 
     /**
-     * @param PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
+     * @param \PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
      *
      * @return void
      */

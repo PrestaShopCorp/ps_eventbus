@@ -9,7 +9,7 @@ class ModuleRepository
     public const MODULE_SHOP = 'module_shop';
 
     /**
-     * @var PrestaShop\PrestaShop\Adapter\Entity\Db
+     * @var \PrestaShop\PrestaShop\Adapter\Entity\Db
      */
     private $db;
 
@@ -19,11 +19,11 @@ class ModuleRepository
     }
 
     /**
-     * @return PrestaShop\PrestaShop\Adapter\Entity\DbQuery
+     * @return \PrestaShop\PrestaShop\Adapter\Entity\DbQuery
      */
     public function getBaseQuery()
     {
-        $query = (new PrestaShop\PrestaShop\Adapter\Entity\DbQuery())
+        $query = (new \PrestaShop\PrestaShop\Adapter\Entity\DbQuery())
           ->from(self::MODULE_TABLE, 'm')
           ->leftJoin(self::MODULE_SHOP, 'm_shop', 'm.id_module = m_shop.id_module');
 
@@ -40,7 +40,7 @@ class ModuleRepository
      *
      * @return array|bool|false|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getModules($offset, $limit)
     {
@@ -81,7 +81,7 @@ class ModuleRepository
      *
      * @return array
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit)
     {

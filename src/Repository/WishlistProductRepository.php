@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 class WishlistProductRepository
 {
     /**
-     * @var PrestaShop\PrestaShop\Adapter\Entity\Db
+     * @var \PrestaShop\PrestaShop\Adapter\Entity\Db
      */
     private $db;
 
@@ -17,11 +17,11 @@ class WishlistProductRepository
     /**
      * @param array $wishlistIds
      *
-     * @return PrestaShop\PrestaShop\Adapter\Entity\DbQuery
+     * @return \PrestaShop\PrestaShop\Adapter\Entity\DbQuery
      */
     public function getBaseQuery(array &$wishlistIds)
     {
-        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
+        $query = new \PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
         $query->from('wishlist_product', 'wp');
         $query->where('wp.id_wishlist IN(' . implode(',', array_map('intval', $wishlistIds)) . ')');
 
@@ -33,7 +33,7 @@ class WishlistProductRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getWishlistProducts(array &$wishlistIds)
     {
@@ -45,7 +45,7 @@ class WishlistProductRepository
     }
 
     /**
-     * @param PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
+     * @param \PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
      *
      * @return void
      */

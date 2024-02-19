@@ -5,11 +5,11 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 class ProductCarrierRepository
 {
     /**
-     * @var PrestaShop\PrestaShop\Adapter\Entity\Db
+     * @var \PrestaShop\PrestaShop\Adapter\Entity\Db
      */
     private $db;
     /**
-     * @var PrestaShop\PrestaShop\Adapter\Entity\Context
+     * @var \PrestaShop\PrestaShop\Adapter\Entity\Context
      */
     private $context;
 
@@ -18,24 +18,24 @@ class ProductCarrierRepository
      */
     private $shopId;
 
-    public function __construct(\Db $db, PrestaShop\PrestaShop\Adapter\Entity\Context $context)
+    public function __construct(\Db $db, \PrestaShop\PrestaShop\Adapter\Entity\Context $context)
     {
         $this->db = $db;
         $this->context = $context;
 
         if ($this->context->shop === null) {
-            throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
+            throw new \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
         }
 
         $this->shopId = (int) $this->context->shop->id;
     }
 
     /**
-     * @return PrestaShop\PrestaShop\Adapter\Entity\DbQuery
+     * @return \PrestaShop\PrestaShop\Adapter\Entity\DbQuery
      */
     private function getBaseQuery()
     {
-        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
+        $query = new \PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
 
         $query->from('product_carrier', 'pc');
         $query->where('pc.id_shop = ' . $this->shopId);
@@ -49,7 +49,7 @@ class ProductCarrierRepository
      *
      * @return array
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getProductCarriers($offset, $limit)
     {
@@ -69,7 +69,7 @@ class ProductCarrierRepository
      *
      * @return int
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getRemainingProductCarriersCount($offset)
     {
@@ -88,11 +88,11 @@ class ProductCarrierRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getProductCarrierIncremental($type, $langIso)
     {
-        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
+        $query = new \PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
         $query->from(IncrementalSyncRepository::INCREMENTAL_SYNC_TABLE, 'aic');
         $query->leftJoin(EventbusSyncRepository::TYPE_SYNC_TABLE_NAME, 'ts', 'ts.type = aic.type');
         $query->where('aic.type = "' . (string) $type . '"');
@@ -107,14 +107,14 @@ class ProductCarrierRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getProductCarriersProperties(array $productIds)
     {
         if (!$productIds) {
             return [];
         }
-        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
+        $query = new \PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
 
         $query->select('pc.*')
             ->from('product_carrier', 'pc')
@@ -129,7 +129,7 @@ class ProductCarrierRepository
      *
      * @return array
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit)
     {
@@ -148,7 +148,7 @@ class ProductCarrierRepository
     }
 
     /**
-     * @param PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
+     * @param \PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
      *
      * @return void
      */

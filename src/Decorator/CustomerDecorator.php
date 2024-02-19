@@ -43,7 +43,7 @@ class CustomerDecorator
         $customer['newsletter'] = (bool) $customer['newsletter'];
 
         $timezone = (string) $this->configurationRepository->get('PS_TIMEZONE');
-        $customer['newsletter_date_add'] = (new PrestaShop\PrestaShop\Adapter\Entity\DateTime($customer['newsletter_date_add'], new PrestaShop\PrestaShop\Adapter\Entity\DateTimeZone($timezone)))->format('Y-m-d\TH:i:sO');
+        $customer['newsletter_date_add'] = (new \PrestaShop\PrestaShop\Adapter\Entity\DateTime($customer['newsletter_date_add'], new \PrestaShop\PrestaShop\Adapter\Entity\DateTimeZone($timezone)))->format('Y-m-d\TH:i:sO');
 
         $customer['optin'] = (bool) $customer['optin'];
         $customer['active'] = (bool) $customer['active'];

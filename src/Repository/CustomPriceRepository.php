@@ -5,38 +5,38 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 class CustomPriceRepository
 {
     /**
-     * @var PrestaShop\PrestaShop\Adapter\Entity\Context
+     * @var \PrestaShop\PrestaShop\Adapter\Entity\Context
      */
     private $context;
     /**
-     * @var PrestaShop\PrestaShop\Adapter\Entity\Db
+     * @var \PrestaShop\PrestaShop\Adapter\Entity\Db
      */
     private $db;
 
-    public function __construct(\Db $db, PrestaShop\PrestaShop\Adapter\Entity\Context $context)
+    public function __construct(\Db $db, \PrestaShop\PrestaShop\Adapter\Entity\Context $context)
     {
         $this->db = $db;
         $this->context = $context;
 
-        if (!$this->context->employee instanceof PrestaShop\PrestaShop\Adapter\Entity\Employee) {
-            if (($employees = PrestaShop\PrestaShop\Adapter\Entity\Employee::getEmployees()) !== false) {
-                $this->context->employee = new PrestaShop\PrestaShop\Adapter\Entity\Employee($employees[0]['id_employee']);
+        if (!$this->context->employee instanceof \PrestaShop\PrestaShop\Adapter\Entity\Employee) {
+            if (($employees = \PrestaShop\PrestaShop\Adapter\Entity\Employee::getEmployees()) !== false) {
+                $this->context->employee = new \PrestaShop\PrestaShop\Adapter\Entity\Employee($employees[0]['id_employee']);
             }
         }
     }
 
     /**
-     * @return PrestaShop\PrestaShop\Adapter\Entity\DbQuery
+     * @return \PrestaShop\PrestaShop\Adapter\Entity\DbQuery
      */
     private function getBaseQuery()
     {
         if ($this->context->shop === null) {
-            throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
+            throw new \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
         }
 
         $shopId = (int) $this->context->shop->id;
 
-        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
+        $query = new \PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
 
         $query->from('specific_price', 'sp')
             ->leftJoin('country', 'c', 'c.id_country = sp.id_country')
@@ -53,7 +53,7 @@ class CustomPriceRepository
      *
      * @return array
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getSpecificPrices($offset, $limit)
     {
@@ -73,7 +73,7 @@ class CustomPriceRepository
      *
      * @return int
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getRemainingSpecificPricesCount($offset)
     {
@@ -85,7 +85,7 @@ class CustomPriceRepository
     }
 
     /**
-     * @param PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
+     * @param \PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
      *
      * @return void
      */
@@ -104,7 +104,7 @@ class CustomPriceRepository
      *
      * @return array
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getSpecificPricesIncremental($limit, $specificPriceIds)
     {
@@ -126,7 +126,7 @@ class CustomPriceRepository
      *
      * @return array
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit)
     {

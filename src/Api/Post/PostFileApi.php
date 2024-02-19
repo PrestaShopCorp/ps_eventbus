@@ -27,7 +27,7 @@ class PostFileApi implements PostFileInterface
      * @param string|null $filename Filename content-disposition attribute
      * @param array $headers Array of headers to set on the file (can override any default headers)
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\RuntimeException when filename is not passed or can't be determined
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\RuntimeException when filename is not passed or can't be determined
      */
     public function __construct(
         $name,

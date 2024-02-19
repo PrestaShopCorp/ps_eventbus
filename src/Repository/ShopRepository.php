@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 class ShopRepository
 {
     /**
-     * @var PrestaShop\PrestaShop\Adapter\Entity\Db
+     * @var \PrestaShop\PrestaShop\Adapter\Entity\Db
      */
     private $db;
 
@@ -19,7 +19,7 @@ class ShopRepository
      */
     public function getMultiShopCount()
     {
-        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
+        $query = new \PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
 
         $query->select('COUNT(id_shop)')
             ->from('shop')
@@ -33,7 +33,7 @@ class ShopRepository
      */
     public function getCreatedAt()
     {
-        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
+        $query = new \PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
 
         $query->select('date_add as created_at')
           ->from('configuration')
@@ -49,7 +49,7 @@ class ShopRepository
      */
     public function getShopCountryCode()
     {
-        $query = new PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
+        $query = new \PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
 
         $query->select('iso_code')
           ->from('country')

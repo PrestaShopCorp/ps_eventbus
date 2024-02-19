@@ -22,6 +22,7 @@
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
+use Raven_Client;
 
 /**
  * Handle Error.
@@ -33,11 +34,11 @@ class ErrorHandler implements ErrorHandlerInterface
      */
     protected $client;
 
-    public function __construct(\Module $module, PsAccounts $accountsService, string $sentryDsn, string $sentryEnv)
+    public function __construct(\PrestaShop\PrestaShop\Adapter\Entity\Module $module, PsAccounts $accountsService, string $sentryDsn, string $sentryEnv)
     {
-        $psAccounts = PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName('ps_accounts');
+        $psAccounts = \PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName('ps_accounts');
         try {
-            $this->client = new PrestaShop\PrestaShop\Adapter\Entity\Raven_Client(
+            $this->client = new Raven_Client(
                 $sentryDsn,
                 [
                     'level' => 'warning',
@@ -47,28 +48,28 @@ class ErrorHandler implements ErrorHandlerInterface
                         'ps_accounts_version' => $psAccounts ? $psAccounts->version : false,
                         'php_version' => phpversion(),
                         'prestashop_version' => _PS_VERSION_,
-                        'ps_eventbus_is_enabled' => PrestaShop\PrestaShop\Adapter\Entity\Module::isEnabled((string) $module->name),
-                        'ps_eventbus_is_installed' => PrestaShop\PrestaShop\Adapter\Entity\Module::isInstalled((string) $module->name),
+                        'ps_eventbus_is_enabled' => \PrestaShop\PrestaShop\Adapter\Entity\Module::isEnabled((string) $module->name),
+                        'ps_eventbus_is_installed' => \PrestaShop\PrestaShop\Adapter\Entity\Module::isInstalled((string) $module->name),
                         'env' => $sentryEnv,
                     ],
                 ]
             );
             /** @var string $configurationPsShopEmail */
-            $configurationPsShopEmail = PrestaShop\PrestaShop\Adapter\Entity\Configuration::get('PS_SHOP_EMAIL');
+            $configurationPsShopEmail = \PrestaShop\PrestaShop\Adapter\Entity\Configuration::get('PS_SHOP_EMAIL');
             $this->client->set_user_data($accountsService->getPsAccountsService()->getShopUuid(), $configurationPsShopEmail);
         } catch (\Exception $e) {
         }
     }
 
     /**
-     * @param PrestaShop\PrestaShop\Adapter\Entity\Exception $error
+     * @param \PrestaShop\PrestaShop\Adapter\Entity\Exception $error
      * @param mixed $code
      * @param bool|null $throw
      * @param array|null $data
      *
      * @return void
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\Exception
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\Exception
      */
     public function handle($error, $code = null, $throw = true, $data = null)
     {

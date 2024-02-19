@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 interface ErrorHandlerInterface
 {
     /**
-     * @param PrestaShop\PrestaShop\Adapter\Entity\Exception $error
+     * @param \PrestaShop\PrestaShop\Adapter\Entity\Exception $error
      * @param mixed $code
      * @param bool|null $throw
      * @param array|null $data

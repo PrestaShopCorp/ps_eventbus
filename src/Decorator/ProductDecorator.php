@@ -12,7 +12,7 @@ use PrestaShop\Module\PsEventbus\Repository\ProductRepository;
 class ProductDecorator
 {
     /**
-     * @var PrestaShop\PrestaShop\Adapter\Entity\Context
+     * @var \PrestaShop\PrestaShop\Adapter\Entity\Context
      */
     private $context;
     /**
@@ -42,7 +42,7 @@ class ProductDecorator
     private $shopId;
 
     public function __construct(
-        PrestaShop\PrestaShop\Adapter\Entity\Context $context,
+        \PrestaShop\PrestaShop\Adapter\Entity\Context $context,
         LanguageRepository $languageRepository,
         ProductRepository $productRepository,
         CategoryRepository $categoryRepository,
@@ -57,7 +57,7 @@ class ProductDecorator
         $this->bundleRepository = $bundleRepository;
 
         if ($this->context->shop === null) {
-            throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
+            throw new \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
         }
 
         $this->shopId = (int) $this->context->shop->id;
@@ -70,7 +70,7 @@ class ProductDecorator
      *
      * @return void
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     public function decorateProducts(array &$products, $langIso, $langId)
     {
@@ -116,7 +116,7 @@ class ProductDecorator
     {
         try {
             if ($this->context->link === null) {
-                throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No link context');
+                throw new \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No link context');
             }
 
             $product['link'] = $this->context->link->getProductLink(
@@ -273,7 +273,7 @@ class ProductDecorator
      *
      * @return void
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     private function addFeatureValues(array &$products, $langId)
     {
@@ -291,7 +291,7 @@ class ProductDecorator
      *
      * @return void
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     private function addAttributeValues(array &$products, $langId)
     {
@@ -308,7 +308,7 @@ class ProductDecorator
      *
      * @return void
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
      */
     private function addImages(array &$products)
     {
@@ -354,7 +354,7 @@ class ProductDecorator
             $productImageIds = array_diff($productImageIds, [$coverImageId]);
 
             if ($this->context->link === null) {
-                throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No link context');
+                throw new \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No link context');
             }
 
             $link = $this->context->link;

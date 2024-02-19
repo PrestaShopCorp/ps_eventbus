@@ -8,15 +8,15 @@ use PrestaShop\PrestaShop\Core\Addon\Theme\ThemeManagerBuilder;
 class ThemeRepository
 {
     /**
-     * @var PrestaShop\PrestaShop\Adapter\Entity\Context
+     * @var \PrestaShop\PrestaShop\Adapter\Entity\Context
      */
     private $context;
     /**
-     * @var PrestaShop\PrestaShop\Adapter\Entity\Db
+     * @var \PrestaShop\PrestaShop\Adapter\Entity\Db
      */
     private $db;
 
-    public function __construct(\Context $context, PrestaShop\PrestaShop\Adapter\Entity\Db $db)
+    public function __construct(\Context $context, \PrestaShop\PrestaShop\Adapter\Entity\Db $db)
     {
         $this->context = $context;
         $this->db = $db;
@@ -29,7 +29,7 @@ class ThemeRepository
     {
         if (version_compare(_PS_VERSION_, '1.7', '>')) {
             if ($this->context->shop === null) {
-                throw new PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
+                throw new \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
             }
 
             $themeRepository = (new ThemeManagerBuilder($this->context, $this->db))
@@ -52,11 +52,11 @@ class ThemeRepository
             }, array_keys($themes), $themes);
         } else {
             /* @phpstan-ignore-next-line */
-            $themes = PrestaShop\PrestaShop\Adapter\Entity\Theme::getAvailable(false);
+            $themes = \PrestaShop\PrestaShop\Adapter\Entity\Theme::getAvailable(false);
 
             return array_map(function ($theme) {
                 /* @phpstan-ignore-next-line */
-                $themeObj = PrestaShop\PrestaShop\Adapter\Entity\Theme::getByDirectory($theme);
+                $themeObj = \PrestaShop\PrestaShop\Adapter\Entity\Theme::getByDirectory($theme);
 
                 $themeData = [
                     'id' => md5($theme),
@@ -65,9 +65,9 @@ class ThemeRepository
                 ];
 
                 /* @phpstan-ignore-next-line */
-                if ($themeObj instanceof PrestaShop\PrestaShop\Adapter\Entity\Theme) {
+                if ($themeObj instanceof \PrestaShop\PrestaShop\Adapter\Entity\Theme) {
                     /* @phpstan-ignore-next-line */
-                    $themeInfo = PrestaShop\PrestaShop\Adapter\Entity\Theme::getThemeInfo($themeObj->id);
+                    $themeInfo = \PrestaShop\PrestaShop\Adapter\Entity\Theme::getThemeInfo($themeObj->id);
 
                     $themeData['properties'] = [
                         'theme_id' => md5($theme),

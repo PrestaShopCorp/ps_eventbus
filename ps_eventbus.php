@@ -25,8 +25,8 @@
  */
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\PrestaShop\Adapter\Entity\Db;
-use PrestaShop\PrestaShop\Adapter\Entity\Module;
+use \PrestaShop\PrestaShop\Adapter\Entity\Db;
+use \PrestaShop\PrestaShop\Adapter\Entity\Module;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -197,7 +197,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @return PrestaShop\PrestaShop\Adapter\Entity\Context
+     * @return \PrestaShop\PrestaShop\Adapter\Entity\Context
      */
     public function getContext()
     {

@@ -50,7 +50,7 @@ class StoreDecorator
             $store['id_shop'] = (int) $store['id_shop'];
         } // TODO: statusCode:465 for PS 1.6 here, what should we set in the else ?
 
-        $store['created_at'] = (new PrestaShop\PrestaShop\Adapter\Entity\DateTime($store['created_at'], new PrestaShop\PrestaShop\Adapter\Entity\DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
-        $store['updated_at'] = (new PrestaShop\PrestaShop\Adapter\Entity\DateTime($store['updated_at'], new PrestaShop\PrestaShop\Adapter\Entity\DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
+        $store['created_at'] = (new \PrestaShop\PrestaShop\Adapter\Entity\DateTime($store['created_at'], new \PrestaShop\PrestaShop\Adapter\Entity\DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
+        $store['updated_at'] = (new \PrestaShop\PrestaShop\Adapter\Entity\DateTime($store['updated_at'], new \PrestaShop\PrestaShop\Adapter\Entity\DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
     }
 }

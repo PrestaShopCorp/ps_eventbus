@@ -29,7 +29,7 @@ class MultipartBody implements StreamInterface
      * @param array $files Associative array of PostFileInterface objects
      * @param string $boundary You can optionally provide a specific boundary
      *
-     * @throws PrestaShop\PrestaShop\Adapter\Entity\InvalidArgumentException
+     * @throws \PrestaShop\PrestaShop\Adapter\Entity\InvalidArgumentException
      */
     public function __construct(
         array $fields = [],
@@ -112,7 +112,7 @@ class MultipartBody implements StreamInterface
 
         foreach ($files as $file) {
             if (!$file instanceof PostFileInterface) {
-                throw new PrestaShop\PrestaShop\Adapter\Entity\InvalidArgumentException('All POST fields must implement PostFieldInterface');
+                throw new \PrestaShop\PrestaShop\Adapter\Entity\InvalidArgumentException('All POST fields must implement PostFieldInterface');
             }
 
             $stream->addStream(

@@ -42,6 +42,6 @@ class ProductSupplierDecorator
         $productSupplier['id_supplier'] = (int) $productSupplier['id_supplier'];
         $productSupplier['product_supplier_price_te'] = (float) $productSupplier['product_supplier_price_te'];
         $productSupplier['id_currency'] = (int) $productSupplier['id_currency'];
-        $productSupplier['created_at'] = (new PrestaShop\PrestaShop\Adapter\Entity\DateTime($productSupplier['created_at'], new PrestaShop\PrestaShop\Adapter\Entity\DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
+        $productSupplier['created_at'] = (new \PrestaShop\PrestaShop\Adapter\Entity\DateTime($productSupplier['created_at'], new \PrestaShop\PrestaShop\Adapter\Entity\DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
     }
 }
