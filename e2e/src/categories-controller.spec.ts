@@ -1,37 +1,35 @@
 import {MockProbe} from './helpers/mock-probe';
 import testConfig from './helpers/test.config';
 import request from 'supertest';
-import {beforeEach} from "@jest/globals";
+import {beforeEach, expect} from "@jest/globals";
+import axios, {AxiosError} from "axios";
 
 const controller = 'apiCategories';
 const endpoint = `/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5`;
 
 describe('CategoriesController', () => {
-  let probe: MockProbe;
-
-  beforeEach(() => {
-    probe = new MockProbe();
-  });
-
-  it('should be defined', () => {
-    expect(testConfig.prestashopUrl).toBeDefined();
-  });
+  let probe: MockProbe = new MockProbe();;
 
   it('should return 454 with an invalid job id (sync-api status 454)', async () => {
-    const jobId = 'invalid-job-id'
+      expect.assertions(4);
 
-    const messages = probe.waitForMessages(1, {params: {id: jobId}});
+      const jobId = 'invalid-job-id'
+      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&job_id=${jobId}`
 
-    const stuff = await request(testConfig.prestashopUrl)
-      .get(`/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&job_id=${jobId}`)
-      .set('Host', testConfig.prestaShopHostHeader)
-      .redirects(1)
-      .expect('content-type', /json/)
-      .expect(454);
+      const messages = probe.waitForMessages(1, {params: {id: jobId}});
 
-    const syncApiRequest = await messages;
+      await axios.get(url, {
+        headers: {'Host': testConfig.prestaShopHostHeader}
+      }).catch(err => {
+        expect(err.response.status).toEqual(454);
+        expect(err.response.headers).toMatchObject({'content-type': /json/});
+      })
 
-    expect(syncApiRequest[0].method).toBe('GET');
-    expect(syncApiRequest[0].url.split('/')).toContain(jobId);
-  });
+      const syncApiRequest = await messages;
+
+      expect(syncApiRequest[0].method).toBe('GET');
+      expect(syncApiRequest[0].url.split('/')).toContain(jobId);
+    }
+  )
+  ;
 });
