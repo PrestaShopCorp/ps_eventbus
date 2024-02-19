@@ -7,6 +7,7 @@ import axios, {AxiosError} from "axios";
 describe('Reject invalid job-id', () => {
   let testIndex = 0;
   let probe = new MockProbe();
+
   const controllers = testConfig.controllers.filter(it => !['apiHealthCheck'].includes(it))
 
   let jobId: string;
