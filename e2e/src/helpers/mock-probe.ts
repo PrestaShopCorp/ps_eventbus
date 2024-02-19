@@ -1,6 +1,6 @@
 import WebSocket from 'ws';
 import { WebSocketSubject} from "rxjs/webSocket";
-import {bufferCount, catchError, filter, lastValueFrom, map, Observable, take, tap, timeout} from "rxjs";
+import {bufferCount, catchError, filter, lastValueFrom, map, Observable, Subject, take, tap, timeout} from "rxjs";
 import R from 'ramda';
 
 const PROBE_TIMEOUT=1000;
@@ -35,8 +35,7 @@ export class MockProbe {
    * @param match filter only messages matching this object
    */
   public async waitForMessages(expectedMessageCount = 1, match?: Partial<MockProbeResponse>): Promise<MockProbeResponse[]> {
-    const $messages = MockProbe.wsConnection.pipe(
-      tap(console.log),
+    const $messages: Observable<MockProbeResponse[]> = MockProbe.wsConnection.pipe(
       filter(message => {
         if (match) {
           return (R.whereEq(match, message));

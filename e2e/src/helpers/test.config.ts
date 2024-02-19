@@ -1,9 +1,4 @@
 export default {
-  // server mocks configuration
-  syncApiPort: process.env.SYNC_API_PORT ?? '3232',
-  collectorApiPort: process.env.COLLECTOR_API_PORT ?? '3333',
-  liveSyncApiPort: process.env.LIVE_SYNC_API_PORT ?? '3434',
-
   // client test configuration
   prestashopUrl:
     process.env.RUN_IN_DOCKER === '1'
@@ -11,10 +6,15 @@ export default {
       : 'http://localhost:8000',
   prestaShopHostHeader: 'localhost:8000',
 
-  mockProbeUrl:
+  mockBaseUrl:
     process.env.RUN_IN_DOCKER === '1'
-      ? 'http://reverse-proxy/mock-probe'
-      : 'http://localhost:80/mock-probe',
+      ? 'http://reverse-proxy'
+      : 'http://localhost:80',
+
+  mockProbePath: '/mock-probe',
+  mockSyncApiPath: '/sync/v1',
+  mockCollectorPath: '/collector/v1',
+  mockLiveSyncApiPath: '/live-sync-api/v1',
 
   // list of controllers
   controllers: [

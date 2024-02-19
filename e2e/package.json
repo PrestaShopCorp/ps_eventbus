@@ -23,7 +23,8 @@
     "ws": "^8.16.0",
     "rxjs": "^7.8.1",
     "ramda": "^0.29.1",
-    "@types/ramda": "^0.29.1"
+    "@types/ramda": "^0.29.1",
+    "axios": "^1.6.7"
   },
   "engines": {
     "yarn": "please use pnpm",

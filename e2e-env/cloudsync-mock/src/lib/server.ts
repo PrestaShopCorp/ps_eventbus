@@ -8,6 +8,10 @@ export class Server {
   public constructor(probe: WsServer) {
     this.api = express();
 
+    this.api.get("/healthcheck", (_req, res) => {
+      res.status(200).send({mock: this.constructor.name});
+    });
+
     this.api.use((req: Request, res: Response, next: NextFunction) => {
       // send data to probe after parsing params
       req.on('close', () => {
