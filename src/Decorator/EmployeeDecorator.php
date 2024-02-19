@@ -52,7 +52,7 @@ class EmployeeDecorator
         $employee['id_last_customer_message'] = (int) $employee['id_last_customer_message'];
         $employee['id_last_customer'] = (int) $employee['id_last_customer'];
 
-        $employee['has_enable_gravatar'] = (bool) $employee['has_enable_gravatar'];
+        $employee['has_enabled_gravatar'] = (bool) $employee['has_enabled_gravatar'];
 
         $timezone = (string) $this->configurationRepository->get('PS_TIMEZONE');
         $employee['last_connection_date'] = (new \DateTime($employee['last_connection_date'], new \DateTimeZone($timezone)))->format('Y-m-d\TH:i:sO');
