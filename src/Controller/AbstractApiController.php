@@ -98,6 +98,8 @@ abstract class AbstractApiController extends ModuleFrontController
         $this->errorHandler = $this->module->getService(ErrorHandler::class);
         try {
             $this->psAccountsService = Module::getInstanceByName('ps_accounts');
+            dump($this->psAccountsService = Module::getInstanceByName('ps_accounts'));
+            die;
             $this->proxyService = $this->module->getService(ProxyService::class);
             $this->authorizationService = $this->module->getService(ApiAuthorizationService::class);
             $this->synchronizationService = $this->module->getService(SynchronizationService::class);
@@ -119,6 +121,8 @@ abstract class AbstractApiController extends ModuleFrontController
         $this->startTime = time();
 
         try {
+            
+
             $this->authorize();
         } catch (PrestaShopDatabaseException $exception) {
             $this->errorHandler->handle($exception);

@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use GuzzleHttp\Psr7\Request;
 use \PrestaShop\CircuitBreaker\Client\GuzzleClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
 
@@ -85,7 +84,7 @@ class SyncApiClient
         );
 
         $jsonResponse = json_decode($rawResponse);
- 
+
         return [
             'status' => substr((string) $jsonResponse->statusCode, 0, 1) === '2',
             'httpCode' => $jsonResponse->statusCode,
