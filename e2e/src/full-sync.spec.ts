@@ -1,7 +1,6 @@
 import {MockProbe} from './helpers/mock-probe';
 import testConfig from './helpers/test.config';
 import * as matchers from 'jest-extended';
-import {describe} from "@jest/globals";
 import axios from "axios";
 
 expect.extend(matchers);
@@ -26,18 +25,17 @@ describe('Full Sync', () => {
       const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
 
       // act
-      const response = await axios.post(url, {
+      await axios.post(url, {
         headers: {
           'Host': testConfig.prestaShopHostHeader
         },
+      }).then(response => {
+        // assert
+        expect(response.status).toBeOneOf([200, 201])
+        expect(response.headers).toMatchObject({'content-type': /json/})
       }).catch(err => {
-        console.error(err)
-        throw err;
+        expect(err).toBeNull()
       });
-
-      // assert
-      expect(response.status).toBeOneOf([200, 201])
-      expect(response.headers).toMatchObject({'content-type': /json/})
     });
 
     it(`${controller} should upload to collector`, async () => {
@@ -46,13 +44,12 @@ describe('Full Sync', () => {
       const messages = probe.waitForMessages(1, {url: `/upload/${jobId}`});
 
       // act
-      const response = await axios.post(url, {
+      await axios.post(url, {
         headers: {
           'Host': testConfig.prestaShopHostHeader
         },
       }).catch(err => {
-        console.error(err)
-        throw err;
+        expect(err).toBeNull()
       })
       const collectorRequest = await messages;
 
