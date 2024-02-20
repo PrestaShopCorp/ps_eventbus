@@ -131,6 +131,7 @@ describe('Full Sync', () => {
 
         // assert
         expect(collectorRequest[0].method).toBe('POST');
+        expect(collectorRequest[0].headers).toMatchObject({"full-sync-requested": "1"});
       });
     }
   })
