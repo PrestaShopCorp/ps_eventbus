@@ -168,10 +168,10 @@ class ImageRepository
     {
         $query->select('i.id_image');
         $query->select('i.id_product');
-      $query->select('i.position');
-      $query->select('i.cover');
+        $query->select('i.position');
+        $query->select('i.cover');
         $query->select('il.id_lang');
-      $query->select('il.legend');
-      $query->select('is.id_shop');
+        $query->select('il.legend');
+        $query->select('is.id_shop');
     }
 }
