@@ -7,17 +7,6 @@ use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 class ProductSupplierDecorator
 {
     /**
-     * @var string
-     */
-    private $timezone;
-
-    public function __construct(
-        ConfigurationRepository $configurationRepository
-    ) {
-        $this->timezone = (string) $configurationRepository->get('PS_TIMEZONE');
-    }
-
-    /**
      * @param array $productSuppliers
      *
      * @return void
