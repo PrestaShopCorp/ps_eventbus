@@ -1,7 +1,9 @@
 import {MockProbe} from './helpers/mock-probe';
 import testConfig from './helpers/test.config';
 import * as matchers from 'jest-extended';
-import axios from "axios";
+import axios, {AxiosError} from "axios";
+import R from "ramda";
+import {logAxiosError} from "./helpers/log-helper";
 
 expect.extend(matchers);
 
@@ -34,7 +36,8 @@ describe('Full Sync', () => {
         expect(response.status).toBeOneOf([200, 201])
         expect(response.headers).toMatchObject({'content-type': /json/})
       }).catch(err => {
-        expect(err).toBeNull()
+        logAxiosError(err);
+        expect(err).toBeNull();
       });
     });
 
@@ -49,7 +52,8 @@ describe('Full Sync', () => {
           'Host': testConfig.prestaShopHostHeader
         },
       }).catch(err => {
-        expect(err).toBeNull()
+        logAxiosError(err);
+        expect(err).toBeNull();
       })
       const collectorRequest = await messages;
 
