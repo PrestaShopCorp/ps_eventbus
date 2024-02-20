@@ -2,24 +2,28 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use \PrestaShop\PrestaShop\Adapter\Entity\Db;
+use \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException;
+use \PrestaShop\PrestaShop\Adapter\Entity\DbQuery;
+
 class CartRuleRepository
 {
     /**
-     * @var \PrestaShop\PrestaShop\Adapter\Entity\Db
+     * @var Db
      */
     private $db;
 
-    public function __construct(\Db $db)
+    public function __construct()
     {
-        $this->db = $db;
+        $this->db = Db::getInstance();
     }
 
     /**
-     * @return \PrestaShop\PrestaShop\Adapter\Entity\DbQuery
+     * @return DbQuery
      */
     public function getBaseQuery()
     {
-        $query = new \PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
+        $query = new DbQuery();
 
         $query->from('cart_rule', 'cr');
 
@@ -32,7 +36,7 @@ class CartRuleRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws PrestaShopDatabaseException
      */
     public function getCartRules($limit, $offset)
     {
@@ -60,7 +64,7 @@ class CartRuleRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws PrestaShopDatabaseException
      */
     public function getCartRulesIncremental($limit, $cartRuleIds)
     {
@@ -92,7 +96,7 @@ class CartRuleRepository
      *
      * @return array
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws PrestaShopDatabaseException
      */
     public function getQueryForDebug($limit, $offset)
     {

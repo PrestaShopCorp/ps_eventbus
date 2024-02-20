@@ -2,28 +2,32 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use \PrestaShop\PrestaShop\Adapter\Entity\Db;
+use \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException;
+use \PrestaShop\PrestaShop\Adapter\Entity\DbQuery;
+
 class OrderRepository
 {
     public const ORDERS_TABLE = 'orders';
 
     /**
-     * @var \PrestaShop\PrestaShop\Adapter\Entity\Db
+     * @var Db
      */
     private $db;
 
-    public function __construct(\Db $db)
+    public function __construct()
     {
-        $this->db = $db;
+        $this->db = Db::getInstance();
     }
 
     /**
      * @param int $shopId
      *
-     * @return \PrestaShop\PrestaShop\Adapter\Entity\DbQuery
+     * @return DbQuery
      */
     public function getBaseQuery($shopId)
     {
-        $query = new \PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
+        $query = new DbQuery();
         $query->from(self::ORDERS_TABLE, 'o')
             ->leftJoin('currency', 'c', 'o.id_currency = c.id_currency')
             ->leftJoin('order_slip', 'os', 'o.id_order = os.id_order')
@@ -46,7 +50,7 @@ class OrderRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws PrestaShopDatabaseException
      */
     public function getOrders($offset, $limit, $shopId)
     {
@@ -83,7 +87,7 @@ class OrderRepository
      *
      * @return array
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws PrestaShopDatabaseException
      */
     public function getOrdersIncremental($limit, $shopId, $orderIds)
     {
@@ -106,7 +110,7 @@ class OrderRepository
      *
      * @return array
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $shopId)
     {
@@ -125,11 +129,11 @@ class OrderRepository
     }
 
     /**
-     * @param \PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
+     * @param DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $query)
+    private function addSelectParameters(DbQuery $query)
     {
         $query->select('o.id_order, o.reference, o.id_customer, o.id_cart, o.current_state');
         $query->select('o.conversion_rate, o.total_paid_tax_excl, o.total_paid_tax_incl');

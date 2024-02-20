@@ -4,12 +4,16 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
 
+use \PrestaShop\PrestaShop\Adapter\Entity\Db;
+use \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException;
+use \PrestaShop\PrestaShop\Adapter\Entity\DbQuery;
+
 class DeletedObjectsRepository
 {
     public const DELETED_OBJECTS_TABLE = 'eventbus_deleted_objects';
 
     /**
-     * @var \PrestaShop\PrestaShop\Adapter\Entity\Db
+     * @var Db
      */
     private $db;
 
@@ -18,9 +22,9 @@ class DeletedObjectsRepository
      */
     private $errorHandler;
 
-    public function __construct(\Db $db, ErrorHandlerInterface $errorHandler)
+    public function __construct(ErrorHandlerInterface $errorHandler)
     {
-        $this->db = $db;
+        $this->db = Db::getInstance();
         $this->errorHandler = $errorHandler;
     }
 
@@ -29,11 +33,11 @@ class DeletedObjectsRepository
      *
      * @return array
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws PrestaShopDatabaseException
      */
     public function getDeletedObjectsGrouped($shopId)
     {
-        $query = new \PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
+        $query = new DbQuery();
 
         $query->select('type, GROUP_CONCAT(id_object SEPARATOR ";") as ids')
             ->from(self::DELETED_OBJECTS_TABLE)
@@ -66,7 +70,7 @@ class DeletedObjectsRepository
                 ],
                 false,
                 true,
-                \PrestaShop\PrestaShop\Adapter\Entity\Db::ON_DUPLICATE_KEY
+                Db::ON_DUPLICATE_KEY
             );
         } catch (\PrestaShopDatabaseException $e) {
             $this->errorHandler->handle($e);

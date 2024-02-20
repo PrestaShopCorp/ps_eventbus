@@ -21,7 +21,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
-use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 use Raven_Client;
 
 /**
@@ -34,16 +33,18 @@ class ErrorHandler implements ErrorHandlerInterface
      */
     protected $client;
 
-    public function __construct(\PrestaShop\PrestaShop\Adapter\Entity\Module $module, PsAccounts $accountsService, string $sentryDsn, string $sentryEnv)
+    public function __construct(\PrestaShop\PrestaShop\Adapter\Entity\Module $module, string $sentryDsn, string $sentryEnv)
     {
         $psAccounts = \PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName('ps_accounts');
+        $psAccountsService = $psAccounts->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
+
         try {
             $this->client = new Raven_Client(
                 $sentryDsn,
                 [
                     'level' => 'warning',
                     'tags' => [
-                        'shop_id' => $accountsService->getPsAccountsService()->getShopUuid(),
+                        'shop_id' => $psAccountsService->getShopUuid(),
                         'ps_eventbus_version' => $module->version,
                         'ps_accounts_version' => $psAccounts ? $psAccounts->version : false,
                         'php_version' => phpversion(),
@@ -56,7 +57,7 @@ class ErrorHandler implements ErrorHandlerInterface
             );
             /** @var string $configurationPsShopEmail */
             $configurationPsShopEmail = \PrestaShop\PrestaShop\Adapter\Entity\Configuration::get('PS_SHOP_EMAIL');
-            $this->client->set_user_data($accountsService->getPsAccountsService()->getShopUuid(), $configurationPsShopEmail);
+            $this->client->set_user_data($psAccountsService->getShopUuid(), $configurationPsShopEmail);
         } catch (\Exception $e) {
         }
     }

@@ -3,10 +3,8 @@
 namespace PrestaShop\Module\PsEventbus\Api;
 
 use GuzzleHttp\Psr7\Request;
+use PrestaShop\CircuitBreaker\Client\GuzzleClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
-use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
-use Prestashop\ModuleLibGuzzleAdapter\Interfaces\HttpClientInterface;
-use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 
 class LiveSyncApiClient
 {
@@ -35,15 +33,18 @@ class LiveSyncApiClient
     private $shopId;
 
     /**
-     * @param PsAccounts $psAccounts
      * @param string $liveSyncApiUrl
      * @param \Ps_eventbus $module
      */
-    public function __construct($psAccounts, $liveSyncApiUrl, $module)
+    public function __construct($liveSyncApiUrl, $module)
     {
         $this->module = $module;
-        $this->jwt = $psAccounts->getPsAccountsService()->getOrRefreshToken();
-        $this->shopId = $psAccounts->getPsAccountsService()->getShopUuid();
+
+        $psAccounts = \PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName('ps_accounts');
+        $psAccountsService = $psAccounts->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
+
+        $this->jwt = $psAccountsService->getOrRefreshToken();
+        $this->shopId = $psAccountsService->getShopUuid();
         $this->liveSyncApiUrl = $liveSyncApiUrl;
     }
 
@@ -52,11 +53,11 @@ class LiveSyncApiClient
      *
      * @param int $timeout
      *
-     * @return HttpClientInterface
+     * @return GuzzleClient
      */
     private function getClient($timeout = Config::SYNC_API_MAX_TIMEOUT)
     {
-        return (new ClientFactory())->getClient([
+        return new GuzzleClient([
             'allow_redirects' => true,
             'connect_timeout' => 3,
             'http_errors' => false,
@@ -73,24 +74,26 @@ class LiveSyncApiClient
      */
     public function liveSync(string $shopContent, int $shopContentId, string $action)
     {
-        $rawResponse = $this->getClient(3)->sendRequest(
-            new Request(
-                'POST',
-                $this->liveSyncApiUrl . '/notify/' . $this->shopId,
-                [
+        $rawResponse = $this->getClient(3)->request(
+            $this->liveSyncApiUrl . '/notify/' . $this->shopId,
+            [
+                'method' => 'POST',     
+                'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . $this->jwt,
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                     'Content-Type' => 'application/json',
                 ],
-                '{"shopContents": ["' . $shopContent . '"], "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}'
-            )
+                'body' => '{"shopContents": ["' . $shopContent . '"], "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}'
+            ]
         );
 
+        $jsonResponse = json_decode($rawResponse);
+
         return [
-            'status' => substr((string) $rawResponse->getStatusCode(), 0, 1) === '2',
-            'httpCode' => $rawResponse->getStatusCode(),
-            'body' => $rawResponse->getBody(),
+            'status' => substr((string) $jsonResponse->statusCode, 0, 1) === '2',
+            'httpCode' => $jsonResponse->statusCode,
+            'body' => $jsonResponse->body,
         ];
     }
 }

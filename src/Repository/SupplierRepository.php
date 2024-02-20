@@ -2,21 +2,27 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use \PrestaShop\PrestaShop\Adapter\Entity\Context;
+use \PrestaShop\PrestaShop\Adapter\Entity\Db;
+use \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException;
+use \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException;
+use \PrestaShop\PrestaShop\Adapter\Entity\DbQuery;
+
 class SupplierRepository
 {
     /**
-     * @var \PrestaShop\PrestaShop\Adapter\Entity\Db
+     * @var Db
      */
     private $db;
 
     /**
-     * @var \PrestaShop\PrestaShop\Adapter\Entity\Context
+     * @var Context
      */
     private $context;
 
-    public function __construct(\Db $db, \PrestaShop\PrestaShop\Adapter\Entity\Context $context)
+    public function __construct(Context $context)
     {
-        $this->db = $db;
+        $this->db = Db::getInstance();
         $this->context = $context;
     }
 
@@ -27,7 +33,7 @@ class SupplierRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws PrestaShopDatabaseException
      */
     public function getSuppliers($offset, $limit, $langIso)
     {
@@ -61,7 +67,7 @@ class SupplierRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws PrestaShopDatabaseException
      */
     public function getSuppliersIncremental($limit, $langIso, $supplierIds)
     {
@@ -78,19 +84,19 @@ class SupplierRepository
     /**
      * @param string $langIso
      *
-     * @return \PrestaShop\PrestaShop\Adapter\Entity\DbQuery
+     * @return DbQuery
      */
     public function getBaseQuery($langIso)
     {
         if ($this->context->shop === null) {
-            throw new \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
+            throw new PrestaShopException('No shop context');
         }
 
         $shopId = (int) $this->context->shop->id;
 
         /** @var int $langId */
         $langId = (int) \PrestaShop\PrestaShop\Adapter\Entity\Language::getIdByIso($langIso);
-        $query = new \PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
+        $query = new DbQuery();
         $query->from('supplier', 'su')
             ->innerJoin('supplier_lang', 'sul', 'su.id_supplier = sul.id_supplier AND sul.id_lang = ' . (int) $langId)
             ->innerJoin('supplier_shop', 'sus', 'su.id_supplier = sus.id_supplier AND sus.id_shop = ' . $shopId);
@@ -105,7 +111,7 @@ class SupplierRepository
      *
      * @return array
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $langIso)
     {
@@ -124,11 +130,11 @@ class SupplierRepository
     }
 
     /**
-     * @param \PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
+     * @param DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $query)
+    private function addSelectParameters(DbQuery $query)
     {
         $query->select('su.id_supplier, su.name, su.date_add as created_at, su.date_upd as updated_at, su.active, sul.id_lang');
         $query->select('sul.description, sul.meta_title, sul.meta_keywords, sul.meta_description, sus.id_shop');

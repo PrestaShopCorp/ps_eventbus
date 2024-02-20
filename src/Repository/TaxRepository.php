@@ -2,15 +2,21 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use \PrestaShop\PrestaShop\Adapter\Entity\Context;
+use \PrestaShop\PrestaShop\Adapter\Entity\Db;
+use \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException;
+use \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException;
+use \PrestaShop\PrestaShop\Adapter\Entity\DbQuery;
+
 class TaxRepository
 {
     /**
-     * @var \PrestaShop\PrestaShop\Adapter\Entity\Db
+     * @var Db
      */
     private $db;
 
     /**
-     * @var \PrestaShop\PrestaShop\Adapter\Entity\Context
+     * @var Context
      */
     private $context;
 
@@ -19,30 +25,30 @@ class TaxRepository
      */
     private $countryIsoCodeCache = [];
 
-    public function __construct(\Db $db, \PrestaShop\PrestaShop\Adapter\Entity\Context $context)
+    public function __construct(Context $context)
     {
-        $this->db = $db;
+        $this->db = Db::getInstance();
         $this->context = $context;
     }
 
     /**
-     * @return \PrestaShop\PrestaShop\Adapter\Entity\DbQuery
+     * @return DbQuery
      */
     private function getBaseQuery()
     {
         if ($this->context->shop == null) {
-            throw new \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
+            throw new PrestaShopException('No shop context');
         }
 
         $shopId = (int) $this->context->shop->id;
 
         if ($this->context->language == null) {
-            throw new \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No language context');
+            throw new PrestaShopException('No language context');
         }
 
         $language = (int) $this->context->language->id;
 
-        $query = new \PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
+        $query = new DbQuery();
 
         $query->from('tax', 't')
             ->innerJoin('tax_rule', 'tr', 'tr.id_tax = t.id_tax')
@@ -62,7 +68,7 @@ class TaxRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws PrestaShopDatabaseException
      */
     public function getCarrierTaxesByZone($zoneId, $taxRulesGroupId, $active = true)
     {

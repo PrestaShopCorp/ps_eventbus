@@ -6,7 +6,12 @@ use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsAccounts\Api\Client\AccountsClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
-use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
+use \PrestaShop\PrestaShop\Adapter\Entity\Context;
+use \PrestaShop\PrestaShop\Adapter\Entity\Db;
+use \PrestaShop\PrestaShop\Adapter\Entity\Language;
+use \PrestaShop\PrestaShop\Adapter\Entity\Module;
+use \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException;
+use \PrestaShop\PrestaShop\Adapter\Entity\DbQuery;
 
 class ServerInformationRepository
 {
@@ -23,11 +28,11 @@ class ServerInformationRepository
      */
     private $configurationRepository;
     /**
-     * @var \PrestaShop\PrestaShop\Adapter\Entity\Context
+     * @var Context
      */
     private $context;
     /**
-     * @var \PrestaShop\PrestaShop\Adapter\Entity\Db
+     * @var Db
      */
     private $db;
     /**
@@ -52,13 +57,11 @@ class ServerInformationRepository
     private $errorHandler;
 
     public function __construct(
-        \PrestaShop\PrestaShop\Adapter\Entity\Context $context,
-        \PrestaShop\PrestaShop\Adapter\Entity\Db $db,
+        Context $context,
         CurrencyRepository $currencyRepository,
         LanguageRepository $languageRepository,
         ConfigurationRepository $configurationRepository,
         ShopRepository $shopRepository,
-        PsAccounts $psAccounts,
         ErrorHandlerInterface $errorHandler,
         array $configuration
     ) {
@@ -67,8 +70,8 @@ class ServerInformationRepository
         $this->configurationRepository = $configurationRepository;
         $this->shopRepository = $shopRepository;
         $this->context = $context;
-        $this->db = $db;
-        $this->psAccountsService = $psAccounts->getPsAccountsService();
+        $this->db = Db::getInstance();
+        $this->psAccountsService = Module::getInstanceByName('ps_accounts');
         $this->configuration = $configuration;
         $this->createdAt = $this->shopRepository->getCreatedAt();
         $this->errorHandler = $errorHandler;
@@ -79,13 +82,13 @@ class ServerInformationRepository
      *
      * @return array[]
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException
+     * @throws PrestaShopException
      */
     public function getServerInformation($langIso = '')
     {
-        $langId = !empty($langIso) ? (int) \PrestaShop\PrestaShop\Adapter\Entity\Language::getIdByIso($langIso) : null;
+        $langId = !empty($langIso) ? (int) Language::getIdByIso($langIso) : null;
         $timezone = (string) $this->configurationRepository->get('PS_TIMEZONE');
-        $createdAt = (new \PrestaShop\PrestaShop\Adapter\Entity\DateTime($this->createdAt, new \PrestaShop\PrestaShop\Adapter\Entity\DateTimeZone($timezone)))->format('Y-m-d\TH:i:sO');
+        $createdAt = (new DateTime($this->createdAt, new DateTimeZone($timezone)))->format('Y-m-d\TH:i:sO');
         $folderCreatedAt = null;
 
         /* This file is created on installation and never modified.
@@ -94,11 +97,11 @@ class ServerInformationRepository
         $filename = './img/admin/enabled.gif';
 
         if (file_exists($filename)) {
-            $folderCreatedAt = (new \PrestaShop\PrestaShop\Adapter\Entity\DateTime(date('Y-m-d H:i:s', (int) filectime($filename)), new \PrestaShop\PrestaShop\Adapter\Entity\DateTimeZone('Europe/Paris')))->format('Y-m-d\TH:i:sO');
+            $folderCreatedAt = (new DateTime(date('Y-m-d H:i:s', (int) filectime($filename)), new DateTimeZone('Europe/Paris')))->format('Y-m-d\TH:i:sO');
         }
 
         if ($this->context->link === null) {
-            throw new \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No link context');
+            throw new PrestaShopException('No link context');
         }
 
         return [
@@ -161,7 +164,7 @@ class ServerInformationRepository
         }
 
         foreach (\Ps_eventbus::REQUIRED_TABLES as $requiredTable) {
-            $query = new \PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
+            $query = new DbQuery();
 
             $query->select('*')
                 ->from($requiredTable)
@@ -184,7 +187,7 @@ class ServerInformationRepository
         return [
             'prestashop_version' => _PS_VERSION_,
             'ps_eventbus_version' => \Ps_eventbus::VERSION,
-            'ps_accounts_version' => defined('Ps_accounts::VERSION') ? \PrestaShop\PrestaShop\Adapter\Entity\Ps_accounts::VERSION : false, /* @phpstan-ignore-line */
+            'ps_accounts_version' => defined('Ps_accounts::VERSION') ? Ps_accounts::VERSION : false, /* @phpstan-ignore-line */
             'php_version' => $phpVersion,
             'ps_account' => $tokenIsSet,
             'is_valid_jwt' => $tokenValid,
@@ -202,7 +205,7 @@ class ServerInformationRepository
      */
     private function getAccountsClient()
     {
-        $module = \PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName('ps_accounts');
+        $module = Module::getInstanceByName('ps_accounts');
 
         /* @phpstan-ignore-next-line */
         return $module->getService(AccountsClient::class);

@@ -83,6 +83,7 @@ return [
     'patchers' => [
         static function (string $filePath, string $prefix, string $contents): string {
             if (strpos($filePath, 'vendor/prestashop/')) {
+                var_dump($filePath);
                 /* $pattern = '/\s(\\)([A-Za-z]+)(?![A-Za-z\\])/'; */
                 $replacement = '\\PrestaShop\\PrestaShop\\Adapter\Entity';
                 $contents = preg_replace('/\\\\'. $prefix . '/', $replacement, $contents);
@@ -97,7 +98,9 @@ return [
     // For more information see: https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#excluded-symbols
     'exclude-namespaces' => [
         '\PrestaShop\PrestaShop',
-        'Symfony'
+        'Symfony',
+        'PrestaShop\Module\PsAccounts',
+        '\PrestaShop\CircuitBreaker'
         // 'Acme\Foo'                     // The Acme\Foo namespace (and sub-namespaces)
         // '~^PHPUnit\\\\Framework$~',    // The whole namespace PHPUnit\Framework (but not sub-namespaces)
         // '~^$~',                        // The root namespace only

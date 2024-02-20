@@ -3,7 +3,6 @@ services:
     class: PrestaShop\Module\PsEventbus\Api\SyncApiClient
     public: true
     arguments:
-      - '@PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
       - "%ps_eventbus.sync_api_url%"
       - "@ps_eventbus"
 
@@ -11,7 +10,6 @@ services:
     class: PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient
     public: true
     arguments:
-      - '@PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
       - "%ps_eventbus.live_sync_api_url%"
       - "@ps_eventbus"
 
@@ -19,6 +17,5 @@ services:
     class: PrestaShop\Module\PsEventbus\Api\CollectorApiClient
     public: true
     arguments:
-      - '@PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
       - "%ps_eventbus.proxy_api_url%"
       - "@ps_eventbus"

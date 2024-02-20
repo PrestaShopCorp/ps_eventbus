@@ -2,6 +2,10 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use \PrestaShop\PrestaShop\Adapter\Entity\Db;
+use \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException;
+use \PrestaShop\PrestaShop\Adapter\Entity\DbQuery;
+
 class ModuleRepository
 {
     public const MODULE_TABLE = 'module';
@@ -9,21 +13,21 @@ class ModuleRepository
     public const MODULE_SHOP = 'module_shop';
 
     /**
-     * @var \PrestaShop\PrestaShop\Adapter\Entity\Db
+     * @var Db
      */
     private $db;
 
-    public function __construct(\Db $db)
+    public function __construct()
     {
-        $this->db = $db;
+        $this->db = Db::getInstance();
     }
 
     /**
-     * @return \PrestaShop\PrestaShop\Adapter\Entity\DbQuery
+     * @return DbQuery
      */
     public function getBaseQuery()
     {
-        $query = (new \PrestaShop\PrestaShop\Adapter\Entity\DbQuery())
+        $query = (new DbQuery())
           ->from(self::MODULE_TABLE, 'm')
           ->leftJoin(self::MODULE_SHOP, 'm_shop', 'm.id_module = m_shop.id_module');
 
@@ -40,7 +44,7 @@ class ModuleRepository
      *
      * @return array|bool|false|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws PrestaShopDatabaseException
      */
     public function getModules($offset, $limit)
     {
@@ -81,7 +85,7 @@ class ModuleRepository
      *
      * @return array
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit)
     {

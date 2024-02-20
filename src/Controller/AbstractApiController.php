@@ -2,6 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Controller;
 
+use Exception;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
@@ -15,10 +16,11 @@ use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService;
 use PrestaShop\Module\PsEventbus\Service\ProxyService;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
+use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
+use \PrestaShop\PrestaShop\Adapter\Entity\Module;
 use \PrestaShop\PrestaShop\Adapter\Entity\ModuleFrontController;
-use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleNotInstalledException;
-use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleVersionException;
-use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
+use \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException;
+use \PrestaShop\PrestaShop\Adapter\Entity\Tools;
 
 abstract class AbstractApiController extends ModuleFrontController
 {
@@ -85,8 +87,8 @@ abstract class AbstractApiController extends ModuleFrontController
     {
         parent::__construct();
 
-        /** @var \PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository $configurationRepository */
-        $configurationRepository = $this->module->getService(\PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository::class);
+        /** @var ConfigurationRepository $configurationRepository */
+        $configurationRepository = $this->module->getService(ConfigurationRepository::class);
         $this->timezone = (string) $configurationRepository->get('PS_TIMEZONE');
 
         $this->ajax = true;
@@ -95,11 +97,11 @@ abstract class AbstractApiController extends ModuleFrontController
 
         $this->errorHandler = $this->module->getService(ErrorHandler::class);
         try {
-            $this->psAccountsService = $this->module->getService(PsAccounts::class)->getPsAccountsService();
+            $this->psAccountsService = Module::getInstanceByName('ps_accounts');
             $this->proxyService = $this->module->getService(ProxyService::class);
             $this->authorizationService = $this->module->getService(ApiAuthorizationService::class);
             $this->synchronizationService = $this->module->getService(SynchronizationService::class);
-        } catch (ModuleVersionException $exception) {
+        } catch (Exception $exception) {
             $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
         }
@@ -118,7 +120,7 @@ abstract class AbstractApiController extends ModuleFrontController
 
         try {
             $this->authorize();
-        } catch (\PrestaShopDatabaseException $exception) {
+        } catch (PrestaShopDatabaseException $exception) {
             $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
         } catch (EnvVarException $exception) {
@@ -133,19 +135,19 @@ abstract class AbstractApiController extends ModuleFrontController
     /**
      * @return void
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException|EnvVarException|FirebaseException
+     * @throws PrestaShopDatabaseException|EnvVarException|FirebaseException
      */
     private function authorize()
     {
         /** @var string $jobId */
-        $jobId = \PrestaShop\PrestaShop\Adapter\Entity\Tools::getValue('job_id', 'empty_job_id');
+        $jobId = Tools::getValue('job_id', 'empty_job_id');
 
         $authorizationResponse = $this->authorizationService->authorizeCall($jobId);
 
         if (is_array($authorizationResponse)) {
             $this->exitWithResponse($authorizationResponse);
         } elseif (!$authorizationResponse) {
-            throw new \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException('Failed saving job id to database');
+            throw new PrestaShopDatabaseException('Failed saving job id to database');
         }
 
         try {
@@ -167,23 +169,23 @@ abstract class AbstractApiController extends ModuleFrontController
     protected function handleDataSync(PaginatedApiDataProviderInterface $dataProvider)
     {
         /** @var bool $debug */
-        $debug = \PrestaShop\PrestaShop\Adapter\Entity\Tools::getValue('debug') == 1;
+        $debug = Tools::getValue('debug') == 1;
 
         /** @var string $jobId */
-        $jobId = \PrestaShop\PrestaShop\Adapter\Entity\Tools::getValue('job_id');
+        $jobId = Tools::getValue('job_id');
         /** @var string $langIso */
-        $langIso = \PrestaShop\PrestaShop\Adapter\Entity\Tools::getValue('lang_iso', $this->languageRepository->getDefaultLanguageIsoCode());
+        $langIso = Tools::getValue('lang_iso', $this->languageRepository->getDefaultLanguageIsoCode());
         /** @var int $limit */
-        $limit = \PrestaShop\PrestaShop\Adapter\Entity\Tools::getValue('limit', 50);
+        $limit = Tools::getValue('limit', 50);
 
         if ($limit < 0) {
             $this->exitWithExceptionMessage(new QueryParamsException('Invalid URL Parameters', Config::INVALID_URL_QUERY));
         }
 
         /** @var bool $initFullSync */
-        $initFullSync = \PrestaShop\PrestaShop\Adapter\Entity\Tools::getValue('full', 0) == 1;
+        $initFullSync = Tools::getValue('full', 0) == 1;
 
-        $dateNow = (new \PrestaShop\PrestaShop\Adapter\Entity\DateTime('now', new \PrestaShop\PrestaShop\Adapter\Entity\DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
+        $dateNow = (new DateTime('now', new DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
         $offset = 0;
         $incrementalSync = false;
         $response = [];
@@ -277,7 +279,7 @@ abstract class AbstractApiController extends ModuleFrontController
      *
      * @return void
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException
+     * @throws PrestaShopException
      */
     public function ajaxDie($value = null, $controller = null, $method = null)
     {
@@ -297,7 +299,7 @@ abstract class AbstractApiController extends ModuleFrontController
     }
 
     /**
-     * @param \PrestaShop\PrestaShop\Adapter\Entity\Exception $exception
+     * @param Exception $exception
      *
      * @return void
      */
@@ -305,7 +307,7 @@ abstract class AbstractApiController extends ModuleFrontController
     {
         $code = $exception->getCode() == 0 ? 500 : $exception->getCode();
 
-        if ($exception instanceof \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException) {
+        if ($exception instanceof PrestaShopDatabaseException) {
             $code = Config::DATABASE_QUERY_ERROR_CODE;
         } elseif ($exception instanceof EnvVarException) {
             $code = Config::ENV_MISCONFIGURED_ERROR_CODE;
@@ -313,10 +315,6 @@ abstract class AbstractApiController extends ModuleFrontController
             $code = Config::REFRESH_TOKEN_ERROR_CODE;
         } elseif ($exception instanceof QueryParamsException) {
             $code = Config::INVALID_URL_QUERY;
-        } elseif ($exception instanceof ModuleVersionException) {
-            $code = Config::INVALID_PS_ACCOUNTS_VERSION;
-        } elseif ($exception instanceof ModuleNotInstalledException) {
-            $code = Config::PS_ACCOUNTS_NOT_INSTALLED;
         }
 
         $response = [

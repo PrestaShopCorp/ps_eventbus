@@ -2,16 +2,20 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use \PrestaShop\PrestaShop\Adapter\Entity\Db;
+use \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException;
+use \PrestaShop\PrestaShop\Adapter\Entity\DbQuery;
+
 class CurrencyRepository
 {
     /**
-     * @var \PrestaShop\PrestaShop\Adapter\Entity\Db
+     * @var Db
      */
     private $db;
 
-    public function __construct(\Db $db)
+    public function __construct()
     {
-        $this->db = $db;
+        $this->db = Db::getInstance();
     }
 
     /**
@@ -50,7 +54,7 @@ class CurrencyRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws PrestaShopDatabaseException
      */
     public function getCurrencies($offset, $limit)
     {
@@ -82,7 +86,7 @@ class CurrencyRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws PrestaShopDatabaseException
      */
     public function getCurrenciesIncremental($limit, $currencyIds)
     {
@@ -97,11 +101,11 @@ class CurrencyRepository
     }
 
     /**
-     * @return \PrestaShop\PrestaShop\Adapter\Entity\DbQuery
+     * @return DbQuery
      */
     public function getBaseQuery()
     {
-        $query = new \PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
+        $query = new DbQuery();
         $query->from('currency', 'c');
         if ($this->isLangAvailable()) {
             $query->innerJoin('currency_lang', 'cl', 'cl.id_currency = c.id_currency');
@@ -116,7 +120,7 @@ class CurrencyRepository
      *
      * @return array
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit)
     {
@@ -135,11 +139,11 @@ class CurrencyRepository
     }
 
     /**
-     * @param \PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
+     * @param DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $query)
+    private function addSelectParameters(DbQuery $query)
     {
         if ($this->isLangAvailable()) {
             $query->select('c.id_currency, cl.name, c.iso_code, c.conversion_rate, c.deleted, c.active');

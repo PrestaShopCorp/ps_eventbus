@@ -3,10 +3,8 @@
 namespace PrestaShop\Module\PsEventbus\Api;
 
 use GuzzleHttp\Psr7\Request;
+use \PrestaShop\CircuitBreaker\Client\GuzzleClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
-use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
-use Prestashop\ModuleLibGuzzleAdapter\Interfaces\HttpClientInterface;
-use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 
 class SyncApiClient
 {
@@ -35,15 +33,18 @@ class SyncApiClient
     private $shopId;
 
     /**
-     * @param PsAccounts $psAccounts
      * @param string $syncApiUrl
      * @param \Ps_eventbus $module
      */
-    public function __construct($psAccounts, $syncApiUrl, $module)
+    public function __construct($syncApiUrl, $module)
     {
         $this->module = $module;
-        $this->jwt = $psAccounts->getPsAccountsService()->getOrRefreshToken();
-        $this->shopId = $psAccounts->getPsAccountsService()->getShopUuid();
+    
+        $psAccounts = \PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName('ps_accounts');
+        $psAccountsService = $psAccounts->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
+
+        $this->jwt = $psAccountsService->getOrRefreshToken();
+        $this->shopId = $psAccountsService->getShopUuid();
         $this->syncApiUrl = $syncApiUrl;
     }
 
@@ -52,11 +53,11 @@ class SyncApiClient
      *
      * @param int $timeout
      *
-     * @return HttpClientInterface
+     * @return GuzzleClient
      */
     private function getClient($timeout = Config::SYNC_API_MAX_TIMEOUT)
     {
-        return (new ClientFactory())->getClient([
+        return new GuzzleClient([
             'allow_redirects' => true,
             'connect_timeout' => 3,
             'http_errors' => false,
@@ -71,21 +72,23 @@ class SyncApiClient
      */
     public function validateJobId($jobId)
     {
-        $rawResponse = $this->getClient()->sendRequest(
-            new Request(
-                'GET',
-                $this->syncApiUrl . '/job/' . $jobId,
-                [
+        $rawResponse = $this->getClient()->request(
+            $this->syncApiUrl . '/job/' . $jobId,
+            [
+                'method' => 'GET',
+                'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . $this->jwt,
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                 ]
-            )
+            ]
         );
 
+        $jsonResponse = json_decode($rawResponse);
+ 
         return [
-            'status' => substr((string) $rawResponse->getStatusCode(), 0, 1) === '2',
-            'httpCode' => $rawResponse->getStatusCode(),
+            'status' => substr((string) $jsonResponse->statusCode, 0, 1) === '2',
+            'httpCode' => $jsonResponse->statusCode,
         ];
     }
 
@@ -98,24 +101,26 @@ class SyncApiClient
      */
     public function liveSync($shopContent, $shopContentId, $action)
     {
-        $rawResponse = $this->getClient(3)->sendRequest(
-            new Request(
-                'POST',
-                $this->syncApiUrl . '/notify/' . $this->shopId,
-                [
+        $rawResponse = $this->getClient(3)->request(
+            $this->syncApiUrl . '/notify/' . $this->shopId,
+            [
+                'method' => 'POST',
+                'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . $this->jwt,
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                     'Content-Type' => 'application/json',
                 ],
-                '{"shopContents":' . json_encode($shopContent) . ', "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}'
-            )
+                'body' => '{"shopContents":' . json_encode($shopContent) . ', "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}'
+            ]
         );
 
+        $jsonResponse = json_decode($rawResponse);
+
         return [
-            'status' => substr((string) $rawResponse->getStatusCode(), 0, 1) === '2',
-            'httpCode' => $rawResponse->getStatusCode(),
-            'body' => $rawResponse->getBody(),
+            'status' => substr((string) $jsonResponse->statusCode, 0, 1) === '2',
+            'httpCode' => $jsonResponse->statusCode,
+            'body' => $jsonResponse->body,
         ];
     }
 }

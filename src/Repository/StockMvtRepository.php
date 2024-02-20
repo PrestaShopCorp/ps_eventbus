@@ -2,28 +2,33 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use \PrestaShop\PrestaShop\Adapter\Entity\Db;
+use \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException;
+use \PrestaShop\PrestaShop\Adapter\Entity\DbQuery;
+use \PrestaShop\PrestaShop\Adapter\Entity\Language;
+
 class StockMvtRepository
 {
     /**
-     * @var \PrestaShop\PrestaShop\Adapter\Entity\Db
+     * @var Db
      */
     private $db;
 
-    public function __construct(\Db $db)
+    public function __construct()
     {
-        $this->db = $db;
+        $this->db = Db::getInstance();
     }
 
     /**
      * @param string $langIso
      *
-     * @return \PrestaShop\PrestaShop\Adapter\Entity\DbQuery
+     * @return DbQuery
      */
     public function getBaseQuery($langIso)
     {
         /** @var int $langId */
-        $langId = (int) \PrestaShop\PrestaShop\Adapter\Entity\Language::getIdByIso($langIso);
-        $query = new \PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
+        $langId = (int) Language::getIdByIso($langIso);
+        $query = new DbQuery();
         $query->from('stock_mvt', 'sm')
             ->innerJoin('stock_mvt_reason', 'smr', 'sm.id_stock_mvt_reason = smr.id_stock_mvt_reason')
             ->innerJoin('stock_mvt_reason_lang', 'smrl', 'sm.id_stock_mvt_reason = smrl.id_stock_mvt_reason AND smrl.id_lang = ' . (int) $langId);
@@ -37,7 +42,7 @@ class StockMvtRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @throws PrestaShopDatabaseException
      */
     public function getStockMvts($langIso, $stockIds)
     {
@@ -51,11 +56,11 @@ class StockMvtRepository
     }
 
     /**
-     * @param \PrestaShop\PrestaShop\Adapter\Entity\DbQuery $query
+     * @param DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $query)
+    private function addSelectParameters(DbQuery $query)
     {
         $query->select('sm.id_stock_mvt, sm.id_stock, sm.id_order, sm.id_supply_order, sm.id_stock_mvt_reason, smrl.name, smrl.id_lang');
         $query->select('sm.id_employee, sm.employee_lastname, sm.employee_firstname, sm.physical_quantity, sm.date_add, sm.sign, sm.price_te');

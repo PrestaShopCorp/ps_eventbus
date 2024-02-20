@@ -21,10 +21,10 @@ class PresenterService
         }
         $moduleManager = $moduleManager->build();
         if ($moduleManager->isInstalled('ps_accounts')) {
-            $accountsModule = \PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName('ps_accounts');
-            /* @phpstan-ignore-next-line */
-            $accountService = $accountsModule->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
-            $this->psAccountsService = $accountService;
+            $psAccounts = \PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName('ps_accounts');
+            $psAccountsService = $psAccounts->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
+
+            $this->psAccountsService = $psAccountsService;
         } else {
             $this->initPsAccount();
         }
