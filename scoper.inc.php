@@ -43,7 +43,7 @@ return [
     //
     // For more see: https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#finders-and-paths
     'finders' => [
-        Finder::create()->files()->in($_SERVER['TMP_FOLDER'])
+        Finder::create()->files()->in($_SERVER['TMP_FOLDER']),
         /*
         Finder::create()->files()->in('src'),
         Finder::create()
@@ -86,9 +86,9 @@ return [
                 var_dump($filePath);
                 /* $pattern = '/\s(\\)([A-Za-z]+)(?![A-Za-z\\])/'; */
                 $replacement = '\\PrestaShop\\PrestaShop\\Adapter\Entity';
-                $contents = preg_replace('/\\\\'. $prefix . '/', $replacement, $contents);
+                $contents = preg_replace('/\\\\' . $prefix . '/', $replacement, $contents);
             }
-    
+
             return $contents;
         },
     ],
@@ -100,7 +100,7 @@ return [
         '\PrestaShop\PrestaShop',
         'Symfony',
         'PrestaShop\Module\PsAccounts',
-        '\PrestaShop\CircuitBreaker'
+        '\PrestaShop\CircuitBreaker',
         // 'Acme\Foo'                     // The Acme\Foo namespace (and sub-namespaces)
         // '~^PHPUnit\\\\Framework$~',    // The whole namespace PHPUnit\Framework (but not sub-namespaces)
         // '~^$~',                        // The root namespace only

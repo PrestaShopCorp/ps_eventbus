@@ -3,10 +3,9 @@
 namespace PrestaShop\Module\PsEventbus\Repository;
 
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
-
-use \PrestaShop\PrestaShop\Adapter\Entity\Db;
-use \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException;
-use \PrestaShop\PrestaShop\Adapter\Entity\DbQuery;
+use PrestaShop\PrestaShop\Adapter\Entity\Db;
+use PrestaShop\PrestaShop\Adapter\Entity\DbQuery;
+use PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException;
 
 class DeletedObjectsRepository
 {

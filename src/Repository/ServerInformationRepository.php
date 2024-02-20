@@ -6,12 +6,12 @@ use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsAccounts\Api\Client\AccountsClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
-use \PrestaShop\PrestaShop\Adapter\Entity\Context;
-use \PrestaShop\PrestaShop\Adapter\Entity\Db;
-use \PrestaShop\PrestaShop\Adapter\Entity\Language;
-use \PrestaShop\PrestaShop\Adapter\Entity\Module;
-use \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException;
-use \PrestaShop\PrestaShop\Adapter\Entity\DbQuery;
+use PrestaShop\PrestaShop\Adapter\Entity\Context;
+use PrestaShop\PrestaShop\Adapter\Entity\Db;
+use PrestaShop\PrestaShop\Adapter\Entity\DbQuery;
+use PrestaShop\PrestaShop\Adapter\Entity\Language;
+use PrestaShop\PrestaShop\Adapter\Entity\Module;
+use PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException;
 
 class ServerInformationRepository
 {

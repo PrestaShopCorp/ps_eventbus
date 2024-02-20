@@ -2,8 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use \PrestaShop\PrestaShop\Adapter\Entity\Db;
-use \PrestaShop\PrestaShop\Adapter\Entity\DbQuery;
+use PrestaShop\PrestaShop\Adapter\Entity\Db;
+use PrestaShop\PrestaShop\Adapter\Entity\DbQuery;
 
 class ShopRepository
 {

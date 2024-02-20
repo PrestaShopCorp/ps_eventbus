@@ -26,6 +26,7 @@ class PresenterService
 
             $this->psAccountsService = $psAccountsService;
         } else {
+            // PrestaShop\Module\PsAccounts\Presenter\PsAccountsPresenter
             $this->initPsAccount();
         }
     }

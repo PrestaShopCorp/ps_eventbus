@@ -2,7 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use \PrestaShop\CircuitBreaker\Client\GuzzleClient;
+use PrestaShop\CircuitBreaker\Client\GuzzleClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
 
 class SyncApiClient
@@ -38,7 +38,7 @@ class SyncApiClient
     public function __construct($syncApiUrl, $module)
     {
         $this->module = $module;
-    
+
         $psAccounts = \PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName('ps_accounts');
         $psAccountsService = $psAccounts->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
 
@@ -79,12 +79,21 @@ class SyncApiClient
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . $this->jwt,
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
-                ]
+                ],
             ]
         );
 
         $jsonResponse = json_decode($rawResponse);
-
+        dump($rawResponse,
+        $this->syncApiUrl . '/job/' . $jobId,
+        [
+            'method' => 'GET',
+            'headers' => [
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer ' . $this->jwt,
+                'User-Agent' => 'ps-eventbus/' . $this->module->version,
+            ],
+        ]);
         return [
             'status' => substr((string) $jsonResponse->statusCode, 0, 1) === '2',
             'httpCode' => $jsonResponse->statusCode,
@@ -110,7 +119,7 @@ class SyncApiClient
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                     'Content-Type' => 'application/json',
                 ],
-                'body' => '{"shopContents":' . json_encode($shopContent) . ', "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}'
+                'body' => '{"shopContents":' . json_encode($shopContent) . ', "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}',
             ]
         );
 

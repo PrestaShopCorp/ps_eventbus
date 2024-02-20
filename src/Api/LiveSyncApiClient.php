@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use GuzzleHttp\Psr7\Request;
 use PrestaShop\CircuitBreaker\Client\GuzzleClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
 
@@ -77,14 +76,14 @@ class LiveSyncApiClient
         $rawResponse = $this->getClient(3)->request(
             $this->liveSyncApiUrl . '/notify/' . $this->shopId,
             [
-                'method' => 'POST',     
+                'method' => 'POST',
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . $this->jwt,
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                     'Content-Type' => 'application/json',
                 ],
-                'body' => '{"shopContents": ["' . $shopContent . '"], "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}'
+                'body' => '{"shopContents": ["' . $shopContent . '"], "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}',
             ]
         );
 

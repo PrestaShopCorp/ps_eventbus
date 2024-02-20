@@ -21,8 +21,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
-use Raven_Client;
-
 /**
  * Handle Error.
  */
@@ -39,7 +37,7 @@ class ErrorHandler implements ErrorHandlerInterface
         $psAccountsService = $psAccounts->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
 
         try {
-            $this->client = new Raven_Client(
+            $this->client = new \Raven_Client(
                 $sentryDsn,
                 [
                     'level' => 'warning',

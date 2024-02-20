@@ -2,11 +2,12 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use GuzzleHttp\Psr7\Request;
+
 use PrestaShop\CircuitBreaker\Client\GuzzleClient;
 use PrestaShop\Module\PsEventbus\Api\Post\MultipartBody;
 use PrestaShop\Module\PsEventbus\Api\Post\PostFileApi;
 use PrestaShop\Module\PsEventbus\Config\Config;
+use \PrestaShop\PrestaShop\Adapter\Entity\Module;
 
 class CollectorApiClient
 {
@@ -34,8 +35,8 @@ class CollectorApiClient
     public function __construct($collectorApiUrl, $module)
     {
         $this->module = $module;
-        
-        $psAccounts = \PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName('ps_accounts');
+
+        $psAccounts = Module::getInstanceByName('ps_accounts');
         $psAccountsService = $psAccounts->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
 
         $this->jwt = $psAccountsService->getOrRefreshToken();
@@ -90,12 +91,12 @@ class CollectorApiClient
                     'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                 ],
-                'body' => $multipartBody->getContents()
+                'body' => $multipartBody->getContents(),
             ]
         );
 
         $jsonResponse = json_decode($rawResponse);
-    
+
         return [
             'status' => substr((string) $jsonResponse->statusCode, 0, 1) === '2',
             'httpCode' => $jsonResponse->statusCode,
@@ -132,10 +133,10 @@ class CollectorApiClient
                     'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                 ],
-                'body' => $multipartBody->getContents()
-            ]  
+                'body' => $multipartBody->getContents(),
+            ]
         );
-        
+
         $jsonResponse = json_decode($rawResponse);
 
         return [

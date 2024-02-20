@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Controller;
 
-use Exception;
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
@@ -10,17 +9,17 @@ use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
 use PrestaShop\Module\PsEventbus\Exception\QueryParamsException;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
+use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService;
 use PrestaShop\Module\PsEventbus\Service\ProxyService;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
-use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
-use \PrestaShop\PrestaShop\Adapter\Entity\Module;
-use \PrestaShop\PrestaShop\Adapter\Entity\ModuleFrontController;
-use \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException;
-use \PrestaShop\PrestaShop\Adapter\Entity\Tools;
+use PrestaShop\PrestaShop\Adapter\Entity\Module;
+use PrestaShop\PrestaShop\Adapter\Entity\ModuleFrontController;
+use PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException;
+use PrestaShop\PrestaShop\Adapter\Entity\Tools;
 
 abstract class AbstractApiController extends ModuleFrontController
 {
@@ -97,13 +96,13 @@ abstract class AbstractApiController extends ModuleFrontController
 
         $this->errorHandler = $this->module->getService(ErrorHandler::class);
         try {
-            $this->psAccountsService = Module::getInstanceByName('ps_accounts');
-            dump($this->psAccountsService = Module::getInstanceByName('ps_accounts'));
-            die;
+            //$psAccountsPresenter = $psAccounts->getService('PrestaShop\Module\PsAccounts\Presenter\PsAccountsPresenter');
+            $psAccounts = Module::getInstanceByName('ps_accounts');
+            $this->psAccountsService = $psAccounts->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
             $this->proxyService = $this->module->getService(ProxyService::class);
             $this->authorizationService = $this->module->getService(ApiAuthorizationService::class);
             $this->synchronizationService = $this->module->getService(SynchronizationService::class);
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
         }
@@ -121,8 +120,6 @@ abstract class AbstractApiController extends ModuleFrontController
         $this->startTime = time();
 
         try {
-            
-
             $this->authorize();
         } catch (PrestaShopDatabaseException $exception) {
             $this->errorHandler->handle($exception);
@@ -155,6 +152,7 @@ abstract class AbstractApiController extends ModuleFrontController
         }
 
         try {
+
             $token = $this->psAccountsService->getOrRefreshToken();
         } catch (\Exception $exception) {
             throw new FirebaseException($exception->getMessage());
@@ -303,7 +301,7 @@ abstract class AbstractApiController extends ModuleFrontController
     }
 
     /**
-     * @param Exception $exception
+     * @param \Exception $exception
      *
      * @return void
      */
