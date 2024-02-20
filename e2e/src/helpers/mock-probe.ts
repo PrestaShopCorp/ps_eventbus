@@ -1,12 +1,12 @@
 import WebSocket from 'ws';
-import { WebSocketSubject} from "rxjs/webSocket";
+import {WebSocketSubject} from "rxjs/webSocket";
 import {bufferCount, catchError, filter, lastValueFrom, map, Observable, Subject, take, tap, timeout} from "rxjs";
 import R from 'ramda';
 
-const PROBE_TIMEOUT=1000;
+const PROBE_TIMEOUT = 1500;
 
 // no Websocket implementation seems to exist in jest runner
-if(!global.WebSocket) {
+if (!global.WebSocket) {
   (global as any).WebSocket = WebSocket;
 }
 

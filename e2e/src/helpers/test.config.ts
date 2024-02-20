@@ -16,7 +16,7 @@ export default {
   mockCollectorPath: '/collector/v1',
   mockLiveSyncApiPath: '/live-sync-api/v1',
 
-  // list of controllers
+  // list of every controller of ps_eventbus
   controllers: [
     "apiCarriers",
     "apiCartRules",
@@ -44,5 +44,5 @@ export default {
     "apiThemes",
     "apiTranslations",
     "apiWishlists",
-  ]
+  ] as const
 };
