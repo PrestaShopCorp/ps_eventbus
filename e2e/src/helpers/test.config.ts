@@ -9,7 +9,7 @@ export default {
   mockBaseUrl:
     process.env.RUN_IN_DOCKER === '1'
       ? 'http://reverse-proxy'
-      : 'http://localhost:80',
+      : 'http://localhost:3030',
 
   mockProbePath: '/mock-probe',
   mockSyncApiPath: '/sync/v1',
