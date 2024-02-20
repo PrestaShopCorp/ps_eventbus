@@ -17,11 +17,6 @@ export class Server {
       req.on('close', () => {
         probe.sendDataToWS(this.constructor.name, req);
       })
-      next();
-    });
-
-    this.api.use((req: Request, res: Response, next: NextFunction) => {
-      //TODO : make prettier
       req.on('data', buf => console.log(buf.toString('utf8')));
       next();
     });

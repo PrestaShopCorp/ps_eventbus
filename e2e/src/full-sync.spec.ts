@@ -7,7 +7,10 @@ import axios, {AxiosError} from "axios";
 expect.extend(matchers);
 
 // these controllers will be excluded from the following test suite
-const EXCLUDED_API : typeof testConfig.controllers[number][] = ['apiHealthCheck', 'apiGoogleTaxonomies'];
+const EXCLUDED_API: typeof testConfig.controllers[number][] = ['apiHealthCheck', 'apiGoogleTaxonomies'];
+
+// FIXME : these api can't send anything to the mock api because the database is empty from the factory
+const MISSING_TEST_DATA: typeof testConfig.controllers[number][] = ['apiCartRules', 'apiCustomProductCarriers', 'apiDeletedObjects', 'apiTranslations', 'apiWishlists'];
 
 describe('Full Sync', () => {
   let testIndex = 0;
@@ -78,7 +81,7 @@ describe('Full Sync', () => {
       }).catch(err => {
         // assert
         expect(err).toBeInstanceOf(AxiosError);
-        if(err instanceof AxiosError) {
+        if (err instanceof AxiosError) {
           expect(err.response.status).toEqual(456);
           // expect some explanation to be given to the user
           expect(err.response.statusText).toMatch(/[Ff]acebook/)
@@ -107,25 +110,29 @@ describe('Full Sync', () => {
       });
     });
 
-    it(`${controller} should upload to collector`, async () => {
-      // arrange
-      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
-      const messages = probe.waitForMessages(1, {url: `/upload/${jobId}`});
+    if (MISSING_TEST_DATA.includes(controller)) {
+      it.skip(`${controller} should upload to collector`, () => {})
+    } else {
+      it(`${controller} should upload to collector`, async () => {
+        // arrange
+        const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
+        const messages = probe.waitForMessages(1, {url: `/upload/${jobId}`});
 
-      // act
-      await axios.post(url, {
-        headers: {
-          'Host': testConfig.prestaShopHostHeader
-        },
-      }).catch(err => {
-        logAxiosError(err);
-        expect(err).toBeNull();
-      })
-      const collectorRequest = await messages;
+        // act
+        await axios.post(url, {
+          headers: {
+            'Host': testConfig.prestaShopHostHeader
+          },
+        }).catch(err => {
+          logAxiosError(err);
+          expect(err).toBeNull();
+        })
+        const collectorRequest = await messages;
 
-      // assert
-      expect(collectorRequest[0].method).toBe('POST');
-    });
+        // assert
+        expect(collectorRequest[0].method).toBe('POST');
+      });
+    }
   })
 })
 
