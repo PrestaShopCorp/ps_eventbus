@@ -2,8 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Decorator;
 
-use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
-
 class ProductSupplierDecorator
 {
     /**

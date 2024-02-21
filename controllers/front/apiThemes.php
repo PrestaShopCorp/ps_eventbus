@@ -25,7 +25,6 @@ class ps_EventbusApiThemesModuleFrontController extends AbstractApiController
         /** @var array $themeInfo */
         $themeInfo = $themeRepository->getThemes();
 
-
         /** @var bool $initFullSync */
         $initFullSync = \Tools::getValue('full', 0) == 1;
 
