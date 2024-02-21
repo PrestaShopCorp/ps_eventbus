@@ -2,7 +2,7 @@
   "name": "cloudsync-mock",
   "version": "0.0.0",
   "main": "dist/app.js",
-  "type": "module", 
+  "type": "module",
   "private": true,
   "engines": {
     "yarn": "please use pnpm",
@@ -35,6 +35,6 @@
     "nodemon": "^3.0.2",
     "rimraf": "^5.0.5",
     "typescript": "^5.3.3",
-    "ws": "^8.15.1"
+    "ws": "^8.16.0"
   }
 }
