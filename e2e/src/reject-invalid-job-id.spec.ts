@@ -10,7 +10,7 @@ const EXCLUDED_API : typeof testConfig.controllers[number][] = ['apiHealthCheck'
 
 describe('Reject invalid job-id', () => {
   let testIndex = 0;
-  let probe = new MockProbe();
+  let probe = new MockProbe({timeout: 3000});
 
   const controllers = testConfig.controllers.filter(it => !EXCLUDED_API.includes(it))
 

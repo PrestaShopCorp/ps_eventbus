@@ -3,7 +3,11 @@ import {WebSocketSubject} from "rxjs/webSocket";
 import {bufferCount, catchError, filter, lastValueFrom, map, Observable, Subject, take, tap, timeout} from "rxjs";
 import R from 'ramda';
 
-const PROBE_TIMEOUT = 1500;
+const DEFAULT_OPTIONS = {
+  timeout : 1500
+};
+
+export type MockProbeOptions = typeof DEFAULT_OPTIONS;
 
 // no Websocket implementation seems to exist in jest runner
 if (!global.WebSocket) {
@@ -22,11 +26,13 @@ type MockProbeResponse = {
 
 export class MockProbe {
   private static wsConnection: WebSocketSubject<MockProbeResponse>;
+  private options : MockProbeOptions
 
-  constructor() {
+  constructor(options?: MockProbeOptions) {
     if (!MockProbe.wsConnection) {
       MockProbe.wsConnection = new WebSocketSubject<MockProbeResponse>('ws://localhost:8080');
     }
+    this.options = R.mergeLeft(options, DEFAULT_OPTIONS);
   }
 
   /**
@@ -45,7 +51,7 @@ export class MockProbe {
       }),
       bufferCount(expectedMessageCount),
       take(1),
-      timeout(PROBE_TIMEOUT),
+      timeout(this.options.timeout),
     )
 
     return lastValueFrom($messages)
