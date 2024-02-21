@@ -97,10 +97,12 @@ return [
     //
     // For more information see: https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#excluded-symbols
     'exclude-namespaces' => [
-        '\PrestaShop\PrestaShop',
-        'Symfony',
-        'PrestaShop\Module\PsAccounts',
-        '\PrestaShop\CircuitBreaker',
+        '~^PrestaShop\\\\Module\\\\PsEventbus~',
+        '~^PrestaShop\\\\PrestaShop~',
+        '~^PrestaShopBundle~',
+        '~^Symfony~',
+        '~^PrestaShop\\\\Module\\\\PsAccounts~',
+        '~^PrestaShop\\\\CircuitBreaker~',
         // 'Acme\Foo'                     // The Acme\Foo namespace (and sub-namespaces)
         // '~^PHPUnit\\\\Framework$~',    // The whole namespace PHPUnit\Framework (but not sub-namespaces)
         // '~^$~',                        // The root namespace only
@@ -108,6 +110,7 @@ return [
     ],
     'exclude-classes' => [
         // 'ReflectionClassConstant',
+        '\ModuleCore'
     ],
     'exclude-functions' => [
         // 'mb_str_split',

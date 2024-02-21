@@ -33,8 +33,7 @@ class ErrorHandler implements ErrorHandlerInterface
 
     public function __construct(\PrestaShop\PrestaShop\Adapter\Entity\Module $module, string $sentryDsn, string $sentryEnv)
     {
-        $psAccounts = \PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName('ps_accounts');
-        $psAccountsService = $psAccounts->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
+        $psAccountsService = $module->getService('PrestaShop\Module\PsEventbus\Service\PsAccountsService');
 
         try {
             $this->client = new \Raven_Client(
@@ -44,7 +43,7 @@ class ErrorHandler implements ErrorHandlerInterface
                     'tags' => [
                         'shop_id' => $psAccountsService->getShopUuid(),
                         'ps_eventbus_version' => $module->version,
-                        'ps_accounts_version' => $psAccounts ? $psAccounts->version : false,
+                        'ps_accounts_version' => $psAccountsService->getModule() ? $psAccountsService->getModule()->version : false,
                         'php_version' => phpversion(),
                         'prestashop_version' => _PS_VERSION_,
                         'ps_eventbus_is_enabled' => \PrestaShop\PrestaShop\Adapter\Entity\Module::isEnabled((string) $module->name),

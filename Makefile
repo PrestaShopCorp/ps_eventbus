@@ -37,6 +37,9 @@ define zip_it_temp
 	cp -r $(shell cat .zip-contents) ./dist/tmp;
 	VERSION=${PACKAGE} TMP_FOLDER=./dist/tmp php php-scoper.phar add-prefix --output-dir=./dist/${MODULE_NAME} --force
 	$(call replace_version,./dist/${MODULE_NAME},${SEM_VERSION});
+	./tools/vendor/bin/autoindex prestashop:add:index ./dist/${MODULE_NAME}
+	cp $1 ./dist/${MODULE_NAME}/config/parameters.yml;
+	cd ./dist/${MODULE_NAME} && composer dump-autoload;
 	rm -rf ./dist/tmp;
 endef
 
@@ -75,20 +78,20 @@ dist:
 
 # target: zip-e2e                                              - Bundle a local E2E integrable zip
 .PHONY: zip-e2e
-zip-e2e: vendor tools/vendor dist
+zip-e2e: php-scoper.phar vendor tools/vendor dist
 	@$(call zip_it,./config/parameters.yml,${PACKAGE}_e2e.zip)
 
 # target: zip-inte                                             - Bundle an integration zip
 .PHONY: zip-inte
-zip-inte: vendor tools/vendor dist
+zip-inte: php-scoper.phar vendor tools/vendor dist
 	@$(call zip_it,.config.inte.yml,${PACKAGE}_integration.zip)
 
 # target: zip-prod                                             - Bundle a production zip
 .PHONY: zip-prod
-zip-prod: vendor tools/vendor dist
+zip-prod: php-scoper.phar vendor tools/vendor dist
 	@$(call zip_it,.config.prod.yml,${PACKAGE}.zip)
 
-zip-test: vendor tools/vendor dist
+zip-test: php-scoper.phar vendor tools/vendor dist
 	@$(call zip_it_temp,.config.prod.yml,${PACKAGE}.zip)
 
 # target: build                                                - Setup PHP & Node.js locally

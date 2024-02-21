@@ -2,14 +2,18 @@
 
 namespace PrestaShop\Module\PsEventbus\Helper;
 
+use ModuleCore;
+use PrestaShop\PrestaShop\Adapter\Entity\Module;
+use PrestaShop\PrestaShop\Adapter\Entity\Tools;
 use PrestaShopBundle\Service\Routing\Router;
+use Ps_eventbus;
 
 class ModuleHelper
 {
-    /** @var \Ps_eventbus */
+    /** @var Ps_eventbus */
     private $module;
 
-    public function __construct(\Ps_eventbus $module)
+    public function __construct(Ps_eventbus $module)
     {
         $this->module = $module;
     }
@@ -21,7 +25,7 @@ class ModuleHelper
      */
     public function isInstalled(string $moduleName)
     {
-        return \PrestaShop\PrestaShop\Adapter\Entity\ModuleCore::isInstalled($moduleName);
+        return ModuleCore::isInstalled($moduleName);
     }
 
     /**
@@ -31,7 +35,7 @@ class ModuleHelper
      */
     public function isEnabled(string $moduleName)
     {
-        return \PrestaShop\PrestaShop\Adapter\Entity\ModuleCore::isEnabled($moduleName);
+        return ModuleCore::isEnabled($moduleName);
     }
 
     /**
@@ -45,7 +49,7 @@ class ModuleHelper
             return '';
         }
 
-        $module = \PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName($moduleName);
+        $module = Module::getInstanceByName($moduleName);
 
         if (false === $module) {
             return '';
@@ -57,11 +61,11 @@ class ModuleHelper
     /**
      * @param string $moduleName
      *
-     * @return false|\ModuleCore
+     * @return false|ModuleCore
      */
     public function getInstanceByName(string $moduleName)
     {
-        return \PrestaShop\PrestaShop\Adapter\Entity\ModuleCore::getInstanceByName($moduleName);
+        return ModuleCore::getInstanceByName($moduleName);
     }
 
     /**
@@ -78,16 +82,16 @@ class ModuleHelper
         }
 
         /** @var Router $router * */
-        $router = $this->module->get('router');
+        $router = $this->module->getService('router');
 
         if ($moduleName === 'ps_mbo') {
-            return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
+            return substr(Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
             $router->generate('ps_eventbus_api_resolver', [
                 'query' => 'installPsMbo',
             ]);
         }
 
-        return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
+        return substr(Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
             $router->generate('admin_module_manage_action', [
                 'action' => 'install',
                 'module_name' => $moduleName,
@@ -108,9 +112,9 @@ class ModuleHelper
         }
 
         /** @var Router $router * */
-        $router = $this->module->get('router');
+        $router = $this->module->getService('router');
 
-        return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
+        return substr(Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
             $router->generate('admin_module_manage_action', [
                 'action' => 'enable',
                 'module_name' => $moduleName,
@@ -129,9 +133,9 @@ class ModuleHelper
         // need to check if module is up to date, if not, return empty string
 
         /** @var Router $router * */
-        $router = $this->module->get('router');
+        $router = $this->module->getService('router');
 
-        return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
+        return substr(Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
             $router->generate('admin_module_manage_action', [
                 'action' => 'upgrade',
                 'module_name' => $moduleName,
@@ -151,7 +155,7 @@ class ModuleHelper
             return '0.0.0';
         }
 
-        $module = \PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName($moduleName);
+        $module = Module::getInstanceByName($moduleName);
 
         if (false === $module) {
             return '0.0.0';

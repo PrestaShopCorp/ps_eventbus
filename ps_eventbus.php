@@ -25,6 +25,7 @@
  */
 
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer;
 use PrestaShop\PrestaShop\Adapter\Entity\Db;
 use PrestaShop\PrestaShop\Adapter\Entity\Module;
 
@@ -184,7 +185,7 @@ class Ps_eventbus extends Module
 
         require_once __DIR__ . '/vendor/autoload.php';
 
-        $this->serviceContainer = new \PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer(
+        $this->serviceContainer = new ServiceContainer(
             (string) $this->name,
             $this->getLocalPath()
         );
@@ -197,7 +198,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @return \PrestaShop\PrestaShop\Adapter\Entity\Context
+     * @return Context
      */
     public function getContext()
     {
