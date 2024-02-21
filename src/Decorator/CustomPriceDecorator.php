@@ -45,6 +45,7 @@ class CustomPriceDecorator
             false,
             $this->context
         );
+
         $specificPrice['price_tax_excluded'] = $this->priceService->getSpecificProductPrice(
             $specificPrice['id_product'],
             $specificPrice['id_product_attribute'],
