@@ -104,6 +104,10 @@ describe('Full Sync', () => {
         // assert
         expect(response.status).toBeOneOf([200, 201])
         expect(response.headers).toMatchObject({'content-type': /json/})
+        expect(response.data).toMatchObject({
+          'job_id': jobId,
+          'syncType': 'full'
+        })
       }).catch(err => {
         logAxiosError(err);
         expect(err).toBeNull();
@@ -111,7 +115,8 @@ describe('Full Sync', () => {
     });
 
     if (MISSING_TEST_DATA.includes(controller)) {
-      it.skip(`${controller} should upload to collector`, () => {})
+      it.skip(`${controller} should upload to collector`, () => {
+      })
     } else {
       it(`${controller} should upload to collector`, async () => {
         // arrange
