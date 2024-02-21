@@ -41,6 +41,10 @@ describe('Full Sync', () => {
         // assert
         expect(response.status).toBeOneOf([200, 201])
         expect(response.headers).toMatchObject({'content-type': /json/})
+        expect(response.data).toMatchObject({
+          'job_id': jobId,
+          'syncType': 'full'
+        })
       }).catch(err => {
         logAxiosError(err);
         expect(err).toBeNull();

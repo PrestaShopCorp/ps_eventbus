@@ -23,7 +23,7 @@ describe('Reject invalid job-id', () => {
   describe.each(controllers)('%s', (controller) => {
 
     it(`${controller} should return 454 with an invalid job id (sync-api status 454)`, async () => {
-       expect.assertions(4);
+       expect.assertions(5);
         // arrange
         const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&job_id=${jobId}`
         const messages = probe.waitForMessages(1, {params: {id: jobId}});
@@ -37,6 +37,10 @@ describe('Reject invalid job-id', () => {
           // assert
           expect(err.response.status).toEqual(454);
           expect(err.response.headers).toMatchObject({'content-type': /json/});
+          expect(err.response.data).toMatchObject({
+            status: false,
+            httpCode: 454,
+          });
         })
 
         const syncApiRequest = await messages;
