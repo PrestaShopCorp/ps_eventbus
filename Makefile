@@ -18,31 +18,32 @@ define replace_version
 	rm -f ${1}/${MODULE_NAME}.php.bak ${1}/config.xml.bak
 endef
 
-define zip_it
+define create_module
 	$(eval TMP_DIR := $(shell mktemp -d))
 	mkdir -p ${TMP_DIR}/tmp;
 	cp -r $(shell cat .zip-contents) ${TMP_DIR}/tmp;
 	VERSION=${PACKAGE} TMP_FOLDER=${TMP_DIR}/tmp php php-scoper.phar add-prefix --output-dir=${TMP_DIR}/${MODULE_NAME} --force
 	$(call replace_version,${TMP_DIR}/${MODULE_NAME},${SEM_VERSION})
 	./tools/vendor/bin/autoindex prestashop:add:index ${TMP_DIR}
-	cp $1 ${TMP_DIR}/${MODULE_NAME}/config/parameters.yml;
-	cd ${TMP_DIR}/${MODULE_NAME} && composer dump-autoload;
+	cp $1 ${TMP_DIR}/${MODULE_NAME}/config/parameters.yml
+	cd ${TMP_DIR}/${MODULE_NAME} && composer dump-autoload
 	SCOPER_FOLDER=${TMP_DIR}/${MODULE_NAME} php php-scoper-fix.php
+
+	echo ${TMP_DIR}
+endef
+
+define zip_it
+	TMP_DIR=$(call create_module,$1)
 	cd ${TMP_DIR} && zip -9 -r $2 ./${MODULE_NAME};
 	mv ${TMP_DIR}/$2 ./dist;
 	rm -rf ${TMP_DIR:-/dev/null};
 endef
 
-define zip_it_temp
-	mkdir -p ./dist/tmp;
-	cp -r $(shell cat .zip-contents) ./dist/tmp;
-	VERSION=${PACKAGE} TMP_FOLDER=./dist/tmp php php-scoper.phar add-prefix --output-dir=./dist/${MODULE_NAME} --force
-	$(call replace_version,./dist/${MODULE_NAME},${SEM_VERSION});
-	./tools/vendor/bin/autoindex prestashop:add:index ./dist/${MODULE_NAME}
-	cp $1 ./dist/${MODULE_NAME}/config/parameters.yml;
-	cd ./dist/${MODULE_NAME} && composer dump-autoload;
-	SCOPER_FOLDER=./dist/${MODULE_NAME} php php-scoper-fix.php
-	rm -rf ./dist/tmp;
+define no_zip_it
+	rm -rf ./dist/${MODULE_NAME}
+	TMP_DIR=$(call create_module,$1)
+	mv ${TMP_DIR}/${MODULE_NAME} ./dist;
+	rm -rf ${TMP_DIR:-/dev/null};
 endef
 
 define in_docker
@@ -61,8 +62,8 @@ default: build
 help:
 	@egrep "^#" Makefile
 
-# target: clean 
-.PHONY: clean                                               - Clean up the repository
+# target: clean                                                - Clean up the repository
+.PHONY: clean                                               
 clean:
 	git -c core.excludesfile=/dev/null clean -X -d -f
 
@@ -92,8 +93,10 @@ zip-inte: php-scoper.phar vendor tools/vendor dist
 zip-prod: php-scoper.phar vendor tools/vendor dist
 	@$(call zip_it,.config.prod.yml,${PACKAGE}.zip)
 
-zip-test: php-scoper.phar vendor tools/vendor dist
-	@$(call zip_it_temp,.config.prod.yml,${PACKAGE}.zip)
+# target: zip-unziped                                          - Bundle a production module, but without zip step (only for check sources)
+.PHONY: zip-unziped
+zip-unziped: php-scoper.phar vendor tools/vendor dist
+	@$(call no_zip_it,.config.prod.yml)
 
 # target: build                                                - Setup PHP & Node.js locally
 .PHONY: build
