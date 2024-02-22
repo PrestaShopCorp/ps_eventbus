@@ -127,6 +127,8 @@ return [
         '\Tab',
         '\Tools',
         '\Shop',
+        '\DateTime',
+        '\DateTimeZone'
     ],
     'exclude-functions' => [
         // 'mb_str_split',

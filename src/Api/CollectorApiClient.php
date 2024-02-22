@@ -7,7 +7,7 @@ use GuzzleHttp\Psr7\Request;
 use PrestaShop\Module\PsEventbus\Api\Post\MultipartBody;
 use PrestaShop\Module\PsEventbus\Api\Post\PostFileApi;
 use PrestaShop\Module\PsEventbus\Config\Config;
-use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
+use GuzzleHttp\Client;
 use Prestashop\ModuleLibGuzzleAdapter\Interfaces\HttpClientInterface;
 
 class CollectorApiClient
@@ -32,14 +32,11 @@ class CollectorApiClient
     /**
      * @param string $collectorApiUrl
      * @param \Ps_eventbus $module
+     * @param PsAccountsService
      */
-    public function __construct($collectorApiUrl, $module)
+    public function __construct($collectorApiUrl, $module, $psAccountsService)
     {
         $this->module = $module;
-
-        $psAccounts = \Module::getInstanceByName('ps_accounts');
-        $psAccountsService = $psAccounts->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
-
         $this->jwt = $psAccountsService->getOrRefreshToken();
         $this->collectorApiUrl = $collectorApiUrl;
     }
@@ -49,11 +46,11 @@ class CollectorApiClient
      *
      * @param int $startTime @optional start time in seconds since epoch
      *
-     * @return HttpClientInterface
+     * @return Client
      */
     private function getClient(int $startTime = null)
     {
-        return (new ClientFactory())->getClient([
+        return new Client([
             'allow_redirects' => true,
             'connect_timeout' => 3,
             'http_errors' => false,
@@ -79,31 +76,29 @@ class CollectorApiClient
         $file = new PostFileApi('file', $data, 'file');
         $contentSize = $file->getContent()->getSize();
         $multipartBody = new MultipartBody([], [$file], Config::COLLECTOR_MULTIPART_BOUNDARY);
-        $request = new Request(
-            'POST',
-            $url,
-            [
-                'Accept' => 'application/json',
-                'Authorization' => 'Bearer ' . $this->jwt,
-                'Content-Length' => $contentSize ? (string) $contentSize : '0',
-                'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
-                'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
-                'User-Agent' => 'ps-eventbus/' . $this->module->version,
-            ],
-            $multipartBody->getContents()
+
+        $response = $this->getClient($startTime)->request(
+            new Request(
+                'POST',
+                $url,
+                [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->jwt,
+                    'Content-Length' => $contentSize ? (string) $contentSize : '0',
+                    'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
+                    'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
+                    'User-Agent' => 'ps-eventbus/' . $this->module->version,
+                ],
+                $multipartBody->getContents()
+            )  
         );
 
-        // Send request and parse response
-        $rawResponse = $this->getClient($startTime)->sendRequest($request);
-        $jsonResponse = json_decode($rawResponse->getBody()->getContents(), true);
-        $response = [
-            'status' => substr((string) $rawResponse->getStatusCode(), 0, 1) === '2',
-            'httpCode' => $rawResponse->getStatusCode(),
-            'body' => $jsonResponse,
+        return [
+            'status' => substr((string) $response->getStatusCode(), 0, 1) === '2',
+            'httpCode' => $response->getStatusCode(),
+            'body' => json_decode($response->getBody()->getContents(), true),
             'upload_url' => $url,
         ];
-
-        return $response;
     }
 
     /**
@@ -122,30 +117,28 @@ class CollectorApiClient
         $file = new PostFileApi('file', $data, 'file');
         $contentSize = $file->getContent()->getSize();
         $multipartBody = new MultipartBody([], [$file], Config::COLLECTOR_MULTIPART_BOUNDARY);
-        $request = new Request(
-            'POST',
-            $url,
-            [
-                'Accept' => 'application/json',
-                'Authorization' => 'Bearer ' . $this->jwt,
-                'Content-Length' => $contentSize ? (string) $contentSize : '0',
-                'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
-                'User-Agent' => 'ps-eventbus/' . $this->module->version,
-            ],
-            $multipartBody->getContents()
+
+        $response = $this->getClient($startTime)->request(
+            new Request(
+                'POST',
+                $url,
+                [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->jwt,
+                    'Content-Length' => $contentSize ? (string) $contentSize : '0',
+                    'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
+                    'User-Agent' => 'ps-eventbus/' . $this->module->version,
+                ],
+                $multipartBody->getContents()
+            )
         );
 
-        // Send request and parse response
-        $rawResponse = $this->getClient($startTime)->sendRequest($request);
-        $jsonResponse = json_decode($rawResponse->getBody()->getContents(), true);
-        $response = [
-            'status' => substr((string) $rawResponse->getStatusCode(), 0, 1) === '2',
-            'httpCode' => $rawResponse->getStatusCode(),
-            'body' => $jsonResponse,
+        return [
+            'status' => substr((string) $response->getStatusCode(), 0, 1) === '2',
+            'httpCode' => $response->getStatusCode(),
+            'body' => json_decode($response->getBody()->getContents(), true),
             'upload_url' => $url,
         ];
-
-        return $response;
     }
 
     /**

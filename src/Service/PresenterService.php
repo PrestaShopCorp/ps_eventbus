@@ -26,10 +26,7 @@ class PresenterService
         }
         $moduleManager = $moduleManager->build();
         if ($moduleManager->isInstalled('ps_accounts')) {
-            $psAccounts = Module::getInstanceByName('ps_accounts');
-            $psAccountsService = $psAccounts->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
-
-            $this->psAccountsService = $psAccountsService;
+            $this->psAccountsService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\PsAccountsService');
         } else {
             $this->initPsAccount();
         }

@@ -96,9 +96,7 @@ abstract class AbstractApiController extends ModuleFrontController
 
         $this->errorHandler = $this->module->getService(ErrorHandler::class);
         try {
-            //$psAccountsPresenter = $psAccounts->getService('PrestaShop\Module\PsAccounts\Presenter\PsAccountsPresenter');
-            $psAccounts = Module::getInstanceByName('ps_accounts');
-            $this->psAccountsService = $psAccounts->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
+            $this->psAccountsService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\PsAccountsService');
             $this->proxyService = $this->module->getService(ProxyService::class);
             $this->authorizationService = $this->module->getService(ApiAuthorizationService::class);
             $this->synchronizationService = $this->module->getService(SynchronizationService::class);
@@ -152,7 +150,6 @@ abstract class AbstractApiController extends ModuleFrontController
         }
 
         try {
-
             $token = $this->psAccountsService->getOrRefreshToken();
         } catch (\Exception $exception) {
             throw new FirebaseException($exception->getMessage());
@@ -187,7 +184,7 @@ abstract class AbstractApiController extends ModuleFrontController
         /** @var bool $initFullSync */
         $initFullSync = Tools::getValue('full', 0) == 1;
 
-        $dateNow = (new DateTime('now', new DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
+        $dateNow = (new \DateTime('now', new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
         $offset = 0;
         $incrementalSync = false;
         $response = [];

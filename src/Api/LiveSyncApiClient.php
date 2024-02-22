@@ -4,8 +4,7 @@ namespace PrestaShop\Module\PsEventbus\Api;
 
 use GuzzleHttp\Psr7\Request;
 use PrestaShop\Module\PsEventbus\Config\Config;
-use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
-use Prestashop\ModuleLibGuzzleAdapter\Interfaces\HttpClientInterface;
+use GuzzleHttp\Client;
 
 class LiveSyncApiClient
 {
@@ -36,14 +35,11 @@ class LiveSyncApiClient
     /**
      * @param string $liveSyncApiUrl
      * @param \Ps_eventbus $module
+     * @param PsAccountsService
      */
-    public function __construct($liveSyncApiUrl, $module)
+    public function __construct($liveSyncApiUrl, $module, $psAccountsService)
     {
         $this->module = $module;
-
-        $psAccounts = \Module::getInstanceByName('ps_accounts');
-        $psAccountsService = $psAccounts->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
-
         $this->jwt = $psAccountsService->getOrRefreshToken();
         $this->shopId = $psAccountsService->getShopUuid();
         $this->liveSyncApiUrl = $liveSyncApiUrl;
@@ -54,11 +50,11 @@ class LiveSyncApiClient
      *
      * @param int $timeout
      *
-     * @return HttpClientInterface
+     * @return Client
      */
     private function getClient($timeout = Config::SYNC_API_MAX_TIMEOUT)
     {
-        return (new ClientFactory())->getClient([
+        return new Client([
             'allow_redirects' => true,
             'connect_timeout' => 3,
             'http_errors' => false,
@@ -75,7 +71,7 @@ class LiveSyncApiClient
      */
     public function liveSync(string $shopContent, int $shopContentId, string $action)
     {
-        $rawResponse = $this->getClient(3)->sendRequest(
+        $response = $this->getClient(3)->request(
             new Request(
                 'POST',
                 $this->liveSyncApiUrl . '/notify/' . $this->shopId,
@@ -90,9 +86,9 @@ class LiveSyncApiClient
         );
 
         return [
-            'status' => substr((string) $rawResponse->getStatusCode(), 0, 1) === '2',
-            'httpCode' => $rawResponse->getStatusCode(),
-            'body' => $rawResponse->getBody(),
+            'status' => substr((string) $response->getStatusCode(), 0, 1) === '2',
+            'httpCode' => $response->getStatusCode(),
+            'body' => $response->getBody(),
         ];
     }
 }
