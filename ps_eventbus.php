@@ -26,8 +26,8 @@
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer;
-use PrestaShop\PrestaShop\Adapter\Entity\Db;
-use PrestaShop\PrestaShop\Adapter\Entity\Module;
+use Db;
+use Module;
 
 if (!defined('_PS_VERSION_')) {
     exit;

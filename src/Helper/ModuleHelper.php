@@ -3,8 +3,8 @@
 namespace PrestaShop\Module\PsEventbus\Helper;
 
 use ModuleCore;
-use PrestaShop\PrestaShop\Adapter\Entity\Module;
-use PrestaShop\PrestaShop\Adapter\Entity\Tools;
+use Module;
+use Tools;
 use PrestaShopBundle\Service\Routing\Router;
 use Ps_eventbus;
 

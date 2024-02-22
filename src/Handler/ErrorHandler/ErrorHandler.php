@@ -21,6 +21,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
+use Ps_eventbus;
+
 /**
  * Handle Error.
  */
@@ -31,7 +33,7 @@ class ErrorHandler implements ErrorHandlerInterface
      */
     protected $client;
 
-    public function __construct(\PrestaShop\PrestaShop\Adapter\Entity\Module $module, string $sentryDsn, string $sentryEnv)
+    public function __construct(Ps_eventbus $module, string $sentryDsn, string $sentryEnv)
     {
         $psAccountsService = $module->getService('PrestaShop\Module\PsEventbus\Service\PsAccountsService');
 
@@ -46,28 +48,28 @@ class ErrorHandler implements ErrorHandlerInterface
                         'ps_accounts_version' => $psAccountsService->getModule() ? $psAccountsService->getModule()->version : false,
                         'php_version' => phpversion(),
                         'prestashop_version' => _PS_VERSION_,
-                        'ps_eventbus_is_enabled' => \PrestaShop\PrestaShop\Adapter\Entity\Module::isEnabled((string) $module->name),
-                        'ps_eventbus_is_installed' => \PrestaShop\PrestaShop\Adapter\Entity\Module::isInstalled((string) $module->name),
+                        'ps_eventbus_is_enabled' => \Module::isEnabled((string) $module->name),
+                        'ps_eventbus_is_installed' => \Module::isInstalled((string) $module->name),
                         'env' => $sentryEnv,
                     ],
                 ]
             );
             /** @var string $configurationPsShopEmail */
-            $configurationPsShopEmail = \PrestaShop\PrestaShop\Adapter\Entity\Configuration::get('PS_SHOP_EMAIL');
+            $configurationPsShopEmail = \Configuration::get('PS_SHOP_EMAIL');
             $this->client->set_user_data($psAccountsService->getShopUuid(), $configurationPsShopEmail);
         } catch (\Exception $e) {
         }
     }
 
     /**
-     * @param \PrestaShop\PrestaShop\Adapter\Entity\Exception $error
+     * @param Exception $error
      * @param mixed $code
      * @param bool|null $throw
      * @param array|null $data
      *
      * @return void
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\Exception
+     * @@throws \Exception
      */
     public function handle($error, $code = null, $throw = true, $data = null)
     {

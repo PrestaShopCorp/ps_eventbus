@@ -2,12 +2,12 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShop\PrestaShop\Adapter\Entity\Context;
-use PrestaShop\PrestaShop\Adapter\Entity\Db;
-use PrestaShop\PrestaShop\Adapter\Entity\DbQuery;
-use PrestaShop\PrestaShop\Adapter\Entity\Employee;
-use PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException;
-use PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException;
+use Context;
+use Db;
+use DbQuery;
+use Employee;
+use PrestaShopDatabaseException;
+use PrestaShopException;
 
 class CustomPriceRepository
 {

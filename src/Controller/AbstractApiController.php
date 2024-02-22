@@ -16,10 +16,10 @@ use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService;
 use PrestaShop\Module\PsEventbus\Service\ProxyService;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
-use PrestaShop\PrestaShop\Adapter\Entity\Module;
-use PrestaShop\PrestaShop\Adapter\Entity\ModuleFrontController;
-use PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException;
-use PrestaShop\PrestaShop\Adapter\Entity\Tools;
+use Module;
+use ModuleFrontController;
+use PrestaShopDatabaseException;
+use Tools;
 
 abstract class AbstractApiController extends ModuleFrontController
 {

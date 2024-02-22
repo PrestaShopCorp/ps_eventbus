@@ -50,7 +50,7 @@ class Upgrade
      */
     public function upgradePsEventbus()
     {
-        if (true === \PrestaShop\PrestaShop\Adapter\Entity\Module::needUpgrade($this->module)) {
+        if (true === \Module::needUpgrade($this->module)) {
             /** @var ModuleManagerBuilder $moduleManagerBuilder */
             $moduleManagerBuilder = ModuleManagerBuilder::getInstance();
             $moduleManager = $moduleManagerBuilder->build();

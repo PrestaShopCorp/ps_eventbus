@@ -33,12 +33,12 @@ class DeletedObjectsService
      *
      * @return array
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException|EnvVarException
+     * @@throws \PrestaShopDatabaseException|EnvVarException
      */
     public function handleDeletedObjectsSync($jobId, $scriptStartTime)
     {
         if ($this->context->shop === null) {
-            throw new \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $shopId = (int) $this->context->shop->id;

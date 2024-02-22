@@ -60,15 +60,15 @@ class CarrierBuilder
      *
      * @return array
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException
+     * @@throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopException
      */
     public function buildCarriers(array $carriers, int $langId, \PrestaShop\PrestaShop\Adapter\Entity\Currency $currency, $weightUnit)
     {
         $eventBusCarriers = [];
         foreach ($carriers as $carrier) {
             $eventBusCarriers[] = $this->buildCarrier(
-                new \PrestaShop\PrestaShop\Adapter\Entity\Carrier($carrier['id_carrier'], $langId),
+                new \Carrier($carrier['id_carrier'], $langId),
                 $currency->iso_code,
                 $weightUnit,
             );
@@ -92,8 +92,8 @@ class CarrierBuilder
      *
      * @return EventBusCarrier
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException
+     * @@throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopException
      */
     public function buildCarrier(\Carrier $carrier, $currencyIsoCode, $weightUnit)
     {
@@ -169,7 +169,7 @@ class CarrierBuilder
      *
      * @return false|CarrierDetail
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     private function buildCarrierDetails(\Carrier $carrier, $range, array $zone)
     {
@@ -206,7 +206,7 @@ class CarrierBuilder
      *
      * @return CarrierTax|null
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     private function buildCarrierTaxes(\Carrier $carrier, $zoneId, $rangeId)
     {

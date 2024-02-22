@@ -51,11 +51,11 @@ class CarrierDataProvider implements ProviderPaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     public function getFormattedData($offset, $limit, $langIso)
     {
-        $currency = new \PrestaShop\PrestaShop\Adapter\Entity\Currency((int) $this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
+        $currency = new \Currency((int) $this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
 
         $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
         /** @var array $carriers */
@@ -83,7 +83,7 @@ class CarrierDataProvider implements ProviderPaginatedApiDataProviderInterface
             return [];
         }
 
-        $currency = new \PrestaShop\PrestaShop\Adapter\Entity\Currency((int) $this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
+        $currency = new \Currency((int) $this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
 
         $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
 
@@ -110,7 +110,7 @@ class CarrierDataProvider implements ProviderPaginatedApiDataProviderInterface
      *
      * @return int
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     public function getRemainingObjectsCount($offset, $langIso)
     {
@@ -126,7 +126,7 @@ class CarrierDataProvider implements ProviderPaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $langIso)
     {

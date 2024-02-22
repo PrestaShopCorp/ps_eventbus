@@ -20,8 +20,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Module;
 
-use PrestaShop\PrestaShop\Adapter\Entity\Db;
-use PrestaShop\PrestaShop\Adapter\Entity\Tools;
+use Db;
+use Tools;
 
 class Install
 {

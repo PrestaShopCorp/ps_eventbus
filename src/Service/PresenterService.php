@@ -4,11 +4,11 @@ namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsEventbus\Helper\ModuleHelper;
-use PrestaShop\PrestaShop\Adapter\Entity\Configuration;
-use PrestaShop\PrestaShop\Adapter\Entity\Context;
-use PrestaShop\PrestaShop\Adapter\Entity\Module;
-use PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException;
-use PrestaShop\PrestaShop\Adapter\Entity\Tools;
+use Configuration;
+use Context;
+use Module;
+use PrestaShopException;
+use Tools;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 
 class PresenterService

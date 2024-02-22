@@ -27,7 +27,7 @@ class GoogleTaxonomyDataProvider implements PaginatedApiDataProviderInterface
         $this->context = $context;
 
         if ($this->context->shop === null) {
-            throw new \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $this->shopId = (int) $this->context->shop->id;
@@ -70,7 +70,7 @@ class GoogleTaxonomyDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $langIso)
     {

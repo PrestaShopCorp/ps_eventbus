@@ -2,14 +2,14 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShop\PrestaShop\Adapter\Entity\Carrier;
-use PrestaShop\PrestaShop\Adapter\Entity\Context;
-use PrestaShop\PrestaShop\Adapter\Entity\Db;
-use PrestaShop\PrestaShop\Adapter\Entity\DbQuery;
-use PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException;
-use PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException;
-use PrestaShop\PrestaShop\Adapter\Entity\RangePrice;
-use PrestaShop\PrestaShop\Adapter\Entity\RangeWeight;
+use Carrier;
+use Context;
+use Db;
+use DbQuery;
+use PrestaShopDatabaseException;
+use PrestaShopException;
+use RangePrice;
+use RangeWeight;
 
 class CarrierRepository
 {

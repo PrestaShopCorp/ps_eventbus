@@ -2,8 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShop\PrestaShop\Adapter\Entity\Db;
-use PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException;
+use Db;
+use PrestaShopDatabaseException;
 
 class LiveSyncRepository
 {

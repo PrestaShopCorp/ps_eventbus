@@ -2,7 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShop\PrestaShop\Adapter\Entity\Configuration;
+use Configuration;
 
 class ConfigurationRepository
 {

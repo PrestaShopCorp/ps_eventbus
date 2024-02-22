@@ -30,7 +30,7 @@ class SpecificPriceService
      *
      * @return float|int|void
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException
+     * @@throws \PrestaShopException
      */
     public function getSpecificProductPrice($productId, $attributeId, $specificPriceId, $useTax, $usereduc, $context)
     {
@@ -55,7 +55,7 @@ class SpecificPriceService
      *
      * @return float|int|void
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException
+     * @@throws \PrestaShopException
      */
     private function getPriceStatic(
         $id_product,
@@ -75,7 +75,7 @@ class SpecificPriceService
     ) {
         if (!$context) {
             /** @var \PrestaShop\PrestaShop\Adapter\Entity\Context $context */
-            $context = \PrestaShop\PrestaShop\Adapter\Entity\Context::getContext();
+            $context = \Context::getContext();
         }
 
         $cur_cart = (object) $context->cart;
@@ -91,14 +91,14 @@ class SpecificPriceService
 
         /** @var \PrestaShop\PrestaShop\Adapter\Entity\Currency $currency */
         $currency = $context->currency;
-        $id_currency = \PrestaShop\PrestaShop\Adapter\Entity\Validate::isLoadedObject($currency) ? (int) $currency->id : (int) \PrestaShop\PrestaShop\Adapter\Entity\Configuration::get('PS_CURRENCY_DEFAULT');
+        $id_currency = \Validate::isLoadedObject($currency) ? (int) $currency->id : (int) \PrestaShop\PrestaShop\Adapter\Entity\Configuration::get('PS_CURRENCY_DEFAULT');
 
         if (\Validate::isLoadedObject($cur_cart)) {
             $id_address = $cur_cart->{\Configuration::get('PS_TAX_ADDRESS_TYPE')};
         }
 
         // retrieve address informations
-        $address = \PrestaShop\PrestaShop\Adapter\Entity\Address::initialize($id_address, true);
+        $address = \Address::initialize($id_address, true);
         $id_country = (int) $address->id_country;
         $id_state = (int) $address->id_state;
         $zipcode = $address->postcode;
@@ -110,14 +110,14 @@ class SpecificPriceService
         if (
             $usetax != false
             && !empty($address->vat_number)
-            && $address->id_country != \PrestaShop\PrestaShop\Adapter\Entity\Configuration::get('VATNUMBER_COUNTRY')
+            && $address->id_country != \Configuration::get('VATNUMBER_COUNTRY')
             && \PrestaShop\PrestaShop\Adapter\Entity\Configuration::get('VATNUMBER_MANAGEMENT')
         ) {
             $usetax = false;
         }
 
         if ($context->shop == null) {
-            throw new \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $shopId = (int) $context->shop->id;
@@ -161,7 +161,7 @@ class SpecificPriceService
      *
      * @return float|int|void
      *
-     * @throws \PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     private function priceCalculation(
         $id_shop,
@@ -186,25 +186,25 @@ class SpecificPriceService
 
         if ($context == null) {
             /** @var \PrestaShop\PrestaShop\Adapter\Entity\Context $context */
-            $context = \PrestaShop\PrestaShop\Adapter\Entity\Context::getContext();
+            $context = \Context::getContext();
             $context = $context->cloneContext();
         }
 
         if ($address === null) {
             if (is_object($context->cart) && $context->cart->{\Configuration::get('PS_TAX_ADDRESS_TYPE')} != null) {
                 $id_address = $context->cart->{\Configuration::get('PS_TAX_ADDRESS_TYPE')};
-                $address = new \PrestaShop\PrestaShop\Adapter\Entity\Address($id_address);
+                $address = new \Address($id_address);
             } else {
-                $address = new \PrestaShop\PrestaShop\Adapter\Entity\Address();
+                $address = new \Address();
             }
         }
 
         if ($id_shop !== null && $context->shop->id != (int) $id_shop) {
-            $context->shop = new \PrestaShop\PrestaShop\Adapter\Entity\Shop((int) $id_shop);
+            $context->shop = new \Shop((int) $id_shop);
         }
 
         if ($id_product_attribute == null) {
-            $id_product_attribute = \PrestaShop\PrestaShop\Adapter\Entity\Product::getDefaultAttribute($id_product);
+            $id_product_attribute = \Product::getDefaultAttribute($id_product);
         }
 
         // reference parameter is filled before any returns
@@ -214,7 +214,7 @@ class SpecificPriceService
         // fetch price & attribute price
         $cache_id_2 = $id_product . '-' . $id_shop . '-' . $specificPriceId;
         if (!isset(self::$_pricesLevel2[$cache_id_2])) {
-            $sql = new \PrestaShop\PrestaShop\Adapter\Entity\DbQuery();
+            $sql = new \DbQuery();
             $sql->select('product_shop.`price`, product_shop.`ecotax`');
             $sql->from('product', 'p');
             $sql->innerJoin('product_shop', 'product_shop', '(product_shop.id_product=p.id_product AND product_shop.id_shop = ' . (int) $id_shop . ')');
@@ -226,7 +226,7 @@ class SpecificPriceService
                 $sql->select('0 as id_product_attribute');
             }
 
-            $res = \PrestaShop\PrestaShop\Adapter\Entity\Db::getInstance((bool) _PS_USE_SQL_SLAVE_)->executeS($sql);
+            $res = \Db::getInstance((bool) _PS_USE_SQL_SLAVE_)->executeS($sql);
 
             if (is_array($res) && count($res)) {
                 foreach ($res as $row) {
@@ -257,7 +257,7 @@ class SpecificPriceService
         }
         // convert only if the specific price is in the default currency (id_currency = 0)
         if (!$specific_price || !($specific_price['price'] >= 0 && $specific_price['id_currency'])) {
-            $price = \PrestaShop\PrestaShop\Adapter\Entity\Tools::convertPrice($price, $id_currency);
+            $price = \Tools::convertPrice($price, $id_currency);
 
             if (isset($specific_price['price']) && $specific_price['price'] >= 0) {
                 $specific_price['price'] = $price;
@@ -266,7 +266,7 @@ class SpecificPriceService
 
         // Attribute price
         if (is_array($result) && (!$specific_price || !$specific_price['id_product_attribute'] || $specific_price['price'] < 0)) {
-            $attribute_price = \PrestaShop\PrestaShop\Adapter\Entity\Tools::convertPrice($result['attribute_price'] !== null ? (float) $result['attribute_price'] : 0, $id_currency);
+            $attribute_price = \Tools::convertPrice($result['attribute_price'] !== null ? (float) $result['attribute_price'] : 0, $id_currency);
             // If you want the default combination, please use NULL value instead
             if ($id_product_attribute !== false) {
                 $price += $attribute_price;
@@ -277,7 +277,7 @@ class SpecificPriceService
             // Customization price
             if ((int) $id_customization) {
                 /* @phpstan-ignore-next-line */
-                $price += \PrestaShop\PrestaShop\Adapter\Entity\Tools::convertPrice(\Customization::getCustomizationPrice($id_customization), $id_currency);
+                $price += \Tools::convertPrice(\Customization::getCustomizationPrice($id_customization), $id_currency);
             }
         }
 
@@ -286,7 +286,7 @@ class SpecificPriceService
         $address->id_state = $id_state;
         $address->postcode = $zipcode;
 
-        $tax_manager = \PrestaShop\PrestaShop\Adapter\Entity\TaxManagerFactory::getManager($address, \PrestaShop\PrestaShop\Adapter\Entity\Product::getIdTaxRulesGroupByIdProduct((int) $id_product, $context));
+        $tax_manager = \TaxManagerFactory::getManager($address, \PrestaShop\PrestaShop\Adapter\Entity\Product::getIdTaxRulesGroupByIdProduct((int) $id_product, $context));
         $product_tax_calculator = $tax_manager->getTaxCalculator();
 
         // Add Tax
@@ -302,7 +302,7 @@ class SpecificPriceService
             }
 
             if ($id_currency) {
-                $ecotax = \PrestaShop\PrestaShop\Adapter\Entity\Tools::convertPrice($ecotax, $id_currency);
+                $ecotax = \Tools::convertPrice($ecotax, $id_currency);
             }
             if ($use_tax) {
                 static $psEcotaxTaxRulesGroupId = null;
@@ -310,7 +310,7 @@ class SpecificPriceService
                     $psEcotaxTaxRulesGroupId = (int) \PrestaShop\PrestaShop\Adapter\Entity\Configuration::get('PS_ECOTAX_TAX_RULES_GROUP_ID');
                 }
                 // reinit the tax manager for ecotax handling
-                $tax_manager = \PrestaShop\PrestaShop\Adapter\Entity\TaxManagerFactory::getManager(
+                $tax_manager = \TaxManagerFactory::getManager(
                     $address,
                     $psEcotaxTaxRulesGroupId
                 );
@@ -328,7 +328,7 @@ class SpecificPriceService
                 $reduction_amount = $specific_price['reduction'];
 
                 if (!$specific_price['id_currency']) {
-                    $reduction_amount = \PrestaShop\PrestaShop\Adapter\Entity\Tools::convertPrice($reduction_amount, $id_currency);
+                    $reduction_amount = \Tools::convertPrice($reduction_amount, $id_currency);
                 }
 
                 $specific_price_reduction = $reduction_amount;
@@ -352,21 +352,21 @@ class SpecificPriceService
 
         // Group reduction
         if ($use_group_reduction) {
-            $reduction_from_category = \PrestaShop\PrestaShop\Adapter\Entity\GroupReduction::getValueForProduct($id_product, $id_group);
+            $reduction_from_category = \GroupReduction::getValueForProduct($id_product, $id_group);
             if ($reduction_from_category !== false) {
                 $group_reduction = $price * (float) $reduction_from_category;
             } else { // apply group reduction if there is no group reduction for this category
-                $group_reduction = (($reduc = \PrestaShop\PrestaShop\Adapter\Entity\Group::getReductionByIdGroup($id_group)) != 0) ? ($price * $reduc / 100) : 0;
+                $group_reduction = (($reduc = \Group::getReductionByIdGroup($id_group)) != 0) ? ($price * $reduc / 100) : 0;
             }
 
             $price -= $group_reduction;
         }
 
         if ($only_reduc) {
-            return \PrestaShop\PrestaShop\Adapter\Entity\Tools::ps_round($specific_price_reduction, $decimals);
+            return \Tools::ps_round($specific_price_reduction, $decimals);
         }
 
-        $price = \PrestaShop\PrestaShop\Adapter\Entity\Tools::ps_round((float) $price, $decimals);
+        $price = \Tools::ps_round((float) $price, $decimals);
 
         if ($price < 0) {
             $price = 0;

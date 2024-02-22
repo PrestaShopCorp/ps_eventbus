@@ -42,8 +42,7 @@ class ApiAuthorizationService
 
         // Check the jobId validity to avoid Dnial Of Service
         $jobValidationResponse = $this->syncApiClient->validateJobId($jobId);
-        dump($job, $jobValidationResponse);
-        die;
+
         if (!is_array($jobValidationResponse) || (int) $jobValidationResponse['httpCode'] !== 201) {
             return false;
         }

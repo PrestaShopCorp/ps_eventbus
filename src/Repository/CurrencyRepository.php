@@ -2,9 +2,9 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShop\PrestaShop\Adapter\Entity\Db;
-use PrestaShop\PrestaShop\Adapter\Entity\DbQuery;
-use PrestaShop\PrestaShop\Adapter\Entity\PrestaShopDatabaseException;
+use Db;
+use DbQuery;
+use PrestaShopDatabaseException;
 
 class CurrencyRepository
 {
@@ -23,7 +23,7 @@ class CurrencyRepository
      */
     private function isLangAvailable()
     {
-        return \PrestaShop\PrestaShop\Adapter\Entity\Tools::version_compare(_PS_VERSION_, '1.7.6', '>=');
+        return \Tools::version_compare(_PS_VERSION_, '1.7.6', '>=');
     }
 
     /**
@@ -31,7 +31,7 @@ class CurrencyRepository
      */
     public function getCurrenciesIsoCodes()
     {
-        $currencies = \PrestaShop\PrestaShop\Adapter\Entity\Currency::getCurrencies();
+        $currencies = \Currency::getCurrencies();
 
         return array_map(function ($currency) {
             return $currency['iso_code'];
@@ -43,7 +43,7 @@ class CurrencyRepository
      */
     public function getDefaultCurrencyIsoCode()
     {
-        $currency = \PrestaShop\PrestaShop\Adapter\Entity\Currency::getDefaultCurrency();
+        $currency = \Currency::getDefaultCurrency();
 
         return $currency instanceof \PrestaShop\PrestaShop\Adapter\Entity\Currency ? $currency->iso_code : '';
     }
