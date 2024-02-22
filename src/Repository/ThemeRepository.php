@@ -3,26 +3,23 @@
 namespace PrestaShop\Module\PsEventbus\Repository;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use Context;
-use Db;
-use PrestaShopException;
 use PrestaShop\PrestaShop\Core\Addon\Theme\ThemeManagerBuilder;
 
 class ThemeRepository
 {
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
-    public function __construct(Context $context)
+    public function __construct(\Context $context)
     {
         $this->context = $context;
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
     }
 
     /**
@@ -32,7 +29,7 @@ class ThemeRepository
     {
         if (version_compare(_PS_VERSION_, '1.7', '>')) {
             if ($this->context->shop === null) {
-                throw new PrestaShopException('No shop context');
+                throw new \PrestaShopException('No shop context');
             }
 
             $themeRepository = (new ThemeManagerBuilder($this->context, $this->db))

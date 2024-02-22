@@ -21,8 +21,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
-use Ps_eventbus;
-
 /**
  * Handle Error.
  */
@@ -33,7 +31,7 @@ class ErrorHandler implements ErrorHandlerInterface
      */
     protected $client;
 
-    public function __construct(Ps_eventbus $module, string $sentryDsn, string $sentryEnv)
+    public function __construct(\Ps_eventbus $module, string $sentryDsn, string $sentryEnv)
     {
         $psAccountsService = $module->getService('PrestaShop\Module\PsEventbus\Service\PsAccountsService');
 

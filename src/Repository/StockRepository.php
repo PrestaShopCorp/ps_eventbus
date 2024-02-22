@@ -2,42 +2,36 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
-use Db;
-use DbQuery;
-use PrestaShopDatabaseException;
-use PrestaShopException;
-
 class StockRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
 
-    public function __construct(Context $context)
+    public function __construct(\Context $context)
     {
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
         $this->context = $context;
     }
 
     /**
-     * @return DbQuery
+     * @return \DbQuery
      */
     public function getBaseQuery()
     {
         if ($this->context->shop === null) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $shopId = (int) $this->context->shop->id;
 
-        $query = new DbQuery();
+        $query = new \DbQuery();
         $query->from('stock_available', 'sa')
             ->where('sa.id_shop = ' . (int) $shopId);
 
@@ -50,7 +44,7 @@ class StockRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getStocks($offset, $limit)
     {
@@ -82,7 +76,7 @@ class StockRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getStocksIncremental($limit, $productIds)
     {
@@ -102,7 +96,7 @@ class StockRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit)
     {
@@ -121,11 +115,11 @@ class StockRepository
     }
 
     /**
-     * @param DbQuery $query
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(DbQuery $query)
+    private function addSelectParameters(\DbQuery $query)
     {
         $query->select('sa.id_stock_available, sa.id_product, sa.id_product_attribute, sa.id_shop, sa.id_shop_group');
         $query->select('sa.quantity, sa.physical_quantity, sa.reserved_quantity, sa.depends_on_stock, sa.out_of_stock, sa.location');

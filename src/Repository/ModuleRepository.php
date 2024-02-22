@@ -2,10 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Db;
-use DbQuery;
-use PrestaShopDatabaseException;
-
 class ModuleRepository
 {
     public const MODULE_TABLE = 'module';
@@ -13,21 +9,21 @@ class ModuleRepository
     public const MODULE_SHOP = 'module_shop';
 
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
     public function __construct()
     {
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
     }
 
     /**
-     * @return DbQuery
+     * @return \DbQuery
      */
     public function getBaseQuery()
     {
-        $query = (new DbQuery())
+        $query = (new \DbQuery())
           ->from(self::MODULE_TABLE, 'm')
           ->leftJoin(self::MODULE_SHOP, 'm_shop', 'm.id_module = m_shop.id_module');
 
@@ -44,7 +40,7 @@ class ModuleRepository
      *
      * @return array|bool|false|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getModules($offset, $limit)
     {
@@ -85,7 +81,7 @@ class ModuleRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit)
     {

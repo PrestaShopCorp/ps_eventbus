@@ -2,47 +2,40 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
-use Db;
-use DbQuery;
-use Language;
-use PrestaShopDatabaseException;
-use PrestaShopException;
-
 class StoreRepository
 {
     public const STORES_TABLE = 'store';
 
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
 
-    public function __construct(Context $context)
+    public function __construct(\Context $context)
     {
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
         $this->context = $context;
     }
 
     /**
      * @param string $langIso
      *
-     * @return DbQuery
+     * @return \DbQuery
      */
     public function getBaseQuery($langIso)
     {
         if ($this->context->shop === null) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $shopId = (int) $this->context->shop->id;
-        $langId = (int) Language::getIdByIso($langIso);
+        $langId = (int) \Language::getIdByIso($langIso);
 
-        $query = new DbQuery();
+        $query = new \DbQuery();
         if (version_compare(_PS_VERSION_, '1.7', '>=')) {
             $query->from(self::STORES_TABLE, 's')
                 ->leftJoin('store_lang', 'sl', 's.id_store = sl.id_store')
@@ -63,7 +56,7 @@ class StoreRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getStores($offset, $limit, $langIso)
     {
@@ -100,7 +93,7 @@ class StoreRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getStoresIncremental($limit, $langIso, $storeIds)
     {
@@ -123,7 +116,7 @@ class StoreRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $langIso)
     {
@@ -142,11 +135,11 @@ class StoreRepository
     }
 
     /**
-     * @param DbQuery $query
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(DbQuery $query)
+    private function addSelectParameters(\DbQuery $query)
     {
         if (version_compare(_PS_VERSION_, '1.7', '>=')) {
             $query->select('s.id_store, s.id_country, s.id_state, s.city, s.postcode, s.active, s.date_add as created_at, s.date_upd as updated_at, sl.id_lang, sl.name, sl.address1, sl.address2, sl.hours, ss.id_shop');

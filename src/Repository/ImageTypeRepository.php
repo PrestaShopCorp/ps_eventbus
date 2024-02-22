@@ -2,28 +2,24 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Db;
-use DbQuery;
-use PrestaShopDatabaseException;
-
 class ImageTypeRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
     public function __construct()
     {
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
     }
 
     /**
-     * @return DbQuery
+     * @return \DbQuery
      */
     private function getBaseQuery()
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->from('image_type', 'it');
 
@@ -36,7 +32,7 @@ class ImageTypeRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getImageTypes($offset, $limit)
     {
@@ -68,7 +64,7 @@ class ImageTypeRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getImageTypesIncremental($limit, $imageTypeIds)
     {
@@ -88,7 +84,7 @@ class ImageTypeRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit)
     {
@@ -107,11 +103,11 @@ class ImageTypeRepository
     }
 
     /**
-     * @param DbQuery $query
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(DbQuery $query)
+    private function addSelectParameters(\DbQuery $query)
     {
         $query->select('it.id_image_type');
         $query->select('it.name');

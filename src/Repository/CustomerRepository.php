@@ -2,42 +2,36 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
-use Db;
-use DbQuery;
-use PrestaShopDatabaseException;
-use PrestaShopException;
-
 class CustomerRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
 
-    public function __construct(Context $context)
+    public function __construct(\Context $context)
     {
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
         $this->context = $context;
     }
 
     /**
-     * @return DbQuery
+     * @return \DbQuery
      */
     public function getBaseQuery()
     {
         if ($this->context->shop === null) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $shopId = (int) $this->context->shop->id;
 
-        $query = new DbQuery();
+        $query = new \DbQuery();
         $query->from('customer', 'c')
             ->where('c.id_shop = ' . $shopId);
 
@@ -50,7 +44,7 @@ class CustomerRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getCustomers($offset, $limit)
     {
@@ -82,7 +76,7 @@ class CustomerRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getCustomersIncremental($limit, $customerIds)
     {
@@ -102,7 +96,7 @@ class CustomerRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit)
     {
@@ -121,11 +115,11 @@ class CustomerRepository
     }
 
     /**
-     * @param DbQuery $query
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(DbQuery $query)
+    private function addSelectParameters(\DbQuery $query)
     {
         $query->select('c.id_customer, c.id_lang, c.email, c.newsletter, c.newsletter_date_add');
         $query->select('c.optin, c.active, c.is_guest, c.deleted, c.date_add as created_at, c.date_upd as updated_at');

@@ -2,28 +2,24 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Db;
-use DbQuery;
-use PrestaShopDatabaseException;
-
 class ProductSupplierRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
     public function __construct()
     {
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
     }
 
     /**
-     * @return DbQuery
+     * @return \DbQuery
      */
     public function getBaseQuery()
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
         $query->from('product_supplier', 'ps');
 
         return $query;
@@ -35,7 +31,7 @@ class ProductSupplierRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getProductSuppliers($offset, $limit)
     {
@@ -67,7 +63,7 @@ class ProductSupplierRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getProductSuppliersIncremental($limit, $productIds)
     {
@@ -87,7 +83,7 @@ class ProductSupplierRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit)
     {
@@ -106,11 +102,11 @@ class ProductSupplierRepository
     }
 
     /**
-     * @param DbQuery $query
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(DbQuery $query)
+    private function addSelectParameters(\DbQuery $query)
     {
         $query->select('ps.id_product_supplier, ps.id_product, ps.id_product_attribute, ps.id_supplier, ps.product_supplier_reference');
         $query->select('ps.product_supplier_price_te, ps.id_currency');

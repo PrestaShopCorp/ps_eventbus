@@ -2,43 +2,37 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
-use Db;
-use DbQuery;
-use PrestaShopDatabaseException;
-use PrestaShopException;
-
 class OrderDetailsRepository
 {
     public const TABLE_NAME = 'order_detail';
 
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
 
-    public function __construct(Context $context)
+    public function __construct(\Context $context)
     {
         $this->context = $context;
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
     }
 
     /**
-     * @return DbQuery
+     * @return \DbQuery
      */
     public function getBaseQuery()
     {
         if ($this->context->shop === null) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $shopId = (int) $this->context->shop->id;
 
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->from(self::TABLE_NAME, 'od')
             ->where('od.id_shop = ' . $shopId);
@@ -52,7 +46,7 @@ class OrderDetailsRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getOrderDetails(array $orderIds, $shopId)
     {

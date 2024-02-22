@@ -2,30 +2,26 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Db;
-use DbQuery;
-use PrestaShopDatabaseException;
-
 class WishlistProductRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
     public function __construct()
     {
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
     }
 
     /**
      * @param array $wishlistIds
      *
-     * @return DbQuery
+     * @return \DbQuery
      */
     public function getBaseQuery(array &$wishlistIds)
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
         $query->from('wishlist_product', 'wp');
         $query->where('wp.id_wishlist IN(' . implode(',', array_map('intval', $wishlistIds)) . ')');
 
@@ -37,7 +33,7 @@ class WishlistProductRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getWishlistProducts(array &$wishlistIds)
     {
@@ -49,11 +45,11 @@ class WishlistProductRepository
     }
 
     /**
-     * @param DbQuery $query
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(DbQuery $query)
+    private function addSelectParameters(\DbQuery $query)
     {
         $query->select('wp.id_wishlist_product, wp.id_wishlist, wp.id_product, wp.id_product_attribute');
         $query->select('wp.quantity, wp.priority');

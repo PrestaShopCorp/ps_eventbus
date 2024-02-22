@@ -3,11 +3,6 @@
 namespace PrestaShop\Module\PsEventbus\Repository;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use Context;
-use Db;
-use DbQuery;
-use PrestaShopDatabaseException;
-use PrestaShopException;
 
 class EventbusSyncRepository
 {
@@ -15,11 +10,11 @@ class EventbusSyncRepository
     public const JOB_TABLE_NAME = 'eventbus_job';
 
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
 
@@ -28,13 +23,13 @@ class EventbusSyncRepository
      */
     private $shopId;
 
-    public function __construct(Context $context)
+    public function __construct(\Context $context)
     {
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
         $this->context = $context;
 
         if ($this->context->shop === null) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $this->shopId = (int) $this->context->shop->id;
@@ -48,7 +43,7 @@ class EventbusSyncRepository
      *
      * @return bool
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function insertTypeSync($type, $offset, $lastSyncDate, $langIso = null)
     {
@@ -64,7 +59,7 @@ class EventbusSyncRepository
         );
 
         if (!$result) {
-            throw new PrestaShopDatabaseException('Failed to insert type sync', Config::DATABASE_INSERT_ERROR_CODE);
+            throw new \PrestaShopDatabaseException('Failed to insert type sync', Config::DATABASE_INSERT_ERROR_CODE);
         }
 
         return $result;
@@ -76,7 +71,7 @@ class EventbusSyncRepository
      *
      * @return bool
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function insertJob($jobId, $date)
     {
@@ -96,7 +91,7 @@ class EventbusSyncRepository
      */
     public function findJobById($jobId)
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
         $query->select('*')
             ->from(self::JOB_TABLE_NAME)
             ->where('job_id = "' . pSQL($jobId) . '"');
@@ -112,7 +107,7 @@ class EventbusSyncRepository
      */
     public function findTypeSync($type, $langIso = null)
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
         $query->select('*')
             ->from(self::TYPE_SYNC_TABLE_NAME)
             ->where('type = "' . pSQL($type) . '"')

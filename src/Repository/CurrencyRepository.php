@@ -2,20 +2,16 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Db;
-use DbQuery;
-use PrestaShopDatabaseException;
-
 class CurrencyRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
     public function __construct()
     {
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
     }
 
     /**
@@ -54,7 +50,7 @@ class CurrencyRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getCurrencies($offset, $limit)
     {
@@ -86,7 +82,7 @@ class CurrencyRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getCurrenciesIncremental($limit, $currencyIds)
     {
@@ -101,11 +97,11 @@ class CurrencyRepository
     }
 
     /**
-     * @return DbQuery
+     * @return \DbQuery
      */
     public function getBaseQuery()
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
         $query->from('currency', 'c');
         if ($this->isLangAvailable()) {
             $query->innerJoin('currency_lang', 'cl', 'cl.id_currency = c.id_currency');
@@ -120,7 +116,7 @@ class CurrencyRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit)
     {
@@ -139,11 +135,11 @@ class CurrencyRepository
     }
 
     /**
-     * @param DbQuery $query
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(DbQuery $query)
+    private function addSelectParameters(\DbQuery $query)
     {
         if ($this->isLangAvailable()) {
             $query->select('c.id_currency, cl.name, c.iso_code, c.conversion_rate, c.deleted, c.active');

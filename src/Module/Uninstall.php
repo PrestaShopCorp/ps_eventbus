@@ -20,9 +20,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Module;
 
-use Db;
-use Tools;
-
 class Uninstall
 {
     /**
@@ -34,7 +31,7 @@ class Uninstall
      */
     private $db;
 
-    public function __construct(\Ps_eventbus $module, Db $db)
+    public function __construct(\Ps_eventbus $module, \Db $db)
     {
         $this->module = $module;
         $this->db = $db;
@@ -74,7 +71,7 @@ class Uninstall
             return false;
         }
 
-        $sql = Tools::file_get_contents($dbUninstallFile);
+        $sql = \Tools::file_get_contents($dbUninstallFile);
 
         if (empty($sql) || !is_string($sql)) {
             return false;

@@ -2,14 +2,10 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Db;
-use DbQuery;
-use PrestaShopException;
-
 class CountryRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
@@ -25,24 +21,24 @@ class CountryRepository
 
     public function __construct(Context $context)
     {
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
         $this->context = $context;
     }
 
     /**
-     * @return DbQuery
+     * @return \DbQuery
      */
     private function getBaseQuery()
     {
         if ($this->context->shop == null) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         if ($this->context->language == null) {
-            throw new PrestaShopException('No language context');
+            throw new \PrestaShopException('No language context');
         }
 
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->from('country', 'c')
             ->innerJoin('country_shop', 'cs', 'cs.id_country = c.id_country')

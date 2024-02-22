@@ -6,12 +6,6 @@ use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsAccounts\Api\Client\AccountsClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
-use Context;
-use Db;
-use DbQuery;
-use Language;
-use Module;
-use PrestaShopException;
 
 class ServerInformationRepository
 {
@@ -28,11 +22,11 @@ class ServerInformationRepository
      */
     private $configurationRepository;
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
     /**
@@ -57,7 +51,7 @@ class ServerInformationRepository
     private $errorHandler;
 
     public function __construct(
-        Context $context,
+        \Context $context,
         CurrencyRepository $currencyRepository,
         LanguageRepository $languageRepository,
         ConfigurationRepository $configurationRepository,
@@ -70,8 +64,8 @@ class ServerInformationRepository
         $this->configurationRepository = $configurationRepository;
         $this->shopRepository = $shopRepository;
         $this->context = $context;
-        $this->db = Db::getInstance();
-        $this->psAccountsService = Module::getInstanceByName('ps_accounts');
+        $this->db = \Db::getInstance();
+        $this->psAccountsService = \Module::getInstanceByName('ps_accounts');
         $this->configuration = $configuration;
         $this->createdAt = $this->shopRepository->getCreatedAt();
         $this->errorHandler = $errorHandler;
@@ -82,11 +76,11 @@ class ServerInformationRepository
      *
      * @return array[]
      *
-     * @throws PrestaShopException
+     * @throws \PrestaShopException
      */
     public function getServerInformation($langIso = '')
     {
-        $langId = !empty($langIso) ? (int) Language::getIdByIso($langIso) : null;
+        $langId = !empty($langIso) ? (int) \Language::getIdByIso($langIso) : null;
         $timezone = (string) $this->configurationRepository->get('PS_TIMEZONE');
         $createdAt = (new DateTime($this->createdAt, new DateTimeZone($timezone)))->format('Y-m-d\TH:i:sO');
         $folderCreatedAt = null;
@@ -101,7 +95,7 @@ class ServerInformationRepository
         }
 
         if ($this->context->link === null) {
-            throw new PrestaShopException('No link context');
+            throw new \PrestaShopException('No link context');
         }
 
         return [
@@ -164,7 +158,7 @@ class ServerInformationRepository
         }
 
         foreach (\Ps_eventbus::REQUIRED_TABLES as $requiredTable) {
-            $query = new DbQuery();
+            $query = new \DbQuery();
 
             $query->select('*')
                 ->from($requiredTable)
@@ -205,7 +199,7 @@ class ServerInformationRepository
      */
     private function getAccountsClient()
     {
-        $module = Module::getInstanceByName('ps_accounts');
+        $module = \Module::getInstanceByName('ps_accounts');
 
         /* @phpstan-ignore-next-line */
         return $module->getService(AccountsClient::class);

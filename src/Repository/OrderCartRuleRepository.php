@@ -2,30 +2,26 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Db;
-use DbQuery;
-use PrestaShopDatabaseException;
-
 class OrderCartRuleRepository
 {
     public const TABLE_NAME = 'order_cart_rule';
 
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
     public function __construct()
     {
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
     }
 
     /**
-     * @return DbQuery
+     * @return \DbQuery
      */
     public function getBaseQuery()
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->from(self::TABLE_NAME, 'ocr');
 
@@ -37,7 +33,7 @@ class OrderCartRuleRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getOrderCartRules(array $orderIds)
     {

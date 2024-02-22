@@ -2,30 +2,26 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Db;
-use DbQuery;
-use PrestaShopDatabaseException;
-
 class GoogleTaxonomyRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
     public function __construct()
     {
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
     }
 
     /**
      * @param int $shopId
      *
-     * @return DbQuery
+     * @return \DbQuery
      */
     public function getBaseQuery($shopId)
     {
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->from('fb_category_match', 'cm')
             ->where('cm.id_shop = ' . (int) $shopId);
@@ -40,7 +36,7 @@ class GoogleTaxonomyRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getTaxonomyCategories($offset, $limit, $shopId)
     {
@@ -74,7 +70,7 @@ class GoogleTaxonomyRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $shopId)
     {

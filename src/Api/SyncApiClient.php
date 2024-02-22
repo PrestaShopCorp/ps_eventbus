@@ -5,6 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Api;
 use GuzzleHttp\Client;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsService;
+
 class SyncApiClient
 {
     /**

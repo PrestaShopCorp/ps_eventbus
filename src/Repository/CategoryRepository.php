@@ -2,16 +2,10 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
-use Db;
-use DbQuery;
-use PrestaShopDatabaseException;
-use PrestaShopException;
-
 class CategoryRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
@@ -21,30 +15,30 @@ class CategoryRepository
     private $categoryLangCache;
 
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
 
-    public function __construct(Context $context)
+    public function __construct(\Context $context)
     {
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
         $this->context = $context;
     }
 
     /**
      * @param string $langIso
      *
-     * @return DbQuery
+     * @return \DbQuery
      */
     private function getBaseQuery($langIso)
     {
         if ($this->context->shop === null) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $shopId = (int) $this->context->shop->id;
 
-        $query = new DbQuery();
+        $query = new \DbQuery();
         $query->from('category_shop', 'cs')
             ->innerJoin('category', 'c', 'cs.id_category = c.id_category')
             ->leftJoin('category_lang', 'cl', 'cl.id_category = cs.id_category')
@@ -120,12 +114,12 @@ class CategoryRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getCategoriesWithParentInfo($langId, $shopId)
     {
         if (!isset($this->categoryLangCache[$langId])) {
-            $query = new DbQuery();
+            $query = new \DbQuery();
 
             $query->select('c.id_category, cl.name, c.id_parent')
                 ->from('category', 'c')
@@ -142,7 +136,7 @@ class CategoryRepository
             if (is_array($result)) {
                 $this->categoryLangCache[$langId] = $result;
             } else {
-                throw new PrestaShopDatabaseException('No categories found');
+                throw new \PrestaShopDatabaseException('No categories found');
             }
         }
 
@@ -156,7 +150,7 @@ class CategoryRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getCategories($offset, $limit, $langIso)
     {
@@ -190,7 +184,7 @@ class CategoryRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getCategoriesIncremental($limit, $langIso, $categoryIds)
     {
@@ -211,7 +205,7 @@ class CategoryRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $langIso)
     {
@@ -230,11 +224,11 @@ class CategoryRepository
     }
 
     /**
-     * @param DbQuery $query
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(DbQuery $query)
+    private function addSelectParameters(\DbQuery $query)
     {
         $query->select('CONCAT(cs.id_category, "-", l.iso_code) as unique_category_id, cs.id_category');
         $query->select('c.id_parent, cl.name, cl.description, cl.link_rewrite, cl.meta_title, cl.meta_keywords, cl.meta_description');

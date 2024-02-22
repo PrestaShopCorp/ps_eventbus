@@ -24,10 +24,10 @@
  * International Registered Trademark & Property of PrestaShop SA
  */
 
-use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer;
 use Db;
 use Module;
+use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer;
 
 if (!defined('_PS_VERSION_')) {
     exit;

@@ -2,40 +2,35 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
-use Db;
-use DbQuery;
-use PrestaShopException;
-
 class CartRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
 
-    public function __construct(Context $context)
+    public function __construct(\Context $context)
     {
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
         $this->context = $context;
     }
 
     /**
-     * @return DbQuery
+     * @return \DbQuery
      */
     private function getBaseQuery()
     {
         if ($this->context->shop === null) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $shopId = (int) $this->context->shop->id;
 
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->from('cart', 'c')
             ->where('c.id_shop = ' . $shopId);
@@ -123,11 +118,11 @@ class CartRepository
     }
 
     /**
-     * @param DbQuery $query
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(DbQuery $query)
+    private function addSelectParameters(\DbQuery $query)
     {
         $query->select('c.id_cart, date_add as created_at, date_upd as updated_at');
     }

@@ -2,16 +2,15 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use Module;
 use PrestaShop\PrestaShop\Core\Domain\Module\Exception\ModuleNotFoundException;
 
-class PsAccountsService 
+class PsAccountsService
 {
     private $psAccountModule;
 
     public function __construct()
     {
-        $this->psAccountModule = Module::getInstanceByName('ps_accounts');
+        $this->psAccountModule = \Module::getInstanceByName('ps_accounts');
 
         if ($this->psAccountModule == false) {
             throw new ModuleNotFoundException('Ps_Accounts is\'nt installed');
@@ -47,7 +46,7 @@ class PsAccountsService
         if ($this->psAccountModule == false) {
             return null;
         }
-        
+
         return $this->getService()->getOrRefreshToken();
     }
 }

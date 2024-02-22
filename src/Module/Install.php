@@ -20,9 +20,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Module;
 
-use Db;
-use Tools;
-
 class Install
 {
     public const PARENT_TAB_NAME = -1;
@@ -37,7 +34,7 @@ class Install
      */
     private $db;
 
-    public function __construct(\Ps_eventbus $module, Db $db)
+    public function __construct(\Ps_eventbus $module, \Db $db)
     {
         $this->module = $module;
         $this->db = $db;
@@ -56,7 +53,7 @@ class Install
             return false;
         }
 
-        $sql = Tools::file_get_contents($dbInstallFile);
+        $sql = \Tools::file_get_contents($dbInstallFile);
 
         if (empty($sql) || !is_string($sql)) {
             return false;
@@ -89,7 +86,7 @@ class Install
             return;
         }
 
-        $sql = Tools::file_get_contents($dbInstallFile);
+        $sql = \Tools::file_get_contents($dbInstallFile);
 
         if (empty($sql) || !is_string($sql)) {
             return;

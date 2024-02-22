@@ -2,19 +2,16 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Db;
-use PrestaShopDatabaseException;
-
 class LiveSyncRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
     public function __construct()
     {
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
     }
 
     /**
@@ -22,7 +19,7 @@ class LiveSyncRepository
      *
      * @return array|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getShopContentInfo(string $shopContent)
     {
@@ -47,7 +44,7 @@ class LiveSyncRepository
      *
      * @return bool
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function upsertDebounce(string $shopContent, string $lastChangeAt)
     {

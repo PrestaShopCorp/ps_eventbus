@@ -2,48 +2,41 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
-use Db;
-use DbQuery;
-use Employee;
-use PrestaShopDatabaseException;
-use PrestaShopException;
-
 class CustomPriceRepository
 {
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
-    public function __construct(Context $context)
+    public function __construct(\Context $context)
     {
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
         $this->context = $context;
 
-        if (!$this->context->employee instanceof Employee) {
-            if (($employees = Employee::getEmployees()) !== false) {
-                $this->context->employee = new Employee($employees[0]['id_employee']);
+        if (!$this->context->employee instanceof \Employee) {
+            if (($employees = \Employee::getEmployees()) !== false) {
+                $this->context->employee = new \Employee($employees[0]['id_employee']);
             }
         }
     }
 
     /**
-     * @return DbQuery
+     * @return \DbQuery
      */
     private function getBaseQuery()
     {
         if ($this->context->shop === null) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $shopId = (int) $this->context->shop->id;
 
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->from('specific_price', 'sp')
             ->leftJoin('country', 'c', 'c.id_country = sp.id_country')
@@ -60,7 +53,7 @@ class CustomPriceRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getSpecificPrices($offset, $limit)
     {
@@ -80,7 +73,7 @@ class CustomPriceRepository
      *
      * @return int
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getRemainingSpecificPricesCount($offset)
     {
@@ -92,11 +85,11 @@ class CustomPriceRepository
     }
 
     /**
-     * @param DbQuery $query
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(DbQuery $query)
+    private function addSelectParameters(\DbQuery $query)
     {
         $query->select('sp.id_specific_price, sp.id_product, sp.id_shop, sp.id_shop_group, sp.id_currency');
         $query->select('sp.id_country, sp.id_group, sp.id_customer, sp.id_product_attribute, sp.price, sp.from_quantity');
@@ -111,7 +104,7 @@ class CustomPriceRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getSpecificPricesIncremental($limit, $specificPriceIds)
     {
@@ -133,7 +126,7 @@ class CustomPriceRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit)
     {

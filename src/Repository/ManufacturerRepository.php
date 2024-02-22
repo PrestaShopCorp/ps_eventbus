@@ -2,27 +2,21 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
-use Db;
-use DbQuery;
-use PrestaShopDatabaseException;
-use PrestaShopException;
-
 class ManufacturerRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
 
-    public function __construct(Context $context)
+    public function __construct(\Context $context)
     {
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
         $this->context = $context;
     }
 
@@ -33,7 +27,7 @@ class ManufacturerRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getManufacturers($offset, $limit, $langIso)
     {
@@ -67,7 +61,7 @@ class ManufacturerRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getManufacturersIncremental($limit, $langIso, $manufacturerIds)
     {
@@ -84,19 +78,19 @@ class ManufacturerRepository
     /**
      * @param string $langIso
      *
-     * @return DbQuery
+     * @return \DbQuery
      */
     public function getBaseQuery($langIso)
     {
         if ($this->context->shop === null) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $shopId = (int) $this->context->shop->id;
 
         /** @var int $langId */
         $langId = (int) \PrestaShop\PrestaShop\Adapter\Entity\Language::getIdByIso($langIso);
-        $query = new DbQuery();
+        $query = new \DbQuery();
         $query->from('manufacturer', 'ma')
             ->innerJoin('manufacturer_lang', 'mal', 'ma.id_manufacturer = mal.id_manufacturer AND mal.id_lang = ' . (int) $langId)
             ->innerJoin('manufacturer_shop', 'mas', 'ma.id_manufacturer = mas.id_manufacturer AND mas.id_shop = ' . $shopId);
@@ -111,7 +105,7 @@ class ManufacturerRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $langIso)
     {
@@ -130,11 +124,11 @@ class ManufacturerRepository
     }
 
     /**
-     * @param DbQuery $query
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(DbQuery $query)
+    private function addSelectParameters(\DbQuery $query)
     {
         $query->select('ma.id_manufacturer, ma.name, ma.date_add as created_at, ma.date_upd as updated_at, ma.active, mal.id_lang');
         $query->select('mal.description, mal.short_description, mal.meta_title, mal.meta_keywords, mal.meta_description, mas.id_shop');

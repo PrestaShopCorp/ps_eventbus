@@ -16,12 +16,8 @@ use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService;
 use PrestaShop\Module\PsEventbus\Service\ProxyService;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
-use Module;
-use ModuleFrontController;
-use PrestaShopDatabaseException;
-use Tools;
 
-abstract class AbstractApiController extends ModuleFrontController
+abstract class AbstractApiController extends \ModuleFrontController
 {
     /**
      * Endpoint name
@@ -119,7 +115,7 @@ abstract class AbstractApiController extends ModuleFrontController
 
         try {
             $this->authorize();
-        } catch (PrestaShopDatabaseException $exception) {
+        } catch (\PrestaShopDatabaseException $exception) {
             $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
         } catch (EnvVarException $exception) {
@@ -134,19 +130,19 @@ abstract class AbstractApiController extends ModuleFrontController
     /**
      * @return void
      *
-     * @throws PrestaShopDatabaseException|EnvVarException|FirebaseException
+     * @throws \PrestaShopDatabaseException|EnvVarException|FirebaseException
      */
     private function authorize()
     {
         /** @var string $jobId */
-        $jobId = Tools::getValue('job_id', 'empty_job_id');
+        $jobId = \Tools::getValue('job_id', 'empty_job_id');
 
         $authorizationResponse = $this->authorizationService->authorizeCall($jobId);
 
         if (is_array($authorizationResponse)) {
             $this->exitWithResponse($authorizationResponse);
         } elseif (!$authorizationResponse) {
-            throw new PrestaShopDatabaseException('Failed saving job id to database');
+            throw new \PrestaShopDatabaseException('Failed saving job id to database');
         }
 
         try {
@@ -168,21 +164,21 @@ abstract class AbstractApiController extends ModuleFrontController
     protected function handleDataSync(PaginatedApiDataProviderInterface $dataProvider)
     {
         /** @var bool $debug */
-        $debug = Tools::getValue('debug') == 1;
+        $debug = \Tools::getValue('debug') == 1;
 
         /** @var string $jobId */
-        $jobId = Tools::getValue('job_id');
+        $jobId = \Tools::getValue('job_id');
         /** @var string $langIso */
-        $langIso = Tools::getValue('lang_iso', $this->languageRepository->getDefaultLanguageIsoCode());
+        $langIso = \Tools::getValue('lang_iso', $this->languageRepository->getDefaultLanguageIsoCode());
         /** @var int $limit */
-        $limit = Tools::getValue('limit', 50);
+        $limit = \Tools::getValue('limit', 50);
 
         if ($limit < 0) {
             $this->exitWithExceptionMessage(new QueryParamsException('Invalid URL Parameters', Config::INVALID_URL_QUERY));
         }
 
         /** @var bool $initFullSync */
-        $initFullSync = Tools::getValue('full', 0) == 1;
+        $initFullSync = \Tools::getValue('full', 0) == 1;
 
         $dateNow = (new \DateTime('now', new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
         $offset = 0;
@@ -306,7 +302,7 @@ abstract class AbstractApiController extends ModuleFrontController
     {
         $code = $exception->getCode() == 0 ? 500 : $exception->getCode();
 
-        if ($exception instanceof PrestaShopDatabaseException) {
+        if ($exception instanceof \PrestaShopDatabaseException) {
             $code = Config::DATABASE_QUERY_ERROR_CODE;
         } elseif ($exception instanceof EnvVarException) {
             $code = Config::ENV_MISCONFIGURED_ERROR_CODE;

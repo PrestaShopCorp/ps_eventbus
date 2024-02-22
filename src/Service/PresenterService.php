@@ -4,11 +4,6 @@ namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsEventbus\Helper\ModuleHelper;
-use Configuration;
-use Context;
-use Module;
-use PrestaShopException;
-use Tools;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 
 class PresenterService
@@ -85,7 +80,7 @@ class PresenterService
     public function expose(\ModuleCore $module, $requiredConsents = [], $optionalConsents = [])
     {
         /** @var \Ps_eventbus $psEventbusModule */
-        $psEventbusModule = Module::getInstanceByName('ps_eventbus');
+        $psEventbusModule = \Module::getInstanceByName('ps_eventbus');
 
         /** @var ModuleHelper $moduleHelper */
         $moduleHelper = $psEventbusModule->getService('ps_eventbus.helper.module');
@@ -96,10 +91,10 @@ class PresenterService
         if ($this->psAccountsService == null) {
             return [];
         } else {
-            $language = Context::getContext()->language;
+            $language = \Context::getContext()->language;
 
             if ($language == null) {
-                throw new PrestaShopException('No language context');
+                throw new \PrestaShopException('No language context');
             }
 
             return [
@@ -107,16 +102,16 @@ class PresenterService
                 'requiredConsents' => $requiredConsents,
                 'optionalConsents' => $optionalConsents,
                 'module' => array_merge([
-                    'logoUrl' => Tools::getHttpHost(true) . '/modules/' . $module->name . '/logo.png',
+                    'logoUrl' => \Tools::getHttpHost(true) . '/modules/' . $module->name . '/logo.png',
                 ], $this->convertObjectToArray($module)),
                 'shop' => [
                     /* @phpstan-ignore-next-line */
                     'id' => $this->psAccountsService->getShopUuid(),
-                    'name' => Configuration::get('PS_SHOP_NAME'),
-                    'url' => Tools::getHttpHost(true),
+                    'name' => \Configuration::get('PS_SHOP_NAME'),
+                    'url' => \Tools::getHttpHost(true),
                     'lang' => $language->iso_code,
                 ],
-                'psEventbusModule' => $this->convertObjectToArray(Module::getInstanceByName('ps_eventbus')),
+                'psEventbusModule' => $this->convertObjectToArray(\Module::getInstanceByName('ps_eventbus')),
                 'modulesInformation' => [
                     'psEventbus' => $moduleHelper->buildModuleInformation(
                         'ps_eventbus'

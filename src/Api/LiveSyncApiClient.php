@@ -2,9 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use GuzzleHttp\Psr7\Request;
-use PrestaShop\Module\PsEventbus\Config\Config;
 use GuzzleHttp\Client;
+use PrestaShop\Module\PsEventbus\Config\Config;
 
 class LiveSyncApiClient
 {
@@ -81,7 +80,7 @@ class LiveSyncApiClient
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                     'Content-Type' => 'application/json',
                 ],
-                'body' => '{"shopContents": ["' . $shopContent . '"], "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}'
+                'body' => '{"shopContents": ["' . $shopContent . '"], "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}',
             ]
         );
 

@@ -2,10 +2,10 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
+use GuzzleHttp\Client;
 use PrestaShop\Module\PsEventbus\Api\Post\MultipartBody;
 use PrestaShop\Module\PsEventbus\Api\Post\PostFileApi;
 use PrestaShop\Module\PsEventbus\Config\Config;
-use GuzzleHttp\Client;
 
 class CollectorApiClient
 {
@@ -86,7 +86,7 @@ class CollectorApiClient
                     'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                 ],
-                'body' => $multipartBody->getContents()
+                'body' => $multipartBody->getContents(),
             ]
         );
 
@@ -126,7 +126,7 @@ class CollectorApiClient
                     'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                 ],
-                'body' => [$multipartBody->getContents()]
+                'body' => [$multipartBody->getContents()],
             ]
         );
 

@@ -2,29 +2,21 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Configuration;
-use Context;
-use Db;
-use DbQuery;
-use Language;
-use PrestaShopDatabaseException;
-use PrestaShopException;
-
 class LanguageRepository
 {
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
 
-    public function __construct(Context $context)
+    public function __construct(\Context $context)
     {
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
         $this->context = $context;
     }
 
@@ -34,7 +26,7 @@ class LanguageRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getLanguagesSync($offset, $limit)
     {
@@ -66,7 +58,7 @@ class LanguageRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getLanguagesIncremental($limit, $languageIds)
     {
@@ -81,17 +73,17 @@ class LanguageRepository
     }
 
     /**
-     * @return DbQuery
+     * @return \DbQuery
      */
     public function getBaseQuery()
     {
         if ($this->context->shop === null) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $shopId = (int) $this->context->shop->id;
 
-        $query = new DbQuery();
+        $query = new \DbQuery();
         $query->from('lang', 'la')
             ->innerJoin('lang_shop', 'las', 'la.id_lang = las.id_lang AND las.id_shop = ' . $shopId);
 
@@ -99,11 +91,11 @@ class LanguageRepository
     }
 
     /**
-     * @param DbQuery $query
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(DbQuery $query)
+    private function addSelectParameters(\DbQuery $query)
     {
         $query->select('la.id_lang, la.name, la.active, la.iso_code, la.language_code, la.locale, la.date_format_lite');
         $query->select('la.date_format_full, la.is_rtl, las.id_shop');
@@ -115,7 +107,7 @@ class LanguageRepository
     public function getLanguagesIsoCodes()
     {
         /** @var array $languages */
-        $languages = Language::getLanguages();
+        $languages = \Language::getLanguages();
 
         return array_map(function ($language) {
             return $language['iso_code'];
@@ -127,7 +119,7 @@ class LanguageRepository
      */
     public function getDefaultLanguageIsoCode()
     {
-        $language = Language::getLanguage((int) Configuration::get('PS_LANG_DEFAULT'));
+        $language = \Language::getLanguage((int) \Configuration::get('PS_LANG_DEFAULT'));
 
         if (is_array($language)) {
             return $language['iso_code'];
@@ -143,7 +135,7 @@ class LanguageRepository
      */
     public function getLanguageIdByIsoCode($isoCode)
     {
-        return (int) Language::getIdByIso($isoCode);
+        return (int) \Language::getIdByIso($isoCode);
     }
 
     /**
@@ -151,7 +143,7 @@ class LanguageRepository
      */
     public function getLanguages()
     {
-        return Language::getLanguages();
+        return \Language::getLanguages();
     }
 
     /**
@@ -160,7 +152,7 @@ class LanguageRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit)
     {

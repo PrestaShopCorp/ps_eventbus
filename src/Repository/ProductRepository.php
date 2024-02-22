@@ -2,22 +2,14 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
-use Db;
-use DbQuery;
-use Employee;
-use PrestaShopDatabaseException;
-use PrestaShopException;
-use Product;
-
 class ProductRepository
 {
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
@@ -26,19 +18,19 @@ class ProductRepository
      */
     private $shopId;
 
-    public function __construct(Context $context)
+    public function __construct(\Context $context)
     {
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
         $this->context = $context;
 
-        if (!$this->context->employee instanceof Employee) {
-            if (($employees = Employee::getEmployees()) !== false) {
-                $this->context->employee = new Employee($employees[0]['id_employee']);
+        if (!$this->context->employee instanceof \Employee) {
+            if (($employees = \Employee::getEmployees()) !== false) {
+                $this->context->employee = new \Employee($employees[0]['id_employee']);
             }
         }
 
         if ($this->context->shop === null) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $this->shopId = (int) $this->context->shop->id;
@@ -47,17 +39,17 @@ class ProductRepository
     /**
      * @param int $langId
      *
-     * @return DbQuery
+     * @return \DbQuery
      */
     private function getBaseQuery($langId)
     {
         if ($this->context->shop === null) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $shopIdGroup = (int) $this->context->shop->id_shop_group;
 
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->from('product', 'p')
             ->innerJoin('product_shop', 'ps', 'ps.id_product = p.id_product AND ps.id_shop = ' . $this->shopId)
@@ -85,7 +77,7 @@ class ProductRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getProducts($offset, $limit, $langId)
     {
@@ -106,7 +98,7 @@ class ProductRepository
      *
      * @return int
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getRemainingProductsCount($offset, $langId)
     {
@@ -125,14 +117,14 @@ class ProductRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getProductAttributeValues(array $attributeIds, $langId)
     {
         if (!$attributeIds) {
             return [];
         }
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->select('pas.id_product_attribute, agl.name as name, al.name as value')
             ->from('product_attribute_shop', 'pas')
@@ -163,7 +155,7 @@ class ProductRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getProductFeatures(array $productIds, $langId)
     {
@@ -171,7 +163,7 @@ class ProductRepository
             return [];
         }
 
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->select('fp.id_product, fl.name, fvl.value')
             ->from('feature_product', 'fp')
@@ -199,7 +191,7 @@ class ProductRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getProductImages(array $productIds)
     {
@@ -207,7 +199,7 @@ class ProductRepository
             return [];
         }
 
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->select('imgs.id_product, imgs.id_image, IFNULL(imgs.cover, 0) as cover')
             ->from('image_shop', 'imgs')
@@ -223,14 +215,14 @@ class ProductRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getAttributeImages(array $attributeIds)
     {
         if (!$attributeIds) {
             return [];
         }
-        $query = new DbQuery();
+        $query = new \DbQuery();
 
         $query->select('id_product_attribute, id_image')
             ->from('product_attribute_image', 'pai')
@@ -249,7 +241,7 @@ class ProductRepository
      */
     public function getPriceTaxExcluded($productId, $attributeId)
     {
-        return Product::getPriceStatic($productId, false, $attributeId, 6, null, false, false);
+        return \Product::getPriceStatic($productId, false, $attributeId, 6, null, false, false);
     }
 
     /**
@@ -260,7 +252,7 @@ class ProductRepository
      */
     public function getPriceTaxIncluded($productId, $attributeId)
     {
-        return Product::getPriceStatic($productId, true, $attributeId, 6, null, false, false);
+        return \Product::getPriceStatic($productId, true, $attributeId, 6, null, false, false);
     }
 
     /**
@@ -271,7 +263,7 @@ class ProductRepository
      */
     public function getSalePriceTaxExcluded($productId, $attributeId)
     {
-        return Product::getPriceStatic($productId, false, $attributeId, 6);
+        return \Product::getPriceStatic($productId, false, $attributeId, 6);
     }
 
     /**
@@ -282,7 +274,7 @@ class ProductRepository
      */
     public function getSalePriceTaxIncluded($productId, $attributeId)
     {
-        return Product::getPriceStatic($productId, true, $attributeId, 6);
+        return \Product::getPriceStatic($productId, true, $attributeId, 6);
     }
 
     /**
@@ -292,7 +284,7 @@ class ProductRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getProductsIncremental($limit, $langId, $productIds)
     {
@@ -315,7 +307,7 @@ class ProductRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $langId)
     {
@@ -334,11 +326,11 @@ class ProductRepository
     }
 
     /**
-     * @param DbQuery $query
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(DbQuery $query)
+    private function addSelectParameters(\DbQuery $query)
     {
         $query->select('p.id_product, p.id_manufacturer, p.id_supplier, IFNULL(pas.id_product_attribute, 0) as id_attribute, pas.default_on as is_default_attribute');
         $query->select('pl.name, pl.description, pl.description_short, pl.link_rewrite, cl.name as default_category');
@@ -349,7 +341,7 @@ class ProductRepository
         $query->select('p.available_for_order, p.available_date, p.cache_is_pack as is_bundle, p.is_virtual');
         $query->select('p.unity, p.unit_price_ratio');
 
-        if (property_exists(new Product(), 'mpn')) {
+        if (property_exists(new \Product(), 'mpn')) {
             $query->select('p.mpn');
         }
 

@@ -82,11 +82,11 @@ return [
     // For more see: https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#patchers
     'patchers' => [
         static function (string $filePath, string $prefix, string $contents): string {
-                // if (strpos($filePath, 'vendor/prestashop/')) {
-                //$pattern = '/\s(\\)([A-Za-z]+)(?![A-Za-z\\])/';
-                //$replacement = '\\PrestaShop\\PrestaShop\\Adapter\Entity';
-                //$contents = preg_replace('/\\\\' . $prefix . '/', $replacement, $contents);
-                //}
+            // if (strpos($filePath, 'vendor/prestashop/')) {
+            // $pattern = '/\s(\\)([A-Za-z]+)(?![A-Za-z\\])/';
+            // $replacement = '\\PrestaShop\\PrestaShop\\Adapter\Entity';
+            // $contents = preg_replace('/\\\\' . $prefix . '/', $replacement, $contents);
+            // }
 
             return $contents;
         },
@@ -128,7 +128,7 @@ return [
         '\Tools',
         '\Shop',
         '\DateTime',
-        '\DateTimeZone'
+        '\DateTimeZone',
     ],
     'exclude-functions' => [
         // 'mb_str_split',
