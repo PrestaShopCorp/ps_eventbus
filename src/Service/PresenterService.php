@@ -18,7 +18,7 @@ class PresenterService
      */
     private $psAccountsService;
 
-    public function __construct()
+    public function __construct($psAccountsService)
     {
         $moduleManager = ModuleManagerBuilder::getInstance();
         if (!$moduleManager) {
@@ -26,7 +26,7 @@ class PresenterService
         }
         $moduleManager = $moduleManager->build();
         if ($moduleManager->isInstalled('ps_accounts')) {
-            $this->psAccountsService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\PsAccountsService');
+            $this->psAccountsService = $psAccountsService;
         } else {
             $this->initPsAccount();
         }

@@ -74,7 +74,5 @@ services:
   PrestaShop\Module\PsEventbus\Service\PresenterService:
     class: PrestaShop\Module\PsEventbus\Service\PresenterService
     public: true
-
-  PrestaShop\Module\PsEventbus\Service\PsAccountsService:
-    class: PrestaShop\Module\PsEventbus\Service\PsAccountsService
-    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Service\PsAccountsService'
