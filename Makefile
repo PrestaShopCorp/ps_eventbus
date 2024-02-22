@@ -27,6 +27,7 @@ define zip_it
 	./tools/vendor/bin/autoindex prestashop:add:index ${TMP_DIR}
 	cp $1 ${TMP_DIR}/${MODULE_NAME}/config/parameters.yml;
 	cd ${TMP_DIR}/${MODULE_NAME} && composer dump-autoload;
+	SCOPER_FOLDER=${TMP_DIR}/${MODULE_NAME} php php-scoper-fix.php
 	cd ${TMP_DIR} && zip -9 -r $2 ./${MODULE_NAME};
 	mv ${TMP_DIR}/$2 ./dist;
 	rm -rf ${TMP_DIR:-/dev/null};
@@ -40,9 +41,9 @@ define zip_it_temp
 	./tools/vendor/bin/autoindex prestashop:add:index ./dist/${MODULE_NAME}
 	cp $1 ./dist/${MODULE_NAME}/config/parameters.yml;
 	cd ./dist/${MODULE_NAME} && composer dump-autoload;
+	SCOPER_FOLDER=./dist/${MODULE_NAME} php php-scoper-fix.php
 	rm -rf ./dist/tmp;
 endef
-
 
 define in_docker
 	docker run \

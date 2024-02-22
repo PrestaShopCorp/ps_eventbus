@@ -2,7 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use PrestaShop\CircuitBreaker\Client\GuzzleClient;
+use GuzzleHttp\Client;
 use PrestaShop\Module\PsEventbus\Config\Config;
 
 class SyncApiClient
@@ -39,7 +39,7 @@ class SyncApiClient
     {
         $this->module = $module;
 
-        $psAccounts = \PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName('ps_accounts');
+        $psAccounts = \Module::getInstanceByName('ps_accounts');
         $psAccountsService = $psAccounts->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
 
         $this->jwt = $psAccountsService->getOrRefreshToken();
@@ -56,7 +56,7 @@ class SyncApiClient
      */
     private function getClient($timeout = Config::SYNC_API_MAX_TIMEOUT)
     {
-        return new GuzzleClient([
+        return new Client([
             'allow_redirects' => true,
             'connect_timeout' => 3,
             'http_errors' => false,
@@ -71,19 +71,20 @@ class SyncApiClient
      */
     public function validateJobId($jobId)
     {
-        $rawResponse = $this->getClient()->request(
+        $rawResponse = $this->getClient()->createRequest(
+            'GET',
             $this->syncApiUrl . '/job/' . $jobId,
             [
-                'method' => 'GET',
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . $this->jwt,
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                 ],
             ]
-        );
+        )->send();
 
         $jsonResponse = json_decode($rawResponse);
+        
         dump($rawResponse,
         $this->syncApiUrl . '/job/' . $jobId,
         [
@@ -94,6 +95,7 @@ class SyncApiClient
                 'User-Agent' => 'ps-eventbus/' . $this->module->version,
             ],
         ]);
+
         return [
             'status' => substr((string) $jsonResponse->statusCode, 0, 1) === '2',
             'httpCode' => $jsonResponse->statusCode,

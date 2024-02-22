@@ -2,8 +2,10 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use PrestaShop\CircuitBreaker\Client\GuzzleClient;
+use GuzzleHttp\Psr7\Request;
 use PrestaShop\Module\PsEventbus\Config\Config;
+use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
+use Prestashop\ModuleLibGuzzleAdapter\Interfaces\HttpClientInterface;
 
 class LiveSyncApiClient
 {
@@ -39,7 +41,7 @@ class LiveSyncApiClient
     {
         $this->module = $module;
 
-        $psAccounts = \PrestaShop\PrestaShop\Adapter\Entity\Module::getInstanceByName('ps_accounts');
+        $psAccounts = \Module::getInstanceByName('ps_accounts');
         $psAccountsService = $psAccounts->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
 
         $this->jwt = $psAccountsService->getOrRefreshToken();
@@ -52,11 +54,11 @@ class LiveSyncApiClient
      *
      * @param int $timeout
      *
-     * @return GuzzleClient
+     * @return HttpClientInterface
      */
     private function getClient($timeout = Config::SYNC_API_MAX_TIMEOUT)
     {
-        return new GuzzleClient([
+        return (new ClientFactory())->getClient([
             'allow_redirects' => true,
             'connect_timeout' => 3,
             'http_errors' => false,
@@ -73,26 +75,24 @@ class LiveSyncApiClient
      */
     public function liveSync(string $shopContent, int $shopContentId, string $action)
     {
-        $rawResponse = $this->getClient(3)->request(
-            $this->liveSyncApiUrl . '/notify/' . $this->shopId,
-            [
-                'method' => 'POST',
-                'headers' => [
+        $rawResponse = $this->getClient(3)->sendRequest(
+            new Request(
+                'POST',
+                $this->liveSyncApiUrl . '/notify/' . $this->shopId,
+                [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . $this->jwt,
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                     'Content-Type' => 'application/json',
                 ],
-                'body' => '{"shopContents": ["' . $shopContent . '"], "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}',
-            ]
+                '{"shopContents": ["' . $shopContent . '"], "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}'
+            )
         );
 
-        $jsonResponse = json_decode($rawResponse);
-
         return [
-            'status' => substr((string) $jsonResponse->statusCode, 0, 1) === '2',
-            'httpCode' => $jsonResponse->statusCode,
-            'body' => $jsonResponse->body,
+            'status' => substr((string) $rawResponse->getStatusCode(), 0, 1) === '2',
+            'httpCode' => $rawResponse->getStatusCode(),
+            'body' => $rawResponse->getBody(),
         ];
     }
 }
