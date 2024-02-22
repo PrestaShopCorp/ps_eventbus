@@ -37,9 +37,8 @@ class TranslationRepository
 
         $shopId = (int) $this->context->shop->id;
 
-        $query = new DbQuery();
-        $query->from('translation', 'c')
-            ->where('c.id_shop = ' . $shopId);
+        $query = new \DbQuery();
+        $query->from('translation', 't');
 
         return $query;
     }
@@ -71,7 +70,7 @@ class TranslationRepository
     public function getRemainingTranslationsCount($offset)
     {
         $query = $this->getBaseQuery()
-            ->select('(COUNT(c.id_translation) - ' . (int) $offset . ') as count');
+            ->select('(COUNT(t.id_translation) - ' . (int) $offset . ') as count');
 
         return (int) $this->db->getValue($query);
     }
@@ -90,7 +89,7 @@ class TranslationRepository
 
         $this->addSelectParameters($query);
 
-        $query->where('c.id_translation IN(' . implode(',', array_map('intval', $translationIds)) . ')')
+        $query->where('t.id_translation IN(' . implode(',', array_map('intval', $translationIds)) . ')')
             ->limit($limit);
 
         return $this->db->executeS($query);
@@ -127,6 +126,6 @@ class TranslationRepository
      */
     private function addSelectParameters(DbQuery $query)
     {
-        $query->select('c.id_translation, c.id_lang, c.key, c.translation, c.domain, c.theme');
+        $query->select('t.id_translation, t.id_lang, t.key, t.translation, t.domain, t.theme');
     }
 }

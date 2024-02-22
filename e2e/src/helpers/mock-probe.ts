@@ -1,64 +1,59 @@
-import WebSocket, { RawData } from 'ws';
+import WebSocket from 'ws';
+import {WebSocketSubject} from "rxjs/webSocket";
+import {bufferCount, catchError, filter, lastValueFrom, map, Observable, Subject, take, tap, timeout} from "rxjs";
+import R from 'ramda';
+
+const DEFAULT_OPTIONS = {
+  timeout : 1500
+};
+
+export type MockProbeOptions = typeof DEFAULT_OPTIONS;
+
+// no Websocket implementation seems to exist in jest runner
+if (!global.WebSocket) {
+  (global as any).WebSocket = WebSocket;
+}
 
 type MockProbeResponse = {
-    method: string,
-    headers: Record<string, unknown>,
-    url: string,
-    query: string,
-    body: Record<string, unknown>
+  apiName: string,
+  method: string,
+  headers: Record<string, string>,
+  url: string,
+  query: Record<string, string>,
+  params: Record<string, string>,
+  body: Record<string, any>
 }
 
 export class MockProbe {
-    private static wsConnection: WebSocket|null = null;
-    private static messageList = [];
+  private static wsConnection: WebSocketSubject<MockProbeResponse>;
+  private options : MockProbeOptions
 
-    public static connect(): void {
-        if (MockProbe.wsConnection !== null) {
-            throw new Error('You have already one connection to wss, close before create new another !');
+  constructor(options?: MockProbeOptions) {
+    if (!MockProbe.wsConnection) {
+      MockProbe.wsConnection = new WebSocketSubject<MockProbeResponse>('ws://localhost:8080');
+    }
+    this.options = R.mergeLeft(options, DEFAULT_OPTIONS);
+  }
+
+  /**
+   * connect the probe to the server.
+   * @param expectedMessageCount how may messages to wait for before resolving
+   * @param match filter only messages matching this object
+   */
+  public async waitForMessages(expectedMessageCount = 1, match?: Partial<MockProbeResponse>): Promise<MockProbeResponse[]> {
+    const $messages: Observable<MockProbeResponse[]> = MockProbe.wsConnection.pipe(
+      filter(message => {
+        if (match) {
+          return (R.whereEq(match, message));
         }
+        // no filtering
+        return true;
+      }),
+      bufferCount(expectedMessageCount),
+      take(1),
+      timeout(this.options.timeout),
+    )
 
-        MockProbe.wsConnection = new WebSocket('ws://localhost:8080');
-        MockProbe.wsConnection.on('message', (message: RawData) => this.insertToMessageList(message));
-    }
-
-    public static disconnect(): void {
-        MockProbe.clearMessageList();
-        MockProbe.wsConnection.close();
-        MockProbe.wsConnection = null;
-    }
-
-    public static async waitForMessages(expectedMessageCount = 1): Promise<Array<MockProbeResponse>> {
-        return new Promise((resolve, reject) => {
-            let tryCount = 0;
-            let attempt = 10;
-            
-            const interval = setInterval(() => {
-                attempt++;
-                
-                if (MockProbe.messageList.length === expectedMessageCount) {
-                    clearInterval(interval);
-                    resolve(MockProbe.messageList);
-
-                    MockProbe.clearMessageList();
-                }
-
-                if (tryCount === attempt) {
-                    clearInterval(interval);
-                    reject('No sufficient message received from probe');
-
-                    MockProbe.clearMessageList();
-                }
-            }, 500)
-        });
-    }
-
-    private static insertToMessageList(message: RawData): void {
-        MockProbe.messageList.push(
-            JSON.parse(message.toString())
-        );
-    }
-
-    private static clearMessageList(): void {
-        MockProbe.messageList = [];
-    }
+    return lastValueFrom($messages)
+  }
 }

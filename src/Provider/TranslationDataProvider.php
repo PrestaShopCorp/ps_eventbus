@@ -35,6 +35,11 @@ class TranslationDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getFormattedData($offset, $limit, $langIso)
     {
+        // translations are stored as xml files before version 1.7
+        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+            return [];
+        }
+
         $translations = $this->translationRepository->getTranslations($offset, $limit);
 
         if (!is_array($translations)) {
@@ -73,6 +78,11 @@ class TranslationDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
+        // translations are stored as xml files before version 1.7
+        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+            return [];
+        }
+
         $translations = $this->translationRepository->getTranslationsIncremental($limit, $objectIds);
 
         if (!is_array($translations)) {

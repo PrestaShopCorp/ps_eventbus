@@ -41,7 +41,7 @@ class EmployeeRepository
         $query->from('employee', 'e')
             ->leftJoin('employee_shop', 'es', 'es.id_employee = e.id_employee');
 
-        $query->where('c.id_shop = ' . $shopId);
+        $query->where('es.id_shop = ' . $shopId);
 
         return $query;
     }

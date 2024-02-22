@@ -27,8 +27,11 @@ class ps_EventbusApiInfoModuleFrontController extends AbstractApiController
         $langIso = Tools::getValue('lang_iso', '');
         $serverInfo = $serverInformationRepository->getServerInformation($langIso);
 
+        /** @var bool $initFullSync */
+        $initFullSync = \Tools::getValue('full', 0) == 1;
+
         try {
-            $response = $this->proxyService->upload($jobId, $serverInfo, $this->startTime);
+            $response = $this->proxyService->upload($jobId, $serverInfo, $this->startTime, $initFullSync);
         } catch (EnvVarException|Exception $exception) {
             $this->exitWithExceptionMessage($exception);
         }
