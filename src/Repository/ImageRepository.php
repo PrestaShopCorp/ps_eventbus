@@ -55,7 +55,7 @@ class ImageRepository
     public function getRemainingImagesCount($offset)
     {
         $query = $this->getBaseQuery()
-            ->select('(COUNT(it.id_image) - ' . (int) $offset . ') as count');
+            ->select('(COUNT(i.id_image) - ' . (int) $offset . ') as count');
 
         return (int) $this->db->getValue($query);
     }
@@ -74,7 +74,7 @@ class ImageRepository
 
         $this->addSelectParameters($query);
 
-        $query->where('it.id_image IN(' . implode(',', array_map('intval', $imageIds)) . ')')
+        $query->where('i.id_image IN(' . implode(',', array_map('intval', $imageIds)) . ')')
             ->limit($limit);
 
         return $this->db->executeS($query);
@@ -166,12 +166,12 @@ class ImageRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('it.id_image');
-        $query->select('it.id_product');
-        $query->select('it.id_lang');
-        $query->select('it.id_shop');
-        $query->select('it.position');
-        $query->select('it.cover');
-        $query->select('it.legend');
+        $query->select('i.id_image');
+        $query->select('i.id_product');
+        $query->select('i.position');
+        $query->select('i.cover');
+        $query->select('il.id_lang');
+        $query->select('il.legend');
+        $query->select('is.id_shop');
     }
 }

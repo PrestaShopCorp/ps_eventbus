@@ -1,45 +1,43 @@
-import WebSocket, { WebSocketServer } from 'ws';
-import { Request } from "express";
+import {WebSocketServer} from 'ws';
+import {Request} from "express";
 
+/**
+ * Websocket server used by [mock-probe.ts] to wait for and inspect requests during testing.
+ */
 export class WsServer {
-    private static instance: WsServer;
-    private static server: WebSocketServer;
-    private static client: WebSocket|null;
+  private server: WebSocketServer;
 
-    private constructor() { }
+  constructor(port: number) {
+    this.server = new WebSocketServer({port});
 
-    public static getInstance(): WsServer {
-        if (!WsServer.instance) {
-            WsServer.instance = new WsServer();
+    this.server.on('error', err => {
+      console.error(err);
+    })
 
-            WsServer.server = new WebSocketServer({ port: 8080 });
+    console.log(`Probe listening on port \x1b[96m${port}\x1b[0m`);
+  }
 
-            WsServer.server.on('connection', (ws: WebSocket) => {
-                if (WsServer.server.clients.size > 1) {
-                    throw new Error('Too many connection to websocket server !');
-                }
-                WsServer.client = ws;
-            });
-            WsServer.server.on('error', err => { throw err } )
+  /**
+   * send data to all connected clients
+   * @param apiName
+   * @param request
+   */
+  public sendDataToWS(apiName: string, request: Request) {
+    const data = {
+      apiName,
+      method: request.method,
+      headers: request.headers,
+      url: request.url,
+      query: request.query,
+      params: request.params,
+      body: request.body ?? {},
+    };
 
-            console.log(`WS server started on port \x1b[96m8080\x1b[0m`);
-        }
-
-        return WsServer.instance;
+    // there may be no client if we're not runing an automated test suite
+    if (this.server.clients.size > 0) {
+      this.server.clients.forEach((client) => {
+        client.send(JSON.stringify(data));
+      })
     }
-
-    public sendDataToWS(apiName: string, request: Request) {
-        if (!WsServer.client) return;
-
-        const data = {
-            apiName,
-            method: request.method,
-            headers: request.headers,
-            url: request.url,
-            query: request.query,
-            body: request.body ?? {},
-        };
-
-        WsServer.client.send(JSON.stringify(data));
-    }
+  }
 }

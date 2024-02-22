@@ -34,8 +34,8 @@ ps_eventbus_install() {
   # - ..:/var/www/html/modules/ps_eventbus:rw        => mount all the sources
   # - /var/www/html/modules/ps_eventbus/vendor       => void the specific vendor dir, makint it empty
   # - /var/www/html/modules/ps_eventbus/tools/vendor => void the specific vendor dev dir, making it empty
-  # 
-  # That said, we now want our container to have RW access on these directories, 
+  #
+  # That said, we now want our container to have RW access on these directories,
   # and to install the required composer dependencies for the module to work.
   #
   # Other scenarios could be imagined, but this is the best way to avoid writes on a mounted volume,
