@@ -46,7 +46,7 @@ class ProxyService implements ProxyServiceInterface
         $dataJson = $this->jsonFormatter->formatNewlineJsonString($data);
 
         try {
-            $response = $this->eventBusProxyClient->upload($jobId, $dataJson, $scriptStartTime, $isFull);
+            return $this->eventBusProxyClient->upload($jobId, $dataJson, $scriptStartTime, $isFull);
         } catch (ClientException $exception) {
             $this->errorHandler->handle($exception);
 
@@ -56,8 +56,6 @@ class ProxyService implements ProxyServiceInterface
 
             return ['error' => $exception->getMessage()];
         }
-
-        return $response;
     }
 
     /**

@@ -2,13 +2,10 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-
-use GuzzleHttp\Psr7\Request;
 use PrestaShop\Module\PsEventbus\Api\Post\MultipartBody;
 use PrestaShop\Module\PsEventbus\Api\Post\PostFileApi;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use GuzzleHttp\Client;
-use Prestashop\ModuleLibGuzzleAdapter\Interfaces\HttpClientInterface;
 
 class CollectorApiClient
 {
@@ -78,10 +75,10 @@ class CollectorApiClient
         $multipartBody = new MultipartBody([], [$file], Config::COLLECTOR_MULTIPART_BOUNDARY);
 
         $response = $this->getClient($startTime)->request(
-            new Request(
-                'POST',
-                $url,
-                [
+            'POST',
+            $url,
+            [
+                'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . $this->jwt,
                     'Content-Length' => $contentSize ? (string) $contentSize : '0',
@@ -89,8 +86,8 @@ class CollectorApiClient
                     'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                 ],
-                $multipartBody->getContents()
-            )  
+                'body' => $multipartBody->getContents()
+            ]
         );
 
         return [
@@ -119,18 +116,18 @@ class CollectorApiClient
         $multipartBody = new MultipartBody([], [$file], Config::COLLECTOR_MULTIPART_BOUNDARY);
 
         $response = $this->getClient($startTime)->request(
-            new Request(
-                'POST',
-                $url,
-                [
+            'POST',
+            $url,
+            [
+                'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . $this->jwt,
                     'Content-Length' => $contentSize ? (string) $contentSize : '0',
                     'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                 ],
-                $multipartBody->getContents()
-            )
+                'body' => [$multipartBody->getContents()]
+            ]
         );
 
         return [

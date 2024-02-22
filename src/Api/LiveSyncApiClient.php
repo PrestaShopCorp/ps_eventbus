@@ -72,17 +72,17 @@ class LiveSyncApiClient
     public function liveSync(string $shopContent, int $shopContentId, string $action)
     {
         $response = $this->getClient(3)->request(
-            new Request(
-                'POST',
-                $this->liveSyncApiUrl . '/notify/' . $this->shopId,
-                [
+            'POST',
+            $this->liveSyncApiUrl . '/notify/' . $this->shopId,
+            [
+                'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . $this->jwt,
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                     'Content-Type' => 'application/json',
                 ],
-                '{"shopContents": ["' . $shopContent . '"], "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}'
-            )
+                'body' => '{"shopContents": ["' . $shopContent . '"], "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}'
+            ]
         );
 
         return [
