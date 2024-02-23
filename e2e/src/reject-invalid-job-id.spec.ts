@@ -1,6 +1,5 @@
 import {MockProbe} from './helpers/mock-probe';
 import testConfig from './helpers/test.config';
-import request from 'supertest';
 import {beforeEach, describe, expect} from "@jest/globals";
 import axios, {AxiosError} from "axios";
 
