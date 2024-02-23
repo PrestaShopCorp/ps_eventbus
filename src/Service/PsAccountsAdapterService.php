@@ -25,7 +25,7 @@ class PsAccountsAdapterService
     /**
      * Get psAccounts module main class, or null if module is'nt ready
      *
-     * @return PsAccountsService
+     * @return PsAccountsService|null
      *
      * @throws \PrestaShopException
      */
@@ -41,7 +41,7 @@ class PsAccountsAdapterService
     /**
      * Get psAccounts service, or null if module is'nt ready
      *
-     * @return PsAccountsService
+     * @return PsAccountsService|null
      *
      * @throws \PrestaShopException
      */
@@ -57,7 +57,7 @@ class PsAccountsAdapterService
     /**
      * Get presenter from psAccounts, or null if module is'nt ready
      *
-     * @return PsAccountsPresenter
+     * @return PsAccountsPresenter|null
      *
      * @throws \PrestaShopException
      */
@@ -73,7 +73,7 @@ class PsAccountsAdapterService
     /**
      * Get shopUuid from psAccounts, or null if module is'nt ready
      *
-     * @return string|null
+     * @return string
      *
      * @throws \PrestaShopException
      */
@@ -89,7 +89,7 @@ class PsAccountsAdapterService
     /**
      * Get refreshToken from psAccounts, or null if module is'nt ready
      *
-     * @return string|null
+     * @return string
      *
      * @throws \PrestaShopException
      */
