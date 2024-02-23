@@ -64,11 +64,14 @@ return [
     // For more see: https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#patchers
     'patchers' => [
         static function (string $filePath, string $prefix, string $contents): string {
-            // if (strpos($filePath, 'vendor/prestashop/')) {
-            // $pattern = '/\s(\\)([A-Za-z]+)(?![A-Za-z\\])/';
-            // $replacement = '\\PrestaShop\\PrestaShop\\Adapter\Entity';
-            // $contents = preg_replace('/\\\\' . $prefix . '/', $replacement, $contents);
-            // }
+            if (strpos($filePath, '/vendor/sentry/sentry/lib/Raven/Client.php')) {
+
+                return str_replace(
+                    "\$new_processor = new \$processor(\$this);",
+                    "\$new_processor = new (\"{$prefix}\\\\\$processor\")(\$this);",
+                    $contents
+                );
+            }
 
             return $contents;
         },

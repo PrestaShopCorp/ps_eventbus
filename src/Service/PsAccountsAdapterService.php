@@ -74,6 +74,10 @@ class PsAccountsAdapterService
      */
     public function getShopUuid()
     {
+        if ($this->moduleHelper->isInstalledAndActive('ps_accounts') == false) {
+            return '';
+        }
+
         return $this->getService()->getShopUuid();
     }
 
@@ -84,6 +88,10 @@ class PsAccountsAdapterService
      */
     public function getOrRefreshToken()
     {
+        if ($this->moduleHelper->isInstalledAndActive('ps_accounts') == false) {
+            return '';
+        }
+
         return $this->getService()->getOrRefreshToken();
     }
 }
