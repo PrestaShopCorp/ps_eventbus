@@ -53,7 +53,7 @@ class SpecificPriceService
      * @param null $specific_price_output
      * @param bool $use_group_reduction
      *
-     * @return float|int|void
+     * @return float|int|null
      *
      * @throws \PrestaShopException
      */
@@ -92,7 +92,7 @@ class SpecificPriceService
         $id_currency = \Validate::isLoadedObject($currency) ? (int) $currency->id : (int) \Configuration::get('PS_CURRENCY_DEFAULT');
 
         $current_cart = $context->cart;
-        if (!is_null($current_cart) && \Validate::isLoadedObject($current_cart)) {
+        if ($current_cart != null && \Validate::isLoadedObject($current_cart)) {
             $id_address = $current_cart->{\Configuration::get('PS_TAX_ADDRESS_TYPE')};
         }
 
