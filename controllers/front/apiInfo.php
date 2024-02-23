@@ -39,8 +39,11 @@ class ps_EventbusApiInfoModuleFrontController extends AbstractApiController
         $this->exitWithResponse(
             array_merge(
                 [
-                    'remaining_objects' => 0,
-                    'total_objects' => 1,
+                  'remaining_objects' => 0,
+                  'total_objects' => 1,
+                  'job_id' => $jobId,
+                  'object_type' => $this->type,
+                  'syncType' => 'full',
                 ],
                 $response
             )
