@@ -4,7 +4,7 @@ namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\PrestaShop\Core\Domain\Module\Exception\ModuleNotFoundException;
 
-class PsAccountsService
+class PsAccountsAdapterService
 {
     private $psAccountModule;
 

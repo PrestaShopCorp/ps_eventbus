@@ -16,8 +16,8 @@ services:
     arguments:
       - "ps_eventbus"
   
-  PrestaShop\Module\PsEventbus\Service\PsAccountsService:
-    class: PrestaShop\Module\PsEventbus\Service\PsAccountsService
+  PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService:
+    class: PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService
     public: true
 
 

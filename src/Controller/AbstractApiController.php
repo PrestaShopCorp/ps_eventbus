@@ -92,7 +92,7 @@ abstract class AbstractApiController extends \ModuleFrontController
 
         $this->errorHandler = $this->module->getService(ErrorHandler::class);
         try {
-            $this->psAccountsService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\PsAccountsService');
+            $this->psAccountsService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService');
             $this->proxyService = $this->module->getService(ProxyService::class);
             $this->authorizationService = $this->module->getService(ApiAuthorizationService::class);
             $this->synchronizationService = $this->module->getService(SynchronizationService::class);

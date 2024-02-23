@@ -5,7 +5,7 @@ services:
     arguments:
       - '%ps_eventbus.sync_api_url%'
       - '@ps_eventbus'
-      - '@PrestaShop\Module\PsEventbus\Service\PsAccountsService'
+      - '@PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService'
 
   PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient:
     class: PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient
@@ -13,7 +13,7 @@ services:
     arguments:
       - '%ps_eventbus.live_sync_api_url%'
       - '@ps_eventbus'
-      - '@PrestaShop\Module\PsEventbus\Service\PsAccountsService'
+      - '@PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService'
 
   PrestaShop\Module\PsEventbus\Api\CollectorApiClient:
     class: PrestaShop\Module\PsEventbus\Api\CollectorApiClient
@@ -21,4 +21,4 @@ services:
     arguments:
       - '%ps_eventbus.proxy_api_url%'
       - '@ps_eventbus'
-      - '@PrestaShop\Module\PsEventbus\Service\PsAccountsService'
+      - '@PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService'

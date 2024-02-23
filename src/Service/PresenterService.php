@@ -4,7 +4,7 @@ namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsEventbus\Helper\ModuleHelper;
-use PrestaShop\Module\PsEventbus\Service\PsAccountsService as ServicePsAccountsService;
+use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 
 class PresenterService
@@ -14,7 +14,7 @@ class PresenterService
      */
     private $psAccountsService;
 
-    public function __construct(ServicePsAccountsService $psAccountsService)
+    public function __construct(PsAccountsAdapterService $psAccountsAdapterService)
     {
         $moduleManager = ModuleManagerBuilder::getInstance();
         if (!$moduleManager) {
@@ -23,7 +23,7 @@ class PresenterService
         $moduleManager = $moduleManager->build();
         if ($moduleManager->isInstalled('ps_accounts')) {
             
-            $this->psAccountsService = $psAccountsService->getService();
+            $this->psAccountsService = $psAccountsAdapterService->getService();
         } else {
             $this->initPsAccount();
         }
