@@ -1,6 +1,6 @@
 import {doFullSync, probe} from './helpers/mock-probe';
 import {expect} from "@jest/globals";
-import {concatAll, concatMap, from, lastValueFrom, map, toArray, zip} from "rxjs";
+import { concatMap, from, lastValueFrom, map, toArray, zip} from "rxjs";
 
 let testIndex = 0;
 
@@ -10,6 +10,7 @@ beforeEach(() => {
   jobId = `valid-job-full-better-${testIndex++}`
 });
 
+// TODO expand to other apis
 describe('apiCategories full sync but more better', () => {
   it(`apiCategories should upload to collector bet`, async () => {
     // arrange
