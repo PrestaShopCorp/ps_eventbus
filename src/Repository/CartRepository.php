@@ -44,7 +44,7 @@ class CartRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getCarts($offset, $limit)
     {
@@ -77,7 +77,7 @@ class CartRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getCartsIncremental($limit, $cartIds)
     {
@@ -99,7 +99,7 @@ class CartRepository
      *
      * @return array
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit)
     {

@@ -5,6 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Api;
 use GuzzleHttp\Client;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsService;
+use Ps_eventbus;
 
 class SyncApiClient
 {
@@ -34,10 +35,10 @@ class SyncApiClient
 
     /**
      * @param string $syncApiUrl
-     * @param \Ps_eventbus $module
-     * @param PsAccountsService
+     * @param Ps_eventbus $module
+     * @param PsAccountsService $psAccountsService
      */
-    public function __construct($syncApiUrl, $module, $psAccountsService)
+    public function __construct(string $syncApiUrl, Ps_eventbus $module, PsAccountsService $psAccountsService)
     {
         $this->module = $module;
         $this->jwt = $psAccountsService->getOrRefreshToken();

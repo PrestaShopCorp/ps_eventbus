@@ -10,7 +10,7 @@ class CountryRepository
     private $db;
 
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
 
@@ -19,7 +19,7 @@ class CountryRepository
      */
     private $countryIsoCodeCache = [];
 
-    public function __construct(Context $context)
+    public function __construct(\Context $context)
     {
         $this->db = \Db::getInstance();
         $this->context = $context;
@@ -55,7 +55,7 @@ class CountryRepository
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getCountyIsoCodesByZoneId($zoneId, $active = true)
     {

@@ -6,6 +6,8 @@ use GuzzleHttp\Client;
 use PrestaShop\Module\PsEventbus\Api\Post\MultipartBody;
 use PrestaShop\Module\PsEventbus\Api\Post\PostFileApi;
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Service\PsAccountsService;
+use Ps_eventbus;
 
 class CollectorApiClient
 {
@@ -28,10 +30,10 @@ class CollectorApiClient
 
     /**
      * @param string $collectorApiUrl
-     * @param \Ps_eventbus $module
-     * @param PsAccountsService
+     * @param Ps_eventbus $module
+     * @param PsAccountsService $psAccountsService
      */
-    public function __construct($collectorApiUrl, $module, $psAccountsService)
+    public function __construct(string $collectorApiUrl, Ps_eventbus $module, PsAccountsService $psAccountsService)
     {
         $this->module = $module;
         $this->jwt = $psAccountsService->getOrRefreshToken();
