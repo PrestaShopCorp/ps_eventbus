@@ -15,11 +15,11 @@ class PresenterService
 
     public function __construct(PsAccountsAdapterService $psAccountsAdapterService)
     {
-        $moduleManager = ModuleManagerBuilder::getInstance();
-        if (!$moduleManager) {
+        $moduleManagerBuilder = ModuleManagerBuilder::getInstance();
+        if (!$moduleManagerBuilder) {
             return;
         }
-        $moduleManager = $moduleManager->build();
+        $moduleManager = $moduleManagerBuilder->build();
         if ($moduleManager->isInstalled('ps_accounts')) {
             
             $this->psAccountsAdapterService = $psAccountsAdapterService->getService();
@@ -33,11 +33,11 @@ class PresenterService
      */
     public function initPsAccount()
     {
-        $moduleManager = ModuleManagerBuilder::getInstance();
-        if (!$moduleManager) {
+        $moduleManagerBuilder = ModuleManagerBuilder::getInstance();
+        if (!$moduleManagerBuilder) {
             return;
         }
-        $moduleManager = $moduleManager->build();
+        $moduleManager = $moduleManagerBuilder->build();
 
         if (!$moduleManager->isInstalled('ps_accounts')) {
             $moduleManager->install('ps_accounts');

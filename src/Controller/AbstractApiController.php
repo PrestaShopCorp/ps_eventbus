@@ -15,6 +15,7 @@ use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService;
 use PrestaShop\Module\PsEventbus\Service\ProxyService;
+use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
 
 abstract class AbstractApiController extends \ModuleFrontController
@@ -92,7 +93,7 @@ abstract class AbstractApiController extends \ModuleFrontController
 
         $this->errorHandler = $this->module->getService(ErrorHandler::class);
         try {
-            $this->psAccountsAdapterService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService');
+            $this->psAccountsAdapterService = $this->module->getService(PsAccountsAdapterService::class);
             $this->proxyService = $this->module->getService(ProxyService::class);
             $this->authorizationService = $this->module->getService(ApiAuthorizationService::class);
             $this->synchronizationService = $this->module->getService(SynchronizationService::class);

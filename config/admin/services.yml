@@ -9,12 +9,6 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService'
-
-  ps_eventbus.helper.module:
-    class: 'PrestaShop\Module\PsEventbus\Helper\ModuleHelper'
-    arguments:
-      - "@ps_eventbus"
-    public: true
   
   ps_eventbus.module.upgrade:
     class: 'PrestaShop\Module\PsEventbus\Module\Upgrade'

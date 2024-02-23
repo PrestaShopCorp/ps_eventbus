@@ -8,16 +8,24 @@ services:
 
   ps_eventbus.db:
     class: Db
-    factory: ["Db", "getInstance"]
+    factory: ['Db', 'getInstance']
 
   ps_eventbus:
-    class: "Ps_eventbus"
-    factory: ["Module", "getInstanceByName"]
+    class: 'Ps_eventbus'
+    factory: ['Module', 'getInstanceByName']
     arguments:
-      - "ps_eventbus"
+      - 'ps_eventbus'
   
+  ps_eventbus.helper.module:
+    class: 'PrestaShop\Module\PsEventbus\Helper\ModuleHelper'
+    arguments:
+      - "@ps_eventbus"
+    public: true
+
   PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService:
     class: PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService
     public: true
+    arguments: 
+      - '@ps_eventbus.helper.module'
 
 

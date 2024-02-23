@@ -2,17 +2,26 @@
 
 namespace PrestaShop\Module\PsEventbus\Helper;
 
-use Module;
+use PrestaShop\PrestaShop\Core\Module\ModuleManager;
+use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 use PrestaShopBundle\Service\Routing\Router;
 
 class ModuleHelper
 {
-    /** @var \Ps_eventbus */
+    /** 
+     * @var \Ps_eventbus
+     */
     private $module;
+
+    /**
+     * @var ModuleManager
+     */
+    private $moduleManager;
 
     public function __construct(\Ps_eventbus $module)
     {
         $this->module = $module;
+        $this->moduleManager = ModuleManagerBuilder::getInstance()->build();
     }
 
     /**
@@ -22,7 +31,7 @@ class ModuleHelper
      */
     public function isInstalled(string $moduleName)
     {
-        return \ModuleCore::isInstalled($moduleName);
+        return $this->moduleManager->isInstalled($moduleName);
     }
 
     /**
@@ -32,7 +41,17 @@ class ModuleHelper
      */
     public function isEnabled(string $moduleName)
     {
-        return \ModuleCore::isEnabled($moduleName);
+        return $this->moduleManager->isEnabled($moduleName);
+    }
+
+    /**
+     * @param string $moduleName
+     *
+     * @return bool
+     */
+    public function isInstalledAndActive(string $moduleName)
+    {
+        return $this->moduleManager->isInstalledAndActive($moduleName);
     }
 
     /**
@@ -46,13 +65,35 @@ class ModuleHelper
             return '';
         }
 
-        $module = \Module::getInstanceByName($moduleName);
+        $module = $this->getInstanceByName($moduleName);
 
         if (false === $module) {
             return '';
         }
 
         return $module->displayName;
+    }
+
+    /**
+     * get module version
+     *
+     * @param string $moduleName
+     *
+     * @return string
+     */
+    public function getModuleVersion(string $moduleName)
+    {
+        if (false === $this->isInstalled($moduleName)) {
+            return '0.0.0';
+        }
+
+        $module = $this->getInstanceByName($moduleName);
+
+        if (false === $module) {
+            return '0.0.0';
+        }
+
+        return $module->version;
     }
 
     /**
@@ -137,28 +178,6 @@ class ModuleHelper
                 'action' => 'upgrade',
                 'module_name' => $moduleName,
             ]);
-    }
-
-    /**
-     * get ps_analytics module version
-     *
-     * @param string $moduleName
-     *
-     * @return string
-     */
-    public function getModuleVersion(string $moduleName)
-    {
-        if (false === $this->isInstalled($moduleName)) {
-            return '0.0.0';
-        }
-
-        $module = \Module::getInstanceByName($moduleName);
-
-        if (false === $module) {
-            return '0.0.0';
-        }
-
-        return $module->version;
     }
 
     /**
