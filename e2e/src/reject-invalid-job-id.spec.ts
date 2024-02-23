@@ -1,16 +1,15 @@
-import {MockProbe} from './helpers/mock-probe';
 import testConfig from './helpers/test.config';
-import request from 'supertest';
 import {beforeEach, describe, expect} from "@jest/globals";
-import axios, {AxiosError} from "axios";
+import axios from "axios";
+import {probe} from "./helpers/mock-probe";
+import {from, lastValueFrom, map, toArray, zip} from "rxjs";
 
 // these controllers will be excluded from the following test suite
-const EXCLUDED_API : typeof testConfig.controllers[number][] = ['apiHealthCheck'];
+const EXCLUDED_API: typeof testConfig.controllers[number][] = ['apiHealthCheck'];
 
 
 describe('Reject invalid job-id', () => {
   let testIndex = 0;
-  let probe = new MockProbe({timeout: 3000});
 
   const controllers = testConfig.controllers.filter(it => !EXCLUDED_API.includes(it))
 
@@ -23,13 +22,13 @@ describe('Reject invalid job-id', () => {
   describe.each(controllers)('%s', (controller) => {
 
     it(`${controller} should return 454 with an invalid job id (sync-api status 454)`, async () => {
-       expect.assertions(4);
+        expect.assertions(5);
         // arrange
         const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&job_id=${jobId}`
-        const messages = probe.waitForMessages(1, {params: {id: jobId}});
+        const message$ = probe({params: {id: jobId}});
 
         //act
-        await axios.get(url, {
+        const request$ = from(axios.get(url, {
           headers: {'Host': testConfig.prestaShopHostHeader}
         }).then(res => {
           expect(res).toBeNull();
@@ -37,13 +36,19 @@ describe('Reject invalid job-id', () => {
           // assert
           expect(err.response.status).toEqual(454);
           expect(err.response.headers).toMatchObject({'content-type': /json/});
-        })
+        }))
 
-        const syncApiRequest = await messages;
+        const results = await lastValueFrom(zip(message$, request$)
+          .pipe(map(result => ({
+              probeMessage: result[0],
+              psEventbusReq: result[1],
+            })),
+            toArray()));
 
         // assert
-        expect(syncApiRequest[0].method).toBe('GET');
-        expect(syncApiRequest[0].url.split('/')).toContain(jobId);
+        expect(results.length).toEqual(1);
+        expect(results[0].probeMessage.method).toBe('GET');
+        expect(results[0].probeMessage.url.split('/')).toContain(jobId);
       }
     );
   })

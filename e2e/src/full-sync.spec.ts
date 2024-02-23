@@ -1,8 +1,9 @@
-import {MockProbe} from './helpers/mock-probe';
 import testConfig from './helpers/test.config';
 import * as matchers from 'jest-extended';
 import {logAxiosError} from "./helpers/log-helper";
 import axios, {AxiosError} from "axios";
+import {probe} from "./helpers/mock-probe";
+import {from, lastValueFrom, map, tap, toArray, zip} from "rxjs";
 
 expect.extend(matchers);
 
@@ -14,7 +15,6 @@ const MISSING_TEST_DATA: typeof testConfig.controllers[number][] = ['apiCartRule
 
 describe('Full Sync', () => {
   let testIndex = 0;
-  let probe = new MockProbe();
 
   const controllers = testConfig.controllers.filter(it => !EXCLUDED_API.includes(it))
 
@@ -50,7 +50,7 @@ describe('Full Sync', () => {
     it.skip(`${controller} should upload to collector`, async () => {
       // arrange
       const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
-      const messages = probe.waitForMessages(1, {url: `/upload/${jobId}`});
+      const messages = lastValueFrom(probe({url: `/upload/${jobId}`}).pipe(toArray()));
 
       // act
       await axios.post(url, {
@@ -111,27 +111,32 @@ describe('Full Sync', () => {
     });
 
     if (MISSING_TEST_DATA.includes(controller)) {
-      it.skip(`${controller} should upload to collector`, () => {})
+      it.skip(`${controller} should upload to collector`, () => {
+      })
     } else {
       it(`${controller} should upload to collector`, async () => {
         // arrange
         const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
-        const messages = probe.waitForMessages(1, {url: `/upload/${jobId}`});
+        const message$ = probe({url: `/upload/${jobId}`});
 
         // act
-        await axios.post(url, {
+        const request$ = from(axios.post(url, {
           headers: {
             'Host': testConfig.prestaShopHostHeader
           },
-        }).catch(err => {
-          logAxiosError(err);
-          expect(err).toBeNull();
-        })
-        const collectorRequest = await messages;
+        }));
+
+        const results = await lastValueFrom(zip(message$, request$)
+          .pipe(map(result => ({
+            probeMessage: result[0],
+            psEventbusReq: result[1],
+          })),
+          toArray()));
 
         // assert
-        expect(collectorRequest[0].method).toBe('POST');
-        expect(collectorRequest[0].headers).toMatchObject({"full-sync-requested": "1"});
+        expect(results.length).toEqual(1);
+        expect(results[0].probeMessage.method).toBe('POST');
+        expect(results[0].probeMessage.headers).toMatchObject({"full-sync-requested": "1"});
       });
     }
   })

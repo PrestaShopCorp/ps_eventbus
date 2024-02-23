@@ -17,7 +17,6 @@ import {
 import R from 'ramda';
 import testConfig from "./test.config";
 import axios from "axios";
-import {PsEventbusSyncResponse} from "../full-sync-categories.spec";
 
 const DEFAULT_OPTIONS = {
   timeout : 1500
@@ -31,7 +30,15 @@ if (!global.WebSocket) {
   (global as any).WebSocket = WebSocket;
 }
 
-type MockProbeResponse = {
+let wsConnection: WebSocketSubject<MockProbeResponse> = null
+function getProbeSocket() {
+  if (!wsConnection) {
+    wsConnection = new WebSocketSubject<MockProbeResponse>('ws://localhost:8080');
+  }
+  return wsConnection
+}
+
+export type MockProbeResponse = {
   apiName: string,
   method: string,
   headers: Record<string, string>,
@@ -40,50 +47,6 @@ type MockProbeResponse = {
   params: Record<string, string>,
   body: Record<string, any> & { file : any[]}
 }
-
-export class MockProbe {
-  private static wsConnection: WebSocketSubject<MockProbeResponse>;
-  private options : MockProbeOptions
-
-  constructor(options?: MockProbeOptions) {
-    if (!MockProbe.wsConnection) {
-      MockProbe.wsConnection = new WebSocketSubject<MockProbeResponse>('ws://localhost:8080');
-    }
-    this.options = R.mergeLeft(options, DEFAULT_OPTIONS);
-  }
-
-  /**
-   * connect the probe to the server.
-   * @param expectedMessageCount how may messages to wait for before resolving
-   * @param match filter only messages matching this object
-   */
-  public async waitForMessages(expectedMessageCount = 1, match?: Partial<MockProbeResponse>): Promise<MockProbeResponse[]> {
-    const $messages: Observable<MockProbeResponse[]> = MockProbe.wsConnection.pipe(
-      filter(message => {
-        if (match) {
-          return (R.whereEq(match, message));
-        }
-        // no filtering
-        return true;
-      }),
-      bufferCount(expectedMessageCount),
-      take(1),
-      timeout(this.options.timeout),
-    )
-
-    return lastValueFrom($messages)
-  }
-}
-
-let wsConnection: WebSocketSubject<MockProbeResponse> = null
-
-function getProbeSocket() {
-  if (!wsConnection) {
-    wsConnection = new WebSocketSubject<MockProbeResponse>('ws://localhost:8080');
-  }
-  return wsConnection
-}
-
 export function probe(match?: Partial<MockProbeResponse>, options?: MockProbeOptions): Observable<MockProbeResponse> {
   options = R.mergeLeft(options, DEFAULT_OPTIONS);
 
@@ -99,6 +62,20 @@ export function probe(match?: Partial<MockProbeResponse>, options?: MockProbeOpt
     timeout(options.timeout),
   )
   return messages$;
+}
+
+export type PsEventbusSyncResponse = {
+  job_id: string,
+  object_type: string,
+  syncType: string, // 'full' | 'incremental'
+  total_objects: number, // may not always be accurate, can't be relied on
+  has_remaining_objects: boolean, // reliable
+  remaining_objects: number, // may not always be accurate, can't be relied on
+  md5: string,
+  status: boolean,
+  httpCode: number,
+  body: unknown, // not sure what this is
+  upload_url: string,
 }
 
 export function doFullSync(jobId : string, options?: MockClientOptions): Observable<PsEventbusSyncResponse> {

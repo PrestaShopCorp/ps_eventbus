@@ -1,20 +1,6 @@
-import {doFullSync, MockProbe, probe} from './helpers/mock-probe';
+import {doFullSync, probe} from './helpers/mock-probe';
 import {expect} from "@jest/globals";
-import {concatAll, concatMap, from, lastValueFrom, map, mergeAll, of, tap, toArray, zip} from "rxjs";
-
-export type PsEventbusSyncResponse = {
-  job_id: string,
-  object_type: string,
-  syncType: string, // 'full' | 'incremental'
-  total_objects: number, // may not always be accurate, can't be relied on
-  has_remaining_objects: boolean, // reliable
-  remaining_objects: number, // may not always be accurate, can't be relied on
-  md5: string,
-  status: boolean,
-  httpCode: number,
-  body: unknown, // not sure what this is
-  upload_url: string,
-}
+import {concatAll, concatMap, from, lastValueFrom, map, toArray, zip} from "rxjs";
 
 let testIndex = 0;
 
