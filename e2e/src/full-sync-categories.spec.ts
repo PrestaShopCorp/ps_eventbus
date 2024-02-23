@@ -1,4 +1,4 @@
-import {MockProbe} from './helpers/mock-probe';
+import {doFullSync, MockProbe} from './helpers/mock-probe';
 import testConfig from './helpers/test.config';
 import * as matchers from 'jest-extended';
 import {logAxiosError} from "./helpers/log-helper";
@@ -27,23 +27,6 @@ export type PsEventbusSyncResponse = {
   upload_url: string,
 }
 
-async function* doFullSync(): AsyncGenerator<PsEventbusSyncResponse> {
-  let full = 1;
-  let lastPage = false;
-  while (!lastPage) {
-    const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiCategories&limit=5&full=${full}&job_id=${jobId}`;
-    console.log(url);
-    const response = await axios.post<PsEventbusSyncResponse>(url, {
-      headers: {
-        'Host': testConfig.prestaShopHostHeader
-      },
-    })
-    lastPage = !response.data.has_remaining_objects;
-    full = 0;
-    yield response.data;
-  }
-}
-
 let testIndex = 0;
 let probe = new MockProbe();
 
@@ -56,30 +39,20 @@ let jobId: string = `valid-job-full-categories`;
 });
 
 describe('apiCategories full sync but more better' , () => {
-      it(`apiCategories should upload to collector bet`, async () => {
+      it(`apiCategories should upload to collector bet`, (done) => {
         // arrange
+        const fullSync$ = doFullSync(jobId);
 
         // act
-        const allTheResponses = [];
-        const collectorRequests = [];
-        let done = false;
-        const fullSync = doFullSync();
-
-        while (!done) {
-          const message = probe.waitForMessages(1, {url: `/upload/${jobId}`});
-          const response = await fullSync.next()
-          allTheResponses.push( response.value);
-          const collectorReq = await message;
-          collectorRequests.push( ...collectorReq );
-          done = response.done;
-        }
-
-        const uploadedItems = collectorRequests.flatMap(request => request.body.file)
-
-        console.debug(uploadedItems);
-
-        // assert
-        expect(allTheResponses).toEqual('toto')
+        fullSync$.subscribe({
+          next : (value) => console.debug(value),
+          error: console.error,
+          complete: () => {
+            // assert
+            expect('tata').toEqual('toto')
+            done()
+          }
+        })
       });
   })
 

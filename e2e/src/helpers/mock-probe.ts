@@ -1,7 +1,23 @@
 import WebSocket from 'ws';
 import {WebSocketSubject} from "rxjs/webSocket";
-import {bufferCount, catchError, filter, lastValueFrom, map, Observable, Subject, take, tap, timeout} from "rxjs";
+import {
+  bufferCount,
+  catchError, EMPTY,
+  expand,
+  filter,
+  from,
+  lastValueFrom,
+  map,
+  Observable, retry,
+  Subject,
+  take,
+  tap,
+  timeout
+} from "rxjs";
 import R from 'ramda';
+import testConfig from "./test.config";
+import axios from "axios";
+import {PsEventbusSyncResponse} from "../full-sync-categories.spec";
 
 const DEFAULT_OPTIONS = {
   timeout : 1500
@@ -56,4 +72,28 @@ export class MockProbe {
 
     return lastValueFrom($messages)
   }
+}
+
+export function doFullSync(jobId : string): Observable<PsEventbusSyncResponse> {
+  const url = (full: number, jobId : string) => `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiCategories&limit=5&full=${full}&job_id=${jobId}`;
+
+  return from(axios.post<PsEventbusSyncResponse>(url(1, jobId), {
+    headers: {
+      'Host': testConfig.prestaShopHostHeader
+    },
+  })).pipe(
+    expand(response => {
+      if(response.data.has_remaining_objects) {
+        return from(axios.post<PsEventbusSyncResponse>(url(0, jobId), {
+          headers: {
+            'Host': testConfig.prestaShopHostHeader
+          },
+        }));
+      } else {
+        return EMPTY
+      }
+    }),
+    timeout(1500),
+    map(response => response.data)
+  )
 }
