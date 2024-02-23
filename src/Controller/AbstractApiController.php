@@ -48,9 +48,9 @@ abstract class AbstractApiController extends \ModuleFrontController
      */
     private $languageRepository;
     /**
-     * @var PsAccountsService
+     * @var PsAccountsAdapterService
      */
-    private $psAccountsService;
+    private $psAccountsAdapterService;
     /**
      * @var IncrementalSyncRepository
      */
@@ -92,7 +92,7 @@ abstract class AbstractApiController extends \ModuleFrontController
 
         $this->errorHandler = $this->module->getService(ErrorHandler::class);
         try {
-            $this->psAccountsService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService');
+            $this->psAccountsAdapterService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService');
             $this->proxyService = $this->module->getService(ProxyService::class);
             $this->authorizationService = $this->module->getService(ApiAuthorizationService::class);
             $this->synchronizationService = $this->module->getService(SynchronizationService::class);
@@ -146,7 +146,7 @@ abstract class AbstractApiController extends \ModuleFrontController
         }
 
         try {
-            $token = $this->psAccountsService->getOrRefreshToken();
+            $token = $this->psAccountsAdapterService->getOrRefreshToken();
         } catch (\Exception $exception) {
             throw new FirebaseException($exception->getMessage());
         }

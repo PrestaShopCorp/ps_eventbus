@@ -54,7 +54,7 @@ class ErrorHandler implements ErrorHandlerInterface
             );
             /** @var string $configurationPsShopEmail */
             $configurationPsShopEmail = \Configuration::get('PS_SHOP_EMAIL');
-            $this->client->set_user_data($psAccountsService->getShopUuid(), $configurationPsShopEmail);
+            $this->client->set_user_data($psAccountsAdapterService->getShopUuid(), $configurationPsShopEmail);
         } catch (\Exception $e) {
         }
     }

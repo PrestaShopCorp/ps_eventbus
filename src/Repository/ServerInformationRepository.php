@@ -6,6 +6,7 @@ use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsAccounts\Api\Client\AccountsClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
+use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 
 class ServerInformationRepository
 {
@@ -34,9 +35,9 @@ class ServerInformationRepository
      */
     private $shopRepository;
     /**
-     * @var PsAccountsService
+     * @var PsAccountsAdapterService
      */
-    private $psAccountsService;
+    private $psAccountsAdapterService;
     /**
      * @var array
      */
@@ -52,6 +53,7 @@ class ServerInformationRepository
 
     public function __construct(
         \Context $context,
+        PsAccountsAdapterService $psAccountsAdapterService,
         CurrencyRepository $currencyRepository,
         LanguageRepository $languageRepository,
         ConfigurationRepository $configurationRepository,
@@ -65,7 +67,7 @@ class ServerInformationRepository
         $this->shopRepository = $shopRepository;
         $this->context = $context;
         $this->db = \Db::getInstance();
-        $this->psAccountsService = \Module::getInstanceByName('ps_accounts');
+        $this->psAccountsAdapterService = $psAccountsAdapterService;
         $this->configuration = $configuration;
         $this->createdAt = $this->shopRepository->getCreatedAt();
         $this->errorHandler = $errorHandler;
@@ -140,7 +142,7 @@ class ServerInformationRepository
         $allTablesInstalled = true;
 
         try {
-            $token = $this->psAccountsService->getOrRefreshToken();
+            $token = $this->psAccountsAdapterService->getOrRefreshToken();
 
             if (!$token) {
                 $tokenIsSet = false;

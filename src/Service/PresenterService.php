@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsEventbus\Helper\ModuleHelper;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
@@ -10,9 +9,9 @@ use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 class PresenterService
 {
     /**
-     * @var PsAccountsService|null
+     * @var PsAccountsAdapterService|null
      */
-    private $psAccountsService;
+    private $psAccountsAdapterService;
 
     public function __construct(PsAccountsAdapterService $psAccountsAdapterService)
     {
@@ -23,7 +22,7 @@ class PresenterService
         $moduleManager = $moduleManager->build();
         if ($moduleManager->isInstalled('ps_accounts')) {
             
-            $this->psAccountsService = $psAccountsAdapterService->getService();
+            $this->psAccountsAdapterService = $psAccountsAdapterService->getService();
         } else {
             $this->initPsAccount();
         }
@@ -90,7 +89,7 @@ class PresenterService
         if (!in_array('info', $requiredConsents)) {
             array_unshift($requiredConsents, 'info');
         }
-        if ($this->psAccountsService == null) {
+        if ($this->psAccountsAdapterService == null) {
             return [];
         } else {
             $language = \Context::getContext()->language;
@@ -100,7 +99,7 @@ class PresenterService
             }
 
             return [
-                'jwt' => $this->psAccountsService->getOrRefreshToken(),
+                'jwt' => $this->psAccountsAdapterService->getOrRefreshToken(),
                 'requiredConsents' => $requiredConsents,
                 'optionalConsents' => $optionalConsents,
                 'module' => array_merge([
@@ -108,7 +107,7 @@ class PresenterService
                 ], $this->convertObjectToArray($module)),
                 'shop' => [
                     /* @phpstan-ignore-next-line */
-                    'id' => $this->psAccountsService->getShopUuid(),
+                    'id' => $this->psAccountsAdapterService->getShopUuid(),
                     'name' => \Configuration::get('PS_SHOP_NAME'),
                     'url' => \Tools::getHttpHost(true),
                     'lang' => $language->iso_code,

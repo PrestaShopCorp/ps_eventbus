@@ -10,7 +10,6 @@ parameters:
   reportUnmatchedIgnoredErrors: false
   checkMissingIterableValueType: false
   ignoreErrors:
-    - '#Property [a-zA-Z0-9\\_:]+\$psAccountsService has unknown class PrestaShop\\AccountsAuth\\Service\\PsAccountsService as its type.#'
     - '#Call to method getOrRefreshToken\(\) on an unknown class PrestaShop\\AccountsAuth\\Service\\PsAccountsService.#'
     - '#Instantiated class Symfony\\Component\\Cache\\Adapter\\FilesystemAdapter not found.#'
     - '#Call to method getItem\(\) on an unknown class Symfony\\Component\\Cache\\Adapter\\FilesystemAdapter.#'
@@ -25,7 +24,6 @@ parameters:
     - '#Cannot call method getPsAccountsService\(\) on mixed.#'
     - '#Cannot call method handle\(\) on mixed.#'
     - '#Cannot access property [a-z\$]+ on Context\|null.#'
-    - '#Property [a-zA-Z0-9\\_:]+\$psAccountsService \(PrestaShop\\AccountsAuth\\Service\\PsAccountsService\) does not accept mixed.#'
     - '#Parameter \#2 \$currency of static method ToolsCore::convertPrice\(\) expects array\|object\|null, [a-z0-9<>,-\| ]+ given.#'
     - '#Method PrestaShop\\Module\\PsEventbus\\Service\\SpecificPriceService::priceCalculation\(\) never returns void so it can be removed from the return type.#'
     - '#Property PrestaShop\\Module\\PsEventbus\\Api\\Post\\Stream::\$stream \(resource\) does not accept null.#'

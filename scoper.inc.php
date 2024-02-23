@@ -43,26 +43,8 @@ return [
     //
     // For more see: https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#finders-and-paths
     'finders' => [
-        Finder::create()->files()->in($_SERVER['TMP_FOLDER']),
-        /*
-        Finder::create()->files()->in('src'),
-        Finder::create()
-            ->files()
-            ->ignoreVCS(true)
-            ->notName('/LICENSE|.*\\.md|.*\\.dist|Makefile|composer\\.json|composer\\.lock/')
-            ->exclude([
-                'doc',
-                'test',
-                'test_old',
-                'tests',
-                'Tests',
-                'vendor-bin',
-            ])
-            ->in('vendor'),
-        Finder::create()->append([
-            'composer.json',
-        ]),
-        */
+        Finder::create()->files()->in($_SERVER['TMP_FOLDER'])
+            /* ->exclude('vendor/symfony'), */
     ],
 
     // List of excluded files, i.e. files for which the content will be left untouched.
@@ -101,7 +83,6 @@ return [
         '~^PrestaShopBundle~',
         '~^Symfony~',
         '~^PrestaShop\\\\Module\\\\PsAccounts~',
-        '~^PrestaShop\\\\CircuitBreaker~',
         // 'Acme\Foo'                     // The Acme\Foo namespace (and sub-namespaces)
         // '~^PHPUnit\\\\Framework$~',    // The whole namespace PHPUnit\Framework (but not sub-namespaces)
         // '~^$~',                        // The root namespace only
