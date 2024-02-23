@@ -43,7 +43,7 @@ return [
     //
     // For more see: https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#finders-and-paths
     'finders' => [
-        Finder::create()->files()->in($_SERVER['TMP_FOLDER'])
+        Finder::create()->files()->in($_SERVER['TMP_FOLDER']),
             /* ->exclude('vendor/symfony'), */
     ],
 
@@ -65,9 +65,8 @@ return [
     'patchers' => [
         static function (string $filePath, string $prefix, string $contents): string {
             if (strpos($filePath, '/vendor/sentry/sentry/lib/Raven/Client.php')) {
-
                 return str_replace(
-                    "\$new_processor = new \$processor(\$this);",
+                    '$new_processor = new $processor($this);',
                     "\$new_processor = new (\"{$prefix}\\\\\$processor\")(\$this);",
                     $contents
                 );

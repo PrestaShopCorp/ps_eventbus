@@ -7,7 +7,6 @@ use PrestaShop\Module\PsEventbus\Api\Post\MultipartBody;
 use PrestaShop\Module\PsEventbus\Api\Post\PostFileApi;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
-use Ps_eventbus;
 
 class CollectorApiClient
 {
@@ -30,10 +29,10 @@ class CollectorApiClient
 
     /**
      * @param string $collectorApiUrl
-     * @param Ps_eventbus $module
+     * @param \Ps_eventbus $module
      * @param PsAccountsAdapterService $psAccountsAdapterService
      */
-    public function __construct(string $collectorApiUrl, Ps_eventbus $module, PsAccountsAdapterService $psAccountsAdapterService)
+    public function __construct(string $collectorApiUrl, \Ps_eventbus $module, PsAccountsAdapterService $psAccountsAdapterService)
     {
         $this->module = $module;
         $this->jwt = $psAccountsAdapterService->getOrRefreshToken();

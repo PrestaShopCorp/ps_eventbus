@@ -2,9 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use ModuleCore;
 use PrestaShop\Module\PsEventbus\Helper\ModuleHelper;
-use PrestaShopException;
 
 class PsAccountsAdapterService
 {
@@ -14,21 +12,22 @@ class PsAccountsAdapterService
     private $moduleHelper;
 
     /**
-     * 
-     * @var false|ModuleCore
+     * @var false|\ModuleCore
      */
     private $psAccountModule;
 
     public function __construct(ModuleHelper $moduleHelper)
-    {   
+    {
         $this->moduleHelper = $moduleHelper;
         $this->psAccountModule = $this->moduleHelper->getInstanceByName('ps_accounts');
     }
 
     /**
      * Get psAccounts module main class, or null if module is'nt ready
+     *
      * @return PsAccountsService
-     * @throws PrestaShopException 
+     *
+     * @throws \PrestaShopException
      */
     public function getModule()
     {
@@ -41,8 +40,10 @@ class PsAccountsAdapterService
 
     /**
      * Get psAccounts service, or null if module is'nt ready
+     *
      * @return PsAccountsService
-     * @throws PrestaShopException 
+     *
+     * @throws \PrestaShopException
      */
     public function getService()
     {
@@ -55,8 +56,10 @@ class PsAccountsAdapterService
 
     /**
      * Get presenter from psAccounts, or null if module is'nt ready
+     *
      * @return PsAccountsPresenter
-     * @throws PrestaShopException 
+     *
+     * @throws \PrestaShopException
      */
     public function getPresenter()
     {
@@ -69,8 +72,10 @@ class PsAccountsAdapterService
 
     /**
      * Get shopUuid from psAccounts, or null if module is'nt ready
-     * @return string|null 
-     * @throws PrestaShopException 
+     *
+     * @return string|null
+     *
+     * @throws \PrestaShopException
      */
     public function getShopUuid()
     {
@@ -83,8 +88,10 @@ class PsAccountsAdapterService
 
     /**
      * Get refreshToken from psAccounts, or null if module is'nt ready
-     * @return string|null 
-     * @throws PrestaShopException 
+     *
+     * @return string|null
+     *
+     * @throws \PrestaShopException
      */
     public function getOrRefreshToken()
     {
