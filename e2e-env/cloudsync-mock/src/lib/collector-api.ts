@@ -1,5 +1,6 @@
 import { Server } from "./server";
 import {WsServer} from "./ws-server";
+// @ts-expect-error we don't care about packaging here
 import multer from "multer";
 
 const storage = multer.memoryStorage()

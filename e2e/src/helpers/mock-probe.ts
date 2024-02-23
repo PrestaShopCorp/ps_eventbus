@@ -24,6 +24,7 @@ const DEFAULT_OPTIONS = {
 };
 
 export type MockProbeOptions = typeof DEFAULT_OPTIONS;
+export type MockClientOptions = typeof DEFAULT_OPTIONS;
 
 // no Websocket implementation seems to exist in jest runner
 if (!global.WebSocket) {
@@ -37,7 +38,7 @@ type MockProbeResponse = {
   url: string,
   query: Record<string, string>,
   params: Record<string, string>,
-  body: Record<string, any>
+  body: Record<string, any> & { file : any[]}
 }
 
 export class MockProbe {
@@ -74,7 +75,34 @@ export class MockProbe {
   }
 }
 
-export function doFullSync(jobId : string): Observable<PsEventbusSyncResponse> {
+let wsConnection: WebSocketSubject<MockProbeResponse> = null
+
+function getProbeSocket() {
+  if (!wsConnection) {
+    wsConnection = new WebSocketSubject<MockProbeResponse>('ws://localhost:8080');
+  }
+  return wsConnection
+}
+
+export function probe(match?: Partial<MockProbeResponse>, options?: MockProbeOptions): Observable<MockProbeResponse> {
+  options = R.mergeLeft(options, DEFAULT_OPTIONS);
+
+  const socket = getProbeSocket();
+  const messages$: Observable<MockProbeResponse> = socket.pipe(
+    filter(message => {
+      if (match) {
+        return (R.whereEq(match, message));
+      }
+      // no filtering
+      return true;
+    }),
+    timeout(options.timeout),
+  )
+  return messages$;
+}
+
+export function doFullSync(jobId : string, options?: MockClientOptions): Observable<PsEventbusSyncResponse> {
+  options = R.mergeLeft(options, DEFAULT_OPTIONS);
   const url = (full: number, jobId : string) => `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiCategories&limit=5&full=${full}&job_id=${jobId}`;
 
   return from(axios.post<PsEventbusSyncResponse>(url(1, jobId), {
@@ -93,7 +121,7 @@ export function doFullSync(jobId : string): Observable<PsEventbusSyncResponse> {
         return EMPTY
       }
     }),
-    timeout(1500),
+    timeout(options.timeout),
     map(response => response.data)
   )
 }
