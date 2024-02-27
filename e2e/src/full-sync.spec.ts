@@ -2,16 +2,16 @@ import testConfig from './helpers/test.config';
 import * as matchers from 'jest-extended';
 import {logAxiosError} from "./helpers/log-helper";
 import axios, {AxiosError} from "axios";
-import {probe} from "./helpers/mock-probe";
+import {Controller, probe} from "./helpers/mock-probe";
 import {from, lastValueFrom, map, tap, toArray, zip} from "rxjs";
 
 expect.extend(matchers);
 
 // these controllers will be excluded from the following test suite
-const EXCLUDED_API: typeof testConfig.controllers[number][] = ['apiHealthCheck', 'apiGoogleTaxonomies'];
+const EXCLUDED_API: Controller[] = ['apiHealthCheck', 'apiGoogleTaxonomies'];
 
 // FIXME : these api can't send anything to the mock api because the database is empty from the factory
-const MISSING_TEST_DATA: typeof testConfig.controllers[number][] = ['apiCartRules', 'apiCustomProductCarriers', 'apiDeletedObjects', 'apiTranslations', 'apiWishlists'];
+const MISSING_TEST_DATA: Controller[] = ['apiCartRules', 'apiCustomProductCarriers', 'apiDeletedObjects', 'apiTranslations', 'apiWishlists'];
 
 describe('Full Sync', () => {
   let testIndex = 0;

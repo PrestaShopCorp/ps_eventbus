@@ -78,9 +78,11 @@ export type PsEventbusSyncResponse = {
   upload_url: string,
 }
 
-export function doFullSync(jobId : string, options?: MockClientOptions): Observable<PsEventbusSyncResponse> {
+export type Controller = typeof testConfig.controllers[number];
+
+export function doFullSync(jobId : string, controller: Controller, options?: MockClientOptions): Observable<PsEventbusSyncResponse> {
   options = R.mergeLeft(options, DEFAULT_OPTIONS);
-  const url = (full: number, jobId : string) => `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiCategories&limit=5&full=${full}&job_id=${jobId}`;
+  const url = (full: number, jobId : string) => `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=${full}&job_id=${jobId}`;
 
   return from(axios.post<PsEventbusSyncResponse>(url(1, jobId), {
     headers: {

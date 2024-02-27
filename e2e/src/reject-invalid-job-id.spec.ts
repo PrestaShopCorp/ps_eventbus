@@ -1,11 +1,11 @@
 import testConfig from './helpers/test.config';
 import {beforeEach, describe, expect} from "@jest/globals";
 import axios from "axios";
-import {probe} from "./helpers/mock-probe";
+import {Controller, probe} from "./helpers/mock-probe";
 import {from, lastValueFrom, map, toArray, zip} from "rxjs";
 
 // these controllers will be excluded from the following test suite
-const EXCLUDED_API: typeof testConfig.controllers[number][] = ['apiHealthCheck'];
+const EXCLUDED_API: Controller[] = ['apiHealthCheck'];
 
 
 describe('Reject invalid job-id', () => {
