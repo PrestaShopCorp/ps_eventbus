@@ -93,9 +93,9 @@ zip-inte: php-scoper.phar vendor tools/vendor dist
 zip-prod: php-scoper.phar vendor tools/vendor dist
 	@$(call zip_it,.config.prod.yml,${PACKAGE}.zip)
 
-# target: zip-unziped                                          - Bundle a production module, but without zip step (only for check sources)
-.PHONY: zip-unziped
-zip-unziped: php-scoper.phar vendor tools/vendor dist
+# target: zip-unzipped                                          - Bundle a production module, but without zip step (only to check sources)
+.PHONY: zip-unzipped
+zip-unzipped: php-scoper.phar vendor tools/vendor dist
 	@$(call no_zip_it,.config.prod.yml)
 
 # target: build                                                - Setup PHP & Node.js locally
