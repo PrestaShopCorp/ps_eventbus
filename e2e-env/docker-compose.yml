@@ -21,7 +21,7 @@ services:
 
   mysql:
     image: mariadb:${DOCKER_VERSION_MARIADB:?See e2e-env/.env.dist}
-    container_name: prestashop-mysql
+    container_name: ps-eventbus-mysql
     healthcheck:
       test:
         [
