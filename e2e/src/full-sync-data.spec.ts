@@ -3,6 +3,8 @@ import {concatMap, from, lastValueFrom, map, toArray, zip} from "rxjs";
 import testConfig from "./helpers/test.config";
 import * as fs from "fs";
 import {sortUploadData} from "./helpers/data-helper";
+import {describe} from "@jest/globals";
+import {dumpData} from "./helpers/log-helper";
 
 // these controllers will be excluded from the following test suite
 const EXCLUDED_API: Controller[] = ['apiHealthCheck', 'apiGoogleTaxonomies'];
@@ -45,7 +47,10 @@ describe('Full Sync Data', () => {
             toArray(),
           ))
 
-          //fs.writeFileSync(`src/fixtures/${controller}.json`, JSON.stringify(syncedData, null, 2));
+          if(testConfig.dumpFullSyncData) {
+            dumpData(syncedData, controller);
+          }
+
           const fixture = require(`./fixtures/${controller}.json`);
           expect(sortUploadData(syncedData)).toMatchObject(sortUploadData(fixture));
           // TODO : check actual content against expected content
