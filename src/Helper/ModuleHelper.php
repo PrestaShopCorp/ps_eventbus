@@ -58,7 +58,7 @@ class ModuleHelper
      */
     public function isInstalledAndActive(string $moduleName)
     {
-        return $this->moduleManager->isInstalledAndActive($moduleName);
+        return $this->isInstalled($moduleName) && $this->isEnabled($moduleName);
     }
 
     /**
