@@ -1,8 +1,6 @@
 import testConfig from "./helpers/test.config";
 import axios from "axios";
 import {expect} from "@jest/globals";
-import {MockProbe} from "./helpers/mock-probe";
-import {match} from "ramda";
 
 // This suite is designed to help troubleshoot the e2e environment by checking if some prerequisites are met.
 describe( 'e2e setup', () => {

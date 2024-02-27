@@ -47,7 +47,9 @@ class DeletedObjectsService
 
         if (empty($deletedObjects)) {
             return [
-                'total_objects' => 0,
+              'job_id' => $jobId,
+              'total_objects' => 0,
+              'syncType' => 'full',
             ];
         }
 
@@ -67,8 +69,9 @@ class DeletedObjectsService
 
         return array_merge(
             [
-                'job_id' => $jobId,
-                'total_objects' => count($data),
+              'job_id' => $jobId,
+              'total_objects' => count($data),
+              'syncType' => 'full',
             ],
             $response
         );
@@ -83,8 +86,8 @@ class DeletedObjectsService
     {
         return array_map(function ($dataItem) {
             return [
-                'collection' => $dataItem['type'],
-                'deleteIds' => explode(';', $dataItem['ids']),
+              'collection' => $dataItem['type'],
+              'deleteIds' => explode(';', $dataItem['ids']),
             ];
         }, $data);
     }
