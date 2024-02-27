@@ -2,7 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Helper;
 
-use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManager;
+use PrestaShop\PrestaShop\Core\Module\ModuleManager;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 use PrestaShopBundle\Service\Routing\Router;
 
