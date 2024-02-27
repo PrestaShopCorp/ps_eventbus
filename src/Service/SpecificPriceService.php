@@ -78,9 +78,7 @@ class SpecificPriceService
             $context = \Context::getContext();
         }
 
-        $cur_cart = (object) $context->cart;
-
-        \PrestaShop\PrestaShop\Adapter\Entity\Tools::displayParameterAsDeprecated('divisor');
+        \Tools::displayParameterAsDeprecated('divisor');
 
         if (!\Validate::isBool($usetax) || !\Validate::isUnsignedId($id_product)) {
             exit(\Tools::displayError());
@@ -93,8 +91,9 @@ class SpecificPriceService
         $currency = $context->currency;
         $id_currency = \Validate::isLoadedObject($currency) ? (int) $currency->id : (int) \PrestaShop\PrestaShop\Adapter\Entity\Configuration::get('PS_CURRENCY_DEFAULT');
 
-        if (\Validate::isLoadedObject($cur_cart)) {
-            $id_address = $cur_cart->{\Configuration::get('PS_TAX_ADDRESS_TYPE')};
+        $current_cart = $context->cart;
+        if ($current_cart != null && \Validate::isLoadedObject($current_cart)) {
+            $id_address = $current_cart->{\Configuration::get('PS_TAX_ADDRESS_TYPE')};
         }
 
         // retrieve address informations
