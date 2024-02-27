@@ -2,6 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
+use ModuleCore;
 use PrestaShop\Module\PsEventbus\Helper\ModuleHelper;
 
 class PsAccountsAdapterService
@@ -12,7 +13,8 @@ class PsAccountsAdapterService
     private $moduleHelper;
 
     /**
-     * @var false|\ModuleCore
+     * 
+     * @var false|ModuleCore
      */
     private $psAccountModule;
 
@@ -25,14 +27,14 @@ class PsAccountsAdapterService
     /**
      * Get psAccounts module main class, or null if module is'nt ready
      *
-     * @return PsAccountsService|null
+     * @return false|\ModuleCore
      *
      * @throws \PrestaShopException
      */
     public function getModule()
     {
         if ($this->moduleHelper->isInstalledAndActive('ps_accounts') == false) {
-            return null;
+            return false;
         }
 
         return $this->psAccountModule;
@@ -41,14 +43,14 @@ class PsAccountsAdapterService
     /**
      * Get psAccounts service, or null if module is'nt ready
      *
-     * @return PsAccountsService|null
+     * @return mixed
      *
      * @throws \PrestaShopException
      */
     public function getService()
     {
         if ($this->moduleHelper->isInstalledAndActive('ps_accounts') == false) {
-            return null;
+            return false;
         }
 
         return $this->psAccountModule->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
@@ -57,14 +59,14 @@ class PsAccountsAdapterService
     /**
      * Get presenter from psAccounts, or null if module is'nt ready
      *
-     * @return PsAccountsPresenter|null
+     * @return mixed
      *
      * @throws \PrestaShopException
      */
     public function getPresenter()
     {
         if ($this->moduleHelper->isInstalledAndActive('ps_accounts') == false) {
-            return null;
+            return false;
         }
 
         return $this->psAccountModule->getService('PrestaShop\Module\PsAccounts\Presenter\PsAccountsPresenter');

@@ -8,7 +8,7 @@ use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 class PresenterService
 {
     /**
-     * @var PsAccountsAdapterService|null
+     * @var PsAccountsAdapterService
      */
     private $psAccountsAdapterService;
 
@@ -20,7 +20,7 @@ class PresenterService
         }
         $moduleManager = $moduleManagerBuilder->build();
         if ($moduleManager->isInstalled('ps_accounts')) {
-            $this->psAccountsAdapterService = $psAccountsAdapterService->getService();
+            $this->psAccountsAdapterService = $psAccountsAdapterService;
         } else {
             $this->initPsAccount();
         }
@@ -32,9 +32,11 @@ class PresenterService
     public function initPsAccount()
     {
         $moduleManagerBuilder = ModuleManagerBuilder::getInstance();
+
         if (!$moduleManagerBuilder) {
             return;
         }
+    
         $moduleManager = $moduleManagerBuilder->build();
 
         if (!$moduleManager->isInstalled('ps_accounts')) {

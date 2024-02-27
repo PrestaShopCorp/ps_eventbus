@@ -21,7 +21,14 @@ class ModuleHelper
     public function __construct(\Ps_eventbus $module)
     {
         $this->module = $module;
-        $this->moduleManager = ModuleManagerBuilder::getInstance()->build();
+
+        $moduleManagerBuilder = ModuleManagerBuilder::getInstance();
+
+        if (is_null($moduleManagerBuilder)) {
+            return;
+        }
+
+        $this->moduleManager = $moduleManagerBuilder->build();
     }
 
     /**
