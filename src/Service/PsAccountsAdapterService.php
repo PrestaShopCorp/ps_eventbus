@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use ModuleCore;
 use PrestaShop\Module\PsEventbus\Helper\ModuleHelper;
 
 class PsAccountsAdapterService
@@ -13,8 +12,7 @@ class PsAccountsAdapterService
     private $moduleHelper;
 
     /**
-     * 
-     * @var false|ModuleCore
+     * @var false|\ModuleCore
      */
     private $psAccountModule;
 

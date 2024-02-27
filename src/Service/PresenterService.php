@@ -36,7 +36,7 @@ class PresenterService
         if (!$moduleManagerBuilder) {
             return;
         }
-    
+
         $moduleManager = $moduleManagerBuilder->build();
 
         if (!$moduleManager->isInstalled('ps_accounts')) {
