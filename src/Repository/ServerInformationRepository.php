@@ -2,8 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use DateTime;
-use DateTimeZone;
 use PrestaShop\Module\PsAccounts\Api\Client\AccountsClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
@@ -85,7 +83,7 @@ class ServerInformationRepository
     {
         $langId = !empty($langIso) ? (int) \Language::getIdByIso($langIso) : null;
         $timezone = (string) $this->configurationRepository->get('PS_TIMEZONE');
-        $createdAt = (new DateTime($this->createdAt, new DateTimeZone($timezone)))->format('Y-m-d\TH:i:sO');
+        $createdAt = (new \DateTime($this->createdAt, new \DateTimeZone($timezone)))->format('Y-m-d\TH:i:sO');
         $folderCreatedAt = null;
 
         /* This file is created on installation and never modified.
@@ -94,7 +92,7 @@ class ServerInformationRepository
         $filename = './img/admin/enabled.gif';
 
         if (file_exists($filename)) {
-            $folderCreatedAt = (new DateTime(date('Y-m-d H:i:s', (int) filectime($filename)), new DateTimeZone('Europe/Paris')))->format('Y-m-d\TH:i:sO');
+            $folderCreatedAt = (new \DateTime(date('Y-m-d H:i:s', (int) filectime($filename)), new \DateTimeZone('Europe/Paris')))->format('Y-m-d\TH:i:sO');
         }
 
         if ($this->context->link === null) {
