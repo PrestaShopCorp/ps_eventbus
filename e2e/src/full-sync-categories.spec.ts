@@ -11,12 +11,11 @@ beforeEach(() => {
 });
 
 // TODO expand to other apis
-describe('apiCategories full sync but more better', () => {
-  it(`apiCategories should upload to collector bet`, async () => {
+describe('apiCategories full sync data', () => {
+  it(`apiCategories should upload all data to collector`, async () => {
     // arrange
     const fullSync$ = doFullSync(jobId);
     const message$ = probe({url: `/upload/${jobId}`})
-
 
     // act
     const syncedData = await lastValueFrom(zip(fullSync$, message$).pipe(
@@ -29,6 +28,7 @@ describe('apiCategories full sync but more better', () => {
 
     // asset
     expect(syncedData.length).toEqual(9);
+    // TODO : check actual content against expected content
   });
 })
 
