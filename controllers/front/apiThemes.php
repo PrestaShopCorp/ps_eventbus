@@ -37,8 +37,11 @@ class ps_EventbusApiThemesModuleFrontController extends AbstractApiController
         $this->exitWithResponse(
             array_merge(
                 [
-                    'remaining_objects' => 0,
-                    'total_objects' => count($themeInfo),
+                  'remaining_objects' => 0,
+                  'total_objects' => count($themeInfo),
+                  'job_id' => $jobId,
+                  'object_type' => $this->type,
+                  'syncType' => 'full',
                 ],
                 $response
             )

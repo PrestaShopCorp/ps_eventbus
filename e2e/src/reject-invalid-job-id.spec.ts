@@ -36,6 +36,10 @@ describe('Reject invalid job-id', () => {
           // assert
           expect(err.response.status).toEqual(454);
           expect(err.response.headers).toMatchObject({'content-type': /json/});
+          expect(err.response.data).toMatchObject({
+            status: false,
+            httpCode: 454,
+          });
         }))
 
         const results = await lastValueFrom(zip(message$, request$)
