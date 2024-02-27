@@ -95,22 +95,6 @@
   },
   {
     "collection": "carrier_details",
-    "id": "3-2-range_price-4",
-    "properties": {
-      "id_reference": "3",
-      "id_zone": "2",
-      "id_range": "4",
-      "id_carrier_detail": "4",
-      "shipping_method": "range_price",
-      "delimiter1": 100,
-      "delimiter2": 200,
-      "country_ids": "US",
-      "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
-      "price": 0
-    }
-  },
-  {
-    "collection": "carrier_details",
     "id": "3-1-range_price-4",
     "properties": {
       "id_reference": "3",
@@ -122,6 +106,22 @@
       "delimiter2": 200,
       "country_ids": "FR",
       "state_ids": "",
+      "price": 0
+    }
+  },
+  {
+    "collection": "carrier_details",
+    "id": "3-2-range_price-4",
+    "properties": {
+      "id_reference": "3",
+      "id_zone": "2",
+      "id_range": "4",
+      "id_carrier_detail": "4",
+      "shipping_method": "range_price",
+      "delimiter1": 100,
+      "delimiter2": 200,
+      "country_ids": "US",
+      "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
       "price": 0
     }
   },
@@ -221,22 +221,6 @@
   },
   {
     "collection": "carrier_details",
-    "id": "4-2-range_weight-4",
-    "properties": {
-      "id_reference": "4",
-      "id_zone": "2",
-      "id_range": "4",
-      "id_carrier_detail": "4",
-      "shipping_method": "range_weight",
-      "delimiter1": 3,
-      "delimiter2": 10000,
-      "country_ids": "US",
-      "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
-      "price": 6
-    }
-  },
-  {
-    "collection": "carrier_details",
     "id": "4-1-range_weight-4",
     "properties": {
       "id_reference": "4",
@@ -249,6 +233,22 @@
       "country_ids": "FR",
       "state_ids": "",
       "price": 5
+    }
+  },
+  {
+    "collection": "carrier_details",
+    "id": "4-2-range_weight-4",
+    "properties": {
+      "id_reference": "4",
+      "id_zone": "2",
+      "id_range": "4",
+      "id_carrier_detail": "4",
+      "shipping_method": "range_weight",
+      "delimiter1": 3,
+      "delimiter2": 10000,
+      "country_ids": "US",
+      "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
+      "price": 6
     }
   },
   {

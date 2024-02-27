@@ -19,7 +19,7 @@ import testConfig from "./test.config";
 import axios from "axios";
 
 const DEFAULT_OPTIONS = {
-  timeout : 1500
+  timeout: 1500
 };
 
 export type MockProbeOptions = typeof DEFAULT_OPTIONS;
@@ -31,6 +31,7 @@ if (!global.WebSocket) {
 }
 
 let wsConnection: WebSocketSubject<MockProbeResponse> = null
+
 function getProbeSocket() {
   if (!wsConnection) {
     wsConnection = new WebSocketSubject<MockProbeResponse>('ws://localhost:8080');
@@ -45,8 +46,9 @@ export type MockProbeResponse = {
   url: string,
   query: Record<string, string>,
   params: Record<string, string>,
-  body: Record<string, any> & { file : any[]}
+  body: Record<string, any> & { file: any[] }
 }
+
 export function probe(match?: Partial<MockProbeResponse>, options?: MockProbeOptions): Observable<MockProbeResponse> {
   options = R.mergeLeft(options, DEFAULT_OPTIONS);
 
@@ -78,11 +80,18 @@ export type PsEventbusSyncResponse = {
   upload_url: string,
 }
 
+// TODO define collection as type literal
+export type Collection = string
+
+export type PsEventbusSyncUpload = {
+  collection: Collection, id: string
+}[]
+
 export type Controller = typeof testConfig.controllers[number];
 
-export function doFullSync(jobId : string, controller: Controller, options?: MockClientOptions): Observable<PsEventbusSyncResponse> {
+export function doFullSync(jobId: string, controller: Controller, options?: MockClientOptions): Observable<PsEventbusSyncResponse> {
   options = R.mergeLeft(options, DEFAULT_OPTIONS);
-  const url = (full: number, jobId : string) => `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=${full}&job_id=${jobId}`;
+  const url = (full: number, jobId: string) => `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=${full}&job_id=${jobId}`;
 
   return from(axios.post<PsEventbusSyncResponse>(url(1, jobId), {
     headers: {
@@ -90,7 +99,7 @@ export function doFullSync(jobId : string, controller: Controller, options?: Moc
     },
   })).pipe(
     expand(response => {
-      if(response.data.has_remaining_objects) {
+      if (response.data.has_remaining_objects) {
         return from(axios.post<PsEventbusSyncResponse>(url(0, jobId), {
           headers: {
             'Host': testConfig.prestaShopHostHeader
