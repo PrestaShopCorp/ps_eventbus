@@ -3,11 +3,12 @@
 namespace PrestaShop\Module\PsEventbus\Decorator;
 
 use PrestaShop\Module\PsEventbus\Service\SpecificPriceService;
+use PrestaShop\PrestaShop\Adapter\Entity\Context;
 
 class CustomPriceDecorator
 {
     /**
-     * @var \PrestaShop\PrestaShop\Adapter\Entity\Context
+     * @var Context
      */
     private $context;
     /**
@@ -16,7 +17,7 @@ class CustomPriceDecorator
     private $priceService;
 
     public function __construct(
-        \PrestaShop\PrestaShop\Adapter\Entity\Context $context,
+        Context $context,
         SpecificPriceService $priceService
     ) {
         $this->context = $context;

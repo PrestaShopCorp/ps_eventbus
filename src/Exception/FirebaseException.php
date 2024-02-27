@@ -20,6 +20,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Exception;
 
-class FirebaseException extends \PrestaShop\PrestaShop\Adapter\Entity\Exception
+class FirebaseException extends \Exception
 {
 }

@@ -89,7 +89,7 @@ class ManufacturerRepository
         $shopId = (int) $this->context->shop->id;
 
         /** @var int $langId */
-        $langId = (int) \PrestaShop\PrestaShop\Adapter\Entity\Language::getIdByIso($langIso);
+        $langId = (int) \Language::getIdByIso($langIso);
         $query = new \DbQuery();
         $query->from('manufacturer', 'ma')
             ->innerJoin('manufacturer_lang', 'mal', 'ma.id_manufacturer = mal.id_manufacturer AND mal.id_lang = ' . (int) $langId)

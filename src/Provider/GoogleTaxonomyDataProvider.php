@@ -12,7 +12,7 @@ class GoogleTaxonomyDataProvider implements PaginatedApiDataProviderInterface
      */
     private $googleTaxonomyRepository;
     /**
-     * @var \PrestaShop\PrestaShop\Adapter\Entity\Context
+     * @var \Context
      */
     private $context;
 

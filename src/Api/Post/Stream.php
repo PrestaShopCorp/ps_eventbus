@@ -82,7 +82,7 @@ class Stream implements StreamInterface
             return new PumpStream($resource, $options);
         }
 
-        if ($resource instanceof \PrestaShop\PrestaShop\Adapter\Entity\Iterator) {
+        if ($resource instanceof \Iterator) {
             return new PumpStream(function () use ($resource) {
                 if (!$resource->valid()) {
                     return false;

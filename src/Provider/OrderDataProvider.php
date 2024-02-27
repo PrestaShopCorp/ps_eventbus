@@ -16,7 +16,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      */
     private $orderRepository;
     /**
-     * @var \PrestaShop\PrestaShop\Adapter\Entity\Context
+     * @var \Context
      */
     private $context;
     /**
@@ -80,7 +80,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             return [];
         }
 
-        $langId = (int) \PrestaShop\PrestaShop\Adapter\Entity\Language::getIdByIso($langIso);
+        $langId = (int) \Language::getIdByIso($langIso);
         $this->castOrderValues($orders, $langId);
 
         $orderDetails = $this->getOrderDetails($orders);
@@ -119,7 +119,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
-        $langId = (int) \PrestaShop\PrestaShop\Adapter\Entity\Language::getIdByIso($langIso);
+        $langId = (int) \Language::getIdByIso($langIso);
         $orders = $this->orderRepository->getOrdersIncremental($limit, $this->shopId, $objectIds);
 
         if (!is_array($orders) || empty($orders)) {
@@ -130,7 +130,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         $orderStatuses = $this->getOrderStatuses($orders, $langId);
         $orderCartRules = $this->getOrderCartRules($orders);
 
-        $this->castOrderValues($orders, (int) \PrestaShop\PrestaShop\Adapter\Entity\Language::getIdByIso($langIso));
+        $this->castOrderValues($orders, (int) \Language::getIdByIso($langIso));
 
         $orders = array_map(function ($order) {
             return [

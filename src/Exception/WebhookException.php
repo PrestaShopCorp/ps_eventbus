@@ -20,6 +20,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Exception;
 
-class WebhookException extends \PrestaShop\PrestaShop\Adapter\Entity\Exception
+class WebhookException extends \Exception
 {
 }

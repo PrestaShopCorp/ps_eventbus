@@ -8,7 +8,7 @@ use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
 class DeletedObjectsService
 {
     /**
-     * @var \PrestaShop\PrestaShop\Adapter\Entity\Context
+     * @var \Context
      */
     private $context;
     /**

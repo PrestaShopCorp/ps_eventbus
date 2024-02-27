@@ -12,7 +12,7 @@ use PrestaShop\Module\PsEventbus\Repository\ProductRepository;
 class ProductDecorator
 {
     /**
-     * @var \PrestaShop\PrestaShop\Adapter\Entity\Context
+     * @var \Context
      */
     private $context;
     /**
@@ -42,7 +42,7 @@ class ProductDecorator
     private $shopId;
 
     public function __construct(
-        \PrestaShop\PrestaShop\Adapter\Entity\Context $context,
+        \Context $context,
         LanguageRepository $languageRepository,
         ProductRepository $productRepository,
         CategoryRepository $categoryRepository,

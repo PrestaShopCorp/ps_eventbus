@@ -2,8 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use Context;
 use PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository;
+use PrestaShop\PrestaShop\Adapter\Entity\Context;
 
 class SpecificPriceService
 {
@@ -26,13 +26,13 @@ class SpecificPriceService
      * @param int $specificPriceId
      * @param bool $useTax
      * @param bool $usereduc
-     * @param \PrestaShop\PrestaShop\Adapter\Entity\Context|null $context
+     * @param Context|null $context
      *
      * @return float|int|void
      *
      * @@throws \PrestaShopException
      */
-    public function getSpecificProductPrice($productId, $attributeId, $specificPriceId, $useTax, $usereduc, $context)
+    public function getSpecificProductPrice(int $productId, int $attributeId, int $specificPriceId, bool $useTax, bool $usereduc, $context)
     {
         return $this->getPriceStatic($productId, $attributeId, $specificPriceId, $useTax, $usereduc, $context);
     }
@@ -43,7 +43,7 @@ class SpecificPriceService
      * @param int $specificPriceId
      * @param bool $usetax
      * @param bool $usereduc
-     * @param \PrestaShop\PrestaShop\Adapter\Entity\Context|null $context
+     * @param Context|null $context
      * @param int $decimals
      * @param null $divisor
      * @param bool $only_reduc
@@ -63,7 +63,7 @@ class SpecificPriceService
         $specificPriceId,
         $usetax = true,
         $usereduc = true,
-        \PrestaShop\PrestaShop\Adapter\Entity\Context $context = null,
+        Context $context = null,
         $decimals = 6,
         $divisor = null,
         $only_reduc = false,
@@ -74,7 +74,7 @@ class SpecificPriceService
         $use_group_reduction = true
     ) {
         if (!$context) {
-            /** @var \PrestaShop\PrestaShop\Adapter\Entity\Context $context */
+            /** @var \Context $context */
             $context = \Context::getContext();
         }
 
@@ -85,11 +85,11 @@ class SpecificPriceService
         }
 
         // Initializations
-        $id_group = (int) \PrestaShop\PrestaShop\Adapter\Entity\Group::getCurrent()->id;
+        $id_group = (int) \Group::getCurrent()->id;
 
-        /** @var \PrestaShop\PrestaShop\Adapter\Entity\Currency $currency */
+        /** @var \Currency $currency */
         $currency = $context->currency;
-        $id_currency = \Validate::isLoadedObject($currency) ? (int) $currency->id : (int) \PrestaShop\PrestaShop\Adapter\Entity\Configuration::get('PS_CURRENCY_DEFAULT');
+        $id_currency = \Validate::isLoadedObject($currency) ? (int) $currency->id : (int) \Configuration::get('PS_CURRENCY_DEFAULT');
 
         $current_cart = $context->cart;
         if ($current_cart != null && \Validate::isLoadedObject($current_cart)) {
@@ -110,7 +110,7 @@ class SpecificPriceService
             $usetax != false
             && !empty($address->vat_number)
             && $address->id_country != \Configuration::get('VATNUMBER_COUNTRY')
-            && \PrestaShop\PrestaShop\Adapter\Entity\Configuration::get('VATNUMBER_MANAGEMENT')
+            && \Configuration::get('VATNUMBER_MANAGEMENT')
         ) {
             $usetax = false;
         }
@@ -184,7 +184,7 @@ class SpecificPriceService
         static $context = null;
 
         if ($context == null) {
-            /** @var \PrestaShop\PrestaShop\Adapter\Entity\Context $context */
+            /** @var \Context $context */
             $context = \Context::getContext();
             $context = $context->cloneContext();
         }
@@ -306,7 +306,7 @@ class SpecificPriceService
             if ($use_tax) {
                 static $psEcotaxTaxRulesGroupId = null;
                 if ($psEcotaxTaxRulesGroupId === null) {
-                    $psEcotaxTaxRulesGroupId = (int) \PrestaShop\PrestaShop\Adapter\Entity\Configuration::get('PS_ECOTAX_TAX_RULES_GROUP_ID');
+                    $psEcotaxTaxRulesGroupId = (int) \Configuration::get('PS_ECOTAX_TAX_RULES_GROUP_ID');
                 }
                 // reinit the tax manager for ecotax handling
                 $tax_manager = \TaxManagerFactory::getManager(

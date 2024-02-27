@@ -27,7 +27,7 @@ class Uninstall
      */
     private $module;
     /**
-     * @var \PrestaShop\PrestaShop\Adapter\Entity\Db
+     * @var \Db
      */
     private $db;
 

@@ -55,7 +55,7 @@ class CarrierBuilder
     /**
      * @param array $carriers
      * @param int $langId
-     * @param \PrestaShop\PrestaShop\Adapter\Entity\Currency $currency
+     * @param \Currency $currency
      * @param string $weightUnit
      *
      * @return array
@@ -63,7 +63,7 @@ class CarrierBuilder
      * @@throws \PrestaShopDatabaseException
      * @@throws \PrestaShopException
      */
-    public function buildCarriers(array $carriers, int $langId, \PrestaShop\PrestaShop\Adapter\Entity\Currency $currency, $weightUnit)
+    public function buildCarriers(array $carriers, int $langId, \Currency $currency, $weightUnit)
     {
         $eventBusCarriers = [];
         foreach ($carriers as $carrier) {
@@ -86,7 +86,7 @@ class CarrierBuilder
     }
 
     /**
-     * @param \PrestaShop\PrestaShop\Adapter\Entity\Carrier $carrier
+     * @param \Carrier $carrier
      * @param string $currencyIsoCode
      * @param string $weightUnit
      *
@@ -163,8 +163,8 @@ class CarrierBuilder
     }
 
     /**
-     * @param \PrestaShop\PrestaShop\Adapter\Entity\Carrier $carrier
-     * @param \PrestaShop\PrestaShop\Adapter\Entity\RangeWeight|\RangePrice $range
+     * @param \Carrier $carrier
+     * @param \RangeWeight|\RangePrice $range
      * @param array $zone
      *
      * @return false|CarrierDetail
@@ -200,7 +200,7 @@ class CarrierBuilder
     }
 
     /**
-     * @param \PrestaShop\PrestaShop\Adapter\Entity\Carrier $carrier
+     * @param \Carrier $carrier
      * @param int $zoneId
      * @param int $rangeId
      *

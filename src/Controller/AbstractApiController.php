@@ -274,7 +274,7 @@ abstract class AbstractApiController extends \ModuleFrontController
      *
      * @return void
      *
-     * @throws PrestaShopException
+     * @throws \PrestaShopException
      */
     public function ajaxDie($value = null, $controller = null, $method = null)
     {

@@ -72,7 +72,7 @@ class PresenterService
     }
 
     /**
-     * @param \PrestaShop\PrestaShop\Adapter\Entity\ModuleCore $module
+     * @param \ModuleCore $module
      * @param array $requiredConsents
      * @param array $optionalConsents
      *
