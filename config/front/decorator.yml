@@ -29,7 +29,7 @@ services:
     class: PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator
     public: true
     arguments:
-      - '@PrestaShop\Module\PsEventbus\Formatter\DateFormatter'
+      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
 
   PrestaShop\Module\PsEventbus\Decorator\CustomPriceDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\CustomPriceDecorator

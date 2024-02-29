@@ -2,7 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Decorator;
 
-use PrestaShop\Module\PsEventbus\Formatter\DateFormatter;
+use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 
 const DATE_FIELDS = [
   'created_at',
@@ -14,30 +14,38 @@ const DATE_FIELDS = [
 
 class PayloadDecorator
 {
-    /**
-     * @var DateFormatter
-     */
-    private $dateFormatter;
+  /**
+   * @var ConfigurationRepository
+   */
+  private $configurationRepository;
+  /**
+   * @var string
+   */
+  private $timezone;
 
-    public function __construct(DateFormatter $dateFormatter)
-    {
-        $this->dateFormatter = $dateFormatter;
-    }
+  public function __construct(ConfigurationRepository $configurationRepository)
+  {
+    $this->configurationRepository = $configurationRepository;
+    $this->timezone = (string) $this->configurationRepository->get('PS_TIMEZONE');
+  }
 
-    /**
-     * @param array $payload
-     *
-     * @return void
-     */
-    public function convertDateFormat(array &$payload)
-    {
-        foreach ($payload as &$payloadItem) {
-            foreach (DATE_FIELDS as $dateField) {
-                if (isset($payloadItem['properties'][$dateField])) {
-                    $payloadItem['properties'][$dateField] =
-                      $this->dateFormatter->convertToIso8061($payloadItem['properties']['created_at']);
-                }
-            }
+  /**
+   * @param array $payload
+   * @return void
+   * @throws \Exception
+   */
+  public function convertDateFormat(array &$payload)
+  {
+    foreach ($payload as &$payloadItem) {
+      foreach (DATE_FIELDS as $dateField) {
+        $date = &$payloadItem['properties'][$dateField];
+        if (isset($date) && !empty($date) && $date !== '0000-00-00 00:00:00') {
+          $dateTime = new \DateTime($date, new \DateTimeZone($this->timezone));
+          $date = $dateTime->format(\DateTime::ISO8601);
+        } else {
+          $date = null;
         }
+      }
     }
+  }
 }

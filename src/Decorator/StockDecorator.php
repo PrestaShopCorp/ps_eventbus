@@ -72,7 +72,7 @@ class StockDecorator
      */
     private function castStockMvtPropertyValues(array &$stockMvt)
     {
-        $date = (new \DateTime($stockMvt['date_add'], new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
+        $date = $stockMvt['date_add'];
 
         $stockMvt['id_stock_mvt'] = (int) $stockMvt['id_stock_mvt'];
         $stockMvt['id_stock'] = (int) $stockMvt['id_stock'];

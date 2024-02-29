@@ -54,9 +54,8 @@ class EmployeeDecorator
 
         $employee['has_enabled_gravatar'] = (bool) $employee['has_enabled_gravatar'];
 
-        $timezone = (string) $this->configurationRepository->get('PS_TIMEZONE');
         // FIXME : date formatting
-        $employee['last_connection_date'] = (new \DateTime($employee['last_connection_date'], new \DateTimeZone($timezone)))->format('Y-m-d\TH:i:sO');
+        $employee['last_connection_date'] = (string) $employee['last_connection_date'];
     }
 
     /**
@@ -66,6 +65,7 @@ class EmployeeDecorator
      */
     private function hashEmail(array &$employee)
     {
+        // FIXME : random salt per shop
         $employee['email_hash'] = hash('sha256', $employee['email'] . 'dUj4GMBD6689pL9pyr');
         unset($employee['email']);
     }
