@@ -54,6 +54,11 @@ class PayloadDecorator
         }
     }
 
+  /**
+   * @param array $payload
+   *
+   * @return void
+   */
     public function filterNull(array &$payload)
     {
       foreach ($payload as &$payloadItem) {
