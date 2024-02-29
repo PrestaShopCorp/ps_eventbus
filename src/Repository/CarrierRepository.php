@@ -95,6 +95,26 @@ class CarrierRepository
         return $filteredRanges;
     }
 
+    /*
+     * @param int $offset
+     * @param int $limit
+     * @param int $langId
+     * 
+     * @return \DbQuery
+     */
+    private function getAllCarriersQuery($offset, $limit, $langId)
+    {
+        $query = new \DbQuery();
+        $query->from('carrier', 'c');
+        $query->select('c.id_carrier');
+        $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
+        $query->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier');
+        $query->where('cs.id_shop = ' . $this->shopId);
+        $query->where('deleted=0');
+        $query->limit($limit, $offset);
+        return $query;
+    }
+
     /**
      * @param string $type
      * @param string $langIso
@@ -170,16 +190,7 @@ class CarrierRepository
      */
     public function getAllCarrierProperties($offset, $limit, $langId)
     {
-        $query = new \DbQuery();
-        $query->from('carrier', 'c');
-        $query->select('c.id_carrier');
-        $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
-        $query->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier');
-        $query->where('cs.id_shop = ' . $this->shopId);
-        $query->where('deleted=0');
-        $query->limit($limit, $offset);
-
-        return $this->db->executeS($query);
+        return $this->db->executeS($this->getAllCarriersQuery($offset, $limit, $langId));
     }
 
     /**
@@ -212,15 +223,7 @@ class CarrierRepository
      */
     public function getQueryForDebug($offset, $limit, $langId)
     {
-        $query = new \DbQuery();
-        $query->from('carrier', 'c');
-        $query->select('c.id_carrier');
-        $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
-        $query->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier');
-        $query->where('cs.id_shop = ' . $this->shopId);
-        $query->where('deleted=0');
-        $query->limit($limit, $offset);
-
+        $query = $this->getAllCarriersQuery($offset, $limit, $langId);
         $queryStringified = preg_replace('/\s+/', ' ', $query->build());
 
         return array_merge(
