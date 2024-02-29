@@ -23,6 +23,8 @@ const specialFieldAssert: { [index: string]: (val) => void } = {
   'last_connection_date': isDateString,
   'folder_created_at': isDateString,
   'date_add': isDateString,
+  'from': isDateString,
+  'to': isDateString,
   'conversion_rate': val => expect(val).toBeNumber(),
   'cms_version': isString,
   'module_version': isString,
