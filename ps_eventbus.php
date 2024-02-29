@@ -139,7 +139,7 @@ class Ps_eventbus extends Module
     /**
      * @var int Defines the multistore compatibility level of the module
      */
-    public $multistoreCompatibility = null;
+    public $multistoreCompatibility;
 
     /**
      * @var string contact email of the maintainers (please consider using github issues)
