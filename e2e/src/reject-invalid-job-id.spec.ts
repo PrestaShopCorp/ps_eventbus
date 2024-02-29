@@ -22,7 +22,7 @@ describe('Reject invalid job-id', () => {
   describe.each(controllers)('%s', (controller) => {
 
     it(`${controller} should return 454 with an invalid job id (sync-api status 454)`, async () => {
-        expect.assertions(5);
+        expect.assertions(6);
         // arrange
         const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&job_id=${jobId}`
         const message$ = probe({params: {id: jobId}});
