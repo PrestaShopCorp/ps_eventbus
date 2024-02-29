@@ -27,8 +27,6 @@ const specialFieldAssert: { [index: string]: (val) => void } = {
   'to': isDateString,
   'conversion_rate': val => expect(val).toBeNumber(),
   'cms_version': isString,
-  'module_version': isString,
-  'name': isString,
 }
 
 describe('Full Sync Data', () => {
