@@ -24,8 +24,6 @@
  * International Registered Trademark & Property of PrestaShop SA
  */
 
-use Db;
-use Module;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer;
 
@@ -142,7 +140,7 @@ class Ps_eventbus extends Module
     /**
      * @var int Defines the multistore compatibility level of the module
      */
-    public $multistoreCompatibility = Module::MULTISTORE_COMPATIBILITY_YES;
+    public $multistoreCompatibility = \Module::MULTISTORE_COMPATIBILITY_YES;
 
     /**
      * @var string contact email of the maintainers (please consider using github issues)
@@ -226,7 +224,7 @@ class Ps_eventbus extends Module
             return defined('PS_INSTALLATION_IN_PROGRESS');
         }
 
-        $installer = new PrestaShop\Module\PsEventbus\Module\Install($this, Db::getInstance());
+        $installer = new PrestaShop\Module\PsEventbus\Module\Install($this, \Db::getInstance());
 
         return $installer->installDatabaseTables()
             && parent::install()
@@ -238,7 +236,7 @@ class Ps_eventbus extends Module
      */
     public function uninstall()
     {
-        $uninstaller = new PrestaShop\Module\PsEventbus\Module\Uninstall($this, Db::getInstance());
+        $uninstaller = new PrestaShop\Module\PsEventbus\Module\Uninstall($this, \Db::getInstance());
 
         return $uninstaller->uninstallMenu()
             && $uninstaller->uninstallDatabaseTables()
