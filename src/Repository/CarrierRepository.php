@@ -99,7 +99,7 @@ class CarrierRepository
      * @param int $offset
      * @param int $limit
      * @param int $langId
-     * 
+     *
      * @return \DbQuery
      */
     private function getAllCarriersQuery($offset, $limit, $langId)
@@ -112,6 +112,7 @@ class CarrierRepository
         $query->where('cs.id_shop = ' . $this->shopId);
         $query->where('deleted=0');
         $query->limit($limit, $offset);
+
         return $query;
     }
 

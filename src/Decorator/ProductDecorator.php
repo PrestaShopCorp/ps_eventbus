@@ -359,15 +359,13 @@ class ProductDecorator
 
             $link = $this->context->link;
 
-/*
-Ici pour certaines boutique on aurait un comporterment qui pourrait être adapté.
-et aller chercher dans une table des images le bon libellé pour appeler ce que le marchand a.
-*/
+            /*
+            Ici pour certaines boutique on aurait un comporterment qui pourrait être adapté.
+            et aller chercher dans une table des images le bon libellé pour appeler ce que le marchand a.
+            */
 
             $product['images'] = $this->arrayFormatter->arrayToString(
                 array_map(function ($imageId) use ($product, $link) {
-
-
                     return $link->getImageLink($product['link_rewrite'], (string) $imageId);
                 }, $productImageIds)
             );
