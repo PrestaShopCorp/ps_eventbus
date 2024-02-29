@@ -40,6 +40,7 @@ class ManufacturerDecorator
         $manufacturer['active'] = (bool) $manufacturer['active'];
         $manufacturer['id_lang'] = (int) $manufacturer['id_lang'];
         $manufacturer['id_shop'] = (int) $manufacturer['id_shop'];
+        // FIXME : date formatting
         $manufacturer['created_at'] = (new \DateTime($manufacturer['created_at'], new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
         $manufacturer['updated_at'] = (new \DateTime($manufacturer['updated_at'], new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
     }

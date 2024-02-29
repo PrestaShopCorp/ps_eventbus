@@ -4,6 +4,14 @@ namespace PrestaShop\Module\PsEventbus\Decorator;
 
 use PrestaShop\Module\PsEventbus\Formatter\DateFormatter;
 
+const DATE_FIELDS = [
+  'created_at',
+  'updated_at',
+  'last_connection_date',
+  'folder_created_at',
+  'date_add',
+];
+
 class PayloadDecorator
 {
     /**
@@ -24,24 +32,11 @@ class PayloadDecorator
     public function convertDateFormat(array &$payload)
     {
         foreach ($payload as &$payloadItem) {
-            if (isset($payloadItem['properties']['created_at'])) {
-                $payloadItem['properties']['created_at'] =
-                    $this->dateFormatter->convertToIso8061($payloadItem['properties']['created_at']);
-            }
-
-            if (isset($payloadItem['properties']['updated_at'])) {
-                $payloadItem['properties']['updated_at'] =
-                    $this->dateFormatter->convertToIso8061($payloadItem['properties']['updated_at']);
-            }
-
-            if (isset($payloadItem['properties']['from'])) {
-                $payloadItem['properties']['from'] =
-                    $this->dateFormatter->convertToIso8061($payloadItem['properties']['from']);
-            }
-
-            if (isset($payloadItem['properties']['to'])) {
-                $payloadItem['properties']['to'] =
-                    $this->dateFormatter->convertToIso8061($payloadItem['properties']['to']);
+            foreach (DATE_FIELDS as $dateField) {
+                if (isset($payloadItem['properties'][$dateField])) {
+                    $payloadItem['properties'][$dateField] =
+                      $this->dateFormatter->convertToIso8061($payloadItem['properties']['created_at']);
+                }
             }
         }
     }

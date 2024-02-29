@@ -85,6 +85,7 @@ class ServerInformationRepository
     {
         $langId = !empty($langIso) ? (int) \Language::getIdByIso($langIso) : null;
         $timezone = (string) $this->configurationRepository->get('PS_TIMEZONE');
+        // FIXME : date formatting
         $createdAt = (new \DateTime($this->createdAt, new \DateTimeZone($timezone)))->format('Y-m-d\TH:i:sO');
         $folderCreatedAt = null;
 
@@ -94,6 +95,7 @@ class ServerInformationRepository
         $filename = './img/admin/enabled.gif';
 
         if (file_exists($filename)) {
+            // FIXME : date formatting
             $folderCreatedAt = (new \DateTime(date('Y-m-d H:i:s', (int) filectime($filename)), new \DateTimeZone('Europe/Paris')))->format('Y-m-d\TH:i:sO');
         }
 

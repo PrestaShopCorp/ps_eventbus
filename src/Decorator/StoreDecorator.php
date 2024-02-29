@@ -50,6 +50,7 @@ class StoreDecorator
             $store['id_shop'] = (int) $store['id_shop'];
         } // TODO: statusCode:465 for PS 1.6 here, what should we set in the else ?
 
+        // FIXME : date formatting
         $store['created_at'] = (new \DateTime($store['created_at'], new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
         $store['updated_at'] = (new \DateTime($store['updated_at'], new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
     }

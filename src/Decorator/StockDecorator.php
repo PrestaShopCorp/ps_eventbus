@@ -82,14 +82,14 @@ class StockDecorator
         $stockMvt['id_lang'] = (int) $stockMvt['id_lang'];
         $stockMvt['id_employee'] = (int) $stockMvt['id_employee'];
         $stockMvt['physical_quantity'] = (int) $stockMvt['physical_quantity'];
-        $stockMvt['date_add'] = $date;
+        $stockMvt['date_add'] = $date; // FIXME : date formatting
         $stockMvt['sign'] = (int) $stockMvt['sign'];
         $stockMvt['price_te'] = (float) $stockMvt['price_te'];
         $stockMvt['last_wa'] = (float) $stockMvt['last_wa'];
         $stockMvt['current_wa'] = (float) $stockMvt['current_wa'];
         $stockMvt['referer'] = (int) $stockMvt['referer'];
         $stockMvt['deleted'] = (bool) $stockMvt['deleted'];
-        $stockMvt['created_at'] = $date;
-        $stockMvt['updated_at'] = $date;
+        $stockMvt['created_at'] = $date; // FIXME : date formatting + meaningless
+        $stockMvt['updated_at'] = $date; // FIXME : date formatting + meaningless
     }
 }

@@ -43,6 +43,7 @@ class CustomerDecorator
         $customer['newsletter'] = (bool) $customer['newsletter'];
 
         $timezone = (string) $this->configurationRepository->get('PS_TIMEZONE');
+        // FIXME : date formatting
         $customer['newsletter_date_add'] = (new \DateTime($customer['newsletter_date_add'], new \DateTimeZone($timezone)))->format('Y-m-d\TH:i:sO');
 
         $customer['optin'] = (bool) $customer['optin'];

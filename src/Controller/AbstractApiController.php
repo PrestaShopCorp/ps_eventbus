@@ -182,6 +182,7 @@ abstract class AbstractApiController extends \ModuleFrontController
         /** @var bool $initFullSync */
         $initFullSync = \Tools::getValue('full', 0) == 1;
 
+        // TODO : validate that this produces the expected result
         $dateNow = (new \DateTime('now', new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
         $offset = 0;
         $incrementalSync = false;

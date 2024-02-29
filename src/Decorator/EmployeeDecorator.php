@@ -55,6 +55,7 @@ class EmployeeDecorator
         $employee['has_enabled_gravatar'] = (bool) $employee['has_enabled_gravatar'];
 
         $timezone = (string) $this->configurationRepository->get('PS_TIMEZONE');
+        // FIXME : date formatting
         $employee['last_connection_date'] = (new \DateTime($employee['last_connection_date'], new \DateTimeZone($timezone)))->format('Y-m-d\TH:i:sO');
     }
 
