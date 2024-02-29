@@ -31,7 +31,6 @@ if (!global.WebSocket) {
 }
 
 let wsConnection: WebSocketSubject<MockProbeResponse> = null
-
 function getProbeSocket() {
   if (!wsConnection) {
     wsConnection = new WebSocketSubject<MockProbeResponse>('ws://localhost:8080');
@@ -99,7 +98,7 @@ export function doFullSync(jobId: string, controller: Controller, options?: Mock
     },
   })).pipe(
     expand(response => {
-      if (response.data.has_remaining_objects) {
+      if(response.data.has_remaining_objects) {
         return from(axios.post<PsEventbusSyncResponse>(url(0, jobId), {
           headers: {
             'Host': testConfig.prestaShopHostHeader
