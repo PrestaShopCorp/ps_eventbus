@@ -2,29 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Decorator;
 
-use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
-use PrestaShop\Module\PsEventbus\Repository\ShopRepository;
-
 class LanguageDecorator
 {
-    /**
-     * @var string
-     */
-    private $timezone;
-
-    /**
-     * @var string
-     */
-    private $createdAt;
-
-    public function __construct(
-        ConfigurationRepository $configurationRepository,
-        ShopRepository $shopRepository
-    ) {
-        $this->timezone = (string) $configurationRepository->get('PS_TIMEZONE');
-        $this->createdAt = $shopRepository->getCreatedAt();
-    }
-
     /**
      * @param array $languages
      *
@@ -48,9 +27,5 @@ class LanguageDecorator
         $language['active'] = (bool) $language['active'];
         $language['is_rtl'] = (bool) $language['is_rtl'];
         $language['id_shop'] = (int) $language['id_shop'];
-        // FIXME : date formatting + meaningless because same as shop creation ?
-        $language['created_at'] = (new \DateTime($this->createdAt, new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
-        // FIXME : date formatting + meaningless updatedAt if same as createdAt
-        $language['updated_at'] = (new \DateTime($this->createdAt, new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
     }
 }

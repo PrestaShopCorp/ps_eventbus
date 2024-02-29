@@ -21,9 +21,6 @@ services:
   PrestaShop\Module\PsEventbus\Decorator\CustomerDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\CustomerDecorator
     public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
-
 
   PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator
@@ -45,64 +42,39 @@ services:
   PrestaShop\Module\PsEventbus\Decorator\StoreDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\StoreDecorator
     public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
 
   PrestaShop\Module\PsEventbus\Decorator\StockDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\StockDecorator
     public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
 
   PrestaShop\Module\PsEventbus\Decorator\ManufacturerDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\ManufacturerDecorator
     public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
 
   PrestaShop\Module\PsEventbus\Decorator\SupplierDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\SupplierDecorator
     public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
 
   PrestaShop\Module\PsEventbus\Decorator\ProductSupplierDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\ProductSupplierDecorator
     public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
 
   PrestaShop\Module\PsEventbus\Decorator\EmployeeDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\EmployeeDecorator
     public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
-      - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
 
   PrestaShop\Module\PsEventbus\Decorator\LanguageDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\LanguageDecorator
     public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
-      - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
 
   PrestaShop\Module\PsEventbus\Decorator\ImageDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\ImageDecorator
     public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
-      - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
 
   PrestaShop\Module\PsEventbus\Decorator\ImageTypeDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\ImageTypeDecorator
     public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
-      - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
 
   PrestaShop\Module\PsEventbus\Decorator\TranslationDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\TranslationDecorator
     public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
-      - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'

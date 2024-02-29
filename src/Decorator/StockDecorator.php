@@ -2,26 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Decorator;
 
-use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
-
 class StockDecorator
 {
-    /**
-     * @var ConfigurationRepository
-     */
-    private $configurationRepository;
-    /**
-     * @var string
-     */
-    private $timezone;
-
-    public function __construct(
-        ConfigurationRepository $configurationRepository
-    ) {
-        $this->configurationRepository = $configurationRepository;
-        $this->timezone = (string) $this->configurationRepository->get('PS_TIMEZONE');
-    }
-
     /**
      * @param array $stocks
      *
@@ -82,14 +64,13 @@ class StockDecorator
         $stockMvt['id_lang'] = (int) $stockMvt['id_lang'];
         $stockMvt['id_employee'] = (int) $stockMvt['id_employee'];
         $stockMvt['physical_quantity'] = (int) $stockMvt['physical_quantity'];
-        $stockMvt['date_add'] = $date; // FIXME : date formatting
+        $stockMvt['date_add'] = $date;
         $stockMvt['sign'] = (int) $stockMvt['sign'];
         $stockMvt['price_te'] = (float) $stockMvt['price_te'];
         $stockMvt['last_wa'] = (float) $stockMvt['last_wa'];
         $stockMvt['current_wa'] = (float) $stockMvt['current_wa'];
         $stockMvt['referer'] = (int) $stockMvt['referer'];
         $stockMvt['deleted'] = (bool) $stockMvt['deleted'];
-        $stockMvt['created_at'] = $date; // FIXME : date formatting + meaningless
-        $stockMvt['updated_at'] = $date; // FIXME : date formatting + meaningless
+        $stockMvt['created_at'] = $date;
     }
 }

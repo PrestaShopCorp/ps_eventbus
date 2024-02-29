@@ -2,21 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Decorator;
 
-use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
-
 class EmployeeDecorator
 {
-    /**
-     * @var ConfigurationRepository
-     */
-    private $configurationRepository;
-
-    public function __construct(
-        ConfigurationRepository $configurationRepository
-    ) {
-        $this->configurationRepository = $configurationRepository;
-    }
-
     /**
      * @param array $employees
      *
@@ -54,7 +41,6 @@ class EmployeeDecorator
 
         $employee['has_enabled_gravatar'] = (bool) $employee['has_enabled_gravatar'];
 
-        // FIXME : date formatting
         $employee['last_connection_date'] = (string) $employee['last_connection_date'];
     }
 
@@ -65,7 +51,7 @@ class EmployeeDecorator
      */
     private function hashEmail(array &$employee)
     {
-        // FIXME : random salt per shop
+        // FIXME : use a random salt generated during module install
         $employee['email_hash'] = hash('sha256', $employee['email'] . 'dUj4GMBD6689pL9pyr');
         unset($employee['email']);
     }

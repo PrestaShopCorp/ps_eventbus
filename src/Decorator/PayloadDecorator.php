@@ -14,38 +14,40 @@ const DATE_FIELDS = [
 
 class PayloadDecorator
 {
-  /**
-   * @var ConfigurationRepository
-   */
-  private $configurationRepository;
-  /**
-   * @var string
-   */
-  private $timezone;
+    /**
+     * @var ConfigurationRepository
+     */
+    private $configurationRepository;
+    /**
+     * @var string
+     */
+    private $timezone;
 
-  public function __construct(ConfigurationRepository $configurationRepository)
-  {
-    $this->configurationRepository = $configurationRepository;
-    $this->timezone = (string) $this->configurationRepository->get('PS_TIMEZONE');
-  }
-
-  /**
-   * @param array $payload
-   * @return void
-   * @throws \Exception
-   */
-  public function convertDateFormat(array &$payload)
-  {
-    foreach ($payload as &$payloadItem) {
-      foreach (DATE_FIELDS as $dateField) {
-        $date = &$payloadItem['properties'][$dateField];
-        if (isset($date) && !empty($date) && $date !== '0000-00-00 00:00:00') {
-          $dateTime = new \DateTime($date, new \DateTimeZone($this->timezone));
-          $date = $dateTime->format(\DateTime::ISO8601);
-        } else {
-          $date = null;
-        }
-      }
+    public function __construct(ConfigurationRepository $configurationRepository)
+    {
+        $this->configurationRepository = $configurationRepository;
+        $this->timezone = (string) $this->configurationRepository->get('PS_TIMEZONE');
     }
-  }
+
+    /**
+     * @param array $payload
+     *
+     * @return void
+     *
+     * @throws \Exception
+     */
+    public function convertDateFormat(array &$payload)
+    {
+        foreach ($payload as &$payloadItem) {
+            foreach (DATE_FIELDS as $dateField) {
+                $date = &$payloadItem['properties'][$dateField];
+                if (isset($date) && !empty($date) && $date !== '0000-00-00 00:00:00') {
+                    $dateTime = new \DateTime($date, new \DateTimeZone($this->timezone));
+                    $date = $dateTime->format(\DateTime::ISO8601);
+                } else {
+                    $date = null;
+                }
+            }
+        }
+    }
 }
