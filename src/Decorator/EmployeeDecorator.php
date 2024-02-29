@@ -30,7 +30,7 @@ class EmployeeDecorator
 
         $employee['default_tab'] = (int) $employee['default_tab'];
         $employee['bo_width'] = (int) $employee['bo_width'];
-        $employee['bo_menu'] = (int) $employee['bo_menu'];
+        $employee['bo_menu'] = (bool) $employee['bo_menu'];
 
         $employee['optin'] = (bool) $employee['optin'];
         $employee['active'] = (bool) $employee['active'];
