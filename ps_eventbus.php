@@ -139,7 +139,7 @@ class Ps_eventbus extends Module
     /**
      * @var int Defines the multistore compatibility level of the module
      */
-    public $multistoreCompatibility = self::MULTISTORE_COMPATIBILITY_YES;
+    public $multistoreCompatibility = null;
 
     /**
      * @var string contact email of the maintainers (please consider using github issues)
@@ -156,6 +156,10 @@ class Ps_eventbus extends Module
      */
     public function __construct()
     {
+        if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+            $this->multistoreCompatibility = parent::MULTISTORE_COMPATIBILITY_YES;
+        }
+
         // @see https://devdocs.prestashop-project.org/8/modules/concepts/module-class/
         $this->name = 'ps_eventbus';
         $this->tab = 'administration';
