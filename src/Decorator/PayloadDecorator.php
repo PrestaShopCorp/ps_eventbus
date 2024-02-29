@@ -12,6 +12,7 @@ const DATE_FIELDS = [
   'last_connection_date',
   'folder_created_at',
   'date_add',
+  'newsletter_date_add',
 ];
 
 class PayloadDecorator
@@ -51,5 +52,16 @@ class PayloadDecorator
                 }
             }
         }
+    }
+
+    public function filterNull(array &$payload)
+    {
+      foreach ($payload as &$payloadItem) {
+        foreach (array_keys($payloadItem['properties']) as $key) {
+          if(is_null($payloadItem['properties'][$key])){
+            unset($payloadItem['properties'][$key]);
+          }
+        }
+      }
     }
 }
