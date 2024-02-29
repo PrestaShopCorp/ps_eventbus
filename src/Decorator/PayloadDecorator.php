@@ -13,6 +13,8 @@ const DATE_FIELDS = [
   'folder_created_at',
   'date_add',
   'newsletter_date_add',
+  'from',
+  'to'
 ];
 
 class PayloadDecorator
