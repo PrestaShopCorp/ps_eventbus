@@ -84,8 +84,8 @@ export type PsEventbusSyncResponse = {
 export type Collection = string
 
 export type PsEventbusSyncUpload = {
-  collection: Collection, id: string
-}[]
+  collection: Collection, id: string, properties: any
+}
 
 export type Controller = typeof testConfig.controllers[number];
 
