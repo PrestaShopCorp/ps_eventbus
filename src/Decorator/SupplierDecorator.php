@@ -2,21 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Decorator;
 
-use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
-
 class SupplierDecorator
 {
-    /**
-     * @var string
-     */
-    private $timezone;
-
-    public function __construct(
-        ConfigurationRepository $configurationRepository
-    ) {
-        $this->timezone = (string) $configurationRepository->get('PS_TIMEZONE');
-    }
-
     /**
      * @param array $suppliers
      *
@@ -40,7 +27,7 @@ class SupplierDecorator
         $supplier['active'] = (bool) $supplier['active'];
         $supplier['id_lang'] = (int) $supplier['id_lang'];
         $supplier['id_shop'] = (int) $supplier['id_shop'];
-        $supplier['created_at'] = (new \DateTime($supplier['created_at'], new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
-        $supplier['updated_at'] = (new \DateTime($supplier['updated_at'], new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
+        $supplier['created_at'] = (string) $supplier['created_at'];
+        $supplier['updated_at'] = (string) $supplier['updated_at'];
     }
 }
