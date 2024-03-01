@@ -103,7 +103,12 @@ class CartRepository
      */
     public function getQueryForDebug($offset, $limit)
     {
-        $query = $this->getAllCartsQuery($offset, $limit);
+        $query = $this->getBaseQuery();
+
+        $this->addSelectParameters($query);
+
+        $query->limit($limit, $offset);
+
         $queryStringified = preg_replace('/\s+/', ' ', $query->build());
 
         return array_merge(

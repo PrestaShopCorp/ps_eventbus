@@ -95,7 +95,7 @@ class CarrierRepository
         return $filteredRanges;
     }
 
-    /*
+    /**
      * @param int $offset
      * @param int $limit
      * @param int $langId
