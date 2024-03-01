@@ -2,7 +2,8 @@ import {AxiosError} from "axios";
 import R from "ramda";
 import fs from "fs";
 import testConfig from "./test.config";
-import {expect} from "@jest/globals";
+import {PsEventbusSyncUpload} from "./mock-probe";
+import {Controller} from "../type/controllers";
 
 export function logAxiosError(err: Error) {
   if(err instanceof AxiosError) {
@@ -10,8 +11,12 @@ export function logAxiosError(err: Error) {
   }
 }
 
-export async function dumpData(data: any, filename: string) {
-  const dir = `./dumps/${testConfig.testRunTime}`;
+export async function dumpUploadData(data: PsEventbusSyncUpload[], filename: string) {
+  const dir = `./dumps/${testConfig.testRunTime}/${filename}`;
   await fs.promises.mkdir(dir, {recursive: true});
-  await fs.promises.writeFile(`${dir}/${filename}.json`, JSON.stringify(data, null, 2));
+  const groupedData = R.groupBy( el => el.collection, data )
+  Object.keys(groupedData).map(collection => {
+    return fs.promises.writeFile(`${dir}/${collection}.json`,
+      JSON.stringify(groupedData[collection], null, 2));
+  })
 }

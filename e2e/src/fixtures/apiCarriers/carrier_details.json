@@ -1,35 +1,5 @@
 [
   {
-    "collection": "carriers",
-    "id": "3",
-    "properties": {
-      "id_carrier": "3",
-      "id_reference": "3",
-      "name": "My cheap carrier",
-      "carrier_taxes_rates_group_id": "1",
-      "url": "",
-      "active": false,
-      "deleted": false,
-      "shipping_handling": 2,
-      "free_shipping_starts_at_price": 0,
-      "free_shipping_starts_at_weight": 0,
-      "disable_carrier_when_out_of_range": false,
-      "is_module": false,
-      "is_free": false,
-      "shipping_external": false,
-      "need_range": false,
-      "external_module_name": "",
-      "max_width": 0,
-      "max_height": 0,
-      "max_depth": 0,
-      "max_weight": 0,
-      "grade": 0,
-      "delay": "Buy more to pay less!",
-      "currency": "EUR",
-      "weight_unit": "kg"
-    }
-  },
-  {
     "collection": "carrier_details",
     "id": "3-1-range_price-2",
     "properties": {
@@ -126,36 +96,6 @@
     }
   },
   {
-    "collection": "carriers",
-    "id": "4",
-    "properties": {
-      "id_carrier": "4",
-      "id_reference": "4",
-      "name": "My light carrier",
-      "carrier_taxes_rates_group_id": "1",
-      "url": "",
-      "active": false,
-      "deleted": false,
-      "shipping_handling": 2,
-      "free_shipping_starts_at_price": 0,
-      "free_shipping_starts_at_weight": 0,
-      "disable_carrier_when_out_of_range": false,
-      "is_module": false,
-      "is_free": false,
-      "shipping_external": false,
-      "need_range": false,
-      "external_module_name": "",
-      "max_width": 0,
-      "max_height": 0,
-      "max_depth": 0,
-      "max_weight": 0,
-      "grade": 0,
-      "delay": "The lighter the cheaper!",
-      "currency": "EUR",
-      "weight_unit": "kg"
-    }
-  },
-  {
     "collection": "carrier_details",
     "id": "4-1-range_weight-2",
     "properties": {
@@ -249,66 +189,6 @@
       "country_ids": "US",
       "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
       "price": 6
-    }
-  },
-  {
-    "collection": "carriers",
-    "id": "1",
-    "properties": {
-      "id_carrier": "1",
-      "id_reference": "1",
-      "name": "Click and collect",
-      "carrier_taxes_rates_group_id": "1",
-      "url": "",
-      "active": true,
-      "deleted": false,
-      "shipping_handling": 0,
-      "free_shipping_starts_at_price": 0,
-      "free_shipping_starts_at_weight": 0,
-      "disable_carrier_when_out_of_range": false,
-      "is_module": false,
-      "is_free": true,
-      "shipping_external": false,
-      "need_range": false,
-      "external_module_name": "",
-      "max_width": 0,
-      "max_height": 0,
-      "max_depth": 0,
-      "max_weight": 0,
-      "grade": 0,
-      "delay": "Pick up in-store",
-      "currency": "EUR",
-      "weight_unit": "kg"
-    }
-  },
-  {
-    "collection": "carriers",
-    "id": "2",
-    "properties": {
-      "id_carrier": "2",
-      "id_reference": "2",
-      "name": "My carrier",
-      "carrier_taxes_rates_group_id": "1",
-      "url": "",
-      "active": true,
-      "deleted": false,
-      "shipping_handling": 2,
-      "free_shipping_starts_at_price": 0,
-      "free_shipping_starts_at_weight": 0,
-      "disable_carrier_when_out_of_range": false,
-      "is_module": false,
-      "is_free": false,
-      "shipping_external": false,
-      "need_range": false,
-      "external_module_name": "",
-      "max_width": 0,
-      "max_height": 0,
-      "max_depth": 0,
-      "max_weight": 0,
-      "grade": 0,
-      "delay": "Delivery next day!",
-      "currency": "EUR",
-      "weight_unit": "kg"
     }
   },
   {

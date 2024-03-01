@@ -1,5 +1,8 @@
 import R from "ramda";
-import {Controller, PsEventbusSyncUpload} from "./mock-probe";
+import {PsEventbusSyncUpload} from "./mock-probe";
+import {Content, contentControllerMapping, Controller} from "../type/controllers";
+import fs from "fs";
+import {of} from "rxjs";
 
 /**
  * sort upload data by collection and id to allow easier comparison
@@ -24,4 +27,21 @@ export function omitProperties(data: PsEventbusSyncUpload[], omitFields: string[
     ...it,
     properties: R.omit(omitFields, it.properties)
   }))
+}
+
+export function getControllerContent(controller: Controller): Content[] {
+  return Object.entries(contentControllerMapping)
+    .filter(it => it[1] === controller)
+    .map(it => it[0]) as Content[];
+}
+
+export async function loadFixture(controller: Controller): Promise<PsEventbusSyncUpload[]> {
+  const contents = getControllerContent(controller);
+  const fixture = [];
+
+  const files = contents.map(content => fs.promises.readFile(`./src/fixtures/${controller}/${content}.json`, 'utf-8'));
+  for await (const file of files) {
+      fixture.push(...JSON.parse(file))
+  }
+  return fixture;
 }

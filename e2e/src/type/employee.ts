@@ -1,11 +1,13 @@
+import fixture from '../fixtures/apiEmployees/employees.json'
+
 export type Employee = {
     id: string;
     collection: string;
     properties: {
       active: boolean;
-      bo_color: null;
+      bo_color?: number;
       bo_css: string;
-      bo_menu: number;
+      bo_menu: boolean;
       bo_theme: string;
       bo_width: number;
       default_tab: number;
@@ -18,7 +20,10 @@ export type Employee = {
       id_last_order: number;
       id_profile: number;
       id_shop: number;
-      last_connection_date: string;
+      last_connection_date?: string;
       optin: boolean;
     }
 }
+
+// assert
+const employee: Employee[] = fixture;

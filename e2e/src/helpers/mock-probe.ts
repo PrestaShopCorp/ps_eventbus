@@ -17,6 +17,7 @@ import {
 import R from 'ramda';
 import testConfig from "./test.config";
 import axios from "axios";
+import {Controller} from "../type/controllers";
 
 const DEFAULT_OPTIONS = {
   timeout: 1500
@@ -85,8 +86,6 @@ export type Collection = string
 export type PsEventbusSyncUpload = {
   collection: Collection, id: string, properties: any
 }
-
-export type Controller = typeof testConfig.controllers[number];
 
 export function doFullSync(jobId: string, controller: Controller, options?: MockClientOptions): Observable<PsEventbusSyncResponse> {
   options = R.mergeLeft(options, DEFAULT_OPTIONS);

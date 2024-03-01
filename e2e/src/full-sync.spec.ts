@@ -1,18 +1,24 @@
 import testConfig from './helpers/test.config';
 import * as matchers from 'jest-extended';
-import {dumpData, logAxiosError} from "./helpers/log-helper";
+import {dumpUploadData, logAxiosError} from "./helpers/log-helper";
 import axios, {AxiosError} from "axios";
-import {Controller, doFullSync, probe, PsEventbusSyncUpload} from "./helpers/mock-probe";
-import {concatMap, from, lastValueFrom, map, tap, toArray, zip} from "rxjs";
-import {generatePredictableModuleId, omitProperties, sortUploadData} from "./helpers/data-helper";
+import {doFullSync, probe, PsEventbusSyncUpload} from "./helpers/mock-probe";
+import {concatMap, from, lastValueFrom, map, toArray, zip} from "rxjs";
+import {
+  generatePredictableModuleId,
+  loadFixture,
+  omitProperties,
+  sortUploadData
+} from "./helpers/data-helper";
+import {Controller, controllerList} from "./type/controllers";
 
 expect.extend(matchers);
 
 // these controllers will be excluded from the following test suite
-const EXCLUDED_API: Controller[] = ['apiHealthCheck', 'apiGoogleTaxonomies'];
+const EXCLUDED_API: Controller[] = ['apiGoogleTaxonomies'];
 
 // FIXME : these api can't send anything to the mock api because the database is empty from the factory
-const MISSING_TEST_DATA: Controller[] = ['apiCartRules', 'apiCustomProductCarriers', 'apiDeletedObjects', 'apiTranslations', 'apiWishlists'];
+const MISSING_TEST_DATA: Controller[] = ['apiCartRules', 'apiCustomProductCarriers', 'apiTranslations', 'apiWishlists'];
 
 // these fields change from test run to test run, so we replace them with a matcher to only ensure the type and format are correct
 const isDateString = val => expect(val).toBeDateString();
@@ -32,7 +38,7 @@ const specialFieldAssert: { [index: string]: (val) => void } = {
 describe('Full Sync', () => {
   let testIndex = 0;
 
-  const controllers = testConfig.controllers.filter(it => !EXCLUDED_API.includes(it))
+  const controllers: Controller[] = controllerList.filter(it => !EXCLUDED_API.includes(it))
 
   let jobId: string;
 
@@ -111,6 +117,7 @@ describe('Full Sync', () => {
   })
 
   describe.each(controllers)('%s', (controller) => {
+
     it(`${controller} should accept full sync`, async () => {
       // arrange
       const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
@@ -172,9 +179,7 @@ describe('Full Sync', () => {
         // arrange
         const fullSync$ = doFullSync(jobId, controller, {timeout: 4000});
         const message$ = probe({url: `/upload/${jobId}`}, {timeout: 4000})
-
-        // load fixtures and filter out fields we know won't exactly match
-        const fixture: PsEventbusSyncUpload[] = require(`./fixtures/${controller}.json`);
+        const fixture = await loadFixture(controller);
 
         // act
         const syncedData: PsEventbusSyncUpload[] = await lastValueFrom(zip(fullSync$, message$).pipe(
@@ -187,7 +192,7 @@ describe('Full Sync', () => {
 
         // dump data for easier debugging or updating fixtures
         if (testConfig.dumpFullSyncData) {
-          await dumpData(syncedData, controller);
+          await dumpUploadData(syncedData, controller);
         }
 
         // we need to process fixtures and data returned from ps_eventbus to make them easier to compare

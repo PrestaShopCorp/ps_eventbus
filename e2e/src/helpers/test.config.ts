@@ -20,34 +20,4 @@ export default {
     process.env.RUN_IN_DOCKER !== '1',
 
   testRunTime: new Date().toISOString(),
-
-  // list of every controller of ps_eventbus
-  controllers: [
-    "apiCarriers",
-    "apiCartRules",
-    "apiCarts",
-    "apiCategories",
-    "apiCurrencies",
-    "apiCustomers",
-    "apiCustomProductCarriers",
-    "apiDeletedObjects",
-    "apiEmployees",
-    "apiGoogleTaxonomies",
-    "apiHealthCheck",
-    "apiImages",
-    "apiImageTypes",
-    "apiInfo",
-    "apiLanguages",
-    "apiManufacturers",
-    "apiModules",
-    "apiOrders",
-    "apiProducts",
-    "apiSpecificPrices",
-    "apiStocks",
-    "apiStores",
-    "apiSuppliers",
-    "apiThemes",
-    "apiTranslations",
-    "apiWishlists",
-  ] as const
 };
