@@ -1,23 +1,18 @@
 import WebSocket from 'ws';
 import {WebSocketSubject} from "rxjs/webSocket";
 import {
-  bufferCount,
-  catchError, EMPTY,
+  EMPTY,
   expand,
   filter,
   from,
-  lastValueFrom,
   map,
-  Observable, retry,
-  Subject,
-  take,
-  tap,
+  Observable,
   timeout
 } from "rxjs";
 import R from 'ramda';
 import testConfig from "./test.config";
 import axios from "axios";
-import {Controller} from "../type/controllers";
+import {Controller} from "./controllers";
 
 const DEFAULT_OPTIONS = {
   timeout: 1500

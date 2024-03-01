@@ -3,7 +3,6 @@ import R from "ramda";
 import fs from "fs";
 import testConfig from "./test.config";
 import {PsEventbusSyncUpload} from "./mock-probe";
-import {Controller} from "../type/controllers";
 
 export function logAxiosError(err: Error) {
   if(err instanceof AxiosError) {

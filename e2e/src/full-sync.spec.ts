@@ -10,7 +10,7 @@ import {
   omitProperties,
   sortUploadData
 } from "./helpers/data-helper";
-import {Controller, controllerList} from "./type/controllers";
+import {Controller, controllerList} from "./helpers/controllers";
 
 expect.extend(matchers);
 

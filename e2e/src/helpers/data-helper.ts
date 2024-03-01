@@ -1,8 +1,7 @@
 import R from "ramda";
 import {PsEventbusSyncUpload} from "./mock-probe";
-import {Content, contentControllerMapping, Controller} from "../type/controllers";
 import fs from "fs";
-import {of} from "rxjs";
+import {Content, contentControllerMapping, Controller} from "./controllers";
 
 /**
  * sort upload data by collection and id to allow easier comparison

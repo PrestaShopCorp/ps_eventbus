@@ -2,8 +2,8 @@ import testConfig from './helpers/test.config';
 import {beforeEach, describe, expect} from "@jest/globals";
 import axios from "axios";
 import {from, lastValueFrom, map, toArray, zip} from "rxjs";
-import {Controller, controllerList} from "./type/controllers";
 import {probe} from "./helpers/mock-probe";
+import {Controller, controllerList} from "./helpers/controllers";
 
 describe('Reject invalid job-id', () => {
   let testIndex = 0;
