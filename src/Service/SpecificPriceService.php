@@ -28,7 +28,7 @@ class SpecificPriceService
      * @param bool $usereduc
      * @param \Context|null $context
      *
-     * @return float|int|null
+     * @return float|int|void
      *
      * @throws \PrestaShopException
      */
