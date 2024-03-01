@@ -23,6 +23,7 @@ const MISSING_TEST_DATA: Controller[] = ['apiCartRules', 'apiCustomProductCarrie
 // these fields change from test run to test run, so we replace them with a matcher to only ensure the type and format are correct
 const isDateString = val => expect(val).toBeDateString();
 const isString = val => expect(val).toBeString();
+const isNumber = val => expect(val).toBeNumber();
 const specialFieldAssert: { [index: string]: (val) => void } = {
   'created_at': isDateString,
   'updated_at': isDateString,
@@ -31,8 +32,9 @@ const specialFieldAssert: { [index: string]: (val) => void } = {
   'date_add': isDateString,
   'from': isDateString,
   'to': isDateString,
-  'conversion_rate': val => expect(val).toBeNumber(),
+  'conversion_rate': isNumber,
   'cms_version': isString,
+  'module_id': isNumber,
 }
 
 describe('Full Sync', () => {
