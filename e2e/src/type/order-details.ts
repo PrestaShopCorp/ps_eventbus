@@ -1,4 +1,9 @@
-export type Order_detail =   {
+import fixture from '../fixtures/apiOrders/order_details.json'
+
+// test type
+const t: OrderDetails[] = fixture;
+
+export type OrderDetails =   {
   id: number,
   collection: string,
   properties: {

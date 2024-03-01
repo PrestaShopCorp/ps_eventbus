@@ -1,4 +1,9 @@
-export type Currency =  {
+import fixture from "../fixtures/apiCurrencies/currencies.json"
+
+// test type
+const t: Currencies[] = fixture;
+
+export type Currencies =  {
     id: number,
     collection: string,
     properties: {

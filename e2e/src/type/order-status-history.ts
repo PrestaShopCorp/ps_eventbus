@@ -1,3 +1,8 @@
+import fixture from '../fixtures/apiOrders/order_status_history.json'
+
+// test type
+const t: OrderStatusHistory[] = fixture;
+
 export type OrderStatusHistory = {
   id: number,
   collection: string,

@@ -1,14 +1,20 @@
-export type Supplier =   {
+import fixture from '../fixtures/apiManufacturers/manufacturers.json'
+
+// test type
+const t: Manufacturers[] = fixture;
+
+export type Manufacturers =   {
   id: number,
   collection: string,
   properties: {
-    id_supplier: number,
+    id_manufacturer: number,
     name: string,
     created_at: string,
     updated_at: string,
     active: boolean,
     id_lang: number,
-    description: string,
+    description: string
+    short_description: string,
     meta_title: string,
     meta_keywords: string,
     meta_description: string,

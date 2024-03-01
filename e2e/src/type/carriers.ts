@@ -1,6 +1,9 @@
 import fixture from "../fixtures/apiCarriers/carriers.json";
 
-export type Carrier = {
+// test type
+const t: Carriers[] = fixture;
+
+export type Carriers = {
   collection: string;
   id: string;
   properties: {
@@ -30,6 +33,3 @@ export type Carrier = {
     weight_unit: string;
   }
 }
-
-type Fixture = typeof fixture;
-//const Carrier: Carrier[] = fixture;

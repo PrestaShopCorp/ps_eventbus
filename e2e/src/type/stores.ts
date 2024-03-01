@@ -1,4 +1,9 @@
-export type Store =   {
+import fixture from '../fixtures/apiStores/stores.json'
+
+// test type
+const t: Stores[] = fixture;
+
+export type Stores =   {
   id: number,
   collection: string,
   properties: {
@@ -6,7 +11,7 @@ export type Store =   {
     id_country: number,
     id_state: number,
     city: string,
-    postcode: number,
+    postcode: string,
     active: boolean,
     created_at: string,
     updated_at: string,
@@ -14,7 +19,7 @@ export type Store =   {
     name: string,
     address1: string,
     address2: string,
-    hours:  string[][],
+    hours: string, // TODO : actually json array inside a string -> transition to a nested array ?
     id_shop: number
   }
 }

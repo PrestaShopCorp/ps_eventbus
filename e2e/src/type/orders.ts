@@ -1,4 +1,9 @@
-export type Order =   {
+import fixture from '../fixtures/apiOrders/orders.json'
+
+// test type
+const t: Orders[] = fixture;
+
+export type Orders =   {
   id: number,
   collection: string,
   properties: {
@@ -24,7 +29,7 @@ export type Order =   {
     refund_tax_excl: number,
     shipping_cost: number,
     status_label: string,
-    total_paid_real: number,
+    total_paid_real: string, // TODO check this is the desired behaviour
     total_paid_tax: number,
     total_paid_tax_excl: number,
     total_paid_tax_incl: number,

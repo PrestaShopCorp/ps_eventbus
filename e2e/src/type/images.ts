@@ -1,4 +1,9 @@
-export type Image =   {
+import fixture from '../fixtures/apiImages/images.json'
+
+// test type
+const t: Images[] = fixture;
+
+export type Images =   {
   "id": string,
   "collection": string,
   "properties": {

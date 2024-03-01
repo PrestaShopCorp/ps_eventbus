@@ -1,4 +1,9 @@
-export type Module =   {
+import fixture from '../fixtures/apiModules/modules.json'
+
+// test type
+const t: Modules[] = fixture;
+
+export type Modules =   {
   id: string,
   collection: string,
   properties: {

@@ -1,4 +1,9 @@
-export type Language =   {
+import fixture from '../fixtures/apiLanguages/languages.json'
+
+// test type
+const t: Languages[] = fixture;
+
+export type Languages =   {
   id: number,
   collection: string,
   properties: {
@@ -12,7 +17,7 @@ export type Language =   {
     date_format_full: string,
     is_rtl: boolean,
     id_shop: number,
-    created_at: string,
-    updated_at: string
+    created_at?: string,
+    updated_at?: string
   }
 }

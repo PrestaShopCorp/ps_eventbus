@@ -1,4 +1,9 @@
-export type Carrier_detail =   {
+import fixture from "../fixtures/apiCarriers/carrier_details.json"
+
+// test type
+const t: CarrierDetails[] = fixture;
+
+export type CarrierDetails =   {
   collection: string;
   id: string;
   properties: {

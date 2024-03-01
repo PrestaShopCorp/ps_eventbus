@@ -1,4 +1,9 @@
-export type Specific_price = {
+import fixture from '../fixtures/apiSpecificPrices/specific_prices.json'
+
+// test type
+const t: SpecificPrices[] = fixture;
+
+export type SpecificPrices = {
   id: number,
   collection: string,
   properties: {

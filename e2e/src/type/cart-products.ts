@@ -1,4 +1,9 @@
-export type Cart_Product =   {
+import fixture from "../fixtures/apiCarts/cart_products.json"
+
+// test type
+const t: CartProducts[] = fixture;
+
+export type CartProducts =   {
   id: string,
   collection: string,
   properties: {
@@ -6,7 +11,7 @@ export type Cart_Product =   {
     id_product: string,
     id_product_attribute: string,
     quantity: number,
-    created_at: string,
+    created_at?: string,
     id_cart_product: string
   }
 }

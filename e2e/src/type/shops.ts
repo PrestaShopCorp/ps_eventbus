@@ -1,4 +1,9 @@
-export type Shop = {
+import fixture from '../fixtures/apiInfo/shops.json'
+
+// test type
+const t: Shops[] = fixture;
+
+export type Shops = {
   collection: string,
   id: string,
   properties: {

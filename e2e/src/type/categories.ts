@@ -1,4 +1,9 @@
-export type Category =   {
+import fixture from "../fixtures/apiCategories/categories.json"
+
+// test type
+const t: Categories[] = fixture;
+
+export type Categories =   {
   id: string;
   collection: string;
   properties: {

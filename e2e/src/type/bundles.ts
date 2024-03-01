@@ -1,4 +1,9 @@
-export type Bundle =   {
+import fixture from "../fixtures/apiProducts/bundles.json";
+
+// test type
+const t: Bundles[] = fixture;
+
+export type Bundles =   {
   id: number,
   collection: string,
   properties: {

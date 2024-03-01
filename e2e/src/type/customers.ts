@@ -1,4 +1,9 @@
-export type Customer =   {
+import fixture from "../fixtures/apiCustomers/customers.json"
+
+// test type
+const t: Customers[] = fixture;
+
+export type Customers =   {
   id: string,
   collection: string,
   properties: {
@@ -10,7 +15,7 @@ export type Customer =   {
     id_lang: number,
     is_guest: boolean,
     newsletter: boolean,
-    newsletter_date_add: string,
+    newsletter_date_add?: string,
     optin: boolean,
     updated_at: string
   }

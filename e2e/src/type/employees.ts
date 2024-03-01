@@ -1,6 +1,9 @@
 import fixture from '../fixtures/apiEmployees/employees.json'
 
-export type Employee = {
+// test type
+const t: Employees[] = fixture;
+
+export type Employees = {
     id: string;
     collection: string;
     properties: {
@@ -24,6 +27,3 @@ export type Employee = {
       optin: boolean;
     }
 }
-
-// assert
-const employee: Employee[] = fixture;

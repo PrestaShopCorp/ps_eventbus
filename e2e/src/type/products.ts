@@ -1,4 +1,9 @@
-export type Product = {
+import fixture from '../fixtures/apiProducts/products.json'
+
+// test type
+const t: Products[] = fixture;
+
+export type Products = {
   id: string,
   collection: string,
   properties: {
@@ -30,11 +35,11 @@ export type Product = {
     is_bundle: boolean,
     is_virtual: boolean,
     mpn: string,
-    width: number,
-    height: number,
-    depth: number,
+    width: string, // TODO : wrong cast
+    height: string, // TODO : wrong cast
+    depth: string, // TODO : wrong cast
     additional_delivery_times: number,
-    additional_shipping_cost: number,
+    additional_shipping_cost: string,
     delivery_in_stock: string,
     delivery_out_stock: string,
     isbn: string,

@@ -1,3 +1,8 @@
+import fixture from '../fixtures/apiImageTypes/image_types.json'
+
+// test type
+const t: ImageType[] = fixture;
+
 export type ImageType = {
   id: string,
   collection: string,
