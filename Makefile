@@ -57,7 +57,7 @@ version:
 
 # target: zip                                                  - Make zip bundles
 .PHONY: zip
-zip: zip-prod zip-inte
+zip: zip-prod zip-inte zip-e2e
 dist:
 	@mkdir -p ./dist
 
