@@ -46,11 +46,13 @@ class PayloadDecorator
         foreach ($payload as &$payloadItem) {
             foreach (DATE_FIELDS as $dateField) {
                 $date = &$payloadItem['properties'][$dateField];
-                if (isset($date) && !empty($date) && $date !== '0000-00-00 00:00:00') {
-                    $dateTime = new \DateTime($date, new \DateTimeZone($this->timezone));
-                    $date = $dateTime->format(ISO8601);
-                } else {
-                    $date = null;
+                if (isset($date)) {
+                    if (!empty($date) && $date !== '0000-00-00 00:00:00') {
+                        $dateTime = new \DateTime($date, new \DateTimeZone($this->timezone));
+                        $date = $dateTime->format(ISO8601);
+                    } else {
+                        $date = null;
+                    }
                 }
             }
         }

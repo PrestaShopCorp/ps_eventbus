@@ -16,6 +16,8 @@
       "from_quantity": 1,
       "reduction": 0.2,
       "reduction_tax": 1,
+      "from": null,
+      "to": null,
       "reduction_type": "percentage",
       "country": "ALL",
       "currency": "ALL",
@@ -25,7 +27,13 @@
       "sale_price_tax_excl": 19.12,
       "discount_percentage": 20,
       "discount_value_tax_incl": 0,
-      "discount_value_tax_excl": 0
+      "discount_value_tax_excl": 0,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null
     }
   },
   {
@@ -45,6 +53,8 @@
       "from_quantity": 1,
       "reduction": 0.2,
       "reduction_tax": 1,
+      "from": null,
+      "to": null,
       "reduction_type": "percentage",
       "country": "ALL",
       "currency": "ALL",
@@ -54,7 +64,13 @@
       "sale_price_tax_excl": 28.72,
       "discount_percentage": 20,
       "discount_value_tax_incl": 0,
-      "discount_value_tax_excl": 0
+      "discount_value_tax_excl": 0,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null
     }
   }
 ]

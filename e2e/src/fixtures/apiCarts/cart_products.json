@@ -7,7 +7,15 @@
       "id_product": "1",
       "id_product_attribute": "1",
       "quantity": 1,
-      "id_cart_product": "1-1-1"
+      "created_at": null,
+      "id_cart_product": "1-1-1",
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -18,7 +26,15 @@
       "id_product": "2",
       "id_product_attribute": "9",
       "quantity": 1,
-      "id_cart_product": "1-2-9"
+      "created_at": null,
+      "id_cart_product": "1-2-9",
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -29,7 +45,15 @@
       "id_product": "4",
       "id_product_attribute": "18",
       "quantity": 1,
-      "id_cart_product": "2-4-18"
+      "created_at": null,
+      "id_cart_product": "2-4-18",
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -40,7 +64,15 @@
       "id_product": "8",
       "id_product_attribute": "0",
       "quantity": 1,
-      "id_cart_product": "2-8-0"
+      "created_at": null,
+      "id_cart_product": "2-8-0",
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -51,7 +83,15 @@
       "id_product": "16",
       "id_product_attribute": "28",
       "quantity": 1,
-      "id_cart_product": "3-16-28"
+      "created_at": null,
+      "id_cart_product": "3-16-28",
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -62,7 +102,15 @@
       "id_product": "16",
       "id_product_attribute": "29",
       "quantity": 1,
-      "id_cart_product": "4-16-29"
+      "created_at": null,
+      "id_cart_product": "4-16-29",
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -73,7 +121,15 @@
       "id_product": "10",
       "id_product_attribute": "25",
       "quantity": 1,
-      "id_cart_product": "5-10-25"
+      "created_at": null,
+      "id_cart_product": "5-10-25",
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   }
 ]

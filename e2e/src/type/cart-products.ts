@@ -3,7 +3,7 @@ import fixture from "../fixtures/apiCarts/cart_products.json"
 // test type
 const t: CartProducts[] = fixture;
 
-export type CartProducts =   {
+export type CartProducts = {
   id: string,
   collection: string,
   properties: {

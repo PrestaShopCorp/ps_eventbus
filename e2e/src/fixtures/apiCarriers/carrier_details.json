@@ -1,22 +1,6 @@
 [
   {
     "collection": "carrier_details",
-    "id": "3-2-range_price-2",
-    "properties": {
-      "id_reference": "3",
-      "id_zone": "2",
-      "id_range": "2",
-      "id_carrier_detail": "2",
-      "shipping_method": "range_price",
-      "delimiter1": 0,
-      "delimiter2": 50,
-      "country_ids": "US",
-      "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
-      "price": 4
-    }
-  },
-  {
-    "collection": "carrier_details",
     "id": "3-1-range_price-2",
     "properties": {
       "id_reference": "3",
@@ -28,23 +12,39 @@
       "delimiter2": 50,
       "country_ids": "FR",
       "state_ids": "",
-      "price": 3
+      "price": 3,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
     "collection": "carrier_details",
-    "id": "3-1-range_price-3",
+    "id": "3-2-range_price-2",
     "properties": {
       "id_reference": "3",
-      "id_zone": "1",
-      "id_range": "3",
-      "id_carrier_detail": "3",
+      "id_zone": "2",
+      "id_range": "2",
+      "id_carrier_detail": "2",
       "shipping_method": "range_price",
-      "delimiter1": 50,
-      "delimiter2": 100,
-      "country_ids": "FR",
-      "state_ids": "",
-      "price": 1
+      "delimiter1": 0,
+      "delimiter2": 50,
+      "country_ids": "US",
+      "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
+      "price": 4,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -60,7 +60,39 @@
       "delimiter2": 100,
       "country_ids": "US",
       "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
-      "price": 2
+      "price": 2,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
+    }
+  },
+  {
+    "collection": "carrier_details",
+    "id": "3-1-range_price-3",
+    "properties": {
+      "id_reference": "3",
+      "id_zone": "1",
+      "id_range": "3",
+      "id_carrier_detail": "3",
+      "shipping_method": "range_price",
+      "delimiter1": 50,
+      "delimiter2": 100,
+      "country_ids": "FR",
+      "state_ids": "",
+      "price": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -76,7 +108,15 @@
       "delimiter2": 200,
       "country_ids": "FR",
       "state_ids": "",
-      "price": 0
+      "price": 0,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -92,23 +132,15 @@
       "delimiter2": 200,
       "country_ids": "US",
       "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
-      "price": 0
-    }
-  },
-  {
-    "collection": "carrier_details",
-    "id": "4-2-range_weight-2",
-    "properties": {
-      "id_reference": "4",
-      "id_zone": "2",
-      "id_range": "2",
-      "id_carrier_detail": "2",
-      "shipping_method": "range_weight",
-      "delimiter1": 0,
-      "delimiter2": 1,
-      "country_ids": "US",
-      "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
-      "price": 0
+      "price": 0,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -124,23 +156,39 @@
       "delimiter2": 1,
       "country_ids": "FR",
       "state_ids": "",
-      "price": 0
+      "price": 0,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
     "collection": "carrier_details",
-    "id": "4-1-range_weight-3",
+    "id": "4-2-range_weight-2",
     "properties": {
       "id_reference": "4",
-      "id_zone": "1",
-      "id_range": "3",
-      "id_carrier_detail": "3",
+      "id_zone": "2",
+      "id_range": "2",
+      "id_carrier_detail": "2",
       "shipping_method": "range_weight",
-      "delimiter1": 1,
-      "delimiter2": 3,
-      "country_ids": "FR",
-      "state_ids": "",
-      "price": 2
+      "delimiter1": 0,
+      "delimiter2": 1,
+      "country_ids": "US",
+      "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
+      "price": 0,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -156,7 +204,39 @@
       "delimiter2": 3,
       "country_ids": "US",
       "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
-      "price": 3
+      "price": 3,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
+    }
+  },
+  {
+    "collection": "carrier_details",
+    "id": "4-1-range_weight-3",
+    "properties": {
+      "id_reference": "4",
+      "id_zone": "1",
+      "id_range": "3",
+      "id_carrier_detail": "3",
+      "shipping_method": "range_weight",
+      "delimiter1": 1,
+      "delimiter2": 3,
+      "country_ids": "FR",
+      "state_ids": "",
+      "price": 2,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -172,7 +252,15 @@
       "delimiter2": 10000,
       "country_ids": "FR",
       "state_ids": "",
-      "price": 5
+      "price": 5,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -188,23 +276,15 @@
       "delimiter2": 10000,
       "country_ids": "US",
       "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
-      "price": 6
-    }
-  },
-  {
-    "collection": "carrier_details",
-    "id": "2-2-range_weight-1",
-    "properties": {
-      "id_reference": "2",
-      "id_zone": "2",
-      "id_range": "1",
-      "id_carrier_detail": "1",
-      "shipping_method": "range_weight",
-      "delimiter1": 0,
-      "delimiter2": 10000,
-      "country_ids": "US",
-      "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
-      "price": 5
+      "price": 6,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -220,7 +300,39 @@
       "delimiter2": 10000,
       "country_ids": "FR",
       "state_ids": "",
-      "price": 5
+      "price": 5,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
+    }
+  },
+  {
+    "collection": "carrier_details",
+    "id": "2-2-range_weight-1",
+    "properties": {
+      "id_reference": "2",
+      "id_zone": "2",
+      "id_range": "1",
+      "id_carrier_detail": "1",
+      "shipping_method": "range_weight",
+      "delimiter1": 0,
+      "delimiter2": 10000,
+      "country_ids": "US",
+      "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
+      "price": 5,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   }
 ]

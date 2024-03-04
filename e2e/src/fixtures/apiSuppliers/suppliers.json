@@ -13,7 +13,13 @@
       "meta_title": "",
       "meta_keywords": "",
       "meta_description": "",
-      "id_shop": 1
+      "id_shop": 1,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -30,7 +36,13 @@
       "meta_title": "",
       "meta_keywords": "",
       "meta_description": "",
-      "id_shop": 1
+      "id_shop": 1,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   }
 ]

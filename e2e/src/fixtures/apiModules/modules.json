@@ -8,7 +8,13 @@
       "module_version": "6.0.4",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -20,7 +26,13 @@
       "module_version": "5.1.4",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -32,7 +44,13 @@
       "module_version": "3.0.1",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -44,7 +62,13 @@
       "module_version": "1.4.3",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -56,7 +80,13 @@
       "module_version": "3.3.2",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -68,7 +98,13 @@
       "module_version": "2.1.3",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -80,7 +116,13 @@
       "module_version": "2.1.1",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -92,7 +134,13 @@
       "module_version": "2.0.5",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -104,7 +152,13 @@
       "module_version": "3.0.0",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -116,7 +170,13 @@
       "module_version": "2.3.2",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -128,7 +188,13 @@
       "module_version": "2.1.3",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -140,7 +206,13 @@
       "module_version": "3.1.3",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -152,7 +224,13 @@
       "module_version": "2.1.5",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -164,7 +242,13 @@
       "module_version": "2.1.2",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -176,7 +260,13 @@
       "module_version": "4.2.1",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -188,7 +278,13 @@
       "module_version": "1.0.2",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -200,7 +296,13 @@
       "module_version": "1.0.4",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -212,7 +314,13 @@
       "module_version": "1.0.6",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -224,7 +332,13 @@
       "module_version": "2.7.1",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -236,7 +350,13 @@
       "module_version": "2.3.0",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -248,7 +368,13 @@
       "module_version": "3.2.0",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -260,7 +386,13 @@
       "module_version": "6.0.2",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -272,7 +404,13 @@
       "module_version": "2.0.3",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -284,7 +422,13 @@
       "module_version": "4.4.1",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -296,7 +440,13 @@
       "module_version": "2.1.2",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -308,7 +458,13 @@
       "module_version": "2.4.2",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -320,7 +476,13 @@
       "module_version": "2.1.1",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -332,7 +494,13 @@
       "module_version": "2.0.2",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -344,7 +512,13 @@
       "module_version": "2.0.1",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -356,7 +530,13 @@
       "module_version": "2.0.1",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -368,7 +548,13 @@
       "module_version": "2.0.3",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -380,7 +566,13 @@
       "module_version": "2.1.3",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -392,7 +584,13 @@
       "module_version": "2.1.4",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -404,7 +602,13 @@
       "module_version": "1.0.3",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -416,7 +620,13 @@
       "module_version": "2.0.2",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -428,7 +638,13 @@
       "module_version": "2.0.3",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -440,7 +656,13 @@
       "module_version": "2.0.3",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -452,7 +674,13 @@
       "module_version": "2.0.1",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -464,7 +692,13 @@
       "module_version": "2.0.3",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -476,7 +710,13 @@
       "module_version": "2.0.4",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -488,7 +728,13 @@
       "module_version": "1.2.4",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -500,7 +746,13 @@
       "module_version": "2.1.1",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -512,7 +764,13 @@
       "module_version": "2.0.1",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -524,7 +782,13 @@
       "module_version": "1.1.0",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -536,7 +800,13 @@
       "module_version": "2.0.3",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -548,7 +818,13 @@
       "module_version": "2.0.1",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -560,7 +836,13 @@
       "module_version": "1.2.3",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -572,7 +854,13 @@
       "module_version": "2.0.4",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -584,7 +872,13 @@
       "module_version": "1.0.7",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -596,7 +890,13 @@
       "module_version": "2.0.1",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -608,7 +908,13 @@
       "module_version": "2.0.3",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -620,7 +926,13 @@
       "module_version": "2.0.1",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -632,7 +944,13 @@
       "module_version": "2.0.4",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -644,7 +962,13 @@
       "module_version": "1.0.6",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -656,7 +980,13 @@
       "module_version": "4.2.2",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -668,7 +998,13 @@
       "module_version": "2.1.3",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -680,7 +1016,13 @@
       "module_version": "2.1.3",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -692,7 +1034,13 @@
       "module_version": "2.0.4",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -704,7 +1052,13 @@
       "module_version": "2.0.2",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -716,7 +1070,13 @@
       "module_version": "2.1.0",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -728,7 +1088,13 @@
       "module_version": "2.1.0",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -740,7 +1106,13 @@
       "module_version": "2.1.3",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -752,7 +1124,13 @@
       "module_version": "4.3.0",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -764,7 +1142,13 @@
       "module_version": "2.1.0",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -776,7 +1160,13 @@
       "module_version": "2.0.4",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -788,7 +1178,13 @@
       "module_version": "3.14.1",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -800,7 +1196,13 @@
       "module_version": "42.0.0",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -812,7 +1214,13 @@
       "module_version": "0.0.0",
       "active": true,
       "created_at": "2024-02-06T20:24:44+0100",
-      "updated_at": "2024-02-06T20:24:44+0100"
+      "updated_at": "2024-02-06T20:24:44+0100",
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   }
 ]

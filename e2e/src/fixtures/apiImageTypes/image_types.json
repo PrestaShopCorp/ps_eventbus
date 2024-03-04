@@ -11,7 +11,15 @@
       "categories": false,
       "manufacturers": false,
       "suppliers": false,
-      "stores": false
+      "stores": false,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -26,7 +34,15 @@
       "categories": true,
       "manufacturers": true,
       "suppliers": true,
-      "stores": false
+      "stores": false,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -41,7 +57,15 @@
       "categories": false,
       "manufacturers": true,
       "suppliers": true,
-      "stores": false
+      "stores": false,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -56,7 +80,15 @@
       "categories": false,
       "manufacturers": false,
       "suppliers": false,
-      "stores": false
+      "stores": false,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -71,7 +103,15 @@
       "categories": false,
       "manufacturers": true,
       "suppliers": true,
-      "stores": false
+      "stores": false,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -86,7 +126,15 @@
       "categories": true,
       "manufacturers": false,
       "suppliers": false,
-      "stores": false
+      "stores": false,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -101,7 +149,15 @@
       "categories": false,
       "manufacturers": false,
       "suppliers": false,
-      "stores": true
+      "stores": true,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   }
 ]

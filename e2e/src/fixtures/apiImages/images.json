@@ -9,7 +9,15 @@
       "cover": true,
       "id_lang": 1,
       "legend": "Hummingbird printed t-shirt",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -22,7 +30,15 @@
       "cover": false,
       "id_lang": 1,
       "legend": "Hummingbird printed t-shirt",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -35,7 +51,15 @@
       "cover": true,
       "id_lang": 1,
       "legend": "The best is yet to come' Framed poster",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -48,7 +72,15 @@
       "cover": true,
       "id_lang": 1,
       "legend": "The adventure begins Framed poster",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -61,7 +93,15 @@
       "cover": true,
       "id_lang": 1,
       "legend": "Today is a good day Framed poster",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -74,7 +114,15 @@
       "cover": true,
       "id_lang": 1,
       "legend": "Mug The best is yet to come",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -87,7 +135,15 @@
       "cover": true,
       "id_lang": 1,
       "legend": "Mug The adventure begins",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -100,7 +156,15 @@
       "cover": true,
       "id_lang": 1,
       "legend": "Mug Today is a good day",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -113,7 +177,15 @@
       "cover": true,
       "id_lang": 1,
       "legend": "Mountain fox cushion",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -126,7 +198,15 @@
       "cover": false,
       "id_lang": 1,
       "legend": "Mountain fox cushion",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -139,7 +219,15 @@
       "cover": true,
       "id_lang": 1,
       "legend": "Brown bear cushion",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -152,7 +240,15 @@
       "cover": false,
       "id_lang": 1,
       "legend": "Brown bear cushion",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -165,7 +261,15 @@
       "cover": true,
       "id_lang": 1,
       "legend": "Hummingbird cushion",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -178,7 +282,15 @@
       "cover": false,
       "id_lang": 1,
       "legend": "Hummingbird cushion",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -191,7 +303,15 @@
       "cover": true,
       "id_lang": 1,
       "legend": "Mountain fox - Vector graphics",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -204,7 +324,15 @@
       "cover": true,
       "id_lang": 1,
       "legend": "Brown bear - Vector graphics",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -217,7 +345,15 @@
       "cover": true,
       "id_lang": 1,
       "legend": "Hummingbird - Vector graphics",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -230,7 +366,15 @@
       "cover": true,
       "id_lang": 1,
       "legend": "Mountain fox notebook",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -243,7 +387,15 @@
       "cover": true,
       "id_lang": 1,
       "legend": "Mountain fox notebook",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -256,7 +408,15 @@
       "cover": true,
       "id_lang": 1,
       "legend": "Mountain fox notebook",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -269,7 +429,15 @@
       "cover": true,
       "id_lang": 1,
       "legend": "Brown bear printed sweater",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -282,7 +450,15 @@
       "cover": true,
       "id_lang": 1,
       "legend": "Customizable mug",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -295,7 +471,15 @@
       "cover": true,
       "id_lang": 1,
       "legend": "Pack Mug + Framed poster",
-      "id_shop": 1
+      "id_shop": 1,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   }
 ]

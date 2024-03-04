@@ -7,7 +7,15 @@
       "id_product": 5,
       "id_product_attribute": 19,
       "unique_product_id": "15-0-en",
-      "quantity": 5
+      "quantity": 5,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   },
   {
@@ -18,7 +26,15 @@
       "id_product": 7,
       "id_product_attribute": 0,
       "unique_product_id": "15-0-en",
-      "quantity": 5
+      "quantity": 5,
+      "created_at": null,
+      "updated_at": null,
+      "last_connection_date": null,
+      "folder_created_at": null,
+      "date_add": null,
+      "newsletter_date_add": null,
+      "from": null,
+      "to": null
     }
   }
 ]

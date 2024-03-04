@@ -43,10 +43,8 @@ export type Products = {
     delivery_in_stock: string,
     delivery_out_stock: string,
     isbn: string,
-    features: {
-    },
-    attributes: {
-    },
+    features: {},
+    attributes: {},
     images: string,
     cover: string,
     iso_code: string,

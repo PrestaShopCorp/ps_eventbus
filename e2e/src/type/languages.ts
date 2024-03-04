@@ -3,7 +3,7 @@ import fixture from '../fixtures/apiLanguages/languages.json'
 // test type
 const t: Languages[] = fixture;
 
-export type Languages =   {
+export type Languages = {
   id: number,
   collection: string,
   properties: {

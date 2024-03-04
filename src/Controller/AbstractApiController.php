@@ -175,7 +175,6 @@ abstract class AbstractApiController extends \ModuleFrontController
         /** @var bool $initFullSync */
         $initFullSync = \Tools::getValue('full', 0) == 1;
 
-
         /** @var \PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository $configurationRepository */
         $configurationRepository = $this->module->getService(\PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository::class);
         $timezone = (string) $configurationRepository->get('PS_TIMEZONE');

@@ -3,7 +3,7 @@ import fixture from '../fixtures/apiManufacturers/manufacturers.json'
 // test type
 const t: Manufacturers[] = fixture;
 
-export type Manufacturers =   {
+export type Manufacturers = {
   id: number,
   collection: string,
   properties: {
