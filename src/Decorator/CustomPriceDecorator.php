@@ -95,13 +95,6 @@ class CustomPriceDecorator
         $specificPrice['sale_price_tax_incl'] = (float) $specificPrice['sale_price_tax_incl'];
         $specificPrice['sale_price_tax_excl'] = (float) $specificPrice['sale_price_tax_excl'];
 
-        if ($specificPrice['from'] === '0000-00-00 00:00:00') {
-            unset($specificPrice['from']);
-        }
-        if ($specificPrice['to'] === '0000-00-00 00:00:00') {
-            unset($specificPrice['to']);
-        }
-
         if ($specificPrice['reduction_type'] === 'percentage') {
             $specificPrice['discount_percentage'] = $specificPrice['reduction'] * 100;
             $specificPrice['discount_value_tax_incl'] = 0.0;

@@ -21,7 +21,6 @@ services:
 
   mysql:
     image: mariadb:${DOCKER_VERSION_MARIADB:?See e2e-env/.env.dist}
-    container_name: prestashop-mysql
     healthcheck:
       test:
         [
@@ -61,7 +60,6 @@ services:
       - prestashop
 
   cloudsync-mock:
-    container_name: cloudsync-mock
     build:
       context: ./cloudsync-mock
       dockerfile: Dockerfile
@@ -79,7 +77,6 @@ services:
 
   reverse-proxy:
     image: nginx:stable-alpine
-    container_name: reverse-proxy
     healthcheck:
       test:
         [

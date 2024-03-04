@@ -117,7 +117,7 @@ jobs:
           cp .env.dist .env
           docker compose build --no-cache
           docker compose up --detach --wait
-          while ! nc -z localhost 8000; do sleep 1; done;
+          curl --retry 20 --retry-delay 1 --retry-all-errors -s 'http://localhost:8000/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck' -o '/dev/null'
         working-directory: e2e-env
 
       - name: Install dependencies and setup e2e

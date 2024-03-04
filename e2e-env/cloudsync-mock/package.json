@@ -7,7 +7,7 @@
   "engines": {
     "yarn": "please use pnpm",
     "npm": "please use pnpm",
-    "node": ">=20",
+    "node": ">=18",
     "pnpm": ">=8"
   },
   "scripts": {
@@ -35,6 +35,8 @@
     "nodemon": "^3.0.2",
     "rimraf": "^5.0.5",
     "typescript": "^5.3.3",
-    "ws": "^8.16.0"
+    "ws": "^8.16.0",
+    "@types/multer": "^1.4.11",
+    "multer": "^1.4.5-lts.1"
   }
 }
