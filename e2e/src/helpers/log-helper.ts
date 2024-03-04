@@ -16,6 +16,6 @@ export async function dumpUploadData(data: PsEventbusSyncUpload[], filename: str
   const groupedData = R.groupBy( el => el.collection, data )
   Object.keys(groupedData).map(collection => {
     return fs.promises.writeFile(`${dir}/${collection}.json`,
-      JSON.stringify(groupedData[collection], null, 2));
+      JSON.stringify(groupedData[collection], null, 2) + '\n');
   })
 }
