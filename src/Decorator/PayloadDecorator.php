@@ -55,20 +55,4 @@ class PayloadDecorator
             }
         }
     }
-
-    /**
-     * @param array $payload
-     *
-     * @return void
-     */
-    public function filterNull(array &$payload)
-    {
-        foreach ($payload as &$payloadItem) {
-            foreach (array_keys($payloadItem['properties']) as $key) {
-                if (is_null($payloadItem['properties'][$key])) {
-                    unset($payloadItem['properties'][$key]);
-                }
-            }
-        }
-    }
 }

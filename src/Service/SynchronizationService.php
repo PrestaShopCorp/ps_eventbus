@@ -69,7 +69,6 @@ class SynchronizationService
         $data = $dataProvider->getFormattedData($offset, $limit, $langIso);
 
         $this->payloadDecorator->convertDateFormat($data);
-        $this->payloadDecorator->filterNull($data);
 
         if (!empty($data)) {
             $response = $this->proxyService->upload($jobId, $data, $scriptStartTime, $isFull);
