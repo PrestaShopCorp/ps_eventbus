@@ -19,6 +19,8 @@ use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleNotInstalledExcepti
 use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleVersionException;
 use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 
+const MYSQL_DATE_FORMAT = 'Y-m-d H:i:s';
+
 abstract class AbstractApiController extends \ModuleFrontController
 {
     /**
@@ -75,18 +77,9 @@ abstract class AbstractApiController extends \ModuleFrontController
      */
     public $errorHandler;
 
-    /**
-     * @var string
-     */
-    private $timezone;
-
     public function __construct()
     {
         parent::__construct();
-
-        /** @var \PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository $configurationRepository */
-        $configurationRepository = $this->module->getService(\PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository::class);
-        $this->timezone = (string) $configurationRepository->get('PS_TIMEZONE');
 
         $this->ajax = true;
         $this->content_only = true;
@@ -182,7 +175,11 @@ abstract class AbstractApiController extends \ModuleFrontController
         /** @var bool $initFullSync */
         $initFullSync = \Tools::getValue('full', 0) == 1;
 
-        $dateNow = (new \DateTime('now', new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
+        /** @var \PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository $configurationRepository */
+        $configurationRepository = $this->module->getService(\PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository::class);
+        $timezone = (string) $configurationRepository->get('PS_TIMEZONE');
+
+        $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(MYSQL_DATE_FORMAT);
         $offset = 0;
         $incrementalSync = false;
         $response = [];

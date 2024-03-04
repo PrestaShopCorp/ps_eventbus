@@ -2,26 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Decorator;
 
-use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
-
 class StoreDecorator
 {
-    /**
-     * @var ConfigurationRepository
-     */
-    private $configurationRepository;
-    /**
-     * @var string
-     */
-    private $timezone;
-
-    public function __construct(
-        ConfigurationRepository $configurationRepository
-    ) {
-        $this->configurationRepository = $configurationRepository;
-        $this->timezone = (string) $this->configurationRepository->get('PS_TIMEZONE');
-    }
-
     /**
      * @param array $stores
      *
@@ -50,7 +32,7 @@ class StoreDecorator
             $store['id_shop'] = (int) $store['id_shop'];
         } // TODO: statusCode:465 for PS 1.6 here, what should we set in the else ?
 
-        $store['created_at'] = (new \DateTime($store['created_at'], new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
-        $store['updated_at'] = (new \DateTime($store['updated_at'], new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
+        $store['created_at'] = (string) $store['created_at'];
+        $store['updated_at'] = (string) $store['updated_at'];
     }
 }
