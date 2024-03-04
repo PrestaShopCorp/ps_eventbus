@@ -12,15 +12,7 @@
       "delimiter2": 50,
       "country_ids": "FR",
       "state_ids": "",
-      "price": 3,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "price": 3
     }
   },
   {
@@ -36,15 +28,7 @@
       "delimiter2": 50,
       "country_ids": "US",
       "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
-      "price": 4,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "price": 4
     }
   },
   {
@@ -60,15 +44,7 @@
       "delimiter2": 100,
       "country_ids": "US",
       "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
-      "price": 2,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "price": 2
     }
   },
   {
@@ -84,15 +60,7 @@
       "delimiter2": 100,
       "country_ids": "FR",
       "state_ids": "",
-      "price": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "price": 1
     }
   },
   {
@@ -108,15 +76,7 @@
       "delimiter2": 200,
       "country_ids": "FR",
       "state_ids": "",
-      "price": 0,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "price": 0
     }
   },
   {
@@ -132,15 +92,7 @@
       "delimiter2": 200,
       "country_ids": "US",
       "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
-      "price": 0,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "price": 0
     }
   },
   {
@@ -156,15 +108,7 @@
       "delimiter2": 1,
       "country_ids": "FR",
       "state_ids": "",
-      "price": 0,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "price": 0
     }
   },
   {
@@ -180,15 +124,7 @@
       "delimiter2": 1,
       "country_ids": "US",
       "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
-      "price": 0,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "price": 0
     }
   },
   {
@@ -204,15 +140,7 @@
       "delimiter2": 3,
       "country_ids": "US",
       "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
-      "price": 3,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "price": 3
     }
   },
   {
@@ -228,15 +156,7 @@
       "delimiter2": 3,
       "country_ids": "FR",
       "state_ids": "",
-      "price": 2,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "price": 2
     }
   },
   {
@@ -252,15 +172,7 @@
       "delimiter2": 10000,
       "country_ids": "FR",
       "state_ids": "",
-      "price": 5,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "price": 5
     }
   },
   {
@@ -276,15 +188,7 @@
       "delimiter2": 10000,
       "country_ids": "US",
       "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
-      "price": 6,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "price": 6
     }
   },
   {
@@ -300,15 +204,7 @@
       "delimiter2": 10000,
       "country_ids": "FR",
       "state_ids": "",
-      "price": 5,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "price": 5
     }
   },
   {
@@ -324,15 +220,7 @@
       "delimiter2": 10000,
       "country_ids": "US",
       "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
-      "price": 5,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "price": 5
     }
   }
 ]

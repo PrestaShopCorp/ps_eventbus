@@ -9,15 +9,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_11",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -30,15 +22,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_12",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -51,15 +35,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_13",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -72,15 +48,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_14",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -93,15 +61,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_18",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -114,15 +74,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_18",
       "product_supplier_price_te": 6.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -135,15 +87,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_19",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -156,15 +100,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_19",
       "product_supplier_price_te": 6.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -177,15 +113,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_20",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -198,15 +126,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_20",
       "product_supplier_price_te": 6.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -219,15 +139,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_1_46",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -240,15 +152,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_1_46",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -261,15 +165,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_1_47",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -282,15 +178,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_1_48",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -303,15 +191,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_1_49",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -324,15 +204,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_1_50",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -345,15 +217,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_1_51",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -366,15 +230,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_1_52",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -387,15 +243,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_1_53",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -408,15 +256,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_3_62",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -429,15 +269,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_3_62",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -450,15 +282,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_3_63",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -471,15 +295,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_3_64",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -492,15 +308,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_3_65",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -513,15 +321,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_6_70",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -534,15 +334,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_6_70",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -555,15 +347,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_6_71",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -576,15 +360,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_6_72",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -597,15 +373,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_5_73",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -618,15 +386,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_5_73",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -639,15 +399,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_5_74",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -660,15 +412,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_5_75",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -681,15 +425,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_5_76",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -702,15 +438,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_5_76",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -723,15 +451,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_5_77",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -744,15 +464,7 @@
       "id_supplier": 1,
       "product_supplier_reference": "demo_5_78",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -765,15 +477,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_6_70",
       "product_supplier_price_te": 2.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -786,15 +490,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_6_70",
       "product_supplier_price_te": 2.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -807,15 +503,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_6_71",
       "product_supplier_price_te": 2.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -828,15 +516,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_6_72",
       "product_supplier_price_te": 2.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -849,15 +529,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_5_73",
       "product_supplier_price_te": 2.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -870,15 +542,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_5_73",
       "product_supplier_price_te": 2.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -891,15 +555,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_5_74",
       "product_supplier_price_te": 2.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -912,15 +568,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_5_75",
       "product_supplier_price_te": 2.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -933,15 +581,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_5_76",
       "product_supplier_price_te": 2.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -954,15 +594,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_5_76",
       "product_supplier_price_te": 2.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -975,15 +607,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_5_77",
       "product_supplier_price_te": 2.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -996,15 +620,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_5_78",
       "product_supplier_price_te": 2.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -1017,15 +633,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_15_79",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   },
   {
@@ -1038,15 +646,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_15_79",
       "product_supplier_price_te": 5.49,
-      "id_currency": 1,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "id_currency": 1
     }
   }
 ]

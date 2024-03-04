@@ -29,13 +29,7 @@
       "status_label": "Canceled",
       "total_paid_tax": 1.4000000000000057,
       "delivery_country_code": "US",
-      "invoice_country_code": "US",
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "invoice_country_code": "US"
     }
   },
   {
@@ -68,13 +62,7 @@
       "status_label": "Awaiting check payment",
       "total_paid_tax": 0,
       "delivery_country_code": "US",
-      "invoice_country_code": "US",
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "invoice_country_code": "US"
     }
   },
   {
@@ -107,13 +95,7 @@
       "status_label": "Payment error",
       "total_paid_tax": 1.4000000000000021,
       "delivery_country_code": "US",
-      "invoice_country_code": "US",
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "invoice_country_code": "US"
     }
   },
   {
@@ -146,13 +128,7 @@
       "status_label": "Awaiting check payment",
       "total_paid_tax": 1.4000000000000021,
       "delivery_country_code": "US",
-      "invoice_country_code": "US",
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "invoice_country_code": "US"
     }
   },
   {
@@ -185,13 +161,7 @@
       "status_label": "Awaiting bank wire payment",
       "total_paid_tax": 1.4000000000000021,
       "delivery_country_code": "US",
-      "invoice_country_code": "US",
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "invoice_country_code": "US"
     }
   }
 ]

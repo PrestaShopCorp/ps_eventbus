@@ -20,14 +20,7 @@
       "last_connection_date": null,
       "has_enabled_gravatar": false,
       "id_shop": 1,
-      "email_hash": "d6368bdac9599988fe4f9d878fc339eee894a71ddd2992c143264252bfb5ad2b",
-      "created_at": null,
-      "updated_at": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "email_hash": "d6368bdac9599988fe4f9d878fc339eee894a71ddd2992c143264252bfb5ad2b"
     }
   }
 ]

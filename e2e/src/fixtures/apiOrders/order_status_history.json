@@ -15,12 +15,7 @@
       "is_paid": false,
       "is_deleted": false,
       "created_at": "2024-02-06T20:24:53+0100",
-      "updated_at": "2024-02-06T20:24:53+0100",
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "updated_at": "2024-02-06T20:24:53+0100"
     }
   },
   {
@@ -39,12 +34,7 @@
       "is_paid": false,
       "is_deleted": false,
       "created_at": "2024-02-06T20:24:53+0100",
-      "updated_at": "2024-02-06T20:24:53+0100",
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "updated_at": "2024-02-06T20:24:53+0100"
     }
   },
   {
@@ -63,12 +53,7 @@
       "is_paid": false,
       "is_deleted": false,
       "created_at": "2024-02-06T20:24:53+0100",
-      "updated_at": "2024-02-06T20:24:53+0100",
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "updated_at": "2024-02-06T20:24:53+0100"
     }
   },
   {
@@ -87,12 +72,7 @@
       "is_paid": false,
       "is_deleted": false,
       "created_at": "2024-02-06T20:24:53+0100",
-      "updated_at": "2024-02-06T20:24:53+0100",
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "updated_at": "2024-02-06T20:24:53+0100"
     }
   },
   {
@@ -111,12 +91,7 @@
       "is_paid": false,
       "is_deleted": false,
       "created_at": "2024-02-06T20:24:53+0100",
-      "updated_at": "2024-02-06T20:24:53+0100",
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "updated_at": "2024-02-06T20:24:53+0100"
     }
   },
   {
@@ -135,12 +110,7 @@
       "is_paid": false,
       "is_deleted": false,
       "created_at": "2024-02-06T20:24:53+0100",
-      "updated_at": "2024-02-06T20:24:53+0100",
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "updated_at": "2024-02-06T20:24:53+0100"
     }
   },
   {
@@ -159,12 +129,7 @@
       "is_paid": false,
       "is_deleted": false,
       "created_at": "2024-02-06T20:24:53+0100",
-      "updated_at": "2024-02-06T20:24:53+0100",
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "updated_at": "2024-02-06T20:24:53+0100"
     }
   }
 ]

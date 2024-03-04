@@ -9,15 +9,7 @@
       "conversion_rate": 1,
       "deleted": false,
       "active": true,
-      "precision": 2,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "precision": 2
     }
   },
   {
@@ -30,15 +22,7 @@
       "conversion_rate": 1.074448,
       "deleted": false,
       "active": true,
-      "precision": 2,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null,
-      "from": null,
-      "to": null
+      "precision": 2
     }
   }
 ]

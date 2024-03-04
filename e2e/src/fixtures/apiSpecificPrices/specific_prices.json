@@ -27,13 +27,7 @@
       "sale_price_tax_excl": 19.12,
       "discount_percentage": 20,
       "discount_value_tax_incl": 0,
-      "discount_value_tax_excl": 0,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null
+      "discount_value_tax_excl": 0
     }
   },
   {
@@ -64,13 +58,7 @@
       "sale_price_tax_excl": 28.72,
       "discount_percentage": 20,
       "discount_value_tax_incl": 0,
-      "discount_value_tax_excl": 0,
-      "created_at": null,
-      "updated_at": null,
-      "last_connection_date": null,
-      "folder_created_at": null,
-      "date_add": null,
-      "newsletter_date_add": null
+      "discount_value_tax_excl": 0
     }
   }
 ]
