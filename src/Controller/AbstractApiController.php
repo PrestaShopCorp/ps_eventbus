@@ -175,7 +175,12 @@ abstract class AbstractApiController extends \ModuleFrontController
         /** @var bool $initFullSync */
         $initFullSync = \Tools::getValue('full', 0) == 1;
 
-        $dateNow = (new \DateTime('now'))->format(MYSQL_DATE_FORMAT);
+
+        /** @var \PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository $configurationRepository */
+        $configurationRepository = $this->module->getService(\PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository::class);
+        $timezone = (string) $configurationRepository->get('PS_TIMEZONE');
+
+        $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(MYSQL_DATE_FORMAT);
         $offset = 0;
         $incrementalSync = false;
         $response = [];
