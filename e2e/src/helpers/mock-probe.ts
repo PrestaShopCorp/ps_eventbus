@@ -15,7 +15,7 @@ import axios from "axios";
 import {Controller} from "./controllers";
 
 const DEFAULT_OPTIONS = {
-  timeout: 1500
+  timeout: 3000
 };
 
 export type MockProbeOptions = typeof DEFAULT_OPTIONS;
