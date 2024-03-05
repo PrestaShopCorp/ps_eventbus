@@ -91,6 +91,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     if: ${{ github.event_name == 'pull_request' }}
+    strategy:
+      matrix:
+        ps_version: [ "1.7.8.10", "8.1.1", "latest" ]
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
@@ -118,13 +121,6 @@ jobs:
           pnpm install --no-optional
         working-directory: e2e
 
-  e2e-tests:
-    name: E2E Tests
-    needs: setup-e2e
-    strategy:
-      matrix:
-        ps_version: ["1.7.8.10", "8.1.1", "latest"]
-    steps:
       - name: Setup e2e-env with Prestashop ${{ matrix.ps_version }}
         run: |
           cp .env.dist .env
@@ -133,6 +129,7 @@ jobs:
         env:
           DOCKER_IMAGE_PRESTASHOP: prestashop/prestashop-flashlight:${{matrix.ps_version}}
         working-directory: e2e-env
+
       - name: Run e2e:tests with Prestashop ${{ matrix.ps_version }}
         run: |
           pnpm test:e2e
