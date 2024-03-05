@@ -102,6 +102,11 @@ services:
 
   reverse-proxy:
     image: nginx:stable-alpine
+    depends_on:
+      prestashop:
+        condition: service_healthy
+      cloudsync-mock:
+        condition: service_healthy
     healthcheck:
       test:
         [
