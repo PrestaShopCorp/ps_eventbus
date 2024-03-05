@@ -86,8 +86,8 @@ jobs:
       - name: PHP unit
         run: make phpunit
 
-  e2e-tests:
-    name: E2E Tests
+  setup-e2e:
+    name: E2E Test Setup
     runs-on: ubuntu-latest
     timeout-minutes: 30
     if: ${{ github.event_name == 'pull_request' }}
@@ -112,21 +112,28 @@ jobs:
           -o $DOCKER_CONFIG/cli-plugins/docker-compose
           chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 
-      - name: Setup e2e-env
-        run: |
-          cp .env.dist .env
-          docker compose build --no-cache
-          docker compose up --detach --wait
-          curl --retry 20 --retry-delay 1 --retry-all-errors -s 'http://localhost:8000/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck' -o '/dev/null'
-        working-directory: e2e-env
-
       - name: Install dependencies and setup e2e
         run: |
           npm install -g pnpm
           pnpm install --no-optional
         working-directory: e2e
 
-      - name: Run e2e:tests
+  e2e-tests:
+    name: E2E Tests
+    needs: setup-e2e
+    strategy:
+      matrix:
+        ps_version: ["1.7.8.10", "8.1.1", "latest"]
+    steps:
+      - name: Setup e2e-env with Prestashop ${{ matrix.ps_version }}
+        run: |
+          cp .env.dist .env
+          docker compose build --no-cache
+          docker compose up --detach --wait
+        env:
+          DOCKER_IMAGE_PRESTASHOP: prestashop/prestashop-flashlight:${{matrix.ps_version}}
+        working-directory: e2e-env
+      - name: Run e2e:tests with Prestashop ${{ matrix.ps_version }}
         run: |
           pnpm test:e2e
         working-directory: e2e
