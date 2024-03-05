@@ -1,4 +1,4 @@
-import fixture from "../fixtures/apiCarriers/carrier_details.json"
+import fixture from "../fixtures/latest/apiCarriers/carrier_details.json"
 
 // test type
 const t: CarrierDetails[] = fixture;
