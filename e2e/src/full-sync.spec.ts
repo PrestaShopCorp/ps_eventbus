@@ -104,8 +104,7 @@ describe('Full Sync', () => {
     });
 
     if (MISSING_TEST_DATA.includes(controller)) {
-      it.skip(`${controller} should upload to collector`, () => {
-      })
+      it.skip(`${controller} should upload to collector`, () => {})
     } else {
       it(`${controller} should upload to collector`, async () => {
         // arrange
