@@ -26,15 +26,9 @@ describe('Reject invalid job-id', () => {
       const request$ = from(axios.get(url, {
         headers: {'Host': testConfig.prestaShopHostHeader}
       }).then(res => {
-        expect(res).toBeNull();
+        expect(res).toBeNull(); // fail test
       }).catch(err => {
-        // assert
-        expect(err.response.status).toEqual(454);
-        expect(err.response.headers).toMatchObject({'content-type': /json/});
-        expect(err.response.data).toMatchObject({
-          status: false,
-          httpCode: 454,
-        });
+        return err.response;
       }))
 
       const results = await lastValueFrom(zip(message$, request$)
@@ -48,6 +42,12 @@ describe('Reject invalid job-id', () => {
       expect(results.length).toEqual(1);
       expect(results[0].probeMessage.method).toBe('GET');
       expect(results[0].probeMessage.url.split('/')).toContain(jobId);
+      expect(results[0].psEventbusReq.status).toEqual(454);
+      expect(results[0].psEventbusReq.headers).toMatchObject({'content-type': /json/});
+      expect(results[0].psEventbusReq.data).toMatchObject({
+        status: false,
+        httpCode: 454,
+      });
     }
   );
 })
