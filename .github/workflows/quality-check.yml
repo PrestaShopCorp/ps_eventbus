@@ -93,7 +93,7 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
     strategy:
       matrix:
-        ps_version: [ "1.7.8.10", "latest" ]
+        ps_version: [ "1.7.8.10", "8.1.1" ]
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
