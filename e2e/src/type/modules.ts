@@ -7,7 +7,7 @@ export type Modules = {
   id: string,
   collection: string,
   properties: {
-    module_id: number,
+    module_id: string,
     name: string,
     module_version: string,
     active: boolean,
