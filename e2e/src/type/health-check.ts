@@ -1,8 +1,3 @@
-import fixture from '../fixtures/latest/apiHealthCheck/health_check.json'
-
-// test type
-const t: HealthCheck = fixture;
-
 export type HealthCheck = {
   "prestashop_version": string,
   "ps_eventbus_version": string,

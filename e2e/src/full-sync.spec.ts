@@ -48,7 +48,8 @@ describe('Full Sync', () => {
     jobId = `valid-job-full-${testIndex++}`
   });
 
-  describe('apiGoogleTaxonomies', () => {
+  // TODO : some versions of prestashop include ps_facebook out of the box, this test can't reliably be run for all versions
+  describe.skip('apiGoogleTaxonomies', () => {
     const controller = 'apiGoogleTaxonomies'
 
     // TODO : apiGoogleTaxonomies requires an additional module to be present : devise a specific test setup for this endpoint
