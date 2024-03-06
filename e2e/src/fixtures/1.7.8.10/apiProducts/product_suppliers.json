@@ -1,0 +1,652 @@
+[
+  {
+    "id": 1,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 1,
+      "id_product": 6,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_11",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 2,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 2,
+      "id_product": 7,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_12",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 3,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 3,
+      "id_product": 8,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_13",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 4,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 4,
+      "id_product": 19,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_14",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 5,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 5,
+      "id_product": 12,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_18",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 6,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 6,
+      "id_product": 13,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_19",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 7,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 7,
+      "id_product": 14,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_20",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 8,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 8,
+      "id_product": 1,
+      "id_product_attribute": 0,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_1_46",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 9,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 9,
+      "id_product": 1,
+      "id_product_attribute": 1,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_1_46",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 10,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 10,
+      "id_product": 1,
+      "id_product_attribute": 2,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_1_47",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 11,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 11,
+      "id_product": 1,
+      "id_product_attribute": 3,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_1_48",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 12,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 12,
+      "id_product": 1,
+      "id_product_attribute": 4,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_1_49",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 13,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 13,
+      "id_product": 1,
+      "id_product_attribute": 5,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_1_50",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 14,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 14,
+      "id_product": 1,
+      "id_product_attribute": 6,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_1_51",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 15,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 15,
+      "id_product": 1,
+      "id_product_attribute": 7,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_1_52",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 16,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 16,
+      "id_product": 1,
+      "id_product_attribute": 8,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_1_53",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 17,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 17,
+      "id_product": 2,
+      "id_product_attribute": 0,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_3_62",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 18,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 18,
+      "id_product": 2,
+      "id_product_attribute": 9,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_3_62",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 19,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 19,
+      "id_product": 2,
+      "id_product_attribute": 10,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_3_63",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 20,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 20,
+      "id_product": 2,
+      "id_product_attribute": 11,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_3_64",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 21,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 21,
+      "id_product": 2,
+      "id_product_attribute": 12,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_3_65",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 22,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 22,
+      "id_product": 3,
+      "id_product_attribute": 0,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_6_70",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 23,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 23,
+      "id_product": 3,
+      "id_product_attribute": 13,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_6_70",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 24,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 24,
+      "id_product": 3,
+      "id_product_attribute": 14,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_6_71",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 25,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 25,
+      "id_product": 3,
+      "id_product_attribute": 15,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_6_72",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 26,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 26,
+      "id_product": 4,
+      "id_product_attribute": 0,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_5_73",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 27,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 27,
+      "id_product": 4,
+      "id_product_attribute": 16,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_5_73",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 28,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 28,
+      "id_product": 4,
+      "id_product_attribute": 17,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_5_74",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 29,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 29,
+      "id_product": 4,
+      "id_product_attribute": 18,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_5_75",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 30,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 30,
+      "id_product": 5,
+      "id_product_attribute": 0,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_5_76",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 31,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 31,
+      "id_product": 5,
+      "id_product_attribute": 19,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_5_76",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 32,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 32,
+      "id_product": 5,
+      "id_product_attribute": 20,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_5_77",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 33,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 33,
+      "id_product": 5,
+      "id_product_attribute": 21,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_5_78",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 34,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 34,
+      "id_product": 3,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_6_70",
+      "product_supplier_price_te": 2.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 35,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 35,
+      "id_product": 3,
+      "id_product_attribute": 13,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_6_70",
+      "product_supplier_price_te": 2.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 36,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 36,
+      "id_product": 3,
+      "id_product_attribute": 14,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_6_71",
+      "product_supplier_price_te": 2.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 37,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 37,
+      "id_product": 3,
+      "id_product_attribute": 15,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_6_72",
+      "product_supplier_price_te": 2.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 38,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 38,
+      "id_product": 4,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_5_73",
+      "product_supplier_price_te": 2.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 39,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 39,
+      "id_product": 4,
+      "id_product_attribute": 16,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_5_73",
+      "product_supplier_price_te": 2.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 40,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 40,
+      "id_product": 4,
+      "id_product_attribute": 17,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_5_74",
+      "product_supplier_price_te": 2.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 41,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 41,
+      "id_product": 4,
+      "id_product_attribute": 18,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_5_75",
+      "product_supplier_price_te": 2.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 42,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 42,
+      "id_product": 5,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_5_76",
+      "product_supplier_price_te": 2.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 43,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 43,
+      "id_product": 5,
+      "id_product_attribute": 19,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_5_76",
+      "product_supplier_price_te": 2.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 44,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 44,
+      "id_product": 5,
+      "id_product_attribute": 20,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_5_77",
+      "product_supplier_price_te": 2.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 45,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 45,
+      "id_product": 5,
+      "id_product_attribute": 21,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_5_78",
+      "product_supplier_price_te": 2.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 46,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 46,
+      "id_product": 9,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_15_79",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 47,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 47,
+      "id_product": 9,
+      "id_product_attribute": 22,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_15_79",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 48,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 48,
+      "id_product": 9,
+      "id_product_attribute": 23,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_15_80",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 49,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 49,
+      "id_product": 10,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_16_81",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 50,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 50,
+      "id_product": 10,
+      "id_product_attribute": 24,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_16_81",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  }
+]

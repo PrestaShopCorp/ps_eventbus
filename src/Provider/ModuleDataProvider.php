@@ -40,7 +40,7 @@ class ModuleDataProvider implements PaginatedApiDataProviderInterface
         }
 
         return array_map(function ($module) {
-            $moduleId = (string) $module['module_id'];
+            $module['module_id'] = (string) $module['module_id'];
             $module['active'] = $module['active'] == '1';
             if (version_compare(_PS_VERSION_, '1.7', '>=')) {
                 $module['created_at'] = $module['created_at'] ?: $this->createdAt;
@@ -51,9 +51,9 @@ class ModuleDataProvider implements PaginatedApiDataProviderInterface
             }
 
             return [
-                'id' => $moduleId,
-                'collection' => Config::COLLECTION_MODULES,
-                'properties' => $module,
+              'id' => $module['module_id'],
+              'collection' => Config::COLLECTION_MODULES,
+              'properties' => $module,
             ];
         }, $modules);
     }

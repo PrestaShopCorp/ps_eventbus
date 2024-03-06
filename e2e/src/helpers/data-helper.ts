@@ -72,7 +72,6 @@ export async function loadFixture(controller: Controller): Promise<PsEventbusSyn
   const useFixture = fixtureVersions
     .filter(version => version.isDirectory())
     .map(version => version.name)
-    .filter(version => semver.valid(version))
     .includes(shopVersion) ? shopVersion : 'latest';
 
   const files = contents.map(content => fs.promises.readFile(

@@ -34,7 +34,7 @@ const specialFieldAssert: { [index: string]: (val) => void } = {
   'to': isDateString,
   'conversion_rate': isNumber,
   'cms_version': isString,
-  'module_id': isNumber,
+  'module_id': isString,
 }
 
 describe('Full Sync', () => {
