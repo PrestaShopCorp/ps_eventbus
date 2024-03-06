@@ -166,6 +166,7 @@ describe('Full Sync', () => {
           processedData = generatePredictableModuleId(processedData);
           processedFixture = generatePredictableModuleId(processedFixture);
         }
+        processedData = omitProperties(processedData, Object.keys(specialFieldAssert));
         processedData = sortUploadData(processedData);
         processedFixture = omitProperties(processedFixture, Object.keys(specialFieldAssert));
         processedFixture = sortUploadData(processedFixture);
