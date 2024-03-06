@@ -5,8 +5,6 @@ import {Content, contentControllerMapping, Controller} from "./controllers";
 import axios from "axios";
 import testConfig from "./test.config";
 import {HealthCheck} from "../type/health-check";
-import semver from "semver/preload";
-import {version} from "ts-jest/dist/transformers/hoist-jest";
 
 /**
  * sort upload data by collection and id to allow easier comparison
