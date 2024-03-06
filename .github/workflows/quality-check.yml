@@ -100,15 +100,15 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
           cache-dependency-path: e2e/pnpm-lock.yaml
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: latest
 
       - name: Cache vendor folder
         uses: actions/cache@v3
