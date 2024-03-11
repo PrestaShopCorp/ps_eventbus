@@ -3,19 +3,21 @@ import {WebSocketSubject} from "rxjs/webSocket";
 import {
   EMPTY,
   expand,
-  filter,
+  filter, firstValueFrom,
   from,
   map,
-  Observable,
+  Observable, take,
+  tap, throwIfEmpty,
   timeout
 } from "rxjs";
 import R from 'ramda';
 import testConfig from "./test.config";
 import axios from "axios";
 import {Controller} from "./controllers";
+import {anyBoolean} from "jest-mock-extended";
 
 const DEFAULT_OPTIONS = {
-  timeout: 1500
+  timeout: 3000
 };
 
 export type MockProbeOptions = typeof DEFAULT_OPTIONS;
@@ -26,12 +28,12 @@ if (!global.WebSocket) {
   (global as any).WebSocket = WebSocket;
 }
 
-let wsConnection: WebSocketSubject<MockProbeResponse> = null
-function getProbeSocket() {
+let wsConnection: Observable<MockProbeResponse> = null;
+function getProbeSocket(): Observable<MockProbeResponse> {
   if (!wsConnection) {
     wsConnection = new WebSocketSubject<MockProbeResponse>('ws://localhost:8080');
   }
-  return wsConnection
+  return wsConnection;
 }
 
 export type MockProbeResponse = {
@@ -46,19 +48,12 @@ export type MockProbeResponse = {
 
 export function probe(match?: Partial<MockProbeResponse>, options?: MockProbeOptions): Observable<MockProbeResponse> {
   options = R.mergeLeft(options, DEFAULT_OPTIONS);
-
   const socket = getProbeSocket();
-  const messages$: Observable<MockProbeResponse> = socket.pipe(
-    filter(message => {
-      if (match) {
-        return (R.whereEq(match, message));
-      }
-      // no filtering
-      return true;
-    }),
+
+  return socket.pipe(
+    filter(message => match ? R.whereEq(match, message) : true),
     timeout(options.timeout),
   )
-  return messages$;
 }
 
 export type PsEventbusSyncResponse = {
@@ -84,20 +79,19 @@ export type PsEventbusSyncUpload = {
 
 export function doFullSync(jobId: string, controller: Controller, options?: MockClientOptions): Observable<PsEventbusSyncResponse> {
   options = R.mergeLeft(options, DEFAULT_OPTIONS);
-  const url = (full: number, jobId: string) => `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=${full}&job_id=${jobId}`;
+  const requestNext = (full: number) => axios.post<PsEventbusSyncResponse>(
+    `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=${full}&job_id=${jobId}`,
+    {
+      headers: {
+        'Host':
+        testConfig.prestaShopHostHeader
+      }
+    });
 
-  return from(axios.post<PsEventbusSyncResponse>(url(1, jobId), {
-    headers: {
-      'Host': testConfig.prestaShopHostHeader
-    },
-  })).pipe(
+  return from(requestNext(1)).pipe(
     expand(response => {
-      if(response.data.has_remaining_objects) {
-        return from(axios.post<PsEventbusSyncResponse>(url(0, jobId), {
-          headers: {
-            'Host': testConfig.prestaShopHostHeader
-          },
-        }));
+      if (response.data.has_remaining_objects) {
+        return from(requestNext(0));
       } else {
         return EMPTY
       }

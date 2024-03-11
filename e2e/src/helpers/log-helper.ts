@@ -1,8 +1,9 @@
-import {AxiosError} from "axios";
+import axios, {AxiosError} from "axios";
 import R from "ramda";
 import fs from "fs";
 import testConfig from "./test.config";
 import {PsEventbusSyncUpload} from "./mock-probe";
+import {getShopHealthCheck} from "./data-helper";
 
 export function logAxiosError(err: Error) {
   if(err instanceof AxiosError) {
@@ -11,7 +12,8 @@ export function logAxiosError(err: Error) {
 }
 
 export async function dumpUploadData(data: PsEventbusSyncUpload[], filename: string) {
-  const dir = `./dumps/${testConfig.testRunTime}/${filename}`;
+  const shopVersion = (await getShopHealthCheck()).prestashop_version;
+  const dir = `./dumps/${testConfig.testRunTime}/${shopVersion}/${filename}`;
   await fs.promises.mkdir(dir, {recursive: true});
   const groupedData = R.groupBy( el => el.collection, data )
   const files = Object.keys(groupedData).map(collection => {

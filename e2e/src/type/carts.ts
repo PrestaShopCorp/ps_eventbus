@@ -1,4 +1,4 @@
-import fixture from "../fixtures/apiCarts/carts.json"
+import fixture from "../fixtures/latest/apiCarts/carts.json"
 
 // test type
 const t: Carts[] = fixture;

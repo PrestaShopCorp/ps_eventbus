@@ -1,4 +1,4 @@
-import fixture from '../fixtures/apiOrders/order_details.json'
+import fixture from '../fixtures/latest/apiOrders/order_details.json'
 
 // test type
 const t: OrderDetails[] = fixture;

@@ -1,4 +1,4 @@
-import fixture from '../fixtures/apiOrders/order_status_history.json'
+import fixture from '../fixtures/latest/apiOrders/order_status_history.json'
 
 // test type
 const t: OrderStatusHistory[] = fixture;

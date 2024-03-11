@@ -1,4 +1,4 @@
-import fixture from '../fixtures/apiStocks/stocks.json'
+import fixture from '../fixtures/latest/apiStocks/stocks.json'
 
 // test type
 const t: Stocks[] = fixture;

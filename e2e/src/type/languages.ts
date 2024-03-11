@@ -1,4 +1,4 @@
-import fixture from '../fixtures/apiLanguages/languages.json'
+import fixture from '../fixtures/latest/apiLanguages/languages.json'
 
 // test type
 const t: Languages[] = fixture;
