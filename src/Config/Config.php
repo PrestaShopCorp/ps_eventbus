@@ -15,6 +15,7 @@ class Config
     public const INVALID_URL_QUERY = 458;
     public const INVALID_PS_ACCOUNTS_VERSION = 459;
     public const PS_ACCOUNTS_NOT_INSTALLED = 460;
+    public const LIVE_SYNC_ENABLED = false;
 
     public const HTTP_STATUS_MESSAGES = [
         self::REFRESH_TOKEN_ERROR_CODE => 'Cannot refresh token',

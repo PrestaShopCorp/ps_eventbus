@@ -1426,7 +1426,7 @@ class Ps_eventbus extends Module
      */
     private function sendLiveSync(string $shopContent, int $shopContentId, string $action)
     {
-        if ((int) $shopContentId === 0) {
+        if ((int) $shopContentId === 0 || !Config::LIVE_SYNC_ENABLED) {
             return;
         }
 
