@@ -39,29 +39,12 @@ class LiveSyncApiClient
      * @param string $liveSyncApiUrl
      * @param \Ps_eventbus $module
      */
-    public function __construct($psAccounts, $liveSyncApiUrl, $module)
+    public function __construct($psAccounts, $liveSyncApiUrl, $liveSyncEnabled, $module)
     {
         $this->module = $module;
         $this->jwt = $psAccounts->getPsAccountsService()->getOrRefreshToken();
         $this->shopId = $psAccounts->getPsAccountsService()->getShopUuid();
         $this->liveSyncApiUrl = $liveSyncApiUrl;
-    }
-
-    /**
-     * @see https://docs.guzzlephp.org/en/stable/quickstart.html-
-     *
-     * @param int $timeout
-     *
-     * @return HttpClientInterface
-     */
-    private function getClient($timeout = Config::SYNC_API_MAX_TIMEOUT)
-    {
-        return (new ClientFactory())->getClient([
-            'allow_redirects' => true,
-            'connect_timeout' => 3,
-            'http_errors' => false,
-            'timeout' => $timeout,
-        ]);
     }
 
     /**
