@@ -31,7 +31,7 @@ class LiveSynchronizationService
      *
      * @throws \PrestaShopDatabaseException
      */
-    private function debounceLiveSync(string $shopContentName): bool
+    private function debounceLiveSync(string $shopContentName)
     {
         $dateNow = date('Y-m-d H:i:s');
 
