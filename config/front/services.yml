@@ -60,7 +60,6 @@ services:
       - '@PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface'
       - '@PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator'
 
-  # Disables live sync
   #PrestaShop\Module\PsEventbus\Service\LiveSynchronizationService:
   #  class: PrestaShop\Module\PsEventbus\Service\LiveSynchronizationService
   #  public: true
@@ -68,6 +67,7 @@ services:
   #    - '@PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient'
   #    - '@PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository'
 
+  # Disables live sync
   PrestaShop\Module\PsEventbus\Service\LiveSynchronizationService:
     class: PrestaShop\Module\PsEventbus\Service\NoopLiveSynchronizationService
     public: true
