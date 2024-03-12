@@ -57,9 +57,20 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository'
-      - '@PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface'
       - '@PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator'
+
+  #PrestaShop\Module\PsEventbus\Service\LiveSynchronizationService:
+  #  class: PrestaShop\Module\PsEventbus\Service\LiveSynchronizationService
+  #  public: true
+  #  arguments:
+  #    - '@PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient'
+  #    - '@PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository'
+
+  # Disables live sync
+  PrestaShop\Module\PsEventbus\Service\LiveSynchronizationService:
+    class: PrestaShop\Module\PsEventbus\Service\NoopLiveSynchronizationService
+    public: true
 
   PrestaShop\Module\PsEventbus\Service\SpecificPriceService:
     class: PrestaShop\Module\PsEventbus\Service\SpecificPriceService

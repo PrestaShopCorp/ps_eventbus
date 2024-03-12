@@ -54,13 +54,13 @@ class LiveSyncApiClient
      *
      * @return HttpClientInterface
      */
-    private function getClient($timeout = Config::SYNC_API_MAX_TIMEOUT)
+    private function getClient($timeout = Config::LIVE_SYNC_API_MAX_TIMEOUT)
     {
         return (new ClientFactory())->getClient([
-            'allow_redirects' => true,
-            'connect_timeout' => 3,
-            'http_errors' => false,
-            'timeout' => $timeout,
+          'allow_redirects' => true,
+          'connect_timeout' => 3,
+          'http_errors' => false,
+          'timeout' => $timeout,
         ]);
     }
 
@@ -73,7 +73,7 @@ class LiveSyncApiClient
      */
     public function liveSync(string $shopContent, int $shopContentId, string $action)
     {
-        $rawResponse = $this->getClient(3)->sendRequest(
+        $rawResponse = $this->getClient()->sendRequest(
             new Request(
                 'POST',
                 $this->liveSyncApiUrl . '/notify/' . $this->shopId,
