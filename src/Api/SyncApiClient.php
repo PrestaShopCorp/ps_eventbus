@@ -28,13 +28,6 @@ class SyncApiClient
     private $jwt;
 
     /**
-     * Accounts Shop UUID
-     *
-     * @var string
-     */
-    private $shopId;
-
-    /**
      * @param PsAccounts $psAccounts
      * @param string $syncApiUrl
      * @param \Ps_eventbus $module
@@ -43,7 +36,6 @@ class SyncApiClient
     {
         $this->module = $module;
         $this->jwt = $psAccounts->getPsAccountsService()->getOrRefreshToken();
-        $this->shopId = $psAccounts->getPsAccountsService()->getShopUuid();
         $this->syncApiUrl = $syncApiUrl;
     }
 
