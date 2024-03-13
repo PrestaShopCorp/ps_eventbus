@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Service;
 use PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient;
 use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
 
-class LiveSynchronizationService
+class LiveSynchronizationService implements LiveSynchronizationServiceInterface
 {
     /**
      * @var LiveSyncApiClient

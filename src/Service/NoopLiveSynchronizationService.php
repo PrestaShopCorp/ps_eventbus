@@ -3,9 +3,9 @@
 namespace PrestaShop\Module\PsEventbus\Service;
 
 /**
- * Injected instead instead of regular LiveSynchronizationService to disable live sync
+ * Injected instead of regular LiveSynchronizationService to disable live sync
  */
-class NoopLiveSynchronizationService
+class NoopLiveSynchronizationService implements LiveSynchronizationServiceInterface
 {
     /**
      * @param string $shopContent
