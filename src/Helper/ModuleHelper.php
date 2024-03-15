@@ -16,7 +16,7 @@ class ModuleHelper
 
     /**
      * returns the module install status
-     * 
+     *
      * @param string $moduleName
      *
      * @return bool
@@ -28,7 +28,7 @@ class ModuleHelper
 
     /**
      * returns the module enable status
-     * 
+     *
      * @param string $moduleName
      *
      * @return bool
@@ -40,7 +40,7 @@ class ModuleHelper
 
     /**
      * returns true/false when module is out/up to date, and null when ps_mbo is not installed
-     * 
+     *
      * @param string $moduleName
      *
      * @return bool|null
@@ -54,6 +54,10 @@ class ModuleHelper
         }
 
         $mboHelper = $mboModule->get('mbo.modules.helper');
+
+        if ($mboHelper == false) {
+            return null;
+        }
 
         $moduleVersionInfos = $mboHelper->findForUpdates($moduleName);
 
@@ -199,25 +203,3 @@ class ModuleHelper
         ];
     }
 }
-// installed but not up to date
-'ps_eventbus' => [
-    'technicalName' => 'technical-name',
-    'displayName' => 'name',
-    'isInstalled' => true,
-    'isEnabled' => true,
-    'isUpToDate' => false,
-    'linkInstall' => null,
-    'linkEnable' => null,
-    'linkUpdate' => 'link',
-],
-// not installed
-'ps_mbo' => [
-    'technicalName' => 'technical-name',
-    'displayName' => 'name',
-    'isInstalled' => false,
-    'isEnabled' => false,
-    'isUpToDate' => false,
-    'linkInstall' => 'link',
-    'linkEnable' => 'link',
-    'linkUpdate' => null,
-]
