@@ -37,6 +37,26 @@ class ModuleHelper
     /**
      * @param string $moduleName
      *
+     * @return bool
+     */
+    public function isUpToDate(string $moduleName)
+    {
+        $mboModule = \Module::getInstanceByName('ps_mbo');
+
+        if ($mboModule == false) {
+            return null;
+        }
+
+        $mboHelper = $mboModule->get('mbo.modules.helper');
+
+        $moduleVersionInfos = $mboHelper->findForUpdates($moduleName);
+
+        return $moduleVersionInfos['upgrade_available'];
+    }
+
+    /**
+     * @param string $moduleName
+     *
      * @return string
      */
     public function getDisplayName(string $moduleName)
@@ -174,9 +194,32 @@ class ModuleHelper
             'displayName' => $this->getDisplayName($moduleName),
             'isInstalled' => $this->isInstalled($moduleName),
             'isEnabled' => $this->isEnabled($moduleName),
+            'isUpToDate' => $this->isUpToDate($moduleName),
             'linkInstall' => $this->getInstallLink($moduleName),
             'linkEnable' => $this->getEnableLink($moduleName),
             'linkUpdate' => $this->getUpdateLink($moduleName),
         ];
     }
 }
+// installed but not up to date
+'ps_eventbus' => [
+    'technicalName' => 'technical-name',
+    'displayName' => 'name',
+    'isInstalled' => true,
+    'isEnabled' => true,
+    'isUpToDate' => false,
+    'linkInstall' => null,
+    'linkEnable' => null,
+    'linkUpdate' => 'link',
+],
+// not installed
+'ps_mbo' => [
+    'technicalName' => 'technical-name',
+    'displayName' => 'name',
+    'isInstalled' => false,
+    'isEnabled' => false,
+    'isUpToDate' => false,
+    'linkInstall' => 'link',
+    'linkEnable' => 'link',
+    'linkUpdate' => null,
+]
