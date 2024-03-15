@@ -15,6 +15,8 @@ class ModuleHelper
     }
 
     /**
+     * returns the module install status
+     * 
      * @param string $moduleName
      *
      * @return bool
@@ -25,6 +27,8 @@ class ModuleHelper
     }
 
     /**
+     * returns the module enable status
+     * 
      * @param string $moduleName
      *
      * @return bool
@@ -35,9 +39,11 @@ class ModuleHelper
     }
 
     /**
+     * returns true/false when module is out/up to date, and null when ps_mbo is not installed
+     * 
      * @param string $moduleName
      *
-     * @return bool
+     * @return bool|null
      */
     public function isUpToDate(string $moduleName)
     {
@@ -55,6 +61,8 @@ class ModuleHelper
     }
 
     /**
+     * returns the display name of the module
+     *
      * @param string $moduleName
      *
      * @return string
@@ -72,16 +80,6 @@ class ModuleHelper
         }
 
         return $module->displayName;
-    }
-
-    /**
-     * @param string $moduleName
-     *
-     * @return false|\ModuleCore
-     */
-    public function getInstanceByName(string $moduleName)
-    {
-        return \ModuleCore::getInstanceByName($moduleName);
     }
 
     /**
@@ -159,7 +157,7 @@ class ModuleHelper
     }
 
     /**
-     * get ps_analytics module version
+     * get module version
      *
      * @param string $moduleName
      *
