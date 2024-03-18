@@ -1430,8 +1430,8 @@ class Ps_eventbus extends Module
             return;
         }
 
-        /** @var \PrestaShop\Module\PsEventbus\Service\LiveSynchronizationService $liveSynchronizationService */
-        $liveSynchronizationService = $this->getService(PrestaShop\Module\PsEventbus\Service\LiveSynchronizationService::class);
+        /** @var \PrestaShop\Module\PsEventbus\Service\LiveSynchronizationServiceInterface $liveSynchronizationService */
+        $liveSynchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\LiveSynchronizationServiceInterface');
         $liveSynchronizationService->liveSync($shopContent, (int) $shopContentId, $action);
     }
 
