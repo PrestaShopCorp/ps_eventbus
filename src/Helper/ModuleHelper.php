@@ -15,6 +15,8 @@ class ModuleHelper
     }
 
     /**
+     * returns the module install status
+     *
      * @param string $moduleName
      *
      * @return bool
@@ -25,6 +27,8 @@ class ModuleHelper
     }
 
     /**
+     * returns the module enable status
+     *
      * @param string $moduleName
      *
      * @return bool
@@ -35,6 +39,34 @@ class ModuleHelper
     }
 
     /**
+     * returns true/false when module is out/up to date, and null when ps_mbo is not installed
+     *
+     * @param string $moduleName
+     *
+     * @return bool|null
+     */
+    public function isUpToDate(string $moduleName)
+    {
+        $mboModule = \Module::getInstanceByName('ps_mbo');
+
+        if ($mboModule == false) {
+            return null;
+        }
+
+        $mboHelper = $mboModule->get('mbo.modules.helper');
+
+        if ($mboHelper == false) {
+            return null;
+        }
+
+        $moduleVersionInfos = $mboHelper->findForUpdates($moduleName);
+
+        return $moduleVersionInfos['upgrade_available'];
+    }
+
+    /**
+     * returns the display name of the module
+     *
      * @param string $moduleName
      *
      * @return string
@@ -52,16 +84,6 @@ class ModuleHelper
         }
 
         return $module->displayName;
-    }
-
-    /**
-     * @param string $moduleName
-     *
-     * @return false|\ModuleCore
-     */
-    public function getInstanceByName(string $moduleName)
-    {
-        return \ModuleCore::getInstanceByName($moduleName);
     }
 
     /**
@@ -139,7 +161,7 @@ class ModuleHelper
     }
 
     /**
-     * get ps_analytics module version
+     * get module version
      *
      * @param string $moduleName
      *
@@ -174,6 +196,7 @@ class ModuleHelper
             'displayName' => $this->getDisplayName($moduleName),
             'isInstalled' => $this->isInstalled($moduleName),
             'isEnabled' => $this->isEnabled($moduleName),
+            'isUpToDate' => $this->isUpToDate($moduleName),
             'linkInstall' => $this->getInstallLink($moduleName),
             'linkEnable' => $this->getEnableLink($moduleName),
             'linkUpdate' => $this->getUpdateLink($moduleName),
