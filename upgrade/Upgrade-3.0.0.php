@@ -3,7 +3,7 @@
 /**
  * @return bool
  */
-function upgrade_module_2_3_5($module)
+function upgrade_module_3_0_0($module)
 {
     $db = Db::getInstance();
 
