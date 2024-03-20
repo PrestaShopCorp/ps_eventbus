@@ -73,7 +73,7 @@ class ModuleHelper
     {
         return \ModuleCore::getInstanceByName($moduleName);
     }
-  
+
     /**
      * returns the display name of the module
      *
