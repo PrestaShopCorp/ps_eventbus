@@ -3,12 +3,12 @@
 namespace PrestaShop\Module\PsEventbus\Api;
 
 use GuzzleHttp\Psr7\Request;
-use Prestashop\ModuleLibGuzzleAdapter\Interfaces\HttpClientInterface;
-use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
 use PrestaShop\Module\PsEventbus\Api\Post\MultipartBody;
 use PrestaShop\Module\PsEventbus\Api\Post\PostFileApi;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
+use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
+use Prestashop\ModuleLibGuzzleAdapter\Interfaces\HttpClientInterface;
 
 class CollectorApiClient
 {
