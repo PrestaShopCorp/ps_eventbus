@@ -62,7 +62,7 @@ class CollectorApiClient
     {
         return (new ClientFactory())->getClient([
             'allow_redirects' => true,
-            'connect_timeout' => 3,
+            'connect_timeout' => 10,
             'http_errors' => false,
             'read_timeout' => 30,
             'timeout' => $this->getRemainingTime($startTime),
