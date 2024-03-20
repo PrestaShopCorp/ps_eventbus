@@ -31,6 +31,7 @@ class CollectorApiClient
 
     /**
      * Default maximum execution time in seconds
+     *
      * @see https://www.php.net/manual/en/info.configuration.php#ini.max-execution-time
      */
     private static $DEFAULT_MAX_EXECUTION_TIME = 30;
@@ -50,6 +51,7 @@ class CollectorApiClient
     /**
      * @see https://docs.guzzlephp.org/en/stable/quickstart.html
      * @see https://docs.guzzlephp.org/en/stable/request-options.html#read-timeout
+     *
      * @param int $startTime @optional start time in seconds since epoch
      *
      * @return HttpClientInterface
@@ -164,6 +166,7 @@ class CollectorApiClient
     {
         /**
          * Negative remaining time means an immediate timeout (0 means infinity)
+         *
          * @see https://docs.guzzlephp.org/en/stable/request-options.html?highlight=timeout#timeout
          */
         $maxExecutionTime = (int) ini_get('max_execution_time');
@@ -184,7 +187,7 @@ class CollectorApiClient
         }
 
         $remainingTime = $maxExecutionTime - $extraOpsTime - (time() - $startTime);
-        
+
         // A protection that might never be used, but who knows
         if ($remainingTime <= 0) {
             return CollectorApiClient::$DEFAULT_MAX_EXECUTION_TIME;
