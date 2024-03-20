@@ -1417,6 +1417,11 @@ class Ps_eventbus extends Module
         }
     }
 
+    // disable liveSync
+    private function sendLiveSync(string $shopContent, int $shopContentId, string $action)
+    {
+    }
+
     /**
      * @param string $shopContent
      * @param int $shopContentId
@@ -1424,7 +1429,7 @@ class Ps_eventbus extends Module
      *
      * @return void
      */
-    private function sendLiveSync(string $shopContent, int $shopContentId, string $action)
+    private function _sendLiveSync(string $shopContent, int $shopContentId, string $action)
     {
         if ((int) $shopContentId === 0) {
             return;
@@ -1439,6 +1444,7 @@ class Ps_eventbus extends Module
                 $liveSyncApiClient = $this->getService(\PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient::class);
                 $liveSyncApiClient->liveSync($shopContent, (int) $shopContentId, $action);
             } catch (\Exception $e) {
+                // TODO : report error
             }
         }
     }
