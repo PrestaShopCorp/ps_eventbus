@@ -1360,7 +1360,7 @@ class Ps_eventbus extends Module
 
         if ($specificPrice instanceof SpecificPrice) {
             if (isset($specificPrice->id)) {
-                $this->sendLiveSync('specific-prics', $specificPrice->id, 'upsert');
+                $this->sendLiveSync('specific-prices', $specificPrice->id, 'upsert');
                 $this->insertIncrementalSyncObject(
                     $specificPrice->id,
                     Config::COLLECTION_SPECIFIC_PRICES,
@@ -1383,7 +1383,7 @@ class Ps_eventbus extends Module
 
         if ($specificPrice instanceof SpecificPrice) {
             if (isset($specificPrice->id)) {
-                $this->sendLiveSync('specific-prics', $specificPrice->id, 'upsert');
+                $this->sendLiveSync('specific-prices', $specificPrice->id, 'upsert');
                 $this->insertIncrementalSyncObject(
                     $specificPrice->id,
                     Config::COLLECTION_SPECIFIC_PRICES,
@@ -1406,7 +1406,7 @@ class Ps_eventbus extends Module
 
         if ($specificPrice instanceof SpecificPrice) {
             if (isset($specificPrice->id)) {
-                $this->sendLiveSync('specific-prics', $specificPrice->id, 'delete');
+                $this->sendLiveSync('specific-prices', $specificPrice->id, 'delete');
                 $this->insertDeletedObject(
                     $specificPrice->id,
                     Config::COLLECTION_SPECIFIC_PRICES,
