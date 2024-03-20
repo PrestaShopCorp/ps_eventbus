@@ -1419,6 +1419,7 @@ class Ps_eventbus extends Module
 
     /**
      * disables liveSync
+     *
      * @param string $shopContent
      * @param int $shopContentId
      * @param string $action
