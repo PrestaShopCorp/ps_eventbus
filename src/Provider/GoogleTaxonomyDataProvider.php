@@ -21,7 +21,7 @@ class GoogleTaxonomyDataProvider implements PaginatedApiDataProviderInterface
      */
     private $shopId;
 
-    public function __construct(GoogleTaxonomyRepository $googleTaxonomyRepository, \PrestaShop\PrestaShop\Adapter\Entity\Context $context)
+    public function __construct(GoogleTaxonomyRepository $googleTaxonomyRepository, \Context $context)
     {
         $this->googleTaxonomyRepository = $googleTaxonomyRepository;
         $this->context = $context;

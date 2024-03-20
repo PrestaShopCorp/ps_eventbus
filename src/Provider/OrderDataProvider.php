@@ -42,7 +42,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     private $shopId;
 
     public function __construct(
-        \PrestaShop\PrestaShop\Adapter\Entity\Context $context,
+        \Context $context,
         OrderRepository $orderRepository,
         OrderDetailsRepository $orderDetailsRepository,
         ArrayFormatter $arrayFormatter,

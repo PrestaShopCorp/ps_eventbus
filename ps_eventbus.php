@@ -200,7 +200,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @return Context
+     * @return \Context
      */
     public function getContext()
     {
