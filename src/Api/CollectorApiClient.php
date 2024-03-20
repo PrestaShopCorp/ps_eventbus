@@ -30,6 +30,12 @@ class CollectorApiClient
     private $jwt;
 
     /**
+     * Default maximum execution time in seconds
+     * @see https://www.php.net/manual/en/info.configuration.php#ini.max-execution-time
+     */
+    private static $DEFAULT_MAX_EXECUTION_TIME = 30;
+
+    /**
      * @param PsAccounts $psAccounts
      * @param string $collectorApiUrl
      * @param \Ps_eventbus $module
@@ -42,8 +48,8 @@ class CollectorApiClient
     }
 
     /**
-     * @see https://docs.guzzlephp.org/en/stable/quickstart.html-
-     *
+     * @see https://docs.guzzlephp.org/en/stable/quickstart.html
+     * @see https://docs.guzzlephp.org/en/stable/request-options.html#read-timeout
      * @param int $startTime @optional start time in seconds since epoch
      *
      * @return HttpClientInterface
@@ -54,6 +60,7 @@ class CollectorApiClient
             'allow_redirects' => true,
             'connect_timeout' => 3,
             'http_errors' => false,
+            'read_timeout' => 30,
             'timeout' => $this->getRemainingTime($startTime),
         ]);
     }
@@ -155,6 +162,14 @@ class CollectorApiClient
      */
     private function getRemainingTime(int $startTime = null)
     {
+        /**
+         * Negative remaining time means an immediate timeout (0 means infinity)
+         * @see https://docs.guzzlephp.org/en/stable/request-options.html?highlight=timeout#timeout
+         */
+        $maxExecutionTime = (int) ini_get('max_execution_time');
+        if ($maxExecutionTime <= 0) {
+            return CollectorApiClient::$DEFAULT_MAX_EXECUTION_TIME;
+        }
         /*
          * An extra 1.5s to be arbitrary substracted
          * to keep time for the JSON parsing and state propagation in MySQL
@@ -165,17 +180,14 @@ class CollectorApiClient
          * Default to maximum timeout
          */
         if (is_null($startTime)) {
-            return (int) ini_get('max_execution_time') - $extraOpsTime;
+            return $maxExecutionTime - $extraOpsTime;
         }
 
-        $remainingTime = (int) ini_get('max_execution_time') - $extraOpsTime - (time() - $startTime);
-
-        /*
-         * Negative remaining time means an immediate timeout (0 means infinity)
-         * @see https://docs.guzzlephp.org/en/stable/request-options.html?highlight=timeout#timeout
-         */
+        $remainingTime = $maxExecutionTime - $extraOpsTime - (time() - $startTime);
+        
+        // A protection that might never be used, but who knows
         if ($remainingTime <= 0) {
-            return 0.1;
+            return CollectorApiClient::$DEFAULT_MAX_EXECUTION_TIME;
         }
 
         return $remainingTime;
