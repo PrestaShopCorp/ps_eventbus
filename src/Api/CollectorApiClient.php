@@ -33,6 +33,7 @@ class CollectorApiClient
      * Default maximum execution time in seconds
      *
      * @see https://www.php.net/manual/en/info.configuration.php#ini.max-execution-time
+     *
      * @var int
      */
     private static $DEFAULT_MAX_EXECUTION_TIME = 30;
