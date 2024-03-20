@@ -26,7 +26,7 @@ class SpecificPriceService
      * @param int $specificPriceId
      * @param bool $useTax
      * @param bool $usereduc
-     * @param Context|null $context
+     * @param \Context|null $context
      *
      * @return float|int|void
      *
@@ -43,7 +43,7 @@ class SpecificPriceService
      * @param int $specificPriceId
      * @param bool $usetax
      * @param bool $usereduc
-     * @param Context|null $context
+     * @param \Context|null $context
      * @param int $decimals
      * @param null $divisor
      * @param bool $only_reduc
@@ -63,7 +63,7 @@ class SpecificPriceService
         $specificPriceId,
         $usetax = true,
         $usereduc = true,
-        Context $context = null,
+        \Context $context = null,
         $decimals = 6,
         $divisor = null,
         $only_reduc = false,
