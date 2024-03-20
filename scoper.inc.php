@@ -34,10 +34,16 @@ return [
             }
 
             if (strpos($filePath, '/ps_eventbus.php')) {
-                return str_replace(
+                $newContent = str_replace(
                     "namespace {$prefix};",
                     '',
                     $contents
+                );
+
+                return str_replace(
+                    "\\class_alias('{$prefix}\\\\Ps_eventbus', 'Ps_eventbus', \\false);",
+                    "",
+                    $newContent
                 );
             }
 
@@ -64,6 +70,7 @@ return [
         '~^Psr~',
     ],
     'exclude-classes' => [
+        '\Ps_eventbus',
         '\Ps_accounts',
         '\Cache',
         '\Configuration',
@@ -92,7 +99,9 @@ return [
     'expose-global-classes' => false,
     'expose-global-functions' => true,
     'expose-namespaces' => [],
-    'expose-classes' => [],
+    'expose-classes' => [
+        '\Ps_eventbus'
+    ],
     'expose-functions' => [],
     'expose-constants' => [],
 ];

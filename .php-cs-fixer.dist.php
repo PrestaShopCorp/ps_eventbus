@@ -8,6 +8,6 @@ $config
     ->in(__DIR__)
     ->exclude('translations')
     ->exclude('prestashop')
-    ->exclude('vendor');
+    ->exclude('vendor', 'dist');
 
 return $config;
