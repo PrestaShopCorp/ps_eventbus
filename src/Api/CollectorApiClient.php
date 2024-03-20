@@ -2,7 +2,9 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
+use Prestashop\ModuleLibGuzzleAdapter\Interfaces\HttpClientInterface;
+use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
 use PrestaShop\Module\PsEventbus\Api\Post\MultipartBody;
 use PrestaShop\Module\PsEventbus\Api\Post\PostFileApi;
 use PrestaShop\Module\PsEventbus\Config\Config;
@@ -44,11 +46,11 @@ class CollectorApiClient
      *
      * @param int $startTime @optional start time in seconds since epoch
      *
-     * @return Client
+     * @return HttpClientInterface
      */
     private function getClient(int $startTime = null)
     {
-        return new Client([
+        return (new ClientFactory())->getClient([
             'allow_redirects' => true,
             'connect_timeout' => 3,
             'http_errors' => false,
@@ -75,11 +77,11 @@ class CollectorApiClient
         $contentSize = $file->getContent()->getSize();
         $multipartBody = new MultipartBody([], [$file], Config::COLLECTOR_MULTIPART_BOUNDARY);
 
-        $response = $this->getClient($startTime)->request(
-            'POST',
-            $url,
-            [
-                'headers' => [
+        $response = $this->getClient($startTime)->sendRequest(
+            new Request(
+                'POST',
+                $url,
+                [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . $this->jwt,
                     'Content-Length' => $contentSize ? (string) $contentSize : '0',
@@ -87,8 +89,8 @@ class CollectorApiClient
                     'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                 ],
-                'body' => $multipartBody->getContents(),
-            ]
+                $multipartBody->getContents()
+            )
         );
 
         return [
@@ -116,19 +118,19 @@ class CollectorApiClient
         $contentSize = $file->getContent()->getSize();
         $multipartBody = new MultipartBody([], [$file], Config::COLLECTOR_MULTIPART_BOUNDARY);
 
-        $response = $this->getClient($startTime)->request(
-            'POST',
-            $url,
-            [
-                'headers' => [
+        $response = $this->getClient($startTime)->sendRequest(
+            new Request(
+                'POST',
+                $url,
+                [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . $this->jwt,
                     'Content-Length' => $contentSize ? (string) $contentSize : '0',
                     'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                 ],
-                'body' => [$multipartBody->getContents()],
-            ]
+                $multipartBody->getContents()
+            )
         );
 
         return [

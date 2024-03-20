@@ -2,7 +2,9 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
+use Prestashop\ModuleLibGuzzleAdapter\Interfaces\HttpClientInterface;
+use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 
@@ -50,11 +52,11 @@ class LiveSyncApiClient
      *
      * @param int $timeout
      *
-     * @return Client
+     * @return HttpClientInterface
      */
     private function getClient($timeout = Config::SYNC_API_MAX_TIMEOUT)
     {
-        return new Client([
+        return (new ClientFactory())->getClient([
             'allow_redirects' => true,
             'connect_timeout' => 3,
             'http_errors' => false,
@@ -71,18 +73,19 @@ class LiveSyncApiClient
      */
     public function liveSync(string $shopContent, int $shopContentId, string $action)
     {
-        $response = $this->getClient(3)->request(
-            'POST',
-            $this->liveSyncApiUrl . '/notify/' . $this->shopId,
-            [
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->jwt,
-                    'User-Agent' => 'ps-eventbus/' . $this->module->version,
-                    'Content-Type' => 'application/json',
-                ],
-                'body' => '{"shopContents": ["' . $shopContent . '"], "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}',
-            ]
+        $response = $this->getClient(3)->sendRequest(
+            new Request(
+                'POST',
+                $this->liveSyncApiUrl . '/notify/' . $this->shopId,
+                [
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Authorization' => 'Bearer ' . $this->jwt,
+                        'User-Agent' => 'ps-eventbus/' . $this->module->version,
+                        'Content-Type' => 'application/json',
+                    ],
+                    '{"shopContents": ["' . $shopContent . '"], "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}'
+            )
         );
 
         return [

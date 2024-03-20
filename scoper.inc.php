@@ -19,8 +19,8 @@ return [
         static function (string $filePath, string $prefix, string $contents): string {
             if (strpos($filePath, '/vendor/sentry/sentry/lib/Raven/Client.php')) {
                 return str_replace(
-                    '$new_processor = new $processor($this);',
-                    "\$new_processor = new (\"{$prefix}\\\\\$processor\")(\$this);",
+                    'Raven_Processor_SanitizeDataProcessor',
+                    "{$prefix}\\Raven_Processor_SanitizeDataProcessor",
                     $contents
                 );
             }
