@@ -33,6 +33,7 @@ return [
                 );
             }
 
+            /* Exclude  ps_eventbus class for namspacing */
             if (strpos($filePath, '/ps_eventbus.php')) {
                 $newContent = str_replace(
                     "namespace {$prefix};",
@@ -42,12 +43,22 @@ return [
 
                 return str_replace(
                     "\\class_alias('{$prefix}\\\\Ps_eventbus', 'Ps_eventbus', \\false);",
-                    "",
+                    '',
                     $newContent
                 );
             }
 
+            /* Exclude upgrade folder for namespacing */
             if (strpos($filePath, '/upgrade') && strpos($filePath, '/vendor') === false) {
+                return str_replace(
+                    "namespace {$prefix};",
+                    '',
+                    $contents
+                );
+            }
+
+            /* Exclude front controller folder for namespacing */
+            if (strpos($filePath, '/controllers') && strpos($filePath, '/vendor') === false) {
                 return str_replace(
                     "namespace {$prefix};",
                     '',
@@ -100,7 +111,7 @@ return [
     'expose-global-functions' => true,
     'expose-namespaces' => [],
     'expose-classes' => [
-        '\Ps_eventbus'
+        '\Ps_eventbus',
     ],
     'expose-functions' => [],
     'expose-constants' => [],
