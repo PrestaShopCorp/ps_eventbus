@@ -92,6 +92,16 @@ class ModuleHelper
     }
 
     /**
+     * @param string $moduleName
+     *
+     * @return false|\ModuleCore
+     */
+    public function getInstanceByName(string $moduleName)
+    {
+        return \ModuleCore::getInstanceByName($moduleName);
+    }
+
+    /**
      * returns the display name of the module
      *
      * @param string $moduleName
