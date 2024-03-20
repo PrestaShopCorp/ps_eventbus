@@ -28,6 +28,13 @@ class SyncApiClient
     private $jwt;
 
     /**
+     * Accounts Shop UUID
+     *
+     * @var string
+     */
+    private $shopId;
+
+    /**
      * @param PsAccounts $psAccounts
      * @param string $syncApiUrl
      * @param \Ps_eventbus $module
@@ -36,6 +43,7 @@ class SyncApiClient
     {
         $this->module = $module;
         $this->jwt = $psAccounts->getPsAccountsService()->getOrRefreshToken();
+        $this->shopId = $psAccounts->getPsAccountsService()->getShopUuid();
         $this->syncApiUrl = $syncApiUrl;
     }
 
@@ -78,6 +86,36 @@ class SyncApiClient
         return [
             'status' => substr((string) $rawResponse->getStatusCode(), 0, 1) === '2',
             'httpCode' => $rawResponse->getStatusCode(),
+        ];
+    }
+
+    /**
+     * @param array $shopContent
+     * @param int $shopContentId
+     * @param string $action
+     *
+     * @return array
+     */
+    public function liveSync($shopContent, $shopContentId, $action)
+    {
+        $rawResponse = $this->getClient(3)->sendRequest(
+            new Request(
+                'POST',
+                $this->syncApiUrl . '/notify/' . $this->shopId,
+                [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->jwt,
+                    'User-Agent' => 'ps-eventbus/' . $this->module->version,
+                    'Content-Type' => 'application/json',
+                ],
+                '{"shopContents":' . json_encode($shopContent) . ', "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}'
+            )
+        );
+
+        return [
+            'status' => substr((string) $rawResponse->getStatusCode(), 0, 1) === '2',
+            'httpCode' => $rawResponse->getStatusCode(),
+            'body' => $rawResponse->getBody(),
         ];
     }
 }

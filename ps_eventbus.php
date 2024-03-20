@@ -1418,6 +1418,8 @@ class Ps_eventbus extends Module
     }
 
     /**
+     * disables liveSync
+     *
      * @param string $shopContent
      * @param int $shopContentId
      * @param string $action
@@ -1426,13 +1428,6 @@ class Ps_eventbus extends Module
      */
     private function sendLiveSync(string $shopContent, int $shopContentId, string $action)
     {
-        if ((int) $shopContentId === 0) {
-            return;
-        }
-
-        /** @var \PrestaShop\Module\PsEventbus\Service\LiveSynchronizationServiceInterface $liveSynchronizationService */
-        $liveSynchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\LiveSynchronizationServiceInterface');
-        $liveSynchronizationService->liveSync($shopContent, (int) $shopContentId, $action);
     }
 
     /**
