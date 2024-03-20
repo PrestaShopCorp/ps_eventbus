@@ -45,7 +45,7 @@ class ImageTypeDataProvider implements PaginatedApiDataProviderInterface
         return array_map(function ($imageType) {
             return [
                 'id' => "{$imageType['id_image_type']}",
-                'collection' => Config::COLLECTION_IMAGES,
+                'collection' => Config::COLLECTION_IMAGE_TYPES,
                 'properties' => $imageType,
             ];
         }, $imageTypes);
@@ -84,7 +84,7 @@ class ImageTypeDataProvider implements PaginatedApiDataProviderInterface
         return array_map(function ($imageType) {
             return [
                 'id' => "{$imageType['id_image_type']}",
-                'collection' => Config::COLLECTION_IMAGES,
+                'collection' => Config::COLLECTION_IMAGE_TYPES,
                 'properties' => $imageType,
             ];
         }, $imageTypes);

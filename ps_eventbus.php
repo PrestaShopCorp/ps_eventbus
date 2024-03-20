@@ -140,7 +140,7 @@ class Ps_eventbus extends Module
     /**
      * @var int Defines the multistore compatibility level of the module
      */
-    public $multistoreCompatibility = \Module::MULTISTORE_COMPATIBILITY_YES;
+    public $multistoreCompatibility;
 
     /**
      * @var string contact email of the maintainers (please consider using github issues)
@@ -157,6 +157,10 @@ class Ps_eventbus extends Module
      */
     public function __construct()
     {
+        if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+            $this->multistoreCompatibility = parent::MULTISTORE_COMPATIBILITY_YES;
+        }
+
         // @see https://devdocs.prestashop-project.org/8/modules/concepts/module-class/
         $this->name = 'ps_eventbus';
         $this->tab = 'administration';
@@ -1356,7 +1360,7 @@ class Ps_eventbus extends Module
 
         if ($specificPrice instanceof SpecificPrice) {
             if (isset($specificPrice->id)) {
-                $this->sendLiveSync('specific-prics', $specificPrice->id, 'upsert');
+                $this->sendLiveSync('specific-prices', $specificPrice->id, 'upsert');
                 $this->insertIncrementalSyncObject(
                     $specificPrice->id,
                     Config::COLLECTION_SPECIFIC_PRICES,
@@ -1379,7 +1383,7 @@ class Ps_eventbus extends Module
 
         if ($specificPrice instanceof SpecificPrice) {
             if (isset($specificPrice->id)) {
-                $this->sendLiveSync('specific-prics', $specificPrice->id, 'upsert');
+                $this->sendLiveSync('specific-prices', $specificPrice->id, 'upsert');
                 $this->insertIncrementalSyncObject(
                     $specificPrice->id,
                     Config::COLLECTION_SPECIFIC_PRICES,
@@ -1402,7 +1406,7 @@ class Ps_eventbus extends Module
 
         if ($specificPrice instanceof SpecificPrice) {
             if (isset($specificPrice->id)) {
-                $this->sendLiveSync('specific-prics', $specificPrice->id, 'delete');
+                $this->sendLiveSync('specific-prices', $specificPrice->id, 'delete');
                 $this->insertDeletedObject(
                     $specificPrice->id,
                     Config::COLLECTION_SPECIFIC_PRICES,
@@ -1414,6 +1418,8 @@ class Ps_eventbus extends Module
     }
 
     /**
+     * disables liveSync
+     *
      * @param string $shopContent
      * @param int $shopContentId
      * @param string $action
@@ -1422,21 +1428,6 @@ class Ps_eventbus extends Module
      */
     private function sendLiveSync(string $shopContent, int $shopContentId, string $action)
     {
-        if ((int) $shopContentId === 0) {
-            return;
-        }
-
-        /** @var \PrestaShop\Module\PsEventbus\Service\SynchronizationService $synchronizationService */
-        $synchronizationService = $this->getService(PrestaShop\Module\PsEventbus\Service\SynchronizationService::class);
-
-        if ($synchronizationService->debounceLiveSync($shopContent)) {
-            try {
-                /** @var \PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient $liveSyncApiClient */
-                $liveSyncApiClient = $this->getService(\PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient::class);
-                $liveSyncApiClient->liveSync($shopContent, (int) $shopContentId, $action);
-            } catch (\Exception $e) {
-            }
-        }
     }
 
     /**

@@ -23,7 +23,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
      */
     public function __construct(
         CartRepository $cartRepository,
-        CartProductRepository $cartProductRepository,
+        CartProductRepository $cartProductRepository
     ) {
         $this->cartRepository = $cartRepository;
         $this->cartProductRepository = $cartProductRepository;

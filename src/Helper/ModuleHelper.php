@@ -32,6 +32,8 @@ class ModuleHelper
     }
 
     /**
+     * returns the module install status
+     *
      * @param string $moduleName
      *
      * @return bool
@@ -42,6 +44,8 @@ class ModuleHelper
     }
 
     /**
+     * returns the module enable status
+     *
      * @param string $moduleName
      *
      * @return bool
@@ -62,6 +66,34 @@ class ModuleHelper
     }
 
     /**
+     * returns true/false when module is out/up to date, and null when ps_mbo is not installed
+     *
+     * @param string $moduleName
+     *
+     * @return bool|null
+     */
+    public function isUpToDate(string $moduleName)
+    {
+        $mboModule = \Module::getInstanceByName('ps_mbo');
+
+        if ($mboModule == false) {
+            return null;
+        }
+
+        $mboHelper = $mboModule->get('mbo.modules.helper');
+
+        if ($mboHelper == false) {
+            return null;
+        }
+
+        $moduleVersionInfos = $mboHelper->findForUpdates($moduleName);
+
+        return $moduleVersionInfos['upgrade_available'];
+    }
+
+    /**
+     * returns the display name of the module
+     *
      * @param string $moduleName
      *
      * @return string
@@ -82,38 +114,6 @@ class ModuleHelper
     }
 
     /**
-     * get module version
-     *
-     * @param string $moduleName
-     *
-     * @return string
-     */
-    public function getModuleVersion(string $moduleName)
-    {
-        if (false === $this->isInstalled($moduleName)) {
-            return '0.0.0';
-        }
-
-        $module = $this->getInstanceByName($moduleName);
-
-        if (false === $module) {
-            return '0.0.0';
-        }
-
-        return $module->version;
-    }
-
-    /**
-     * @param string $moduleName
-     *
-     * @return false|\ModuleCore
-     */
-    public function getInstanceByName(string $moduleName)
-    {
-        return \ModuleCore::getInstanceByName($moduleName);
-    }
-
-    /**
      * returns the installation link of the module if it is not installed. If installed, returns an empty string
      *
      * @param string $moduleName
@@ -126,7 +126,7 @@ class ModuleHelper
             return '';
         }
 
-        /** @var Router $router * */
+        /** @var \Router $router * */
         $router = $this->module->get('router');
 
         if ($moduleName === 'ps_mbo') {
@@ -188,6 +188,28 @@ class ModuleHelper
     }
 
     /**
+     * get module version
+     *
+     * @param string $moduleName
+     *
+     * @return string
+     */
+    public function getModuleVersion(string $moduleName)
+    {
+        if (false === $this->isInstalled($moduleName)) {
+            return '0.0.0';
+        }
+
+        $module = \Module::getInstanceByName($moduleName);
+
+        if (false === $module) {
+            return '0.0.0';
+        }
+
+        return $module->version;
+    }
+
+    /**
      * Build informations about module
      *
      * @param string $moduleName
@@ -201,6 +223,7 @@ class ModuleHelper
             'displayName' => $this->getDisplayName($moduleName),
             'isInstalled' => $this->isInstalled($moduleName),
             'isEnabled' => $this->isEnabled($moduleName),
+            'isUpToDate' => $this->isUpToDate($moduleName),
             'linkInstall' => $this->getInstallLink($moduleName),
             'linkEnable' => $this->getEnableLink($moduleName),
             'linkUpdate' => $this->getUpdateLink($moduleName),

@@ -1,14 +1,16 @@
 SHELL=/bin/bash -o pipefail
-PHP = $(shell command -v php >/dev/null 2>&1 || { echo >&2 "PHP is not installed."; exit 1; } && which php)
+MODULE_NAME = ps_eventbus
 VERSION ?= $(shell git describe --tags 2> /dev/null || echo "v0.0.0")
 SEM_VERSION ?= $(shell echo ${VERSION} | sed 's/^v//')
-MODULE_NAME = ps_eventbus
 PACKAGE ?= ${MODULE_NAME}-${VERSION}
 PHP_VERSION ?= 8.1
 PS_VERSION ?= 8.1.3
 TESTING_IMAGE ?= prestashop/prestashop-flashlight:${PS_VERSION}
 PS_ROOT_DIR ?= $(shell pwd)/prestashop/prestashop-${PS_VERSION}
 PHP_SCOPER_DIR=php-scoper
+
+export PHP_CS_FIXER_IGNORE_ENV = 1
+export _PS_ROOT_DIR_ ?= ${PS_ROOT_DIR}
 export PATH := ./vendor/bin:./tools/vendor/bin:$(PATH)
 
 define replace_version
@@ -30,6 +32,14 @@ define create_module
 	SCOPER_FOLDER=${TMP_DIR}/${MODULE_NAME} php php-scoper-fix.php
 
 	echo ${TMP_DIR}
+endef
+
+define in_docker
+docker run \
+--env _PS_ROOT_DIR_=/var/www/html \
+--workdir /var/www/html/modules/${MODULE_NAME} \
+--volume $(shell pwd):/var/www/html/modules/${MODULE_NAME}:rw \
+--entrypoint $1 ${TESTING_IMAGE} $2
 endef
 
 define zip_it
@@ -67,16 +77,9 @@ help:
 clean:
 	git -c core.excludesfile=/dev/null clean -X -d -f
 
-# target: version                                              - Replace version in files, CI only
-.PHONY: version
-version:
-	@$(call replace_version,$(shell pwd),${SEM_VERSION})
-
 # target: zip                                                  - Make zip bundles
 .PHONY: zip
-zip: zip-prod zip-inte
-dist:
-	@mkdir -p ./dist
+zip: zip-prod zip-inte zip-e2e
 
 # target: zip-e2e                                              - Bundle a local E2E integrable zip
 .PHONY: zip-e2e
@@ -101,6 +104,9 @@ zip-unzipped: php-scoper.phar vendor tools/vendor dist
 # target: build                                                - Setup PHP & Node.js locally
 .PHONY: build
 build: vendor tools/vendor
+
+dist:
+	@mkdir -p ./dist
 
 composer.phar:
 	@php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');";
@@ -154,14 +160,14 @@ docker-lint-fix: docker-php-cs-fixer-fix
 # target: php-cs-fixer (or docker-php-cs-fixer)                - Lint the code and expose errors
 .PHONY: php-cs-fixer docker-php-cs-fixer  
 php-cs-fixer: tools/vendor
-	@PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --dry-run --diff --using-cache=no;
+	@php-cs-fixer fix --dry-run --diff --using-cache=no;
 docker-php-cs-fixer: tools/vendor
 	@$(call in_docker,make,lint)
 
 # target: php-cs-fixer-fix (or docker-php-cs-fixer-fix)        - Lint the code and fix it
 .PHONY: php-cs-fixer-fix docker-php-cs-fixer-fix
 php-cs-fixer-fix: tools/vendor
-	@PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --using-cache=no;
+	@php-cs-fixer fix --using-cache=no;
 docker-php-cs-fixer-fix: tools/vendor
 	@$(call in_docker,make,lint-fix)
 
@@ -190,14 +196,14 @@ docker-phpunit-cov: tools/vendor
 # target: phpstan (or docker-phpstan)                          - Run phpstan
 .PHONY: phpstan docker-phpstan
 phpstan: tools/vendor prestashop/prestashop-${PS_VERSION}
-	_PS_ROOT_DIR_=${PS_ROOT_DIR} phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
+	phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
 docker-phpstan: tools/vendor
-	@$(call in_docker,phpstan,analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon)
+	@$(call in_docker,make,phpstan)
 
 # target: phpstan-baseline                                     - Generate a phpstan baseline to ignore all errors
 .PHONY: phpstan-baseline
 phpstan-baseline: prestashop/prestashop-${PS_VERSION} phpstan
-	_PS_ROOT_DIR_=${PS_ROOT_DIR} phpstan analyse --generate-baseline --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
+	phpstan analyse --generate-baseline --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
 
 # target: docker-test                                          - Static and unit testing in docker
 .PHONY: docker-test

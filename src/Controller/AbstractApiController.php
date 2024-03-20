@@ -8,7 +8,6 @@ use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
 use PrestaShop\Module\PsEventbus\Exception\QueryParamsException;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
-use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
@@ -16,6 +15,8 @@ use PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService;
 use PrestaShop\Module\PsEventbus\Service\ProxyService;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
+
+const MYSQL_DATE_FORMAT = 'Y-m-d H:i:s';
 
 abstract class AbstractApiController extends \ModuleFrontController
 {
@@ -73,18 +74,9 @@ abstract class AbstractApiController extends \ModuleFrontController
      */
     public $errorHandler;
 
-    /**
-     * @var string
-     */
-    private $timezone;
-
     public function __construct()
     {
         parent::__construct();
-
-        /** @var ConfigurationRepository $configurationRepository */
-        $configurationRepository = $this->module->getService(ConfigurationRepository::class);
-        $this->timezone = (string) $configurationRepository->get('PS_TIMEZONE');
 
         $this->ajax = true;
         $this->content_only = true;
@@ -180,7 +172,11 @@ abstract class AbstractApiController extends \ModuleFrontController
         /** @var bool $initFullSync */
         $initFullSync = \Tools::getValue('full', 0) == 1;
 
-        $dateNow = (new \DateTime('now', new \DateTimeZone($this->timezone)))->format('Y-m-d\TH:i:sO');
+        /** @var \PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository $configurationRepository */
+        $configurationRepository = $this->module->getService(\PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository::class);
+        $timezone = (string) $configurationRepository->get('PS_TIMEZONE');
+
+        $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(MYSQL_DATE_FORMAT);
         $offset = 0;
         $incrementalSync = false;
         $response = [];

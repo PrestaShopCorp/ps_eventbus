@@ -16,10 +16,6 @@ services:
     class: PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter
     public: true
 
-  PrestaShop\Module\PsEventbus\Formatter\DateFormatter:
-    class: PrestaShop\Module\PsEventbus\Formatter\DateFormatter
-    public: true
-
   PrestaShop\Module\PsEventbus\Service\CacheService:
     class: PrestaShop\Module\PsEventbus\Service\CacheService
     public: true

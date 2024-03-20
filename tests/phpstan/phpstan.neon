@@ -38,4 +38,6 @@ parameters:
     - '#Parameter \#2 \$type of static method TaxManagerFactoryCore::getManager\(\) expects string, int given.#'
     - '#Method PrestaShop\\Module\\PsEventbus\\Factory\\ContextFactory::getController\(\) has invalid return type PrestaShopBundle\\Bridge\\AdminController\\LegacyControllerBridgeInterface.#'
     - '#Cannot call method getService\(\) on ModuleCore\|false.#'
+    - '#Method PrestaShop\\Module\\PsEventbus\\Service\\SpecificPriceService::getPriceStatic\(\) never returns void so it can be removed from the return type.#'
+    - '#Call to an undefined method object::findForUpdates\(\).#'
   level: 9

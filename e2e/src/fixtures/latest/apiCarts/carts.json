@@ -1,0 +1,47 @@
+[
+  {
+    "id": "1",
+    "collection": "carts",
+    "properties": {
+      "id_cart": "1",
+      "created_at": "2024-02-06T20:24:53+0100",
+      "updated_at": "2024-02-06T20:24:53+0100"
+    }
+  },
+  {
+    "id": "2",
+    "collection": "carts",
+    "properties": {
+      "id_cart": "2",
+      "created_at": "2024-02-06T20:24:53+0100",
+      "updated_at": "2024-02-06T20:24:53+0100"
+    }
+  },
+  {
+    "id": "3",
+    "collection": "carts",
+    "properties": {
+      "id_cart": "3",
+      "created_at": "2024-02-06T20:24:53+0100",
+      "updated_at": "2024-02-06T20:24:53+0100"
+    }
+  },
+  {
+    "id": "4",
+    "collection": "carts",
+    "properties": {
+      "id_cart": "4",
+      "created_at": "2024-02-06T20:24:53+0100",
+      "updated_at": "2024-02-06T20:24:53+0100"
+    }
+  },
+  {
+    "id": "5",
+    "collection": "carts",
+    "properties": {
+      "id_cart": "5",
+      "created_at": "2024-02-06T20:24:53+0100",
+      "updated_at": "2024-02-06T20:24:53+0100"
+    }
+  }
+]

@@ -27,6 +27,7 @@ coverage-reports
 allure-reports
 tests/.phpunit.result.cache
 .phpunit.cache/
+e2e/dumps
 
 # Jetbrains
 .idea
