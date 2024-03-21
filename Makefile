@@ -129,14 +129,14 @@ docker-lint-fix: docker-php-cs-fixer-fix
 # target: php-cs-fixer (or docker-php-cs-fixer)                - Lint the code and expose errors
 .PHONY: php-cs-fixer docker-php-cs-fixer  
 php-cs-fixer: tools/vendor
-	@php-cs-fixer fix --dry-run --diff --using-cache=no;
+	@php-cs-fixer fix --dry-run --diff --using-cache=no --config=.php-cs-fixer.dist.php;
 docker-php-cs-fixer: tools/vendor
 	@$(call in_docker,make,lint)
 
 # target: php-cs-fixer-fix (or docker-php-cs-fixer-fix)        - Lint the code and fix it
 .PHONY: php-cs-fixer-fix docker-php-cs-fixer-fix
 php-cs-fixer-fix: tools/vendor
-	@php-cs-fixer fix --using-cache=no;
+	@php-cs-fixer fix --using-cache=no --config=.php-cs-fixer.dist.php
 docker-php-cs-fixer-fix: tools/vendor
 	@$(call in_docker,make,lint-fix)
 
