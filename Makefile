@@ -129,21 +129,21 @@ docker-lint-fix: docker-php-cs-fixer-fix
 # target: php-cs-fixer (or docker-php-cs-fixer)                - Lint the code and expose errors
 .PHONY: php-cs-fixer docker-php-cs-fixer  
 php-cs-fixer: tools/vendor
-	@php-cs-fixer fix --dry-run --diff --using-cache=no --config=.php-cs-fixer.dist.php;
+	@php-cs-fixer fix --dry-run --diff;
 docker-php-cs-fixer: tools/vendor
 	@$(call in_docker,make,lint)
 
 # target: php-cs-fixer-fix (or docker-php-cs-fixer-fix)        - Lint the code and fix it
 .PHONY: php-cs-fixer-fix docker-php-cs-fixer-fix
 php-cs-fixer-fix: tools/vendor
-	@php-cs-fixer fix --using-cache=no --config=.php-cs-fixer.dist.php
+	@php-cs-fixer fix
 docker-php-cs-fixer-fix: tools/vendor
 	@$(call in_docker,make,lint-fix)
 
 # target: php-lint (or docker-php-lint)                        - Lint the code with the php linter
 .PHONY: php-lint docker-php-lint
 php-lint:
-	@find . -type f -name '*.php' -not -path 'vendor' -and -not -path 'tools/vendor' -print0 | xargs -0 -n1 php -l -n | (! grep -v "No syntax errors" );
+	@find . -type f -name '*.php' -not -path "./vendor/*" -not -path "./tools/*" -not -path "./prestashop/*" -print0 | xargs -0 -n1 php -l -n | (! grep -v "No syntax errors" );
 	@echo "php $(shell php -r 'echo PHP_VERSION;') lint passed";
 docker-php-lint:
 	@$(call in_docker,make,php-lint)
