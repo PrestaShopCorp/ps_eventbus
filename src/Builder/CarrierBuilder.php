@@ -70,7 +70,7 @@ class CarrierBuilder
             $eventBusCarriers[] = $this->buildCarrier(
                 new \Carrier($carrier['id_carrier'], $langId),
                 $currency->iso_code,
-                $weightUnit,
+                $weightUnit
             );
         }
 
