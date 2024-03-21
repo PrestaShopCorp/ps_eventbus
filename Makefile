@@ -143,7 +143,7 @@ docker-php-cs-fixer-fix: tools/vendor
 # target: php-lint (or docker-php-lint)                        - Lint the code with the php linter
 .PHONY: php-lint docker-php-lint
 php-lint:
-	@find . -type f -name '*.php' -not -path 'vendor' -and -path 'tools/vendor' -print0 | xargs -0 -n1 php -l -n | (! grep -v "No syntax errors" );
+	@find . -type f -name '*.php' -not -path 'vendor' -and -not -path 'tools/vendor' -print0 | xargs -0 -n1 php -l -n | (! grep -v "No syntax errors" );
 	@echo "php $(shell php -r 'echo PHP_VERSION;') lint passed";
 docker-php-lint:
 	@$(call in_docker,make,php-lint)
