@@ -80,7 +80,11 @@ class ModuleHelper
             return null;
         }
 
-        $mboHelper = $mboModule->get('mbo.modules.helper');
+        try {
+            $mboHelper = $mboModule->get('mbo.modules.helper');
+        } catch (\Exception $e) {
+            return null;
+        }
 
         if ($mboHelper == false) {
             return null;
