@@ -1403,7 +1403,7 @@ class Ps_eventbus extends Module
      * For security reasons, I like to use the before hook, and put it in a try/catch
      *
      * @param array $parameters
-     * 
+     *
      * @return void
      */
     public function hookActionDispatcherBefore($parameters)
