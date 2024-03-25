@@ -25,6 +25,7 @@
  */
 
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShopBundle\EventListener\ActionDispatcherLegacyHooksSubscriber;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -1409,6 +1410,10 @@ class Ps_eventbus extends Module
     public function hookActionDispatcherBefore($parameters)
     {
         try {
+            if ($parameters['controller_type'] != ActionDispatcherLegacyHooksSubscriber::BACK_OFFICE_CONTROLLER) {
+                return;
+            }
+
             $route = $parameters['route'];
 
             // when translation is edited or reset, add to incremental sync
@@ -1421,6 +1426,7 @@ class Ps_eventbus extends Module
                 );
             }
         } catch (\Exception $e) {
+            return;
         }
     }
 
