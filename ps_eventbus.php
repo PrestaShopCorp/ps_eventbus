@@ -1397,10 +1397,12 @@ class Ps_eventbus extends Module
      * This is global hook. This hook is called at the beginning of the dispatch method of the Dispatcher
      * It's possible to use this hook all time when we don't have specific hook.
      * Available since: 1.7.1
-     * 
-     * Unable to use hookActionDispatcherAfter. Seem to be have a strange effect. When i use 
+     *
+     * Unable to use hookActionDispatcherAfter. Seem to be have a strange effect. When i use
      * this hook and try to dump() the content, no dump appears in the symfony debugger, and no more hooks appear.
      * For security reasons, I like to use the before hook, and put it in a try/catch
+     *
+     * @param array $parameters
      * 
      * @return void
      */
@@ -1418,7 +1420,8 @@ class Ps_eventbus extends Module
                     $this->shopId
                 );
             }
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
     }
 
     /**
