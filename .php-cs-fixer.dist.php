@@ -8,8 +8,7 @@ $finder = (new PhpCsFixer\Finder())
     ->exclude('tools')
     ->exclude('vendor');
 
-$config = new PrestaShop\CodingStandards\CsFixer\Config();
-$config
+$config = (new PrestaShop\CodingStandards\CsFixer\Config())
     ->setUsingCache(false)
     ->setFinder($finder);
 
