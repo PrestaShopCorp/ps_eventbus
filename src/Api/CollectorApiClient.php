@@ -30,6 +30,10 @@ class CollectorApiClient
     private $jwt;
 
     /**
+     * <<<<<<< HEAD
+     * =======
+     *
+     * >>>>>>> 7357fb2f5f39bff81f9a01000304c714dad82fe9
      * Default maximum execution time in seconds
      *
      * @see https://www.php.net/manual/en/info.configuration.php#ini.max-execution-time
@@ -39,7 +43,6 @@ class CollectorApiClient
     private static $DEFAULT_MAX_EXECUTION_TIME = 30;
 
     /**
-     * @param PsAccounts $psAccounts
      * @param string $collectorApiUrl
      * @param \Ps_eventbus $module
      * @param PsAccountsAdapterService $psAccountsAdapterService

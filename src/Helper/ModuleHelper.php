@@ -140,7 +140,7 @@ class ModuleHelper
             return '';
         }
 
-        /** @var \Router $router * */
+        /** @var Router $router * */
         $router = $this->module->get('router');
 
         if ($moduleName === 'ps_mbo') {

@@ -7,7 +7,7 @@ use PrestaShop\Module\PsEventbus\Service\SpecificPriceService;
 class CustomPriceDecorator
 {
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
     /**
