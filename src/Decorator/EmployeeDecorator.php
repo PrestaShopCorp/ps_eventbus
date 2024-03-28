@@ -42,7 +42,7 @@ class EmployeeDecorator
         $employee['has_enabled_gravatar'] = (bool) $employee['has_enabled_gravatar'];
 
         $employee['last_connection_date'] = (string) $employee['last_connection_date'];
-        
+
         $employee['id_shop'] = (int) $employee['id_shop'];
     }
 
