@@ -32,7 +32,7 @@ class CustomPriceDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     public function getFormattedData($offset, $limit, $langIso)
     {
@@ -55,7 +55,7 @@ class CustomPriceDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return int
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     public function getRemainingObjectsCount($offset, $langIso)
     {
@@ -69,7 +69,7 @@ class CustomPriceDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
@@ -97,7 +97,7 @@ class CustomPriceDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $langIso)
     {

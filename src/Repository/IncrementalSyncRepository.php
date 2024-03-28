@@ -26,9 +26,9 @@ class IncrementalSyncRepository
      */
     private $shopId;
 
-    public function __construct(\Db $db, \Context $context, ErrorHandlerInterface $errorHandler)
+    public function __construct(\Context $context, ErrorHandlerInterface $errorHandler)
     {
-        $this->db = $db;
+        $this->db = \Db::getInstance();
         $this->context = $context;
         $this->errorHandler = $errorHandler;
 
@@ -62,7 +62,7 @@ class IncrementalSyncRepository
                 ],
                 false,
                 true,
-                \Db::ON_DUPLICATE_KEY
+                \PrestaShop\PrestaShop\Adapter\Entity\Db::ON_DUPLICATE_KEY
             );
         } catch (\PrestaShopDatabaseException $e) {
             $this->errorHandler->handle(

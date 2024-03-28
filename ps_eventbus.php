@@ -25,6 +25,7 @@
  */
 
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer;
 use PrestaShopBundle\EventListener\ActionDispatcherLegacyHooksSubscriber;
 
 if (!defined('_PS_VERSION_')) {
@@ -193,13 +194,13 @@ class Ps_eventbus extends Module
 
         require_once __DIR__ . '/vendor/autoload.php';
 
-        $this->serviceContainer = new \PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer(
+        $this->serviceContainer = new ServiceContainer(
             (string) $this->name,
             $this->getLocalPath()
         );
 
         if ($this->context->shop === null) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         $this->shopId = (int) $this->context->shop->id;
@@ -234,10 +235,9 @@ class Ps_eventbus extends Module
             return defined('PS_INSTALLATION_IN_PROGRESS');
         }
 
-        $installer = new PrestaShop\Module\PsEventbus\Module\Install($this, Db::getInstance());
+        $installer = new PrestaShop\Module\PsEventbus\Module\Install($this, \Db::getInstance());
 
-        return $installer->installInMenu()
-            && $installer->installDatabaseTables()
+        return $installer->installDatabaseTables()
             && parent::install()
             && $this->registerHook($this->hookToInstall);
     }
@@ -247,7 +247,7 @@ class Ps_eventbus extends Module
      */
     public function uninstall()
     {
-        $uninstaller = new PrestaShop\Module\PsEventbus\Module\Uninstall($this, Db::getInstance());
+        $uninstaller = new PrestaShop\Module\PsEventbus\Module\Uninstall($this, \Db::getInstance());
 
         return $uninstaller->uninstallMenu()
             && $uninstaller->uninstallDatabaseTables()

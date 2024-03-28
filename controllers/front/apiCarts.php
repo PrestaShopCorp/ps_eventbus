@@ -11,7 +11,7 @@ class ps_EventbusApiCartsModuleFrontController extends AbstractApiController
     /**
      * @return void
      *
-     * @throws PrestaShopException
+     * @throws\PrestaShopException
      */
     public function postProcess()
     {

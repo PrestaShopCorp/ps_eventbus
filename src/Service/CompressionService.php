@@ -23,7 +23,7 @@ class CompressionService
      *
      * @return string
      *
-     * @throws \Exception
+     * @@throws \Exception
      */
     public function gzipCompressData($data)
     {

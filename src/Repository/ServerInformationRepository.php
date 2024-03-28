@@ -2,11 +2,10 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsAccounts\Api\Client\AccountsClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
-use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
+use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 
 class ServerInformationRepository
 {
@@ -35,9 +34,9 @@ class ServerInformationRepository
      */
     private $shopRepository;
     /**
-     * @var PsAccountsService
+     * @var PsAccountsAdapterService
      */
-    private $psAccountsService;
+    private $psAccountsAdapterService;
     /**
      * @var array
      */
@@ -49,12 +48,11 @@ class ServerInformationRepository
 
     public function __construct(
         \Context $context,
-        \Db $db,
+        PsAccountsAdapterService $psAccountsAdapterService,
         CurrencyRepository $currencyRepository,
         LanguageRepository $languageRepository,
         ConfigurationRepository $configurationRepository,
         ShopRepository $shopRepository,
-        PsAccounts $psAccounts,
         ErrorHandlerInterface $errorHandler,
         array $configuration
     ) {
@@ -63,8 +61,8 @@ class ServerInformationRepository
         $this->configurationRepository = $configurationRepository;
         $this->shopRepository = $shopRepository;
         $this->context = $context;
-        $this->db = $db;
-        $this->psAccountsService = $psAccounts->getPsAccountsService();
+        $this->db = \Db::getInstance();
+        $this->psAccountsAdapterService = $psAccountsAdapterService;
         $this->configuration = $configuration;
         $this->errorHandler = $errorHandler;
     }
@@ -135,7 +133,7 @@ class ServerInformationRepository
         $allTablesInstalled = true;
 
         try {
-            $token = $this->psAccountsService->getOrRefreshToken();
+            $token = $this->psAccountsAdapterService->getOrRefreshToken();
 
             if (!$token) {
                 $tokenIsSet = false;

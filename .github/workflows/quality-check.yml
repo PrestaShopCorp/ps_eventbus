@@ -69,7 +69,7 @@ jobs:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
       - name: PHPStan PrestaShop ${{ matrix.ps_version }}
-        run: PS_VERSION="${{ matrix.ps_version }}" make phpstan
+        run: PS_VERSION="${{ matrix.ps_version }}" make docker-phpstan
 
   phpunit:
     name: PHP Unit

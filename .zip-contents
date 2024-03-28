@@ -9,3 +9,5 @@ logo.png
 config.xml
 LICENCE
 README.md
+composer.json
+composer.lock

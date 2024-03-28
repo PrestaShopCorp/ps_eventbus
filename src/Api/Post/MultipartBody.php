@@ -29,7 +29,7 @@ class MultipartBody implements StreamInterface
      * @param array $files Associative array of PostFileInterface objects
      * @param string $boundary You can optionally provide a specific boundary
      *
-     * @throws \InvalidArgumentException
+     * @@throws \InvalidArgumentException
      */
     public function __construct(
         array $fields = [],

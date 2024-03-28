@@ -51,7 +51,7 @@ class CarrierDataProvider implements ProviderPaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     public function getFormattedData($offset, $limit, $langIso)
     {
@@ -110,7 +110,7 @@ class CarrierDataProvider implements ProviderPaginatedApiDataProviderInterface
      *
      * @return int
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     public function getRemainingObjectsCount($offset, $langIso)
     {
@@ -126,7 +126,7 @@ class CarrierDataProvider implements ProviderPaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $langIso)
     {

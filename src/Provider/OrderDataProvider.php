@@ -70,7 +70,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     public function getFormattedData($offset, $limit, $langIso)
     {
@@ -115,7 +115,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
@@ -150,7 +150,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $langIso)
     {
@@ -162,7 +162,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     private function getOrderDetails(array $orders)
     {
@@ -197,7 +197,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return array|array[]
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     private function getOrderStatuses(array $orders, $langId)
     {
@@ -222,7 +222,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return array|array[]
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     private function getOrderCartRules(array $orders)
     {
@@ -248,7 +248,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return void
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     private function castOrderValues(array &$orders, int $langId)
     {
@@ -278,7 +278,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return bool
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     private function castIsPaidValue(array $orders, array $order, int $langId)
     {

@@ -9,9 +9,9 @@ class CurrencyRepository
      */
     private $db;
 
-    public function __construct(\Db $db)
+    public function __construct()
     {
-        $this->db = $db;
+        $this->db = \Db::getInstance();
     }
 
     /**
@@ -41,7 +41,7 @@ class CurrencyRepository
     {
         $currency = \Currency::getDefaultCurrency();
 
-        return $currency instanceof \Currency ? $currency->iso_code : '';
+        return $currency instanceof \PrestaShop\PrestaShop\Adapter\Entity\Currency ? $currency->iso_code : '';
     }
 
     /**

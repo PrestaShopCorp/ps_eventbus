@@ -16,6 +16,7 @@ composer.phar
 .php_cs
 install.lock
 composer-setup.php
+php-scoper.phar
 
 # Mac OS
 .DS_Store

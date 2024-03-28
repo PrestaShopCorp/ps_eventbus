@@ -48,7 +48,7 @@ class PsEventbusResolverController extends FrameworkBundleAdminController
      *
      * @return Response
      *
-     * @throws \Exception
+     * @@throws \Exception
      */
     public function resolve(Request $request, string $query)
     {

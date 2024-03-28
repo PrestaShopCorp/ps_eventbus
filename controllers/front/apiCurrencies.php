@@ -11,7 +11,7 @@ class ps_EventbusApiCurrenciesModuleFrontController extends AbstractApiControlle
     /**
      * @return void
      *
-     * @throws PrestaShopException
+     * @throws\PrestaShopException
      */
     public function postProcess()
     {
