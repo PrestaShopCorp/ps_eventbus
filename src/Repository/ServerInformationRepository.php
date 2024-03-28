@@ -174,7 +174,7 @@ class ServerInformationRepository
         return [
             'prestashop_version' => _PS_VERSION_,
             'ps_eventbus_version' => \Ps_eventbus::VERSION,
-            'ps_accounts_version' => defined('Ps_accounts::VERSION') ? Ps_accounts::VERSION : false, /* @phpstan-ignore-line */
+            'ps_accounts_version' => defined('Ps_accounts::VERSION') ? \Ps_accounts::VERSION : false, /* @phpstan-ignore-line */
             'php_version' => $phpVersion,
             'ps_account' => $tokenIsSet,
             'is_valid_jwt' => $tokenValid,

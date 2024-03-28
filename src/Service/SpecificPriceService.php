@@ -285,7 +285,7 @@ class SpecificPriceService
         $address->id_state = $id_state;
         $address->postcode = $zipcode;
 
-        $tax_manager = \TaxManagerFactory::getManager($address, \PrestaShop\PrestaShop\Adapter\Entity\Product::getIdTaxRulesGroupByIdProduct((int) $id_product, $context));
+        $tax_manager = \TaxManagerFactory::getManager($address, \Product::getIdTaxRulesGroupByIdProduct((int) $id_product, $context));
         $product_tax_calculator = $tax_manager->getTaxCalculator();
 
         // Add Tax
