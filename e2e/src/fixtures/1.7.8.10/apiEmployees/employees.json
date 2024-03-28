@@ -19,7 +19,7 @@
       "id_last_customer": 0,
       "last_connection_date": null,
       "has_enabled_gravatar": false,
-      "id_shop": "1",
+      "id_shop": 1,
       "email_hash": "d6368bdac9599988fe4f9d878fc339eee894a71ddd2992c143264252bfb5ad2b"
     }
   }
