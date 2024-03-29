@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Controller;
 
-use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
@@ -14,10 +13,8 @@ use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService;
 use PrestaShop\Module\PsEventbus\Service\ProxyService;
+use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
-use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleNotInstalledException;
-use PrestaShop\PsAccountsInstaller\Installer\Exception\ModuleVersionException;
-use PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts;
 
 const MYSQL_DATE_FORMAT = 'Y-m-d H:i:s';
 
@@ -52,9 +49,9 @@ abstract class AbstractApiController extends \ModuleFrontController
      */
     private $languageRepository;
     /**
-     * @var PsAccountsService
+     * @var PsAccountsAdapterService
      */
-    private $psAccountsService;
+    private $psAccountsAdapterService;
     /**
      * @var IncrementalSyncRepository
      */
@@ -87,11 +84,11 @@ abstract class AbstractApiController extends \ModuleFrontController
 
         $this->errorHandler = $this->module->getService(ErrorHandler::class);
         try {
-            $this->psAccountsService = $this->module->getService(PsAccounts::class)->getPsAccountsService();
+            $this->psAccountsAdapterService = $this->module->getService(PsAccountsAdapterService::class);
             $this->proxyService = $this->module->getService(ProxyService::class);
             $this->authorizationService = $this->module->getService(ApiAuthorizationService::class);
             $this->synchronizationService = $this->module->getService(SynchronizationService::class);
-        } catch (ModuleVersionException $exception) {
+        } catch (\Exception $exception) {
             $this->errorHandler->handle($exception);
             $this->exitWithExceptionMessage($exception);
         }
@@ -141,7 +138,7 @@ abstract class AbstractApiController extends \ModuleFrontController
         }
 
         try {
-            $token = $this->psAccountsService->getOrRefreshToken();
+            $token = $this->psAccountsAdapterService->getOrRefreshToken();
         } catch (\Exception $exception) {
             throw new FirebaseException($exception->getMessage());
         }
@@ -309,10 +306,6 @@ abstract class AbstractApiController extends \ModuleFrontController
             $code = Config::REFRESH_TOKEN_ERROR_CODE;
         } elseif ($exception instanceof QueryParamsException) {
             $code = Config::INVALID_URL_QUERY;
-        } elseif ($exception instanceof ModuleVersionException) {
-            $code = Config::INVALID_PS_ACCOUNTS_VERSION;
-        } elseif ($exception instanceof ModuleNotInstalledException) {
-            $code = Config::PS_ACCOUNTS_NOT_INSTALLED;
         }
 
         $response = [

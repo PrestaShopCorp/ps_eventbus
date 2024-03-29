@@ -2,29 +2,25 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use PrestaShop\AccountsAuth\Service\PsAccountsService;
 use PrestaShop\Module\PsEventbus\Helper\ModuleHelper;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 
 class PresenterService
 {
     /**
-     * @var PsAccountsService|null
+     * @var PsAccountsAdapterService
      */
-    private $psAccountsService;
+    private $psAccountsAdapterService;
 
-    public function __construct()
+    public function __construct(PsAccountsAdapterService $psAccountsAdapterService)
     {
-        $moduleManager = ModuleManagerBuilder::getInstance();
-        if (!$moduleManager) {
+        $moduleManagerBuilder = ModuleManagerBuilder::getInstance();
+        if (!$moduleManagerBuilder) {
             return;
         }
-        $moduleManager = $moduleManager->build();
+        $moduleManager = $moduleManagerBuilder->build();
         if ($moduleManager->isInstalled('ps_accounts')) {
-            $accountsModule = \Module::getInstanceByName('ps_accounts');
-            /* @phpstan-ignore-next-line */
-            $accountService = $accountsModule->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
-            $this->psAccountsService = $accountService;
+            $this->psAccountsAdapterService = $psAccountsAdapterService;
         } else {
             $this->initPsAccount();
         }
@@ -35,11 +31,13 @@ class PresenterService
      */
     public function initPsAccount()
     {
-        $moduleManager = ModuleManagerBuilder::getInstance();
-        if (!$moduleManager) {
+        $moduleManagerBuilder = ModuleManagerBuilder::getInstance();
+
+        if (!$moduleManagerBuilder) {
             return;
         }
-        $moduleManager = $moduleManager->build();
+
+        $moduleManager = $moduleManagerBuilder->build();
 
         if (!$moduleManager->isInstalled('ps_accounts')) {
             $moduleManager->install('ps_accounts');
@@ -91,7 +89,7 @@ class PresenterService
         if (!in_array('info', $requiredConsents)) {
             array_unshift($requiredConsents, 'info');
         }
-        if ($this->psAccountsService == null) {
+        if ($this->psAccountsAdapterService == null) {
             return [];
         } else {
             $language = \Context::getContext()->language;
@@ -101,7 +99,7 @@ class PresenterService
             }
 
             return [
-                'jwt' => $this->psAccountsService->getOrRefreshToken(),
+                'jwt' => $this->psAccountsAdapterService->getOrRefreshToken(),
                 'requiredConsents' => $requiredConsents,
                 'optionalConsents' => $optionalConsents,
                 'module' => array_merge([
@@ -109,7 +107,7 @@ class PresenterService
                 ], $this->convertObjectToArray($module)),
                 'shop' => [
                     /* @phpstan-ignore-next-line */
-                    'id' => $this->psAccountsService->getShopUuid(),
+                    'id' => $this->psAccountsAdapterService->getShopUuid(),
                     'name' => \Configuration::get('PS_SHOP_NAME'),
                     'url' => \Tools::getHttpHost(true),
                     'lang' => $language->iso_code,

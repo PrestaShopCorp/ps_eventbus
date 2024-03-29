@@ -18,9 +18,9 @@ class DeletedObjectsRepository
      */
     private $errorHandler;
 
-    public function __construct(\Db $db, ErrorHandlerInterface $errorHandler)
+    public function __construct(ErrorHandlerInterface $errorHandler)
     {
-        $this->db = $db;
+        $this->db = \Db::getInstance();
         $this->errorHandler = $errorHandler;
     }
 

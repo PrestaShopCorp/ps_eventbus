@@ -41,40 +41,6 @@ class Install
     }
 
     /**
-     * installInMenu.
-     *
-     * @return bool
-     */
-    public function installInMenu()
-    {
-        foreach ($this->module->adminControllers as $controllerName) {
-            $tabId = (int) \Tab::getIdFromClassName($controllerName);
-
-            if (!$tabId) {
-                $tabId = null;
-            }
-
-            $tab = new \Tab($tabId);
-            $tab->active = (bool) self::TAB_ACTIVE;
-            $tab->class_name = $controllerName;
-            $tab->name = [];
-
-            foreach (\Language::getLanguages(true) as $lang) {
-                if (is_array($lang)) {
-                    $tab->name[$lang['id_lang']] = $this->module->displayName;
-                }
-            }
-
-            $tab->id_parent = (int) \Tab::getIdFromClassName((string) self::PARENT_TAB_NAME);
-            $tab->module = $this->module->name;
-
-            $tab->save();
-        }
-
-        return true;
-    }
-
-    /**
      * Installs database tables
      *
      * @return bool

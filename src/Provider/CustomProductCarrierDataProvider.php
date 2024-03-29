@@ -25,7 +25,7 @@ class CustomProductCarrierDataProvider implements PaginatedApiDataProviderInterf
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     public function getFormattedData($offset, $limit, $langIso)
     {
@@ -76,7 +76,7 @@ class CustomProductCarrierDataProvider implements PaginatedApiDataProviderInterf
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     public function getQueryForDebug($offset, $limit, $langIso)
     {
