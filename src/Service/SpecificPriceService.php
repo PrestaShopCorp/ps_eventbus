@@ -3,7 +3,6 @@
 namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository;
-use PrestaShop\PrestaShop\Adapter\Entity\Context;
 
 class SpecificPriceService
 {

@@ -62,7 +62,7 @@ class IncrementalSyncRepository
                 ],
                 false,
                 true,
-                \PrestaShop\PrestaShop\Adapter\Entity\Db::ON_DUPLICATE_KEY
+                \Db::ON_DUPLICATE_KEY
             );
         } catch (\PrestaShopDatabaseException $e) {
             $this->errorHandler->handle(

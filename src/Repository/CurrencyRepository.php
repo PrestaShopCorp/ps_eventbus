@@ -41,7 +41,7 @@ class CurrencyRepository
     {
         $currency = \Currency::getDefaultCurrency();
 
-        return $currency instanceof \PrestaShop\PrestaShop\Adapter\Entity\Currency ? $currency->iso_code : '';
+        return $currency instanceof \Currency ? $currency->iso_code : '';
     }
 
     /**
