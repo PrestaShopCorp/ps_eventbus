@@ -33,7 +33,7 @@ class DeletedObjectsService
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException|EnvVarException
+     * @@throws \PrestaShopDatabaseException|EnvVarException
      */
     public function handleDeletedObjectsSync($jobId, $scriptStartTime)
     {

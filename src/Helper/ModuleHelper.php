@@ -2,16 +2,33 @@
 
 namespace PrestaShop\Module\PsEventbus\Helper;
 
+use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
+use PrestaShop\PrestaShop\Core\Module\ModuleManager;
 use PrestaShopBundle\Service\Routing\Router;
 
 class ModuleHelper
 {
-    /** @var \Ps_eventbus */
+    /**
+     * @var \Ps_eventbus
+     */
     private $module;
+
+    /**
+     * @var ModuleManager
+     */
+    private $moduleManager;
 
     public function __construct(\Ps_eventbus $module)
     {
         $this->module = $module;
+
+        $moduleManagerBuilder = ModuleManagerBuilder::getInstance();
+
+        if (is_null($moduleManagerBuilder)) {
+            return;
+        }
+
+        $this->moduleManager = $moduleManagerBuilder->build();
     }
 
     /**
@@ -23,7 +40,7 @@ class ModuleHelper
      */
     public function isInstalled(string $moduleName)
     {
-        return \ModuleCore::isInstalled($moduleName);
+        return $this->moduleManager->isInstalled($moduleName);
     }
 
     /**
@@ -35,7 +52,17 @@ class ModuleHelper
      */
     public function isEnabled(string $moduleName)
     {
-        return \ModuleCore::isEnabled($moduleName);
+        return $this->moduleManager->isEnabled($moduleName);
+    }
+
+    /**
+     * @param string $moduleName
+     *
+     * @return bool
+     */
+    public function isInstalledAndActive(string $moduleName)
+    {
+        return $this->isInstalled($moduleName) && $this->isEnabled($moduleName);
     }
 
     /**
@@ -91,7 +118,7 @@ class ModuleHelper
             return '';
         }
 
-        $module = \Module::getInstanceByName($moduleName);
+        $module = $this->getInstanceByName($moduleName);
 
         if (false === $module) {
             return '';

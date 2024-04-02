@@ -7,12 +7,8 @@ services:
   ps_eventbus.service.presenter:
     class: 'PrestaShop\Module\PsEventbus\Service\PresenterService'
     public: true
-
-  ps_eventbus.helper.module:
-    class: 'PrestaShop\Module\PsEventbus\Helper\ModuleHelper'
     arguments:
-      - "@ps_eventbus"
-    public: true
+      - '@PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService'
   
   ps_eventbus.module.upgrade:
     class: 'PrestaShop\Module\PsEventbus\Module\Upgrade'

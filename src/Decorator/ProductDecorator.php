@@ -70,7 +70,7 @@ class ProductDecorator
      *
      * @return void
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     public function decorateProducts(array &$products, $langIso, $langId)
     {
@@ -273,7 +273,7 @@ class ProductDecorator
      *
      * @return void
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     private function addFeatureValues(array &$products, $langId)
     {
@@ -291,7 +291,7 @@ class ProductDecorator
      *
      * @return void
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     private function addAttributeValues(array &$products, $langId)
     {
@@ -308,7 +308,7 @@ class ProductDecorator
      *
      * @return void
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     private function addImages(array &$products)
     {

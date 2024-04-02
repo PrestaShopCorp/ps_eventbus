@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use Context;
 use PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository;
 
 class SpecificPriceService
@@ -30,9 +29,9 @@ class SpecificPriceService
      *
      * @return float|int|void
      *
-     * @throws \PrestaShopException
+     * @@throws \PrestaShopException
      */
-    public function getSpecificProductPrice($productId, $attributeId, $specificPriceId, $useTax, $usereduc, $context)
+    public function getSpecificProductPrice(int $productId, int $attributeId, int $specificPriceId, bool $useTax, bool $usereduc, $context)
     {
         return $this->getPriceStatic($productId, $attributeId, $specificPriceId, $useTax, $usereduc, $context);
     }
@@ -55,7 +54,7 @@ class SpecificPriceService
      *
      * @return float|int|void
      *
-     * @throws \PrestaShopException
+     * @@throws \PrestaShopException
      */
     private function getPriceStatic(
         $id_product,
@@ -160,7 +159,7 @@ class SpecificPriceService
      *
      * @return float|int|void
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     private function priceCalculation(
         $id_shop,

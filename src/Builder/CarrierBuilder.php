@@ -60,8 +60,8 @@ class CarrierBuilder
      *
      * @return array
      *
-     * @throws \PrestaShopDatabaseException
-     * @throws \PrestaShopException
+     * @@throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopException
      */
     public function buildCarriers(array $carriers, int $langId, \Currency $currency, $weightUnit)
     {
@@ -92,8 +92,8 @@ class CarrierBuilder
      *
      * @return EventBusCarrier
      *
-     * @throws \PrestaShopDatabaseException
-     * @throws \PrestaShopException
+     * @@throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopException
      */
     public function buildCarrier(\Carrier $carrier, $currencyIsoCode, $weightUnit)
     {
@@ -169,7 +169,7 @@ class CarrierBuilder
      *
      * @return false|CarrierDetail
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     private function buildCarrierDetails(\Carrier $carrier, $range, array $zone)
     {
@@ -206,7 +206,7 @@ class CarrierBuilder
      *
      * @return CarrierTax|null
      *
-     * @throws \PrestaShopDatabaseException
+     * @@throws \PrestaShopDatabaseException
      */
     private function buildCarrierTaxes(\Carrier $carrier, $zoneId, $rangeId)
     {

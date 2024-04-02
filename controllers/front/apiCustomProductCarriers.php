@@ -11,7 +11,7 @@ class ps_EventbusApiCustomProductCarriersModuleFrontController extends AbstractA
     /**
      * @return void
      *
-     * @throws PrestaShopException
+     * @throws\PrestaShopException
      */
     public function postProcess()
     {
