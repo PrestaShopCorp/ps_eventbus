@@ -11,6 +11,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+
       - name: Bundle the production zip
         run: make zip-prod
         env:
@@ -52,7 +57,7 @@ jobs:
     name: Publish the module to the addons marketplace
     runs-on: ubuntu-latest
     needs: upload_release_asset_production
-    if: "!github.event.release.prerelease"
+    if: "!github.event.release.prerelease" # TODO: add a protection over the tag: if it contains a "-" omit this part.
     steps:
       - name: Checkout
         uses: actions/checkout@v4
