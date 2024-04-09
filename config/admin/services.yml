@@ -13,10 +13,3 @@ services:
     arguments:
       - "@ps_eventbus"
     public: true
-
-  PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService:
-    class: 'PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService'
-    public: true
-    arguments: 
-      - '@ps_eventbus.helper.module'
-
