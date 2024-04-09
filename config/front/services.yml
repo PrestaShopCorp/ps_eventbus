@@ -70,5 +70,9 @@ services:
   PrestaShop\Module\PsEventbus\Service\PresenterService:
     class: PrestaShop\Module\PsEventbus\Service\PresenterService
     public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService'
+
+  PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService:
+    class: 'PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService'
+    public: true
+    arguments: 
+      - '@ps_eventbus.helper.module'

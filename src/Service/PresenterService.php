@@ -12,7 +12,7 @@ class PresenterService
      */
     private $psAccountsAdapterService;
 
-    public function __construct(PsAccountsAdapterService $psAccountsAdapterService)
+    public function __construct()
     {
         $moduleManagerBuilder = ModuleManagerBuilder::getInstance();
         if (!$moduleManagerBuilder) {
@@ -20,16 +20,19 @@ class PresenterService
         }
         $moduleManager = $moduleManagerBuilder->build();
         if ($moduleManager->isInstalled('ps_accounts')) {
+            $psEventbus = \Module::getInstanceByName('ps_eventbus');
+            $psAccountsAdapterService = $psEventbus->getService('PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService');
+
             $this->psAccountsAdapterService = $psAccountsAdapterService;
         } else {
-            $this->initPsAccount();
+            $this->installPsAccount();
         }
     }
 
     /**
      * @return void
      */
-    public function initPsAccount()
+    public function installPsAccount()
     {
         $moduleManagerBuilder = ModuleManagerBuilder::getInstance();
 

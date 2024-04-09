@@ -26,6 +26,7 @@
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer;
+use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use PrestaShopBundle\EventListener\ActionDispatcherLegacyHooksSubscriber;
 
 if (!defined('_PS_VERSION_')) {
@@ -261,6 +262,28 @@ class Ps_eventbus extends Module
      */
     public function getService($serviceName)
     {
+        $splitServiceNamespace = explode('.', $serviceName);
+        $firstLevelNamespace = $splitServiceNamespace[0];
+
+        // if serviceName is not a service coming from ps_eventbus
+        if ($firstLevelNamespace !== 'ps_eventbus') {
+            // use symfony service container from prestashop
+            try {
+                $service = $this->get($serviceName);
+            } catch (\Exception $e) {
+                $container = SymfonyContainer::getInstance();
+
+                if ($container == null) {
+                    throw new \PrestaShopException('Symfony container is null or invalid');
+                }
+
+                $service = $container->get($serviceName);
+            }
+
+            return $service;
+        }
+
+        // otherwise use the service container from the module
         return $this->serviceContainer->getService($serviceName);
     }
 
@@ -1414,16 +1437,18 @@ class Ps_eventbus extends Module
                 return;
             }
 
-            $route = $parameters['route'];
+            if (array_key_exists('route', $parameters)) {
+                $route = $parameters['route'];
 
-            // when translation is edited or reset, add to incremental sync
-            if ($route == 'api_translation_value_edit' || $route == 'api_translation_value_reset') {
-                $this->insertIncrementalSyncObject(
-                    0,
-                    Config::COLLECTION_TRANSLATIONS,
-                    date(DATE_ATOM),
-                    $this->shopId
-                );
+                // when translation is edited or reset, add to incremental sync
+                if ($route == 'api_translation_value_edit' || $route == 'api_translation_value_reset') {
+                    $this->insertIncrementalSyncObject(
+                        0,
+                        Config::COLLECTION_TRANSLATIONS,
+                        date(DATE_ATOM),
+                        $this->shopId
+                    );
+                }
             }
         } catch (\Exception $e) {
             return;
