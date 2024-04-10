@@ -269,7 +269,8 @@ class Ps_eventbus extends Module
         if ($firstLevelNamespace !== 'ps_eventbus') {
             // use symfony service container from prestashop
             try {
-                $service = $this->get($serviceName);
+                $service = $this->serviceContainer->getService($serviceName);
+
             } catch (\Exception $e) {
                 $container = SymfonyContainer::getInstance();
 
