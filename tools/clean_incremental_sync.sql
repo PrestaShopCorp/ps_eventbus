@@ -8,7 +8,7 @@ FROM information_schema.tables
 WHERE table_schema = @db_name
 AND table_name LIKE '%_eventbus_incremental_sync');
 
--- Supprime les entrées avec plus de 100 000 entrée de ce type
+-- Supprime les entrées avec plus de X entrée de ce type (paramétré au dessus via la variable @quantity_needed)
 SET @delete_query = CONCAT('
 	DELETE FROM ', @table_with_prefix, '
 	WHERE type IN (
