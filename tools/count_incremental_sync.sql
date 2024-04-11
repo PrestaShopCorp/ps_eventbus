@@ -14,7 +14,7 @@ SET @get_content_with_extra_counts = CONCAT('
 	COUNT(*) as incr_type_count
 	FROM ', @table_with_prefix, '
 	GROUP BY type
-	HAVING COUNT(*) >', @quantity_needed, '
+	HAVING COUNT(*) > ', @quantity_needed, '
 ');
 
 -- Exécuter la requête dynamique directement

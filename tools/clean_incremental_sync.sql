@@ -17,7 +17,7 @@ SET @delete_query = CONCAT('
 			SELECT type, COUNT(*) as incr_type_count
         	FROM ', @table_with_prefix, '
         	GROUP BY type
-        	HAVING COUNT(*) >', @quantity_needed, '
+        	HAVING COUNT(*) > ', @quantity_needed, '
    	 	) AS subquery
 	);
 ');
