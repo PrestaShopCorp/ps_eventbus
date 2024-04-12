@@ -1550,6 +1550,8 @@ class Ps_eventbus extends Module
      */
     private function insertIncrementalSyncObject($objectId, $type, $date, $shopId, $hasMultiLang = false)
     {
+
+
         if ((int) $objectId === 0) {
             return;
         }
@@ -1563,6 +1565,34 @@ class Ps_eventbus extends Module
         $languageRepository = $this->getService(
             \PrestaShop\Module\PsEventbus\Repository\LanguageRepository::class
         );
+
+        /** @var \PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository $eventbusSyncRepository */
+        $eventbusSyncRepository = $this->getService(
+            \PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository::class
+        );
+
+        /**
+         * randomly check if outbox for this shop-content contain more of 100k entries.
+         * When random number == 10, we count number of entry exist in database for this specific shop content
+         * If count > 100 000, we removed all entry corresponding to this shop content, and we enable full sync for this
+         */
+        if (rand(1, 20) == 10) {
+            $count = $incrementalSyncRepository->getIncrementalSyncObjectCountByType($type);
+
+            if ($count > 100000) {
+                $hasDeleted = $incrementalSyncRepository->removeIncrementaSyncObjectByType($type);
+
+                if ($hasDeleted) {
+                    $eventbusSyncRepository->updateTypeSync(
+                        $type,
+                        0,
+                        $date,
+                        false,
+                        $languageRepository->getDefaultLanguageIsoCode()
+                    );
+                }
+            }
+        }
 
         if ($hasMultiLang) {
             $languagesIsoCodes = $languageRepository->getLanguagesIsoCodes();
