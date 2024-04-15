@@ -17,7 +17,7 @@ AND table_name LIKE '%_eventbus_type_sync');
 -- enable full-sync for selected shop content
 SET @enable_full_sync = CONCAT('
 	UPDATE ', @eventbus_type_sync_table, '
-	SET `offset` = 0
+	SET `offset` = 0, full_sync_finished = 0
 	WHERE type IN (
 		SELECT type
 		FROM (
