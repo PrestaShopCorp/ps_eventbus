@@ -3,7 +3,6 @@
 namespace PrestaShop\Module\PsEventbus\Repository;
 
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
-use PrestaShopException;
 use PrestaShopDatabaseException;
 
 class IncrementalSyncRepository

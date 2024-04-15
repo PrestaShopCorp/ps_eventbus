@@ -25,6 +25,10 @@
  */
 
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
+use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
+use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
+use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer;
 use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use PrestaShopBundle\EventListener\ActionDispatcherLegacyHooksSubscriber;
@@ -1550,35 +1554,26 @@ class Ps_eventbus extends Module
      */
     private function insertIncrementalSyncObject($objectId, $type, $date, $shopId, $hasMultiLang = false)
     {
-
-
         if ((int) $objectId === 0) {
             return;
         }
 
-        /** @var \PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository $incrementalSyncRepository */
-        $incrementalSyncRepository = $this->getService(
-            \PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository::class
-        );
+        /** @var IncrementalSyncRepository $incrementalSyncRepository */
+        $incrementalSyncRepository = $this->getService(IncrementalSyncRepository::class);
 
-        /** @var \PrestaShop\Module\PsEventbus\Repository\LanguageRepository $languageRepository */
-        $languageRepository = $this->getService(
-            \PrestaShop\Module\PsEventbus\Repository\LanguageRepository::class
-        );
+        /** @var LanguageRepository $languageRepository */
+        $languageRepository = $this->getService(LanguageRepository::class);
 
-        /** @var \PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository $eventbusSyncRepository */
-        $eventbusSyncRepository = $this->getService(
-            \PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository::class
-        );
+        /** @var EventbusSyncRepository $eventbusSyncRepository */
+        $eventbusSyncRepository = $this->getService(EventbusSyncRepository::class);
 
         /**
          * randomly check if outbox for this shop-content contain more of 100k entries.
          * When random number == 10, we count number of entry exist in database for this specific shop content
          * If count > 100 000, we removed all entry corresponding to this shop content, and we enable full sync for this
          */
-        if (rand(1, 20) == 10) {
+        if (mt_rand(0, 20) == 10) {
             $count = $incrementalSyncRepository->getIncrementalSyncObjectCountByType($type);
-
             if ($count > 100000) {
                 $hasDeleted = $incrementalSyncRepository->removeIncrementaSyncObjectByType($type);
 
@@ -1592,6 +1587,8 @@ class Ps_eventbus extends Module
                     );
                 }
             }
+
+            return;
         }
 
         if ($hasMultiLang) {
@@ -1621,14 +1618,14 @@ class Ps_eventbus extends Module
             return;
         }
 
-        /** @var \PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository $deletedObjectsRepository */
+        /** @var DeletedObjectsRepository $deletedObjectsRepository */
         $deletedObjectsRepository = $this->getService(
-            \PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository::class
+            DeletedObjectsRepository::class
         );
 
-        /** @var \PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository $incrementalSyncRepository */
+        /** @var IncrementalSyncRepository $incrementalSyncRepository */
         $incrementalSyncRepository = $this->getService(
-            \PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository::class
+            IncrementalSyncRepository::class
         );
 
         $deletedObjectsRepository->insertDeletedObject($objectId, $type, $date, $shopId);
