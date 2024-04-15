@@ -15,5 +15,5 @@ file_put_contents($static_loader_path, $static_loader);
 $files_loader_path = $scoper_path . '/autoload_files.php';
 echo "Fixing $files_loader_path \n";
 $files_loader = file_get_contents($files_loader_path);
-$files_loader = \preg_replace('/\'(.*?)\' => (.*?),/', '\'PsAccounts$1\' => $2,', $files_loader);
+$files_loader = \preg_replace('/\'(.*?)\' => (.*?),/', '\'PsEventbus$1\' => $2,', $files_loader);
 file_put_contents($files_loader_path, $files_loader);
