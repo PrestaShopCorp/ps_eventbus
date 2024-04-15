@@ -25,6 +25,7 @@
  */
 
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer;
 use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use PrestaShopBundle\EventListener\ActionDispatcherLegacyHooksSubscriber;
@@ -1538,6 +1539,9 @@ class Ps_eventbus extends Module
      */
     private function sendLiveSync(string $shopContent, int $shopContentId, string $action)
     {
+        if ($this->isFullSyncDone($shopContent)) {
+            return;
+        }
     }
 
     /**
@@ -1569,10 +1573,18 @@ class Ps_eventbus extends Module
             $languagesIsoCodes = $languageRepository->getLanguagesIsoCodes();
 
             foreach ($languagesIsoCodes as $languagesIsoCode) {
+                if ($this->isFullSyncDone($type, $languagesIsoCode)) {
+                    return;
+                }
+                
                 $incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
             }
         } else {
             $languagesIsoCode = $languageRepository->getDefaultLanguageIsoCode();
+
+            if ($this->isFullSyncDone($type, $languagesIsoCode)) {
+                return;
+            }
 
             $incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
         }
@@ -1614,5 +1626,20 @@ class Ps_eventbus extends Module
     private function isPhpVersionCompliant()
     {
         return PHP_VERSION_ID >= 70100;
+    }
+
+    /**
+     * Return true if full sync is done for this shop content
+     * 
+     * @param string $shopContent 
+     * @param string|null $langIso
+     * @return bool 
+     */
+    private function isFullSyncDone($shopContent, $langIso = null)
+    {
+        /** @var EventbusSyncRepository $eventbusSyncRepository */
+        $eventbusSyncRepository = $this->getService(EventbusSyncRepository::class);
+
+        return boolval($eventbusSyncRepository->isFullSyncDoneForThisTypeSync($shopContent, $langIso));
     }
 }

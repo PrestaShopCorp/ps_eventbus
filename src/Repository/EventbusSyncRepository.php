@@ -3,6 +3,8 @@
 namespace PrestaShop\Module\PsEventbus\Repository;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShopException;
+use PrestaShopDatabaseException;
 
 class EventbusSyncRepository
 {
@@ -139,5 +141,23 @@ class EventbusSyncRepository
             AND lang_iso = "' . pSQL((string) $langIso) . '"
             AND id_shop = ' . $this->shopId
         );
+    }
+
+    /**
+     * @param string $type 
+     * @param string $langIso 
+     * @return bool 
+     */
+    public function isFullSyncDoneForThisTypeSync($type, $langIso = null)
+    {
+        $query = new \DbQuery();
+
+        $query->select('full_sync_finished')
+            ->from(self::TYPE_SYNC_TABLE_NAME)
+            ->where('type = "' . pSQL($type) . '"')
+            ->where('lang_iso = "' . pSQL((string) $langIso) . '"')
+            ->where('id_shop = ' . $this->shopId);
+
+        return (bool) $this->db->getRow($query);
     }
 }
