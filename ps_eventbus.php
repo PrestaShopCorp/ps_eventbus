@@ -1576,7 +1576,7 @@ class Ps_eventbus extends Module
                 if ($this->isFullSyncDone($type, $languagesIsoCode)) {
                     return;
                 }
-                
+
                 $incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
             }
         } else {
@@ -1630,10 +1630,11 @@ class Ps_eventbus extends Module
 
     /**
      * Return true if full sync is done for this shop content
-     * 
-     * @param string $shopContent 
+     *
+     * @param string $shopContent
      * @param string|null $langIso
-     * @return bool 
+     *
+     * @return bool
      */
     private function isFullSyncDone($shopContent, $langIso = null)
     {

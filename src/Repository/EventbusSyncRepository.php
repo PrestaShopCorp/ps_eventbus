@@ -3,8 +3,6 @@
 namespace PrestaShop\Module\PsEventbus\Repository;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShopException;
-use PrestaShopDatabaseException;
 
 class EventbusSyncRepository
 {
@@ -144,9 +142,10 @@ class EventbusSyncRepository
     }
 
     /**
-     * @param string $type 
-     * @param string $langIso 
-     * @return bool 
+     * @param string $type
+     * @param string $langIso
+     *
+     * @return bool
      */
     public function isFullSyncDoneForThisTypeSync($type, $langIso = null)
     {
