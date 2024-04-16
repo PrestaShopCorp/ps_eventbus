@@ -126,7 +126,7 @@ jobs:
           chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 
       - name: Install dependencies and setup e2e
-        run: pnpm install --no-optional
+        run: pnpm install --no-optional --no-frozen-lockfile
         working-directory: e2e
 
       - name: Setup e2e-env with Prestashop ${{ matrix.ps_version }}
