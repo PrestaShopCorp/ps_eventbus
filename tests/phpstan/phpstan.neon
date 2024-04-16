@@ -7,9 +7,6 @@ parameters:
     - ../../controllers
     - ../../config
     - ../../ps_eventbus.php
-  excludePaths:
-		- ../tools/*
-    - ../vendor/*
   reportUnmatchedIgnoredErrors: false
   checkMissingIterableValueType: false
   ignoreErrors:
