@@ -38,6 +38,7 @@ const specialFieldAssert: { [index: string]: (val) => void } = {
   'module_version': isString,
   'theme_version': isString,
   'php_version': isString,
+  'http_server' : isString,
 }
 
 describe('Full Sync', () => {
