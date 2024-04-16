@@ -158,6 +158,6 @@ class EventbusSyncRepository
             ->where('lang_iso = "' . pSQL((string) $langIso) . '"')
             ->where('id_shop = ' . $this->shopId);
 
-        return (bool) $this->db->getRow($query);
+        return $this->db->getRow($query);
     }
 }
