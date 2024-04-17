@@ -25,6 +25,10 @@
  */
 
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
+use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
+use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
+use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer;
 use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use PrestaShopBundle\EventListener\ActionDispatcherLegacyHooksSubscriber;
@@ -1538,6 +1542,9 @@ class Ps_eventbus extends Module
      */
     private function sendLiveSync(string $shopContent, int $shopContentId, string $action)
     {
+        if ($this->isFullSyncDone($shopContent)) {
+            return;
+        }
     }
 
     /**
@@ -1555,24 +1562,30 @@ class Ps_eventbus extends Module
             return;
         }
 
-        /** @var \PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository $incrementalSyncRepository */
-        $incrementalSyncRepository = $this->getService(
-            \PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository::class
-        );
+        /** @var IncrementalSyncRepository $incrementalSyncRepository */
+        $incrementalSyncRepository = $this->getService(IncrementalSyncRepository::class);
 
-        /** @var \PrestaShop\Module\PsEventbus\Repository\LanguageRepository $languageRepository */
-        $languageRepository = $this->getService(
-            \PrestaShop\Module\PsEventbus\Repository\LanguageRepository::class
-        );
+        /** @var LanguageRepository $languageRepository */
+        $languageRepository = $this->getService(LanguageRepository::class);
 
         if ($hasMultiLang) {
             $languagesIsoCodes = $languageRepository->getLanguagesIsoCodes();
 
             foreach ($languagesIsoCodes as $languagesIsoCode) {
+                if ($this->isFullSyncDone($type, $languagesIsoCode)) {
+                    return;
+                }
+
                 $incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
             }
         } else {
             $languagesIsoCode = $languageRepository->getDefaultLanguageIsoCode();
+
+            if ($this->isFullSyncDone($type, $languagesIsoCode)) {
+                return;
+            }
+
+
 
             $incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
         }
@@ -1592,15 +1605,11 @@ class Ps_eventbus extends Module
             return;
         }
 
-        /** @var \PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository $deletedObjectsRepository */
-        $deletedObjectsRepository = $this->getService(
-            \PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository::class
-        );
+        /** @var DeletedObjectsRepository $deletedObjectsRepository */
+        $deletedObjectsRepository = $this->getService(DeletedObjectsRepository::class);
 
-        /** @var \PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository $incrementalSyncRepository */
-        $incrementalSyncRepository = $this->getService(
-            \PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository::class
-        );
+        /** @var IncrementalSyncRepository $incrementalSyncRepository */
+        $incrementalSyncRepository = $this->getService(IncrementalSyncRepository::class);
 
         $deletedObjectsRepository->insertDeletedObject($objectId, $type, $date, $shopId);
         $incrementalSyncRepository->removeIncrementalSyncObject($type, $objectId);
@@ -1614,5 +1623,21 @@ class Ps_eventbus extends Module
     private function isPhpVersionCompliant()
     {
         return PHP_VERSION_ID >= 70100;
+    }
+
+    /**
+     * Return true if full sync is done for this shop content
+     *
+     * @param string $shopContent
+     * @param string|null $langIso
+     *
+     * @return bool
+     */
+    private function isFullSyncDone($shopContent, $langIso = null)
+    {
+        /** @var EventbusSyncRepository $eventbusSyncRepository */
+        $eventbusSyncRepository = $this->getService(EventbusSyncRepository::class);
+
+        return $eventbusSyncRepository->isFullSyncDoneForThisTypeSync($shopContent, $langIso);
     }
 }
