@@ -22,9 +22,8 @@ endef
 
 define create_module
 	$(eval TMP_DIR := $(shell mktemp -d))
-	mkdir -p ${TMP_DIR}/tmp;
-	cp -r $(shell cat .zip-contents) ${TMP_DIR}/tmp;
-	VERSION=${PACKAGE} TMP_FOLDER=${TMP_DIR}/tmp php php-scoper.phar add-prefix --output-dir=${TMP_DIR}/${MODULE_NAME} --force
+	mkdir -p ${TMP_DIR}/${MODULE_NAME};
+	cp -r $(shell cat .zip-contents) ${TMP_DIR}/${MODULE_NAME};
 	$(call replace_version,${TMP_DIR}/${MODULE_NAME},${SEM_VERSION})
 	./tools/vendor/bin/autoindex prestashop:add:index ${TMP_DIR}
 	cp $1 ${TMP_DIR}/${MODULE_NAME}/config/parameters.yml

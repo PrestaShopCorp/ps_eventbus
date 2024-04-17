@@ -76,10 +76,8 @@ return [
         '~^PrestaShop\\\\Module\\\\PsEventbus~',
         '~^PrestaShopBundle~',
         '~^PrestaShop\\\\PrestaShop~',
-        '~^PrestaShop\\\\ModuleLibServiceContainer~',
         '~^Http\\\\Client~',
         '~^Symfony~',
-        '~^GuzzleHttp~',
         '~^Psr~',
     ],
     'exclude-classes' => [
