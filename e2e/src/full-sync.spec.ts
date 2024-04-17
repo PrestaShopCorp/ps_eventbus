@@ -33,23 +33,23 @@ const isString = (val) =>
 const isNumber = (val) =>
   val ? expect(val).toBeNumber() : expect(val).toBeNull();
 const specialFieldAssert: { [index: string]: (val) => void } = {
-  created_at: isDateString,
-  updated_at: isDateString,
-  last_connection_date: isDateString,
-  folder_created_at: isDateString,
-  date_add: isDateString,
-  from: isDateString,
-  to: isDateString,
-  conversion_rate: isNumber,
-  cms_version: isString,
-  module_id: isString,
-  module_version: isString,
-  theme_version: isString,
-  php_version: isString,
-  http_server: isString,
-};
+  'created_at': isDateString,
+  'updated_at': isDateString,
+  'last_connection_date': isDateString,
+  'folder_created_at': isDateString,
+  'date_add': isDateString,
+  'from': isDateString,
+  'to': isDateString,
+  'conversion_rate': isNumber,
+  'cms_version': isString,
+  'module_id': isString,
+  'module_version': isString,
+  'theme_version': isString,
+  'php_version': isString,
+  'http_server' : isString,
+}
 
-describe("Full Sync", () => {
+describe('Full Sync', () => {
   let testIndex = 0;
 
   const controllers: Controller[] = controllerList.filter(
