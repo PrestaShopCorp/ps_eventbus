@@ -270,8 +270,9 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * This function allows you to patch bugs that can be found related to "ServiceNotFoundException". 
+     * This function allows you to patch bugs that can be found related to "ServiceNotFoundException".
      * It ensures that you have access to the SymfonyContainer, and also that you have access to FO services.
+     *
      * @param string $serviceName
      *
      * @return mixed
