@@ -151,12 +151,12 @@ class EventbusSyncRepository
     {
         $query = new \DbQuery();
 
-        $query->select('full_sync_finished')
+        $query->select('COUNT(*)')
             ->from(self::TYPE_SYNC_TABLE_NAME)
             ->where('type = "' . pSQL($type) . '"')
             ->where('lang_iso = "' . pSQL((string) $langIso) . '"')
             ->where('id_shop = ' . $this->shopId);
 
-        return $this->db->getRow($query);
+        return (bool) $this->db->getValue($query);
     }
 }

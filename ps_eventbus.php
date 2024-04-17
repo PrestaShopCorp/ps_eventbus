@@ -1641,6 +1641,6 @@ class Ps_eventbus extends Module
         /** @var EventbusSyncRepository $eventbusSyncRepository */
         $eventbusSyncRepository = $this->getService(EventbusSyncRepository::class);
 
-        return boolval($eventbusSyncRepository->isFullSyncDoneForThisTypeSync($shopContent, $langIso));
+        return $eventbusSyncRepository->isFullSyncDoneForThisTypeSync($shopContent, $langIso);
     }
 }
