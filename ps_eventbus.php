@@ -60,6 +60,16 @@ class Ps_eventbus extends Module
     ];
 
     /**
+     * @var int
+     */
+    const RANDOM_SYNC_CHECK_MAX = 20;
+
+    /**
+     * @var int
+     */
+    const INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT = 10000;
+
+    /**
      * @var string
      */
     public $version;
@@ -1572,9 +1582,9 @@ class Ps_eventbus extends Module
          * When random number == 10, we count number of entry exist in database for this specific shop content
          * If count > 100 000, we removed all entry corresponding to this shop content, and we enable full sync for this
          */
-        if (mt_rand(0, 20) == 10) {
+        if (mt_rand() % $this::RANDOM_SYNC_CHECK_MAX == 0) {
             $count = $incrementalSyncRepository->getIncrementalSyncObjectCountByType($type);
-            if ($count > 100000) {
+            if ($count > $this::INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT) {
                 $hasDeleted = $incrementalSyncRepository->removeIncrementaSyncObjectByType($type);
 
                 if ($hasDeleted) {
