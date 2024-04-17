@@ -25,7 +25,10 @@
  */
 
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
+use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
+use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer;
 use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use PrestaShopBundle\EventListener\ActionDispatcherLegacyHooksSubscriber;
@@ -1559,15 +1562,11 @@ class Ps_eventbus extends Module
             return;
         }
 
-        /** @var \PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository $incrementalSyncRepository */
-        $incrementalSyncRepository = $this->getService(
-            \PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository::class
-        );
+        /** @var IncrementalSyncRepository $incrementalSyncRepository */
+        $incrementalSyncRepository = $this->getService(IncrementalSyncRepository::class);
 
-        /** @var \PrestaShop\Module\PsEventbus\Repository\LanguageRepository $languageRepository */
-        $languageRepository = $this->getService(
-            \PrestaShop\Module\PsEventbus\Repository\LanguageRepository::class
-        );
+        /** @var LanguageRepository $languageRepository */
+        $languageRepository = $this->getService(LanguageRepository::class);
 
         if ($hasMultiLang) {
             $languagesIsoCodes = $languageRepository->getLanguagesIsoCodes();
@@ -1585,6 +1584,8 @@ class Ps_eventbus extends Module
             if ($this->isFullSyncDone($type, $languagesIsoCode)) {
                 return;
             }
+
+
 
             $incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
         }
@@ -1604,15 +1605,11 @@ class Ps_eventbus extends Module
             return;
         }
 
-        /** @var \PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository $deletedObjectsRepository */
-        $deletedObjectsRepository = $this->getService(
-            \PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository::class
-        );
+        /** @var DeletedObjectsRepository $deletedObjectsRepository */
+        $deletedObjectsRepository = $this->getService(DeletedObjectsRepository::class);
 
-        /** @var \PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository $incrementalSyncRepository */
-        $incrementalSyncRepository = $this->getService(
-            \PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository::class
-        );
+        /** @var IncrementalSyncRepository $incrementalSyncRepository */
+        $incrementalSyncRepository = $this->getService(IncrementalSyncRepository::class);
 
         $deletedObjectsRepository->insertDeletedObject($objectId, $type, $date, $shopId);
         $incrementalSyncRepository->removeIncrementalSyncObject($type, $objectId);
