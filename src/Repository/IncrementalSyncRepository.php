@@ -3,7 +3,6 @@
 namespace PrestaShop\Module\PsEventbus\Repository;
 
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
-use PrestaShopDatabaseException;
 
 class IncrementalSyncRepository
 {
@@ -159,25 +158,28 @@ class IncrementalSyncRepository
     }
 
     /**
-     * @param string $type 
+     * @param string $type
+     *
      * @return int
      */
-    public function getIncrementalSyncObjectCountByType($type) {
+    public function getIncrementalSyncObjectCountByType($type)
+    {
         $query = new \DbQuery();
 
         $query->select('COUNT(type) as count')
             ->from(self::INCREMENTAL_SYNC_TABLE)
             ->where('type = "' . psql($type) . '"');
-        
-        return (int) $this->db->getValue($query); 
+
+        return (int) $this->db->getValue($query);
     }
 
     /**
-     * 
-     * @param string $type 
-     * @return bool 
+     * @param string $type
+     *
+     * @return bool
      */
-    public function removeIncrementaSyncObjectByType($type) {
+    public function removeIncrementaSyncObjectByType($type)
+    {
         return $this->db->delete(
             self::INCREMENTAL_SYNC_TABLE,
             'type = "' . pSQL($type) . '"'
