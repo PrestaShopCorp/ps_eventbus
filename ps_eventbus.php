@@ -67,7 +67,7 @@ class Ps_eventbus extends Module
     /**
      * @var int
      */
-    const INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT = 10000;
+    const INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT = 100000;
 
     /**
      * @var string
@@ -1622,8 +1622,6 @@ class Ps_eventbus extends Module
                 return;
             }
 
-
-
             $incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
         }
     }
@@ -1641,7 +1639,6 @@ class Ps_eventbus extends Module
         if ((int) $objectId === 0) {
             return;
         }
-
         
         /** @var DeletedObjectsRepository $deletedObjectsRepository */
         $deletedObjectsRepository = $this->getService(DeletedObjectsRepository::class);
