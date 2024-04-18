@@ -67,7 +67,7 @@ class Ps_eventbus extends Module
     /**
      * @var int
      */
-    const INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT = 10000;
+    const INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT = 100000;
 
     /**
      * @var string
