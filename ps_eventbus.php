@@ -1581,7 +1581,7 @@ class Ps_eventbus extends Module
         /** @var EventbusSyncRepository $eventbusSyncRepository */
         $eventbusSyncRepository = $this->getService(EventbusSyncRepository::class);
 
-        /**
+        /*
          * randomly check if outbox for this shop-content contain more of 100k entries.
          * When random number == 10, we count number of entry exist in database for this specific shop content
          * If count > 100 000, we removed all entry corresponding to this shop content, and we enable full sync for this
@@ -1622,8 +1622,6 @@ class Ps_eventbus extends Module
                 return;
             }
 
-
-
             $incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
         }
     }
@@ -1642,7 +1640,6 @@ class Ps_eventbus extends Module
             return;
         }
 
-        
         /** @var DeletedObjectsRepository $deletedObjectsRepository */
         $deletedObjectsRepository = $this->getService(DeletedObjectsRepository::class);
 
