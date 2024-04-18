@@ -28,7 +28,6 @@ define create_module
 	./tools/vendor/bin/autoindex prestashop:add:index ${TMP_DIR}
 	cp $1 ${TMP_DIR}/${MODULE_NAME}/config/parameters.yml
 	cd ${TMP_DIR}/${MODULE_NAME} && composer dump-autoload
-	SCOPER_FOLDER=${TMP_DIR}/${MODULE_NAME} php php-scoper-fix.php
 
 	echo ${TMP_DIR}
 endef
@@ -82,22 +81,22 @@ zip: zip-prod zip-inte zip-e2e
 
 # target: zip-e2e                                              - Bundle a local E2E integrable zip
 .PHONY: zip-e2e
-zip-e2e: php-scoper.phar vendor tools/vendor dist
+zip-e2e: vendor tools/vendor dist
 	@$(call zip_it,./config/parameters.yml,${PACKAGE}_e2e.zip)
 
 # target: zip-inte                                             - Bundle an integration zip
 .PHONY: zip-inte
-zip-inte: php-scoper.phar vendor tools/vendor dist
+zip-inte: vendor tools/vendor dist
 	@$(call zip_it,.config.inte.yml,${PACKAGE}_integration.zip)
 
 # target: zip-prod                                             - Bundle a production zip
 .PHONY: zip-prod
-zip-prod: php-scoper.phar vendor tools/vendor dist
+zip-prod: vendor tools/vendor dist
 	@$(call zip_it,.config.prod.yml,${PACKAGE}.zip)
 
 # target: zip-unzipped                                          - Bundle a production module, but without zip step (only to check sources)
 .PHONY: zip-unzipped
-zip-unzipped: php-scoper.phar vendor tools/vendor dist
+zip-unzipped: vendor tools/vendor dist
 	@$(call no_zip_it,.config.prod.yml)
 
 # target: build                                                - Setup PHP & Node.js locally
