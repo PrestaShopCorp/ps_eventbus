@@ -7,7 +7,6 @@ PHP_VERSION ?= 8.1
 PS_VERSION ?= 8.1.3
 TESTING_IMAGE ?= prestashop/prestashop-flashlight:${PS_VERSION}
 PS_ROOT_DIR ?= $(shell pwd)/prestashop/prestashop-${PS_VERSION}
-PHP_SCOPER_DIR=php-scoper
 
 export PHP_CS_FIXER_IGNORE_ENV = 1
 export _PS_ROOT_DIR_ ?= ${PS_ROOT_DIR}
@@ -206,9 +205,6 @@ phpstan-baseline: prestashop/prestashop-${PS_VERSION} phpstan
 # target: docker-test                                          - Static and unit testing in docker
 .PHONY: docker-test
 docker-test: docker-lint docker-phpstan docker-phpunit
-
-php-scoper.phar:
-	@php -r "copy('https://github.com/humbug/php-scoper/releases/latest/download/php-scoper.phar', 'php-scoper.phar');";
 
 define COMMENT
 	Fixme: add "allure-framework/allure-phpunit" in composer.json to solve this.
