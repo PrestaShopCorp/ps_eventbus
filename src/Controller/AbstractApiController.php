@@ -209,6 +209,8 @@ abstract class AbstractApiController extends \ModuleFrontController
                         false,
                         $langIso
                     );
+
+                    $this->incrementalSyncRepository->removeIncrementaSyncObjectByType($this->type);
                 }
             } else {
                 $this->eventbusSyncRepository->insertTypeSync($this->type, $offset, $dateNow, $langIso);
