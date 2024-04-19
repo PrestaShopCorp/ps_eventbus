@@ -7,7 +7,6 @@ PHP_VERSION ?= 8.1
 PS_VERSION ?= 8.1.3
 TESTING_IMAGE ?= prestashop/prestashop-flashlight:${PS_VERSION}
 PS_ROOT_DIR ?= $(shell pwd)/prestashop/prestashop-${PS_VERSION}
-PHP_SCOPER_DIR=php-scoper
 
 export PHP_CS_FIXER_IGNORE_ENV = 1
 export _PS_ROOT_DIR_ ?= ${PS_ROOT_DIR}
@@ -22,14 +21,12 @@ endef
 
 define create_module
 	$(eval TMP_DIR := $(shell mktemp -d))
-	mkdir -p ${TMP_DIR}/tmp;
-	cp -r $(shell cat .zip-contents) ${TMP_DIR}/tmp;
-	VERSION=${PACKAGE} TMP_FOLDER=${TMP_DIR}/tmp php php-scoper.phar add-prefix --output-dir=${TMP_DIR}/${MODULE_NAME} --force
+	mkdir -p ${TMP_DIR}/${MODULE_NAME};
+	cp -r $(shell cat .zip-contents) ${TMP_DIR}/${MODULE_NAME};
 	$(call replace_version,${TMP_DIR}/${MODULE_NAME},${SEM_VERSION})
 	./tools/vendor/bin/autoindex prestashop:add:index ${TMP_DIR}
 	cp $1 ${TMP_DIR}/${MODULE_NAME}/config/parameters.yml
 	cd ${TMP_DIR}/${MODULE_NAME} && composer dump-autoload
-	SCOPER_FOLDER=${TMP_DIR}/${MODULE_NAME} php php-scoper-fix.php
 
 	echo ${TMP_DIR}
 endef
@@ -83,22 +80,22 @@ zip: zip-prod zip-inte zip-e2e
 
 # target: zip-e2e                                              - Bundle a local E2E integrable zip
 .PHONY: zip-e2e
-zip-e2e: php-scoper.phar vendor tools/vendor dist
+zip-e2e: vendor tools/vendor dist
 	@$(call zip_it,./config/parameters.yml,${PACKAGE}_e2e.zip)
 
 # target: zip-inte                                             - Bundle an integration zip
 .PHONY: zip-inte
-zip-inte: php-scoper.phar vendor tools/vendor dist
+zip-inte: vendor tools/vendor dist
 	@$(call zip_it,.config.inte.yml,${PACKAGE}_integration.zip)
 
 # target: zip-prod                                             - Bundle a production zip
 .PHONY: zip-prod
-zip-prod: php-scoper.phar vendor tools/vendor dist
+zip-prod: vendor tools/vendor dist
 	@$(call zip_it,.config.prod.yml,${PACKAGE}.zip)
 
 # target: zip-unzipped                                          - Bundle a production module, but without zip step (only to check sources)
 .PHONY: zip-unzipped
-zip-unzipped: php-scoper.phar vendor tools/vendor dist
+zip-unzipped: vendor tools/vendor dist
 	@$(call no_zip_it,.config.prod.yml)
 
 # target: build                                                - Setup PHP & Node.js locally
@@ -208,9 +205,6 @@ phpstan-baseline: prestashop/prestashop-${PS_VERSION} phpstan
 # target: docker-test                                          - Static and unit testing in docker
 .PHONY: docker-test
 docker-test: docker-lint docker-phpstan docker-phpunit
-
-php-scoper.phar:
-	@php -r "copy('https://github.com/humbug/php-scoper/releases/latest/download/php-scoper.phar', 'php-scoper.phar');";
 
 define COMMENT
 	Fixme: add "allure-framework/allure-phpunit" in composer.json to solve this.
