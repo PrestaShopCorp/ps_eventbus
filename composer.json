@@ -4,13 +4,13 @@
   "type": "prestashop-module",
   "authors": [
     {
-      "name": "CloudSync",
+      "name": "CloudSync team",
       "email": "cloudsync-support@prestashop.com",
-      "homepage": "https://prestashop.com",
+      "homepage": "https://github.com/PrestaShopCorp/ps_eventbus",
       "role": "Developer"
     }
   ],
-  "license": "AFL-3.0",
+  "license": "OSL-3.0",
   "config": {
     "preferred-install": "dist",
     "platform": {
