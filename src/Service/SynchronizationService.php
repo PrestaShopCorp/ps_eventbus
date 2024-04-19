@@ -87,8 +87,6 @@ class SynchronizationService
 
         $this->eventbusSyncRepository->updateTypeSync($type, $offset, $dateNow, $remainingObjects === 0, $langIso);
 
-        $this->incrementalSyncRepository->removeIncrementaSyncObjectByType($type);
-
         return $this->returnSyncResponse($data, $response, $remainingObjects);
     }
 
