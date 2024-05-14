@@ -8,7 +8,7 @@ RUN npm install -g pnpm
 
 WORKDIR /home/node
 ADD . /home/node
-RUN pnpm install --no-optional
+RUN pnpm install --no-optional --force
 RUN pnpm run build
 
 ENTRYPOINT [ "pnpm" ]
