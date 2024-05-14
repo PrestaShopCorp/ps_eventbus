@@ -8,8 +8,9 @@ RUN npm install -g pnpm
 
 WORKDIR /home/node
 ADD . /home/node
-RUN pnpm install --no-optional --force
-RUN pnpm run build
+RUN rm pnpm-lock.yaml \
+  && pnpm install --no-optional \
+  && pnpm run build
 
 ENTRYPOINT [ "pnpm" ]
 CMD [ "start" ]
