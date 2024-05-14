@@ -1,7 +1,7 @@
 name: Quality Control
 
 env:
-  DOCKER_COMPOSE_VERSION: v2.24.0
+  DOCKER_COMPOSE_VERSION: v2.27.0
 
 on:
   pull_request:
