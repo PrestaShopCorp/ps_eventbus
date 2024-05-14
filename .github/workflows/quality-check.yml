@@ -141,3 +141,10 @@ jobs:
       - name: Run e2e:tests with Prestashop ${{ matrix.ps_version }}
         run: pnpm test:e2e
         working-directory: e2e
+
+      - name: More logs on failure
+        if: failure()
+        run: |
+          docker logs cloudsync-mock
+          docker compose down -v
+        working-directory: e2e-env
