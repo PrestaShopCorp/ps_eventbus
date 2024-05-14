@@ -6,8 +6,6 @@
       "decorators": false,
       "dynamicImport": false
     },
-    "minify": {
-      "compress": false
-    }
+    "minify": false
   }
 }
