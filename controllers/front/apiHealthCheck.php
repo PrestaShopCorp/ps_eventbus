@@ -8,12 +8,10 @@ class ps_EventbusApiHealthCheckModuleFrontController extends AbstractApiControll
 {
     public $type = Config::COLLECTION_SHOPS;
 
-    public function init()
-    {
-    }
-
     /**
      * @return void
+     *
+     * @throws\PrestaShopException
      */
     public function postProcess()
     {
