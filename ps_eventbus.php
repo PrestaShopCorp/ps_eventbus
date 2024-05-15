@@ -1609,20 +1609,16 @@ class Ps_eventbus extends Module
             $languagesIsoCodes = $languageRepository->getLanguagesIsoCodes();
 
             foreach ($languagesIsoCodes as $languagesIsoCode) {
-                if (!$this->isFullSyncDone($type, $languagesIsoCode)) {
-                    return;
+                if ($this->isFullSyncDone($type, $languagesIsoCode)) {
+                    $incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
                 }
-
-                $incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
             }
         } else {
             $languagesIsoCode = $languageRepository->getDefaultLanguageIsoCode();
 
-            if (!$this->isFullSyncDone($type, $languagesIsoCode)) {
-                return;
+            if ($this->isFullSyncDone($type, $languagesIsoCode)) {
+                $incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
             }
-
-            $incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
         }
     }
 
