@@ -1553,7 +1553,7 @@ class Ps_eventbus extends Module
     private function sendLiveSync(string $shopContent, int $shopContentId, string $action)
     {
         if ($this->isFullSyncDone($shopContent)) {
-            return;
+            // SEND live sync only when fullsync is done
         }
     }
 
@@ -1610,19 +1610,15 @@ class Ps_eventbus extends Module
 
             foreach ($languagesIsoCodes as $languagesIsoCode) {
                 if ($this->isFullSyncDone($type, $languagesIsoCode)) {
-                    return;
+                    $incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
                 }
-
-                $incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
             }
         } else {
             $languagesIsoCode = $languageRepository->getDefaultLanguageIsoCode();
 
             if ($this->isFullSyncDone($type, $languagesIsoCode)) {
-                return;
+                $incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
             }
-
-            $incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
         }
     }
 
