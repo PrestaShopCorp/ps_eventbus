@@ -1,4 +1,4 @@
-import fixture from "../fixtures/latest/apiCategories/categories.json"
+import fixture from '../fixtures/latest/apiCategories/categories.json';
 
 // test type
 const t: Categories[] = fixture;
@@ -19,5 +19,5 @@ export type Categories = {
     name: string;
     unique_category_id: string;
     updated_at: string;
-  }
-}
+  };
+};

@@ -1,4 +1,4 @@
-import fixture from '../fixtures/latest/apiEmployees/employees.json'
+import fixture from '../fixtures/latest/apiEmployees/employees.json';
 
 // test type
 const t: Employees[] = fixture;
@@ -25,5 +25,5 @@ export type Employees = {
     id_shop: number;
     last_connection_date?: string;
     optin: boolean;
-  }
-}
+  };
+};

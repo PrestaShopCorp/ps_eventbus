@@ -16,8 +16,7 @@ export default {
   mockCollectorPath: '/collector/v1',
   mockLiveSyncApiPath: '/live-sync-api/v1',
 
-  dumpFullSyncData:
-    process.env.RUN_IN_DOCKER !== '1',
+  dumpFullSyncData: process.env.RUN_IN_DOCKER !== '1',
 
   testRunTime: new Date().toISOString(),
 };

@@ -1,4 +1,4 @@
-import fixture from "../fixtures/latest/apiCarriers/carriers.json";
+import fixture from '../fixtures/latest/apiCarriers/carriers.json';
 
 // test type
 const t: Carriers[] = fixture;
@@ -31,5 +31,5 @@ export type Carriers = {
     shipping_handling: number;
     url: string;
     weight_unit: string;
-  }
-}
+  };
+};

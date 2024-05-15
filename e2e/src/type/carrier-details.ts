@@ -1,4 +1,4 @@
-import fixture from "../fixtures/latest/apiCarriers/carrier_details.json"
+import fixture from '../fixtures/latest/apiCarriers/carrier_details.json';
 
 // test type
 const t: CarrierDetails[] = fixture;
@@ -17,5 +17,5 @@ export type CarrierDetails = {
     price: number;
     shipping_method: string;
     state_ids: string;
-  }
-}
+  };
+};
