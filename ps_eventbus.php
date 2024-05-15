@@ -1552,8 +1552,8 @@ class Ps_eventbus extends Module
      */
     private function sendLiveSync(string $shopContent, int $shopContentId, string $action)
     {
-        if (!$this->isFullSyncDone($shopContent)) {
-            return;
+        if ($this->isFullSyncDone($shopContent)) {
+            // SEND live sync only when fullsync is done
         }
     }
 
