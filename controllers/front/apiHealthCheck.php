@@ -10,12 +10,13 @@ class ps_EventbusApiHealthCheckModuleFrontController extends AbstractApiControll
 
     /**
      * Override default method from AbstractApiController: skip jobId verification
-     * @return void 
+     *
+     * @return void
      */
     public function init()
     {
     }
-    
+
     /**
      * @return void
      *
