@@ -9,6 +9,14 @@ class ps_EventbusApiHealthCheckModuleFrontController extends AbstractApiControll
     public $type = Config::COLLECTION_SHOPS;
 
     /**
+     * Override default method from AbstractApiController: skip jobId verification
+     * @return void 
+     */
+    public function init()
+    {
+    }
+    
+    /**
      * @return void
      *
      * @throws\PrestaShopException

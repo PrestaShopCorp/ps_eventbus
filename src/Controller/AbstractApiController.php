@@ -201,6 +201,9 @@ abstract class AbstractApiController extends \ModuleFrontController
                 if ((int) $typeSync['full_sync_finished'] === 1 && !$initFullSync) {
                     $incrementalSync = true;
                 } elseif ($initFullSync) {
+                    dump('test');
+                    die;
+
                     $offset = 0;
                     $this->eventbusSyncRepository->updateTypeSync(
                         $this->type,
