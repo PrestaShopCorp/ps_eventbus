@@ -185,6 +185,9 @@ class SynchronizationService
      */
     private function getPayloadMd5($payload)
     {
+        dump($payload, implode(' ', array_map(function ($payloadItem) {
+            return $payloadItem['id'];
+        }, $payload)));
         return md5(
             implode(' ', array_map(function ($payloadItem) {
                 return $payloadItem['id'];
