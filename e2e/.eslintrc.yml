@@ -1,4 +1,18 @@
 ---
+parser: '@typescript-eslint/parser'
+parserOptions:
+  sourceType: module
+  project: tsconfig.json
+settings:
+  import/parsers:
+    '@typescript-eslint/parser':
+      - '.ts'
+      - '.tsx'
+  import/resolver:
+    typescript:
+      project: true
+    node:
+      project: true
 root: true
 env:
   jest: true
@@ -31,6 +45,11 @@ rules:
     - warn
     - devDependencies:
         - '**/*.spec.ts'
+        - '**/e2e/**/*'
+        - '**/playwright.config.*'
+      optionalDependencies:
+        - '**/playwright.config.*'
+        - '**/e2e/**/*'
       peerDependencies: false
   '@typescript-eslint/no-explicit-any': warn
   complexity:
@@ -65,17 +84,3 @@ overrides:
     rules:
       '@typescript-eslint/unbound-method': off
       jest/unbound-method: 'error'
-parser: '@typescript-eslint/parser'
-parserOptions:
-  sourceType: module
-  project: tsconfig.json
-settings:
-  import/parsers:
-    '@typescript-eslint/parser':
-      - '.ts'
-      - '.tsx'
-  import/resolver:
-    typescript:
-      project: true
-    node:
-      project: true
