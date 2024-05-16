@@ -6,7 +6,7 @@
 function upgrade_module_3_0_12($module)
 {
     $db = Db::getInstance();
-    
+
     $query = 'SELECT version FROM `' . _DB_PREFIX_ . 'module` WHERE name = \'ps_eventbus\'';
 
     $result = $db->executeS($query);
@@ -18,7 +18,7 @@ function upgrade_module_3_0_12($module)
 
         $db->execute($truncateIncrementalSyncTable);
         $db->execute($truncateTypeSyncTable);
-    } 
+    }
 
     return true;
 }
