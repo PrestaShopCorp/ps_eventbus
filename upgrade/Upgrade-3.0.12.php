@@ -18,9 +18,6 @@ function upgrade_module_3_0_12($module)
 
         $db->execute($truncateIncrementalSyncTable);
         $db->execute($truncateTypeSyncTable);
-
-        dump('db truncated');
-        exit();
     }
 
     return true;
