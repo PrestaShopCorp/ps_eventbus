@@ -1101,6 +1101,13 @@ class Ps_eventbus extends Module
                 date(DATE_ATOM),
                 $this->shopId
             );
+
+            $this->insertIncrementalSyncObject(
+                $order->id,
+                Config::COLLECTION_ORDER_DETAILS,
+                date(DATE_ATOM),
+                $this->shopId
+            );
         }
     }
 
@@ -1112,7 +1119,7 @@ class Ps_eventbus extends Module
     public function hookActionObjectOrderUpdateAfter($parameters)
     {
         $order = $parameters['object'];
-
+        
         if (isset($order->id)) {
             $this->sendLiveSync('orders', $order->id, 'upsert');
             $this->insertIncrementalSyncObject(
@@ -1557,6 +1564,24 @@ class Ps_eventbus extends Module
         }
     }
 
+
+
+    private function insertIncrementalSyncOrderDetails() {
+        /**
+         * Je prend l'order id fourni
+         * Je fais un select ps_order_details (SELECT id_order_detail WHERE id_order = $idOrder)
+         * Pour chaque entrée retourné, créer une nouvelle ligne dans l'outbox avec comme id, l'id_order_detail
+         * Faire la même chose pour chaque API contenant des sous domaine métier (Order => order details, product => product_image, etc...)
+         */
+    }
+
+
+
+
+
+
+
+
     /**
      * @param int $objectId
      * @param string $type
@@ -1571,7 +1596,7 @@ class Ps_eventbus extends Module
         if ((int) $objectId === 0) {
             return;
         }
-
+        
         /** @var IncrementalSyncRepository $incrementalSyncRepository */
         $incrementalSyncRepository = $this->getService(IncrementalSyncRepository::class);
 
