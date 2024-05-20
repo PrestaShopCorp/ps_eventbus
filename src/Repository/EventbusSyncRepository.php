@@ -151,7 +151,7 @@ class EventbusSyncRepository
     {
         $query = new \DbQuery();
 
-        $query->select('COUNT(*)')
+        $query->select('full_sync_finished')
             ->from(self::TYPE_SYNC_TABLE_NAME)
             ->where('type = "' . pSQL($type) . '"')
             ->where('lang_iso = "' . pSQL((string) $langIso) . '"')
