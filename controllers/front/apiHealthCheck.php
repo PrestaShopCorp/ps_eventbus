@@ -8,26 +8,28 @@ class ps_EventbusApiHealthCheckModuleFrontController extends AbstractApiControll
 {
     public $type = Config::COLLECTION_SHOPS;
 
-    /**
-     * Override default method from AbstractApiController: skip jobId verification
-     *
-     * @return void
-     */
+    private $isAuthentifiedCall = true;
+
     public function init()
     {
+        try {
+            parent::init();
+        } catch (Exception $e) {
+            $this->isAuthentifiedCall = false;
+        }
     }
 
     /**
      * @return void
      *
-     * @throws\PrestaShopException
+     * @throws \PrestaShopException
      */
     public function postProcess()
     {
         /** @var ServerInformationRepository $serverInformationRepository */
         $serverInformationRepository = $this->module->getService(ServerInformationRepository::class);
 
-        $status = $serverInformationRepository->getHealthCheckData();
+        $status = $serverInformationRepository->getHealthCheckData($this->isAuthentifiedCall);
 
         $this->exitWithResponse($status);
     }

@@ -126,7 +126,7 @@ class ServerInformationRepository
     /**
      * @return array
      */
-    public function getHealthCheckData()
+    public function getHealthCheckData(bool $isAuthentifiedCall)
     {
         $tokenValid = false;
         $tokenIsSet = true;
@@ -171,11 +171,14 @@ class ServerInformationRepository
             $phpVersion = (string) explode('-', (string) phpversion())[0];
         }
 
-        return [
+        $sensibleInformation = [
             'prestashop_version' => _PS_VERSION_,
             'ps_eventbus_version' => \Ps_eventbus::VERSION,
             'ps_accounts_version' => defined('Ps_accounts::VERSION') ? \Ps_accounts::VERSION : false, /* @phpstan-ignore-line */
             'php_version' => $phpVersion,
+        ];
+
+        $serverInformation = [
             'ps_account' => $tokenIsSet,
             'is_valid_jwt' => $tokenValid,
             'ps_eventbus' => $allTablesInstalled,
@@ -185,6 +188,12 @@ class ServerInformationRepository
                 'EVENT_BUS_LIVE_SYNC_API_URL' => isset($this->configuration['EVENT_BUS_LIVE_SYNC_API_URL']) ? $this->configuration['EVENT_BUS_LIVE_SYNC_API_URL'] : null,
             ],
         ];
+
+        if ($isAuthentifiedCall) {
+            $serverInformation = array_merge($serverInformation, $sensibleInformation);
+        }
+
+        return $serverInformation;
     }
 
     /**
