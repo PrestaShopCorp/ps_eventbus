@@ -3,7 +3,6 @@
 namespace PrestaShop\Module\PsEventbus\Helper;
 
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
-use PrestaShop\PrestaShop\Core\Module\ModuleManager;
 use PrestaShopBundle\Service\Routing\Router;
 
 class ModuleHelper
@@ -14,7 +13,7 @@ class ModuleHelper
     private $module;
 
     /**
-     * @var ModuleManager
+     * @var PrestaShop\PrestaShop\Core\Module\ModuleManager|PrestaShop\PrestaShop\Core\Addon\Module\ModuleManager
      */
     private $moduleManager;
 
