@@ -13,7 +13,7 @@ class ModuleHelper
     private $module;
 
     /**
-     * @var PrestaShop\PrestaShop\Core\Module\ModuleManager|PrestaShop\PrestaShop\Core\Addon\Module\ModuleManager
+     * @var \PrestaShop\PrestaShop\Core\Module\ModuleManager|\PrestaShop\PrestaShop\Core\Addon\Module\ModuleManager
      */
     private $moduleManager;
 
