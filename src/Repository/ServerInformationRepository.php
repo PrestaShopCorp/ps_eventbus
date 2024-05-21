@@ -176,6 +176,7 @@ class ServerInformationRepository
             'ps_eventbus_version' => \Ps_eventbus::VERSION,
             'ps_accounts_version' => defined('Ps_accounts::VERSION') ? \Ps_accounts::VERSION : false, /* @phpstan-ignore-line */
             'php_version' => $phpVersion,
+            'shop_id' => $this->psAccountsAdapterService->getShopUuid()
         ];
 
         $serverInformation = [
@@ -190,7 +191,7 @@ class ServerInformationRepository
         ];
 
         if ($isAuthentifiedCall) {
-            $serverInformation = array_merge($serverInformation, $sensibleInformation);
+            $serverInformation = array_merge($sensibleInformation, $serverInformation);
         }
 
         return $serverInformation;
