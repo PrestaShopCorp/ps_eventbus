@@ -11,6 +11,12 @@ class ps_EventbusApiHealthCheckModuleFrontController extends AbstractApiControll
 
     private $isAuthentifiedCall = true;
 
+    /**
+     * Override default method from AbstractApiController
+     * Get another behavior for healthcheck
+     *
+     * @return void
+     */
     public function init()
     {
         try {
