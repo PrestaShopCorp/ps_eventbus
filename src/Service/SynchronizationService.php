@@ -3,12 +3,12 @@
 namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator;
-use PrestaShop\Module\PsEventbus\Exception\ApiException;
-use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
+use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
+use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 
 class SynchronizationService
 {
@@ -16,33 +16,61 @@ class SynchronizationService
      * @var EventbusSyncRepository
      */
     private $eventbusSyncRepository;
+
     /**
      * @var IncrementalSyncRepository
      */
     private $incrementalSyncRepository;
+
     /**
      * @var LiveSyncRepository
      */
     private $liveSyncRepository;
+
+    /**
+     * @var DeletedObjectsRepository
+     */
+    private $deletedObjectsRepository;
+
+    /**
+     * @var LanguageRepository
+     */
+    private $languageRepository;
+
     /**
      * @var ProxyServiceInterface
      */
     private $proxyService;
+
     /**
      * @var PayloadDecorator
      */
     private $payloadDecorator;
 
+    /**
+     * @var int
+     */
+    const RANDOM_SYNC_CHECK_MAX = 20;
+
+    /**
+     * @var int
+     */
+    const INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT = 100000;
+
     public function __construct(
         EventbusSyncRepository $eventbusSyncRepository,
         IncrementalSyncRepository $incrementalSyncRepository,
         LiveSyncRepository $liveSyncRepository,
+        DeletedObjectsRepository $deletedObjectsRepository,
+        LanguageRepository $languageRepository,
         ProxyServiceInterface $proxyService,
         PayloadDecorator $payloadDecorator
     ) {
         $this->eventbusSyncRepository = $eventbusSyncRepository;
         $this->incrementalSyncRepository = $incrementalSyncRepository;
         $this->liveSyncRepository = $liveSyncRepository;
+        $this->deletedObjectsRepository = $deletedObjectsRepository;
+        $this->languageRepository = $languageRepository;
         $this->proxyService = $proxyService;
         $this->payloadDecorator = $payloadDecorator;
     }
@@ -159,6 +187,111 @@ class SynchronizationService
         }
 
         return false;
+    }
+
+    /**
+     * disables liveSync
+     *
+     * @param string $shopContent
+     * @param int $shopContentId
+     * @param string $action
+     *
+     * @return void
+     */
+    private function sendLiveSync(string $shopContent, int $shopContentId, string $action)
+    {
+        if ($this->isFullSyncDone($shopContent)) {
+            // SEND live sync only when fullsync is done
+        }
+    }
+
+    /**
+     * @param int $objectId
+     * @param string $type
+     * @param string $date
+     * @param int $shopId
+     * @param bool $hasMultiLang
+     *
+     * @return void
+     */
+    private function insertIncrementalSyncObject($objectId, $type, $date, $shopId, $hasMultiLang = false)
+    {
+        if ((int) $objectId === 0) {
+            return;
+        }
+
+        $childrenIds = $this->getChildrenIdsByType($type, $objectId);
+
+        /*
+         * randomly check if outbox for this shop-content contain more of 100k entries.
+         * When random number == 10, we count number of entry exist in database for this specific shop content
+         * If count > 100 000, we removed all entry corresponding to this shop content, and we enable full sync for this
+         */
+        if (mt_rand() % $this::RANDOM_SYNC_CHECK_MAX == 0) {
+            $count = $this->incrementalSyncRepository->getIncrementalSyncObjectCountByType($type);
+            if ($count > $this::INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT) {
+                $hasDeleted = $this->incrementalSyncRepository->removeIncrementaSyncObjectByType($type);
+
+                if ($hasDeleted) {
+                    $this->eventbusSyncRepository->updateTypeSync(
+                        $type,
+                        0,
+                        $date,
+                        false,
+                        $this->languageRepository->getDefaultLanguageIsoCode()
+                    );
+                }
+            }
+
+            return;
+        }
+
+        if ($hasMultiLang) {
+            $languagesIsoCodes = $this->languageRepository->getLanguagesIsoCodes();
+
+            foreach ($languagesIsoCodes as $languagesIsoCode) {
+                if ($this->isFullSyncDone($type, $languagesIsoCode)) {
+                    $this->incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
+                }
+            }
+        } else {
+            $languagesIsoCode = $this->languageRepository->getDefaultLanguageIsoCode();
+
+            if ($this->isFullSyncDone($type, $languagesIsoCode)) {
+                $this->incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
+            }
+        }
+    }
+
+    /**
+     * @param int $objectId
+     * @param string $type
+     * @param string $date
+     * @param int $shopId
+     *
+     * @return void
+     */
+    private function insertDeletedObject($objectId, $type, $date, $shopId)
+    {
+        if ((int) $objectId === 0) {
+            return;
+        }
+
+        $this->deletedObjectsRepository->insertDeletedObject($objectId, $type, $date, $shopId);
+        $this->incrementalSyncRepository->removeIncrementalSyncObject($type, $objectId);
+    }
+
+    /**
+     * Return true if full sync is done for this shop content
+     *
+     * @param string $shopContent
+     * @param string|null $langIso
+     *
+     * @return bool
+     */
+    private function isFullSyncDone($shopContent, $langIso = null)
+    {
+        return $this->eventbusSyncRepository->isFullSyncDoneForThisTypeSync($shopContent, $langIso);
     }
 
     /**
