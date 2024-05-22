@@ -9,9 +9,17 @@ use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
+use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository;
+use Ps_eventbus;
 
 class SynchronizationService
 {
+    /**
+     * @var Ps_eventbus
+     */
+    private $module;
+    
     /**
      * @var EventbusSyncRepository
      */
@@ -58,6 +66,7 @@ class SynchronizationService
     const INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT = 100000;
 
     public function __construct(
+        \Ps_eventbus $module,
         EventbusSyncRepository $eventbusSyncRepository,
         IncrementalSyncRepository $incrementalSyncRepository,
         LiveSyncRepository $liveSyncRepository,
@@ -66,6 +75,7 @@ class SynchronizationService
         ProxyServiceInterface $proxyService,
         PayloadDecorator $payloadDecorator
     ) {
+        $this->module = $module;
         $this->eventbusSyncRepository = $eventbusSyncRepository;
         $this->incrementalSyncRepository = $incrementalSyncRepository;
         $this->liveSyncRepository = $liveSyncRepository;
@@ -236,8 +246,6 @@ class SynchronizationService
             return;
         }
 
-        $childrenIds = $this->getChildrenIdsByType($type, $objectId);
-
         /*
          * randomly check if outbox for this shop-content contain more of 100k entries.
          * When random number == 10, we count number of entry exist in database for this specific shop content
@@ -262,12 +270,18 @@ class SynchronizationService
             return;
         }
 
+        $childrenIdsWithType = $this->getChildrenIdsByType($type, $objectId, $shopId);
+
         if ($hasMultiLang) {
             $languagesIsoCodes = $this->languageRepository->getLanguagesIsoCodes();
 
             foreach ($languagesIsoCodes as $languagesIsoCode) {
                 if ($this->isFullSyncDone($type, $languagesIsoCode)) {
                     $this->incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
+
+                    foreach($childrenIdsWithType['childrenIds'] as $childrenId) {
+                        $this->incrementalSyncRepository->insertIncrementalObject($childrenId, $childrenIdsWithType['type'], $date, $shopId, $languagesIsoCode);
+                    }
                 }
             }
         } else {
@@ -275,6 +289,10 @@ class SynchronizationService
 
             if ($this->isFullSyncDone($type, $languagesIsoCode)) {
                 $this->incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
+
+                foreach($childrenIdsWithType['childrenIds'] as $childrenId) {
+                    $this->incrementalSyncRepository->insertIncrementalObject($childrenId, $childrenIdsWithType['type'], $date, $shopId, $languagesIsoCode);
+                }
             }
         }
     }
@@ -297,10 +315,21 @@ class SynchronizationService
         $this->incrementalSyncRepository->removeIncrementalSyncObject($type, $objectId);
     }
 
-    private function getChildrenIdsByType(string $type, int $objectId)
+    private function getChildrenIdsByType(string $type, int $objectId, int $shopId)
     {
-        switch ($type) {
+        if ($type == Config::COLLECTION_ORDERS) {
+            /** @var OrderDetailsRepository */
+            $orderDetailsRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository');
 
+            return [
+                'type' => Config::COLLECTION_ORDER_DETAILS,
+                'childrenIds' => array_map(
+                    function ($orderDetail) {
+                        return $orderDetail['id_order_detail'];
+                    },
+                    $orderDetailsRepository->getOrderDetails([$objectId], $shopId)
+                )
+            ];
         }
     }
 
