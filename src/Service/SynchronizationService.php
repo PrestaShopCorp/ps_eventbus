@@ -90,8 +90,17 @@ class SynchronizationService
      *
      * @@throws \PrestaShopDatabaseException|EnvVarException|ApiException
      */
-    public function handleFullSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $langIso, $offset, $limit, $dateNow, $scriptStartTime, bool $isFull)
-    {
+    public function handleFullSync(
+        PaginatedApiDataProviderInterface $dataProvider,
+        string $type,
+        string $jobId,
+        string $langIso,
+        int $offset,
+        int $limit,
+        string $dateNow,
+        int $scriptStartTime,
+        bool $isFull
+    ) {
         $response = [];
 
         $data = $dataProvider->getFormattedData($offset, $limit, $langIso);
@@ -131,8 +140,15 @@ class SynchronizationService
      *
      * @@throws \PrestaShopDatabaseException|EnvVarException
      */
-    public function handleIncrementalSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $limit, $langIso, $scriptStartTime, bool $isFull)
-    {
+    public function handleIncrementalSync(
+        PaginatedApiDataProviderInterface $dataProvider,
+        string $type,
+        string $jobId,
+        int $limit,
+        string $langIso,
+        int $scriptStartTime,
+        bool $isFull
+    ) {
         $response = [];
 
         $objectIds = $this->incrementalSyncRepository->getIncrementalSyncObjectIds($type, $langIso, $limit);
@@ -214,7 +230,7 @@ class SynchronizationService
      *
      * @return void
      */
-    public function insertIncrementalSyncObject($objectId, $type, $date, $shopId, $hasMultiLang = false)
+    public function insertIncrementalSyncObject(int $objectId, string $type, string $date, int $shopId, bool $hasMultiLang = false)
     {
         if ((int) $objectId === 0) {
             return;
@@ -271,7 +287,7 @@ class SynchronizationService
      *
      * @return void
      */
-    public function insertDeletedObject($objectId, $type, $date, $shopId)
+    public function insertDeletedObject(int $objectId, string $type, string $date, int $shopId)
     {
         if ((int) $objectId === 0) {
             return;
@@ -279,6 +295,13 @@ class SynchronizationService
 
         $this->deletedObjectsRepository->insertDeletedObject($objectId, $type, $date, $shopId);
         $this->incrementalSyncRepository->removeIncrementalSyncObject($type, $objectId);
+    }
+
+    private function getChildrenIdsByType(string $type, int $objectId)
+    {
+        switch ($type) {
+
+        }
     }
 
     /**
@@ -289,7 +312,7 @@ class SynchronizationService
      *
      * @return bool
      */
-    private function isFullSyncDone($shopContent, $langIso = null)
+    private function isFullSyncDone(string $shopContent, $langIso = null)
     {
         return $this->eventbusSyncRepository->isFullSyncDoneForThisTypeSync($shopContent, $langIso);
     }
@@ -316,7 +339,7 @@ class SynchronizationService
      *
      * @return string
      */
-    private function getPayloadMd5($payload)
+    private function getPayloadMd5(array $payload)
     {
         return md5(
             implode(' ', array_map(function ($payloadItem) {
