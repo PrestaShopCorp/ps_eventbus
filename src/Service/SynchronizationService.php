@@ -165,6 +165,22 @@ class SynchronizationService
     }
 
     /**
+     * disables liveSync
+     *
+     * @param string $shopContent
+     * @param int $shopContentId
+     * @param string $action
+     *
+     * @return void
+     */
+    public function sendLiveSync(string $shopContent, int $shopContentId, string $action)
+    {
+        if ($this->isFullSyncDone($shopContent)) {
+            // SEND live sync only when fullsync is done
+        }
+    }
+
+    /**
      * @param string $shopContentName
      *
      * @return bool
@@ -190,22 +206,6 @@ class SynchronizationService
     }
 
     /**
-     * disables liveSync
-     *
-     * @param string $shopContent
-     * @param int $shopContentId
-     * @param string $action
-     *
-     * @return void
-     */
-    private function sendLiveSync(string $shopContent, int $shopContentId, string $action)
-    {
-        if ($this->isFullSyncDone($shopContent)) {
-            // SEND live sync only when fullsync is done
-        }
-    }
-
-    /**
      * @param int $objectId
      * @param string $type
      * @param string $date
@@ -214,7 +214,7 @@ class SynchronizationService
      *
      * @return void
      */
-    private function insertIncrementalSyncObject($objectId, $type, $date, $shopId, $hasMultiLang = false)
+    public function insertIncrementalSyncObject($objectId, $type, $date, $shopId, $hasMultiLang = false)
     {
         if ((int) $objectId === 0) {
             return;
@@ -271,7 +271,7 @@ class SynchronizationService
      *
      * @return void
      */
-    private function insertDeletedObject($objectId, $type, $date, $shopId)
+    public function insertDeletedObject($objectId, $type, $date, $shopId)
     {
         if ((int) $objectId === 0) {
             return;
