@@ -118,10 +118,10 @@ abstract class AbstractApiController extends \ModuleFrontController
             if ($exception instanceof \PrestaShopDatabaseException) {
                 $this->errorHandler->handle($exception);
                 $this->exitWithExceptionMessage($exception);
-            } else if ($exception instanceof EnvVarException) {
+            } elseif ($exception instanceof EnvVarException) {
                 $this->errorHandler->handle($exception);
                 $this->exitWithExceptionMessage($exception);
-            } else if ($exception instanceof FirebaseException) {
+            } elseif ($exception instanceof FirebaseException) {
                 $this->errorHandler->handle($exception);
                 $this->exitWithExceptionMessage($exception);
             }
