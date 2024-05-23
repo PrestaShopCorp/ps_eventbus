@@ -4,7 +4,7 @@ VERSION ?= $(shell git describe --tags 2> /dev/null || echo "v0.0.0")
 SEM_VERSION ?= $(shell echo ${VERSION} | sed 's/^v//')
 PACKAGE ?= ${MODULE_NAME}-${VERSION}
 PHP_VERSION ?= 8.1
-PS_VERSION ?= 8.1.3
+PS_VERSION ?= 8.1.5
 TESTING_IMAGE ?= prestashop/prestashop-flashlight:${PS_VERSION}
 PS_ROOT_DIR ?= $(shell pwd)/prestashop/prestashop-${PS_VERSION}
 
@@ -31,13 +31,6 @@ define create_module
 	echo ${TMP_DIR}
 endef
 
-define in_docker
-docker run \
---env _PS_ROOT_DIR_=/var/www/html \
---workdir /var/www/html/modules/${MODULE_NAME} \
---volume $(shell pwd):/var/www/html/modules/${MODULE_NAME}:rw \
---entrypoint $1 ${TESTING_IMAGE} $2
-endef
 
 define zip_it
 	TMP_DIR=$(call create_module,$1)
@@ -55,7 +48,6 @@ endef
 
 define in_docker
 	docker run \
-	--env _PS_ROOT_DIR_=/var/www/html \
 	--workdir /var/www/html/modules/${MODULE_NAME} \
 	--volume $(shell pwd):/var/www/html/modules/${MODULE_NAME}:rw \
 	--entrypoint $1 ${TESTING_IMAGE} $2
@@ -115,7 +107,6 @@ vendor: composer.phar
 
 tools/vendor: composer.phar vendor
 	./composer.phar install --working-dir tools -o;
-	sed -i -e 's|%currentWorkingDirectory%/vendor|%currentWorkingDirectory%/tools/vendor|g' ./tools/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
 
 prestashop:
 	@mkdir -p ./prestashop
@@ -192,15 +183,10 @@ docker-phpunit-cov: tools/vendor
 
 # target: phpstan (or docker-phpstan)                          - Run phpstan
 .PHONY: phpstan docker-phpstan
-phpstan: tools/vendor prestashop/prestashop-${PS_VERSION}
-	phpstan analyse --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
-docker-phpstan: tools/vendor
-	@$(call in_docker,make,phpstan)
-
-# target: phpstan-baseline                                     - Generate a phpstan baseline to ignore all errors
-.PHONY: phpstan-baseline
-phpstan-baseline: prestashop/prestashop-${PS_VERSION} phpstan
-	phpstan analyse --generate-baseline --memory-limit=256M --configuration=./tests/phpstan/phpstan.neon;
+phpstan: tools/vendor ${PS_ROOT_DIR}
+	phpstan analyse --memory-limit=-1 --configuration=./tests/phpstan/phpstan-local.neon;
+docker-phpstan:
+	@$(call in_docker,/usr/bin/phpstan,analyse --memory-limit=-1 --configuration=./tests/phpstan/phpstan-docker.neon)
 
 # target: docker-test                                          - Static and unit testing in docker
 .PHONY: docker-test
