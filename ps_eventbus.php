@@ -1587,4 +1587,9 @@ class Ps_eventbus extends Module
     {
         return PHP_VERSION_ID >= 70100;
     }
+
+    private function initServices() 
+    {
+        $this->synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+    }
 }
