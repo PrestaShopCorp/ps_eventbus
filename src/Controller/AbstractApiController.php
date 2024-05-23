@@ -6,6 +6,7 @@ use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
 use PrestaShop\Module\PsEventbus\Exception\QueryParamsException;
+use PrestaShop\Module\PsEventbus\Exception\UnauthorizedException;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
@@ -99,7 +100,7 @@ abstract class AbstractApiController extends \ModuleFrontController
     }
 
     /**
-     * @return void
+     * @return bool|void
      */
     public function init()
     {
@@ -107,15 +108,23 @@ abstract class AbstractApiController extends \ModuleFrontController
 
         try {
             $this->authorize();
-        } catch (\PrestaShopDatabaseException $exception) {
-            $this->errorHandler->handle($exception);
-            $this->exitWithExceptionMessage($exception);
-        } catch (EnvVarException $exception) {
-            $this->errorHandler->handle($exception);
-            $this->exitWithExceptionMessage($exception);
-        } catch (FirebaseException $exception) {
-            $this->errorHandler->handle($exception);
-            $this->exitWithExceptionMessage($exception);
+        } catch (\Exception $exception) {
+            // For ApiHealthCheck, handle the error, and throw UnauthorizedException directly, to catch-up at top level.
+            if (str_contains($this->page_name, 'apiHealthCheck')) {
+                $this->errorHandler->handle($exception);
+                throw new UnauthorizedException('You are not allowed to access to this resource');
+            }
+
+            if ($exception instanceof \PrestaShopDatabaseException) {
+                $this->errorHandler->handle($exception);
+                $this->exitWithExceptionMessage($exception);
+            } elseif ($exception instanceof EnvVarException) {
+                $this->errorHandler->handle($exception);
+                $this->exitWithExceptionMessage($exception);
+            } elseif ($exception instanceof FirebaseException) {
+                $this->errorHandler->handle($exception);
+                $this->exitWithExceptionMessage($exception);
+            }
         }
     }
 
