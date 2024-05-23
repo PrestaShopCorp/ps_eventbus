@@ -207,31 +207,6 @@ class SynchronizationService
     }
 
     /**
-     * @param string $shopContentName
-     *
-     * @return bool
-     *
-     * @@throws \PrestaShopDatabaseException
-     */
-    public function debounceLiveSync(string $shopContentName)
-    {
-        $dateNow = date('Y-m-d H:i:s');
-
-        $shopContent = $this->liveSyncRepository->getShopContentInfo($shopContentName);
-
-        $lastChangeAt = $shopContent != null ? (string) $shopContent['last_change_at'] : (string) $dateNow;
-        $diff = strtotime((string) $dateNow) - strtotime((string) $lastChangeAt);
-
-        if ($shopContent == null || $diff > 60 * 5) {
-            $this->liveSyncRepository->upsertDebounce($shopContentName, $dateNow);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * @param int $objectId
      * @param string $type
      * @param string $date
@@ -331,6 +306,31 @@ class SynchronizationService
                 )
             ];
         }
+    }
+
+    /**
+     * @param string $shopContentName
+     *
+     * @return bool
+     *
+     * @@throws \PrestaShopDatabaseException
+     */
+    private function debounceLiveSync(string $shopContentName)
+    {
+        $dateNow = date('Y-m-d H:i:s');
+
+        $shopContent = $this->liveSyncRepository->getShopContentInfo($shopContentName);
+
+        $lastChangeAt = $shopContent != null ? (string) $shopContent['last_change_at'] : (string) $dateNow;
+        $diff = strtotime((string) $dateNow) - strtotime((string) $lastChangeAt);
+
+        if ($shopContent == null || $diff > 60 * 5) {
+            $this->liveSyncRepository->upsertDebounce($shopContentName, $dateNow);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
