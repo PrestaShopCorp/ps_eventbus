@@ -9,6 +9,7 @@ class ps_EventbusApiHealthCheckModuleFrontController extends AbstractApiControll
 {
     public $type = Config::COLLECTION_SHOPS;
 
+    /** @var bool */
     private $isAuthentifiedCall = true;
 
     /**

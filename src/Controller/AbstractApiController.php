@@ -101,6 +101,8 @@ abstract class AbstractApiController extends \ModuleFrontController
 
     /**
      * @return bool|void
+     *
+     * @throws UnauthorizedException
      */
     public function init()
     {
@@ -110,7 +112,7 @@ abstract class AbstractApiController extends \ModuleFrontController
             $this->authorize();
         } catch (\Exception $exception) {
             // For ApiHealthCheck, handle the error, and throw UnauthorizedException directly, to catch-up at top level.
-            if (str_contains($this->page_name, 'apiHealthCheck')) {
+            if (strpos($this->page_name, 'apiHealthCheck') !== false) {
                 $this->errorHandler->handle($exception);
                 throw new UnauthorizedException('You are not allowed to access to this resource');
             }
