@@ -129,15 +129,13 @@ class ServerInformationRepository
     public function getHealthCheckData(bool $isAuthentifiedCall)
     {
         $tokenValid = false;
-        $tokenIsSet = true;
+        $tokenIsSet = false;
         $allTablesInstalled = true;
 
         try {
             $token = $this->psAccountsAdapterService->getOrRefreshToken();
-
-            if (!$token) {
-                $tokenIsSet = false;
-            } else {
+            if ($token) {
+                $tokenIsSet = true;
                 $accountsClient = $this->getAccountsClient();
                 /** @phpstan-ignore-next-line */
                 $response = $accountsClient->verifyToken($token);
