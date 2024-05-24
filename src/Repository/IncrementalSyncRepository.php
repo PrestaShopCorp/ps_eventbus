@@ -40,26 +40,16 @@ class IncrementalSyncRepository
     }
 
     /**
-     * @param int $objectId
-     * @param string $objectType
-     * @param string $date
-     * @param int $shopId
-     * @param string $langIso
+     * @param array $objectsData
      *
      * @return bool
      */
-    public function insertIncrementalObject($objectId, $objectType, $date, $shopId, $langIso)
+    public function insertIncrementalObject($objectsData)
     {
         try {
             return $this->db->insert(
                 self::INCREMENTAL_SYNC_TABLE,
-                [
-                    'id_shop' => $shopId,
-                    'id_object' => $objectId,
-                    'type' => $objectType,
-                    'created_at' => $date,
-                    'lang_iso' => $langIso,
-                ],
+                $objectsData,
                 false,
                 true,
                 \Db::ON_DUPLICATE_KEY

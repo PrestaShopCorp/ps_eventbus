@@ -10,7 +10,9 @@ use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository;
+use PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository;
 use Ps_eventbus;
 
 class SynchronizationService
@@ -209,13 +211,13 @@ class SynchronizationService
     /**
      * @param int $objectId
      * @param string $type
-     * @param string $date
+     * @param string $createdAt
      * @param int $shopId
      * @param bool $hasMultiLang
      *
      * @return void
      */
-    public function insertIncrementalSyncObject(int $objectId, string $type, string $date, int $shopId, bool $hasMultiLang = false)
+    public function insertIncrementalSyncObject(int $objectId, string $type, string $createdAt, int $shopId, bool $hasMultiLang = false)
     {
         if ((int) $objectId === 0) {
             return;
@@ -235,7 +237,7 @@ class SynchronizationService
                     $this->eventbusSyncRepository->updateTypeSync(
                         $type,
                         0,
-                        $date,
+                        $createdAt,
                         false,
                         $this->languageRepository->getDefaultLanguageIsoCode()
                     );
@@ -245,31 +247,66 @@ class SynchronizationService
             return;
         }
 
+        $objectsData = [];
         $childrenIdsWithType = $this->getChildrenIdsByType($type, $objectId, $shopId);
 
         if ($hasMultiLang) {
-            $languagesIsoCodes = $this->languageRepository->getLanguagesIsoCodes();
+            $allIsoCodes = $this->languageRepository->getLanguagesIsoCodes();
 
-            foreach ($languagesIsoCodes as $languagesIsoCode) {
-                if ($this->isFullSyncDone($type, $languagesIsoCode)) {
-                    $this->incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
+            foreach ($allIsoCodes as $langIso) {
+                if ($this->isFullSyncDone($type, $langIso)) {
+                    array_push($objectsData, 
+                        [
+                            'id_shop' => $shopId,
+                            'id_object' => $objectId,
+                            'type' => $type,
+                            'created_at' => $createdAt,
+                            'lang_iso' => $langIso,
+                        ]
+                    );
 
-                    foreach($childrenIdsWithType['childrenIds'] as $childrenId) {
-                        $this->incrementalSyncRepository->insertIncrementalObject($childrenId, $childrenIdsWithType['type'], $date, $shopId, $languagesIsoCode);
+                    foreach($childrenIdsWithType as $childrenType => $childrenId) {
+                        array_push($objectsData, 
+                            [
+                                'id_shop' => $shopId,
+                                'id_object' => $childrenId,
+                                'type' => $childrenType,
+                                'created_at' => $createdAt,
+                                'lang_iso' => $langIso,
+                            ]
+                        );
                     }
                 }
             }
         } else {
-            $languagesIsoCode = $this->languageRepository->getDefaultLanguageIsoCode();
+            $defaultIsoCode = $this->languageRepository->getDefaultLanguageIsoCode();
 
-            if ($this->isFullSyncDone($type, $languagesIsoCode)) {
-                $this->incrementalSyncRepository->insertIncrementalObject($objectId, $type, $date, $shopId, $languagesIsoCode);
+            if ($this->isFullSyncDone($type, $defaultIsoCode)) {
+                array_push($objectsData, 
+                    [
+                        'id_shop' => $shopId,
+                        'id_object' => $objectId,
+                        'type' => $type,
+                        'created_at' => $createdAt,
+                        'lang_iso' => $defaultIsoCode,
+                    ]
+                );
 
-                foreach($childrenIdsWithType['childrenIds'] as $childrenId) {
-                    $this->incrementalSyncRepository->insertIncrementalObject($childrenId, $childrenIdsWithType['type'], $date, $shopId, $languagesIsoCode);
+                foreach($childrenIdsWithType as $childrenType => $childrenId) {
+                    array_push($objectsData, 
+                        [
+                            'id_shop' => $shopId,
+                            'id_object' => $childrenId,
+                            'type' => $childrenType,
+                            'created_at' => $createdAt,
+                            'lang_iso' => $defaultIsoCode,
+                        ]
+                    );
                 }
             }
         }
+
+        $this->incrementalSyncRepository->insertIncrementalObject($objectsData);
     }
 
     /**
@@ -290,20 +327,32 @@ class SynchronizationService
         $this->incrementalSyncRepository->removeIncrementalSyncObject($type, $objectId);
     }
 
-    private function getChildrenIdsByType(string $type, int $objectId, int $shopId)
+    /**
+     * @param string $type
+     * @param int $objectId
+     * @param int $shopId
+     *
+     * @return array
+     */
+    private function getChildrenIdsByType(string $type, int $objectId)
     {
         if ($type == Config::COLLECTION_ORDERS) {
             /** @var OrderDetailsRepository */
             $orderDetailsRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository');
+            $orderDetailIds = $orderDetailsRepository->getOrderDetailIdsByOrderIds([$objectId]);
+
+            /** @var OrderHistoryRepository */
+            $orderHistoryRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository');
+            $orderHistoryIds = $orderHistoryRepository->getOrderHistoryStatuseIdsByOrderIds([$objectId]);
+
+            /** @var OrderCartRuleRepository */
+            $orderCartRuleRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository');
+            $orderCartIds = $orderCartRuleRepository->getOrderCartRuleIdsByOrderIds([$objectId]);
 
             return [
-                'type' => Config::COLLECTION_ORDER_DETAILS,
-                'childrenIds' => array_map(
-                    function ($orderDetail) {
-                        return $orderDetail['id_order_detail'];
-                    },
-                    $orderDetailsRepository->getOrderDetails([$objectId], $shopId)
-                )
+                Config::COLLECTION_ORDER_DETAILS => $orderDetailIds,
+                Config::COLLECTION_ORDER_STATUS_HISTORY => $orderHistoryIds,
+                Config::COLLECTION_ORDER_CART_RULES => $orderCartIds
             ];
         }
     }
