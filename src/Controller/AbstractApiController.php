@@ -101,6 +101,7 @@ abstract class AbstractApiController extends \ModuleFrontController
 
     /**
      * @return bool|void
+     *
      * @throws UnauthorizedException
      */
     public function init()
