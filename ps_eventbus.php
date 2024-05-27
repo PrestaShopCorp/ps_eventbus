@@ -25,16 +25,19 @@
  */
 
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Module\Install;
+use PrestaShop\Module\PsEventbus\Module\Uninstall;
 use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
-use PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer;
 use PrestaShopBundle\EventListener\ActionDispatcherLegacyHooksSubscriber;
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
+
+require_once __DIR__ . '/vendor/autoload.php';
 
 class Ps_eventbus extends Module
 {
@@ -208,13 +211,6 @@ class Ps_eventbus extends Module
             return;
         }
 
-        require_once __DIR__ . '/vendor/autoload.php';
-
-        $this->serviceContainer = new ServiceContainer(
-            (string) $this->name,
-            $this->getLocalPath()
-        );
-
         if ($this->context->shop === null) {
             throw new \PrestaShopException('No shop context');
         }
@@ -251,7 +247,7 @@ class Ps_eventbus extends Module
             return defined('PS_INSTALLATION_IN_PROGRESS');
         }
 
-        $installer = new PrestaShop\Module\PsEventbus\Module\Install($this, \Db::getInstance());
+        $installer = new Install($this, \Db::getInstance());
 
         return $installer->installDatabaseTables()
             && parent::install()
@@ -263,7 +259,7 @@ class Ps_eventbus extends Module
      */
     public function uninstall()
     {
-        $uninstaller = new PrestaShop\Module\PsEventbus\Module\Uninstall($this, \Db::getInstance());
+        $uninstaller = new Uninstall($this, \Db::getInstance());
 
         return $uninstaller->uninstallMenu()
             && $uninstaller->uninstallDatabaseTables()
@@ -289,7 +285,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @return \PrestaShop\Module\PsAccounts\DependencyInjection\ServiceContainer
+     * @return \PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer
      *
      * @throws Exception
      */
@@ -1466,14 +1462,18 @@ class Ps_eventbus extends Module
     public function hookActionDispatcherBefore($parameters)
     {
         try {
-            // Class "ActionDispatcherLegacyHooksSubscriber" as implement in 1.7.3.0: https://github.com/PrestaShop/PrestaShop/commit/a4ae4544cc62c818aba8b3d9254308f538b7acdc
             if (version_compare(_PS_VERSION_, '1.7.3.0', '<')) {
-                return;
-            }
-
-            // If is not back office controller, don't add data in incremental sync
-            if ($parameters['controller_type'] != ActionDispatcherLegacyHooksSubscriber::BACK_OFFICE_CONTROLLER) {
-                return;
+                /**
+                 * Class "ActionDispatcherLegacyHooksSubscriber" as implement in 1.7.3.0:
+                 * https://github.com/PrestaShop/PrestaShop/commit/a4ae4544cc62c818aba8b3d9254308f538b7acdc
+                 */
+                if ($parameters['controller_type'] != 2) {
+                    return;
+                }
+            } else {
+                if ($parameters['controller_type'] != ActionDispatcherLegacyHooksSubscriber::BACK_OFFICE_CONTROLLER) {
+                    return;
+                }
             }
 
             if (array_key_exists('route', $parameters)) {
