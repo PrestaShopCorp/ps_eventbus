@@ -69,7 +69,7 @@ class OrderHistoryRepository
 
         $query = $this->getBaseQuery();
 
-        $query->select('oh.id_order_state')
+        $query->select('oh.id_order_state as id')
             ->where('oh.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')')
         ;
 

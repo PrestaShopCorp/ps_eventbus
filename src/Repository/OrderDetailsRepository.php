@@ -86,7 +86,7 @@ class OrderDetailsRepository
 
         $query = $this->getBaseQuery();
 
-        $query->select('od.id_order_detail')
+        $query->select('od.id_order_detail as id')
             ->where('od.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')')
             ->groupBy('od.id_order_detail');
 

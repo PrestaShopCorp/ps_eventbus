@@ -265,16 +265,19 @@ class SynchronizationService
                         ]
                     );
 
-                    foreach($childrenIdsWithType as $childrenType => $childrenId) {
-                        array_push($objectsData, 
-                            [
-                                'id_shop' => $shopId,
-                                'id_object' => $childrenId,
-                                'type' => $childrenType,
-                                'created_at' => $createdAt,
-                                'lang_iso' => $langIso,
-                            ]
-                        );
+                    foreach($childrenIdsWithType as $childrenType => $childrenIds) {
+                        foreach($childrenIds as $childrenId) {
+                            array_push($objectsData, 
+                                [
+                                    'id_shop' => $shopId,
+                                    'id_object' => $childrenId,
+                                    'type' => $childrenType,
+                                    'created_at' => $createdAt,
+                                    'lang_iso' => $langIso,
+                                ]
+                            );
+                        }
+                        
                     }
                 }
             }
@@ -292,21 +295,25 @@ class SynchronizationService
                     ]
                 );
 
-                foreach($childrenIdsWithType as $childrenType => $childrenId) {
-                    array_push($objectsData, 
-                        [
-                            'id_shop' => $shopId,
-                            'id_object' => $childrenId,
-                            'type' => $childrenType,
-                            'created_at' => $createdAt,
-                            'lang_iso' => $defaultIsoCode,
-                        ]
-                    );
+                foreach($childrenIdsWithType as $childrenType => $childrenIds) {
+                    foreach($childrenIds as $childrenId) {
+                        array_push($objectsData, 
+                            [
+                                'id_shop' => $shopId,
+                                'id_object' => $childrenId,
+                                'type' => $childrenType,
+                                'created_at' => $createdAt,
+                                'lang_iso' => $defaultIsoCode,
+                            ]
+                        );
+                    }
                 }
             }
         }
-
-        $this->incrementalSyncRepository->insertIncrementalObject($objectsData);
+        
+        if (empty($objectsData) == false) {
+            $this->incrementalSyncRepository->insertIncrementalObject($objectsData);
+        }
     }
 
     /**
@@ -350,11 +357,13 @@ class SynchronizationService
             $orderCartIds = $orderCartRuleRepository->getOrderCartRuleIdsByOrderIds([$objectId]);
 
             return [
-                Config::COLLECTION_ORDER_DETAILS => $orderDetailIds,
-                Config::COLLECTION_ORDER_STATUS_HISTORY => $orderHistoryIds,
-                Config::COLLECTION_ORDER_CART_RULES => $orderCartIds
+                Config::COLLECTION_ORDER_DETAILS => array_column($orderDetailIds, 'id'),
+                Config::COLLECTION_ORDER_STATUS_HISTORY => array_column($orderHistoryIds, 'id'),
+                Config::COLLECTION_ORDER_CART_RULES => array_column($orderCartIds, 'id')
             ];
         }
+
+        return [];
     }
 
     /**

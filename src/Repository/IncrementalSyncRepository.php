@@ -46,6 +46,7 @@ class IncrementalSyncRepository
      */
     public function insertIncrementalObject($objectsData)
     {
+        dump($objectsData);
         try {
             return $this->db->insert(
                 self::INCREMENTAL_SYNC_TABLE,
@@ -55,6 +56,7 @@ class IncrementalSyncRepository
                 \Db::ON_DUPLICATE_KEY
             );
         } catch (\PrestaShopDatabaseException $e) {
+            dump($e);
             $this->errorHandler->handle(
                 new \PrestaShopDatabaseException('Failed to insert incremental object', $e->getCode(), $e)
             );
