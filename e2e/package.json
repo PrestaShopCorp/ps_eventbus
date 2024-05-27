@@ -44,7 +44,9 @@
     "ts-jest": "^29.1.2",
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.9.0",
-    "ws": "^8.17.0"
+    "ws": "^8.17.0",
+    "pg": "^8.11.5",
+    "pg-types": "^4.0.2"
   },
   "engines": {
     "yarn": "please use pnpm",

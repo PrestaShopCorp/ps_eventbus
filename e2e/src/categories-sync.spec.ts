@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as matchers from 'jest-extended';
 import { Category, WSClient } from 'prestashop-ws-client';
 import { concatMap, from, lastValueFrom, map, toArray, zip } from 'rxjs';
-import { categoryMultilanguage, getWSKey, getWSUrl } from './data/ws';
+import { category_new } from './data/ws/categories';
 import {
   Controller,
   contentControllerMapping,
@@ -15,58 +15,37 @@ import {
 } from './helpers/data-helper';
 import { dumpUploadData, logAxiosError } from './helpers/log-helper';
 import { PsEventbusSyncUpload, doFullSync, probe } from './helpers/mock-probe';
+import { PostgresClient } from './helpers/postgres';
+import { postgresTablesMapping } from './helpers/postgres-tables';
 import testConfig from './helpers/test.config';
 
 expect.extend(matchers);
 
-// these fields change from test run to test run, so we replace them with a matcher to only ensure the type and format are correct
-const isDateString = (val) =>
-  val ? expect(val).toBeDateString() : expect(val).toBeNull();
-const isString = (val) =>
-  val ? expect(val).toBeString() : expect(val).toBeNull();
-const isNumber = (val) =>
-  val ? expect(val).toBeNumber() : expect(val).toBeNull();
-const specialFieldAssert: { [index: string]: (val) => void } = {
-  created_at: isDateString,
-  updated_at: isDateString,
-  last_connection_date: isDateString,
-  folder_created_at: isDateString,
-  date_add: isDateString,
-  from: isDateString,
-  to: isDateString,
-  conversion_rate: isNumber,
-  cms_version: isString,
-  module_id: isString,
-  module_version: isString,
-  theme_version: isString,
-  php_version: isString,
-  http_server: isString,
-};
-
-describe('Full Sync', () => {
+describe('Categories', () => {
   const testIndex = 0;
 
   let wsClient: WSClient = null;
   let categoryId: number = -1;
+  let postgresClient: PostgresClient;
 
-  const controllers: Controller[] = controllerList;
   const controller: string = contentControllerMapping.categories;
   const jobId: string = `valid-job-full-${controller}`;
 
   beforeAll(async () => {
-    wsClient = new WSClient(getWSUrl(), getWSKey());
-    const category: Category = await wsClient.categories.create(
-      categoryMultilanguage,
+    if (!postgresClient.isConnected) {
+      await postgresClient.connect();
+    }
+    await postgresClient.query(
+      `TRUNCATE TABLE  ${postgresTablesMapping.categories};`,
     );
+
+    wsClient = new WSClient(testConfig.prestashopUrl, testConfig.wsKey);
+    const category: Category = await wsClient.categories.create(category_new);
 
     categoryId = category.id;
   });
 
-  afterAll(async () => {
-    await wsClient.categories.delete(categoryId.toString());
-  });
-
-  describe('Categories', () => {
+  describe('Full Sync', () => {
     it(`${controller} should accept full sync`, async () => {
       // arrange
       const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
@@ -126,10 +105,13 @@ describe('Full Sync', () => {
     });
 
     it(`${controller} should upload complete dataset collector`, async () => {
+      const ctrler: Controller = controllerList[controller];
       // arrange
-      const fullSync$ = doFullSync(jobId, controller, { timeout: 4000 });
+      const fullSync$ = doFullSync(jobId, ctrler, {
+        timeout: 4000,
+      });
       const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 4000 });
-      const fixture = await loadFixture(controller);
+      const fixture = await loadFixture(ctrler);
 
       // act
       const syncedData: PsEventbusSyncUpload[] = await lastValueFrom(
@@ -174,6 +156,18 @@ describe('Full Sync', () => {
           }
         }
       }
+    });
+  });
+
+  describe('Incremental Sync', () => {
+    it(`${controller} update category`, async () => {
+      //TODO
+      await wsClient.categories.update(category_new);
+    });
+
+    it(`${controller} update category`, async () => {
+      //TODO
+      await wsClient.categories.delete(categoryId.toString());
     });
   });
 });

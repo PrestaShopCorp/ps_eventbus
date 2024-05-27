@@ -18,8 +18,10 @@ stack consists of the following elements:
 - PHPMyAdmin;
 - A mock of the CloudSync APIs.
 
-For the CloudSync APIs mock, it is a NodeJS application simulating the CloudSync APIs. Requests made by `ps_eventbus` to CloudSync are redirected to the mock using a reverse proxy (nginx).
-When a request reaches the mock, it utilizes WebSockets to transmit the said request from `ps_eventbus` to the E2E tests, allowing validation of the information coming out of `ps_eventbus`.
+For the CloudSync APIs mock, it is a NodeJS application simulating the CloudSync APIs. Requests made by `ps_eventbus` to
+CloudSync are redirected to the mock using a reverse proxy (nginx).
+When a request reaches the mock, it utilizes WebSockets to transmit the said request from `ps_eventbus` to the E2E
+tests, allowing validation of the information coming out of `ps_eventbus`.
 
 ## Installation
 
@@ -48,10 +50,11 @@ Or in detached mode:
 docker compose up -d
 ```
 
-Or specifically only starting PrestaShop (and its dependencies) with special commands to be sure your containers and volumes will be recreacted/renewed:
+Or specifically only starting PrestaShop (and its dependencies) with special commands to be sure your containers and
+volumes will be recreacted/renewed:
 
 ```
-docker compose up prestashop --force-recreate --renew-anon-volumes
+dock
 ```
 
 ## Usage
