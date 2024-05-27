@@ -1450,6 +1450,12 @@ class Ps_eventbus extends Module
     public function hookActionDispatcherBefore($parameters)
     {
         try {
+            // Class "ActionDispatcherLegacyHooksSubscriber" as implement in 1.7.3.0: https://github.com/PrestaShop/PrestaShop/commit/a4ae4544cc62c818aba8b3d9254308f538b7acdc
+            if (version_compare(_PS_VERSION_, '1.7.3.0', '<')) {
+                return;
+            }
+
+            // If is not back office controller, don't add data in incremental sync
             if ($parameters['controller_type'] != ActionDispatcherLegacyHooksSubscriber::BACK_OFFICE_CONTROLLER) {
                 return;
             }
