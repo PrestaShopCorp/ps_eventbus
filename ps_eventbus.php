@@ -30,7 +30,6 @@ use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer;
-use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use PrestaShopBundle\EventListener\ActionDispatcherLegacyHooksSubscriber;
 
 if (!defined('_PS_VERSION_')) {
@@ -48,6 +47,8 @@ class Ps_eventbus extends Module
      * @var string
      */
     const VERSION = '0.0.0';
+
+    const DEFAULT_ENV = '';
 
     /**
      * @var array
@@ -150,7 +151,7 @@ class Ps_eventbus extends Module
     ];
 
     /**
-     * @var \PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer
+     * @var \PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer
      */
     private $serviceContainer;
 
@@ -270,6 +271,43 @@ class Ps_eventbus extends Module
     }
 
     /**
+     * @return string
+     */
+    public function getModuleEnvVar()
+    {
+        return strtoupper((string) $this->name) . '_ENV';
+    }
+
+    /**
+     * @param string $default
+     *
+     * @return string
+     */
+    public function getModuleEnv($default = null)
+    {
+        return getenv($this->getModuleEnvVar()) ?: $default ?: self::DEFAULT_ENV;
+    }
+
+    /**
+     * @return \PrestaShop\Module\PsAccounts\DependencyInjection\ServiceContainer
+     *
+     * @throws Exception
+     */
+    public function getServiceContainer()
+    {
+        if (null === $this->serviceContainer) {
+            // append version number to force cache generation (1.6 Core won't clear it)
+            $this->serviceContainer = new \PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer(
+                $this->name . str_replace(['.', '-', '+'], '', $this->version),
+                $this->getLocalPath(),
+                $this->getModuleEnv()
+            );
+        }
+
+        return $this->serviceContainer;
+    }
+
+    /**
      * This function allows you to patch bugs that can be found related to "ServiceNotFoundException".
      * It ensures that you have access to the SymfonyContainer, and also that you have access to FO services.
      *
@@ -279,29 +317,7 @@ class Ps_eventbus extends Module
      */
     public function getService($serviceName)
     {
-        $splitServiceNamespace = explode('.', $serviceName);
-        $firstLevelNamespace = $splitServiceNamespace[0];
-
-        // if serviceName is not a service coming from ps_eventbus
-        if ($firstLevelNamespace !== 'ps_eventbus') {
-            // use symfony service container from prestashop
-            try {
-                $service = $this->serviceContainer->getService($serviceName);
-            } catch (\Exception $e) {
-                $container = SymfonyContainer::getInstance();
-
-                if ($container == null) {
-                    throw new \PrestaShopException('Symfony container is null or invalid');
-                }
-
-                $service = $container->get($serviceName);
-            }
-
-            return $service;
-        }
-
-        // otherwise use the service container from the module
-        return $this->serviceContainer->getService($serviceName);
+        return $this->getServiceContainer()->getService($serviceName);
     }
 
     /**
