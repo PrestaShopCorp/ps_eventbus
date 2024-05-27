@@ -11,6 +11,8 @@ class ps_EventbusApiDeletedObjectsModuleFrontController extends AbstractApiContr
 
     /**
      * @return void
+     *
+     * @throws\PrestaShopException
      */
     public function postProcess()
     {

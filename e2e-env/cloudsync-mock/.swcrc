@@ -6,5 +6,6 @@
       "decorators": false,
       "dynamicImport": false
     }
-  }
+  },
+  "minify": false
 }
