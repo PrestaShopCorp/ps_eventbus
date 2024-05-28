@@ -1,35 +1,25 @@
 services:
   prestashop:
     image: ${DOCKER_IMAGE_PRESTASHOP:?See e2e-env/.env.dist}
+    container_name: prestashop
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - PS_EVENTBUS_VERSION=$PS_EVENTBUS_VERSION
+      - PS_ACCOUNTS_MOCK_VERSION=$PS_ACCOUNTS_MOCK_VERSION
+      - GITHUB_API_TOKEN=$GITHUB_API_TOKEN
+      - DEBUG_MODE=true
     depends_on:
       mysql:
         condition: service_healthy
-    healthcheck:
-      test:
-        [
-          'CMD',
-          'curl',
-          '-sI',
-          'http://localhost:80/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck',
-        ]
-      interval: 1s
-      timeout: 5s
-      retries: 30
     volumes:
-      - ..:/var/www/html/modules/ps_eventbus:rw
       - ./init-scripts:/tmp/init-scripts:ro
-      - /var/www/html/modules/ps_eventbus/vendor
-      - /var/www/html/modules/ps_eventbus/tools/vendor
-    environment:
-      - PS_DOMAIN=localhost:8000
-      - ON_INIT_SCRIPT_FAILURE=fail
-      - DEBUG_MODE=true
-      - INIT_SCRIPTS_USER=root
-      - PS_ACCOUNTS_MOCK_VERSION=$PS_ACCOUNTS_MOCK_VERSION
+      - ./downloads:/downloads:rw
     ports:
       - ${HOST_PORT_BIND_PRESTASHOP:?See e2e-env/.env.dist}:80
     networks:
-      - prestashop
+      prestashop:
 
   mysql:
     image: mariadb:${DOCKER_VERSION_MARIADB:?See e2e-env/.env.dist}
