@@ -140,7 +140,7 @@ class ModuleHelper
         }
 
         /** @var Router $router * */
-        $router = $this->module->getService('router');
+        $router = $this->module->get('router');
 
         if ($moduleName === 'ps_mbo') {
             return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
@@ -170,7 +170,7 @@ class ModuleHelper
         }
 
         /** @var Router $router * */
-        $router = $this->module->getService('router');
+        $router = $this->module->get('router');
 
         return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
             $router->generate('admin_module_manage_action', [
@@ -191,7 +191,7 @@ class ModuleHelper
         // need to check if module is up to date, if not, return empty string
 
         /** @var Router $router * */
-        $router = $this->module->getService('router');
+        $router = $this->module->get('router');
 
         return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
             $router->generate('admin_module_manage_action', [
