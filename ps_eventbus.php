@@ -1462,18 +1462,12 @@ class Ps_eventbus extends Module
     public function hookActionDispatcherBefore($parameters)
     {
         try {
-            if (version_compare(_PS_VERSION_, '1.7.3.0', '<')) {
-                /**
-                 * Class "ActionDispatcherLegacyHooksSubscriber" as implement in 1.7.3.0:
-                 * https://github.com/PrestaShop/PrestaShop/commit/a4ae4544cc62c818aba8b3d9254308f538b7acdc
-                 */
-                if ($parameters['controller_type'] != 2) {
-                    return;
-                }
-            } else {
-                if ($parameters['controller_type'] != ActionDispatcherLegacyHooksSubscriber::BACK_OFFICE_CONTROLLER) {
-                    return;
-                }
+            /**
+             * Class "ActionDispatcherLegacyHooksSubscriber" as implement in 1.7.3.0:
+             * https://github.com/PrestaShop/PrestaShop/commit/a4ae4544cc62c818aba8b3d9254308f538b7acdc
+             */
+            if ($parameters['controller_type'] != 2) {
+                return;
             }
 
             if (array_key_exists('route', $parameters)) {
