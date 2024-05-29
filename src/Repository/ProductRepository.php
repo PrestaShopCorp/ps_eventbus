@@ -345,6 +345,7 @@ class ProductRepository
             $query->select('p.mpn');
         }
 
+        // https://github.com/PrestaShop/PrestaShop/commit/10268af8db4163dc2a02edb8da93d02f37f814d8#diff-e94a594ba740485c7a4882b333984d3932a2f99c0d6d0005620745087cce7a10R260
         if (version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
             $query->select('p.additional_delivery_times');
         }

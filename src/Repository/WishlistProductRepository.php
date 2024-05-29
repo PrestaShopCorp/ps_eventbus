@@ -38,6 +38,7 @@ class WishlistProductRepository
      */
     public function getWishlistProducts(array &$wishlistIds)
     {
+        // need this module for this table : https://addons.prestashop.com/en/undownloadable/9131-wishlist-block.html
         if (empty($this->checkIfPsWishlistIsInstalled())) {
             return [];
         }
