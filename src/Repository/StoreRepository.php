@@ -36,7 +36,7 @@ class StoreRepository
         $langId = (int) \Language::getIdByIso($langIso);
 
         $query = new \DbQuery();
-        if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+        if (version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
             $query->from(self::STORES_TABLE, 's')
                 ->leftJoin('store_lang', 'sl', 's.id_store = sl.id_store')
                 ->leftJoin('store_shop', 'ss', 's.id_store = ss.id_store')

@@ -146,7 +146,7 @@ class CurrencyRepository
         } else {
             $query->select('c.id_currency, \'\' as name, c.iso_code, c.conversion_rate, c.deleted, c.active');
         }
-        if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+        if (version_compare(_PS_VERSION_, '1.7.6.0', '>=')) {
             $query->select('c.precision');
         }
     }

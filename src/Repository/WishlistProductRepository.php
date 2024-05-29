@@ -22,6 +22,7 @@ class WishlistProductRepository
     public function getBaseQuery(array &$wishlistIds)
     {
         $query = new \DbQuery();
+
         $query->from('wishlist_product', 'wp');
         $query->where('wp.id_wishlist IN(' . implode(',', array_map('intval', $wishlistIds)) . ')');
 
@@ -37,11 +38,27 @@ class WishlistProductRepository
      */
     public function getWishlistProducts(array &$wishlistIds)
     {
+        if (empty($this->checkIfPsWishlistIsInstalled())) {
+            return [];
+        }
+
         $query = $this->getBaseQuery($wishlistIds);
 
         $this->addSelectParameters($query);
 
         return $this->db->executeS($query);
+    }
+
+    private function checkIfPsWishlistIsInstalled() 
+    {
+        $moduleisInstalledQuery = new \DbQuery();
+
+        $moduleisInstalledQuery->select('*');
+        $moduleisInstalledQuery->from('information_schema.tables');
+        $moduleisInstalledQuery->where('table_name LIKE \'%wishlist\'');
+        $moduleisInstalledQuery->limit(1);
+
+        return $this->db->executeS($moduleisInstalledQuery);
     }
 
     /**

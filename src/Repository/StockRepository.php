@@ -122,6 +122,10 @@ class StockRepository
     private function addSelectParameters(\DbQuery $query)
     {
         $query->select('sa.id_stock_available, sa.id_product, sa.id_product_attribute, sa.id_shop, sa.id_shop_group');
-        $query->select('sa.quantity, sa.physical_quantity, sa.reserved_quantity, sa.depends_on_stock, sa.out_of_stock, sa.location');
+        $query->select('sa.quantity, sa.physical_quantity, sa.reserved_quantity, sa.depends_on_stock, sa.out_of_stock');
+
+        if (version_compare(_PS_VERSION_, '1.7.5.0', '>=')) {
+            $query->select('sa.location');
+        }
     }
 }

@@ -345,7 +345,11 @@ class ProductRepository
             $query->select('p.mpn');
         }
 
-        $query->select('p.width, p.height, p.depth, p.additional_delivery_times, p.additional_shipping_cost');
+        if (version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
+            $query->select('p.additional_delivery_times');
+        }
+
+        $query->select('p.width, p.height, p.depth, p.additional_shipping_cost');
         $query->select('pl.delivery_in_stock, pl.delivery_out_stock');
 
         if (version_compare(_PS_VERSION_, '1.7', '>=')) {

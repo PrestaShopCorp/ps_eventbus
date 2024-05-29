@@ -139,8 +139,10 @@ class EmployeeRepository
         $query->select('e.id_last_customer_message');
         $query->select('e.id_last_customer');
         $query->select('e.last_connection_date');
-        $query->select('e.has_enabled_gravatar');
-
         $query->select('es.id_shop as id_shop');
+
+        if (version_compare(_PS_VERSION_, '1.7.8.0', '>=')) {
+            $query->select('e.has_enabled_gravatar');
+        }
     }
 }
