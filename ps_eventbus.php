@@ -1462,7 +1462,7 @@ class Ps_eventbus extends Module
     public function hookActionDispatcherBefore($parameters)
     {
         try {
-            /**
+            /*
              * Class "ActionDispatcherLegacyHooksSubscriber" as implement in 1.7.3.0:
              * https://github.com/PrestaShop/PrestaShop/commit/a4ae4544cc62c818aba8b3d9254308f538b7acdc
              */

@@ -49,7 +49,7 @@ class WishlistProductRepository
         return $this->db->executeS($query);
     }
 
-    private function checkIfPsWishlistIsInstalled() 
+    private function checkIfPsWishlistIsInstalled()
     {
         $moduleisInstalledQuery = new \DbQuery();
 

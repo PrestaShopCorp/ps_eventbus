@@ -68,7 +68,7 @@ class ServerInformationRepository
         $this->configuration = [
             'EVENT_BUS_SYNC_API_URL' => $eventbusSyncApiUrl,
             'EVENT_BUS_LIVE_SYNC_API_URL' => $eventbusLiveSyncApiUrl,
-            'EVENT_BUS_PROXY_API_URL' => $eventbusProxyApiUrl
+            'EVENT_BUS_PROXY_API_URL' => $eventbusProxyApiUrl,
         ];
         $this->errorHandler = $errorHandler;
     }
