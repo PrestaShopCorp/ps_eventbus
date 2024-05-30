@@ -71,7 +71,7 @@ class ContainerProvider
     /**
      * @param string $containerName
      *
-     * @return mixed
+     * @return ContainerInterface
      *
      * @throws \Exception
      */
@@ -87,7 +87,10 @@ class ContainerProvider
         if ($containerConfigCache->isFresh()) {
             require_once $containerFilePath;
 
-            return new $containerClassName();
+            /** @var ContainerInterface $containerClass */
+            $containerClass = new $containerClassName();
+
+            return $containerClass;
         }
 
         $containerBuilder = new ContainerBuilder();
@@ -106,8 +109,10 @@ class ContainerProvider
 
         $containerBuilder->compile();
         $dumper = new PhpDumper($containerBuilder);
+        $serviceContainerClass = $dumper->dump(['class' => $containerClassName]);
+
         $containerConfigCache->write(
-            (string) $dumper->dump(['class' => $containerClassName]),
+            is_array($serviceContainerClass) ? implode(' ', $serviceContainerClass) : $serviceContainerClass,
             $containerBuilder->getResources()
         );
 
