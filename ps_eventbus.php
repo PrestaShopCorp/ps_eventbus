@@ -27,13 +27,6 @@
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Module\Install;
 use PrestaShop\Module\PsEventbus\Module\Uninstall;
-use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
-use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
-use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
-use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
-use PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer;
-use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
-use PrestaShopBundle\EventListener\ActionDispatcherLegacyHooksSubscriber;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
 
 if (!defined('_PS_VERSION_')) {
@@ -229,8 +222,6 @@ class Ps_eventbus extends Module
             throw new \PrestaShopException('No shop context');
         }
 
-        $this->synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
-
         $this->shopId = (int) $this->context->shop->id;
     }
 
@@ -339,6 +330,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectImageDeleteAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $image = $parameters['object'];
@@ -362,6 +354,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectImageAddAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $image = $parameters['object'];
@@ -384,6 +377,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectImageUpdateAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $image = $parameters['object'];
@@ -406,6 +400,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectLanguageDeleteAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $language = $parameters['object'];
@@ -427,6 +422,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectLanguageAddAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $language = $parameters['object'];
@@ -449,6 +445,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectLanguageUpdateAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $language = $parameters['object'];
@@ -471,6 +468,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectManufacturerDeleteAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $manufacturer = $parameters['object'];
@@ -492,6 +490,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectManufacturerAddAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $manufacturer = $parameters['object'];
@@ -514,6 +513,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectManufacturerUpdateAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $manufacturer = $parameters['object'];
@@ -536,6 +536,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectSupplierDeleteAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $supplier = $parameters['object'];
@@ -557,6 +558,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectSupplierAddAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $supplier = $parameters['object'];
@@ -579,6 +581,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectSupplierUpdateAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $supplier = $parameters['object'];
@@ -601,6 +604,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectProductDeleteAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $product = $parameters['object'];
@@ -623,6 +627,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectProductAddAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $product = $parameters['object'];
@@ -664,6 +669,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectProductUpdateAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         /** @var Product $product */
@@ -705,6 +711,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectWishlistDeleteAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $wishlist = $parameters['object'];
@@ -726,6 +733,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectWishlistAddAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $wishlist = $parameters['object'];
@@ -748,6 +756,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectWishlistUpdateAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $wishlist = $parameters['object'];
@@ -770,6 +779,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectStockAddAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $stock = $parameters['object'];
@@ -792,6 +802,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectStockUpdateAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $stock = $parameters['object'];
@@ -814,6 +825,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectStoreDeleteAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $product = $parameters['object'];
@@ -835,6 +847,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectStoreAddAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $product = $parameters['object'];
@@ -857,6 +870,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectStoreUpdateAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $store = $parameters['object'];
@@ -879,6 +893,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCombinationDeleteAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         /** @var Combination $combination */
@@ -902,6 +917,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCategoryAddAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $category = $parameters['object'];
@@ -925,6 +941,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCategoryUpdateAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $category = $parameters['object'];
@@ -948,6 +965,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCategoryDeleteAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $category = $parameters['object'];
@@ -970,6 +988,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCustomerAddAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $customer = $parameters['object'];
@@ -993,6 +1012,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCustomerUpdateAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $customer = $parameters['object'];
@@ -1016,6 +1036,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCustomerDeleteAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $customer = $parameters['object'];
@@ -1038,6 +1059,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCurrencyAddAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $currency = $parameters['object'];
@@ -1061,6 +1083,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCurrencyUpdateAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $currency = $parameters['object'];
@@ -1084,6 +1107,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCartAddAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $cart = $parameters['object'];
@@ -1106,6 +1130,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCartUpdateAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $cart = $parameters['object'];
@@ -1128,6 +1153,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCartRuleAddAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $cartRule = $parameters['object'];
@@ -1150,6 +1176,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCartRuleDeleteAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $cartRule = $parameters['object'];
@@ -1172,6 +1199,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCartRuleUpdateAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $cartRule = $parameters['object'];
@@ -1194,6 +1222,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectOrderAddAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $order = $parameters['object'];
@@ -1216,6 +1245,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectOrderUpdateAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $order = $parameters['object'];
@@ -1238,6 +1268,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCarrierAddAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         /** @var Carrier $carrier */
@@ -1261,6 +1292,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCarrierUpdateAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         /** @var Carrier $carrier */
@@ -1284,6 +1316,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCarrierDeleteAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         /** @var Carrier $carrier */
@@ -1305,6 +1338,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCountryAddAfter()
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $synchronizationService->insertIncrementalSyncObject(
@@ -1320,6 +1354,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCountryUpdateAfter()
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $synchronizationService->insertIncrementalSyncObject(
@@ -1335,6 +1370,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectCountryDeleteAfter()
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $synchronizationService->insertIncrementalSyncObject(
@@ -1350,6 +1386,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectStateAddAfter()
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $synchronizationService->insertIncrementalSyncObject(
@@ -1365,6 +1402,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectStateUpdateAfter()
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $synchronizationService->insertIncrementalSyncObject(
@@ -1380,6 +1418,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectStateDeleteAfter()
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $synchronizationService->insertIncrementalSyncObject(
@@ -1395,6 +1434,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectZoneAddAfter()
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $synchronizationService->insertIncrementalSyncObject(
@@ -1410,6 +1450,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectZoneUpdateAfter()
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $synchronizationService->insertIncrementalSyncObject(
@@ -1425,6 +1466,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectZoneDeleteAfter()
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
         
         $synchronizationService->insertIncrementalSyncObject(
@@ -1440,6 +1482,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectTaxAddAfter()
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $synchronizationService->insertIncrementalSyncObject(
@@ -1455,6 +1498,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectTaxUpdateAfter()
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $synchronizationService->insertIncrementalSyncObject(
@@ -1470,6 +1514,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectTaxDeleteAfter()
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $synchronizationService->insertIncrementalSyncObject(
@@ -1485,6 +1530,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectTaxRulesGroupAddAfter()
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $synchronizationService->insertIncrementalSyncObject(
@@ -1500,6 +1546,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectTaxRulesGroupUpdateAfter()
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $synchronizationService->insertIncrementalSyncObject(
@@ -1515,6 +1562,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectTaxRulesGroupDeleteAfter()
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $synchronizationService->insertIncrementalSyncObject(
@@ -1530,6 +1578,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionShippingPreferencesPageSave()
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $synchronizationService->insertIncrementalSyncObject(
@@ -1545,6 +1594,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectEmployeeAddAfter()
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $synchronizationService->insertIncrementalSyncObject(
@@ -1560,6 +1610,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectEmployeeDeleteAfter()
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $synchronizationService->insertIncrementalSyncObject(
@@ -1575,6 +1626,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectEmployeeUpdateAfter()
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         $synchronizationService->insertIncrementalSyncObject(
@@ -1600,6 +1652,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionDispatcherBefore($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         try {
@@ -1636,6 +1689,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectSpecificPriceAddAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         /** @var SpecificPrice $specificPrice */
@@ -1661,6 +1715,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectSpecificPriceUpdateAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         /** @var SpecificPrice $specificPrice */
@@ -1686,6 +1741,7 @@ class Ps_eventbus extends Module
      */
     public function hookActionObjectSpecificPriceDeleteAfter($parameters)
     {
+        /** @var SynchronizationService $synchronizationService **/
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
         /** @var SpecificPrice $specificPrice */
