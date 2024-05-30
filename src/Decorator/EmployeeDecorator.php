@@ -39,11 +39,14 @@ class EmployeeDecorator
         $employee['id_last_customer_message'] = (int) $employee['id_last_customer_message'];
         $employee['id_last_customer'] = (int) $employee['id_last_customer'];
 
-        $employee['has_enabled_gravatar'] = (bool) $employee['has_enabled_gravatar'];
-
         $employee['last_connection_date'] = (string) $employee['last_connection_date'];
 
         $employee['id_shop'] = (int) $employee['id_shop'];
+
+        // https://github.com/PrestaShop/PrestaShop/commit/20f1d9fe8a03559dfa9d1f7109de1f70c99f1874#diff-cde6a9d4a58afb13ff068801ee09c0e712c5e90b0cbf5632a0cc965f15cb6802R107
+        if (version_compare(_PS_VERSION_, '1.7.8.0', '>=')) {
+            $employee['has_enabled_gravatar'] = (bool) $employee['has_enabled_gravatar'];
+        }
     }
 
     /**

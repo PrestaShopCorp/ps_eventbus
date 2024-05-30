@@ -22,6 +22,7 @@ class WishlistProductRepository
     public function getBaseQuery(array &$wishlistIds)
     {
         $query = new \DbQuery();
+
         $query->from('wishlist_product', 'wp');
         $query->where('wp.id_wishlist IN(' . implode(',', array_map('intval', $wishlistIds)) . ')');
 
@@ -37,11 +38,28 @@ class WishlistProductRepository
      */
     public function getWishlistProducts(array &$wishlistIds)
     {
+        // need this module for this table : https://addons.prestashop.com/en/undownloadable/9131-wishlist-block.html
+        if (empty($this->checkIfPsWishlistIsInstalled())) {
+            return [];
+        }
+
         $query = $this->getBaseQuery($wishlistIds);
 
         $this->addSelectParameters($query);
 
         return $this->db->executeS($query);
+    }
+
+    /**
+     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    private function checkIfPsWishlistIsInstalled()
+    {
+        $moduleisInstalledQuery = 'SELECT * FROM information_schema.tables WHERE table_name LIKE \'%wishlist\' LIMIT 1;';
+
+        return $this->db->executeS($moduleisInstalledQuery);
     }
 
     /**

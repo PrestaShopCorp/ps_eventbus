@@ -25,17 +25,19 @@
  */
 
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Module\Install;
+use PrestaShop\Module\PsEventbus\Module\Uninstall;
 use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
-use PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer;
-use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use PrestaShopBundle\EventListener\ActionDispatcherLegacyHooksSubscriber;
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
+
+require_once __DIR__ . '/vendor/autoload.php';
 
 class Ps_eventbus extends Module
 {
@@ -48,6 +50,8 @@ class Ps_eventbus extends Module
      * @var string
      */
     const VERSION = '0.0.0';
+
+    const DEFAULT_ENV = '';
 
     /**
      * @var array
@@ -150,7 +154,7 @@ class Ps_eventbus extends Module
     ];
 
     /**
-     * @var \PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer
+     * @var \PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer
      */
     private $serviceContainer;
 
@@ -207,13 +211,6 @@ class Ps_eventbus extends Module
             return;
         }
 
-        require_once __DIR__ . '/vendor/autoload.php';
-
-        $this->serviceContainer = new ServiceContainer(
-            (string) $this->name,
-            $this->getLocalPath()
-        );
-
         if ($this->context->shop === null) {
             throw new \PrestaShopException('No shop context');
         }
@@ -250,7 +247,7 @@ class Ps_eventbus extends Module
             return defined('PS_INSTALLATION_IN_PROGRESS');
         }
 
-        $installer = new PrestaShop\Module\PsEventbus\Module\Install($this, \Db::getInstance());
+        $installer = new Install($this, \Db::getInstance());
 
         return $installer->installDatabaseTables()
             && parent::install()
@@ -262,11 +259,48 @@ class Ps_eventbus extends Module
      */
     public function uninstall()
     {
-        $uninstaller = new PrestaShop\Module\PsEventbus\Module\Uninstall($this, \Db::getInstance());
+        $uninstaller = new Uninstall($this, \Db::getInstance());
 
         return $uninstaller->uninstallMenu()
             && $uninstaller->uninstallDatabaseTables()
             && parent::uninstall();
+    }
+
+    /**
+     * @return string
+     */
+    public function getModuleEnvVar()
+    {
+        return strtoupper((string) $this->name) . '_ENV';
+    }
+
+    /**
+     * @param string $default
+     *
+     * @return string
+     */
+    public function getModuleEnv($default = null)
+    {
+        return getenv($this->getModuleEnvVar()) ?: $default ?: self::DEFAULT_ENV;
+    }
+
+    /**
+     * @return \PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer
+     *
+     * @throws Exception
+     */
+    public function getServiceContainer()
+    {
+        if (null === $this->serviceContainer) {
+            // append version number to force cache generation (1.6 Core won't clear it)
+            $this->serviceContainer = new \PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer(
+                $this->name . str_replace(['.', '-', '+'], '', $this->version),
+                $this->getLocalPath(),
+                $this->getModuleEnv()
+            );
+        }
+
+        return $this->serviceContainer;
     }
 
     /**
@@ -279,29 +313,7 @@ class Ps_eventbus extends Module
      */
     public function getService($serviceName)
     {
-        $splitServiceNamespace = explode('.', $serviceName);
-        $firstLevelNamespace = $splitServiceNamespace[0];
-
-        // if serviceName is not a service coming from ps_eventbus
-        if ($firstLevelNamespace !== 'ps_eventbus') {
-            // use symfony service container from prestashop
-            try {
-                $service = $this->serviceContainer->getService($serviceName);
-            } catch (\Exception $e) {
-                $container = SymfonyContainer::getInstance();
-
-                if ($container == null) {
-                    throw new \PrestaShopException('Symfony container is null or invalid');
-                }
-
-                $service = $container->get($serviceName);
-            }
-
-            return $service;
-        }
-
-        // otherwise use the service container from the module
-        return $this->serviceContainer->getService($serviceName);
+        return $this->getServiceContainer()->getService($serviceName);
     }
 
     /**
@@ -1450,7 +1462,11 @@ class Ps_eventbus extends Module
     public function hookActionDispatcherBefore($parameters)
     {
         try {
-            if ($parameters['controller_type'] != ActionDispatcherLegacyHooksSubscriber::BACK_OFFICE_CONTROLLER) {
+            /*
+             * Class "ActionDispatcherLegacyHooksSubscriber" as implement in 1.7.3.0:
+             * https://github.com/PrestaShop/PrestaShop/commit/a4ae4544cc62c818aba8b3d9254308f538b7acdc
+             */
+            if ($parameters['controller_type'] != 2) {
                 return;
             }
 
