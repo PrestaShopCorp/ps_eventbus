@@ -74,3 +74,17 @@ Dev requirements:
   - [zip](https://www.php.net/manual/en/book.zip.php)
 
 Or an up to date [Docker engine](https://docs.docker.com/engine/install).
+
+
+## List of data forgotten, and why
+
+| Added in PS version |     Why missing    |     Specification    |               Name               |                                                                              Link with more info                                                                              |
+|:-------------------:|:------------------:|:--------------------:|:--------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|       1.7.6.0       |      update PS     | row missing in table |        currency.precision        |  [github](https://github.com/PrestaShop/PrestaShop/commit/37807f66b40b0cebb365ef952e919be15e9d6b2f#diff-3f41d3529ffdbfd1b994927eb91826a32a0560697025a734cf128a2c8e092a45R124) |
+|       1.7.8.0       |      update PS     | row missing in table |  employee.has_enabled_gravatar   |  [github](https://github.com/PrestaShop/PrestaShop/commit/20f1d9fe8a03559dfa9d1f7109de1f70c99f1874#diff-cde6a9d4a58afb13ff068801ee09c0e712c5e90b0cbf5632a0cc965f15cb6802R107) |
+|       1.7.3.0       |      update PS     | row missing in table | product.additional_delivery_time |  [github](https://github.com/PrestaShop/PrestaShop/commit/10268af8db4163dc2a02edb8da93d02f37f814d8#diff-e94a594ba740485c7a4882b333984d3932a2f99c0d6d0005620745087cce7a10R260) |
+|       1.7.3.0       |      update PS     | row missing in table |     product.delivery_in_stock    |  [github](https://github.com/PrestaShop/PrestaShop/commit/10268af8db4163dc2a02edb8da93d02f37f814d8#diff-e94a594ba740485c7a4882b333984d3932a2f99c0d6d0005620745087cce7a10R260) |
+|       1.7.3.0       |      update PS     | row missing in table |    product.delivery_out_stock    |  [github](https://github.com/PrestaShop/PrestaShop/commit/10268af8db4163dc2a02edb8da93d02f37f814d8#diff-e94a594ba740485c7a4882b333984d3932a2f99c0d6d0005620745087cce7a10R260) |
+|       1.7.5.0       |      update PS     | row missing in table |          stock.location          |  [github](https://github.com/PrestaShop/PrestaShop/commit/4c7d58a905dfb61c7fb2ef4a1f9b4fab2a8d8ecb#diff-e57fb1deeaab9e9079505333394d58f0bf7bb40280b4382aad1278c08c73e2e8R58)  |
+|       1.7.3.0       |      update PS     |     table missing    |            store_lang            | [github](https://github.com/PrestaShop/PrestaShop/commit/7dda2be62d8bd606edc269fa051c36ea68f81682#diff-e98d435095567c145b49744715fd575eaab7050328c211b33aa9a37158421ff4R2004) |
+|         1.6         | third party module |     table missing    |             wishlist             |                                         [Prestashop Addons](https://addons.prestashop.com/en/undownloadable/9131-wishlist-block.html)                                         |
