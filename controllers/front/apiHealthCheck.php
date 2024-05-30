@@ -2,6 +2,7 @@
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
+use PrestaShop\Module\PsEventbus\Exception\UnauthorizedException;
 use PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository;
 
 class ps_EventbusApiHealthCheckModuleFrontController extends AbstractApiController
@@ -19,6 +20,11 @@ class ps_EventbusApiHealthCheckModuleFrontController extends AbstractApiControll
      */
     public function init()
     {
+        try {
+            parent::init();
+        } catch (UnauthorizedException $exception) {
+            $this->isAuthentifiedCall = false;
+        }
     }
 
     /**
