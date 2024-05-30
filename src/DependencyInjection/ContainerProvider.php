@@ -18,7 +18,7 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 
-namespace PrestaShop\Module\PsEventbus\DependencyInjection;
+namespace PrestaShop\Module\Ps_tech_vendor_boilerplate\DependencyInjection;
 
 use PrestaShop\ModuleLibCacheDirectoryProvider\Cache\CacheDirectoryProvider;
 use Symfony\Component\Config\ConfigCache;
@@ -71,7 +71,7 @@ class ContainerProvider
     /**
      * @param string $containerName
      *
-     * @return ContainerInterface
+     * @return mixed
      *
      * @throws \Exception
      */
@@ -107,7 +107,7 @@ class ContainerProvider
         $containerBuilder->compile();
         $dumper = new PhpDumper($containerBuilder);
         $containerConfigCache->write(
-            $dumper->dump(['class' => $containerClassName]),
+            (string) $dumper->dump(['class' => $containerClassName]),
             $containerBuilder->getResources()
         );
 
