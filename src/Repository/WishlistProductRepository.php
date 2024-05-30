@@ -52,13 +52,8 @@ class WishlistProductRepository
 
     private function checkIfPsWishlistIsInstalled()
     {
-        $moduleisInstalledQuery = new \DbQuery();
-
-        $moduleisInstalledQuery->select('*');
-        $moduleisInstalledQuery->from('information_schema.tables');
-        $moduleisInstalledQuery->where('table_name LIKE \'%wishlist\'');
-        $moduleisInstalledQuery->limit(1);
-
+        $moduleisInstalledQuery = 'SELECT * FROM information_schema.tables WHERE table_name LIKE \'%wishlist\' LIMIT 1;';
+        
         return $this->db->executeS($moduleisInstalledQuery);
     }
 
