@@ -18,7 +18,7 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 
-namespace PrestaShop\Module\Ps_tech_vendor_boilerplate\DependencyInjection;
+namespace PrestaShop\Module\PsEventbus\DependencyInjection;
 
 use PrestaShop\ModuleLibCacheDirectoryProvider\Cache\CacheDirectoryProvider;
 use Symfony\Component\Config\ConfigCache;
