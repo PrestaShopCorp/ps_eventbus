@@ -40,23 +40,29 @@ class IncrementalSyncRepository
     }
 
     /**
-     * @param array $objectsData
+     * @param array $data
      *
      * @return bool
      */
-    public function insertIncrementalObject($objectsData)
+    public function insertIncrementalObject($data)
     {
-        dump($objectsData);
+        $arrayOfData = $data;
+
+        if (!is_array($data[0])) {
+            $arrayOfData = [$data];
+        }
+
         try {
-            return $this->db->insert(
-                self::INCREMENTAL_SYNC_TABLE,
-                $objectsData,
-                false,
-                true,
-                \Db::ON_DUPLICATE_KEY
-            );
+            foreach ($arrayOfData as $currenData) {
+                $this->db->insert(
+                    self::INCREMENTAL_SYNC_TABLE,
+                    $currenData,
+                    false,
+                    true,
+                    \Db::ON_DUPLICATE_KEY
+                );
+            }
         } catch (\PrestaShopDatabaseException $e) {
-            dump($e);
             $this->errorHandler->handle(
                 new \PrestaShopDatabaseException('Failed to insert incremental object', $e->getCode(), $e)
             );
