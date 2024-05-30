@@ -352,7 +352,7 @@ class ProductRepository
         }
 
         $query->select('p.width, p.height, p.depth, p.additional_shipping_cost');
-        
+
         if (version_compare(_PS_VERSION_, '1.7', '>=')) {
             $query->select('IFNULL(NULLIF(pa.isbn, ""), p.isbn) as isbn');
         }

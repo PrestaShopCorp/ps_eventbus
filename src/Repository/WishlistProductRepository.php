@@ -50,10 +50,15 @@ class WishlistProductRepository
         return $this->db->executeS($query);
     }
 
+    /**
+     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     *
+     * @throws \PrestaShopDatabaseException
+     */
     private function checkIfPsWishlistIsInstalled()
     {
         $moduleisInstalledQuery = 'SELECT * FROM information_schema.tables WHERE table_name LIKE \'%wishlist\' LIMIT 1;';
-        
+
         return $this->db->executeS($moduleisInstalledQuery);
     }
 

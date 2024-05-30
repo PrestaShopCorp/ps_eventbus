@@ -2,11 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use mysqli_result;
-use PDOStatement;
-use PrestaShopException;
-use PrestaShopDatabaseException;
-
 class WishlistRepository
 {
     /**
@@ -76,7 +71,7 @@ class WishlistRepository
     {
         // need this module for this table : https://addons.prestashop.com/en/undownloadable/9131-wishlist-block.html
         if (empty($this->checkIfPsWishlistIsInstalled())) {
-            return [];
+            return 0;
         }
 
         $query = $this->getBaseQuery()
@@ -141,14 +136,15 @@ class WishlistRepository
     }
 
     /**
-     * @return array|bool|mysqli_result|PDOStatement|resource|null 
-     * @throws PrestaShopException 
-     * @throws PrestaShopDatabaseException 
+     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
     private function checkIfPsWishlistIsInstalled()
     {
         $moduleisInstalledQuery = 'SELECT * FROM information_schema.tables WHERE table_name LIKE \'%wishlist\' LIMIT 1;';
-        
+
         return $this->db->executeS($moduleisInstalledQuery);
     }
 }
