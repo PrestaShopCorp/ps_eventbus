@@ -257,11 +257,11 @@ class SynchronizationService
                 if ($this->isFullSyncDone($type, $langIso)) {
                     array_push($objectsData, 
                         [
-                            'id_shop' => $shopId,
-                            'id_object' => $objectId,
                             'type' => $type,
-                            'created_at' => $createdAt,
+                            'id_object' => $objectId,
+                            'id_shop' => $shopId,
                             'lang_iso' => $langIso,
+                            'created_at' => $createdAt,
                         ]
                     );
 
@@ -269,11 +269,11 @@ class SynchronizationService
                         foreach($childrenIds as $childrenId) {
                             array_push($objectsData, 
                                 [
-                                    'id_shop' => $shopId,
-                                    'id_object' => $childrenId,
                                     'type' => $childrenType,
-                                    'created_at' => $createdAt,
+                                    'id_object' => $childrenId,
+                                    'id_shop' => $shopId,
                                     'lang_iso' => $langIso,
+                                    'created_at' => $createdAt,
                                 ]
                             );
                         }
@@ -287,11 +287,11 @@ class SynchronizationService
             if ($this->isFullSyncDone($type, $defaultIsoCode)) {
                 array_push($objectsData, 
                     [
-                        'id_shop' => $shopId,
-                        'id_object' => $objectId,
                         'type' => $type,
-                        'created_at' => $createdAt,
+                        'id_object' => $objectId,
+                        'id_shop' => $shopId,
                         'lang_iso' => $defaultIsoCode,
+                        'created_at' => $createdAt,
                     ]
                 );
 
@@ -299,11 +299,11 @@ class SynchronizationService
                     foreach($childrenIds as $childrenId) {
                         array_push($objectsData, 
                             [
-                                'id_shop' => $shopId,
-                                'id_object' => $childrenId,
                                 'type' => $childrenType,
-                                'created_at' => $createdAt,
+                                'id_object' => $childrenId,
+                                'id_shop' => $shopId,
                                 'lang_iso' => $defaultIsoCode,
+                                'created_at' => $createdAt,
                             ]
                         );
                     }

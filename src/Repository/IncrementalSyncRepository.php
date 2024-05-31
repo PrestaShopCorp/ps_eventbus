@@ -46,22 +46,41 @@ class IncrementalSyncRepository
      */
     public function insertIncrementalObject($data)
     {
-        $arrayOfData = $data;
-
-        if (!is_array($data[0])) {
-            $arrayOfData = [$data];
-        }
-
         try {
-            foreach ($arrayOfData as $currenData) {
-                $this->db->insert(
-                    self::INCREMENTAL_SYNC_TABLE,
-                    $currenData,
-                    false,
-                    true,
-                    \Db::ON_DUPLICATE_KEY
-                );
+            $arrayOfData = $data;
+
+            if (!is_array($data[0])) {
+                $arrayOfData = [$data];
             }
+
+            $elementsCount = count($arrayOfData);
+            $index = 0;
+
+            $query = 'INSERT INTO `' . _DB_PREFIX_ . $this::INCREMENTAL_SYNC_TABLE . '(type, id_object, id_shop, lang_iso, created_at) VALUES ';
+            
+            foreach ($arrayOfData as $currenData) {
+                $query .= `(
+                    {$this->db->escape($currenData['type'])},
+                    {$this->db->escape($currenData['id_object'])},
+                    {$this->db->escape($currenData['id_shop'])},
+                    {$this->db->escape($currenData['created_at'])},
+                )`;
+
+                if (++$index < $elementsCount) {
+                    $query .= ',';
+                }
+            }
+
+            $query .= ' 
+                ON DUPLICATE KEY UPDATE 
+                type = VALUES(type),
+                id_object = VALUES(id_object),
+                id_shop = VALUES(id_shop),
+                lang_iso = VALUES(lang_iso),
+                created_at = VALUES(created_at)
+            ';
+
+            return $this->db->query($query);
         } catch (\PrestaShopDatabaseException $e) {
             $this->errorHandler->handle(
                 new \PrestaShopDatabaseException('Failed to insert incremental object', $e->getCode(), $e)
