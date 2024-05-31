@@ -76,7 +76,7 @@ Dev requirements:
 Or an up to date [Docker engine](https://docs.docker.com/engine/install).
 
 
-## List of data forgotten, and why
+## List of missing data in database and why is missing
 
 | Added in PS version |     Why missing    |     Specification    |               Name               |                                                                              Link with more info                                                                              |
 |:-------------------:|:------------------:|:--------------------:|:--------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
