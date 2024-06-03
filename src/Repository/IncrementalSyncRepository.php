@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use DateTime;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
 
 class IncrementalSyncRepository
@@ -45,10 +44,9 @@ class IncrementalSyncRepository
      *
      * @return bool
      */
-    public function insertIncrementalObject($data)
+    public function insertIncrementalObject(array $data)
     {
         try {
-            dump('insertIncrementalObject');
             $arrayOfData = $data;
 
             if (!is_array($data[0])) {
@@ -59,9 +57,9 @@ class IncrementalSyncRepository
             $index = 0;
 
             $query = 'INSERT INTO `' . _DB_PREFIX_ . $this::INCREMENTAL_SYNC_TABLE . '` (type, id_object, id_shop, lang_iso, created_at) VALUES ';
-        
+
             foreach ($arrayOfData as $currenData) {
-                $dateTime = new DateTime($currenData['created_at']);
+                $dateTime = new \DateTime($currenData['created_at']);
                 $date = $dateTime->format('Y-m-d H:i:s');
 
                 $query .= "(

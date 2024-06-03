@@ -2,26 +2,25 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
+use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
-use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
-use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
-use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository;
-use Ps_eventbus;
 
 class SynchronizationService
 {
     /**
-     * @var Ps_eventbus
+     * @var \Ps_eventbus
      */
     private $module;
-    
+
     /**
      * @var EventbusSyncRepository
      */
@@ -255,7 +254,7 @@ class SynchronizationService
 
             foreach ($allIsoCodes as $langIso) {
                 if ($this->isFullSyncDone($type, $langIso)) {
-                    array_push($objectsData, 
+                    array_push($objectsData,
                         [
                             'type' => $type,
                             'id_object' => $objectId,
@@ -265,9 +264,9 @@ class SynchronizationService
                         ]
                     );
 
-                    foreach($childrenIdsWithType as $childrenType => $childrenIds) {
-                        foreach($childrenIds as $childrenId) {
-                            array_push($objectsData, 
+                    foreach ($childrenIdsWithType as $childrenType => $childrenIds) {
+                        foreach ($childrenIds as $childrenId) {
+                            array_push($objectsData,
                                 [
                                     'type' => $childrenType,
                                     'id_object' => $childrenId,
@@ -277,7 +276,6 @@ class SynchronizationService
                                 ]
                             );
                         }
-                        
                     }
                 }
             }
@@ -285,7 +283,7 @@ class SynchronizationService
             $defaultIsoCode = $this->languageRepository->getDefaultLanguageIsoCode();
 
             if ($this->isFullSyncDone($type, $defaultIsoCode)) {
-                array_push($objectsData, 
+                array_push($objectsData,
                     [
                         'type' => $type,
                         'id_object' => $objectId,
@@ -295,9 +293,9 @@ class SynchronizationService
                     ]
                 );
 
-                foreach($childrenIdsWithType as $childrenType => $childrenIds) {
-                    foreach($childrenIds as $childrenId) {
-                        array_push($objectsData, 
+                foreach ($childrenIdsWithType as $childrenType => $childrenIds) {
+                    foreach ($childrenIds as $childrenId) {
+                        array_push($objectsData,
                             [
                                 'type' => $childrenType,
                                 'id_object' => $childrenId,
@@ -310,7 +308,7 @@ class SynchronizationService
                 }
             }
         }
-        
+
         if (empty($objectsData) == false) {
             $this->incrementalSyncRepository->insertIncrementalObject($objectsData);
         }
@@ -359,7 +357,7 @@ class SynchronizationService
             return [
                 Config::COLLECTION_ORDER_DETAILS => array_column($orderDetailIds, 'id'),
                 Config::COLLECTION_ORDER_STATUS_HISTORY => array_column($orderHistoryIds, 'id'),
-                Config::COLLECTION_ORDER_CART_RULES => array_column($orderCartIds, 'id')
+                Config::COLLECTION_ORDER_CART_RULES => array_column($orderCartIds, 'id'),
             ];
         }
 

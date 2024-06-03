@@ -54,7 +54,7 @@ class OrderHistoryRepository
         return $this->db->executeS($query);
     }
 
-        /**
+    /**
      * @param array $orderIds
      *
      * @return array|bool|\mysqli_result|\PDOStatement|resource|null
