@@ -53,4 +53,28 @@ class OrderHistoryRepository
 
         return $this->db->executeS($query);
     }
+
+    /**
+     * @param array $orderIds
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getOrderHistoryStatuseIdsByOrderIds(array $orderIds)
+    {
+        if (!$orderIds) {
+            return [];
+        }
+
+        $query = $this->getBaseQuery();
+
+        $query->select('oh.id_order_state as id')
+            ->where('oh.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')')
+        ;
+
+        $result = $this->db->executeS($query);
+
+        return is_array($result) ? $result : [];
+    }
 }

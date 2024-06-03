@@ -2,47 +2,86 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator;
-use PrestaShop\Module\PsEventbus\Exception\ApiException;
-use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
+use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
+use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
+use PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository;
+use PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository;
+use PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository;
 
 class SynchronizationService
 {
     /**
+     * @var \Ps_eventbus
+     */
+    private $module;
+
+    /**
      * @var EventbusSyncRepository
      */
     private $eventbusSyncRepository;
+
     /**
      * @var IncrementalSyncRepository
      */
     private $incrementalSyncRepository;
+
     /**
      * @var LiveSyncRepository
      */
     private $liveSyncRepository;
+
+    /**
+     * @var DeletedObjectsRepository
+     */
+    private $deletedObjectsRepository;
+
+    /**
+     * @var LanguageRepository
+     */
+    private $languageRepository;
+
     /**
      * @var ProxyServiceInterface
      */
     private $proxyService;
+
     /**
      * @var PayloadDecorator
      */
     private $payloadDecorator;
 
+    /**
+     * @var int
+     */
+    const RANDOM_SYNC_CHECK_MAX = 20;
+
+    /**
+     * @var int
+     */
+    const INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT = 100000;
+
     public function __construct(
+        \Ps_eventbus $module,
         EventbusSyncRepository $eventbusSyncRepository,
         IncrementalSyncRepository $incrementalSyncRepository,
         LiveSyncRepository $liveSyncRepository,
+        DeletedObjectsRepository $deletedObjectsRepository,
+        LanguageRepository $languageRepository,
         ProxyServiceInterface $proxyService,
         PayloadDecorator $payloadDecorator
     ) {
+        $this->module = $module;
         $this->eventbusSyncRepository = $eventbusSyncRepository;
         $this->incrementalSyncRepository = $incrementalSyncRepository;
         $this->liveSyncRepository = $liveSyncRepository;
+        $this->deletedObjectsRepository = $deletedObjectsRepository;
+        $this->languageRepository = $languageRepository;
         $this->proxyService = $proxyService;
         $this->payloadDecorator = $payloadDecorator;
     }
@@ -62,8 +101,17 @@ class SynchronizationService
      *
      * @@throws \PrestaShopDatabaseException|EnvVarException|ApiException
      */
-    public function handleFullSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $langIso, $offset, $limit, $dateNow, $scriptStartTime, bool $isFull)
-    {
+    public function handleFullSync(
+        PaginatedApiDataProviderInterface $dataProvider,
+        string $type,
+        string $jobId,
+        string $langIso,
+        int $offset,
+        int $limit,
+        string $dateNow,
+        int $scriptStartTime,
+        bool $isFull
+    ) {
         $response = [];
 
         $data = $dataProvider->getFormattedData($offset, $limit, $langIso);
@@ -103,8 +151,15 @@ class SynchronizationService
      *
      * @@throws \PrestaShopDatabaseException|EnvVarException
      */
-    public function handleIncrementalSync(PaginatedApiDataProviderInterface $dataProvider, $type, $jobId, $limit, $langIso, $scriptStartTime, bool $isFull)
-    {
+    public function handleIncrementalSync(
+        PaginatedApiDataProviderInterface $dataProvider,
+        string $type,
+        string $jobId,
+        int $limit,
+        string $langIso,
+        int $scriptStartTime,
+        bool $isFull
+    ) {
         $response = [];
 
         $objectIds = $this->incrementalSyncRepository->getIncrementalSyncObjectIds($type, $langIso, $limit);
@@ -137,13 +192,185 @@ class SynchronizationService
     }
 
     /**
+     * disables liveSync
+     *
+     * @param string $shopContent
+     * @param int $shopContentId
+     * @param string $action
+     *
+     * @return void
+     */
+    public function sendLiveSync(string $shopContent, int $shopContentId, string $action)
+    {
+        if ($this->isFullSyncDone($shopContent)) {
+            // $this->debounceLiveSync($shopContent);
+        }
+    }
+
+    /**
+     * @param int $objectId
+     * @param string $type
+     * @param string $createdAt
+     * @param int $shopId
+     * @param bool $hasMultiLang
+     *
+     * @return void
+     */
+    public function insertIncrementalSyncObject(int $objectId, string $type, string $createdAt, int $shopId, bool $hasMultiLang = false)
+    {
+        if ((int) $objectId === 0) {
+            return;
+        }
+
+        /*
+         * randomly check if outbox for this shop-content contain more of 100k entries.
+         * When random number == 10, we count number of entry exist in database for this specific shop content
+         * If count > 100 000, we removed all entry corresponding to this shop content, and we enable full sync for this
+         */
+        if (mt_rand() % $this::RANDOM_SYNC_CHECK_MAX == 0) {
+            $count = $this->incrementalSyncRepository->getIncrementalSyncObjectCountByType($type);
+            if ($count > $this::INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT) {
+                $hasDeleted = $this->incrementalSyncRepository->removeIncrementaSyncObjectByType($type);
+
+                if ($hasDeleted) {
+                    $this->eventbusSyncRepository->updateTypeSync(
+                        $type,
+                        0,
+                        $createdAt,
+                        false,
+                        $this->languageRepository->getDefaultLanguageIsoCode()
+                    );
+                }
+            }
+
+            return;
+        }
+
+        $objectsData = [];
+        $childrenIdsWithType = $this->getChildrenIdsByType($type, $objectId);
+
+        if ($hasMultiLang) {
+            $allIsoCodes = $this->languageRepository->getLanguagesIsoCodes();
+
+            foreach ($allIsoCodes as $langIso) {
+                if ($this->isFullSyncDone($type, $langIso)) {
+                    array_push($objectsData,
+                        [
+                            'type' => $type,
+                            'id_object' => $objectId,
+                            'id_shop' => $shopId,
+                            'lang_iso' => $langIso,
+                            'created_at' => $createdAt,
+                        ]
+                    );
+
+                    foreach ($childrenIdsWithType as $childrenType => $childrenIds) {
+                        foreach ($childrenIds as $childrenId) {
+                            array_push($objectsData,
+                                [
+                                    'type' => $childrenType,
+                                    'id_object' => $childrenId,
+                                    'id_shop' => $shopId,
+                                    'lang_iso' => $langIso,
+                                    'created_at' => $createdAt,
+                                ]
+                            );
+                        }
+                    }
+                }
+            }
+        } else {
+            $defaultIsoCode = $this->languageRepository->getDefaultLanguageIsoCode();
+
+            if ($this->isFullSyncDone($type, $defaultIsoCode)) {
+                array_push($objectsData,
+                    [
+                        'type' => $type,
+                        'id_object' => $objectId,
+                        'id_shop' => $shopId,
+                        'lang_iso' => $defaultIsoCode,
+                        'created_at' => $createdAt,
+                    ]
+                );
+
+                foreach ($childrenIdsWithType as $childrenType => $childrenIds) {
+                    foreach ($childrenIds as $childrenId) {
+                        array_push($objectsData,
+                            [
+                                'type' => $childrenType,
+                                'id_object' => $childrenId,
+                                'id_shop' => $shopId,
+                                'lang_iso' => $defaultIsoCode,
+                                'created_at' => $createdAt,
+                            ]
+                        );
+                    }
+                }
+            }
+        }
+
+        if (empty($objectsData) == false) {
+            $this->incrementalSyncRepository->insertIncrementalObject($objectsData);
+        }
+    }
+
+    /**
+     * @param int $objectId
+     * @param string $type
+     * @param string $date
+     * @param int $shopId
+     *
+     * @return void
+     */
+    public function insertDeletedObject(int $objectId, string $type, string $date, int $shopId)
+    {
+        if ((int) $objectId === 0) {
+            return;
+        }
+
+        $this->deletedObjectsRepository->insertDeletedObject($objectId, $type, $date, $shopId);
+        $this->incrementalSyncRepository->removeIncrementalSyncObject($type, $objectId);
+    }
+
+    /**
+     * @param string $type
+     * @param int $objectId
+     *
+     * @return array
+     */
+    private function getChildrenIdsByType(string $type, int $objectId)
+    {
+        if ($type == Config::COLLECTION_ORDERS) {
+            /** @var OrderDetailsRepository */
+            $orderDetailsRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository');
+            $orderDetailIds = $orderDetailsRepository->getOrderDetailIdsByOrderIds([$objectId]);
+
+            /** @var OrderHistoryRepository */
+            $orderHistoryRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository');
+            $orderHistoryIds = $orderHistoryRepository->getOrderHistoryStatuseIdsByOrderIds([$objectId]);
+
+            /** @var OrderCartRuleRepository */
+            $orderCartRuleRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository');
+            $orderCartIds = $orderCartRuleRepository->getOrderCartRuleIdsByOrderIds([$objectId]);
+
+            return [
+                Config::COLLECTION_ORDER_DETAILS => array_column($orderDetailIds, 'id'),
+                Config::COLLECTION_ORDER_STATUS_HISTORY => array_column($orderHistoryIds, 'id'),
+                Config::COLLECTION_ORDER_CART_RULES => array_column($orderCartIds, 'id'),
+            ];
+        }
+
+        return [];
+    }
+
+    /**
      * @param string $shopContentName
      *
      * @return bool
      *
      * @@throws \PrestaShopDatabaseException
      */
-    public function debounceLiveSync(string $shopContentName)
+    private function debounceLiveSync(string $shopContentName) // @phpstan-ignore method.unused
     {
         $dateNow = date('Y-m-d H:i:s');
 
@@ -159,6 +386,19 @@ class SynchronizationService
         }
 
         return false;
+    }
+
+    /**
+     * Return true if full sync is done for this shop content
+     *
+     * @param string $shopContent
+     * @param string|null $langIso
+     *
+     * @return bool
+     */
+    private function isFullSyncDone(string $shopContent, $langIso = null)
+    {
+        return $this->eventbusSyncRepository->isFullSyncDoneForThisTypeSync($shopContent, $langIso);
     }
 
     /**
@@ -183,7 +423,7 @@ class SynchronizationService
      *
      * @return string
      */
-    private function getPayloadMd5($payload)
+    private function getPayloadMd5(array $payload)
     {
         return md5(
             implode(' ', array_map(function ($payloadItem) {
