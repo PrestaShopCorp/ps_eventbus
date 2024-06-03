@@ -2,6 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use DateTime;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
 
 class IncrementalSyncRepository
@@ -47,6 +48,7 @@ class IncrementalSyncRepository
     public function insertIncrementalObject($data)
     {
         try {
+            dump('insertIncrementalObject');
             $arrayOfData = $data;
 
             if (!is_array($data[0])) {
@@ -56,15 +58,19 @@ class IncrementalSyncRepository
             $elementsCount = count($arrayOfData);
             $index = 0;
 
-            $query = 'INSERT INTO `' . _DB_PREFIX_ . $this::INCREMENTAL_SYNC_TABLE . '(type, id_object, id_shop, lang_iso, created_at) VALUES ';
-            
+            $query = 'INSERT INTO `' . _DB_PREFIX_ . $this::INCREMENTAL_SYNC_TABLE . '` (type, id_object, id_shop, lang_iso, created_at) VALUES ';
+        
             foreach ($arrayOfData as $currenData) {
-                $query .= `(
-                    {$this->db->escape($currenData['type'])},
+                $dateTime = new DateTime($currenData['created_at']);
+                $date = $dateTime->format('Y-m-d H:i:s');
+
+                $query .= "(
+                    '{$this->db->escape($currenData['type'])}',
                     {$this->db->escape($currenData['id_object'])},
                     {$this->db->escape($currenData['id_shop'])},
-                    {$this->db->escape($currenData['created_at'])},
-                )`;
+                    '{$this->db->escape($currenData['lang_iso'])}',
+                    '{$this->db->escape($date)}'
+                )";
 
                 if (++$index < $elementsCount) {
                     $query .= ',';
