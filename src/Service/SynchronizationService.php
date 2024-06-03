@@ -372,7 +372,7 @@ class SynchronizationService
             $stockIds = $stocksRepository->getStocksIdsByProductIds([$objectId]);
 
             return [
-                CONFIG::COLLECTION_CUSTOM_PRODUCT_CARRIERS => array_column($productCarrierIds, 'id'),
+                Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => array_column($productCarrierIds, 'id'),
                 Config::COLLECTION_STOCKS => array_column($stockIds, 'id'),
             ];
         }
