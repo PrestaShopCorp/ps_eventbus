@@ -115,6 +115,29 @@ class StockRepository
     }
 
     /**
+     * @param array $productIds
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getStocksIdsByProductIds(array $productIds)
+    {
+        if (!$productIds) {
+            return [];
+        }
+
+        $query = $this->getBaseQuery();
+
+        $query->select('sa.id_stock_available as id');
+        $query->where('sa.id_product IN (' . implode(',', array_map('intval', $productIds)) . ')');
+
+        $result = $this->db->executeS($query);
+
+        return is_array($result) ? $result : [];
+    }
+
+    /**
      * @param \DbQuery $query
      *
      * @return void

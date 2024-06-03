@@ -148,6 +148,29 @@ class ProductCarrierRepository
     }
 
     /**
+     * @param array $productIds
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getProductCarrierIdsByProductIds(array $productIds)
+    {
+        if (!$productIds) {
+            return [];
+        }
+
+        $query = $this->getBaseQuery();
+
+        $query->select('pc.id_carrier_reference as id');
+        $query->where('pc.id_product IN (' . implode(',', array_map('intval', $productIds)) . ')');
+
+        $result = $this->db->executeS($query);
+
+        return is_array($result) ? $result : [];
+    }
+
+    /**
      * @param \DbQuery $query
      *
      * @return void

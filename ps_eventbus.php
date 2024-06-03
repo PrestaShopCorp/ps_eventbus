@@ -643,22 +643,6 @@ class Ps_eventbus extends Module
                 $this->shopId,
                 true
             );
-
-            $synchronizationService->insertIncrementalSyncObject(
-                $product->id,
-                Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
-                date(DATE_ATOM),
-                $this->shopId,
-                false
-            );
-
-            $synchronizationService->insertIncrementalSyncObject(
-                $product->id,
-                Config::COLLECTION_STOCKS,
-                date(DATE_ATOM),
-                $this->shopId,
-                false
-            );
         }
     }
 
@@ -686,20 +670,6 @@ class Ps_eventbus extends Module
                 date(DATE_ATOM),
                 $this->shopId,
                 true
-            );
-            $synchronizationService->insertIncrementalSyncObject(
-                $product->id,
-                Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
-                date(DATE_ATOM),
-                $this->shopId,
-                false
-            );
-            $synchronizationService->insertIncrementalSyncObject(
-                $product->id,
-                Config::COLLECTION_STOCKS,
-                date(DATE_ATOM),
-                $this->shopId,
-                false
             );
         }
     }
