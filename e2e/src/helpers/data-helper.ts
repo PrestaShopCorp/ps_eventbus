@@ -1,5 +1,6 @@
 import axios from 'axios';
 import fs from 'fs';
+import * as process from 'node:process';
 import R from 'ramda';
 import { HealthCheck } from '../type/health-check';
 import { Content, contentControllerMapping, Controller } from './controllers';
@@ -63,7 +64,7 @@ export async function getShopHealthCheck(options?: {
   return healthCheck;
 }
 
-const FIXTURE_DIR = './src/fixtures';
+const FIXTURE_DIR = './e2e/src/fixtures';
 
 export async function loadFixture(
   controller: Controller,
@@ -71,7 +72,7 @@ export async function loadFixture(
   const contents = getControllerContent(controller);
   const shopVersion = (await getShopHealthCheck()).prestashop_version;
   const fixture = [];
-
+  console.log(process.cwd());
   const fixtureVersions = await fs.promises.readdir(`${FIXTURE_DIR}`, {
     encoding: 'utf-8',
     withFileTypes: true,

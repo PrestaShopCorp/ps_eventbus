@@ -1,6 +1,6 @@
+import { Category as WSCategory, WSClient } from '@prestashop-core/ws-client';
 import axios from 'axios';
 import * as matchers from 'jest-extended';
-import { Category, WSClient } from 'prestashop-ws-client';
 import { concatMap, from, lastValueFrom, map, toArray, zip } from 'rxjs';
 import { category_new } from './data/ws/categories';
 import {
@@ -13,6 +13,7 @@ import {
   omitProperties,
   sortUploadData,
 } from './helpers/data-helper';
+import { specialFieldAssert } from './helpers/eventbus-fields';
 import { dumpUploadData, logAxiosError } from './helpers/log-helper';
 import { PsEventbusSyncUpload, doFullSync, probe } from './helpers/mock-probe';
 import { PostgresClient } from './helpers/postgres';
@@ -40,9 +41,10 @@ describe('Categories', () => {
     );
 
     wsClient = new WSClient(testConfig.prestashopUrl, testConfig.wsKey);
-    const category: Category = await wsClient.categories.create(category_new);
+    const wsCategory: WSCategory =
+      await wsClient.categories.create(category_new);
 
-    categoryId = category.id;
+    categoryId = wsCategory.id;
   });
 
   describe('Full Sync', () => {

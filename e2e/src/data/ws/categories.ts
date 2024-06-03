@@ -1,5 +1,5 @@
-import { Category, CategoryWritable } from 'prestashop-ws-client';
-import { getLanguageValues } from 'prestashop-ws-client/dist/xml/xml.interfaces';
+import { Category, CategoryWritable } from '@prestashop-core/ws-client';
+import { getLanguageValues } from '@prestashop-core/ws-client/dist/xml/xml.interfaces';
 import { language_en, language_fr } from './langagues';
 
 export const category_home: Partial<Category> = {

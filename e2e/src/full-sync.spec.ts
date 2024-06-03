@@ -8,6 +8,7 @@ import {
   omitProperties,
   sortUploadData,
 } from './helpers/data-helper';
+import { specialFieldAssert } from './helpers/eventbus-fields';
 import { dumpUploadData, logAxiosError } from './helpers/log-helper';
 import { PsEventbusSyncUpload, doFullSync, probe } from './helpers/mock-probe';
 import testConfig from './helpers/test.config';

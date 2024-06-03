@@ -1,12 +1,12 @@
 // these fields change from test run to test run, so we replace them with a matcher to only ensure the type and format are correct
-const isDateString = (val) =>
+export const isDateString = (val) =>
   val ? expect(val).toBeDateString() : expect(val).toBeNull();
-const isString = (val) =>
+export const isString = (val) =>
   val ? expect(val).toBeString() : expect(val).toBeNull();
-const isNumber = (val) =>
+export const isNumber = (val) =>
   val ? expect(val).toBeNumber() : expect(val).toBeNull();
 
-const specialFieldAssert: { [index: string]: (val) => void } = {
+export const specialFieldAssert: { [index: string]: (val) => void } = {
   created_at: isDateString,
   updated_at: isDateString,
   last_connection_date: isDateString,
