@@ -35,12 +35,9 @@ services:
     healthcheck:
       test:
         [
-          'CMD',
-          'mysqladmin',
-          'ping',
-          '--host=localhost',
-          '--user=prestashop',
-          '--password=prestashop',
+          "CMD",
+          "healthcheck.sh",
+          "--connect",
         ]
       interval: 1s
       timeout: 10s
@@ -116,7 +113,7 @@ services:
       start_period: 1s
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro,cached
-    command: [nginx-debug, "-g", "daemon off;"]
+    command: [ nginx-debug, "-g", "daemon off;" ]
     networks:
       - prestashop
     ports:
