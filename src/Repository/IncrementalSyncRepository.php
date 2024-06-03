@@ -84,7 +84,7 @@ class IncrementalSyncRepository
                 created_at = VALUES(created_at)
             ';
 
-            return $this->db->query($query);
+            return (bool) $this->db->query($query);
         } catch (\PrestaShopDatabaseException $e) {
             $this->errorHandler->handle(
                 new \PrestaShopDatabaseException('Failed to insert incremental object', $e->getCode(), $e)

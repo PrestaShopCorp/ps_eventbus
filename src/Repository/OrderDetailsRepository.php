@@ -74,7 +74,7 @@ class OrderDetailsRepository
     /**
      * @param array $orderIds
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -90,6 +90,8 @@ class OrderDetailsRepository
             ->where('od.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')')
             ->groupBy('od.id_order_detail');
 
-        return $this->db->executeS($query);
+        $result = $this->db->executeS($query);
+
+        return is_array($result) ? $result : [];
     }
 }

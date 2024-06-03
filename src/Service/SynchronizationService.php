@@ -203,7 +203,7 @@ class SynchronizationService
     public function sendLiveSync(string $shopContent, int $shopContentId, string $action)
     {
         if ($this->isFullSyncDone($shopContent)) {
-            // SEND live sync only when fullsync is done
+            // $this->debounceLiveSync($shopContent);
         }
     }
 
@@ -247,7 +247,7 @@ class SynchronizationService
         }
 
         $objectsData = [];
-        $childrenIdsWithType = $this->getChildrenIdsByType($type, $objectId, $shopId);
+        $childrenIdsWithType = $this->getChildrenIdsByType($type, $objectId);
 
         if ($hasMultiLang) {
             $allIsoCodes = $this->languageRepository->getLanguagesIsoCodes();
@@ -335,7 +335,6 @@ class SynchronizationService
     /**
      * @param string $type
      * @param int $objectId
-     * @param int $shopId
      *
      * @return array
      */
@@ -371,7 +370,7 @@ class SynchronizationService
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function debounceLiveSync(string $shopContentName)
+    private function debounceLiveSync(string $shopContentName) // @phpstan-ignore method.unused
     {
         $dateNow = date('Y-m-d H:i:s');
 
