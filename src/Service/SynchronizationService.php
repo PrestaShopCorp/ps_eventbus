@@ -366,7 +366,7 @@ class SynchronizationService
             /** @var ProductCarrierRepository */
             $productCarriersRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository');
             $productCarrierIds = $productCarriersRepository->getProductCarrierIdsByProductIds([$objectId]);
-            
+
             /** @var StockRepository */
             $stocksRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\StockRepository');
             $stockIds = $stocksRepository->getStocksIdsByProductIds([$objectId]);
