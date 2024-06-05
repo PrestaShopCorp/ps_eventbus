@@ -70,4 +70,28 @@ class OrderDetailsRepository
 
         return $this->db->executeS($query);
     }
+
+    /**
+     * @param array $orderIds
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getOrderDetailIdsByOrderIds(array $orderIds)
+    {
+        if (!$orderIds) {
+            return [];
+        }
+
+        $query = $this->getBaseQuery();
+
+        $query->select('od.id_order_detail as id')
+            ->where('od.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')')
+            ->groupBy('od.id_order_detail');
+
+        $result = $this->db->executeS($query);
+
+        return is_array($result) ? $result : [];
+    }
 }

@@ -82,7 +82,6 @@ class LanguageRepository
         }
 
         $shopId = (int) $this->context->shop->id;
-
         $query = new \DbQuery();
         $query->from('lang', 'la')
             ->innerJoin('lang_shop', 'las', 'la.id_lang = las.id_lang AND las.id_shop = ' . $shopId);

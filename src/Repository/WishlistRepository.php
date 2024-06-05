@@ -48,6 +48,11 @@ class WishlistRepository
      */
     public function getWishlists($offset, $limit)
     {
+        // need this module for this table : https://addons.prestashop.com/en/undownloadable/9131-wishlist-block.html
+        if (empty($this->checkIfPsWishlistIsInstalled())) {
+            return [];
+        }
+
         $query = $this->getBaseQuery();
 
         $this->addSelectParameters($query);
@@ -64,6 +69,11 @@ class WishlistRepository
      */
     public function getRemainingWishlistsCount($offset)
     {
+        // need this module for this table : https://addons.prestashop.com/en/undownloadable/9131-wishlist-block.html
+        if (empty($this->checkIfPsWishlistIsInstalled())) {
+            return 0;
+        }
+
         $query = $this->getBaseQuery()
             ->select('(COUNT(w.id_wishlist) - ' . (int) $offset . ') as count');
 
@@ -123,5 +133,18 @@ class WishlistRepository
     {
         $query->select('w.id_wishlist, w.id_customer, w.id_shop, w.id_shop_group, w.token, w.name, w.counter');
         $query->select('w.date_add AS created_at, w.date_upd as updated_at, w.default');
+    }
+
+    /**
+     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    private function checkIfPsWishlistIsInstalled()
+    {
+        $moduleisInstalledQuery = 'SELECT * FROM information_schema.tables WHERE table_name LIKE \'%wishlist\' LIMIT 1;';
+
+        return $this->db->executeS($moduleisInstalledQuery);
     }
 }

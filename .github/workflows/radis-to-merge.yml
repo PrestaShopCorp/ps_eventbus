@@ -1,0 +1,38 @@
+---
+name: Pull Request readiness
+on:
+  pull_request:
+    types: [opened, labeled, unlabeled, synchronize]
+
+jobs:
+  notify_earth:
+    # once, only when the label is set
+    if: ${{ github.event.action == 'labeled' && github.event.label.name == '🥕 Radis to review' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify everyone when PR is radis to be reviewed
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_COLOR: 2986CC
+          SLACK_TITLE: 👀 it's review time!
+          SLACK_MESSAGE: "🥕 ${{ github.event.pull_request.title }}"
+          SLACK_FOOTER: "https://github.com/PrestaShopCorp/ps_eventbus/pull/${{ github.event.pull_request.number }}"
+          SLACK_USERNAME: QABot
+          SLACK_CHANNEL: squad-cloudsync-dev
+          SLACK_ICON: https://avatars.githubusercontent.com/u/56089550?s=48&v=4
+
+  is_ready:
+    name: Is ready 🥕
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mheap/github-action-required-labels@v3
+        with:
+          mode: minimum
+          count: 1
+          labels: "🥕 Radis to review"
+      - uses: mheap/github-action-required-labels@v3
+        with:
+          mode: exactly
+          count: 0
+          labels: "🚧 WIP"
