@@ -117,6 +117,10 @@ class Ps_eventbus extends Module
         'actionObjectProductDeleteAfter',
         'actionObjectProductUpdateAfter',
 
+        'actionObjectProductSupplierAddAfter',
+        'actionObjectProductSupplierDeleteAfter',
+        'actionObjectProductSupplierUpdateAfter',
+
         'actionObjectSpecificPriceAddAfter',
         'actionObjectSpecificPriceDeleteAfter',
         'actionObjectSpecificPriceUpdateAfter',
@@ -700,6 +704,75 @@ class Ps_eventbus extends Module
                 date(DATE_ATOM),
                 $this->shopId,
                 false
+            );
+        }
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectProductSupplierDeleteAfter($parameters)
+    {
+        /** @var SynchronizationService $synchronizationService * */
+        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+
+        $productSupplier = $parameters['object'];
+
+        if (isset($productSupplier->id)) {
+            $synchronizationService->sendLiveSync('product_suppliers', $productSupplier->id, 'delete');
+            $synchronizationService->insertDeletedObject(
+                $productSupplier->id,
+                Config::COLLECTION_PRODUCT_SUPPLIERS,
+                date(DATE_ATOM),
+                $this->shopId
+            );
+        }
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectProductSupplierAddAfter($parameters)
+    {
+        /** @var SynchronizationService $synchronizationService * */
+        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+
+        $productSupplier = $parameters['object'];
+
+        if (isset($productSupplier->id)) {
+            $synchronizationService->sendLiveSync('product_suppliers', $productSupplier->id, 'delete');
+            $synchronizationService->insertIncrementalSyncObject(
+                $productSupplier->id,
+                Config::COLLECTION_PRODUCT_SUPPLIERS,
+                date(DATE_ATOM),
+                $this->shopId
+            );
+        }
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectProductSupplierUpdateAfter($parameters)
+    {
+        /** @var SynchronizationService $synchronizationService * */
+        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+
+        $productSupplier = $parameters['object'];
+        
+        if (isset($productSupplier->id)) {
+            $synchronizationService->sendLiveSync('product_suppliers', $productSupplier->id, 'delete');
+            $synchronizationService->insertIncrementalSyncObject(
+                $productSupplier->id,
+                Config::COLLECTION_PRODUCT_SUPPLIERS,
+                date(DATE_ATOM),
+                $this->shopId
             );
         }
     }
