@@ -13,6 +13,8 @@ use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository;
+use PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository;
+use PrestaShop\Module\PsEventbus\Repository\StockRepository;
 
 class SynchronizationService
 {
@@ -357,6 +359,21 @@ class SynchronizationService
                 Config::COLLECTION_ORDER_DETAILS => array_column($orderDetailIds, 'id'),
                 Config::COLLECTION_ORDER_STATUS_HISTORY => array_column($orderHistoryIds, 'id'),
                 Config::COLLECTION_ORDER_CART_RULES => array_column($orderCartIds, 'id'),
+            ];
+        }
+
+        if ($type == Config::COLLECTION_PRODUCTS) {
+            /** @var ProductCarrierRepository */
+            $productCarriersRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository');
+            $productCarrierIds = $productCarriersRepository->getProductCarrierIdsByProductIds([$objectId]);
+
+            /** @var StockRepository */
+            $stocksRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\StockRepository');
+            $stockIds = $stocksRepository->getStocksIdsByProductIds([$objectId]);
+
+            return [
+                Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => array_column($productCarrierIds, 'id'),
+                Config::COLLECTION_STOCKS => array_column($stockIds, 'id'),
             ];
         }
 

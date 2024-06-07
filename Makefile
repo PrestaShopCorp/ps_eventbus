@@ -48,6 +48,7 @@ endef
 
 define in_docker
 	docker run \
+	--rm \
 	--workdir /var/www/html/modules/${MODULE_NAME} \
 	--volume $(shell pwd):/var/www/html/modules/${MODULE_NAME}:rw \
 	--entrypoint $1 ${TESTING_IMAGE} $2
