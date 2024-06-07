@@ -31,7 +31,7 @@ jobs:
 
       - name: Move the staging tag
         run: |
-          git tag -d staging
+          git tag -d staging | true
           git tag staging
           git push origin :refs/tags/staging
           git push origin staging
