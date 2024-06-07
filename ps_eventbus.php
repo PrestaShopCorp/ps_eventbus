@@ -1088,8 +1088,7 @@ class Ps_eventbus extends Module
                 $currency->id,
                 Config::COLLECTION_CURRENCIES,
                 date(DATE_ATOM),
-                $this->shopId,
-                true
+                $this->shopId
             );
         }
     }
