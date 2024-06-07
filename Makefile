@@ -47,13 +47,10 @@ define no_zip_it
 endef
 
 define in_docker
-	docker run \
-	--name prestashop-flashlight-${PS_VERSION} \
+	docker run --rm \
 	--workdir /var/www/html/modules/${MODULE_NAME} \
 	--volume $(shell pwd):/var/www/html/modules/${MODULE_NAME}:rw \
-	--entrypoint $1 ${TESTING_IMAGE} $2 \
-	
-	docker rm prestashop-flashlight-${PS_VERSION}
+	--entrypoint $1 ${TESTING_IMAGE} $2
 endef
 
 # target: default                                              - Calling build by default
