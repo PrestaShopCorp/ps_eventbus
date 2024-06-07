@@ -8,6 +8,9 @@ on:
   workflow_dispatch:
   workflow_call:
 
+env:
+  PHP_BUILDER_VERSION: "8.3"
+
 jobs:
   update_staging_release:
     name: Build and update staging assets
@@ -19,7 +22,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.3"
+          php-version: ${{ env.PHP_BUILDER_VERSION }}
 
       - name: Bundle zips
         run: make zip

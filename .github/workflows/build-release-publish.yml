@@ -3,6 +3,9 @@ on:
   release:
     types: [released, prereleased]
 
+env:
+  PHP_BUILDER_VERSION: "8.3"
+
 jobs:
   upload_release_asset_production:
     name: Upload the production zip asset to the release
@@ -15,7 +18,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.3"
+          php-version: ${{ env.PHP_BUILDER_VERSION }}
 
       - name: Bundle the production zip
         run: make zip-prod
@@ -43,7 +46,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.3"
+          php-version: ${{ env.PHP_BUILDER_VERSION }}
 
       - name: Bundle the integration zip
         run: make zip-inte
