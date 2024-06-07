@@ -26,10 +26,15 @@ jobs:
 
       - name: Bundle zips
         run: make zip
+        env:
+          VERSION: staging
 
-      - name: Update release
-        uses: johnwbyrd/update-release@v1
+      - name: Release
+        uses: softprops/action-gh-release@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          files: dist/*.zip
-          release: staging
+          name: staging
+          tag_name: staging
+          files: |
+            ./dist/ps_eventbus-staging.zip
+            ./dist/ps_eventbus-staging_e2e.zip
+            ./dist/ps_eventbus-staging_integration.zip
