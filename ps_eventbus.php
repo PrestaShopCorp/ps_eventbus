@@ -1075,6 +1075,29 @@ class Ps_eventbus extends Module
      *
      * @return void
      */
+    public function hookActionObjectCurrencyDeleteAfter($parameters)
+    {
+        /** @var SynchronizationService $synchronizationService * */
+        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+
+        $currency = $parameters['object'];
+
+        if (isset($currency->id)) {
+            $synchronizationService->sendLiveSync('currencies', $currency->id, 'delete');
+            $synchronizationService->insertDeletedObject(
+                $currency->id,
+                Config::COLLECTION_CURRENCIES,
+                date(DATE_ATOM),
+                $this->shopId
+            );
+        }
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return void
+     */
     public function hookActionObjectCartAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
@@ -1582,8 +1605,7 @@ class Ps_eventbus extends Module
     {
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
-
-        $synchronizationService->insertIncrementalSyncObject(
+        $synchronizationService->insertDeletedObject(
             0,
             Config::COLLECTION_EMPLOYEES,
             date(DATE_ATOM),
