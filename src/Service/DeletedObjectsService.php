@@ -44,7 +44,7 @@ class DeletedObjectsService
         $shopId = (int) $this->context->shop->id;
 
         $deletedObjects = $this->deletedObjectsRepository->getDeletedObjectsGrouped($shopId);
-        
+
         if (empty($deletedObjects)) {
             return [
               'job_id' => $jobId,
@@ -66,7 +66,7 @@ class DeletedObjectsService
                 );
             }
         }
-        
+
         return array_merge(
             [
               'job_id' => $jobId,
