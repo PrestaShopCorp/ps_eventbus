@@ -27,40 +27,40 @@ class Config
         self::PS_ACCOUNTS_NOT_INSTALLED => 'PsAccounts not installed',
     ];
 
+    public const COLLECTION_BUNDLES = 'bundles';
     public const COLLECTION_CARRIERS = 'carriers';
     public const COLLECTION_CARTS = 'carts';
     public const COLLECTION_CART_PRODUCTS = 'cart_products';
     public const COLLECTION_CART_RULES = 'cart_rules';
     public const COLLECTION_CATEGORIES = 'categories';
     public const COLLECTION_CURRENCIES = 'currencies';
-    public const COLLECTION_SPECIFIC_PRICES = 'specific_prices';
     public const COLLECTION_CUSTOM_PRODUCT_CARRIERS = 'custom_product_carriers';
     public const COLLECTION_CUSTOMERS = 'customers';
-    public const COLLECTION_TAXONOMIES = 'taxonomies';
-    public const COLLECTION_MODULES = 'modules';
-    public const COLLECTION_ORDERS = 'orders';
-    public const COLLECTION_ORDER_DETAILS = 'order_details';
-    public const COLLECTION_ORDER_STATUS_HISTORY = 'order_status_history';
-    public const COLLECTION_ORDER_CART_RULES = 'order_cart_rules';
-    public const COLLECTION_PRODUCTS = 'products';
-    public const COLLECTION_PRODUCT_ATTRIBUTES = 'attributes';
     public const COLLECTION_DELETED = 'deleted';
-    public const COLLECTION_SHOPS = 'shops';
-    public const COLLECTION_STORES = 'stores';
-    public const COLLECTION_THEMES = 'themes';
-    public const COLLECTION_BUNDLES = 'bundles';
-    public const COLLECTION_WISHLISTS = 'wishlists';
-    public const COLLECTION_WISHLIST_PRODUCTS = 'wishlist_products';
-    public const COLLECTION_STOCKS = 'stocks';
-    public const COLLECTION_STOCK_MVTS = 'stock_movements';
-    public const COLLECTION_MANUFACTURERS = 'manufacturers';
-    public const COLLECTION_SUPPLIERS = 'suppliers';
-    public const COLLECTION_PRODUCT_SUPPLIERS = 'product_suppliers';
-    public const COLLECTION_LANGUAGES = 'languages';
     public const COLLECTION_EMPLOYEES = 'employees';
-    public const COLLECTION_TRANSLATIONS = 'translations';
     public const COLLECTION_IMAGES = 'images';
     public const COLLECTION_IMAGE_TYPES = 'image_types';
+    public const COLLECTION_LANGUAGES = 'languages';
+    public const COLLECTION_MANUFACTURERS = 'manufacturers';
+    public const COLLECTION_MODULES = 'modules';
+    public const COLLECTION_ORDERS = 'orders';
+    public const COLLECTION_ORDER_CART_RULES = 'order_cart_rules';
+    public const COLLECTION_ORDER_DETAILS = 'order_details';
+    public const COLLECTION_ORDER_STATUS_HISTORY = 'order_status_history';
+    public const COLLECTION_PRODUCTS = 'products';
+    public const COLLECTION_PRODUCT_ATTRIBUTES = 'attributes';
+    public const COLLECTION_PRODUCT_SUPPLIERS = 'product_suppliers';
+    public const COLLECTION_SHOPS = 'shops';
+    public const COLLECTION_SPECIFIC_PRICES = 'specific_prices';
+    public const COLLECTION_STOCKS = 'stocks';
+    public const COLLECTION_STOCK_MVTS = 'stock_movements';
+    public const COLLECTION_STORES = 'stores';
+    public const COLLECTION_SUPPLIERS = 'suppliers';
+    public const COLLECTION_TAXONOMIES = 'taxonomies';
+    public const COLLECTION_THEMES = 'themes';
+    public const COLLECTION_TRANSLATIONS = 'translations';
+    public const COLLECTION_WISHLISTS = 'wishlists';
+    public const COLLECTION_WISHLIST_PRODUCTS = 'wishlist_products';
 
     /**
      * @param mixed $message
