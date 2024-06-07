@@ -29,6 +29,13 @@ jobs:
         env:
           VERSION: staging
 
+      - name: Move the staging tag
+        run: |
+          git tag -d staging
+          git tag staging
+          git push origin :refs/tags/staging
+          git push origin staging
+
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
