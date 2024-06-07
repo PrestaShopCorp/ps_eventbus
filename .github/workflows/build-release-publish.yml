@@ -12,7 +12,7 @@ jobs:
     name: E2E Tests
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    if: ${{ github.event_name == 'pull_request' }}
+    if: ${{ github.event.release.tag_name }} != 'staging'
     strategy:
       matrix:
         ps_version: ["1.7.8.10", "8.1.4"]
