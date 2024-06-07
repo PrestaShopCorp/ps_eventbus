@@ -6,7 +6,7 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributions](#contributions)
-- [Licence](#licence)
+- [License](#license)
 
 ## Introduction
 
