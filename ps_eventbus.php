@@ -1606,7 +1606,6 @@ class Ps_eventbus extends Module
     {
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
-        // need to convert to delete
         $synchronizationService->insertDeletedObject(
             0,
             Config::COLLECTION_EMPLOYEES,
