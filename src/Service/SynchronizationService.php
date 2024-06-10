@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
@@ -10,19 +9,9 @@ use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
-use PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository;
-use PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository;
-use PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository;
-use PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository;
-use PrestaShop\Module\PsEventbus\Repository\StockRepository;
 
 class SynchronizationService
 {
-    /**
-     * @var \Ps_eventbus
-     */
-    private $module;
-
     /**
      * @var EventbusSyncRepository
      */
@@ -69,7 +58,6 @@ class SynchronizationService
     const INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT = 100000;
 
     public function __construct(
-        \Ps_eventbus $module,
         EventbusSyncRepository $eventbusSyncRepository,
         IncrementalSyncRepository $incrementalSyncRepository,
         LiveSyncRepository $liveSyncRepository,
@@ -78,7 +66,6 @@ class SynchronizationService
         ProxyServiceInterface $proxyService,
         PayloadDecorator $payloadDecorator
     ) {
-        $this->module = $module;
         $this->eventbusSyncRepository = $eventbusSyncRepository;
         $this->incrementalSyncRepository = $incrementalSyncRepository;
         $this->liveSyncRepository = $liveSyncRepository;
