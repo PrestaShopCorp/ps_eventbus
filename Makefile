@@ -3,7 +3,6 @@ MODULE_NAME = ps_eventbus
 VERSION ?= $(shell git describe --tags 2> /dev/null || echo "v0.0.0")
 SEM_VERSION ?= $(shell echo ${VERSION} | sed 's/^v//')
 PACKAGE ?= ${MODULE_NAME}-${VERSION}
-PHP_VERSION ?= 8.1
 PS_VERSION ?= 8.1.5
 TESTING_IMAGE ?= prestashop/prestashop-flashlight:${PS_VERSION}
 PS_ROOT_DIR ?= $(shell pwd)/prestashop/prestashop-${PS_VERSION}
@@ -48,6 +47,7 @@ endef
 
 define in_docker
 	docker run \
+	--rm \
 	--workdir /var/www/html/modules/${MODULE_NAME} \
 	--volume $(shell pwd):/var/www/html/modules/${MODULE_NAME}:rw \
 	--entrypoint $1 ${TESTING_IMAGE} $2

@@ -54,7 +54,9 @@ class ServerInformationRepository
         ConfigurationRepository $configurationRepository,
         ShopRepository $shopRepository,
         ErrorHandlerInterface $errorHandler,
-        array $configuration
+        string $eventbusSyncApiUrl,
+        string $eventbusLiveSyncApiUrl,
+        string $eventbusProxyApiUrl
     ) {
         $this->currencyRepository = $currencyRepository;
         $this->languageRepository = $languageRepository;
@@ -63,7 +65,11 @@ class ServerInformationRepository
         $this->context = $context;
         $this->db = \Db::getInstance();
         $this->psAccountsAdapterService = $psAccountsAdapterService;
-        $this->configuration = $configuration;
+        $this->configuration = [
+            'EVENT_BUS_SYNC_API_URL' => $eventbusSyncApiUrl,
+            'EVENT_BUS_LIVE_SYNC_API_URL' => $eventbusLiveSyncApiUrl,
+            'EVENT_BUS_PROXY_API_URL' => $eventbusProxyApiUrl,
+        ];
         $this->errorHandler = $errorHandler;
     }
 
