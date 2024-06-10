@@ -7,10 +7,9 @@ services:
     healthcheck:
       test:
         [
-          'CMD',
-          'curl',
-          '-sI',
-          'http://localhost:80/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck',
+          "CMD",
+          "healthcheck.sh",
+          "--connect",
         ]
       interval: 1s
       timeout: 5s
