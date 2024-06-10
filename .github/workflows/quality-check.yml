@@ -132,6 +132,7 @@ jobs:
       - name: Setup e2e-env with Prestashop ${{ matrix.ps_version }}
         run: |
           cp .env.dist .env
+          docker compose pull
           docker compose build
           docker compose up --detach --wait
         env:
