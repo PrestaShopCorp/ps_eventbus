@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1",
+    "collection": "shops",
+    "properties": {
+      "created_at": "2024-05-29 12:31:10",
+      "folder_created_at": "2024-06-10 14:18:47",
+      "cms_version": "8.1.4",
+      "url_is_simplified": true,
+      "cart_is_persistent": false,
+      "default_language": "en",
+      "languages": "en",
+      "default_currency": "EUR",
+      "currencies": "EUR;USD",
+      "weight_unit": "kg",
+      "distance_unit": "m",
+      "volume_unit": "cl",
+      "dimension_unit": "cm",
+      "timezone": "Europe/Paris",
+      "is_order_return_enabled": false,
+      "order_return_nb_days": 14,
+      "php_version": "8.1.28",
+      "http_server": "nginx/1.26.0",
+      "url": "http://localhost:8000/",
+      "ssl": false,
+      "multi_shop_count": 1,
+      "country_code": "FR"
+    }
+  }
+]
