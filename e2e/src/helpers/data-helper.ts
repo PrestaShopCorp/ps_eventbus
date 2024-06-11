@@ -70,20 +70,16 @@ export async function loadFixture(
   controller: Controller
 ): Promise<PsEventbusSyncUpload[]> {
   const contents = getControllerContent(controller);
-  const shopVersion = (await getShopHealthCheck()).prestashop_version;
+  const shopSemver = semver.coerce(
+    (await getShopHealthCheck()).prestashop_version
+  );
   const fixture = [];
-
-  const fixtureVersions = await fs.promises.readdir(`${FIXTURE_DIR}`, {
-    encoding: "utf-8",
-    withFileTypes: true,
-  });
-
   let useFixture = "latest";
-  if (semver.satisfies(shopVersion, "1.7")) {
+  if (semver.satisfies(shopSemver, "1.7")) {
     useFixture = "1.7";
-  } else if (semver.satisfies(shopVersion, "8")) {
+  } else if (semver.satisfies(shopSemver, "8")) {
     useFixture = "8";
-  } else if (semver.satisfies(shopVersion, "9")) {
+  } else if (semver.satisfies(shopSemver, "9")) {
     useFixture = "9";
   }
 
