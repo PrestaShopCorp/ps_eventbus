@@ -7,9 +7,11 @@ services:
     healthcheck:
       test:
         [
-          "CMD",
-          "healthcheck.sh",
-          "--connect",
+          'CMD',
+          'curl',
+          '-sI',
+          "'-H: localhost:8000'",
+          'http://localhost:80/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck',
         ]
       interval: 1s
       timeout: 5s
@@ -28,6 +30,8 @@ services:
       - ${HOST_PORT_BIND_PRESTASHOP:?See e2e-env/.env.dist}:80
     networks:
       - prestashop
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   mysql:
     image: mariadb:${DOCKER_VERSION_MARIADB:?See e2e-env/.env.dist}
