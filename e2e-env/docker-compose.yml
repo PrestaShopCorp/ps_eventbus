@@ -14,6 +14,7 @@ services:
           "Host: localhost:8000",
           "http://localhost:80/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck",
         ]
+      interval: 30s
     volumes:
       - ..:/var/www/html/modules/ps_eventbus:rw
       - ./init-scripts:/tmp/init-scripts:ro
