@@ -265,16 +265,6 @@ class Stream implements StreamInterface
     }
 
     /**
-     * @param int<0, max> $length
-     *
-     * @return false|string
-     */
-    public function read($length)
-    {
-        return $this->readable ? fread($this->stream, $length) : false;
-    }
-
-    /**
      * @param string $string
      *
      * @return false|int
