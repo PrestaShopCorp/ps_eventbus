@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      semver:
+        specifier: ^7.6.2
+        version: 7.6.2
     devDependencies:
       '@jest/globals':
         specifier: ^29.7.0
@@ -20,6 +24,9 @@ importers:
       '@types/ramda':
         specifier: ^0.30.0
         version: 0.30.0
+      '@types/semver':
+        specifier: ^7.5.8
+        version: 7.5.8
       '@types/ws':
         specifier: ^8.5.10
         version: 8.5.10
@@ -360,6 +367,9 @@ packages:
 
   '@types/ramda@0.30.0':
     resolution: {integrity: sha512-DQtfqUbSB18iM9NHbQ++kVUDuBWHMr6T2FpW1XTiksYRGjq4WnNPZLt712OEHEBJs7aMyJ68Mf2kGMOP1srVVw==}
+
+  '@types/semver@7.5.8':
+    resolution: {integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==}
 
   '@types/stack-utils@2.0.3':
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
@@ -1758,6 +1768,8 @@ snapshots:
   '@types/ramda@0.30.0':
     dependencies:
       types-ramda: 0.30.0
+
+  '@types/semver@7.5.8': {}
 
   '@types/stack-utils@2.0.3': {}
 
