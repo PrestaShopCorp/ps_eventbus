@@ -50,3 +50,5 @@ jobs:
             ./dist/ps_eventbus-staging.zip
             ./dist/ps_eventbus-staging_e2e.zip
             ./dist/ps_eventbus-staging_integration.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
