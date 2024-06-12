@@ -147,3 +147,21 @@ jobs:
             --debug
         env:
           CHANGELOG: ${{ github.event.release.body }}
+
+  notify_earth:
+    name: Notify slack internal channels about the release
+    needs:
+      - publish_to_marketplace
+    if: success()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_COLOR: 8FCE00
+          SLACK_TITLE: "🚀 PS EventBus {{ github.event.release.tag_name }} has been released"
+          SLACK_MESSAGE: ${{ github.event.release.body }}
+          SLACK_FOOTER: "https://github.com/PrestaShopCorp/ps_eventbus/releases/tag/${{ github.event.release.tag_name }}"
+          SLACK_USERNAME: QABot
+          SLACK_CHANNEL: squad-cloudsync
+          SLACK_ICON: https://raw.githubusercontent.com/PrestaShopCorp/ps_eventbus/main/logo.png
