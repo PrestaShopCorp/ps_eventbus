@@ -6,6 +6,7 @@ on:
 env:
   PHP_BUILDER_VERSION: "8.3"
   NODE_BUILDER_VERSION: "20"
+  GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
 
 jobs:
   e2e-tests:
@@ -96,8 +97,6 @@ jobs:
 
       - name: Publish the production zip
         uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: ./dist/${{ github.event.repository.name }}-${{ github.event.release.tag_name }}.zip
@@ -106,12 +105,18 @@ jobs:
 
       - name: Publish the integration zip
         uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: ./dist/${{ github.event.repository.name }}-${{ github.event.release.tag_name }}_integration.zip
           asset_name: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}_integration.zip
+          asset_content_type: application/zip
+
+      - name: Publish the e2e zip
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./dist/${{ github.event.repository.name }}-${{ github.event.release.tag_name }}_e2e.zip
+          asset_name: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}_e2e.zip
           asset_content_type: application/zip
 
   publish_to_marketplace:
@@ -130,7 +135,7 @@ jobs:
         with:
           version: tags/${{ github.event.release.tag_name }}
           file: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}.zip
-          token: ${{ secrets.GA_ACCESS_TOKEN }}
+          token: ${{ env.GITHUB_TOKEN }}
 
       - name: Prepare publishing tool
         run: |
