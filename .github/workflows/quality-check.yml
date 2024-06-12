@@ -2,13 +2,11 @@ name: Quality Control
 
 env:
   DOCKER_COMPOSE_VERSION: v2.27.0
+  NODE_BUILDER_VERSION: "20"
 
 on:
   pull_request:
     types: [opened, reopened, synchronize]
-  push:
-    branches:
-      - "main"
 
 jobs:
   php-linter:
@@ -106,7 +104,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ env.NODE_BUILDER_VERSION }}
           cache: "pnpm"
           cache-dependency-path: e2e/pnpm-lock.yaml
 
