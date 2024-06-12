@@ -1,18 +1,18 @@
-# Guideline to write E2E test
+# e2e testing ps_eventbus
 
-To write an end-to-end (E2E) test for ps_eventbus, it is necessary to control both the response from ps_eventbus when making a request to its APIs and to control the request that ps_eventbus makes itself towards the CloudSync APIs.
+ps_eventbus works by listening to calls and pushing data to the Cloudsync server synchronously.
+In order to test the calls made to Cloudsync, tests connect to mock Cloudsync servers using Websocket.
 
-To achieve this, the tests work with two components:
+## Running tests
 
-- Supertest:
-    This allows making assertions on the request to ps_eventbus and validating the response sent by ps_eventbus directly.
-- Websocket Client Usage:
-    With Websockets, we are able to listen to the requests that ps_eventbus makes towards the CloudSync APIs.
+First start e2e environment in ```e2e-env``` (see e2e-env [README.md](../e2e-env/README.md)) then simply run ```pnpm test:e2e```.
 
-# How to clearly write E2E test
+## Writing tests
 
-exemple
-```javascript
+The `MockProbe` object allows to connect to a mock and check uploaded contents against the query we made.
+
+example :
+```typescript
 import { MockProbe } from './helpers/mock-probe';
 import testConfig from './helpers/test.config';
 import request from 'supertest';
@@ -21,41 +21,59 @@ const controller = 'apiCategories';
 const endpoint = `/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5`;
 
 describe('CategoriesController', () => {
-  it('should return 454 with an invalid job id (sync-api status 454)', async () => {
-    // instantiate the probe
-    beforeAll(() => {
-      MockProbe.connect();
-    });
+  it(`${controller} should upload to collector`, async () => {
+    // arrange
+    const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
+    // jobId starting with "valid-job-" will be considered valid by the mock sync-api and will always return 201;
+    // other values will be rejected by the mock
+    const jobId = 'valid-job-1'
+    // get values sent to the mock as Observable.
+    // only values maching the given parameter will be received, which allows to exclude values sent by other tests.
+    // The obsevable given by ```probe()``` establishes a websocket connection with the mock only on first subscribe,
+    // but the mock accounts for that by replaying messages received a few seconds before.
+    // As such, timing is not critical here.
+    const message$ = probe({ url: `/upload/${jobId}` });
 
-    /**
-     * initialize the connection with probe,
-     * and pass into parameter the response count awaiting 
-     */
-    const probe = MockProbe.waitForMessages(1);
-    const jobId = `invalid-job-${Date.now()}`;
+    // act
+    // call ps_eventbus api, which should in turn upload data to the mock.
+    const request$ = from(
+      axios.post(url, {
+        headers: {
+          Host: testConfig.prestaShopHostHeader,
+        },
+      })
+    );
 
-    // assert the result of request with supertest
-    await request(testConfig.prestashopUrl)
-      .get(`${endpoint}&job_id=${jobId}`)
-      .set('Host', testConfig.prestaShopHostHeader)
-      .redirects(1)
-      .expect('content-type', /json/)
-      .expect(454);
+    const results = await lastValueFrom(
+      // collect both from
+      // - ps_eventbus responses
+      // - messages from the mock sent through the probe
+      // in this example, only one request is made and as such, only one message should be received, but because
+      // we're using observables, we can make an arbitrary number of requests.
+      zip(message$, request$).pipe(
+        map((result) => ({
+          probeMessage: result[0],
+          psEventbusReq: result[1],
+        })),
+        toArray()
+      )
+    );
 
-    /**
-     * await the stack of messages from probe
-     * the probe return an Array
-     */
-    const syncApiRequest = await probe;
-    
-    // assert the request send from ps_eventbus to CloudSync API
-    expect(syncApiRequest[0].method).toBe('GET');
-    expect(syncApiRequest[0].url.split( '/' )).toContain(jobId);
-
-    // Close the connection of probe
-    afterAll(() => {
-      MockProbe.disconnect();
+    // assert
+    expect(results.length).toEqual(1);
+    expect(results[0].probeMessage.method).toBe("POST");
+    expect(results[0].probeMessage.headers).toMatchObject({
+      "full-sync-requested": "1",
     });
   });
 });
 ```
+
+## Using fixtures
+
+Fixtures for prestashop versions should be placed in [src/fixtures](src/fixtures). The correct version is loaded 
+automatically by ```loadFixture()```. If no fixture matches the version given by prestashop's healthcheck,
+[src/fixtures/latest](src/fixtures/latest) is loaded instead.
+
+```dumpUploadData()``` will write data in [dumps](dumps) using the same format used by ```loadFixture()```
+to make it easier to make or update fixtures.

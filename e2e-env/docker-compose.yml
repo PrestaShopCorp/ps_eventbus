@@ -7,14 +7,14 @@ services:
     healthcheck:
       test:
         [
-          'CMD',
-          'curl',
-          '-sI',
-          'http://localhost:80/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck',
+          "CMD",
+          "curl",
+          "-sI",
+          "-H",
+          "Host: localhost:8000",
+          "http://localhost:80/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck",
         ]
-      interval: 1s
-      timeout: 5s
-      retries: 30
+      interval: 30s
     volumes:
       - ..:/var/www/html/modules/ps_eventbus:rw
       - ./init-scripts:/tmp/init-scripts:ro
@@ -33,15 +33,7 @@ services:
   mysql:
     image: mariadb:${DOCKER_VERSION_MARIADB:?See e2e-env/.env.dist}
     healthcheck:
-      test:
-        [
-          "CMD",
-          "healthcheck.sh",
-          "--connect",
-        ]
-      interval: 1s
-      timeout: 10s
-      retries: 30
+      test: ["CMD", "healthcheck.sh", "--connect"]
     environment:
       - MYSQL_HOST=mysql
       - MYSQL_USER=prestashop
@@ -77,16 +69,7 @@ services:
     environment:
       - RUN_IN_DOCKER=1
     healthcheck:
-      test:
-        [
-          'CMD',
-          'curl',
-          '-sI',
-          'http://localhost:8080',
-        ]
-      interval: 1s
-      timeout: 5s
-      retries: 30
+      test: ["CMD", "curl", "-sI", "http://localhost:8080"]
     volumes:
       - ./cloudsync-mock/src:/home/node/src:ro
     ports:
@@ -100,20 +83,10 @@ services:
   reverse-proxy:
     image: nginx:stable-alpine
     healthcheck:
-      test:
-        [
-          'CMD',
-          'curl',
-          '-sI',
-          'http://localhost:80/nginx_status',
-        ]
-      interval: 1s
-      timeout: 2s
-      retries: 30
-      start_period: 1s
+      test: ["CMD", "curl", "-sI", "http://localhost:80/nginx_status"]
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro,cached
-    command: [ nginx-debug, "-g", "daemon off;" ]
+    command: [nginx-debug, "-g", "daemon off;"]
     networks:
       - prestashop
     ports:
