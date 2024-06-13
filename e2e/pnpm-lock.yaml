@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+dependencies:
+  semver:
+    specifier: ^7.6.2
+    version: 7.6.2
+
 devDependencies:
   '@jest/globals':
     specifier: ^29.7.0
@@ -17,6 +22,9 @@ devDependencies:
   '@types/ramda':
     specifier: ^0.30.0
     version: 0.30.0
+  '@types/semver':
+    specifier: ^7.5.8
+    version: 7.5.8
   '@types/ws':
     specifier: ^8.5.10
     version: 8.5.10
@@ -742,6 +750,10 @@ packages:
     resolution: {integrity: sha512-DQtfqUbSB18iM9NHbQ++kVUDuBWHMr6T2FpW1XTiksYRGjq4WnNPZLt712OEHEBJs7aMyJ68Mf2kGMOP1srVVw==}
     dependencies:
       types-ramda: 0.30.0
+    dev: true
+
+  /@types/semver@7.5.8:
+    resolution: {integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==}
     dev: true
 
   /@types/stack-utils@2.0.3:
@@ -2177,7 +2189,6 @@ packages:
     resolution: {integrity: sha512-FNAIBWCx9qcRhoHcgcJ0gvU7SN1lYU2ZXuSfl04bSC5OpvDHFyJCjdNHomPXxjQlCBU67YW64PzY7/VIEH7F2w==}
     engines: {node: '>=10'}
     hasBin: true
-    dev: true
 
   /shebang-command@2.0.0:
     resolution: {integrity: sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==}

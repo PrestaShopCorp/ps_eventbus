@@ -37,12 +37,18 @@ jobs:
           git push origin staging
 
       - name: Release
-        uses: softprops/action-gh-release@v2
+        uses: joutvhu/create-release@v1
         with:
-          name: staging
           tag_name: staging
+          name: staging
+          draft: true
           prerelease: true
+          on_release_exists: update
+          generate_release_notes: true
+          remove_assets: true
           files: |
             ./dist/ps_eventbus-staging.zip
             ./dist/ps_eventbus-staging_e2e.zip
             ./dist/ps_eventbus-staging_integration.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
