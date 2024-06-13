@@ -29,8 +29,6 @@ services:
       - ${HOST_PORT_BIND_PRESTASHOP:?See e2e-env/.env.dist}:80
     networks:
       - prestashop
-    extra_hosts:
-      - host.docker.internal:host-gateway
 
   mysql:
     image: mariadb:${DOCKER_VERSION_MARIADB:?See e2e-env/.env.dist}
