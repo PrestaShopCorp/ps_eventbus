@@ -70,17 +70,27 @@ export async function loadFixture(
   controller: Controller
 ): Promise<PsEventbusSyncUpload[]> {
   const contents = getControllerContent(controller);
-  const shopSemver = semver.coerce(
-    (await getShopHealthCheck()).prestashop_version
-  );
+  const shopVersion = (await getShopHealthCheck()).prestashop_version;
+  const shopSemver = semver.coerce(shopVersion);
   const fixture = [];
-  let useFixture = "latest";
-  if (semver.satisfies(shopSemver, "1.7")) {
-    useFixture = "1.7";
-  } else if (semver.satisfies(shopSemver, "8")) {
-    useFixture = "8";
-  } else if (semver.satisfies(shopSemver, "9")) {
-    useFixture = "9";
+
+  const fixtureVersions = await fs.promises.readdir(
+    `${FIXTURE_DIR}`,
+    {encoding: 'utf-8', withFileTypes: true}
+  )
+
+  // use either fixture specific to PS version or latest fixture
+  const matchingFixtures = fixtureVersions
+    .filter(version => version.isDirectory())
+    .map(version => version.name)
+    .filter(fixtureDir => semver.satisfies(shopSemver, fixtureDir));
+
+  let useFixture = 'latest';
+
+  if(matchingFixtures.length > 1) {
+    throw new Error(`More than one fixture matches prestashop version ${shopVersion} : ${JSON.stringify(useFixture)}`)
+  } else if(matchingFixtures.length === 1) {
+    useFixture = matchingFixtures[0];
   }
 
   const files = contents.map((content) =>
