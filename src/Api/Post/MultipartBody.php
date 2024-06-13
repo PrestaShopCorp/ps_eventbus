@@ -5,7 +5,6 @@ namespace PrestaShop\Module\PsEventbus\Api\Post;
 use GuzzleHttp\Psr7\AppendStream;
 use GuzzleHttp\Psr7\StreamDecoratorTrait;
 use Psr\Http\Message\StreamInterface;
-use PrestaShop\Module\PsEventbus\Api\Post\Stream;
 
 /**
  * Stream that when read returns bytes for a streaming multipart/form-data body
