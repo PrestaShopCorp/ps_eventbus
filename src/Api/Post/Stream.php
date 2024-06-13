@@ -265,7 +265,7 @@ class Stream implements StreamInterface
     }
 
     /**
-     * @param int<0, max> $length
+     * @param int<1, max> $length
      *
      * @return false|string
      */
