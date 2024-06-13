@@ -1524,7 +1524,7 @@
       "attributes": {
         "Color": "Black"
       },
-      "images": "",
+      "images": "http://localhost:8000/10/mountain-fox-cushion.jpg",
       "cover": "http://localhost:8000/9/mountain-fox-cushion.jpg",
       "iso_code": "en",
       "unique_product_id": "9-23-en",
