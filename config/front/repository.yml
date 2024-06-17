@@ -58,11 +58,9 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
       - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
-      - {
-          EVENT_BUS_SYNC_API_URL: '%ps_eventbus.sync_api_url%',
-          EVENT_BUS_LIVE_SYNC_API_URL: '%ps_eventbus.live_sync_api_url%',
-          EVENT_BUS_PROXY_API_URL: '%ps_eventbus.proxy_api_url%',
-        }
+      - '%ps_eventbus.sync_api_url%'
+      - '%ps_eventbus.live_sync_api_url%'
+      - '%ps_eventbus.proxy_api_url%'
 
   PrestaShop\Module\PsEventbus\Repository\ThemeRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ThemeRepository

@@ -52,4 +52,27 @@ class OrderCartRuleRepository
 
         return $this->db->executeS($query);
     }
+
+    /**
+     * @param array $orderIds
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getOrderCartRuleIdsByOrderIds(array $orderIds)
+    {
+        if (!$orderIds) {
+            return [];
+        }
+
+        $query = $this->getBaseQuery();
+
+        $query->select('ocr.id_order_cart_rule as id');
+        $query->where('ocr.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')');
+
+        $result = $this->db->executeS($query);
+
+        return is_array($result) ? $result : [];
+    }
 }

@@ -21,7 +21,9 @@
     "fix": "pnpm format:fix && pnpm lint:fix"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "ws": "^8.17.0",
+    "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
     "@swc/cli": "^0.3.12",
@@ -35,8 +37,6 @@
     "nodemon": "^3.1.0",
     "rimraf": "^5.0.7",
     "typescript": "^5.4.5",
-    "ws": "^8.17.0",
-    "@types/multer": "^1.4.11",
-    "multer": "^1.4.5-lts.1"
+    "@types/multer": "^1.4.11"
   }
 }

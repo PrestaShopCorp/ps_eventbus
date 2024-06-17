@@ -36,7 +36,9 @@ class StoreRepository
         $langId = (int) \Language::getIdByIso($langIso);
 
         $query = new \DbQuery();
-        if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+
+        // https://github.com/PrestaShop/PrestaShop/commit/7dda2be62d8bd606edc269fa051c36ea68f81682#diff-e98d435095567c145b49744715fd575eaab7050328c211b33aa9a37158421ff4R2004
+        if (version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
             $query->from(self::STORES_TABLE, 's')
                 ->leftJoin('store_lang', 'sl', 's.id_store = sl.id_store')
                 ->leftJoin('store_shop', 'ss', 's.id_store = ss.id_store')
@@ -141,7 +143,8 @@ class StoreRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+        // https://github.com/PrestaShop/PrestaShop/commit/7dda2be62d8bd606edc269fa051c36ea68f81682#diff-e98d435095567c145b49744715fd575eaab7050328c211b33aa9a37158421ff4R2004
+        if (version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
             $query->select('s.id_store, s.id_country, s.id_state, s.city, s.postcode, s.active, s.date_add as created_at, s.date_upd as updated_at, sl.id_lang, sl.name, sl.address1, sl.address2, sl.hours, ss.id_shop');
         } else {
             $query->select('s.id_store, s.id_country, s.id_state, s.city, s.postcode, s.active, s.date_add as created_at, s.date_upd as updated_at');

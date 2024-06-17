@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "616670508e331fd1789b484fd98ab7e8",
+    "content-hash": "bf1644c746eeea434e761668b46875a0",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -650,62 +650,6 @@
                 "source": "https://github.com/PrestaShopCorp/module-lib-mbo-installer/tree/v0.1"
             },
             "time": "2023-02-06T10:42:50+00:00"
-        },
-        {
-            "name": "prestashop/module-lib-service-container",
-            "version": "v2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PrestaShopCorp/module-lib-service-container.git",
-                "reference": "5525b56513d9ddad6e4232dfd93a24e028efdca7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PrestaShopCorp/module-lib-service-container/zipball/5525b56513d9ddad6e4232dfd93a24e028efdca7",
-                "reference": "5525b56513d9ddad6e4232dfd93a24e028efdca7",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.6.0",
-                "prestashop/module-lib-cache-directory-provider": "^1.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~5.7"
-            },
-            "suggest": {
-                "symfony/config": "Needed when the running PrestaShop does not already run with Symfony",
-                "symfony/dependency-injection": "Needed when the running PrestaShop does not already run with Symfony",
-                "symfony/expression-language": "Needed when the running PrestaShop does not already run with Symfony",
-                "symfony/yaml": "Needed when the running PrestaShop does not already run with Symfony"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "PrestaShop\\ModuleLibServiceContainer\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "AFL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "PrestaShop SA",
-                    "email": "contact@prestashop.com"
-                }
-            ],
-            "description": "Service container to use on prestashop modules",
-            "keywords": [
-                "composer",
-                "modules",
-                "package",
-                "prestashop"
-            ],
-            "support": {
-                "issues": "https://github.com/PrestaShopCorp/module-lib-service-container/issues",
-                "source": "https://github.com/PrestaShopCorp/module-lib-service-container/tree/v2.0"
-            },
-            "time": "2022-06-20T08:30:47+00:00"
         },
         {
             "name": "psr/container",
@@ -1361,5 +1305,5 @@
     "platform-overrides": {
         "php": "7.1"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

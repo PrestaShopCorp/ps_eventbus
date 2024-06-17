@@ -58,6 +58,8 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
       - '@PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface'
       - '@PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator'
 

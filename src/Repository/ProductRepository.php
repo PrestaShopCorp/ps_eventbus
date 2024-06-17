@@ -345,8 +345,13 @@ class ProductRepository
             $query->select('p.mpn');
         }
 
-        $query->select('p.width, p.height, p.depth, p.additional_delivery_times, p.additional_shipping_cost');
-        $query->select('pl.delivery_in_stock, pl.delivery_out_stock');
+        // https://github.com/PrestaShop/PrestaShop/commit/10268af8db4163dc2a02edb8da93d02f37f814d8#diff-e94a594ba740485c7a4882b333984d3932a2f99c0d6d0005620745087cce7a10R260
+        if (version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
+            $query->select('p.additional_delivery_times');
+            $query->select('pl.delivery_in_stock, pl.delivery_out_stock');
+        }
+
+        $query->select('p.width, p.height, p.depth, p.additional_shipping_cost');
 
         if (version_compare(_PS_VERSION_, '1.7', '>=')) {
             $query->select('IFNULL(NULLIF(pa.isbn, ""), p.isbn) as isbn');

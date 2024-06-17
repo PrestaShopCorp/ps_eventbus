@@ -115,6 +115,29 @@ class StockRepository
     }
 
     /**
+     * @param array $productIds
+     *
+     * @return array
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getStocksIdsByProductIds(array $productIds)
+    {
+        if (!$productIds) {
+            return [];
+        }
+
+        $query = $this->getBaseQuery();
+
+        $query->select('sa.id_stock_available as id');
+        $query->where('sa.id_product IN (' . implode(',', array_map('intval', $productIds)) . ')');
+
+        $result = $this->db->executeS($query);
+
+        return is_array($result) ? $result : [];
+    }
+
+    /**
      * @param \DbQuery $query
      *
      * @return void
@@ -122,6 +145,11 @@ class StockRepository
     private function addSelectParameters(\DbQuery $query)
     {
         $query->select('sa.id_stock_available, sa.id_product, sa.id_product_attribute, sa.id_shop, sa.id_shop_group');
-        $query->select('sa.quantity, sa.physical_quantity, sa.reserved_quantity, sa.depends_on_stock, sa.out_of_stock, sa.location');
+        $query->select('sa.quantity, sa.physical_quantity, sa.reserved_quantity, sa.depends_on_stock, sa.out_of_stock');
+
+        // https://github.com/PrestaShop/PrestaShop/commit/4c7d58a905dfb61c7fb2ef4a1f9b4fab2a8d8ecb#diff-e57fb1deeaab9e9079505333394d58f0bf7bb40280b4382aad1278c08c73e2e8R58
+        if (version_compare(_PS_VERSION_, '1.7.5.0', '>=')) {
+            $query->select('sa.location');
+        }
     }
 }

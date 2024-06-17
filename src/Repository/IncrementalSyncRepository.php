@@ -40,30 +40,51 @@ class IncrementalSyncRepository
     }
 
     /**
-     * @param int $objectId
-     * @param string $objectType
-     * @param string $date
-     * @param int $shopId
-     * @param string $langIso
+     * @param array $data
      *
      * @return bool
      */
-    public function insertIncrementalObject($objectId, $objectType, $date, $shopId, $langIso)
+    public function insertIncrementalObject(array $data)
     {
         try {
-            return $this->db->insert(
-                self::INCREMENTAL_SYNC_TABLE,
-                [
-                    'id_shop' => $shopId,
-                    'id_object' => $objectId,
-                    'type' => $objectType,
-                    'created_at' => $date,
-                    'lang_iso' => $langIso,
-                ],
-                false,
-                true,
-                \Db::ON_DUPLICATE_KEY
-            );
+            $arrayOfData = $data;
+
+            if (!is_array($data[0])) {
+                $arrayOfData = [$data];
+            }
+
+            $elementsCount = count($arrayOfData);
+            $index = 0;
+
+            $query = 'INSERT INTO `' . _DB_PREFIX_ . $this::INCREMENTAL_SYNC_TABLE . '` (type, id_object, id_shop, lang_iso, created_at) VALUES ';
+
+            foreach ($arrayOfData as $currenData) {
+                $dateTime = new \DateTime($currenData['created_at']);
+                $date = $dateTime->format('Y-m-d H:i:s');
+
+                $query .= "(
+                    '{$this->db->escape($currenData['type'])}',
+                    {$this->db->escape($currenData['id_object'])},
+                    {$this->db->escape($currenData['id_shop'])},
+                    '{$this->db->escape($currenData['lang_iso'])}',
+                    '{$this->db->escape($date)}'
+                )";
+
+                if (++$index < $elementsCount) {
+                    $query .= ',';
+                }
+            }
+
+            $query .= ' 
+                ON DUPLICATE KEY UPDATE 
+                type = VALUES(type),
+                id_object = VALUES(id_object),
+                id_shop = VALUES(id_shop),
+                lang_iso = VALUES(lang_iso),
+                created_at = VALUES(created_at)
+            ';
+
+            return (bool) $this->db->query($query);
         } catch (\PrestaShopDatabaseException $e) {
             $this->errorHandler->handle(
                 new \PrestaShopDatabaseException('Failed to insert incremental object', $e->getCode(), $e)
