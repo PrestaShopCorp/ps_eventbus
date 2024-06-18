@@ -1,0 +1,105 @@
+---
+name: 'e2e tests'
+description: ''
+inputs:
+  services:
+    description: list of services
+    type: string
+    required: false
+  image-tag:
+    description: Tag for docker image (pr-xxx)
+    type: string
+    required: false
+  githhub-event-name:
+    description: PR, workflow dispatch, or schedule
+  ps-version:
+    description: Prestashop version
+    required: true
+  php-version:
+    description: Php version
+    required: true
+  docker-compose-version:
+    description: Docker compose version
+    required: false
+    default: v2.24.4
+  pnpm-version:
+    description: pnpm version
+    required: false
+    default: 9
+  npm-token-prestashopcorp:
+    description: npm PrestashopCorp token
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: 'Install docker compose'
+      shell: bash
+      run: |
+        DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+        mkdir -p $DOCKER_CONFIG/cli-plugins
+        rm -f $DOCKER_CONFIG/cli-plugins/docker-compose
+        curl -SL https://github.com/docker/compose/releases/download/${{ inputs.docker-compose-version }}/docker-compose-linux-x86_64 \
+        -o $DOCKER_CONFIG/cli-plugins/docker-compose
+        chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+
+    - name: 'Get general node version'
+      id: node_version
+      shell: bash
+      run: echo "VERSION=$(jq -r '.engines.node' package.json)" >> $GITHUB_OUTPUT
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ steps.node_version.outputs.VERSION }}
+
+    - name: Install dependencies and setup e2e-env
+      shell: bash
+      run: |
+        npm install -g pnpm@${{ inputs.pnpm-version }}
+        pnpm install --no-optional
+        cp ./e2e-env/.env.dist ./e2e-env/.env
+        cat ./e2e-env/.env
+      env:
+        NPM_TOKEN_PRESTASHOPCORP: ${{ inputs.npm-token-prestashopcorp }}
+
+    - name: PS${{ inputs.ps-version }} & PHP${{matrix.php_version}} setup env
+      shell: bash
+      run: |
+        cp .env.dist .env
+        docker compose build
+        docker compose up --detach --wait
+      env:
+        DOCKER_IMAGE_PRESTASHOP: prestashop/prestashop-flashlight:${{matrix.ps_version}}-${{matrix.php_version}}
+      working-directory: e2e-env
+
+    - name: PS${{ inputs.ps-version }} docker instances
+      shell: bash
+      run: |
+        ./e2e-env.sh run --capture
+        while ! nc -z localhost 8000; do sleep 1; done;
+      working-directory: e2e-env
+
+    - name: PS${{ inputs.ps-version }} & PHP${{ inputs.php-version }} run tests & stop e2e-env
+      shell: bash
+      run: |
+        pnpm test:e2e
+      working-directory: e2e
+
+    - name: More logs on failure
+      if: failure()
+      shell: bash
+      run: |
+        echo "========= Shop healthcheck =============="
+        curl -s -L 'http://localhost:8000/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck' | jq .
+        docker logs prestashop
+        echo "========= Failed at startup containers =========="
+        docker container ps --filter "status=created" --format "{{.Names}}"
+        echo "========= Failed at startup containers logs =========="
+        docker container ps --filter "status=created" --format "{{.Names}}" | xargs docker compose logs
+        echo "========= Unhealthy containers =========="
+        docker container ps --filter "health=unhealthy" --format "{{.Names}}"
+        echo "========= Unhealthy containers logs =========="
+        docker container ps --filter "health=unhealthy" --format "{{.Names}}" | xargs docker compose logs
+        echo "========= Shutting down env =========="
+        ./e2e-env.sh stop
+      working-directory: e2e-env
