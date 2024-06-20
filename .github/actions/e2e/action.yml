@@ -62,14 +62,14 @@ runs:
       env:
         NPM_TOKEN_PRESTASHOPCORP: ${{ inputs.npm-token-prestashopcorp }}
 
-    - name: PS${{ inputs.ps-version }} & PHP${{matrix.php_version}} setup env
+    - name: PS${{ inputs.ps-version }} & PHP${{inputs.php_version}} setup env
       shell: bash
       run: |
         cp .env.dist .env
         docker compose build
         docker compose up --detach --wait
       env:
-        DOCKER_IMAGE_PRESTASHOP: prestashop/prestashop-flashlight:${{matrix.ps_version}}-${{matrix.php_version}}
+        DOCKER_IMAGE_PRESTASHOP: prestashop/prestashop-flashlight:${{inputs.ps_version}}-${{inputs.php_version}}
       working-directory: e2e-env
 
     - name: PS${{ inputs.ps-version }} docker instances
