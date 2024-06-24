@@ -5,7 +5,6 @@ parameters:
     - ../../config
     - ../../ps_eventbus.php
   reportUnmatchedIgnoredErrors: false
-  checkMissingIterableValueType: false
   ignoreErrors:
     - '#Call to method getOrRefreshToken\(\) on an unknown class PrestaShop\\AccountsAuth\\Service\\PsAccountsService.#'
     - '#Instantiated class Symfony\\Component\\Cache\\Adapter\\FilesystemAdapter not found.#'
