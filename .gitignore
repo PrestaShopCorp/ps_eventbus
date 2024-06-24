@@ -33,6 +33,5 @@ e2e/dumps
 
 # Sonar
 .scannerwork
-sonar-project.properties
 
 *.cache
