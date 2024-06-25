@@ -143,11 +143,36 @@ class StoreRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
+        $query->select('s.id_store');
+        $query->select('s.id_country');
+        $query->select('s.id_state');
+        $query->select('s.city');
+        $query->select('s.latitude');
+        $query->select('s.longitude');
+        $query->select('s.postcode');
+        $query->select('s.phone');
+        $query->select('s.fax');
+        $query->select('s.email');
+        $query->select('s.active');
+        $query->select('s.date_add as created_at');
+        $query->select('s.date_upd as updated_at');
+
         // https://github.com/PrestaShop/PrestaShop/commit/7dda2be62d8bd606edc269fa051c36ea68f81682#diff-e98d435095567c145b49744715fd575eaab7050328c211b33aa9a37158421ff4R2004
         if (version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
-            $query->select('s.id_store, s.id_country, s.id_state, s.city, s.postcode, s.active, s.date_add as created_at, s.date_upd as updated_at, sl.id_lang, sl.name, sl.address1, sl.address2, sl.hours, ss.id_shop');
+
+            $query->select('sl.id_lang');
+            $query->select('sl.name');
+            $query->select('sl.address1');
+            $query->select('sl.address2');
+            $query->select('sl.hours');
+            $query->select('sl.note');
+            $query->select('ss.id_shop');
         } else {
-            $query->select('s.id_store, s.id_country, s.id_state, s.city, s.postcode, s.active, s.date_add as created_at, s.date_upd as updated_at');
+            $query->select('s.name');
+            $query->select('s.address1');
+            $query->select('s.address2');
+            $query->select('s.hours');
+            $query->select('s.note');
         }
     }
 }
