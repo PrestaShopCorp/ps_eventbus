@@ -64,6 +64,11 @@ class TranslationDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getRemainingObjectsCount($offset, $langIso)
     {
+        // translations are stored as xml files before version 1.7
+        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+            return 0;
+        }
+
         return (int) $this->translationRepository->getRemainingTranslationsCount($offset);
     }
 
