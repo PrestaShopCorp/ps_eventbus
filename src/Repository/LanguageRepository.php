@@ -96,7 +96,12 @@ class LanguageRepository
      */
     private function addSelectParameters(\DbQuery $query)
     {
-        $query->select('la.id_lang, la.name, la.active, la.iso_code, la.language_code, la.locale, la.date_format_lite');
+        // https://github.com/PrestaShop/PrestaShop/commit/481111b8274ed005e1c4a8ce2cf2b3ebbeb9a270#diff-c123d3d30d9c9e012a826a21887fccce6600a2f2a848a58d5910e55f0f8f5093R41
+        if (version_compare(_PS_VERSION_, '1.7.0.0', '>=')) {
+            $query->select('la.locale');
+        }
+
+        $query->select('la.id_lang, la.name, la.active, la.iso_code, la.language_code, la.date_format_lite');
         $query->select('la.date_format_full, la.is_rtl, las.id_shop');
     }
 

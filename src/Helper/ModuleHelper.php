@@ -21,7 +21,11 @@ class ModuleHelper
     {
         $this->module = $module;
 
-        $moduleManagerBuilder = ModuleManagerBuilder::getInstance();
+        $moduleManagerBuilder = null;
+
+        if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+            $moduleManagerBuilder = ModuleManagerBuilder::getInstance();
+        }
 
         if (is_null($moduleManagerBuilder)) {
             return;
@@ -35,10 +39,20 @@ class ModuleHelper
      *
      * @param string $moduleName
      *
-     * @return bool
+     * @return bool|null
      */
     public function isInstalled(string $moduleName)
     {
+        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+            $module = \Module::getInstanceByName($moduleName);
+
+            if ($module) {
+                return true;
+            }
+
+            return null;
+        }
+
         return $this->moduleManager->isInstalled($moduleName);
     }
 
@@ -47,10 +61,20 @@ class ModuleHelper
      *
      * @param string $moduleName
      *
-     * @return bool
+     * @return bool|null
      */
     public function isEnabled(string $moduleName)
     {
+        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+            $module = \Module::getInstanceByName($moduleName);
+
+            if ($module && $module->active) {
+                return true;
+            }
+
+            return null;
+        }
+
         return $this->moduleManager->isEnabled($moduleName);
     }
 
