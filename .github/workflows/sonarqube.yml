@@ -1,0 +1,33 @@
+---
+name: SonarQube
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sonarqube:
+    name: SonarQube
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+        with:
+          # Disabling shallow clones is recommended for improving the relevancy of reporting
+          fetch-depth: 0
+
+      # SonarQube scan
+      - name: Auth GCP 🔒
+        uses: PrestaShopCorp/prestashop-github-action-gcp-auth@v1
+        with:
+          auth-mode: 'json-file'
+          credentials-json: ${{ secrets.SONARQUBE_SECRET_KEY }}
+          gke-cluster-name: ${{ secrets.CLUSTER_NAME_INTEGRATION }}
+          setup-gcloud: false
+          registry-login: false
+
+      - name: Launch quality test ✅
+        uses: PrestaShopCorp/prestashop-github-action-sonarqube@v1
+        with:
+          sonar-token: ${{ secrets.SONAR_TOKEN }}

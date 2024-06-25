@@ -45,6 +45,7 @@
     "symfony/dependency-injection": "^3.4",
     "symfony/yaml": "^3.4",
     "prestashop/module-lib-mbo-installer": "^0.1.0",
-    "prestashop/module-lib-guzzle-adapter": "v0.6"
+    "prestashop/module-lib-guzzle-adapter": "v0.6",
+    "guzzlehttp/guzzle": "^5.0"
   }
 }

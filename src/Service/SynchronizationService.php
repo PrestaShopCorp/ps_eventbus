@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
@@ -10,19 +9,9 @@ use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
-use PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository;
-use PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository;
-use PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository;
-use PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository;
-use PrestaShop\Module\PsEventbus\Repository\StockRepository;
 
 class SynchronizationService
 {
-    /**
-     * @var \Ps_eventbus
-     */
-    private $module;
-
     /**
      * @var EventbusSyncRepository
      */
@@ -69,7 +58,6 @@ class SynchronizationService
     const INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT = 100000;
 
     public function __construct(
-        \Ps_eventbus $module,
         EventbusSyncRepository $eventbusSyncRepository,
         IncrementalSyncRepository $incrementalSyncRepository,
         LiveSyncRepository $liveSyncRepository,
@@ -78,7 +66,6 @@ class SynchronizationService
         ProxyServiceInterface $proxyService,
         PayloadDecorator $payloadDecorator
     ) {
-        $this->module = $module;
         $this->eventbusSyncRepository = $eventbusSyncRepository;
         $this->incrementalSyncRepository = $incrementalSyncRepository;
         $this->liveSyncRepository = $liveSyncRepository;
@@ -249,7 +236,6 @@ class SynchronizationService
         }
 
         $objectsData = [];
-        $childrenIdsWithType = $this->getChildrenIdsByType($type, $objectId);
 
         if ($hasMultiLang) {
             $allIsoCodes = $this->languageRepository->getLanguagesIsoCodes();
@@ -265,20 +251,6 @@ class SynchronizationService
                             'created_at' => $createdAt,
                         ]
                     );
-
-                    foreach ($childrenIdsWithType as $childrenType => $childrenIds) {
-                        foreach ($childrenIds as $childrenId) {
-                            array_push($objectsData,
-                                [
-                                    'type' => $childrenType,
-                                    'id_object' => $childrenId,
-                                    'id_shop' => $shopId,
-                                    'lang_iso' => $langIso,
-                                    'created_at' => $createdAt,
-                                ]
-                            );
-                        }
-                    }
                 }
             }
         } else {
@@ -294,20 +266,6 @@ class SynchronizationService
                         'created_at' => $createdAt,
                     ]
                 );
-
-                foreach ($childrenIdsWithType as $childrenType => $childrenIds) {
-                    foreach ($childrenIds as $childrenId) {
-                        array_push($objectsData,
-                            [
-                                'type' => $childrenType,
-                                'id_object' => $childrenId,
-                                'id_shop' => $shopId,
-                                'lang_iso' => $defaultIsoCode,
-                                'created_at' => $createdAt,
-                            ]
-                        );
-                    }
-                }
             }
         }
 
@@ -332,52 +290,6 @@ class SynchronizationService
 
         $this->deletedObjectsRepository->insertDeletedObject($objectId, $type, $date, $shopId);
         $this->incrementalSyncRepository->removeIncrementalSyncObject($type, $objectId);
-    }
-
-    /**
-     * @param string $type
-     * @param int $objectId
-     *
-     * @return array
-     */
-    private function getChildrenIdsByType(string $type, int $objectId)
-    {
-        if ($type == Config::COLLECTION_ORDERS) {
-            /** @var OrderDetailsRepository */
-            $orderDetailsRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository');
-            $orderDetailIds = $orderDetailsRepository->getOrderDetailIdsByOrderIds([$objectId]);
-
-            /** @var OrderHistoryRepository */
-            $orderHistoryRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository');
-            $orderHistoryIds = $orderHistoryRepository->getOrderHistoryStatuseIdsByOrderIds([$objectId]);
-
-            /** @var OrderCartRuleRepository */
-            $orderCartRuleRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository');
-            $orderCartIds = $orderCartRuleRepository->getOrderCartRuleIdsByOrderIds([$objectId]);
-
-            return [
-                Config::COLLECTION_ORDER_DETAILS => array_column($orderDetailIds, 'id'),
-                Config::COLLECTION_ORDER_STATUS_HISTORY => array_column($orderHistoryIds, 'id'),
-                Config::COLLECTION_ORDER_CART_RULES => array_column($orderCartIds, 'id'),
-            ];
-        }
-
-        if ($type == Config::COLLECTION_PRODUCTS) {
-            /** @var ProductCarrierRepository */
-            $productCarriersRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository');
-            $productCarrierIds = $productCarriersRepository->getProductCarrierIdsByProductIds([$objectId]);
-
-            /** @var StockRepository */
-            $stocksRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\StockRepository');
-            $stockIds = $stocksRepository->getStocksIdsByProductIds([$objectId]);
-
-            return [
-                Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => array_column($productCarrierIds, 'id'),
-                Config::COLLECTION_STOCKS => array_column($stockIds, 'id'),
-            ];
-        }
-
-        return [];
     }
 
     /**
