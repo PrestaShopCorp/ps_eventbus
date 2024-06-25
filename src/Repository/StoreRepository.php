@@ -147,12 +147,7 @@ class StoreRepository
         $query->select('s.id_country');
         $query->select('s.id_state');
         $query->select('s.city');
-        $query->select('s.latitude');
-        $query->select('s.longitude');
         $query->select('s.postcode');
-        $query->select('s.phone');
-        $query->select('s.fax');
-        $query->select('s.email');
         $query->select('s.active');
         $query->select('s.date_add as created_at');
         $query->select('s.date_upd as updated_at');
@@ -164,14 +159,12 @@ class StoreRepository
             $query->select('sl.address1');
             $query->select('sl.address2');
             $query->select('sl.hours');
-            $query->select('sl.note');
             $query->select('ss.id_shop');
         } else {
             $query->select('s.name');
             $query->select('s.address1');
             $query->select('s.address2');
             $query->select('s.hours');
-            $query->select('s.note');
         }
     }
 }
