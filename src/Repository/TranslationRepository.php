@@ -29,8 +29,6 @@ class TranslationRepository
             throw new \PrestaShopException('No shop context');
         }
 
-        $shopId = (int) $this->context->shop->id;
-
         $query = new \DbQuery();
         $query->from('translation', 't');
 
