@@ -20,6 +20,8 @@ class ps_EventbusApiHealthCheckModuleFrontController extends AbstractApiControll
      */
     public function init()
     {
+        return;
+    
         try {
             parent::init();
         } catch (UnauthorizedException $exception) {
