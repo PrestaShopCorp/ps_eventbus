@@ -10,6 +10,7 @@ on:
 
 env:
   PHP_BUILDER_VERSION: "8.3"
+  GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
 
 jobs:
   update_staging_release:
@@ -36,7 +37,7 @@ jobs:
           git push origin :refs/tags/staging
           git push origin staging
 
-      - name: Release
+      - name: Update release
         uses: joutvhu/create-release@v1
         with:
           tag_name: staging
@@ -46,9 +47,27 @@ jobs:
           on_release_exists: update
           generate_release_notes: true
           remove_assets: true
-          files: |
-            ./dist/ps_eventbus-staging.zip
-            ./dist/ps_eventbus-staging_e2e.zip
-            ./dist/ps_eventbus-staging_integration.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
+
+      - name: Push the integration zip
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.update_staging_release.outputs.upload_url }}
+          asset_path: ./dist/${{ github.event.repository.name }}-staging_integration.zip
+          asset_name: ${{ github.event.repository.name }}-staging_integration.zip
+          asset_content_type: application/zip
+
+      - name: Push the e2e zip
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.update_staging_release.outputs.upload_url }}
+          asset_path: ./dist/${{ github.event.repository.name }}-staging_e2e.zip
+          asset_name: ${{ github.event.repository.name }}-staging_e2e.zip
+          asset_content_type: application/zip
+
+      - name: Push the production zip
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.update_staging_release.outputs.upload_url }}
+          asset_path: ./dist/${{ github.event.repository.name }}-staging.zip
+          asset_name: ${{ github.event.repository.name }}-staging.zip
+          asset_content_type: application/zip
