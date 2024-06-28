@@ -30,17 +30,17 @@ jobs:
         env:
           VERSION: staging
 
+      - name: Delete previous staging release
+        uses: liudonghua123/delete-release-action@v1
+        with:
+          release_name: staging
+
       - name: Move the staging tag
         run: |
           git tag -d staging | true
           git tag staging
           git push origin :refs/tags/staging
           git push origin staging
-
-      - name: Delete previous staging release
-        uses: liudonghua123/delete-release-action@v1
-        with:
-          release_name: staging
 
       - name: Update release
         id: update_staging_release
