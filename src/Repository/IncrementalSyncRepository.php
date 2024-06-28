@@ -6,7 +6,7 @@ use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
 
 class IncrementalSyncRepository
 {
-    public const INCREMENTAL_SYNC_TABLE = 'eventbus_incremental_sync';
+    const INCREMENTAL_SYNC_TABLE = 'eventbus_incremental_sync';
 
     /**
      * @var \Db
@@ -44,7 +44,7 @@ class IncrementalSyncRepository
      *
      * @return bool
      */
-    public function insertIncrementalObject(array $data)
+    public function insertIncrementalObject($data)
     {
         try {
             $arrayOfData = $data;

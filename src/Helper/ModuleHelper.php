@@ -33,7 +33,7 @@ class ModuleHelper
      *
      * @return bool|null
      */
-    public function isInstalled(string $moduleName)
+    public function isInstalled($moduleName)
     {
         if (version_compare(_PS_VERSION_, '1.7', '<')) {
             $module = \Module::getInstanceByName($moduleName);
@@ -55,7 +55,7 @@ class ModuleHelper
      *
      * @return bool|null
      */
-    public function isEnabled(string $moduleName)
+    public function isEnabled($moduleName)
     {
         if (version_compare(_PS_VERSION_, '1.7', '<')) {
             $module = \Module::getInstanceByName($moduleName);
@@ -75,7 +75,7 @@ class ModuleHelper
      *
      * @return bool
      */
-    public function isInstalledAndActive(string $moduleName)
+    public function isInstalledAndActive($moduleName)
     {
         return $this->isInstalled($moduleName) && $this->isEnabled($moduleName);
     }
@@ -87,7 +87,7 @@ class ModuleHelper
      *
      * @return bool|null
      */
-    public function isUpToDate(string $moduleName)
+    public function isUpToDate($moduleName)
     {
         $mboModule = \Module::getInstanceByName('ps_mbo');
 
@@ -115,7 +115,7 @@ class ModuleHelper
      *
      * @return false|\ModuleCore
      */
-    public function getInstanceByName(string $moduleName)
+    public function getInstanceByName($moduleName)
     {
         return \ModuleCore::getInstanceByName($moduleName);
     }
@@ -127,7 +127,7 @@ class ModuleHelper
      *
      * @return string
      */
-    public function getDisplayName(string $moduleName)
+    public function getDisplayName($moduleName)
     {
         if (false === $this->isInstalled($moduleName)) {
             return '';
@@ -149,7 +149,7 @@ class ModuleHelper
      *
      * @return string
      */
-    public function getInstallLink(string $moduleName)
+    public function getInstallLink($moduleName)
     {
         if (true === $this->isInstalled($moduleName)) {
             return '';
@@ -186,7 +186,7 @@ class ModuleHelper
      *
      * @return string
      */
-    public function getEnableLink(string $moduleName)
+    public function getEnableLink($moduleName)
     {
         if (true === $this->isEnabled($moduleName)) {
             return '';
@@ -213,7 +213,7 @@ class ModuleHelper
      *
      * @return string
      */
-    public function getUpdateLink(string $moduleName)
+    public function getUpdateLink($moduleName)
     {
         if (version_compare(_PS_VERSION_, '1.7', '<')) {
             return '';
@@ -236,7 +236,7 @@ class ModuleHelper
      *
      * @return string
      */
-    public function getModuleVersion(string $moduleName)
+    public function getModuleVersion($moduleName)
     {
         if (false === $this->isInstalled($moduleName)) {
             return '0.0.0';
@@ -258,7 +258,7 @@ class ModuleHelper
      *
      * @return array
      */
-    public function buildModuleInformation(string $moduleName)
+    public function buildModuleInformation($moduleName)
     {
         return [
             'technicalName' => $moduleName,

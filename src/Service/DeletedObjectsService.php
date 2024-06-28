@@ -81,7 +81,7 @@ class DeletedObjectsService
      *
      * @return array
      */
-    private function formatData(array $data)
+    private function formatData($data)
     {
         return array_map(function ($dataItem) {
             return [

@@ -4,7 +4,7 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 
 class SpecificPriceRepository
 {
-    public const TABLE_NAME = 'specific_price';
+    const TABLE_NAME = 'specific_price';
 
     /**
      * @var \Db
@@ -34,7 +34,7 @@ class SpecificPriceRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getSpecificPrice(int $specificPriceId)
+    public function getSpecificPrice($specificPriceId)
     {
         if (!$specificPriceId) {
             return [];

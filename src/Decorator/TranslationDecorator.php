@@ -9,7 +9,7 @@ class TranslationDecorator
      *
      * @return void
      */
-    public function decorateTranslations(array &$translations)
+    public function decorateTranslations(&$translations)
     {
         foreach ($translations as &$translation) {
             $this->castPropertyValues($translation);
@@ -21,7 +21,7 @@ class TranslationDecorator
      *
      * @return void
      */
-    private function castPropertyValues(array &$translation)
+    private function castPropertyValues(&$translation)
     {
         $translation['id_translation'] = (int) $translation['id_translation'];
         $translation['id_lang'] = (int) $translation['id_lang'];

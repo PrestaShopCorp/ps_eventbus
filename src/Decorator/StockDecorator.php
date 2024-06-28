@@ -9,7 +9,7 @@ class StockDecorator
      *
      * @return void
      */
-    public function decorateStocks(array &$stocks)
+    public function decorateStocks(&$stocks)
     {
         foreach ($stocks as &$stock) {
             $this->castStockPropertyValues($stock);
@@ -21,7 +21,7 @@ class StockDecorator
      *
      * @return void
      */
-    private function castStockPropertyValues(array &$stock)
+    private function castStockPropertyValues(&$stock)
     {
         $stock['id_stock_available'] = (int) $stock['id_stock_available'];
         $stock['id_product'] = (int) $stock['id_product'];
@@ -45,7 +45,7 @@ class StockDecorator
      *
      * @return void
      */
-    public function decorateStockMvts(array &$stockMvts)
+    public function decorateStockMvts(&$stockMvts)
     {
         foreach ($stockMvts as &$stockMvt) {
             $this->castStockMvtPropertyValues($stockMvt);
@@ -57,7 +57,7 @@ class StockDecorator
      *
      * @return void
      */
-    private function castStockMvtPropertyValues(array &$stockMvt)
+    private function castStockMvtPropertyValues(&$stockMvt)
     {
         $date = $stockMvt['date_add'];
 

@@ -9,7 +9,7 @@ class CurrencyDecorator
      *
      * @return void
      */
-    public function decorateCurrencies(array &$currencies)
+    public function decorateCurrencies(&$currencies)
     {
         foreach ($currencies as &$currency) {
             $this->castPropertyValues($currency);
@@ -21,7 +21,7 @@ class CurrencyDecorator
      *
      * @return void
      */
-    private function castPropertyValues(array &$currency)
+    private function castPropertyValues(&$currency)
     {
         $currency['id_currency'] = (int) $currency['id_currency'];
         $currency['conversion_rate'] = (float) $currency['conversion_rate'];

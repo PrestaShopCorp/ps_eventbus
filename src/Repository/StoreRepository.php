@@ -4,7 +4,7 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 
 class StoreRepository
 {
-    public const STORES_TABLE = 'store';
+    const STORES_TABLE = 'store';
 
     /**
      * @var \Db

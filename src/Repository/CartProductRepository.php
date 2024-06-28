@@ -45,7 +45,7 @@ class CartProductRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getCartProducts(array $cartIds)
+    public function getCartProducts($cartIds)
     {
         $query = $this->getBaseQuery();
 

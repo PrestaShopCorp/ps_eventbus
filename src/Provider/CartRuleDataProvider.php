@@ -102,7 +102,7 @@ class CartRuleDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return void
      */
-    private function castCartRuleValues(array &$cartRules)
+    private function castCartRuleValues(&$cartRules)
     {
         foreach ($cartRules as &$cartRule) {
             $cartRule['id_cart_rule'] = (int) $cartRule['id_cart_rule'];

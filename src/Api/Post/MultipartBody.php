@@ -98,7 +98,7 @@ class MultipartBody implements StreamInterface
      *
      * @return AppendStream
      */
-    protected function createStream(array $fields, array $files)
+    protected function createStream($fields, $files)
     {
         $stream = new AppendStream();
 

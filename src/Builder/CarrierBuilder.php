@@ -63,7 +63,7 @@ class CarrierBuilder
      * @@throws \PrestaShopDatabaseException
      * @@throws \PrestaShopException
      */
-    public function buildCarriers(array $carriers, int $langId, \Currency $currency, $weightUnit)
+    public function buildCarriers($carriers, $langId, \Currency $currency, $weightUnit)
     {
         $eventBusCarriers = [];
         foreach ($carriers as $carrier) {
@@ -171,7 +171,7 @@ class CarrierBuilder
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function buildCarrierDetails(\Carrier $carrier, $range, array $zone)
+    private function buildCarrierDetails(\Carrier $carrier, $range, $zone)
     {
         /** @var int $rangeId */
         $rangeId = $range->id;
