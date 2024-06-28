@@ -37,6 +37,11 @@ jobs:
           git push origin :refs/tags/staging
           git push origin staging
 
+      - name: Delete previous staging release
+        uses: liudonghua123/delete-release-action@v1
+        with:
+          release_name: staging
+
       - name: Update release
         id: update_staging_release
         uses: joutvhu/create-release@v1
