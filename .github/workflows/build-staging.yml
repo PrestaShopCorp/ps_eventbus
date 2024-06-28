@@ -43,7 +43,6 @@ jobs:
         with:
           tag_name: staging
           name: staging
-          draft: true
           prerelease: true
           on_release_exists: update
           generate_release_notes: true
