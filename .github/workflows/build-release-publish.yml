@@ -1,7 +1,7 @@
 name: Release and publish
 on:
   release:
-    types: [released, prereleased] # "edited" should rebuild the assets
+    types: [released, prereleased, edited]
 
 env:
   PHP_BUILDER_VERSION: "8.3"
