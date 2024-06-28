@@ -1,0 +1,26 @@
+---
+name: Build staging module
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  bump_staging_tag:
+    name: Build and publish staging assets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Move the staging tag
+        run: |
+          git tag -d staging | true
+          git tag staging
+          git push origin :refs/tags/staging
+          git push origin staging
+
+      - name: Edit the staging release
+        run: gh release edit staging --tag staging
+        env:
+          GH_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
