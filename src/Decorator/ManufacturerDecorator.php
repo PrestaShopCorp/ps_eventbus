@@ -9,7 +9,7 @@ class ManufacturerDecorator
      *
      * @return void
      */
-    public function decorateManufacturers(array &$manufacturers)
+    public function decorateManufacturers(&$manufacturers)
     {
         foreach ($manufacturers as &$manufacturer) {
             $this->castPropertyValues($manufacturer);
@@ -21,7 +21,7 @@ class ManufacturerDecorator
      *
      * @return void
      */
-    private function castPropertyValues(array &$manufacturer)
+    private function castPropertyValues(&$manufacturer)
     {
         $manufacturer['id_manufacturer'] = (int) $manufacturer['id_manufacturer'];
         $manufacturer['active'] = (bool) $manufacturer['active'];

@@ -10,7 +10,7 @@ class ArrayFormatter
      *
      * @return string
      */
-    public function arrayToString(array $data, $separator = ';')
+    public function arrayToString($data, $separator = ';')
     {
         return implode($separator, $data);
     }
@@ -22,7 +22,7 @@ class ArrayFormatter
      *
      * @return array
      */
-    public function formatValueArray(array $data, $key, $unique = false)
+    public function formatValueArray($data, $key, $unique = null)
     {
         $result = array_map(function ($dataItem) use ($key) {
             return $dataItem[$key];
@@ -40,7 +40,7 @@ class ArrayFormatter
      *
      * @return array
      */
-    private function unique(array $data)
+    private function unique($data)
     {
         return array_unique($data);
     }
@@ -52,7 +52,7 @@ class ArrayFormatter
      *
      * @return string
      */
-    public function formatValueString(array $data, $key, $separator = ';')
+    public function formatValueString($data, $key, $separator = ';')
     {
         return implode($separator, $this->formatValueArray($data, $key));
     }

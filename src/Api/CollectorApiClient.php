@@ -30,10 +30,6 @@ class CollectorApiClient
     private $jwt;
 
     /**
-     * <<<<<<< HEAD
-     * =======
-     *
-     * >>>>>>> 7357fb2f5f39bff81f9a01000304c714dad82fe9
      * Default maximum execution time in seconds
      *
      * @see https://www.php.net/manual/en/info.configuration.php#ini.max-execution-time
@@ -47,7 +43,7 @@ class CollectorApiClient
      * @param \Ps_eventbus $module
      * @param PsAccountsAdapterService $psAccountsAdapterService
      */
-    public function __construct(string $collectorApiUrl, \Ps_eventbus $module, PsAccountsAdapterService $psAccountsAdapterService)
+    public function __construct($collectorApiUrl, \Ps_eventbus $module, PsAccountsAdapterService $psAccountsAdapterService)
     {
         $this->module = $module;
         $this->jwt = $psAccountsAdapterService->getOrRefreshToken();
@@ -62,7 +58,7 @@ class CollectorApiClient
      *
      * @return HttpClientInterface
      */
-    private function getClient(int $startTime = null)
+    private function getClient($startTime = null)
     {
         return (new ClientFactory())->getClient([
             'allow_redirects' => true,
@@ -83,7 +79,7 @@ class CollectorApiClient
      *
      * @return array
      */
-    public function upload(string $jobId, string $data, int $startTime, bool $fullSyncRequested = false)
+    public function upload($jobId, $data, $startTime, $fullSyncRequested)
     {
         $url = $this->collectorApiUrl . '/upload/' . $jobId;
 
@@ -125,7 +121,7 @@ class CollectorApiClient
      *
      * @return array
      */
-    public function uploadDelete(string $jobId, string $data, int $startTime)
+    public function uploadDelete($jobId, $data, $startTime)
     {
         $url = $this->collectorApiUrl . '/delete/' . $jobId;
         // Prepare request
@@ -164,7 +160,7 @@ class CollectorApiClient
      *
      * @return float
      */
-    private function getRemainingTime(int $startTime = null)
+    private function getRemainingTime($startTime = null)
     {
         /**
          * Negative remaining time means an immediate timeout (0 means infinity)

@@ -54,7 +54,7 @@ class Stream implements StreamInterface
      *
      * @@throws \InvalidArgumentException if the $resource arg is not valid
      */
-    public static function factory($resource = '', array $options = [])
+    public static function factory($resource = '', $options = [])
     {
         if (is_string($resource)) {
             $stream = fopen('php://temp', 'r+');
@@ -122,7 +122,11 @@ class Stream implements StreamInterface
             $this->size = $options['size'];
         }
 
-        $this->customMetadata = $options['metadata'] ?? [];
+        if (isset($options['metadata'])) {
+            $this->customMetadata = $options['metadata'];
+        } else {
+            $this->customMetadata =  [];
+        }
 
         $this->attach($stream);
     }
@@ -300,7 +304,7 @@ class Stream implements StreamInterface
         return isset($meta[$key]) ? $meta[$key] : null;
     }
 
-    public function rewind(): void
+    public function rewind()
     {
         $this->seek(0);
     }

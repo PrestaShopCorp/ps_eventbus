@@ -4,9 +4,9 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 
 class ModuleRepository
 {
-    public const MODULE_TABLE = 'module';
-    public const MODULE_TABLE_HISTORY = 'module_history';
-    public const MODULE_SHOP = 'module_shop';
+    const MODULE_TABLE = 'module';
+    const MODULE_TABLE_HISTORY = 'module_history';
+    const MODULE_SHOP = 'module_shop';
 
     /**
      * @var \Db

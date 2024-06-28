@@ -9,7 +9,7 @@ class EmployeeDecorator
      *
      * @return void
      */
-    public function decorateEmployees(array &$employees)
+    public function decorateEmployees(&$employees)
     {
         foreach ($employees as &$employee) {
             $this->castPropertyValues($employee);
@@ -22,7 +22,7 @@ class EmployeeDecorator
      *
      * @return void
      */
-    private function castPropertyValues(array &$employee)
+    private function castPropertyValues(&$employee)
     {
         $employee['id_employee'] = (int) $employee['id_employee'];
         $employee['id_profile'] = (int) $employee['id_profile'];
@@ -54,7 +54,7 @@ class EmployeeDecorator
      *
      * @return void
      */
-    private function hashEmail(array &$employee)
+    private function hashEmail(&$employee)
     {
         // FIXME : use a random salt generated during module install
         $employee['email_hash'] = hash('sha256', $employee['email'] . 'dUj4GMBD6689pL9pyr');

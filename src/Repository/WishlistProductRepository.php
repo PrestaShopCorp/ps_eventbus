@@ -19,7 +19,7 @@ class WishlistProductRepository
      *
      * @return \DbQuery
      */
-    public function getBaseQuery(array &$wishlistIds)
+    public function getBaseQuery(&$wishlistIds)
     {
         $query = new \DbQuery();
 
@@ -36,7 +36,7 @@ class WishlistProductRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getWishlistProducts(array &$wishlistIds)
+    public function getWishlistProducts(&$wishlistIds)
     {
         // need this module for this table : https://addons.prestashop.com/en/undownloadable/9131-wishlist-block.html
         if (empty($this->checkIfPsWishlistIsInstalled())) {

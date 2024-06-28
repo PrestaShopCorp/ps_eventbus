@@ -4,7 +4,7 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 
 class OrderCartRuleRepository
 {
-    public const TABLE_NAME = 'order_cart_rule';
+    const TABLE_NAME = 'order_cart_rule';
 
     /**
      * @var \Db
@@ -35,7 +35,7 @@ class OrderCartRuleRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getOrderCartRules(array $orderIds)
+    public function getOrderCartRules($orderIds)
     {
         if (!$orderIds) {
             return [];
@@ -60,7 +60,7 @@ class OrderCartRuleRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getOrderCartRuleIdsByOrderIds(array $orderIds)
+    public function getOrderCartRuleIdsByOrderIds($orderIds)
     {
         if (!$orderIds) {
             return [];

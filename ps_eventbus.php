@@ -247,7 +247,7 @@ class Ps_eventbus extends Module
     public function install()
     {
         if (!$this->isPhpVersionCompliant()) {
-            $this->_errors[] = $this->l('This requires PHP 7.1 to work properly. Please upgrade your server configuration.');
+            $this->_errors[] = $this->l('This requires PHP 5.6 to work properly. Please upgrade your server configuration.');
 
             // We return true during the installation of PrestaShop to not stop the whole process,
             // Otherwise we warn properly the installation failed.
@@ -1759,6 +1759,6 @@ class Ps_eventbus extends Module
      */
     private function isPhpVersionCompliant()
     {
-        return PHP_VERSION_ID >= 70100;
+        return PHP_VERSION_ID >= 50600;
     }
 }

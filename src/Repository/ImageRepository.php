@@ -109,7 +109,7 @@ class ImageRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getProductImages($productId, $attributeId, $shopId, $includeCover = false)
+    public function getProductImages($productId, $attributeId, $shopId, $includeCover = null)
     {
         $query = new \DbQuery();
 

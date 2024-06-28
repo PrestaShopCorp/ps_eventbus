@@ -164,7 +164,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function getOrderDetails(array $orders)
+    private function getOrderDetails($orders)
     {
         if (empty($orders)) {
             return [];
@@ -199,7 +199,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function getOrderStatuses(array $orders, $langId)
+    private function getOrderStatuses($orders, $langId)
     {
         if (empty($orders)) {
             return [];
@@ -224,7 +224,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function getOrderCartRules(array $orders)
+    private function getOrderCartRules($orders)
     {
         if (empty($orders)) {
             return [];
@@ -250,7 +250,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function castOrderValues(array &$orders, int $langId)
+    private function castOrderValues(&$orders, $langId)
     {
         foreach ($orders as &$order) {
             $order['id_order'] = (int) $order['id_order'];
@@ -280,7 +280,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function castIsPaidValue(array $orders, array $order, int $langId)
+    private function castIsPaidValue($orders, $order, $langId)
     {
         $isPaid = $dateAdd = 0;
         $orderIds = $this->arrayFormatter->formatValueArray($orders, 'id_order');
@@ -302,7 +302,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return void
      */
-    private function castOrderDetailValues(array &$orderDetails)
+    private function castOrderDetailValues(&$orderDetails)
     {
         foreach ($orderDetails as &$orderDetail) {
             $orderDetail['id_order_detail'] = (int) $orderDetail['id_order_detail'];
@@ -320,7 +320,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         }
     }
 
-    private function castOrderStatuses(array &$orderStatuses): array
+    private function castOrderStatuses(&$orderStatuses)
     {
         $castedOrderStatuses = [];
         foreach ($orderStatuses as $orderStatus) {
@@ -382,7 +382,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      *
      * @return void
      */
-    private function castOrderCartRulesValues(array &$orderCartRules)
+    private function castOrderCartRulesValues(&$orderCartRules)
     {
         foreach ($orderCartRules as &$orderCartRule) {
             $orderCartRule['id_order_cart_rule'] = (int) $orderCartRule['id_order_cart_rule'];
