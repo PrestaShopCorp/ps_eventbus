@@ -96,6 +96,11 @@ jobs:
         env:
           VERSION: ${{ github.event.release.tag_name }}
 
+      - name: Bundle the e2e zip
+        run: make zip-e2e
+        env:
+          VERSION: ${{ github.event.release.tag_name }}
+
       - name: Publish the production zip
         uses: actions/upload-release-asset@v1
         with:
