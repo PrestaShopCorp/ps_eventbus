@@ -8,6 +8,7 @@ env:
   NODE_BUILDER_VERSION: "20"
   DOCKER_COMPOSE_VERSION: v2.27.0
   GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
+  VERSION: ${{ github.event.release.tag_name }}
 
 jobs:
   e2e-tests:
@@ -88,18 +89,12 @@ jobs:
 
       - name: Bundle the production zip
         run: make zip-prod
-        env:
-          VERSION: ${{ github.event.release.tag_name }}
 
       - name: Bundle the integration zip
         run: make zip-inte
-        env:
-          VERSION: ${{ github.event.release.tag_name }}
 
       - name: Bundle the e2e zip
         run: make zip-e2e
-        env:
-          VERSION: ${{ github.event.release.tag_name }}
 
       - name: Publish the production zip
         uses: actions/upload-release-asset@v1
