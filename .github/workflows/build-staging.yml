@@ -30,6 +30,11 @@ jobs:
         env:
           VERSION: staging
 
+      - name: Delete previous staging release
+        uses: liudonghua123/delete-release-action@v1
+        with:
+          release_name: staging
+
       - name: Move the staging tag
         run: |
           git tag -d staging | true
