@@ -79,7 +79,7 @@ class CollectorApiClient
      *
      * @return array
      */
-    public function upload($jobId, $data, $startTime, $fullSyncRequested)
+    public function upload($jobId, $data, $startTime, $fullSyncRequested = null)
     {
         $url = $this->collectorApiUrl . '/upload/' . $jobId;
 
