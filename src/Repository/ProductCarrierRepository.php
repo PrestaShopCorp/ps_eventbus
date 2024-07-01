@@ -109,7 +109,7 @@ class ProductCarrierRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getProductCarriersProperties(array $productIds)
+    public function getProductCarriersProperties($productIds)
     {
         if (!$productIds) {
             return [];
@@ -154,7 +154,7 @@ class ProductCarrierRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getProductCarrierIdsByProductIds(array $productIds)
+    public function getProductCarrierIdsByProductIds($productIds)
     {
         if (!$productIds) {
             return [];

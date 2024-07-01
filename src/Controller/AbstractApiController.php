@@ -295,7 +295,7 @@ abstract class AbstractApiController extends \ModuleFrontController
      *
      * @return void
      */
-    protected function exitWithResponse(array $response)
+    protected function exitWithResponse($response)
     {
         $httpCode = isset($response['httpCode']) ? (int) $response['httpCode'] : 200;
 
@@ -337,7 +337,7 @@ abstract class AbstractApiController extends \ModuleFrontController
      *
      * @return void
      */
-    private function dieWithResponse(array $response, $code)
+    private function dieWithResponse($response, $code)
     {
         $httpStatusText = "HTTP/1.1 $code";
 

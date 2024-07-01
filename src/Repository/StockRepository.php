@@ -121,7 +121,7 @@ class StockRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getStocksIdsByProductIds(array $productIds)
+    public function getStocksIdsByProductIds($productIds)
     {
         if (!$productIds) {
             return [];

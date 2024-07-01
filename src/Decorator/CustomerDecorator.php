@@ -9,7 +9,7 @@ class CustomerDecorator
      *
      * @return void
      */
-    public function decorateCustomers(array &$customers)
+    public function decorateCustomers(&$customers)
     {
         foreach ($customers as &$customer) {
             $this->castPropertyValues($customer);
@@ -22,7 +22,7 @@ class CustomerDecorator
      *
      * @return void
      */
-    private function castPropertyValues(array &$customer)
+    private function castPropertyValues(&$customer)
     {
         $customer['id_customer'] = (int) $customer['id_customer'];
         $customer['id_lang'] = (int) $customer['id_lang'];
@@ -39,7 +39,7 @@ class CustomerDecorator
      *
      * @return void
      */
-    private function hashEmail(array &$customer)
+    private function hashEmail(&$customer)
     {
         $customer['email_hash'] = hash('sha256', $customer['email'] . 'dUj4GMBD6689pL9pyr');
         unset($customer['email']);

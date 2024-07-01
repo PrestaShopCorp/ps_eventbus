@@ -41,7 +41,7 @@ class PayloadDecorator
      *
      * @throws \Exception
      */
-    public function convertDateFormat(array &$payload)
+    public function convertDateFormat(&$payload)
     {
         foreach ($payload as &$payloadItem) {
             foreach (DATE_FIELDS as $dateField) {

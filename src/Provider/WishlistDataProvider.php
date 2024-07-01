@@ -134,7 +134,7 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function getWishlistProducts(array &$wishlists)
+    private function getWishlistProducts(&$wishlists)
     {
         if (empty($wishlists)) {
             return [];

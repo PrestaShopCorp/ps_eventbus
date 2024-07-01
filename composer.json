@@ -14,7 +14,7 @@
   "config": {
     "preferred-install": "dist",
     "platform": {
-      "php": "7.1"
+      "php": "5.6"
     },
     "optimize-autoloader": true,
     "prepend-autoloader": false,
@@ -34,7 +34,7 @@
     }
   },
   "require": {
-    "php": ">=7.1",
+    "php": ">=5.6",
     "ext-json": "*",
     "monolog/monolog": "^1.27",
     "prestashop/module-lib-cache-directory-provider": "^1.0",

@@ -12,5 +12,5 @@ interface ErrorHandlerInterface
      *
      * @return void
      */
-    public function handle($error, $code = null, $throw = true, $data = null);
+    public function handle($error, $code = null, $throw = null, $data = null);
 }

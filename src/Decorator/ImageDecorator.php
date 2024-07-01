@@ -9,7 +9,7 @@ class ImageDecorator
      *
      * @return void
      */
-    public function decorateImages(array &$images)
+    public function decorateImages(&$images)
     {
         foreach ($images as &$image) {
             $this->castPropertyValues($image);
@@ -21,7 +21,7 @@ class ImageDecorator
      *
      * @return void
      */
-    private function castPropertyValues(array &$image)
+    private function castPropertyValues(&$image)
     {
         $image['id_image'] = (int) $image['id_image'];
         $image['id_product'] = (int) $image['id_product'];

@@ -41,7 +41,7 @@ class ProxyService implements ProxyServiceInterface
      *
      * @throws EnvVarException
      */
-    public function upload($jobId, $data, $scriptStartTime, bool $isFull = false)
+    public function upload($jobId, $data, $scriptStartTime, $isFull = null)
     {
         $dataJson = $this->jsonFormatter->formatNewlineJsonString($data);
 

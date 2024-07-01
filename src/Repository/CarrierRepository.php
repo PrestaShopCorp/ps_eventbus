@@ -144,7 +144,7 @@ class CarrierRepository
      * @throws \PrestaShopDatabaseException
      * @throws \PrestaShopException
      */
-    public function getCarrierRange(array $deliveryPriceByRange)
+    public function getCarrierRange($deliveryPriceByRange)
     {
         if (isset($deliveryPriceByRange['id_range_weight'])) {
             return new \RangeWeight($deliveryPriceByRange['id_range_weight']);

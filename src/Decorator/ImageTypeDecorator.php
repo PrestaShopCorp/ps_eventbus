@@ -9,7 +9,7 @@ class ImageTypeDecorator
      *
      * @return void
      */
-    public function decorateImageTypes(array &$imageTypes)
+    public function decorateImageTypes(&$imageTypes)
     {
         foreach ($imageTypes as &$imageType) {
             $this->castPropertyValues($imageType);
@@ -21,7 +21,7 @@ class ImageTypeDecorator
      *
      * @return void
      */
-    private function castPropertyValues(array &$imageType)
+    private function castPropertyValues(&$imageType)
     {
         $imageType['id_image_type'] = (int) $imageType['id_image_type'];
         $imageType['name'] = (string) $imageType['name'];

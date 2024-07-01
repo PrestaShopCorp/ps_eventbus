@@ -9,7 +9,7 @@ class ProductSupplierDecorator
      *
      * @return void
      */
-    public function decorateProductSuppliers(array &$productSuppliers)
+    public function decorateProductSuppliers(&$productSuppliers)
     {
         foreach ($productSuppliers as &$productSupplier) {
             $this->castProductSupplierPropertyValues($productSupplier);
@@ -21,7 +21,7 @@ class ProductSupplierDecorator
      *
      * @return void
      */
-    private function castProductSupplierPropertyValues(array &$productSupplier)
+    private function castProductSupplierPropertyValues(&$productSupplier)
     {
         $productSupplier['id_product_supplier'] = (int) $productSupplier['id_product_supplier'];
         $productSupplier['id_product'] = (int) $productSupplier['id_product'];

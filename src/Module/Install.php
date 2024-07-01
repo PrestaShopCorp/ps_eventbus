@@ -22,8 +22,8 @@ namespace PrestaShop\Module\PsEventbus\Module;
 
 class Install
 {
-    public const PARENT_TAB_NAME = -1;
-    public const TAB_ACTIVE = 0;
+    const PARENT_TAB_NAME = -1;
+    const TAB_ACTIVE = 0;
 
     /**
      * @var \Ps_eventbus

@@ -54,9 +54,9 @@ class ServerInformationRepository
         ConfigurationRepository $configurationRepository,
         ShopRepository $shopRepository,
         ErrorHandlerInterface $errorHandler,
-        string $eventbusSyncApiUrl,
-        string $eventbusLiveSyncApiUrl,
-        string $eventbusProxyApiUrl
+        $eventbusSyncApiUrl,
+        $eventbusLiveSyncApiUrl,
+        $eventbusProxyApiUrl
     ) {
         $this->currencyRepository = $currencyRepository;
         $this->languageRepository = $languageRepository;
@@ -132,7 +132,7 @@ class ServerInformationRepository
     /**
      * @return array
      */
-    public function getHealthCheckData(bool $isAuthentifiedCall)
+    public function getHealthCheckData($isAuthentifiedCall)
     {
         $tokenValid = false;
         $tokenIsSet = false;

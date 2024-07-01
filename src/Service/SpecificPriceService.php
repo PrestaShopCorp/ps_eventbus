@@ -31,7 +31,7 @@ class SpecificPriceService
      *
      * @@throws \PrestaShopException
      */
-    public function getSpecificProductPrice(int $productId, int $attributeId, int $specificPriceId, bool $useTax, bool $usereduc, $context)
+    public function getSpecificProductPrice($productId, $attributeId, $specificPriceId, $useTax, $usereduc, $context)
     {
         return $this->getPriceStatic($productId, $attributeId, $specificPriceId, $useTax, $usereduc, $context);
     }

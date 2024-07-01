@@ -50,7 +50,7 @@ class PsEventbusResolverController extends FrameworkBundleAdminController
      *
      * @@throws \Exception
      */
-    public function resolve(Request $request, string $query)
+    public function resolve(Request $request, $query)
     {
         try {
             if (is_callable([$this, $query])) {
@@ -74,7 +74,7 @@ class PsEventbusResolverController extends FrameworkBundleAdminController
      *
      * @return Response
      */
-    public function installPsMbo(): Response
+    public function installPsMbo()
     {
         $mboInstaller = new MBOInstaller(_PS_VERSION_);
 

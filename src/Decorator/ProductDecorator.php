@@ -72,7 +72,7 @@ class ProductDecorator
      *
      * @@throws \PrestaShopDatabaseException
      */
-    public function decorateProducts(array &$products, $langIso, $langId)
+    public function decorateProducts(&$products, $langIso, $langId)
     {
         $this->addFeatureValues($products, $langId);
         $this->addAttributeValues($products, $langId);
@@ -95,7 +95,7 @@ class ProductDecorator
      *
      * @return array
      */
-    public function getBundles(array $products)
+    public function getBundles($products)
     {
         $bundles = [];
         foreach ($products as $product) {
@@ -112,7 +112,7 @@ class ProductDecorator
      *
      * @return void
      */
-    private function addLink(array &$product)
+    private function addLink(&$product)
     {
         try {
             if ($this->context->link === null) {
@@ -138,7 +138,7 @@ class ProductDecorator
      *
      * @return void
      */
-    private function addProductPrices(array &$product)
+    private function addProductPrices(&$product)
     {
         $product['price_tax_excl'] = (float) $product['price_tax_excl'];
         $product['price_tax_incl'] =
@@ -152,7 +152,7 @@ class ProductDecorator
         $product['sale_tax'] = $product['sale_price_tax_incl'] - $product['sale_price_tax_excl'];
     }
 
-    private function getBundleCollection(array $product): array
+    private function getBundleCollection($product)
     {
         $bundleProducts = $this->bundleRepository->getBundleProducts($product['id_product']);
         $uniqueProductId = $product['unique_product_id'];
@@ -177,7 +177,7 @@ class ProductDecorator
      *
      * @return void
      */
-    private function formatDescriptions(array &$product)
+    private function formatDescriptions(&$product)
     {
         $product['description'] = base64_encode($product['description']);
         $product['description_short'] = base64_encode($product['description_short']);
@@ -188,7 +188,7 @@ class ProductDecorator
      *
      * @return void
      */
-    private function addCategoryTree(array &$product)
+    private function addCategoryTree(&$product)
     {
         $categoryPaths = $this->categoryRepository->getCategoryPaths(
             $product['id_category_default'],
@@ -205,7 +205,7 @@ class ProductDecorator
      *
      * @return void
      */
-    private function castPropertyValues(array &$product)
+    private function castPropertyValues(&$product)
     {
         $product['id_product'] = (int) $product['id_product'];
         $product['id_manufacturer'] = (int) $product['id_manufacturer'];
@@ -241,7 +241,7 @@ class ProductDecorator
      *
      * @return void
      */
-    private function addUniqueId(array &$product)
+    private function addUniqueId(&$product)
     {
         $product['unique_product_id'] = "{$product['id_product']}-{$product['id_attribute']}-{$product['iso_code']}";
     }
@@ -251,7 +251,7 @@ class ProductDecorator
      *
      * @return void
      */
-    private function addAttributeId(array &$product)
+    private function addAttributeId(&$product)
     {
         $product['id_product_attribute'] = "{$product['id_product']}-{$product['id_attribute']}";
     }
@@ -275,7 +275,7 @@ class ProductDecorator
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function addFeatureValues(array &$products, $langId)
+    private function addFeatureValues(&$products, $langId)
     {
         $productIds = $this->arrayFormatter->formatValueArray($products, 'id_product', true);
         $features = $this->productRepository->getProductFeatures($productIds, $langId);
@@ -293,7 +293,7 @@ class ProductDecorator
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function addAttributeValues(array &$products, $langId)
+    private function addAttributeValues(&$products, $langId)
     {
         $attributeIds = $this->arrayFormatter->formatValueArray($products, 'id_attribute', true);
         $attributes = $this->productRepository->getProductAttributeValues($attributeIds, $langId);
@@ -310,7 +310,7 @@ class ProductDecorator
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function addImages(array &$products)
+    private function addImages(&$products)
     {
         $productIds = $this->arrayFormatter->formatValueArray($products, 'id_product', true);
         $attributeIds = $this->arrayFormatter->formatValueArray($products, 'id_attribute', true);

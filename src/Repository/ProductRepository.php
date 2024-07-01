@@ -119,7 +119,7 @@ class ProductRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getProductAttributeValues(array $attributeIds, $langId)
+    public function getProductAttributeValues($attributeIds, $langId)
     {
         if (!$attributeIds) {
             return [];
@@ -157,7 +157,7 @@ class ProductRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getProductFeatures(array $productIds, $langId)
+    public function getProductFeatures($productIds, $langId)
     {
         if (!$productIds) {
             return [];
@@ -193,7 +193,7 @@ class ProductRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getProductImages(array $productIds)
+    public function getProductImages($productIds)
     {
         if (!$productIds) {
             return [];
@@ -217,7 +217,7 @@ class ProductRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getAttributeImages(array $attributeIds)
+    public function getAttributeImages($attributeIds)
     {
         if (!$attributeIds) {
             return [];

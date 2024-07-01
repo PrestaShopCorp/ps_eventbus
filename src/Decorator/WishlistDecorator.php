@@ -9,7 +9,7 @@ class WishlistDecorator
      *
      * @return void
      */
-    public function decorateWishlists(array &$wishlists)
+    public function decorateWishlists(&$wishlists)
     {
         foreach ($wishlists as &$wishlist) {
             $this->castWishlistPropertyValues($wishlist);
@@ -21,7 +21,7 @@ class WishlistDecorator
      *
      * @return void
      */
-    public function decorateWishlistProducts(array &$wishlistProducts)
+    public function decorateWishlistProducts(&$wishlistProducts)
     {
         foreach ($wishlistProducts as &$wishlistProduct) {
             $this->castWishlistProductPropertyValues($wishlistProduct);
@@ -33,7 +33,7 @@ class WishlistDecorator
      *
      * @return void
      */
-    private function castWishlistPropertyValues(array &$wishlist)
+    private function castWishlistPropertyValues(&$wishlist)
     {
         $wishlist['id_wishlist'] = (int) $wishlist['id_wishlist'];
         $wishlist['id_customer'] = (int) $wishlist['id_customer'];
@@ -48,7 +48,7 @@ class WishlistDecorator
      *
      * @return void
      */
-    private function castWishlistProductPropertyValues(array &$wishlistProduct)
+    private function castWishlistProductPropertyValues(&$wishlistProduct)
     {
         $wishlistProduct['id_wishlist_product'] = (int) $wishlistProduct['id_wishlist_product'];
         $wishlistProduct['id_wishlist'] = (int) $wishlistProduct['id_wishlist'];

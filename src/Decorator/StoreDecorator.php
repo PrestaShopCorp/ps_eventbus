@@ -9,7 +9,7 @@ class StoreDecorator
      *
      * @return void
      */
-    public function decorateStores(array &$stores)
+    public function decorateStores(&$stores)
     {
         foreach ($stores as &$store) {
             $this->castPropertyValues($store);
@@ -21,7 +21,7 @@ class StoreDecorator
      *
      * @return void
      */
-    private function castPropertyValues(array &$store)
+    private function castPropertyValues(&$store)
     {
         $store['id_store'] = (int) $store['id_store'];
         $store['id_country'] = (int) $store['id_country'];

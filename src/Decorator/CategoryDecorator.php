@@ -9,7 +9,7 @@ class CategoryDecorator
      *
      * @return void
      */
-    public function decorateCategories(array &$categories)
+    public function decorateCategories(&$categories)
     {
         foreach ($categories as &$category) {
             $this->castPropertyValues($category);
@@ -22,7 +22,7 @@ class CategoryDecorator
      *
      * @return void
      */
-    private function castPropertyValues(array &$category)
+    private function castPropertyValues(&$category)
     {
         $category['id_category'] = (int) $category['id_category'];
         $category['id_parent'] = (int) $category['id_parent'];
@@ -33,7 +33,7 @@ class CategoryDecorator
      *
      * @return void
      */
-    private function formatDescription(array &$category)
+    private function formatDescription(&$category)
     {
         $category['description'] = base64_encode($category['description']);
     }
