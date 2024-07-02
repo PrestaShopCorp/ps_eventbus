@@ -6,7 +6,9 @@ on:
 env:
   PHP_BUILDER_VERSION: "8.3"
   NODE_BUILDER_VERSION: "20"
+  DOCKER_COMPOSE_VERSION: v2.27.0
   GITHUB_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
+  VERSION: ${{ github.event.release.tag_name }}
 
 jobs:
   e2e-tests:
