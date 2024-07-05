@@ -149,7 +149,7 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_COLOR: 8FCE00
-          SLACK_TITLE: "🚀 PS EventBus {{ github.event.release.tag_name }} has been released"
+          SLACK_TITLE: "🚀 PS EventBus ${{ github.event.release.tag_name }} has been released"
           SLACK_MESSAGE: ${{ github.event.release.body }}
           SLACK_FOOTER: "https://github.com/PrestaShopCorp/ps_eventbus/releases/tag/${{ github.event.release.tag_name }}"
           SLACK_USERNAME: QABot

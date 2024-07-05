@@ -13,6 +13,11 @@ jobs:
     name: Build and publish staging assets
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
       - name: Move the staging tag
         run: |
           git tag -d staging | true
