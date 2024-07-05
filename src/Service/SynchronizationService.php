@@ -9,7 +9,6 @@ use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
-use PrestaShop\Module\PsEventbus\Service\ProxyService;
 
 class SynchronizationService
 {

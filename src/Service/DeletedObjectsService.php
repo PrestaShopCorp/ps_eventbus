@@ -3,7 +3,6 @@
 namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
-use PrestaShop\Module\PsEventbus\Service\ProxyService;
 
 class DeletedObjectsService
 {
