@@ -9,7 +9,6 @@ use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
-use Ps_eventbus;
 
 class SynchronizationService
 {
@@ -17,7 +16,7 @@ class SynchronizationService
      * @var \Ps_eventbus
      */
     private $module;
-    
+
     /**
      * @var EventbusSyncRepository
      */
@@ -172,7 +171,7 @@ class SynchronizationService
         if (!empty($data)) {
             /** @var ProxyServiceInterface */
             $proxyService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface');
-            
+
             $response = $proxyService->upload($jobId, $data, $scriptStartTime, $isFull);
 
             if ($response['httpCode'] == 201) {
