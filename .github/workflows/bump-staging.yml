@@ -1,16 +1,14 @@
 ---
-name: Build staging module
+name: Bump staging
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
-  workflow_call:
 
 jobs:
   bump_staging_tag:
-    name: Build and publish staging assets
+    name: Bump staging and notify to build assets
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
@@ -25,7 +23,13 @@ jobs:
           git push origin :refs/tags/staging
           git push origin staging
 
-      - name: Edit the staging release
-        run: gh release edit staging --tag staging
+      - name: Notify build workflow
+        run: |
+          gh release delete staging || true
+          gh release create staging \
+            --title "🐣 staging (commit $(git rev-parse --short HEAD))" \
+            --prerelease \
+            --generate-notes \
+            --latest=false
         env:
           GH_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}

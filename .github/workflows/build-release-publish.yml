@@ -1,7 +1,7 @@
 name: Release and publish
 on:
   release:
-    types: [released, prereleased, edited]
+    types: [released, prereleased]
 
 env:
   PHP_BUILDER_VERSION: "8.3"
@@ -94,6 +94,10 @@ jobs:
         env:
           VERSION: ${{ github.event.release.tag_name }}
 
+      - name: Get short commit sha
+        id: commit
+        run: echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
       - name: Upload the zip assets
         uses: softprops/action-gh-release@v2
         with:
@@ -102,7 +106,7 @@ jobs:
             ./dist/${{ github.event.repository.name }}-${{ github.event.release.tag_name }}_integration.zip
             ./dist/${{ github.event.repository.name }}-${{ github.event.release.tag_name }}_e2e.zip
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: ${{ github.event.release.tag_name }}
+          name: ${{ github.event.release.tag_name == 'staging' && format('🐣 staging (commit {0})', steps.commit.outputs.sha) || github.event.release.tag_name }}
 
   publish_to_marketplace:
     name: Publish the module to the addons marketplace
