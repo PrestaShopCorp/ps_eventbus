@@ -26,8 +26,6 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Formatter\JsonFormatter'
 
-  PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface: '@PrestaShop\Module\PsEventbus\Service\ProxyService'
-
   PrestaShop\Module\PsEventbus\Service\ProxyService:
     class: PrestaShop\Module\PsEventbus\Service\ProxyService
     public: true
@@ -49,7 +47,7 @@ services:
     arguments:
       - "@ps_eventbus.context"
       - '@PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository'
-      - '@PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface'
+      - '@PrestaShop\Module\PsEventbus\Service\ProxyService'
 
   PrestaShop\Module\PsEventbus\Service\SynchronizationService:
     class: PrestaShop\Module\PsEventbus\Service\SynchronizationService

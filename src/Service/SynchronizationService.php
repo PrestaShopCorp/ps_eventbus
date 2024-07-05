@@ -9,6 +9,7 @@ use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
+use PrestaShop\Module\PsEventbus\Service\ProxyService;
 
 class SynchronizationService
 {
@@ -108,7 +109,7 @@ class SynchronizationService
         $this->payloadDecorator->convertDateFormat($data);
 
         if (!empty($data)) {
-            /** @var ProxyServiceInterface */
+            /** @var ProxyService */
             $proxyService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\ProxyService');
 
             $response = $proxyService->upload($jobId, $data, $scriptStartTime, $isFull);
@@ -169,7 +170,7 @@ class SynchronizationService
         $this->payloadDecorator->convertDateFormat($data);
 
         if (!empty($data)) {
-            /** @var ProxyServiceInterface */
+            /** @var ProxyService */
             $proxyService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\ProxyService');
 
             $response = $proxyService->upload($jobId, $data, $scriptStartTime, $isFull);
