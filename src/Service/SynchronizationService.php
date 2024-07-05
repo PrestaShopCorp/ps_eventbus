@@ -109,7 +109,7 @@ class SynchronizationService
 
         if (!empty($data)) {
             /** @var ProxyServiceInterface */
-            $proxyService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface');
+            $proxyService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\ProxyService');
 
             $response = $proxyService->upload($jobId, $data, $scriptStartTime, $isFull);
 
@@ -170,7 +170,7 @@ class SynchronizationService
 
         if (!empty($data)) {
             /** @var ProxyServiceInterface */
-            $proxyService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface');
+            $proxyService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\ProxyService');
 
             $response = $proxyService->upload($jobId, $data, $scriptStartTime, $isFull);
 
