@@ -108,8 +108,8 @@ class SynchronizationService
         $this->payloadDecorator->convertDateFormat($data);
 
         if (!empty($data)) {
-            /** @var ProxyServiceInterface */
-            $proxyService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface');
+            /** @var ProxyService */
+            $proxyService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\ProxyService');
 
             $response = $proxyService->upload($jobId, $data, $scriptStartTime, $isFull);
 
@@ -169,8 +169,8 @@ class SynchronizationService
         $this->payloadDecorator->convertDateFormat($data);
 
         if (!empty($data)) {
-            /** @var ProxyServiceInterface */
-            $proxyService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface');
+            /** @var ProxyService */
+            $proxyService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\ProxyService');
 
             $response = $proxyService->upload($jobId, $data, $scriptStartTime, $isFull);
 
