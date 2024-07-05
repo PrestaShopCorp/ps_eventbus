@@ -13,6 +13,11 @@ use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
 class SynchronizationService
 {
     /**
+     * @var \Ps_eventbus
+     */
+    private $module;
+
+    /**
      * @var EventbusSyncRepository
      */
     private $eventbusSyncRepository;
@@ -38,11 +43,6 @@ class SynchronizationService
     private $languageRepository;
 
     /**
-     * @var ProxyServiceInterface
-     */
-    private $proxyService;
-
-    /**
      * @var PayloadDecorator
      */
     private $payloadDecorator;
@@ -58,20 +58,20 @@ class SynchronizationService
     const INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT = 100000;
 
     public function __construct(
+        \Ps_eventbus $module,
         EventbusSyncRepository $eventbusSyncRepository,
         IncrementalSyncRepository $incrementalSyncRepository,
         LiveSyncRepository $liveSyncRepository,
         DeletedObjectsRepository $deletedObjectsRepository,
         LanguageRepository $languageRepository,
-        ProxyServiceInterface $proxyService,
         PayloadDecorator $payloadDecorator
     ) {
+        $this->module = $module;
         $this->eventbusSyncRepository = $eventbusSyncRepository;
         $this->incrementalSyncRepository = $incrementalSyncRepository;
         $this->liveSyncRepository = $liveSyncRepository;
         $this->deletedObjectsRepository = $deletedObjectsRepository;
         $this->languageRepository = $languageRepository;
-        $this->proxyService = $proxyService;
         $this->payloadDecorator = $payloadDecorator;
     }
 
@@ -108,7 +108,10 @@ class SynchronizationService
         $this->payloadDecorator->convertDateFormat($data);
 
         if (!empty($data)) {
-            $response = $this->proxyService->upload($jobId, $data, $scriptStartTime, $isFull);
+            /** @var ProxyServiceInterface */
+            $proxyService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface');
+
+            $response = $proxyService->upload($jobId, $data, $scriptStartTime, $isFull);
 
             if ($response['httpCode'] == 201) {
                 $offset += $limit;
@@ -166,7 +169,10 @@ class SynchronizationService
         $this->payloadDecorator->convertDateFormat($data);
 
         if (!empty($data)) {
-            $response = $this->proxyService->upload($jobId, $data, $scriptStartTime, $isFull);
+            /** @var ProxyServiceInterface */
+            $proxyService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface');
+
+            $response = $proxyService->upload($jobId, $data, $scriptStartTime, $isFull);
 
             if ($response['httpCode'] == 201) {
                 $this->incrementalSyncRepository->removeIncrementalSyncObjects($type, $objectIds, $langIso);
