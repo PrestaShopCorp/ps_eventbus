@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
 
 class DeletedObjectsService
@@ -16,11 +15,11 @@ class DeletedObjectsService
      */
     private $deletedObjectsRepository;
     /**
-     * @var ProxyServiceInterface
+     * @var ProxyService
      */
     private $proxyService;
 
-    public function __construct(\Context $context, DeletedObjectsRepository $deletedObjectsRepository, ProxyServiceInterface $proxyService)
+    public function __construct(\Context $context, DeletedObjectsRepository $deletedObjectsRepository, ProxyService $proxyService)
     {
         $this->context = $context;
         $this->deletedObjectsRepository = $deletedObjectsRepository;
