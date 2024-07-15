@@ -305,7 +305,6 @@ class Stream implements StreamInterface
     }
 
     /**
-     * 
      * @return void
      */
     public function rewind()

@@ -24,8 +24,8 @@ class CustomPriceDecorator
     }
 
     /**
-     * @param mixed $specificPrices
-     * 
+     * @param array $specificPrices
+     *
      * @return void
      */
     public function decorateSpecificPrices(&$specificPrices)
@@ -37,6 +37,11 @@ class CustomPriceDecorator
         }
     }
 
+    /**
+     * @param array $specificPrice
+     *
+     * @return void
+     */
     private function addTotalPrice(&$specificPrice)
     {
         $this->context->country = new \Country($specificPrice['id_country']);
@@ -77,6 +82,11 @@ class CustomPriceDecorator
         );
     }
 
+    /**
+     * @param array $specificPrice
+     *
+     * @return void
+     */
     private function castPropertyValues(&$specificPrice)
     {
         $specificPrice['id_specific_price'] = (int) $specificPrice['id_specific_price'];
@@ -110,6 +120,11 @@ class CustomPriceDecorator
         }
     }
 
+        /**
+     * @param array $specificPrice
+     *
+     * @return void
+     */
     private function setShopId(&$specificPrice)
     {
         if ($this->context->shop === null) {

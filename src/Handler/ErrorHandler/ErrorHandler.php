@@ -22,6 +22,7 @@
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
+use Ps_eventbus;
 
 /**
  * Handle Error.
@@ -33,6 +34,14 @@ class ErrorHandler implements ErrorHandlerInterface
      */
     protected $client;
 
+    /**
+     * 
+     * @param Ps_eventbus $module 
+     * @param PsAccountsAdapterService $psAccountsAdapterService 
+     * @param string $sentryDsn 
+     * @param string $sentryEnv 
+     * @return void 
+     */
     public function __construct(\Ps_eventbus $module, PsAccountsAdapterService $psAccountsAdapterService, $sentryDsn, $sentryEnv)
     {
         try {

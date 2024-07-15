@@ -152,6 +152,11 @@ class ProductDecorator
         $product['sale_tax'] = $product['sale_price_tax_incl'] - $product['sale_price_tax_excl'];
     }
 
+    /**
+     * @param array $product
+     *
+     * @return array
+     */
     private function getBundleCollection($product)
     {
         $bundleProducts = $this->bundleRepository->getBundleProducts($product['id_product']);
