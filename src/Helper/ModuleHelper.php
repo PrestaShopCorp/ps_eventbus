@@ -7,19 +7,12 @@ use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 class ModuleHelper
 {
     /**
-     * @var \Ps_eventbus
-     */
-    private $module;
-
-    /**
      * @var \PrestaShop\PrestaShop\Core\Module\ModuleManager|\PrestaShop\PrestaShop\Core\Addon\Module\ModuleManager
      */
     private $moduleManager;
 
     public function __construct(\Ps_eventbus $module)
     {
-        $this->module = $module;
-
         $moduleManagerBuilder = null;
 
         if (version_compare(_PS_VERSION_, '1.7', '>=')) {
