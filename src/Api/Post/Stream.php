@@ -125,7 +125,7 @@ class Stream implements StreamInterface
         if (isset($options['metadata'])) {
             $this->customMetadata = $options['metadata'];
         } else {
-            $this->customMetadata =  [];
+            $this->customMetadata = [];
         }
 
         $this->attach($stream);
