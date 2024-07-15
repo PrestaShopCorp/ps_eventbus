@@ -3,7 +3,6 @@
 namespace PrestaShop\Module\PsEventbus\Helper;
 
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
-use PrestaShopBundle\Service\Routing\Router;
 
 class ModuleHelper
 {
@@ -166,25 +165,25 @@ class ModuleHelper
         if (version_compare(_PS_VERSION_, '1.7', '<')) {
             return '';
         }
-        
+
         if ($moduleName === 'ps_mbo') {
-            return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) . \Link::getUrlSmarty(array(
+            return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) . \Link::getUrlSmarty([
                 'entity' => 'sf',
                 'route' => 'ps_eventbus_api_resolver',
-                'sf-params' => array(
+                'sf-params' => [
                     'query' => 'installPsMbo',
-                )
-            ));
+                ],
+            ]);
         }
 
-        return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) . \Link::getUrlSmarty(array(
+        return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) . \Link::getUrlSmarty([
             'entity' => 'sf',
             'route' => 'admin_module_manage_action',
-            'sf-params' => array(
+            'sf-params' => [
                 'action' => 'install',
                 'module_name' => $moduleName,
-            )
-        ));
+            ],
+        ]);
     }
 
     /**
@@ -203,15 +202,15 @@ class ModuleHelper
         if (version_compare(_PS_VERSION_, '1.7', '<')) {
             return '';
         }
-        
-        return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) . \Link::getUrlSmarty(array(
+
+        return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) . \Link::getUrlSmarty([
             'entity' => 'sf',
             'route' => 'admin_module_manage_action',
-            'sf-params' => array(
+            'sf-params' => [
                 'action' => 'enable',
                 'module_name' => $moduleName,
-            )
-        ));
+            ],
+        ]);
     }
 
     /**
@@ -226,15 +225,15 @@ class ModuleHelper
         if (version_compare(_PS_VERSION_, '1.7', '<')) {
             return '';
         }
-        
-        return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) . \Link::getUrlSmarty(array(
+
+        return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) . \Link::getUrlSmarty([
             'entity' => 'sf',
             'route' => 'admin_module_manage_action',
-            'sf-params' => array(
+            'sf-params' => [
                 'action' => 'upgrade',
                 'module_name' => $moduleName,
-            )
-        ));
+            ],
+        ]);
     }
 
     /**
