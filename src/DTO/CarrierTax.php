@@ -72,6 +72,10 @@ class CarrierTax implements \JsonSerializable
         return $this;
     }
 
+    /**
+     * 
+     * @return int
+     */
     public function getRangeId()
     {
         return $this->rangeId;
