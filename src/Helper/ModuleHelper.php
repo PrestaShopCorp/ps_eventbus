@@ -3,24 +3,16 @@
 namespace PrestaShop\Module\PsEventbus\Helper;
 
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
-use PrestaShopBundle\Service\Routing\Router;
 
 class ModuleHelper
 {
-    /**
-     * @var \Ps_eventbus
-     */
-    private $module;
-
     /**
      * @var \PrestaShop\PrestaShop\Core\Module\ModuleManager|\PrestaShop\PrestaShop\Core\Addon\Module\ModuleManager
      */
     private $moduleManager;
 
-    public function __construct(\Ps_eventbus $module)
+    public function __construct()
     {
-        $this->module = $module;
-
         $moduleManagerBuilder = null;
 
         if (version_compare(_PS_VERSION_, '1.7', '>=')) {
@@ -163,21 +155,28 @@ class ModuleHelper
             return '';
         }
 
-        /** @var Router $router * */
-        $router = $this->module->get('router');
+        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+            return '';
+        }
 
         if ($moduleName === 'ps_mbo') {
-            return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
-            $router->generate('ps_eventbus_api_resolver', [
-                'query' => 'installPsMbo',
+            return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) . \Link::getUrlSmarty([
+                'entity' => 'sf',
+                'route' => 'ps_eventbus_api_resolver',
+                'sf-params' => [
+                    'query' => 'installPsMbo',
+                ],
             ]);
         }
 
-        return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
-            $router->generate('admin_module_manage_action', [
+        return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) . \Link::getUrlSmarty([
+            'entity' => 'sf',
+            'route' => 'admin_module_manage_action',
+            'sf-params' => [
                 'action' => 'install',
                 'module_name' => $moduleName,
-            ]);
+            ],
+        ]);
     }
 
     /**
@@ -193,14 +192,18 @@ class ModuleHelper
             return '';
         }
 
-        /** @var Router $router * */
-        $router = $this->module->get('router');
+        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+            return '';
+        }
 
-        return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
-            $router->generate('admin_module_manage_action', [
+        return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) . \Link::getUrlSmarty([
+            'entity' => 'sf',
+            'route' => 'admin_module_manage_action',
+            'sf-params' => [
                 'action' => 'enable',
                 'module_name' => $moduleName,
-            ]);
+            ],
+        ]);
     }
 
     /**
@@ -212,16 +215,18 @@ class ModuleHelper
      */
     public function getUpdateLink(string $moduleName)
     {
-        // need to check if module is up to date, if not, return empty string
+        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+            return '';
+        }
 
-        /** @var Router $router * */
-        $router = $this->module->get('router');
-
-        return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
-            $router->generate('admin_module_manage_action', [
+        return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) . \Link::getUrlSmarty([
+            'entity' => 'sf',
+            'route' => 'admin_module_manage_action',
+            'sf-params' => [
                 'action' => 'upgrade',
                 'module_name' => $moduleName,
-            ]);
+            ],
+        ]);
     }
 
     /**
