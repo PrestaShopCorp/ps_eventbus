@@ -11,7 +11,7 @@ class ModuleHelper
      */
     private $moduleManager;
 
-    public function __construct(\Ps_eventbus $module)
+    public function __construct()
     {
         $moduleManagerBuilder = null;
 

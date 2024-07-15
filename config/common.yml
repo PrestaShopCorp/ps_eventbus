@@ -18,8 +18,6 @@ services:
   ps_eventbus.helper.module:
     class: 'PrestaShop\Module\PsEventbus\Helper\ModuleHelper'
     public: true
-    arguments:
-      - "@ps_eventbus"
 
   PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService:
     class: PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService
