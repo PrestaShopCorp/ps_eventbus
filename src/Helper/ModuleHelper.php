@@ -163,21 +163,28 @@ class ModuleHelper
             return '';
         }
 
-        /** @var Router $router * */
-        $router = $this->module->get('router');
-
+        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+            return '';
+        }
+        
         if ($moduleName === 'ps_mbo') {
-            return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
-            $router->generate('ps_eventbus_api_resolver', [
-                'query' => 'installPsMbo',
-            ]);
+            return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) . \Link::getUrlSmarty(array(
+                'entity' => 'sf',
+                'route' => 'ps_eventbus_api_resolver',
+                'sf-params' => array(
+                    'query' => 'installPsMbo',
+                )
+            ));
         }
 
-        return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
-            $router->generate('admin_module_manage_action', [
+        return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) . \Link::getUrlSmarty(array(
+            'entity' => 'sf',
+            'route' => 'admin_module_manage_action',
+            'sf-params' => array(
                 'action' => 'install',
                 'module_name' => $moduleName,
-            ]);
+            )
+        ));
     }
 
     /**
@@ -193,14 +200,18 @@ class ModuleHelper
             return '';
         }
 
-        /** @var Router $router * */
-        $router = $this->module->get('router');
-
-        return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
-            $router->generate('admin_module_manage_action', [
+        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+            return '';
+        }
+        
+        return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) . \Link::getUrlSmarty(array(
+            'entity' => 'sf',
+            'route' => 'admin_module_manage_action',
+            'sf-params' => array(
                 'action' => 'enable',
                 'module_name' => $moduleName,
-            ]);
+            )
+        ));
     }
 
     /**
@@ -212,16 +223,18 @@ class ModuleHelper
      */
     public function getUpdateLink(string $moduleName)
     {
-        // need to check if module is up to date, if not, return empty string
-
-        /** @var Router $router * */
-        $router = $this->module->get('router');
-
-        return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) .
-            $router->generate('admin_module_manage_action', [
+        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+            return '';
+        }
+        
+        return substr(\Tools::getShopDomainSsl(true) . __PS_BASE_URI__, 0, -1) . \Link::getUrlSmarty(array(
+            'entity' => 'sf',
+            'route' => 'admin_module_manage_action',
+            'sf-params' => array(
                 'action' => 'upgrade',
                 'module_name' => $moduleName,
-            ]);
+            )
+        ));
     }
 
     /**
