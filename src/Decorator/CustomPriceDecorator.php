@@ -120,7 +120,7 @@ class CustomPriceDecorator
         }
     }
 
-        /**
+    /**
      * @param array $specificPrice
      *
      * @return void

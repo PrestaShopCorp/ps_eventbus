@@ -321,9 +321,9 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
-     * 
-     * @param array $orderStatuses 
-     * @return array 
+     * @param array $orderStatuses
+     *
+     * @return array
      */
     private function castOrderStatuses(&$orderStatuses)
     {

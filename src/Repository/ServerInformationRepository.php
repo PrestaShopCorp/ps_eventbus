@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
 use PrestaShop\Module\PsAccounts\Api\Client\AccountsClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
@@ -48,18 +47,18 @@ class ServerInformationRepository
     private $errorHandler;
 
     /**
-     * 
-     * @param Context $context 
-     * @param PsAccountsAdapterService $psAccountsAdapterService 
-     * @param CurrencyRepository $currencyRepository 
-     * @param LanguageRepository $languageRepository 
-     * @param ConfigurationRepository $configurationRepository 
-     * @param ShopRepository $shopRepository 
-     * @param ErrorHandlerInterface $errorHandler 
-     * @param string $eventbusSyncApiUrl 
-     * @param string $eventbusLiveSyncApiUrl 
-     * @param string $eventbusProxyApiUrl 
-     * @return void 
+     * @param \Context $context
+     * @param PsAccountsAdapterService $psAccountsAdapterService
+     * @param CurrencyRepository $currencyRepository
+     * @param LanguageRepository $languageRepository
+     * @param ConfigurationRepository $configurationRepository
+     * @param ShopRepository $shopRepository
+     * @param ErrorHandlerInterface $errorHandler
+     * @param string $eventbusSyncApiUrl
+     * @param string $eventbusLiveSyncApiUrl
+     * @param string $eventbusProxyApiUrl
+     *
+     * @return void
      */
     public function __construct(
         \Context $context,
@@ -146,6 +145,7 @@ class ServerInformationRepository
 
     /**
      * @param bool $isAuthentifiedCall
+     *
      * @return array
      */
     public function getHealthCheckData($isAuthentifiedCall)
