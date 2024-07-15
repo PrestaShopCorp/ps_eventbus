@@ -304,6 +304,10 @@ class Stream implements StreamInterface
         return isset($meta[$key]) ? $meta[$key] : null;
     }
 
+    /**
+     * 
+     * @return void
+     */
     public function rewind()
     {
         $this->seek(0);

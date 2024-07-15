@@ -23,6 +23,11 @@ class CustomPriceDecorator
         $this->priceService = $priceService;
     }
 
+    /**
+     * @param mixed $specificPrices
+     * 
+     * @return void
+     */
     public function decorateSpecificPrices(&$specificPrices)
     {
         foreach ($specificPrices as &$specificPrice) {
