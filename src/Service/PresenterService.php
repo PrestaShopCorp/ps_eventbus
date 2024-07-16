@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use PrestaShop\Module\PsEventbus\Helper\ModuleHelper;
 use PrestaShop\PrestaShop\Core\Addon\Module\ModuleManagerBuilder;
 
 class PresenterService
@@ -83,12 +82,6 @@ class PresenterService
      */
     public function expose(\ModuleCore $module, $requiredConsents = [], $optionalConsents = [])
     {
-        /** @var \Ps_eventbus $psEventbusModule */
-        $psEventbusModule = \Module::getInstanceByName('ps_eventbus');
-
-        /** @var ModuleHelper $moduleHelper */
-        $moduleHelper = $psEventbusModule->getService('ps_eventbus.helper.module');
-
         if (!in_array('info', $requiredConsents)) {
             array_unshift($requiredConsents, 'info');
         }
@@ -100,7 +93,7 @@ class PresenterService
             if ($language == null) {
                 throw new \PrestaShopException('No language context');
             }
-
+            
             return [
                 'jwt' => $this->psAccountsAdapterService->getOrRefreshToken(),
                 'requiredConsents' => $requiredConsents,
@@ -115,15 +108,7 @@ class PresenterService
                     'url' => \Tools::getHttpHost(true),
                     'lang' => $language->iso_code,
                 ],
-                'psEventbusModule' => $this->convertObjectToArray(\Module::getInstanceByName('ps_eventbus')),
-                'modulesInformation' => [
-                    'psEventbus' => $moduleHelper->buildModuleInformation(
-                        'ps_eventbus'
-                    ),
-                    'psMbo' => $moduleHelper->buildModuleInformation(
-                        'ps_mbo'
-                    ),
-                ],
+                'psEventbusModule' => $this->convertObjectToArray(\Module::getInstanceByName('ps_eventbus'))
             ];
         }
     }
