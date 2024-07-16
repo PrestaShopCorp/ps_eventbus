@@ -93,7 +93,7 @@ class PresenterService
             if ($language == null) {
                 throw new \PrestaShopException('No language context');
             }
-            
+
             return [
                 'jwt' => $this->psAccountsAdapterService->getOrRefreshToken(),
                 'requiredConsents' => $requiredConsents,
@@ -108,7 +108,7 @@ class PresenterService
                     'url' => \Tools::getHttpHost(true),
                     'lang' => $language->iso_code,
                 ],
-                'psEventbusModule' => $this->convertObjectToArray(\Module::getInstanceByName('ps_eventbus'))
+                'psEventbusModule' => $this->convertObjectToArray(\Module::getInstanceByName('ps_eventbus')),
             ];
         }
     }
