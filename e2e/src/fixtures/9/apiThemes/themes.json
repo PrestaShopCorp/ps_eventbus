@@ -1,5 +1,15 @@
 [
   {
+    "id": "28d58425ad1994a889cc596050bc52db",
+    "collection": "themes",
+    "properties": {
+      "theme_id": "28d58425ad1994a889cc596050bc52db",
+      "name": "hummingbird",
+      "theme_version": "0.2.0",
+      "active": false
+    }
+  },
+  {
     "id": "f3d64714d1f6e7f71558d4252e84ab58",
     "collection": "themes",
     "properties": {
