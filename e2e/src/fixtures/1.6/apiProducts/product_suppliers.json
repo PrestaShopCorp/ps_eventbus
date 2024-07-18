@@ -63,5 +63,31 @@
       "product_supplier_price_te": 0,
       "id_currency": 0
     }
+  },
+  {
+    "id": 6,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 6,
+      "id_product": 6,
+      "id_product_attribute": 0,
+      "id_supplier": 1,
+      "product_supplier_reference": "",
+      "product_supplier_price_te": 0,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 7,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 7,
+      "id_product": 7,
+      "id_product_attribute": 0,
+      "id_supplier": 1,
+      "product_supplier_reference": "",
+      "product_supplier_price_te": 0,
+      "id_currency": 0
+    }
   }
 ]

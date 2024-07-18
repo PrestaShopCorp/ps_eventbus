@@ -52,6 +52,7 @@ const specialFieldAssert: { [index: string]: (val) => void } = {
 describe('Full Sync', () => {
   let testIndex = 0;
 
+  // gérer les cas ou un shopContent n'existe pas (pas de fixture du coup)
   const controllers: Controller[] = controllerList.filter(
     (it) => !EXCLUDED_API.includes(it)
   );
@@ -97,11 +98,15 @@ describe('Full Sync', () => {
       // arrange
       const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
 
+      // for compatibility PHP 5.6, we need to pass form-urlencoded param.
+      const fakeData = { foo: 'bar' };
+
       // act
       const response = await axios
-        .post(url, {
+        .post(url, fakeData, {
           headers: {
             Host: testConfig.prestaShopHostHeader,
+            'Content-Type': 'application/x-www-form-urlencoded'
           },
         })
         .catch((err) => {
@@ -127,11 +132,15 @@ describe('Full Sync', () => {
         const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
         const message$ = probe({ url: `/upload/${jobId}` });
 
+        // for compatibility PHP 5.6, we need to pass form-urlencoded param.
+        const fakeData = { foo: 'bar' };
+
         // act
         const request$ = from(
-          axios.post(url, {
+          axios.post(url, fakeData, {
             headers: {
               Host: testConfig.prestaShopHostHeader,
+              'Content-Type': 'application/x-www-form-urlencoded'
             },
           })
         );
@@ -154,16 +163,17 @@ describe('Full Sync', () => {
         });
       });
     }
+    
 
     if (MISSING_TEST_DATA.includes(controller)) {
       it.skip(`${controller} should upload complete dataset to collector`, () => {});
     } else {
       it(`${controller} should upload complete dataset collector`, async () => {
+        console.log(controller);
         // arrange
         const fullSync$ = doFullSync(jobId, controller, { timeout: 4000 });
         const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 4000 });
-        const fixture = await loadFixture(controller);
-
+        
         // act
         const syncedData: PsEventbusSyncUpload[] = await lastValueFrom(
           zip(fullSync$, message$).pipe(
@@ -179,6 +189,8 @@ describe('Full Sync', () => {
         if (testConfig.dumpFullSyncData) {
           await dumpUploadData(syncedData, controller);
         }
+
+        const fixture = await loadFixture(controller);
 
         // we need to process fixtures and data returned from ps_eventbus to make them easier to compare
         let processedData = syncedData;

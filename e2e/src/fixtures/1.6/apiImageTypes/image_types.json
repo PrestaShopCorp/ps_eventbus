@@ -73,5 +73,65 @@
       "suppliers": true,
       "stores": false
     }
+  },
+  {
+    "id": "6",
+    "collection": "image_types",
+    "properties": {
+      "id_image_type": 6,
+      "name": "thickbox_default",
+      "width": 800,
+      "height": 800,
+      "products": true,
+      "categories": false,
+      "manufacturers": false,
+      "suppliers": false,
+      "stores": false
+    }
+  },
+  {
+    "id": "7",
+    "collection": "image_types",
+    "properties": {
+      "id_image_type": 7,
+      "name": "category_default",
+      "width": 870,
+      "height": 217,
+      "products": false,
+      "categories": true,
+      "manufacturers": false,
+      "suppliers": false,
+      "stores": false
+    }
+  },
+  {
+    "id": "8",
+    "collection": "image_types",
+    "properties": {
+      "id_image_type": 8,
+      "name": "scene_default",
+      "width": 870,
+      "height": 270,
+      "products": false,
+      "categories": false,
+      "manufacturers": false,
+      "suppliers": false,
+      "stores": false
+    }
+  },
+  {
+    "id": "9",
+    "collection": "image_types",
+    "properties": {
+      "id_image_type": 9,
+      "name": "m_scene_default",
+      "width": 161,
+      "height": 58,
+      "products": false,
+      "categories": false,
+      "manufacturers": false,
+      "suppliers": false,
+      "stores": false
+    }
   }
 ]
