@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "collection": "languages",
+    "properties": {
+      "id_lang": 1,
+      "name": "English (English)",
+      "active": true,
+      "iso_code": "en",
+      "language_code": "en-us",
+      "date_format_lite": "m/d/Y",
+      "date_format_full": "m/d/Y H:i:s",
+      "is_rtl": false,
+      "id_shop": 1
+    }
+  }
+]

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "1-en",
+    "collection": "categories",
+    "properties": {
+      "unique_category_id": "1-en",
+      "id_category": 1,
+      "id_parent": 0,
+      "name": "Root",
+      "description": "",
+      "link_rewrite": "root",
+      "meta_title": "",
+      "meta_keywords": "",
+      "meta_description": "",
+      "iso_code": "en",
+      "created_at": "2024-07-16T15:33:52+0200",
+      "updated_at": "2024-07-16T15:33:52+0200"
+    }
+  },
+  {
+    "id": "2-en",
+    "collection": "categories",
+    "properties": {
+      "unique_category_id": "2-en",
+      "id_category": 2,
+      "id_parent": 1,
+      "name": "Home",
+      "description": "",
+      "link_rewrite": "home",
+      "meta_title": "",
+      "meta_keywords": "",
+      "meta_description": "",
+      "iso_code": "en",
+      "created_at": "2024-07-16T15:33:52+0200",
+      "updated_at": "2024-07-16T15:33:52+0200"
+    }
+  },
+  {
+    "id": "3-en",
+    "collection": "categories",
+    "properties": {
+      "unique_category_id": "3-en",
+      "id_category": 3,
+      "id_parent": 2,
+      "name": "Women",
+      "description": "PHA+PHN0cm9uZz5Zb3Ugd2lsbCBmaW5kIGhlcmUgYWxsIHdvbWFuIGZhc2hpb24gY29sbGVjdGlvbnMuPC9zdHJvbmc+PC9wPg0KPHA+VGhpcyBjYXRlZ29yeSBpbmNsdWRlcyBhbGwgdGhlIGJhc2ljcyBvZiB5b3VyIHdhcmRyb2JlIGFuZCBtdWNoIG1vcmU6PC9wPg0KPHA+c2hvZXMsIGFjY2Vzc29yaWVzLCBwcmludGVkIHQtc2hpcnRzLCBmZW1pbmluZSBkcmVzc2VzLCB3b21lbidzIGplYW5zITwvcD4=",
+      "link_rewrite": "women",
+      "meta_title": "",
+      "meta_keywords": "",
+      "meta_description": "",
+      "iso_code": "en",
+      "created_at": "2024-07-16T15:33:54+0200",
+      "updated_at": "2024-07-16T15:33:54+0200"
+    }
+  },
+  {
+    "id": "4-en",
+    "collection": "categories",
+    "properties": {
+      "unique_category_id": "4-en",
+      "id_category": 4,
+      "id_parent": 3,
+      "name": "Tops",
+      "description": "PHA+Q2hvb3NlIGZyb20gdC1zaGlydHMsIHRvcHMsIGJsb3VzZXMsIHNob3J0IHNsZWV2ZXMsIGxvbmcgc2xlZXZlcywgdGFuayB0b3BzLCAzLzQgc2xlZXZlcyBhbmQgbW9yZS48L3A+DQo8cD5GaW5kIHRoZSBjdXQgdGhhdCBzdWl0cyB5b3UgdGhlIGJlc3QhPC9wPg==",
+      "link_rewrite": "tops",
+      "meta_title": "",
+      "meta_keywords": "",
+      "meta_description": "",
+      "iso_code": "en",
+      "created_at": "2024-07-16T15:33:54+0200",
+      "updated_at": "2024-07-16T15:33:54+0200"
+    }
+  },
+  {
+    "id": "5-en",
+    "collection": "categories",
+    "properties": {
+      "unique_category_id": "5-en",
+      "id_category": 5,
+      "id_parent": 4,
+      "name": "T-shirts",
+      "description": "PHA+VGhlIG11c3QgaGF2ZSBvZiB5b3VyIHdhcmRyb2JlLCB0YWtlIGEgbG9vayBhdCBvdXIgZGlmZmVyZW50IGNvbG9ycyw8L3A+DQo8cD5zaGFwZXMgYW5kIHN0eWxlIG9mIG91ciBjb2xsZWN0aW9uITwvcD4=",
+      "link_rewrite": "tshirts",
+      "meta_title": "",
+      "meta_keywords": "",
+      "meta_description": "",
+      "iso_code": "en",
+      "created_at": "2024-07-16T15:33:54+0200",
+      "updated_at": "2024-07-16T15:33:54+0200"
+    }
+  }
+]

@@ -1,0 +1,67 @@
+[
+  {
+    "id": "1",
+    "collection": "images",
+    "properties": {
+      "id_image": 1,
+      "id_product": 1,
+      "position": 1,
+      "cover": true,
+      "id_lang": 1,
+      "legend": "",
+      "id_shop": 1
+    }
+  },
+  {
+    "id": "2",
+    "collection": "images",
+    "properties": {
+      "id_image": 2,
+      "id_product": 1,
+      "position": 2,
+      "cover": false,
+      "id_lang": 1,
+      "legend": "",
+      "id_shop": 1
+    }
+  },
+  {
+    "id": "3",
+    "collection": "images",
+    "properties": {
+      "id_image": 3,
+      "id_product": 1,
+      "position": 3,
+      "cover": false,
+      "id_lang": 1,
+      "legend": "",
+      "id_shop": 1
+    }
+  },
+  {
+    "id": "4",
+    "collection": "images",
+    "properties": {
+      "id_image": 4,
+      "id_product": 1,
+      "position": 4,
+      "cover": false,
+      "id_lang": 1,
+      "legend": "",
+      "id_shop": 1
+    }
+  },
+  {
+    "id": "5",
+    "collection": "images",
+    "properties": {
+      "id_image": 5,
+      "id_product": 2,
+      "position": 1,
+      "cover": false,
+      "id_lang": 1,
+      "legend": "",
+      "id_shop": 1
+    }
+  }
+]
