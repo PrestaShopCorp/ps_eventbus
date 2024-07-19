@@ -34,8 +34,6 @@ class ps_EventbusApiInfoModuleFrontController extends AbstractApiController
             $response = $this->proxyService->upload($jobId, $serverInfo, $this->startTime, $initFullSync);
         } catch (Exception $exception) {
             $this->exitWithExceptionMessage($exception);
-        } catch (EnvVarException $exception) {
-            $this->exitWithExceptionMessage($exception);
         }
 
         $this->exitWithResponse(

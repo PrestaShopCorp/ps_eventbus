@@ -34,8 +34,6 @@ class ps_EventbusApiThemesModuleFrontController extends AbstractApiController
             $response = $this->proxyService->upload($jobId, $themeInfo, $this->startTime, $initFullSync);
         } catch (Exception $exception) {
             $this->exitWithExceptionMessage($exception);
-        } catch (EnvVarException $exception) {
-            $this->exitWithExceptionMessage($exception);
         }
 
         $this->exitWithResponse(
