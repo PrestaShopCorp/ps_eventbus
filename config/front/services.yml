@@ -26,8 +26,6 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Formatter\JsonFormatter'
 
-  PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface: '@PrestaShop\Module\PsEventbus\Service\ProxyService'
-
   PrestaShop\Module\PsEventbus\Service\ProxyService:
     class: PrestaShop\Module\PsEventbus\Service\ProxyService
     public: true
@@ -49,18 +47,18 @@ services:
     arguments:
       - "@ps_eventbus.context"
       - '@PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository'
-      - '@PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface'
+      - '@PrestaShop\Module\PsEventbus\Service\ProxyService'
 
   PrestaShop\Module\PsEventbus\Service\SynchronizationService:
     class: PrestaShop\Module\PsEventbus\Service\SynchronizationService
     public: true
     arguments:
+      - '@ps_eventbus'
       - '@PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
-      - '@PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface'
       - '@PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator'
 
   PrestaShop\Module\PsEventbus\Service\SpecificPriceService:
