@@ -60,7 +60,7 @@ class ImageTypeRepository
 
     /**
      * @param int $limit
-     * @param array $imageTypeIds
+     * @param array<mixed> $imageTypeIds
      *
      * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *

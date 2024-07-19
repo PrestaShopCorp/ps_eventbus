@@ -75,8 +75,8 @@ class PresenterService
 
     /**
      * @param \ModuleCore $module
-     * @param array $requiredConsents
-     * @param array $optionalConsents
+     * @param array<mixed> $requiredConsents
+     * @param array<mixed> $optionalConsents
      *
      * @return array<mixed>
      */

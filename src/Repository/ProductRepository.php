@@ -112,7 +112,7 @@ class ProductRepository
     }
 
     /**
-     * @param array $attributeIds
+     * @param array<mixed> $attributeIds
      * @param int $langId
      *
      * @return array<mixed>
@@ -150,7 +150,7 @@ class ProductRepository
     }
 
     /**
-     * @param array $productIds
+     * @param array<mixed> $productIds
      * @param int $langId
      *
      * @return array<mixed>
@@ -187,7 +187,7 @@ class ProductRepository
     }
 
     /**
-     * @param array $productIds
+     * @param array<mixed> $productIds
      *
      * @return array<mixed>
      *
@@ -211,7 +211,7 @@ class ProductRepository
     }
 
     /**
-     * @param array $attributeIds
+     * @param array<mixed> $attributeIds
      *
      * @return array<mixed>
      *
@@ -280,7 +280,7 @@ class ProductRepository
     /**
      * @param int $limit
      * @param int $langId
-     * @param array $productIds
+     * @param array<mixed> $productIds
      *
      * @return array<mixed>
      *

@@ -337,8 +337,8 @@ class SynchronizationService
     }
 
     /**
-     * @param array $data
-     * @param array $syncResponse
+     * @param array<mixed> $data
+     * @param array<mixed> $syncResponse
      * @param int $remainingObjects
      *
      * @return array<mixed>
@@ -354,7 +354,7 @@ class SynchronizationService
     }
 
     /**
-     * @param array $payload
+     * @param array<mixed> $payload
      *
      * @return string
      */

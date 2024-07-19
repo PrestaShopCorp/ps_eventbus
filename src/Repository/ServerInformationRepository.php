@@ -38,7 +38,7 @@ class ServerInformationRepository
      */
     private $psAccountsAdapterService;
     /**
-     * @var array
+     * @var array<mixed>
      */
     private $configuration;
     /**

@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Decorator;
 class CategoryDecorator
 {
     /**
-     * @param array $categories
+     * @param array<mixed> $categories
      *
      * @return void
      */
@@ -18,7 +18,7 @@ class CategoryDecorator
     }
 
     /**
-     * @param array $category
+     * @param array<mixed> $category
      *
      * @return void
      */
@@ -29,7 +29,7 @@ class CategoryDecorator
     }
 
     /**
-     * @param array $category
+     * @param array<mixed> $category
      *
      * @return void
      */

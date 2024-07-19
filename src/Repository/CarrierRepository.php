@@ -137,7 +137,7 @@ class CarrierRepository
     }
 
     /**
-     * @param array $deliveryPriceByRange
+     * @param array<mixed> $deliveryPriceByRange
      *
      * @return false|\RangeWeight|\RangePrice
      *

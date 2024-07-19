@@ -77,7 +77,7 @@ class DeletedObjectsService
     }
 
     /**
-     * @param array $data
+     * @param array<mixed> $data
      *
      * @return array<mixed>
      */

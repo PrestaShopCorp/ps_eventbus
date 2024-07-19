@@ -28,7 +28,7 @@ class ProductDecorator
      */
     private $categoryRepository;
     /**
-     * @var ArrayFormatter
+     * @var arrayFormatter
      */
     private $arrayFormatter;
     /**
@@ -64,7 +64,7 @@ class ProductDecorator
     }
 
     /**
-     * @param array $products
+     * @param array<mixed> $products
      * @param string $langIso
      * @param int $langId
      *
@@ -91,7 +91,7 @@ class ProductDecorator
     }
 
     /**
-     * @param array $products
+     * @param array<mixed> $products
      *
      * @return array<mixed>
      */
@@ -108,7 +108,7 @@ class ProductDecorator
     }
 
     /**
-     * @param array $product
+     * @param array<mixed> $product
      *
      * @return void
      */
@@ -134,7 +134,7 @@ class ProductDecorator
     }
 
     /**
-     * @param array $product
+     * @param array<mixed> $product
      *
      * @return void
      */
@@ -153,7 +153,7 @@ class ProductDecorator
     }
 
     /**
-     * @param array $product
+     * @param array<mixed> $product
      *
      * @return array<mixed>
      */
@@ -178,7 +178,7 @@ class ProductDecorator
     }
 
     /**
-     * @param array $product
+     * @param array<mixed> $product
      *
      * @return void
      */
@@ -189,7 +189,7 @@ class ProductDecorator
     }
 
     /**
-     * @param array $product
+     * @param array<mixed> $product
      *
      * @return void
      */
@@ -206,7 +206,7 @@ class ProductDecorator
     }
 
     /**
-     * @param array $product
+     * @param array<mixed> $product
      *
      * @return void
      */
@@ -242,7 +242,7 @@ class ProductDecorator
     }
 
     /**
-     * @param array $product
+     * @param array<mixed> $product
      *
      * @return void
      */
@@ -252,7 +252,7 @@ class ProductDecorator
     }
 
     /**
-     * @param array $product
+     * @param array<mixed> $product
      *
      * @return void
      */
@@ -262,7 +262,7 @@ class ProductDecorator
     }
 
     /**
-     * @param array $product
+     * @param array<mixed> $product
      * @param string $langiso
      *
      * @return void
@@ -273,7 +273,7 @@ class ProductDecorator
     }
 
     /**
-     * @param array $products
+     * @param array<mixed> $products
      * @param int $langId
      *
      * @return void
@@ -291,7 +291,7 @@ class ProductDecorator
     }
 
     /**
-     * @param array $products
+     * @param array<mixed> $products
      * @param int $langId
      *
      * @return void
@@ -309,7 +309,7 @@ class ProductDecorator
     }
 
     /**
-     * @param array $products
+     * @param array<mixed> $products
      *
      * @return void
      *

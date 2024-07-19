@@ -77,7 +77,7 @@ class DeletedObjectsRepository
 
     /**
      * @param string $type
-     * @param array $objectIds
+     * @param array<mixed> $objectIds
      * @param int $shopId
      *
      * @return bool

@@ -78,7 +78,7 @@ class CurrencyRepository
 
     /**
      * @param int $limit
-     * @param array $currencyIds
+     * @param array<mixed> $currencyIds
      *
      * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *

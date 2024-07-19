@@ -57,7 +57,7 @@ class SupplierRepository
     /**
      * @param int $limit
      * @param string $langIso
-     * @param array $supplierIds
+     * @param array<mixed> $supplierIds
      *
      * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *

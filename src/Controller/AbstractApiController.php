@@ -277,7 +277,7 @@ abstract class AbstractApiController extends \ModuleFrontController
     }
 
     /**
-     * @param array|null $value
+     * @param array<mixed>|null $value
      * @param string|null $controller
      * @param string|null $method
      *
@@ -291,7 +291,7 @@ abstract class AbstractApiController extends \ModuleFrontController
     }
 
     /**
-     * @param array $response
+     * @param array<mixed> $response
      *
      * @return void
      */
@@ -332,7 +332,7 @@ abstract class AbstractApiController extends \ModuleFrontController
     }
 
     /**
-     * @param array $response
+     * @param array<mixed> $response
      * @param int $code
      *
      * @return void

@@ -103,7 +103,7 @@ class ProductCarrierRepository
     }
 
     /**
-     * @param array $productIds
+     * @param array<mixed> $productIds
      *
      * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
@@ -148,7 +148,7 @@ class ProductCarrierRepository
     }
 
     /**
-     * @param array $productIds
+     * @param array<mixed> $productIds
      *
      * @return array<mixed>
      *

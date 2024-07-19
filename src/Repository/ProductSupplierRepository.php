@@ -59,7 +59,7 @@ class ProductSupplierRepository
 
     /**
      * @param int $limit
-     * @param array $productIds
+     * @param array<mixed> $productIds
      *
      * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *

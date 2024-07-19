@@ -10,7 +10,7 @@ class StateRepository
     private $db;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     private $stateIsoCodeCache = [];
 

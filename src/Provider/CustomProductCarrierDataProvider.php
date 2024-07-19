@@ -43,7 +43,7 @@ class CustomProductCarrierDataProvider implements PaginatedApiDataProviderInterf
 
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
-        /** @var array $productCarrierIncremental */
+        /** @var array<mixed> $productCarrierIncremental */
         $productCarrierIncremental = $this->productCarrierRepository->getProductCarrierIncremental(Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS, $langIso);
 
         if (!$productCarrierIncremental) {
@@ -52,7 +52,7 @@ class CustomProductCarrierDataProvider implements PaginatedApiDataProviderInterf
 
         $productIds = array_column($productCarrierIncremental, 'id_object');
 
-        /** @var array $productCarriers */
+        /** @var array<mixed> $productCarriers */
         $productCarriers = $this->productCarrierRepository->getProductCarriersProperties($productIds);
 
         return array_map(function ($productCarrier) {

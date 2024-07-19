@@ -39,7 +39,7 @@ class CartProductRepository
     }
 
     /**
-     * @param array $cartIds
+     * @param array<mixed> $cartIds
      *
      * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *

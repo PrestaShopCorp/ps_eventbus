@@ -75,7 +75,7 @@ class TranslationDataProvider implements PaginatedApiDataProviderInterface
     /**
      * @param int $limit
      * @param string $langIso
-     * @param array $objectIds
+     * @param array<mixed> $objectIds
      *
      * @return array<mixed>
      *

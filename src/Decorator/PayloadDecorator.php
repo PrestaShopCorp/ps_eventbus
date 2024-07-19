@@ -35,7 +35,7 @@ class PayloadDecorator
     }
 
     /**
-     * @param array $payload
+     * @param array<mixed> $payload
      *
      * @return void
      *

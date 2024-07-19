@@ -29,7 +29,7 @@ class OrderHistoryRepository
     }
 
     /**
-     * @param array $orderIds
+     * @param array<mixed> $orderIds
      * @param int $langId
      *
      * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
@@ -55,7 +55,7 @@ class OrderHistoryRepository
     }
 
     /**
-     * @param array $orderIds
+     * @param array<mixed> $orderIds
      *
      * @return array<mixed>
      *

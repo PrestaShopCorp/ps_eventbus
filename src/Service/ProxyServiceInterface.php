@@ -6,7 +6,7 @@ interface ProxyServiceInterface
 {
     /**
      * @param string $jobId
-     * @param array $data
+     * @param array<mixed> $data
      * @param int $scriptStartTime
      * @param bool $isFull
      *
@@ -16,7 +16,7 @@ interface ProxyServiceInterface
 
     /**
      * @param string $jobId
-     * @param array $data
+     * @param array<mixed> $data
      * @param int $scriptStartTime
      *
      * @return array<mixed>

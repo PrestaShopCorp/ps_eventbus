@@ -58,7 +58,7 @@ class CartRuleDataProvider implements PaginatedApiDataProviderInterface
     /**
      * @param int $limit
      * @param string $langIso
-     * @param array $objectIds
+     * @param array<mixed> $objectIds
      *
      * @return array<mixed>
      *
@@ -98,7 +98,7 @@ class CartRuleDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
-     * @param array $cartRules
+     * @param array<mixed> $cartRules
      *
      * @return void
      */

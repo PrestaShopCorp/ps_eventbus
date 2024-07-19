@@ -15,7 +15,7 @@ class TaxRepository
     private $context;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     private $countryIsoCodeCache = [];
 

@@ -100,7 +100,7 @@ class CustomPriceRepository
 
     /**
      * @param int $limit
-     * @param array $specificPriceIds
+     * @param array<mixed> $specificPriceIds
      *
      * @return array<mixed>
      *

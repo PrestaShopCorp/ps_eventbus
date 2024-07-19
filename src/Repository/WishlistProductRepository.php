@@ -15,7 +15,7 @@ class WishlistProductRepository
     }
 
     /**
-     * @param array $wishlistIds
+     * @param array<mixed> $wishlistIds
      *
      * @return \DbQuery
      */
@@ -30,7 +30,7 @@ class WishlistProductRepository
     }
 
     /**
-     * @param array $wishlistIds
+     * @param array<mixed> $wishlistIds
      *
      * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *

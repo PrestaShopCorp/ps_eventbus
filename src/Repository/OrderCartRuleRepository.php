@@ -29,7 +29,7 @@ class OrderCartRuleRepository
     }
 
     /**
-     * @param array $orderIds
+     * @param array<mixed> $orderIds
      *
      * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
@@ -54,7 +54,7 @@ class OrderCartRuleRepository
     }
 
     /**
-     * @param array $orderIds
+     * @param array<mixed> $orderIds
      *
      * @return array<mixed>
      *

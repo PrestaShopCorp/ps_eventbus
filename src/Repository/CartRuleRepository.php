@@ -56,7 +56,7 @@ class CartRuleRepository
 
     /**
      * @param int $limit
-     * @param array $cartRuleIds
+     * @param array<mixed> $cartRuleIds
      *
      * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *

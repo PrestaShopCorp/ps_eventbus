@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Decorator;
 class StockDecorator
 {
     /**
-     * @param array $stocks
+     * @param array<mixed> $stocks
      *
      * @return void
      */
@@ -17,7 +17,7 @@ class StockDecorator
     }
 
     /**
-     * @param array $stock
+     * @param array<mixed> $stock
      *
      * @return void
      */
@@ -41,7 +41,7 @@ class StockDecorator
     }
 
     /**
-     * @param array $stockMvts
+     * @param array<mixed> $stockMvts
      *
      * @return void
      */
@@ -53,7 +53,7 @@ class StockDecorator
     }
 
     /**
-     * @param array $stockMvt
+     * @param array<mixed> $stockMvt
      *
      * @return void
      */

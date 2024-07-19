@@ -41,7 +41,7 @@ class OrderDetailsRepository
     }
 
     /**
-     * @param array $orderIds
+     * @param array<mixed> $orderIds
      * @param int $shopId
      *
      * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
@@ -72,7 +72,7 @@ class OrderDetailsRepository
     }
 
     /**
-     * @param array $orderIds
+     * @param array<mixed> $orderIds
      *
      * @return array<mixed>
      *

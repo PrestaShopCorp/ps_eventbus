@@ -91,7 +91,7 @@ class StoreRepository
     /**
      * @param int $limit
      * @param string $langIso
-     * @param array $storeIds
+     * @param array<mixed> $storeIds
      *
      * @return array<mixed>
      *

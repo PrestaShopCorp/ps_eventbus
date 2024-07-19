@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Decorator;
 class ImageTypeDecorator
 {
     /**
-     * @param array $imageTypes
+     * @param array<mixed> $imageTypes
      *
      * @return void
      */
@@ -17,7 +17,7 @@ class ImageTypeDecorator
     }
 
     /**
-     * @param array $imageType
+     * @param array<mixed> $imageType
      *
      * @return void
      */

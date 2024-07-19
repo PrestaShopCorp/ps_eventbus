@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Decorator;
 class EmployeeDecorator
 {
     /**
-     * @param array $employees
+     * @param array<mixed> $employees
      *
      * @return void
      */
@@ -18,7 +18,7 @@ class EmployeeDecorator
     }
 
     /**
-     * @param array $employee
+     * @param array<mixed> $employee
      *
      * @return void
      */
@@ -50,7 +50,7 @@ class EmployeeDecorator
     }
 
     /**
-     * @param array $employee
+     * @param array<mixed> $employee
      *
      * @return void
      */

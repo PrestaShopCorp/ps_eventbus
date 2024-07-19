@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Decorator;
 class TranslationDecorator
 {
     /**
-     * @param array $translations
+     * @param array<mixed> $translations
      *
      * @return void
      */
@@ -17,7 +17,7 @@ class TranslationDecorator
     }
 
     /**
-     * @param array $translation
+     * @param array<mixed> $translation
      *
      * @return void
      */

@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Formatter;
 class ArrayFormatter
 {
     /**
-     * @param array $data
+     * @param array<mixed> $data
      * @param string $separator
      *
      * @return string
@@ -16,7 +16,7 @@ class ArrayFormatter
     }
 
     /**
-     * @param array $data
+     * @param array<mixed> $data
      * @param string|int $key
      * @param bool $unique
      *
@@ -36,7 +36,7 @@ class ArrayFormatter
     }
 
     /**
-     * @param array $data
+     * @param array<mixed> $data
      *
      * @return array<mixed>
      */
@@ -46,7 +46,7 @@ class ArrayFormatter
     }
 
     /**
-     * @param array $data
+     * @param array<mixed> $data
      * @param string|int $key
      * @param string $separator
      *

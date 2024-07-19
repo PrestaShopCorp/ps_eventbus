@@ -10,7 +10,7 @@ class CategoryRepository
     private $db;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     private $categoryLangCache;
 
@@ -92,9 +92,9 @@ class CategoryRepository
     }
 
     /**
-     * @param array $categoriesWithParentsInfo
+     * @param array<mixed> $categoriesWithParentsInfo
      * @param int $currentCategoryId
-     * @param array $categories
+     * @param array<mixed> $categories
      *
      * @return void
      */
@@ -180,7 +180,7 @@ class CategoryRepository
     /**
      * @param int $limit
      * @param string $langIso
-     * @param array $categoryIds
+     * @param array<mixed> $categoryIds
      *
      * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *

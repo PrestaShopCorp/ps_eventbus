@@ -57,7 +57,7 @@ class ManufacturerRepository
     /**
      * @param int $limit
      * @param string $langIso
-     * @param array $manufacturerIds
+     * @param array<mixed> $manufacturerIds
      *
      * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *

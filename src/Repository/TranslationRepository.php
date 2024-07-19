@@ -69,7 +69,7 @@ class TranslationRepository
 
     /**
      * @param int $limit
-     * @param array $translationIds
+     * @param array<mixed> $translationIds
      *
      * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *

@@ -15,7 +15,7 @@ class CountryRepository
     private $context;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     private $countryIsoCodeCache = [];
 

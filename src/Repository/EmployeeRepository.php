@@ -74,7 +74,7 @@ class EmployeeRepository
 
     /**
      * @param int $limit
-     * @param array $employeeIds
+     * @param array<mixed> $employeeIds
      *
      * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *

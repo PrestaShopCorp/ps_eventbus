@@ -72,7 +72,7 @@ class CustomerRepository
 
     /**
      * @param int $limit
-     * @param array $customerIds
+     * @param array<mixed> $customerIds
      *
      * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *

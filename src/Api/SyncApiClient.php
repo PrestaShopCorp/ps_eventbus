@@ -90,7 +90,7 @@ class SyncApiClient
     }
 
     /**
-     * @param array $shopContent
+     * @param array<mixed> $shopContent
      * @param int $shopContentId
      * @param string $action
      *
