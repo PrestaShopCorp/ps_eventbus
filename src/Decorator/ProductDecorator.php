@@ -93,7 +93,7 @@ class ProductDecorator
     /**
      * @param array $products
      *
-     * @return array
+     * @return array<mixed>
      */
     public function getBundles($products)
     {
@@ -155,7 +155,7 @@ class ProductDecorator
     /**
      * @param array $product
      *
-     * @return array
+     * @return array<mixed>
      */
     private function getBundleCollection($product)
     {

@@ -23,7 +23,7 @@ class ThemeRepository
     }
 
     /**
-     * @return array|mixed|null
+     * @return array<mixed>|mixed|null
      */
     public function getThemes()
     {

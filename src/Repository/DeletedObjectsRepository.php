@@ -27,7 +27,7 @@ class DeletedObjectsRepository
     /**
      * @param int $shopId
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */

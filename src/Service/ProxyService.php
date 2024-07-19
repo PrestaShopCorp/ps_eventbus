@@ -37,7 +37,7 @@ class ProxyService implements ProxyServiceInterface
      * @param int $scriptStartTime
      * @param bool $isFull
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws EnvVarException
      */
@@ -63,7 +63,7 @@ class ProxyService implements ProxyServiceInterface
      * @param array $data
      * @param int $scriptStartTime
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws EnvVarException
      */

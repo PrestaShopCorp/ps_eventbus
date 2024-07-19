@@ -86,7 +86,7 @@ class SynchronizationService
      * @param int $scriptStartTime
      * @param bool $isFull
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException|EnvVarException|ApiException
      */
@@ -139,7 +139,7 @@ class SynchronizationService
      * @param int $scriptStartTime
      * @param bool $isFull
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException|EnvVarException
      */
@@ -341,7 +341,7 @@ class SynchronizationService
      * @param array $syncResponse
      * @param int $remainingObjects
      *
-     * @return array
+     * @return array<mixed>
      */
     private function returnSyncResponse($data, $syncResponse, $remainingObjects)
     {

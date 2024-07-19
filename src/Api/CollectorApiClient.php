@@ -77,7 +77,7 @@ class CollectorApiClient
      * @param int $startTime in seconds since epoch
      * @param bool $fullSyncRequested
      *
-     * @return array
+     * @return array<mixed>
      */
     public function upload($jobId, $data, $startTime, $fullSyncRequested = null)
     {
@@ -119,7 +119,7 @@ class CollectorApiClient
      * @param string $data
      * @param int $startTime in seconds since epoch
      *
-     * @return array
+     * @return array<mixed>
      */
     public function uploadDelete($jobId, $data, $startTime)
     {

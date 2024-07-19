@@ -162,7 +162,7 @@ abstract class AbstractApiController extends \ModuleFrontController
     /**
      * @param PaginatedApiDataProviderInterface $dataProvider
      *
-     * @return array
+     * @return array<mixed>
      */
     protected function handleDataSync(PaginatedApiDataProviderInterface $dataProvider)
     {

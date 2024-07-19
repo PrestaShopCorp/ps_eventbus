@@ -38,7 +38,7 @@ class ModuleRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array|bool|false|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|false|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -79,7 +79,7 @@ class ModuleRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */

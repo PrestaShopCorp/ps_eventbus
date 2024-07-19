@@ -96,7 +96,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
      * @param string $langIso
      * @param array $objectIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -126,7 +126,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
     /**
      * @param array $carts
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -162,7 +162,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */

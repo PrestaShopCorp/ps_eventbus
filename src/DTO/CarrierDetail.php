@@ -208,7 +208,7 @@ class CarrierDetail implements \JsonSerializable
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getCountryIsoCodes()
     {
@@ -228,7 +228,7 @@ class CarrierDetail implements \JsonSerializable
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getStateIsoCodes()
     {

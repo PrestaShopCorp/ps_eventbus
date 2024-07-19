@@ -20,7 +20,7 @@ class ArrayFormatter
      * @param string|int $key
      * @param bool $unique
      *
-     * @return array
+     * @return array<mixed>
      */
     public function formatValueArray($data, $key, $unique = null)
     {
@@ -38,7 +38,7 @@ class ArrayFormatter
     /**
      * @param array $data
      *
-     * @return array
+     * @return array<mixed>
      */
     private function unique($data)
     {

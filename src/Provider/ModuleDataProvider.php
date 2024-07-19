@@ -29,7 +29,7 @@ class ModuleDataProvider implements PaginatedApiDataProviderInterface
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      */
     public function getFormattedData($offset, $limit, $langIso)
     {
@@ -79,7 +79,7 @@ class ModuleDataProvider implements PaginatedApiDataProviderInterface
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */

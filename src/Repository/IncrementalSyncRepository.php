@@ -117,7 +117,7 @@ class IncrementalSyncRepository
      * @param string $langIso
      * @param int $limit
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */

@@ -23,7 +23,7 @@ class CustomProductCarrierDataProvider implements PaginatedApiDataProviderInterf
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -74,7 +74,7 @@ class CustomProductCarrierDataProvider implements PaginatedApiDataProviderInterf
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */

@@ -90,7 +90,7 @@ class ServerInformationRepository
     /**
      * @param string $langIso
      *
-     * @return array[]
+     * @return array<mixed>[]
      *
      * @throws \PrestaShopException
      */
@@ -146,7 +146,7 @@ class ServerInformationRepository
     /**
      * @param bool $isAuthentifiedCall
      *
-     * @return array
+     * @return array<mixed>
      */
     public function getHealthCheckData($isAuthentifiedCall)
     {

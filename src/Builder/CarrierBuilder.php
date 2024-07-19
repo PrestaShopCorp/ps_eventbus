@@ -58,7 +58,7 @@ class CarrierBuilder
      * @param \Currency $currency
      * @param string $weightUnit
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      * @@throws \PrestaShopException

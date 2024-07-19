@@ -68,7 +68,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -113,7 +113,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -148,7 +148,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -160,7 +160,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     /**
      * @param array $orders
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -195,7 +195,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      * @param array $orders
      * @param int $langId
      *
-     * @return array|array[]
+     * @return array<mixed>|array[]
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -220,7 +220,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     /**
      * @param array $orders
      *
-     * @return array|array[]
+     * @return array<mixed>|array[]
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -323,7 +323,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     /**
      * @param array $orderStatuses
      *
-     * @return array
+     * @return array<mixed>
      */
     private function castOrderStatuses(&$orderStatuses)
     {

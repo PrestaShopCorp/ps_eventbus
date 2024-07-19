@@ -23,7 +23,7 @@ class CurrencyRepository
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getCurrenciesIsoCodes()
     {
@@ -48,7 +48,7 @@ class CurrencyRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -80,7 +80,7 @@ class CurrencyRepository
      * @param int $limit
      * @param array $currencyIds
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -114,7 +114,7 @@ class CurrencyRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */

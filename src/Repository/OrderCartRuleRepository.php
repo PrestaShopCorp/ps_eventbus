@@ -31,7 +31,7 @@ class OrderCartRuleRepository
     /**
      * @param array $orderIds
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -56,7 +56,7 @@ class OrderCartRuleRepository
     /**
      * @param array $orderIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */

@@ -34,7 +34,7 @@ class GoogleTaxonomyRepository
      * @param int $limit
      * @param int $shopId
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -68,7 +68,7 @@ class GoogleTaxonomyRepository
      * @param int $limit
      * @param int $shopId
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */

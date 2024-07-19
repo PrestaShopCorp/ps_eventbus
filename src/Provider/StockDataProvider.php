@@ -44,7 +44,7 @@ class StockDataProvider implements PaginatedApiDataProviderInterface
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -86,7 +86,7 @@ class StockDataProvider implements PaginatedApiDataProviderInterface
      * @param string $langIso
      * @param array $objectIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -118,7 +118,7 @@ class StockDataProvider implements PaginatedApiDataProviderInterface
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -131,7 +131,7 @@ class StockDataProvider implements PaginatedApiDataProviderInterface
      * @param string $langIso
      * @param array $stocks
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */

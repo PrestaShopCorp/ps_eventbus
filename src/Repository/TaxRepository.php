@@ -60,7 +60,7 @@ class TaxRepository
      * @param int $taxRulesGroupId
      * @param bool $active
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */

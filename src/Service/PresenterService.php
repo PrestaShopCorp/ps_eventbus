@@ -53,7 +53,7 @@ class PresenterService
     /**
      * @param object|\ModuleCore|false $object
      *
-     * @return array
+     * @return array<mixed>
      */
     private function convertObjectToArray($object)
     {
@@ -78,7 +78,7 @@ class PresenterService
      * @param array $requiredConsents
      * @param array $optionalConsents
      *
-     * @return array
+     * @return array<mixed>
      */
     public function expose(\ModuleCore $module, $requiredConsents = [], $optionalConsents = [])
     {

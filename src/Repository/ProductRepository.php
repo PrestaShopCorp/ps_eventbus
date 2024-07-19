@@ -75,7 +75,7 @@ class ProductRepository
      * @param int $limit
      * @param int $langId
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -115,7 +115,7 @@ class ProductRepository
      * @param array $attributeIds
      * @param int $langId
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -153,7 +153,7 @@ class ProductRepository
      * @param array $productIds
      * @param int $langId
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -189,7 +189,7 @@ class ProductRepository
     /**
      * @param array $productIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -213,7 +213,7 @@ class ProductRepository
     /**
      * @param array $attributeIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -282,7 +282,7 @@ class ProductRepository
      * @param int $langId
      * @param array $productIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -305,7 +305,7 @@ class ProductRepository
      * @param int $limit
      * @param int $langId
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */

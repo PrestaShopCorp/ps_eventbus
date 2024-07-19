@@ -234,7 +234,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getAdminControllers()
     {
