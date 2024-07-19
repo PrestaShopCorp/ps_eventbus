@@ -6,7 +6,7 @@ use PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository;
 
 class SpecificPriceService
 {
-    /** @var array */
+    /** @var array<mixed> */
     private static $_pricesLevel2;
 
     /**
@@ -206,7 +206,7 @@ class SpecificPriceService
         }
 
         // reference parameter is filled before any returns
-        /** @var array $specific_price */
+        /** @var array<mixed> $specific_price */
         $specific_price = $this->getSpecificPrice($specificPriceId);
 
         // fetch price & attribute price
@@ -378,7 +378,7 @@ class SpecificPriceService
      *
      * @param int $specificPriceId
      *
-     * @return array|bool|false|object|null
+     * @return array<mixed>|bool|false|object|null
      */
     private function getSpecificPrice($specificPriceId)
     {

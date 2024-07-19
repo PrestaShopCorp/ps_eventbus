@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Decorator;
 class CustomerDecorator
 {
     /**
-     * @param array $customers
+     * @param array<mixed> $customers
      *
      * @return void
      */
@@ -18,7 +18,7 @@ class CustomerDecorator
     }
 
     /**
-     * @param array $customer
+     * @param array<mixed> $customer
      *
      * @return void
      */
@@ -35,7 +35,7 @@ class CustomerDecorator
     }
 
     /**
-     * @param array $customer
+     * @param array<mixed> $customer
      *
      * @return void
      */

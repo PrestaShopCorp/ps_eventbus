@@ -30,7 +30,7 @@ class CartRuleRepository
      * @param int $limit
      * @param int $offset
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -56,9 +56,9 @@ class CartRuleRepository
 
     /**
      * @param int $limit
-     * @param array $cartRuleIds
+     * @param array<mixed> $cartRuleIds
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -90,7 +90,7 @@ class CartRuleRepository
      * @param int $limit
      * @param int $offset
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */

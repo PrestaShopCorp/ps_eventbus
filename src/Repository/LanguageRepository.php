@@ -24,7 +24,7 @@ class LanguageRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -54,9 +54,9 @@ class LanguageRepository
 
     /**
      * @param int $limit
-     * @param array $languageIds
+     * @param array<mixed> $languageIds
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -106,11 +106,11 @@ class LanguageRepository
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getLanguagesIsoCodes()
     {
-        /** @var array $languages */
+        /** @var array<mixed> $languages */
         $languages = \Language::getLanguages();
 
         return array_map(function ($language) {
@@ -143,7 +143,7 @@ class LanguageRepository
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getLanguages()
     {
@@ -154,7 +154,7 @@ class LanguageRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */

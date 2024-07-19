@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Decorator;
 class CurrencyDecorator
 {
     /**
-     * @param array $currencies
+     * @param array<mixed> $currencies
      *
      * @return void
      */
@@ -17,7 +17,7 @@ class CurrencyDecorator
     }
 
     /**
-     * @param array $currency
+     * @param array<mixed> $currency
      *
      * @return void
      */

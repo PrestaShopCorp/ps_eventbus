@@ -38,7 +38,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 class Ps_eventbus extends Module
 {
     /**
-     * @var array
+     * @var array<mixed>
      */
     public $adminControllers;
 
@@ -50,7 +50,7 @@ class Ps_eventbus extends Module
     const DEFAULT_ENV = '';
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     const REQUIRED_TABLES = [
         'eventbus_type_sync',
@@ -67,7 +67,7 @@ class Ps_eventbus extends Module
     /**
      * List of hook to install at the installation of the module
      *
-     * @var array
+     * @var array<mixed>
      */
     private $hookToInstall = [
         'actionObjectCarrierAddAfter',
@@ -234,7 +234,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getAdminControllers()
     {
@@ -324,7 +324,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -348,7 +348,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -371,7 +371,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -394,7 +394,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -416,7 +416,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -439,7 +439,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -462,7 +462,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -484,7 +484,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -507,7 +507,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -530,7 +530,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -552,7 +552,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -575,7 +575,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -598,7 +598,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -621,7 +621,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -647,7 +647,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -675,7 +675,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -697,7 +697,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -720,7 +720,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -743,7 +743,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -766,7 +766,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -789,7 +789,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -811,7 +811,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -834,7 +834,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -857,7 +857,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -881,7 +881,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -905,7 +905,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -929,7 +929,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -952,7 +952,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -976,7 +976,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -1000,7 +1000,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -1023,7 +1023,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -1047,7 +1047,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -1071,7 +1071,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -1094,7 +1094,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -1117,7 +1117,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -1140,7 +1140,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -1163,7 +1163,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -1186,7 +1186,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -1209,7 +1209,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -1232,7 +1232,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -1255,7 +1255,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -1279,7 +1279,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -1303,7 +1303,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -1638,7 +1638,7 @@ class Ps_eventbus extends Module
      * this hook and try to dump() the content, no dump appears in the symfony debugger, and no more hooks appear.
      * For security reasons, I like to use the before hook, and put it in a try/catch
      *
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -1675,7 +1675,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -1701,7 +1701,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */
@@ -1727,7 +1727,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param array $parameters
+     * @param array<mixed> $parameters
      *
      * @return void
      */

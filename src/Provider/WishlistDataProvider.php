@@ -23,7 +23,7 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
      */
     private $wishlistDecorator;
     /**
-     * @var ArrayFormatter
+     * @var arrayFormatter
      */
     private $arrayFormatter;
 
@@ -44,7 +44,7 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -86,7 +86,7 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -118,7 +118,7 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -128,9 +128,9 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
-     * @param array $wishlists
+     * @param array<mixed> $wishlists
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */

@@ -67,7 +67,7 @@ class SyncApiClient
     /**
      * @param string $jobId
      *
-     * @return array|bool
+     * @return array<mixed>|bool
      */
     public function validateJobId($jobId)
     {
@@ -90,11 +90,11 @@ class SyncApiClient
     }
 
     /**
-     * @param array $shopContent
+     * @param array<mixed> $shopContent
      * @param int $shopContentId
      * @param string $action
      *
-     * @return array
+     * @return array<mixed>
      */
     public function liveSync($shopContent, $shopContentId, $action)
     {

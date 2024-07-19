@@ -30,7 +30,7 @@ class SpecificPriceRepository
     /**
      * @param int $specificPriceId
      *
-     * @return array|bool|false|object|null
+     * @return array<mixed>|bool|false|object|null
      *
      * @throws \PrestaShopDatabaseException
      */

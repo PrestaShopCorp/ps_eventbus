@@ -41,10 +41,10 @@ class OrderDetailsRepository
     }
 
     /**
-     * @param array $orderIds
+     * @param array<mixed> $orderIds
      * @param int $shopId
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -72,9 +72,9 @@ class OrderDetailsRepository
     }
 
     /**
-     * @param array $orderIds
+     * @param array<mixed> $orderIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */

@@ -23,7 +23,7 @@ class ps_EventbusApiThemesModuleFrontController extends AbstractApiController
         /** @var ThemeRepository $themeRepository */
         $themeRepository = $this->module->getService(ThemeRepository::class);
 
-        /** @var array $themeInfo */
+        /** @var array<mixed> $themeInfo */
         $themeInfo = $themeRepository->getThemes();
 
         /** @var bool $initFullSync */

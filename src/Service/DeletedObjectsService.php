@@ -30,7 +30,7 @@ class DeletedObjectsService
      * @param string $jobId
      * @param int $scriptStartTime
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException|EnvVarException
      */
@@ -77,9 +77,9 @@ class DeletedObjectsService
     }
 
     /**
-     * @param array $data
+     * @param array<mixed> $data
      *
-     * @return array
+     * @return array<mixed>
      */
     private function formatData($data)
     {

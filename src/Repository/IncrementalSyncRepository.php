@@ -40,7 +40,7 @@ class IncrementalSyncRepository
     }
 
     /**
-     * @param array $data
+     * @param array<mixed> $data
      *
      * @return bool
      */
@@ -96,7 +96,7 @@ class IncrementalSyncRepository
 
     /**
      * @param string $type
-     * @param array $objectIds
+     * @param array<mixed> $objectIds
      * @param string $langIso
      *
      * @return bool
@@ -117,7 +117,7 @@ class IncrementalSyncRepository
      * @param string $langIso
      * @param int $limit
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */

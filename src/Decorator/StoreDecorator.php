@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Decorator;
 class StoreDecorator
 {
     /**
-     * @param array $stores
+     * @param array<mixed> $stores
      *
      * @return void
      */
@@ -17,7 +17,7 @@ class StoreDecorator
     }
 
     /**
-     * @param array $store
+     * @param array<mixed> $store
      *
      * @return void
      */

@@ -56,7 +56,7 @@ class StoreRepository
      * @param int $limit
      * @param string $langIso
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -91,9 +91,9 @@ class StoreRepository
     /**
      * @param int $limit
      * @param string $langIso
-     * @param array $storeIds
+     * @param array<mixed> $storeIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -116,7 +116,7 @@ class StoreRepository
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
