@@ -23,7 +23,7 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
      */
     private $wishlistDecorator;
     /**
-     * @var arrayFormatter
+     * @var ArrayFormatter
      */
     private $arrayFormatter;
 

@@ -25,7 +25,7 @@ class MultipartBody implements StreamInterface
 
     /**
      * @param array<mixed> $fields associative array of field names to values where
-     *                      each value is a string or array of strings
+     *                             each value is a string or array of strings
      * @param array<mixed> $files Associative array of PostFileInterface objects
      * @param string $boundary You can optionally provide a specific boundary
      *

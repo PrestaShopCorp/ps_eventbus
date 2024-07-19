@@ -20,7 +20,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      */
     private $context;
     /**
-     * @var arrayFormatter
+     * @var ArrayFormatter
      */
     private $arrayFormatter;
     /**

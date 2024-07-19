@@ -28,7 +28,7 @@ class ProductDecorator
      */
     private $categoryRepository;
     /**
-     * @var arrayFormatter
+     * @var ArrayFormatter
      */
     private $arrayFormatter;
     /**

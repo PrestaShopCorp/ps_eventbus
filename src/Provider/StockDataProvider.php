@@ -23,7 +23,7 @@ class StockDataProvider implements PaginatedApiDataProviderInterface
      */
     private $stockDecorator;
     /**
-     * @var arrayFormatter
+     * @var ArrayFormatter
      */
     private $arrayFormatter;
 

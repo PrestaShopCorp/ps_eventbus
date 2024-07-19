@@ -161,7 +161,7 @@ class Ps_eventbus extends Module
     ];
 
     /**
-     * @var \PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer
+     * @var PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer
      */
     private $serviceContainer;
 
@@ -219,14 +219,14 @@ class Ps_eventbus extends Module
         }
 
         if ($this->context->shop === null) {
-            throw new \PrestaShopException('No shop context');
+            throw new PrestaShopException('No shop context');
         }
 
         $this->shopId = (int) $this->context->shop->id;
     }
 
     /**
-     * @return \Context
+     * @return Context
      */
     public function getContext()
     {
@@ -254,7 +254,7 @@ class Ps_eventbus extends Module
             return defined('PS_INSTALLATION_IN_PROGRESS');
         }
 
-        $installer = new Install($this, \Db::getInstance());
+        $installer = new Install($this, Db::getInstance());
 
         return $installer->installDatabaseTables()
             && parent::install()
@@ -266,7 +266,7 @@ class Ps_eventbus extends Module
      */
     public function uninstall()
     {
-        $uninstaller = new Uninstall($this, \Db::getInstance());
+        $uninstaller = new Uninstall($this, Db::getInstance());
 
         return $uninstaller->uninstallMenu()
             && $uninstaller->uninstallDatabaseTables()
@@ -292,7 +292,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @return \PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer
+     * @return PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer
      *
      * @throws Exception
      */
@@ -300,7 +300,7 @@ class Ps_eventbus extends Module
     {
         if (null === $this->serviceContainer) {
             // append version number to force cache generation (1.6 Core won't clear it)
-            $this->serviceContainer = new \PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer(
+            $this->serviceContainer = new PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer(
                 $this->name . str_replace(['.', '-', '+'], '', $this->version),
                 $this->getLocalPath(),
                 $this->getModuleEnv()
@@ -1669,7 +1669,7 @@ class Ps_eventbus extends Module
                     );
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return;
         }
     }
