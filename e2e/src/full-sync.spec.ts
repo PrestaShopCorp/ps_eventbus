@@ -76,10 +76,15 @@ describe('Full Sync', () => {
       // arrange
       const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
 
+      const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
+
       // act
       const response = await axios
-        .post(url, {
-          headers: { Host: testConfig.prestaShopHostHeader },
+        .post(url, callId, {
+          headers: { 
+            Host: testConfig.prestaShopHostHeader,
+            'Content-Type': 'application/x-www-form-urlencoded' // for compat PHP 5.6
+          },
         })
         .catch((err) => {
           expect(err).toBeInstanceOf(AxiosError);
@@ -98,15 +103,14 @@ describe('Full Sync', () => {
       // arrange
       const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
 
-      // for compatibility PHP 5.6, we need to pass form-urlencoded param.
-      const fakeData = { foo: 'bar' };
+      const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
 
       // act
       const response = await axios
-        .post(url, fakeData, {
+        .post(url, callId, {
           headers: {
             Host: testConfig.prestaShopHostHeader,
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded' // for compat PHP 5.6
           },
         })
         .catch((err) => {
@@ -132,15 +136,14 @@ describe('Full Sync', () => {
         const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
         const message$ = probe({ url: `/upload/${jobId}` });
 
-        // for compatibility PHP 5.6, we need to pass form-urlencoded param.
-        const fakeData = { foo: 'bar' };
+        const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
 
         // act
         const request$ = from(
-          axios.post(url, fakeData, {
+          axios.post(url, callId, {
             headers: {
               Host: testConfig.prestaShopHostHeader,
-              'Content-Type': 'application/x-www-form-urlencoded'
+              'Content-Type': 'application/x-www-form-urlencoded' // for compat PHP 5.6
             },
           })
         );
@@ -169,11 +172,11 @@ describe('Full Sync', () => {
       it.skip(`${controller} should upload complete dataset to collector`, () => {});
     } else {
       it(`${controller} should upload complete dataset collector`, async () => {
-        console.log(controller);
+        
         // arrange
         const fullSync$ = doFullSync(jobId, controller, { timeout: 4000 });
         const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 4000 });
-        
+
         // act
         const syncedData: PsEventbusSyncUpload[] = await lastValueFrom(
           zip(fullSync$, message$).pipe(
