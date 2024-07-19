@@ -59,7 +59,7 @@ runs:
       run: |
         FLASHLIGHT_BASE_IMAGE="prestashop/prestashop-flashlight"
         if [[ "${{ inputs.ps-version }}" != "latest" ]]; then
-          sed -i 's+${FLASHLIGHT_BASE_IMAGE}:latest/${FLASHLIGHT_BASE_IMAGE}:${PS_VERSION}/g' .env.dist
+          sed -i 's+${FLASHLIGHT_BASE_IMAGE}:latest/${FLASHLIGHT_BASE_IMAGE}:${{inputs.ps-version}}-${{inputs.php-version}}/g' .env.dist
         fi;
         cp .env.dist .env
         docker compose build

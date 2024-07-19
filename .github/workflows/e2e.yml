@@ -33,6 +33,16 @@ jobs:
             php-version: 7.1
           - ps-version: 1.7.3.4
             php-version: 7.1
+          - ps-version: 1.7.2.5
+            php-version: 7.1
+          - ps-version: 1.7.1.2
+            php-version: 7.1
+          - ps-version: 1.7.0.6
+            php-version: 7.1
+          - ps-version: 1.6.1.24
+            php-version: 7.1
+          - ps-version: 1.7.3.4
+            php-version: 7.1
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
