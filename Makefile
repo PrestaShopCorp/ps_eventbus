@@ -188,6 +188,13 @@ phpstan: tools/vendor ${PS_ROOT_DIR}
 docker-phpstan:
 	@$(call in_docker,/usr/bin/phpstan,analyse --memory-limit=-1 --configuration=./tests/phpstan/phpstan-docker.neon)
 
+# target: rector (or docker-rector)                          - Run rector tests
+.PHONY: rector docker-rector
+rector: tools/vendor
+	rector
+docker-rector: tools/vendor
+	@$(call in_docker,make,rector)
+
 # target: docker-test                                          - Static and unit testing in docker
 .PHONY: docker-test
 docker-test: docker-lint docker-phpstan docker-phpunit
