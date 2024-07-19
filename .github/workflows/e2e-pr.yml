@@ -23,7 +23,7 @@ on:
         ps1.7.7.x with 7.3, 7.2, 7.1 \n
         ps1.7.5.x & ps1.7.6.x with php 7.2, 7.1, 7.0 \n
         ps1.7.0.x to ps1.7.4.x with php 7.1, 7.0
-        ps1.6.1.x with php 7.1, 7.0, 5.6'
+        ps1.6.1.x with php 7.1, 7.0, 5.6, 5.5, 5.4, 5.3, 5.2'
         default: 'latest'
         type: choice
         options:
