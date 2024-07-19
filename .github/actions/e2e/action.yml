@@ -13,7 +13,7 @@ inputs:
     required: true
   docker-compose-version:
     description: Docker compose version
-    required: trur
+    required: true
 
 runs:
   using: composite
