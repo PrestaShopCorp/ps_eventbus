@@ -53,6 +53,10 @@ on:
           - 7.1
           - 7.0
           - 5.6
+          - 5.5
+          - 5.4
+          - 5.3
+          - 5.2
 
 env:
   DOCKER_COMPOSE_VERSION: v2.27.0
