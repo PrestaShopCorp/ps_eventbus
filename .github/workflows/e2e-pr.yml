@@ -1,4 +1,4 @@
-name: E2e
+name: E2e PR
 
 on:
   workflow_call:

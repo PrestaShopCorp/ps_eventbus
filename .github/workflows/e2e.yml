@@ -70,7 +70,7 @@ jobs:
           SLACK_MESSAGE: The latest E2E Capture tests failed :(
           SLACK_FOOTER: 'Review the last github actions here: https://github.com/PrestaShopCorp/cloudsync/actions/workflows/e2e.yml'
           SLACK_USERNAME: QABot
-          SLACK_CHANNEL: squad-cloudsync-dev
+          SLACK_CHANNEL: squad-cloudsync-qa
           SLACK_ICON: https://avatars.githubusercontent.com/u/56089550?s=48&v=4
 
       - name: Slack notification on success
@@ -83,5 +83,5 @@ jobs:
           SLACK_MESSAGE: ✓ The latest E2E Capture tests just passed!
           SLACK_FOOTER: ''
           SLACK_USERNAME: QABot
-          SLACK_CHANNEL: cloudsync-alerting
+          SLACK_CHANNEL: squad-cloudsync-qa
           SLACK_ICON: https://avatars.githubusercontent.com/u/56089550?s=48&v=4
