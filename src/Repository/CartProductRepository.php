@@ -30,12 +30,12 @@ class CartProductRepository
 
         $shopId = (int) $this->context->shop->id;
 
-        $query = new \DbQuery();
+        $dbQuery = new \DbQuery();
 
-        $query->from('cart_product', 'cp')
+        $dbQuery->from('cart_product', 'cp')
             ->where('cp.id_shop = ' . $shopId);
 
-        return $query;
+        return $dbQuery;
     }
 
     /**
@@ -47,14 +47,14 @@ class CartProductRepository
      */
     public function getCartProducts(array $cartIds)
     {
-        $query = $this->getBaseQuery();
+        $dbQuery = $this->getBaseQuery();
 
-        $query->select('cp.id_cart, cp.id_product, cp.id_product_attribute, cp.quantity, cp.date_add as created_at');
+        $dbQuery->select('cp.id_cart, cp.id_product, cp.id_product_attribute, cp.quantity, cp.date_add as created_at');
 
-        if (!empty($cartIds)) {
-            $query->where('cp.id_cart IN (' . implode(',', array_map('intval', $cartIds)) . ')');
+        if ($cartIds !== []) {
+            $dbQuery->where('cp.id_cart IN (' . implode(',', array_map('intval', $cartIds)) . ')');
         }
 
-        return $this->db->executeS($query);
+        return $this->db->executeS($dbQuery);
     }
 }

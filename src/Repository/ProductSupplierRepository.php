@@ -19,10 +19,10 @@ class ProductSupplierRepository
      */
     public function getBaseQuery()
     {
-        $query = new \DbQuery();
-        $query->from('product_supplier', 'ps');
+        $dbQuery = new \DbQuery();
+        $dbQuery->from('product_supplier', 'ps');
 
-        return $query;
+        return $dbQuery;
     }
 
     /**
@@ -35,13 +35,13 @@ class ProductSupplierRepository
      */
     public function getProductSuppliers($offset, $limit)
     {
-        $query = $this->getBaseQuery();
+        $dbQuery = $this->getBaseQuery();
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->limit($limit, $offset);
+        $dbQuery->limit($limit, $offset);
 
-        return $this->db->executeS($query);
+        return $this->db->executeS($dbQuery);
     }
 
     /**
@@ -67,14 +67,14 @@ class ProductSupplierRepository
      */
     public function getProductSuppliersIncremental($limit, $productIds)
     {
-        $query = $this->getBaseQuery();
+        $dbQuery = $this->getBaseQuery();
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->where('ps.id_product IN(' . implode(',', array_map('intval', $productIds)) . ')')
+        $dbQuery->where('ps.id_product IN(' . implode(',', array_map('intval', $productIds)) . ')')
             ->limit($limit);
 
-        return $this->db->executeS($query);
+        return $this->db->executeS($dbQuery);
     }
 
     /**
@@ -87,28 +87,28 @@ class ProductSupplierRepository
      */
     public function getQueryForDebug($offset, $limit)
     {
-        $query = $this->getBaseQuery();
+        $dbQuery = $this->getBaseQuery();
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->limit($limit, $offset);
+        $dbQuery->limit($limit, $offset);
 
-        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+        $queryStringified = preg_replace('/\s+/', ' ', $dbQuery->build());
 
         return array_merge(
-            (array) $query,
+            (array) $dbQuery,
             ['queryStringified' => $queryStringified]
         );
     }
 
     /**
-     * @param \DbQuery $query
+     * @param \DbQuery $dbQuery
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $query)
+    private function addSelectParameters(\DbQuery $dbQuery)
     {
-        $query->select('ps.id_product_supplier, ps.id_product, ps.id_product_attribute, ps.id_supplier, ps.product_supplier_reference');
-        $query->select('ps.product_supplier_price_te, ps.id_currency');
+        $dbQuery->select('ps.id_product_supplier, ps.id_product, ps.id_product_attribute, ps.id_supplier, ps.product_supplier_reference');
+        $dbQuery->select('ps.product_supplier_price_te, ps.id_currency');
     }
 }

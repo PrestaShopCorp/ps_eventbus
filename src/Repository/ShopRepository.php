@@ -19,13 +19,13 @@ class ShopRepository
      */
     public function getMultiShopCount()
     {
-        $query = new \DbQuery();
+        $dbQuery = new \DbQuery();
 
-        $query->select('COUNT(id_shop)')
+        $dbQuery->select('COUNT(id_shop)')
             ->from('shop')
             ->where('active = 1 and deleted = 0');
 
-        return (int) $this->db->getValue($query);
+        return (int) $this->db->getValue($dbQuery);
     }
 
     /**
@@ -33,13 +33,13 @@ class ShopRepository
      */
     public function getCreatedAt()
     {
-        $query = new \DbQuery();
+        $dbQuery = new \DbQuery();
 
-        $query->select('date_add as created_at')
+        $dbQuery->select('date_add as created_at')
           ->from('configuration')
           ->where('name = "PS_INSTALL_VERSION"');
 
-        return (string) $this->db->getValue($query);
+        return (string) $this->db->getValue($dbQuery);
     }
 
     /**
@@ -49,12 +49,12 @@ class ShopRepository
      */
     public function getShopCountryCode()
     {
-        $query = new \DbQuery();
+        $dbQuery = new \DbQuery();
 
-        $query->select('iso_code')
+        $dbQuery->select('iso_code')
           ->from('country')
           ->where('active = 1');
 
-        return (string) $this->db->getValue($query);
+        return (string) $this->db->getValue($dbQuery);
     }
 }

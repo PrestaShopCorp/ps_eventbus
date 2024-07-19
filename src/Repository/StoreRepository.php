@@ -35,20 +35,20 @@ class StoreRepository
         $shopId = (int) $this->context->shop->id;
         $langId = (int) \Language::getIdByIso($langIso);
 
-        $query = new \DbQuery();
+        $dbQuery = new \DbQuery();
 
         // https://github.com/PrestaShop/PrestaShop/commit/7dda2be62d8bd606edc269fa051c36ea68f81682#diff-e98d435095567c145b49744715fd575eaab7050328c211b33aa9a37158421ff4R2004
         if (version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
-            $query->from(self::STORES_TABLE, 's')
+            $dbQuery->from(self::STORES_TABLE, 's')
                 ->leftJoin('store_lang', 'sl', 's.id_store = sl.id_store')
                 ->leftJoin('store_shop', 'ss', 's.id_store = ss.id_store')
                 ->where('ss.id_shop = ' . (int) $shopId)
                 ->where('sl.id_lang = ' . (int) $langId);
         } else {
-            $query->from(self::STORES_TABLE, 's');
+            $dbQuery->from(self::STORES_TABLE, 's');
         }
 
-        return $query;
+        return $dbQuery;
     }
 
     /**
@@ -62,13 +62,13 @@ class StoreRepository
      */
     public function getStores($offset, $limit, $langIso)
     {
-        $query = $this->getBaseQuery($langIso);
+        $dbQuery = $this->getBaseQuery($langIso);
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->limit((int) $limit, (int) $offset);
+        $dbQuery->limit((int) $limit, (int) $offset);
 
-        return $this->db->executeS($query);
+        return $this->db->executeS($dbQuery);
     }
 
     /**
@@ -81,7 +81,7 @@ class StoreRepository
     {
         $stores = $this->getStores($offset, 1, $langIso);
 
-        if (!is_array($stores) || empty($stores)) {
+        if (!is_array($stores) || $stores === []) {
             return 0;
         }
 
@@ -99,14 +99,14 @@ class StoreRepository
      */
     public function getStoresIncremental($limit, $langIso, $storeIds)
     {
-        $query = $this->getBaseQuery($langIso);
+        $dbQuery = $this->getBaseQuery($langIso);
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->where('s.id_store IN(' . implode(',', array_map('intval', $storeIds)) . ')')
+        $dbQuery->where('s.id_store IN(' . implode(',', array_map('intval', $storeIds)) . ')')
             ->limit($limit);
 
-        $result = $this->db->executeS($query);
+        $result = $this->db->executeS($dbQuery);
 
         return is_array($result) ? $result : [];
     }
@@ -122,49 +122,49 @@ class StoreRepository
      */
     public function getQueryForDebug($offset, $limit, $langIso)
     {
-        $query = $this->getBaseQuery($langIso);
+        $dbQuery = $this->getBaseQuery($langIso);
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->limit($limit, $offset);
+        $dbQuery->limit($limit, $offset);
 
-        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+        $queryStringified = preg_replace('/\s+/', ' ', $dbQuery->build());
 
         return array_merge(
-            (array) $query,
+            (array) $dbQuery,
             ['queryStringified' => $queryStringified]
         );
     }
 
     /**
-     * @param \DbQuery $query
+     * @param \DbQuery $dbQuery
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $query)
+    private function addSelectParameters(\DbQuery $dbQuery)
     {
-        $query->select('s.id_store');
-        $query->select('s.id_country');
-        $query->select('s.id_state');
-        $query->select('s.city');
-        $query->select('s.postcode');
-        $query->select('s.active');
-        $query->select('s.date_add as created_at');
-        $query->select('s.date_upd as updated_at');
+        $dbQuery->select('s.id_store');
+        $dbQuery->select('s.id_country');
+        $dbQuery->select('s.id_state');
+        $dbQuery->select('s.city');
+        $dbQuery->select('s.postcode');
+        $dbQuery->select('s.active');
+        $dbQuery->select('s.date_add as created_at');
+        $dbQuery->select('s.date_upd as updated_at');
 
         // https://github.com/PrestaShop/PrestaShop/commit/7dda2be62d8bd606edc269fa051c36ea68f81682#diff-e98d435095567c145b49744715fd575eaab7050328c211b33aa9a37158421ff4R2004
         if (version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
-            $query->select('sl.id_lang');
-            $query->select('sl.name');
-            $query->select('sl.address1');
-            $query->select('sl.address2');
-            $query->select('sl.hours');
-            $query->select('ss.id_shop');
+            $dbQuery->select('sl.id_lang');
+            $dbQuery->select('sl.name');
+            $dbQuery->select('sl.address1');
+            $dbQuery->select('sl.address2');
+            $dbQuery->select('sl.hours');
+            $dbQuery->select('ss.id_shop');
         } else {
-            $query->select('s.name');
-            $query->select('s.address1');
-            $query->select('s.address2');
-            $query->select('s.hours');
+            $dbQuery->select('s.name');
+            $dbQuery->select('s.address1');
+            $dbQuery->select('s.address2');
+            $dbQuery->select('s.hours');
         }
     }
 }

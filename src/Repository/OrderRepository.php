@@ -23,8 +23,8 @@ class OrderRepository
      */
     public function getBaseQuery($shopId)
     {
-        $query = new \DbQuery();
-        $query->from(self::ORDERS_TABLE, 'o')
+        $dbQuery = new \DbQuery();
+        $dbQuery->from(self::ORDERS_TABLE, 'o')
             ->leftJoin('currency', 'c', 'o.id_currency = c.id_currency')
             ->leftJoin('order_slip', 'os', 'o.id_order = os.id_order')
             ->leftJoin('address', 'ad', 'ad.id_address = o.id_address_delivery')
@@ -36,7 +36,7 @@ class OrderRepository
             ->where('o.id_shop = ' . (int) $shopId)
             ->groupBy('o.id_order');
 
-        return $query;
+        return $dbQuery;
     }
 
     /**
@@ -50,13 +50,13 @@ class OrderRepository
      */
     public function getOrders($offset, $limit, $shopId)
     {
-        $query = $this->getBaseQuery($shopId);
+        $dbQuery = $this->getBaseQuery($shopId);
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->limit((int) $limit, (int) $offset);
+        $dbQuery->limit((int) $limit, (int) $offset);
 
-        return $this->db->executeS($query);
+        return $this->db->executeS($dbQuery);
     }
 
     /**
@@ -69,7 +69,7 @@ class OrderRepository
     {
         $orders = $this->getOrders($offset, 1, $shopId);
 
-        if (!is_array($orders) || empty($orders)) {
+        if (!is_array($orders) || $orders === []) {
             return 0;
         }
 
@@ -87,14 +87,14 @@ class OrderRepository
      */
     public function getOrdersIncremental($limit, $shopId, $orderIds)
     {
-        $query = $this->getBaseQuery($shopId);
+        $dbQuery = $this->getBaseQuery($shopId);
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->where('o.id_order IN(' . implode(',', array_map('intval', $orderIds)) . ')')
+        $dbQuery->where('o.id_order IN(' . implode(',', array_map('intval', $orderIds)) . ')')
             ->limit($limit);
 
-        $result = $this->db->executeS($query);
+        $result = $this->db->executeS($dbQuery);
 
         return is_array($result) ? $result : [];
     }
@@ -110,40 +110,40 @@ class OrderRepository
      */
     public function getQueryForDebug($offset, $limit, $shopId)
     {
-        $query = $this->getBaseQuery($shopId);
+        $dbQuery = $this->getBaseQuery($shopId);
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->limit((int) $limit, (int) $offset);
+        $dbQuery->limit((int) $limit, (int) $offset);
 
-        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+        $queryStringified = preg_replace('/\s+/', ' ', $dbQuery->build());
 
         return array_merge(
-            (array) $query,
+            (array) $dbQuery,
             ['queryStringified' => $queryStringified]
         );
     }
 
     /**
-     * @param \DbQuery $query
+     * @param \DbQuery $dbQuery
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $query)
+    private function addSelectParameters(\DbQuery $dbQuery)
     {
-        $query->select('o.id_order, o.reference, o.id_customer, o.id_cart, o.current_state');
-        $query->select('o.conversion_rate, o.total_paid_tax_excl, o.total_paid_tax_incl');
-        $query->select('IF((SELECT so.id_order FROM `' . _DB_PREFIX_ . 'orders` so WHERE so.id_customer = o.id_customer AND so.id_order < o.id_order LIMIT 1) > 0, 0, 1) as new_customer');
-        $query->select('c.iso_code as currency, SUM(os.total_products_tax_incl + os.total_shipping_tax_incl) as refund');
-        $query->select('SUM(os.total_products_tax_excl + os.total_shipping_tax_excl) as refund_tax_excl, o.module as payment_module');
-        $query->select('o.payment as payment_mode, o.total_paid_real, o.total_shipping as shipping_cost, o.date_add as created_at');
-        $query->select('o.date_upd as updated_at, o.id_carrier');
-        $query->select('o.payment as payment_name');
-        $query->select('CONCAT(CONCAT("delivery", ":", cntd.iso_code), ",", CONCAT("invoice", ":", cnti.iso_code)) as address_iso');
-        $query->select('o.valid as is_validated');
-        $query->select('ost.paid as is_paid');
-        $query->select('ost.shipped as is_shipped');
-        $query->select('osl.name as status_label');
-        $query->select('o.module as payment_name');
+        $dbQuery->select('o.id_order, o.reference, o.id_customer, o.id_cart, o.current_state');
+        $dbQuery->select('o.conversion_rate, o.total_paid_tax_excl, o.total_paid_tax_incl');
+        $dbQuery->select('IF((SELECT so.id_order FROM `' . _DB_PREFIX_ . 'orders` so WHERE so.id_customer = o.id_customer AND so.id_order < o.id_order LIMIT 1) > 0, 0, 1) as new_customer');
+        $dbQuery->select('c.iso_code as currency, SUM(os.total_products_tax_incl + os.total_shipping_tax_incl) as refund');
+        $dbQuery->select('SUM(os.total_products_tax_excl + os.total_shipping_tax_excl) as refund_tax_excl, o.module as payment_module');
+        $dbQuery->select('o.payment as payment_mode, o.total_paid_real, o.total_shipping as shipping_cost, o.date_add as created_at');
+        $dbQuery->select('o.date_upd as updated_at, o.id_carrier');
+        $dbQuery->select('o.payment as payment_name');
+        $dbQuery->select('CONCAT(CONCAT("delivery", ":", cntd.iso_code), ",", CONCAT("invoice", ":", cnti.iso_code)) as address_iso');
+        $dbQuery->select('o.valid as is_validated');
+        $dbQuery->select('ost.paid as is_paid');
+        $dbQuery->select('ost.shipped as is_shipped');
+        $dbQuery->select('osl.name as status_label');
+        $dbQuery->select('o.module as payment_name');
     }
 }

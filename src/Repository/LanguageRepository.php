@@ -30,13 +30,13 @@ class LanguageRepository
      */
     public function getLanguagesSync($offset, $limit)
     {
-        $query = $this->getBaseQuery();
+        $dbQuery = $this->getBaseQuery();
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->limit($limit, $offset);
+        $dbQuery->limit($limit, $offset);
 
-        return $this->db->executeS($query);
+        return $this->db->executeS($dbQuery);
     }
 
     /**
@@ -62,14 +62,14 @@ class LanguageRepository
      */
     public function getLanguagesIncremental($limit, $languageIds)
     {
-        $query = $this->getBaseQuery();
+        $dbQuery = $this->getBaseQuery();
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->where('la.id_lang IN(' . implode(',', array_map('intval', $languageIds)) . ')')
+        $dbQuery->where('la.id_lang IN(' . implode(',', array_map('intval', $languageIds)) . ')')
             ->limit($limit);
 
-        return $this->db->executeS($query);
+        return $this->db->executeS($dbQuery);
     }
 
     /**
@@ -82,27 +82,27 @@ class LanguageRepository
         }
 
         $shopId = (int) $this->context->shop->id;
-        $query = new \DbQuery();
-        $query->from('lang', 'la')
+        $dbQuery = new \DbQuery();
+        $dbQuery->from('lang', 'la')
             ->innerJoin('lang_shop', 'las', 'la.id_lang = las.id_lang AND las.id_shop = ' . $shopId);
 
-        return $query;
+        return $dbQuery;
     }
 
     /**
-     * @param \DbQuery $query
+     * @param \DbQuery $dbQuery
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $query)
+    private function addSelectParameters(\DbQuery $dbQuery)
     {
         // https://github.com/PrestaShop/PrestaShop/commit/481111b8274ed005e1c4a8ce2cf2b3ebbeb9a270#diff-c123d3d30d9c9e012a826a21887fccce6600a2f2a848a58d5910e55f0f8f5093R41
         if (version_compare(_PS_VERSION_, '1.7.0.0', '>=')) {
-            $query->select('la.locale');
+            $dbQuery->select('la.locale');
         }
 
-        $query->select('la.id_lang, la.name, la.active, la.iso_code, la.language_code, la.date_format_lite');
-        $query->select('la.date_format_full, la.is_rtl, las.id_shop');
+        $dbQuery->select('la.id_lang, la.name, la.active, la.iso_code, la.language_code, la.date_format_lite');
+        $dbQuery->select('la.date_format_full, la.is_rtl, las.id_shop');
     }
 
     /**
@@ -160,16 +160,16 @@ class LanguageRepository
      */
     public function getQueryForDebug($offset, $limit)
     {
-        $query = $this->getBaseQuery();
+        $dbQuery = $this->getBaseQuery();
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->limit($limit, $offset);
+        $dbQuery->limit($limit, $offset);
 
-        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+        $queryStringified = preg_replace('/\s+/', ' ', $dbQuery->build());
 
         return array_merge(
-            (array) $query,
+            (array) $dbQuery,
             ['queryStringified' => $queryStringified]
         );
     }

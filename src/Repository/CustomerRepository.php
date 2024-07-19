@@ -31,11 +31,11 @@ class CustomerRepository
 
         $shopId = (int) $this->context->shop->id;
 
-        $query = new \DbQuery();
-        $query->from('customer', 'c')
+        $dbQuery = new \DbQuery();
+        $dbQuery->from('customer', 'c')
             ->where('c.id_shop = ' . $shopId);
 
-        return $query;
+        return $dbQuery;
     }
 
     /**
@@ -48,13 +48,13 @@ class CustomerRepository
      */
     public function getCustomers($offset, $limit)
     {
-        $query = $this->getBaseQuery();
+        $dbQuery = $this->getBaseQuery();
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->limit($limit, $offset);
+        $dbQuery->limit($limit, $offset);
 
-        return $this->db->executeS($query);
+        return $this->db->executeS($dbQuery);
     }
 
     /**
@@ -80,14 +80,14 @@ class CustomerRepository
      */
     public function getCustomersIncremental($limit, $customerIds)
     {
-        $query = $this->getBaseQuery();
+        $dbQuery = $this->getBaseQuery();
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->where('c.id_customer IN(' . implode(',', array_map('intval', $customerIds)) . ')')
+        $dbQuery->where('c.id_customer IN(' . implode(',', array_map('intval', $customerIds)) . ')')
             ->limit($limit);
 
-        return $this->db->executeS($query);
+        return $this->db->executeS($dbQuery);
     }
 
     /**
@@ -100,28 +100,28 @@ class CustomerRepository
      */
     public function getQueryForDebug($offset, $limit)
     {
-        $query = $this->getBaseQuery();
+        $dbQuery = $this->getBaseQuery();
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->limit($limit, $offset);
+        $dbQuery->limit($limit, $offset);
 
-        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+        $queryStringified = preg_replace('/\s+/', ' ', $dbQuery->build());
 
         return array_merge(
-            (array) $query,
+            (array) $dbQuery,
             ['queryStringified' => $queryStringified]
         );
     }
 
     /**
-     * @param \DbQuery $query
+     * @param \DbQuery $dbQuery
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $query)
+    private function addSelectParameters(\DbQuery $dbQuery)
     {
-        $query->select('c.id_customer, c.id_lang, c.email, c.newsletter, c.newsletter_date_add');
-        $query->select('c.optin, c.active, c.is_guest, c.deleted, c.date_add as created_at, c.date_upd as updated_at');
+        $dbQuery->select('c.id_customer, c.id_lang, c.email, c.newsletter, c.newsletter_date_add');
+        $dbQuery->select('c.optin, c.active, c.is_guest, c.deleted, c.date_add as created_at, c.date_upd as updated_at');
     }
 }

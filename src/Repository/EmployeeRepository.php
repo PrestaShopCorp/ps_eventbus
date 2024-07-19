@@ -30,14 +30,14 @@ class EmployeeRepository
 
         $shopId = (int) $this->context->shop->id;
 
-        $query = new \DbQuery();
+        $dbQuery = new \DbQuery();
 
-        $query->from('employee', 'e')
+        $dbQuery->from('employee', 'e')
             ->leftJoin('employee_shop', 'es', 'es.id_employee = e.id_employee');
 
-        $query->where('es.id_shop = ' . $shopId);
+        $dbQuery->where('es.id_shop = ' . $shopId);
 
-        return $query;
+        return $dbQuery;
     }
 
     /**
@@ -50,13 +50,13 @@ class EmployeeRepository
      */
     public function getEmployees($offset, $limit)
     {
-        $query = $this->getBaseQuery();
+        $dbQuery = $this->getBaseQuery();
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->limit($limit, $offset);
+        $dbQuery->limit($limit, $offset);
 
-        return $this->db->executeS($query);
+        return $this->db->executeS($dbQuery);
     }
 
     /**
@@ -82,14 +82,14 @@ class EmployeeRepository
      */
     public function getEmployeesIncremental($limit, $employeeIds)
     {
-        $query = $this->getBaseQuery();
+        $dbQuery = $this->getBaseQuery();
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->where('e.id_employee IN(' . implode(',', array_map('intval', $employeeIds)) . ')')
+        $dbQuery->where('e.id_employee IN(' . implode(',', array_map('intval', $employeeIds)) . ')')
             ->limit($limit);
 
-        return $this->db->executeS($query);
+        return $this->db->executeS($dbQuery);
     }
 
     /**
@@ -102,48 +102,48 @@ class EmployeeRepository
      */
     public function getQueryForDebug($offset, $limit)
     {
-        $query = $this->getBaseQuery();
+        $dbQuery = $this->getBaseQuery();
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->limit($limit, $offset);
+        $dbQuery->limit($limit, $offset);
 
-        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+        $queryStringified = preg_replace('/\s+/', ' ', $dbQuery->build());
 
         return array_merge(
-            (array) $query,
+            (array) $dbQuery,
             ['queryStringified' => $queryStringified]
         );
     }
 
     /**
-     * @param \DbQuery $query
+     * @param \DbQuery $dbQuery
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $query)
+    private function addSelectParameters(\DbQuery $dbQuery)
     {
-        $query->select('e.id_employee');
-        $query->select('e.id_profile');
-        $query->select('e.id_lang');
-        $query->select('e.email');
-        $query->select('e.bo_color');
-        $query->select('e.bo_theme');
-        $query->select('e.bo_css');
-        $query->select('e.default_tab');
-        $query->select('e.bo_width');
-        $query->select('e.bo_menu');
-        $query->select('e.active');
-        $query->select('e.optin');
-        $query->select('e.id_last_order');
-        $query->select('e.id_last_customer_message');
-        $query->select('e.id_last_customer');
-        $query->select('e.last_connection_date');
-        $query->select('es.id_shop as id_shop');
+        $dbQuery->select('e.id_employee');
+        $dbQuery->select('e.id_profile');
+        $dbQuery->select('e.id_lang');
+        $dbQuery->select('e.email');
+        $dbQuery->select('e.bo_color');
+        $dbQuery->select('e.bo_theme');
+        $dbQuery->select('e.bo_css');
+        $dbQuery->select('e.default_tab');
+        $dbQuery->select('e.bo_width');
+        $dbQuery->select('e.bo_menu');
+        $dbQuery->select('e.active');
+        $dbQuery->select('e.optin');
+        $dbQuery->select('e.id_last_order');
+        $dbQuery->select('e.id_last_customer_message');
+        $dbQuery->select('e.id_last_customer');
+        $dbQuery->select('e.last_connection_date');
+        $dbQuery->select('es.id_shop as id_shop');
 
         // https://github.com/PrestaShop/PrestaShop/commit/20f1d9fe8a03559dfa9d1f7109de1f70c99f1874#diff-cde6a9d4a58afb13ff068801ee09c0e712c5e90b0cbf5632a0cc965f15cb6802R107
         if (version_compare(_PS_VERSION_, '1.7.8.0', '>=')) {
-            $query->select('e.has_enabled_gravatar');
+            $dbQuery->select('e.has_enabled_gravatar');
         }
     }
 }

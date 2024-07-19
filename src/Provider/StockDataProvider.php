@@ -94,7 +94,7 @@ class StockDataProvider implements PaginatedApiDataProviderInterface
     {
         $stocks = $this->stockRepository->getStocksIncremental($limit, $objectIds);
 
-        if (!is_array($stocks) || empty($stocks)) {
+        if (!is_array($stocks) || $stocks === []) {
             return [];
         }
 
@@ -145,20 +145,18 @@ class StockDataProvider implements PaginatedApiDataProviderInterface
 
         $stockMvts = $this->stockMvtRepository->getStockMvts($langIso, $stockIds);
 
-        if (!is_array($stockMvts) || empty($stockMvts)) {
+        if (!is_array($stockMvts) || $stockMvts === []) {
             return [];
         }
 
         $this->stockDecorator->decorateStockMvts($stockMvts);
 
-        $stockMvts = array_map(function ($stockMvt) {
+        return array_map(function ($stockMvt) {
             return [
                 'id' => $stockMvt['id_stock_mvt'],
                 'collection' => Config::COLLECTION_STOCK_MVTS,
                 'properties' => $stockMvt,
             ];
         }, $stockMvts);
-
-        return $stockMvts;
     }
 }

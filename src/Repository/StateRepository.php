@@ -24,11 +24,11 @@ class StateRepository
      */
     private function getBaseQuery()
     {
-        $query = new \DbQuery();
+        $dbQuery = new \DbQuery();
 
-        $query->from('state', 's');
+        $dbQuery->from('state', 's');
 
-        return $query;
+        return $dbQuery;
     }
 
     /**

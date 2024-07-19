@@ -96,12 +96,12 @@ class ServiceContainer
      */
     private function initContainer()
     {
-        $cacheDirectory = new CacheDirectoryProvider(
+        $cacheDirectoryProvider = new CacheDirectoryProvider(
             _PS_VERSION_,
             _PS_ROOT_DIR_,
             _PS_MODE_DEV_
         );
-        $containerProvider = new ContainerProvider($this->moduleName, $this->moduleLocalPath, $this->moduleEnv, $cacheDirectory);
+        $containerProvider = new ContainerProvider($this->moduleName, $this->moduleLocalPath, $this->moduleEnv, $cacheDirectoryProvider);
 
         $this->container = $containerProvider->get(defined('_PS_ADMIN_DIR_') || defined('PS_INSTALLATION_IN_PROGRESS') ? 'admin' : 'front');
     }

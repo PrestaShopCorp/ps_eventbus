@@ -38,8 +38,8 @@ class CategoryRepository
 
         $shopId = (int) $this->context->shop->id;
 
-        $query = new \DbQuery();
-        $query->from('category_shop', 'cs')
+        $dbQuery = new \DbQuery();
+        $dbQuery->from('category_shop', 'cs')
             ->innerJoin('category', 'c', 'cs.id_category = c.id_category')
             ->leftJoin('category_lang', 'cl', 'cl.id_category = cs.id_category')
             ->leftJoin('lang', 'l', 'l.id_lang = cl.id_lang')
@@ -47,7 +47,7 @@ class CategoryRepository
             ->where('cl.id_shop = cs.id_shop')
             ->where('l.iso_code = "' . pSQL($langIso) . '"');
 
-        return $query;
+        return $dbQuery;
     }
 
     /**
@@ -100,10 +100,10 @@ class CategoryRepository
      */
     private function buildCategoryPaths($categoriesWithParentsInfo, $currentCategoryId, &$categories)
     {
-        foreach ($categoriesWithParentsInfo as $category) {
-            if ($category['id_category'] == $currentCategoryId) {
-                $categories[] = $category;
-                $this->buildCategoryPaths($categoriesWithParentsInfo, $category['id_parent'], $categories);
+        foreach ($categoriesWithParentsInfo as $categoryWithParentInfo) {
+            if ($categoryWithParentInfo['id_category'] == $currentCategoryId) {
+                $categories[] = $categoryWithParentInfo;
+                $this->buildCategoryPaths($categoriesWithParentsInfo, $categoryWithParentInfo['id_parent'], $categories);
             }
         }
     }
@@ -119,9 +119,9 @@ class CategoryRepository
     public function getCategoriesWithParentInfo($langId, $shopId)
     {
         if (!isset($this->categoryLangCache[$langId])) {
-            $query = new \DbQuery();
+            $dbQuery = new \DbQuery();
 
-            $query->select('c.id_category, cl.name, c.id_parent')
+            $dbQuery->select('c.id_category, cl.name, c.id_parent')
                 ->from('category', 'c')
                 ->leftJoin(
                     'category_lang',
@@ -131,7 +131,7 @@ class CategoryRepository
                 ->where('cl.id_lang = ' . (int) $langId)
                 ->orderBy('cl.id_category');
 
-            $result = $this->db->executeS($query);
+            $result = $this->db->executeS($dbQuery);
 
             if (is_array($result)) {
                 $this->categoryLangCache[$langId] = $result;
@@ -154,13 +154,13 @@ class CategoryRepository
      */
     public function getCategories($offset, $limit, $langIso)
     {
-        $query = $this->getBaseQuery($langIso);
+        $dbQuery = $this->getBaseQuery($langIso);
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->limit($limit, $offset);
+        $dbQuery->limit($limit, $offset);
 
-        return $this->db->executeS($query);
+        return $this->db->executeS($dbQuery);
     }
 
     /**
@@ -188,14 +188,14 @@ class CategoryRepository
      */
     public function getCategoriesIncremental($limit, $langIso, $categoryIds)
     {
-        $query = $this->getBaseQuery($langIso);
+        $dbQuery = $this->getBaseQuery($langIso);
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->where('c.id_category IN(' . implode(',', array_map('intval', $categoryIds)) . ')')
+        $dbQuery->where('c.id_category IN(' . implode(',', array_map('intval', $categoryIds)) . ')')
             ->limit($limit);
 
-        return $this->db->executeS($query);
+        return $this->db->executeS($dbQuery);
     }
 
     /**
@@ -209,29 +209,29 @@ class CategoryRepository
      */
     public function getQueryForDebug($offset, $limit, $langIso)
     {
-        $query = $this->getBaseQuery($langIso);
+        $dbQuery = $this->getBaseQuery($langIso);
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->limit($limit, $offset);
+        $dbQuery->limit($limit, $offset);
 
-        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+        $queryStringified = preg_replace('/\s+/', ' ', $dbQuery->build());
 
         return array_merge(
-            (array) $query,
+            (array) $dbQuery,
             ['queryStringified' => $queryStringified]
         );
     }
 
     /**
-     * @param \DbQuery $query
+     * @param \DbQuery $dbQuery
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $query)
+    private function addSelectParameters(\DbQuery $dbQuery)
     {
-        $query->select('CONCAT(cs.id_category, "-", l.iso_code) as unique_category_id, cs.id_category');
-        $query->select('c.id_parent, cl.name, cl.description, cl.link_rewrite, cl.meta_title, cl.meta_keywords, cl.meta_description');
-        $query->select('l.iso_code, c.date_add as created_at, c.date_upd as updated_at');
+        $dbQuery->select('CONCAT(cs.id_category, "-", l.iso_code) as unique_category_id, cs.id_category');
+        $dbQuery->select('c.id_parent, cl.name, cl.description, cl.link_rewrite, cl.meta_title, cl.meta_keywords, cl.meta_description');
+        $dbQuery->select('l.iso_code, c.date_add as created_at, c.date_upd as updated_at');
     }
 }

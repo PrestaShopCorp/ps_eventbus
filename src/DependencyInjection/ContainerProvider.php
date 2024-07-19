@@ -48,24 +48,24 @@ class ContainerProvider
     /**
      * @var CacheDirectoryProvider
      */
-    private $cacheDirectory;
+    private $cacheDirectoryProvider;
 
     /**
      * @param string $moduleName
      * @param string $moduleLocalPath
      * @param string $moduleEnv
-     * @param CacheDirectoryProvider $cacheDirectory
+     * @param CacheDirectoryProvider $cacheDirectoryProvider
      */
     public function __construct(
         $moduleName,
         $moduleLocalPath,
         $moduleEnv,
-        CacheDirectoryProvider $cacheDirectory
+        CacheDirectoryProvider $cacheDirectoryProvider
     ) {
         $this->moduleName = $moduleName;
         $this->moduleLocalPath = $moduleLocalPath;
         $this->moduleEnv = $moduleEnv;
-        $this->cacheDirectory = $cacheDirectory;
+        $this->cacheDirectoryProvider = $cacheDirectoryProvider;
     }
 
     /**
@@ -81,7 +81,7 @@ class ContainerProvider
             . ucfirst($containerName)
             . 'Container'
         ;
-        $containerFilePath = $this->cacheDirectory->getPath() . '/' . $containerClassName . '.php';
+        $containerFilePath = $this->cacheDirectoryProvider->getPath() . '/' . $containerClassName . '.php';
         $containerConfigCache = new ConfigCache($containerFilePath, _PS_MODE_DEV_);
 
         if ($containerConfigCache->isFresh()) {
@@ -96,20 +96,20 @@ class ContainerProvider
         $containerBuilder = new ContainerBuilder();
         $containerBuilder->set(
             $this->moduleName . '.cache.directory',
-            $this->cacheDirectory
+            $this->cacheDirectoryProvider
         );
         $moduleConfigPath = $this->moduleLocalPath
             . 'config/'
             . $containerName
         ;
 
-        $loader = new YamlFileLoader($containerBuilder, new FileLocator($moduleConfigPath));
+        $yamlFileLoader = new YamlFileLoader($containerBuilder, new FileLocator($moduleConfigPath));
 
-        $loader->load('services' . ($this->moduleEnv ? '_' . $this->moduleEnv : '') . '.yml');
+        $yamlFileLoader->load('services' . ($this->moduleEnv ? '_' . $this->moduleEnv : '') . '.yml');
 
         $containerBuilder->compile();
-        $dumper = new PhpDumper($containerBuilder);
-        $serviceContainerClass = $dumper->dump(['class' => $containerClassName]);
+        $phpDumper = new PhpDumper($containerBuilder);
+        $serviceContainerClass = $phpDumper->dump(['class' => $containerClassName]);
 
         $containerConfigCache->write(
             is_array($serviceContainerClass) ? implode(' ', $serviceContainerClass) : $serviceContainerClass,

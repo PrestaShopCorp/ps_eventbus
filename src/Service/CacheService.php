@@ -14,10 +14,10 @@ class CacheService
      */
     public function setCacheProperty($key, $value)
     {
-        $cache = new FilesystemAdapter();
-        $cacheItem = $cache->getItem($key);
+        $filesystemAdapter = new FilesystemAdapter();
+        $cacheItem = $filesystemAdapter->getItem($key);
         $cacheItem->set($value);
-        $cache->save($cacheItem);
+        $filesystemAdapter->save($cacheItem);
     }
 
     /**
@@ -27,8 +27,8 @@ class CacheService
      */
     public function getCacheProperty($key)
     {
-        $cache = new FilesystemAdapter();
-        $cacheItem = $cache->getItem($key);
+        $filesystemAdapter = new FilesystemAdapter();
+        $cacheItem = $filesystemAdapter->getItem($key);
 
         return $cacheItem->get();
     }

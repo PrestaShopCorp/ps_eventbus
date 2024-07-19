@@ -35,12 +35,12 @@ class ProductCarrierRepository
      */
     private function getBaseQuery()
     {
-        $query = new \DbQuery();
+        $dbQuery = new \DbQuery();
 
-        $query->from('product_carrier', 'pc');
-        $query->where('pc.id_shop = ' . $this->shopId);
+        $dbQuery->from('product_carrier', 'pc');
+        $dbQuery->where('pc.id_shop = ' . $this->shopId);
 
-        return $query;
+        return $dbQuery;
     }
 
     /**
@@ -53,13 +53,13 @@ class ProductCarrierRepository
      */
     public function getProductCarriers($offset, $limit)
     {
-        $query = $this->getBaseQuery();
+        $dbQuery = $this->getBaseQuery();
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->limit($limit, $offset);
+        $dbQuery->limit($limit, $offset);
 
-        $result = $this->db->executeS($query);
+        $result = $this->db->executeS($dbQuery);
 
         return is_array($result) ? $result : [];
     }
@@ -75,7 +75,7 @@ class ProductCarrierRepository
     {
         $productCarriers = $this->getProductCarriers($offset, 1);
 
-        if (!is_array($productCarriers) || empty($productCarriers)) {
+        if (!is_array($productCarriers) || $productCarriers === []) {
             return 0;
         }
 
@@ -92,14 +92,14 @@ class ProductCarrierRepository
      */
     public function getProductCarrierIncremental($type, $langIso)
     {
-        $query = new \DbQuery();
-        $query->from(IncrementalSyncRepository::INCREMENTAL_SYNC_TABLE, 'aic');
-        $query->leftJoin(EventbusSyncRepository::TYPE_SYNC_TABLE_NAME, 'ts', 'ts.type = aic.type');
-        $query->where('aic.type = "' . (string) $type . '"');
-        $query->where('ts.id_shop = ' . $this->shopId);
-        $query->where('ts.lang_iso = "' . (string) $langIso . '"');
+        $dbQuery = new \DbQuery();
+        $dbQuery->from(IncrementalSyncRepository::INCREMENTAL_SYNC_TABLE, 'aic');
+        $dbQuery->leftJoin(EventbusSyncRepository::TYPE_SYNC_TABLE_NAME, 'ts', 'ts.type = aic.type');
+        $dbQuery->where('aic.type = "' . (string) $type . '"');
+        $dbQuery->where('ts.id_shop = ' . $this->shopId);
+        $dbQuery->where('ts.lang_iso = "' . (string) $langIso . '"');
 
-        return $this->db->executeS($query);
+        return $this->db->executeS($dbQuery);
     }
 
     /**
@@ -111,16 +111,16 @@ class ProductCarrierRepository
      */
     public function getProductCarriersProperties(array $productIds)
     {
-        if (!$productIds) {
+        if ($productIds === []) {
             return [];
         }
-        $query = new \DbQuery();
+        $dbQuery = new \DbQuery();
 
-        $query->select('pc.*')
+        $dbQuery->select('pc.*')
             ->from('product_carrier', 'pc')
             ->where('pc.id_product IN (' . implode(',', array_map('intval', $productIds)) . ')');
 
-        return $this->db->executeS($query);
+        return $this->db->executeS($dbQuery);
     }
 
     /**
@@ -133,16 +133,16 @@ class ProductCarrierRepository
      */
     public function getQueryForDebug($offset, $limit)
     {
-        $query = $this->getBaseQuery();
+        $dbQuery = $this->getBaseQuery();
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->limit($limit, $offset);
+        $dbQuery->limit($limit, $offset);
 
-        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+        $queryStringified = preg_replace('/\s+/', ' ', $dbQuery->build());
 
         return array_merge(
-            (array) $query,
+            (array) $dbQuery,
             ['queryStringified' => $queryStringified]
         );
     }
@@ -156,27 +156,27 @@ class ProductCarrierRepository
      */
     public function getProductCarrierIdsByProductIds(array $productIds)
     {
-        if (!$productIds) {
+        if ($productIds === []) {
             return [];
         }
 
-        $query = $this->getBaseQuery();
+        $dbQuery = $this->getBaseQuery();
 
-        $query->select('pc.id_carrier_reference as id');
-        $query->where('pc.id_product IN (' . implode(',', array_map('intval', $productIds)) . ')');
+        $dbQuery->select('pc.id_carrier_reference as id');
+        $dbQuery->where('pc.id_product IN (' . implode(',', array_map('intval', $productIds)) . ')');
 
-        $result = $this->db->executeS($query);
+        $result = $this->db->executeS($dbQuery);
 
         return is_array($result) ? $result : [];
     }
 
     /**
-     * @param \DbQuery $query
+     * @param \DbQuery $dbQuery
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $query)
+    private function addSelectParameters(\DbQuery $dbQuery)
     {
-        $query->select('pc.id_carrier_reference, pc.id_product');
+        $dbQuery->select('pc.id_carrier_reference, pc.id_product');
     }
 }

@@ -33,14 +33,14 @@ class DeletedObjectsRepository
      */
     public function getDeletedObjectsGrouped($shopId)
     {
-        $query = new \DbQuery();
+        $dbQuery = new \DbQuery();
 
-        $query->select('type, GROUP_CONCAT(id_object SEPARATOR ";") as ids')
+        $dbQuery->select('type, GROUP_CONCAT(id_object SEPARATOR ";") as ids')
             ->from(self::DELETED_OBJECTS_TABLE)
             ->where('id_shop = ' . (int) $shopId)
             ->groupBy('type');
 
-        $result = $this->db->executeS($query);
+        $result = $this->db->executeS($dbQuery);
 
         return is_array($result) ? $result : [];
     }

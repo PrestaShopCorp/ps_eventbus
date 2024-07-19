@@ -42,9 +42,9 @@ class TaxRepository
 
         $language = (int) $this->context->language->id;
 
-        $query = new \DbQuery();
+        $dbQuery = new \DbQuery();
 
-        $query->from('tax', 't')
+        $dbQuery->from('tax', 't')
             ->innerJoin('tax_rule', 'tr', 'tr.id_tax = t.id_tax')
             ->innerJoin('tax_rules_group', 'trg', 'trg.id_tax_rules_group = tr.id_tax_rules_group')
             ->innerJoin('tax_rules_group_shop', 'trgs', 'trgs.id_tax_rules_group = tr.id_tax_rules_group')
@@ -52,7 +52,7 @@ class TaxRepository
             ->where('trgs.id_shop = ' . $shopId)
             ->where('tl.id_lang = ' . $language);
 
-        return $query;
+        return $dbQuery;
     }
 
     /**

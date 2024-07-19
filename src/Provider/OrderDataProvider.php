@@ -122,7 +122,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         $langId = (int) \Language::getIdByIso($langIso);
         $orders = $this->orderRepository->getOrdersIncremental($limit, $this->shopId, $objectIds);
 
-        if (!is_array($orders) || empty($orders)) {
+        if (!is_array($orders) || $orders === []) {
             return [];
         }
 
@@ -166,7 +166,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      */
     private function getOrderDetails(array $orders)
     {
-        if (empty($orders)) {
+        if ($orders === []) {
             return [];
         }
 
@@ -174,21 +174,19 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
 
         $orderDetails = $this->orderDetailsRepository->getOrderDetails($orderIds, $this->shopId);
 
-        if (!is_array($orderDetails) || empty($orderDetails)) {
+        if (!is_array($orderDetails) || $orderDetails === []) {
             return [];
         }
 
         $this->castOrderDetailValues($orderDetails);
 
-        $orderDetails = array_map(function ($orderDetail) {
+        return array_map(function ($orderDetail) {
             return [
                 'id' => $orderDetail['id_order_detail'],
                 'collection' => Config::COLLECTION_ORDER_DETAILS,
                 'properties' => $orderDetail,
             ];
         }, $orderDetails);
-
-        return $orderDetails;
     }
 
     /**
@@ -201,7 +199,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      */
     private function getOrderStatuses(array $orders, $langId)
     {
-        if (empty($orders)) {
+        if ($orders === []) {
             return [];
         }
         $orderIds = $this->arrayFormatter->formatValueArray($orders, 'id_order');
@@ -226,7 +224,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      */
     private function getOrderCartRules(array $orders)
     {
-        if (empty($orders)) {
+        if ($orders === []) {
             return [];
         }
         $orderIds = $this->arrayFormatter->formatValueArray($orders, 'id_order');
@@ -287,10 +285,10 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         /** @var array $orderHistoryStatuses */
         $orderHistoryStatuses = $this->orderHistoryRepository->getOrderHistoryStatuses($orderIds, $langId);
 
-        foreach ($orderHistoryStatuses as &$orderHistoryStatus) {
-            if ($order['id_order'] == $orderHistoryStatus['id_order'] && $dateAdd < $orderHistoryStatus['date_add']) {
-                $isPaid = (bool) $orderHistoryStatus['paid'];
-                $dateAdd = $orderHistoryStatus['date_add'];
+        foreach ($orderHistoryStatuses as &$orderHistoryRectorPrefix202407Status) {
+            if ($order['id_order'] == $orderHistoryRectorPrefix202407Status['id_order'] && $dateAdd < $orderHistoryRectorPrefix202407Status['date_add']) {
+                $isPaid = (bool) $orderHistoryRectorPrefix202407Status['paid'];
+                $dateAdd = $orderHistoryRectorPrefix202407Status['date_add'];
             }
         }
 
@@ -323,19 +321,19 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     private function castOrderStatuses(array &$orderStatuses): array
     {
         $castedOrderStatuses = [];
-        foreach ($orderStatuses as $orderStatus) {
+        foreach ($orderStatuses as $orderRectorPrefix202407Status) {
             $castedOrderStatus = [];
-            $castedOrderStatus['id_order_state'] = (int) $orderStatus['id_order_state'];
-            $castedOrderStatus['id_order'] = (int) $orderStatus['id_order'];
-            $castedOrderStatus['id_order_history'] = (int) $orderStatus['id_order_history'];
-            $castedOrderStatus['name'] = (string) $orderStatus['name'];
-            $castedOrderStatus['template'] = (string) $orderStatus['template'];
-            $castedOrderStatus['date_add'] = $orderStatus['date_add'];
-            $castedOrderStatus['is_validated'] = (bool) $orderStatus['logable'];
-            $castedOrderStatus['is_delivered'] = (bool) $orderStatus['delivery'];
-            $castedOrderStatus['is_shipped'] = (bool) $orderStatus['shipped'];
-            $castedOrderStatus['is_paid'] = (bool) $orderStatus['paid'];
-            $castedOrderStatus['is_deleted'] = (bool) $orderStatus['deleted'];
+            $castedOrderStatus['id_order_state'] = (int) $orderRectorPrefix202407Status['id_order_state'];
+            $castedOrderStatus['id_order'] = (int) $orderRectorPrefix202407Status['id_order'];
+            $castedOrderStatus['id_order_history'] = (int) $orderRectorPrefix202407Status['id_order_history'];
+            $castedOrderStatus['name'] = (string) $orderRectorPrefix202407Status['name'];
+            $castedOrderStatus['template'] = (string) $orderRectorPrefix202407Status['template'];
+            $castedOrderStatus['date_add'] = $orderRectorPrefix202407Status['date_add'];
+            $castedOrderStatus['is_validated'] = (bool) $orderRectorPrefix202407Status['logable'];
+            $castedOrderStatus['is_delivered'] = (bool) $orderRectorPrefix202407Status['delivery'];
+            $castedOrderStatus['is_shipped'] = (bool) $orderRectorPrefix202407Status['shipped'];
+            $castedOrderStatus['is_paid'] = (bool) $orderRectorPrefix202407Status['paid'];
+            $castedOrderStatus['is_deleted'] = (bool) $orderRectorPrefix202407Status['deleted'];
             $castedOrderStatus['created_at'] = $castedOrderStatus['date_add'];
             $castedOrderStatus['updated_at'] = $castedOrderStatus['date_add'];
             $castedOrderStatuses[] = $castedOrderStatus;

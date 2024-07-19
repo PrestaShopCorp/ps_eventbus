@@ -21,14 +21,14 @@ class BundleRepository
      */
     private function getBaseQuery($productPackId)
     {
-        $query = new \DbQuery();
+        $dbQuery = new \DbQuery();
 
-        $query->from('pack', 'pac')
+        $dbQuery->from('pack', 'pac')
             ->innerJoin('product', 'p', 'p.id_product = pac.id_product_item');
 
-        $query->where('pac.id_product_pack = ' . (int) $productPackId);
+        $dbQuery->where('pac.id_product_pack = ' . (int) $productPackId);
 
-        return $query;
+        return $dbQuery;
     }
 
     /**
@@ -40,23 +40,23 @@ class BundleRepository
      */
     public function getBundleProducts($productPackId)
     {
-        $query = $this->getBaseQuery($productPackId);
+        $dbQuery = $this->getBaseQuery($productPackId);
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $result = $this->db->executeS($query);
+        $result = $this->db->executeS($dbQuery);
 
         return is_array($result) ? $result : [];
     }
 
     /**
-     * @param \DbQuery $query
+     * @param \DbQuery $dbQuery
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $query)
+    private function addSelectParameters(\DbQuery $dbQuery)
     {
-        $query->select('pac.id_product_pack as id_bundle, pac.id_product_attribute_item as id_product_attribute');
-        $query->select('p.id_product, pac.quantity');
+        $dbQuery->select('pac.id_product_pack as id_bundle, pac.id_product_attribute_item as id_product_attribute');
+        $dbQuery->select('p.id_product, pac.quantity');
     }
 }

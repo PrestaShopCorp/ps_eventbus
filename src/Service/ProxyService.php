@@ -14,7 +14,7 @@ class ProxyService implements ProxyServiceInterface
     /**
      * @var CollectorApiClient
      */
-    private $eventBusProxyClient;
+    private $collectorApiClient;
     /**
      * @var JsonFormatter
      */
@@ -24,9 +24,9 @@ class ProxyService implements ProxyServiceInterface
      */
     private $errorHandler;
 
-    public function __construct(CollectorApiClient $eventBusProxyClient, JsonFormatter $jsonFormatter, ErrorHandlerInterface $errorHandler)
+    public function __construct(CollectorApiClient $collectorApiClient, JsonFormatter $jsonFormatter, ErrorHandlerInterface $errorHandler)
     {
-        $this->eventBusProxyClient = $eventBusProxyClient;
+        $this->collectorApiClient = $collectorApiClient;
         $this->jsonFormatter = $jsonFormatter;
         $this->errorHandler = $errorHandler;
     }
@@ -46,7 +46,7 @@ class ProxyService implements ProxyServiceInterface
         $dataJson = $this->jsonFormatter->formatNewlineJsonString($data);
 
         try {
-            return $this->eventBusProxyClient->upload($jobId, $dataJson, $scriptStartTime, $isFull);
+            return $this->collectorApiClient->upload($jobId, $dataJson, $scriptStartTime, $isFull);
         } catch (ClientException $exception) {
             $this->errorHandler->handle($exception);
 
@@ -72,7 +72,7 @@ class ProxyService implements ProxyServiceInterface
         $dataJson = $this->jsonFormatter->formatNewlineJsonString($data);
 
         try {
-            $response = $this->eventBusProxyClient->uploadDelete($jobId, $dataJson, $scriptStartTime);
+            $response = $this->collectorApiClient->uploadDelete($jobId, $dataJson, $scriptStartTime);
         } catch (ClientException $exception) {
             $this->errorHandler->handle($exception);
 

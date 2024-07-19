@@ -63,24 +63,20 @@ class PresenterService
         $array = [];
         /* @phpstan-ignore-next-line */ // TODO understand why phpstan complains about this
         foreach ($object as $key => $value) {
-            if (is_object($value)) {
-                $array[$key] = $this->convertObjectToArray($value);
-            } else {
-                $array[$key] = $value;
-            }
+            $array[$key] = is_object($value) ? $this->convertObjectToArray($value) : $value;
         }
 
         return $array;
     }
 
     /**
-     * @param \ModuleCore $module
+     * @param \ModuleCore $moduleCore
      * @param array $requiredConsents
      * @param array $optionalConsents
      *
      * @return array
      */
-    public function expose(\ModuleCore $module, $requiredConsents = [], $optionalConsents = [])
+    public function expose(\ModuleCore $moduleCore, $requiredConsents = [], $optionalConsents = [])
     {
         if (!in_array('info', $requiredConsents)) {
             array_unshift($requiredConsents, 'info');
@@ -99,8 +95,8 @@ class PresenterService
                 'requiredConsents' => $requiredConsents,
                 'optionalConsents' => $optionalConsents,
                 'module' => array_merge([
-                    'logoUrl' => \Tools::getHttpHost(true) . '/modules/' . $module->name . '/logo.png',
-                ], $this->convertObjectToArray($module)),
+                    'logoUrl' => \Tools::getHttpHost(true) . '/modules/' . $moduleCore->name . '/logo.png',
+                ], $this->convertObjectToArray($moduleCore)),
                 'shop' => [
                     /* @phpstan-ignore-next-line */
                     'id' => $this->psAccountsAdapterService->getShopUuid(),

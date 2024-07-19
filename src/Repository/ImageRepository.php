@@ -19,13 +19,13 @@ class ImageRepository
      */
     private function getBaseQuery()
     {
-        $query = new \DbQuery();
+        $dbQuery = new \DbQuery();
 
-        $query->from('image', 'i')
+        $dbQuery->from('image', 'i')
             ->leftJoin('image_lang', 'il', 'il.id_image = i.id_image')
             ->leftJoin('image_shop', 'is', 'is.id_image = i.id_image');
 
-        return $query;
+        return $dbQuery;
     }
 
     /**
@@ -38,13 +38,13 @@ class ImageRepository
      */
     public function getImages($offset, $limit)
     {
-        $query = $this->getBaseQuery();
+        $dbQuery = $this->getBaseQuery();
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->limit($limit, $offset);
+        $dbQuery->limit($limit, $offset);
 
-        return $this->db->executeS($query);
+        return $this->db->executeS($dbQuery);
     }
 
     /**
@@ -70,14 +70,14 @@ class ImageRepository
      */
     public function getImagesIncremental($limit, $imageIds)
     {
-        $query = $this->getBaseQuery();
+        $dbQuery = $this->getBaseQuery();
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->where('i.id_image IN(' . implode(',', array_map('intval', $imageIds)) . ')')
+        $dbQuery->where('i.id_image IN(' . implode(',', array_map('intval', $imageIds)) . ')')
             ->limit($limit);
 
-        return $this->db->executeS($query);
+        return $this->db->executeS($dbQuery);
     }
 
     /**
@@ -88,15 +88,15 @@ class ImageRepository
      */
     public function getProductCoverImage($productId, $shopId)
     {
-        $query = new \DbQuery();
+        $dbQuery = new \DbQuery();
 
-        $query->select('imgs.id_image')
+        $dbQuery->select('imgs.id_image')
             ->from('image_shop', 'imgs')
             ->where('imgs.cover = 1')
             ->where('imgs.id_shop = ' . (int) $shopId)
             ->where('imgs.id_product = ' . (int) $productId);
 
-        return $this->db->getValue($query);
+        return $this->db->getValue($dbQuery);
     }
 
     /**
@@ -111,9 +111,9 @@ class ImageRepository
      */
     public function getProductImages($productId, $attributeId, $shopId, $includeCover = false)
     {
-        $query = new \DbQuery();
+        $dbQuery = new \DbQuery();
 
-        $query->select('imgs.id_image')
+        $dbQuery->select('imgs.id_image')
             ->from('image_shop', 'imgs')
             ->leftJoin('image', 'img', 'imgs.id_image = img.id_image')
             ->where('imgs.id_shop = ' . (int) $shopId)
@@ -121,7 +121,7 @@ class ImageRepository
             ->orderBy('img.position ASC');
 
         if ((int) $attributeId !== 0) {
-            $query->innerJoin(
+            $dbQuery->innerJoin(
                 'product_attribute_image',
                 'pai',
                 'imgs.id_image = pai.id_image AND pai.id_product_attribute = ' . (int) $attributeId
@@ -129,10 +129,10 @@ class ImageRepository
         }
 
         if (!$includeCover) {
-            $query->where('(imgs.cover IS NULL OR imgs.cover = 0)');
+            $dbQuery->where('(imgs.cover IS NULL OR imgs.cover = 0)');
         }
 
-        return $this->db->executeS($query);
+        return $this->db->executeS($dbQuery);
     }
 
     /**
@@ -145,33 +145,33 @@ class ImageRepository
      */
     public function getQueryForDebug($offset, $limit)
     {
-        $query = $this->getBaseQuery();
+        $dbQuery = $this->getBaseQuery();
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->limit($limit, $offset);
+        $dbQuery->limit($limit, $offset);
 
-        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+        $queryStringified = preg_replace('/\s+/', ' ', $dbQuery->build());
 
         return array_merge(
-            (array) $query,
+            (array) $dbQuery,
             ['queryStringified' => $queryStringified]
         );
     }
 
     /**
-     * @param \DbQuery $query
+     * @param \DbQuery $dbQuery
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $query)
+    private function addSelectParameters(\DbQuery $dbQuery)
     {
-        $query->select('i.id_image');
-        $query->select('i.id_product');
-        $query->select('i.position');
-        $query->select('i.cover');
-        $query->select('il.id_lang');
-        $query->select('il.legend');
-        $query->select('is.id_shop');
+        $dbQuery->select('i.id_image');
+        $dbQuery->select('i.id_product');
+        $dbQuery->select('i.position');
+        $dbQuery->select('i.cover');
+        $dbQuery->select('il.id_lang');
+        $dbQuery->select('il.legend');
+        $dbQuery->select('is.id_shop');
     }
 }

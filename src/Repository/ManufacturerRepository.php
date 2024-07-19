@@ -31,13 +31,13 @@ class ManufacturerRepository
      */
     public function getManufacturers($offset, $limit, $langIso)
     {
-        $query = $this->getBaseQuery($langIso);
+        $dbQuery = $this->getBaseQuery($langIso);
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->limit($limit, $offset);
+        $dbQuery->limit($limit, $offset);
 
-        return $this->db->executeS($query);
+        return $this->db->executeS($dbQuery);
     }
 
     /**
@@ -65,14 +65,14 @@ class ManufacturerRepository
      */
     public function getManufacturersIncremental($limit, $langIso, $manufacturerIds)
     {
-        $query = $this->getBaseQuery($langIso);
+        $dbQuery = $this->getBaseQuery($langIso);
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->where('ma.id_manufacturer IN(' . implode(',', array_map('intval', $manufacturerIds)) . ')')
+        $dbQuery->where('ma.id_manufacturer IN(' . implode(',', array_map('intval', $manufacturerIds)) . ')')
             ->limit($limit);
 
-        return $this->db->executeS($query);
+        return $this->db->executeS($dbQuery);
     }
 
     /**
@@ -90,12 +90,12 @@ class ManufacturerRepository
 
         /** @var int $langId */
         $langId = (int) \Language::getIdByIso($langIso);
-        $query = new \DbQuery();
-        $query->from('manufacturer', 'ma')
+        $dbQuery = new \DbQuery();
+        $dbQuery->from('manufacturer', 'ma')
             ->innerJoin('manufacturer_lang', 'mal', 'ma.id_manufacturer = mal.id_manufacturer AND mal.id_lang = ' . (int) $langId)
             ->innerJoin('manufacturer_shop', 'mas', 'ma.id_manufacturer = mas.id_manufacturer AND mas.id_shop = ' . $shopId);
 
-        return $query;
+        return $dbQuery;
     }
 
     /**
@@ -109,28 +109,28 @@ class ManufacturerRepository
      */
     public function getQueryForDebug($offset, $limit, $langIso)
     {
-        $query = $this->getBaseQuery($langIso);
+        $dbQuery = $this->getBaseQuery($langIso);
 
-        $this->addSelectParameters($query);
+        $this->addSelectParameters($dbQuery);
 
-        $query->limit($limit, $offset);
+        $dbQuery->limit($limit, $offset);
 
-        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+        $queryStringified = preg_replace('/\s+/', ' ', $dbQuery->build());
 
         return array_merge(
-            (array) $query,
+            (array) $dbQuery,
             ['queryStringified' => $queryStringified]
         );
     }
 
     /**
-     * @param \DbQuery $query
+     * @param \DbQuery $dbQuery
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $query)
+    private function addSelectParameters(\DbQuery $dbQuery)
     {
-        $query->select('ma.id_manufacturer, ma.name, ma.date_add as created_at, ma.date_upd as updated_at, ma.active, mal.id_lang');
-        $query->select('mal.description, mal.short_description, mal.meta_title, mal.meta_keywords, mal.meta_description, mas.id_shop');
+        $dbQuery->select('ma.id_manufacturer, ma.name, ma.date_add as created_at, ma.date_upd as updated_at, ma.active, mal.id_lang');
+        $dbQuery->select('mal.description, mal.short_description, mal.meta_title, mal.meta_keywords, mal.meta_description, mas.id_shop');
     }
 }
