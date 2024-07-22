@@ -206,7 +206,7 @@ class CarrierRepository
     {
         $carriers = $this->getAllCarrierProperties($offset, 1, $langId);
 
-        if (!is_array($carriers) || empty($carriers)) {
+        if (!is_array($carriers) || $carriers === []) {
             return 0;
         }
 

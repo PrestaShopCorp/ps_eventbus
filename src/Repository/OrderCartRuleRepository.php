@@ -37,7 +37,7 @@ class OrderCartRuleRepository
      */
     public function getOrderCartRules(array $orderIds)
     {
-        if (!$orderIds) {
+        if ($orderIds === []) {
             return [];
         }
 
@@ -62,7 +62,7 @@ class OrderCartRuleRepository
      */
     public function getOrderCartRuleIdsByOrderIds(array $orderIds)
     {
-        if (!$orderIds) {
+        if ($orderIds === []) {
             return [];
         }
 

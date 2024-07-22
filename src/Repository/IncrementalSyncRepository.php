@@ -134,7 +134,7 @@ class IncrementalSyncRepository
 
         $result = $this->db->executeS($query);
 
-        if (is_array($result) && !empty($result)) {
+        if (is_array($result) && $result !== []) {
             return array_map(function ($object) {
                 return $object['id_object'];
             }, $result);

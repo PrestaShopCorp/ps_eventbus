@@ -23,10 +23,8 @@ class ProductRepository
         $this->db = \Db::getInstance();
         $this->context = $context;
 
-        if (!$this->context->employee instanceof \Employee) {
-            if (($employees = \Employee::getEmployees()) !== false) {
-                $this->context->employee = new \Employee($employees[0]['id_employee']);
-            }
+        if (!$this->context->employee instanceof \Employee && ($employees = \Employee::getEmployees()) !== false) {
+            $this->context->employee = new \Employee($employees[0]['id_employee']);
         }
 
         if ($this->context->shop === null) {
@@ -104,7 +102,7 @@ class ProductRepository
     {
         $products = $this->getProducts($offset, 1, $langId);
 
-        if (!is_array($products) || empty($products)) {
+        if (!is_array($products) || $products === []) {
             return 0;
         }
 
@@ -121,7 +119,7 @@ class ProductRepository
      */
     public function getProductAttributeValues(array $attributeIds, $langId)
     {
-        if (!$attributeIds) {
+        if ($attributeIds === []) {
             return [];
         }
         $query = new \DbQuery();
@@ -159,7 +157,7 @@ class ProductRepository
      */
     public function getProductFeatures(array $productIds, $langId)
     {
-        if (!$productIds) {
+        if ($productIds === []) {
             return [];
         }
 
@@ -195,7 +193,7 @@ class ProductRepository
      */
     public function getProductImages(array $productIds)
     {
-        if (!$productIds) {
+        if ($productIds === []) {
             return [];
         }
 
@@ -219,7 +217,7 @@ class ProductRepository
      */
     public function getAttributeImages(array $attributeIds)
     {
-        if (!$attributeIds) {
+        if ($attributeIds === []) {
             return [];
         }
         $query = new \DbQuery();

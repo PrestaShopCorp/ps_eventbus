@@ -62,7 +62,7 @@ class Install
         $sql = str_replace(['PREFIX_', 'ENGINE_TYPE'], [_DB_PREFIX_, _MYSQL_ENGINE_], $sql);
         $sql = preg_split("/;\s*[\r\n]+/", trim($sql));
 
-        if (!empty($sql)) {
+        if ($sql !== [] && $sql !== false) {
             foreach ($sql as $query) {
                 if (!$this->db->execute($query)) {
                     return false;
@@ -95,7 +95,7 @@ class Install
         $sql = str_replace(['PREFIX_', 'ENGINE_TYPE'], [_DB_PREFIX_, _MYSQL_ENGINE_], $sql);
         $sql = preg_split("/;\s*[\r\n]+/", trim($sql));
 
-        if (!empty($sql)) {
+        if ($sql !== [] && $sql !== false) {
             foreach ($sql as $query) {
                 try {
                     $this->db->execute($query);

@@ -48,7 +48,7 @@ class Uninstall
         foreach ($this->module->adminControllers as $controllerName) {
             $tabId = (int) \Tab::getIdFromClassName($controllerName);
 
-            if (!$tabId) {
+            if ($tabId === 0) {
                 return true;
             }
 
@@ -80,7 +80,7 @@ class Uninstall
         $sql = str_replace(['PREFIX_', 'ENGINE_TYPE'], [_DB_PREFIX_, _MYSQL_ENGINE_], $sql);
         $sql = preg_split("/;\s*[\r\n]+/", trim($sql));
 
-        if (!empty($sql)) {
+        if ($sql !== [] && $sql !== false) {
             foreach ($sql as $query) {
                 if (!$this->db->execute($query)) {
                     return false;

@@ -72,7 +72,7 @@ class SpecificPriceService
         &$specific_price_output = null,
         $use_group_reduction = true
     ) {
-        if (!$context) {
+        if (!$context instanceof \Context) {
             /** @var \Context $context */
             $context = \Context::getContext();
         }
@@ -157,7 +157,7 @@ class SpecificPriceService
      * @param bool $use_group_reduction
      * @param int $id_customization
      *
-     * @return float|int|void
+     * @return float|int|null
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -243,16 +243,12 @@ class SpecificPriceService
         }
 
         if (!isset(self::$_pricesLevel2[$cache_id_2][(int) $id_product_attribute])) {
-            return;
+            return null;
         }
 
         $result = self::$_pricesLevel2[$cache_id_2][(int) $id_product_attribute];
 
-        if (!$specific_price || $specific_price['price'] < 0) {
-            $price = (float) $result['price'];
-        } else {
-            $price = (float) $specific_price['price'];
-        }
+        $price = !$specific_price || $specific_price['price'] < 0 ? (float) $result['price'] : (float) $specific_price['price'];
         // convert only if the specific price is in the default currency (id_currency = 0)
         if (!$specific_price || !($specific_price['price'] >= 0 && $specific_price['id_currency'])) {
             $price = \Tools::convertPrice($price, $id_currency);
@@ -271,12 +267,10 @@ class SpecificPriceService
             }
         }
 
-        if (version_compare(_PS_VERSION_, '1.7.0.0', '>=')) {
-            // Customization price
-            if ((int) $id_customization) {
-                /* @phpstan-ignore-next-line */
-                $price += \Tools::convertPrice(\Customization::getCustomizationPrice($id_customization), $id_currency);
-            }
+        // Customization price
+        if (version_compare(_PS_VERSION_, '1.7.0.0', '>=') && (int) $id_customization) {
+            /* @phpstan-ignore-next-line */
+            $price += \Tools::convertPrice(\Customization::getCustomizationPrice($id_customization), $id_currency);
         }
 
         // Tax

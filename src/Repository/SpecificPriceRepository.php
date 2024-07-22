@@ -36,7 +36,7 @@ class SpecificPriceRepository
      */
     public function getSpecificPrice(int $specificPriceId)
     {
-        if (!$specificPriceId) {
+        if ($specificPriceId === 0) {
             return [];
         }
 

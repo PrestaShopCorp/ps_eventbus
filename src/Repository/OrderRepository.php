@@ -69,7 +69,7 @@ class OrderRepository
     {
         $orders = $this->getOrders($offset, 1, $shopId);
 
-        if (!is_array($orders) || empty($orders)) {
+        if (!is_array($orders) || $orders === []) {
             return 0;
         }
 

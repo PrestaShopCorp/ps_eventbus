@@ -18,10 +18,8 @@ class CustomPriceRepository
         $this->db = \Db::getInstance();
         $this->context = $context;
 
-        if (!$this->context->employee instanceof \Employee) {
-            if (($employees = \Employee::getEmployees()) !== false) {
-                $this->context->employee = new \Employee($employees[0]['id_employee']);
-            }
+        if (!$this->context->employee instanceof \Employee && ($employees = \Employee::getEmployees()) !== false) {
+            $this->context->employee = new \Employee($employees[0]['id_employee']);
         }
     }
 

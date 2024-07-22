@@ -81,7 +81,7 @@ class StoreRepository
     {
         $stores = $this->getStores($offset, 1, $langIso);
 
-        if (!is_array($stores) || empty($stores)) {
+        if (!is_array($stores) || $stores === []) {
             return 0;
         }
 

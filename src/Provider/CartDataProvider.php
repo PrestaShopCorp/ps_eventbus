@@ -104,7 +104,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
     {
         $carts = $this->cartRepository->getCartsIncremental($limit, $objectIds);
 
-        if (!is_array($carts) || empty($carts)) {
+        if (!is_array($carts) || $carts === []) {
             return [];
         }
 
@@ -138,7 +138,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
 
         $cartProducts = $this->cartProductRepository->getCartProducts($cartIds);
 
-        if (!is_array($cartProducts) || empty($cartProducts)) {
+        if (!is_array($cartProducts) || $cartProducts === []) {
             return [];
         }
 

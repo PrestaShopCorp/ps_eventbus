@@ -50,7 +50,7 @@ class OrderDetailsRepository
      */
     public function getOrderDetails(array $orderIds, $shopId)
     {
-        if (!$orderIds) {
+        if ($orderIds === []) {
             return [];
         }
 
@@ -80,7 +80,7 @@ class OrderDetailsRepository
      */
     public function getOrderDetailIdsByOrderIds(array $orderIds)
     {
-        if (!$orderIds) {
+        if ($orderIds === []) {
             return [];
         }
 

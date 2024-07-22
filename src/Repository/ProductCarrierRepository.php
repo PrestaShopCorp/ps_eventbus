@@ -75,7 +75,7 @@ class ProductCarrierRepository
     {
         $productCarriers = $this->getProductCarriers($offset, 1);
 
-        if (!is_array($productCarriers) || empty($productCarriers)) {
+        if (!is_array($productCarriers) || $productCarriers === []) {
             return 0;
         }
 
@@ -111,7 +111,7 @@ class ProductCarrierRepository
      */
     public function getProductCarriersProperties(array $productIds)
     {
-        if (!$productIds) {
+        if ($productIds === []) {
             return [];
         }
         $query = new \DbQuery();
@@ -156,7 +156,7 @@ class ProductCarrierRepository
      */
     public function getProductCarrierIdsByProductIds(array $productIds)
     {
-        if (!$productIds) {
+        if ($productIds === []) {
             return [];
         }
 

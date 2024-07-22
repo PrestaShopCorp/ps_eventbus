@@ -1687,16 +1687,14 @@ class Ps_eventbus extends Module
         /** @var SpecificPrice $specificPrice */
         $specificPrice = $parameters['object'];
 
-        if ($specificPrice instanceof SpecificPrice) {
-            if (isset($specificPrice->id)) {
-                $synchronizationService->sendLiveSync('specific-prices', $specificPrice->id, 'upsert');
-                $synchronizationService->insertIncrementalSyncObject(
-                    $specificPrice->id,
-                    Config::COLLECTION_SPECIFIC_PRICES,
-                    date(DATE_ATOM),
-                    $this->shopId
-                );
-            }
+        if ($specificPrice instanceof SpecificPrice && isset($specificPrice->id)) {
+            $synchronizationService->sendLiveSync('specific-prices', $specificPrice->id, 'upsert');
+            $synchronizationService->insertIncrementalSyncObject(
+                $specificPrice->id,
+                Config::COLLECTION_SPECIFIC_PRICES,
+                date(DATE_ATOM),
+                $this->shopId
+            );
         }
     }
 
@@ -1713,16 +1711,14 @@ class Ps_eventbus extends Module
         /** @var SpecificPrice $specificPrice */
         $specificPrice = $parameters['object'];
 
-        if ($specificPrice instanceof SpecificPrice) {
-            if (isset($specificPrice->id)) {
-                $synchronizationService->sendLiveSync('specific-prices', $specificPrice->id, 'upsert');
-                $synchronizationService->insertIncrementalSyncObject(
-                    $specificPrice->id,
-                    Config::COLLECTION_SPECIFIC_PRICES,
-                    date(DATE_ATOM),
-                    $this->shopId
-                );
-            }
+        if ($specificPrice instanceof SpecificPrice && isset($specificPrice->id)) {
+            $synchronizationService->sendLiveSync('specific-prices', $specificPrice->id, 'upsert');
+            $synchronizationService->insertIncrementalSyncObject(
+                $specificPrice->id,
+                Config::COLLECTION_SPECIFIC_PRICES,
+                date(DATE_ATOM),
+                $this->shopId
+            );
         }
     }
 
@@ -1739,16 +1735,14 @@ class Ps_eventbus extends Module
         /** @var SpecificPrice $specificPrice */
         $specificPrice = $parameters['object'];
 
-        if ($specificPrice instanceof SpecificPrice) {
-            if (isset($specificPrice->id)) {
-                $synchronizationService->sendLiveSync('specific-prices', $specificPrice->id, 'delete');
-                $synchronizationService->insertDeletedObject(
-                    $specificPrice->id,
-                    Config::COLLECTION_SPECIFIC_PRICES,
-                    date(DATE_ATOM),
-                    $this->shopId
-                );
-            }
+        if ($specificPrice instanceof SpecificPrice && isset($specificPrice->id)) {
+            $synchronizationService->sendLiveSync('specific-prices', $specificPrice->id, 'delete');
+            $synchronizationService->insertDeletedObject(
+                $specificPrice->id,
+                Config::COLLECTION_SPECIFIC_PRICES,
+                date(DATE_ATOM),
+                $this->shopId
+            );
         }
     }
 

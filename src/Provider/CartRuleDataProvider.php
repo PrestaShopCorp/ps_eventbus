@@ -25,7 +25,7 @@ class CartRuleDataProvider implements PaginatedApiDataProviderInterface
     {
         $cartRules = $this->cartRuleRepository->getCartRules($limit, $offset);
 
-        if (!is_array($cartRules) || empty($cartRules)) {
+        if (!is_array($cartRules) || $cartRules === []) {
             return [];
         }
 

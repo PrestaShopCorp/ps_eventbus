@@ -248,34 +248,30 @@ class SynchronizationService
 
             foreach ($allIsoCodes as $langIso) {
                 if ($this->isFullSyncDone($type, $langIso)) {
-                    array_push($objectsData,
-                        [
-                            'type' => $type,
-                            'id_object' => $objectId,
-                            'id_shop' => $shopId,
-                            'lang_iso' => $langIso,
-                            'created_at' => $createdAt,
-                        ]
-                    );
+                    $objectsData[] = [
+                        'type' => $type,
+                        'id_object' => $objectId,
+                        'id_shop' => $shopId,
+                        'lang_iso' => $langIso,
+                        'created_at' => $createdAt,
+                    ];
                 }
             }
         } else {
             $defaultIsoCode = $this->languageRepository->getDefaultLanguageIsoCode();
 
             if ($this->isFullSyncDone($type, $defaultIsoCode)) {
-                array_push($objectsData,
-                    [
-                        'type' => $type,
-                        'id_object' => $objectId,
-                        'id_shop' => $shopId,
-                        'lang_iso' => $defaultIsoCode,
-                        'created_at' => $createdAt,
-                    ]
-                );
+                $objectsData[] = [
+                    'type' => $type,
+                    'id_object' => $objectId,
+                    'id_shop' => $shopId,
+                    'lang_iso' => $defaultIsoCode,
+                    'created_at' => $createdAt,
+                ];
             }
         }
 
-        if (empty($objectsData) == false) {
+        if (($objectsData === []) == false) {
             $this->incrementalSyncRepository->insertIncrementalObject($objectsData);
         }
     }

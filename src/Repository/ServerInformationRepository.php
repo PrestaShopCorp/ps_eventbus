@@ -82,7 +82,7 @@ class ServerInformationRepository
      */
     public function getServerInformation($langIso = '')
     {
-        $langId = !empty($langIso) ? (int) \Language::getIdByIso($langIso) : null;
+        $langId = empty($langIso) ? null : (int) \Language::getIdByIso($langIso);
 
         /* This file is created on installation and never modified.
         As php doesn't allow to retrieve the creation date of a file or folder,

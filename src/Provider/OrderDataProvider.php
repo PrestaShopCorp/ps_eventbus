@@ -122,7 +122,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         $langId = (int) \Language::getIdByIso($langIso);
         $orders = $this->orderRepository->getOrdersIncremental($limit, $this->shopId, $objectIds);
 
-        if (!is_array($orders) || empty($orders)) {
+        if (!is_array($orders) || $orders === []) {
             return [];
         }
 
@@ -166,7 +166,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      */
     private function getOrderDetails(array $orders)
     {
-        if (empty($orders)) {
+        if ($orders === []) {
             return [];
         }
 
@@ -174,21 +174,19 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
 
         $orderDetails = $this->orderDetailsRepository->getOrderDetails($orderIds, $this->shopId);
 
-        if (!is_array($orderDetails) || empty($orderDetails)) {
+        if (!is_array($orderDetails) || $orderDetails === []) {
             return [];
         }
 
         $this->castOrderDetailValues($orderDetails);
 
-        $orderDetails = array_map(function ($orderDetail) {
+        return array_map(function ($orderDetail) {
             return [
                 'id' => $orderDetail['id_order_detail'],
                 'collection' => Config::COLLECTION_ORDER_DETAILS,
                 'properties' => $orderDetail,
             ];
         }, $orderDetails);
-
-        return $orderDetails;
     }
 
     /**
@@ -201,7 +199,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      */
     private function getOrderStatuses(array $orders, $langId)
     {
-        if (empty($orders)) {
+        if ($orders === []) {
             return [];
         }
         $orderIds = $this->arrayFormatter->formatValueArray($orders, 'id_order');
@@ -226,7 +224,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      */
     private function getOrderCartRules(array $orders)
     {
-        if (empty($orders)) {
+        if ($orders === []) {
             return [];
         }
         $orderIds = $this->arrayFormatter->formatValueArray($orders, 'id_order');

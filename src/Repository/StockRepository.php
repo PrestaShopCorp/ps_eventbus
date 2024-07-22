@@ -123,7 +123,7 @@ class StockRepository
      */
     public function getStocksIdsByProductIds(array $productIds)
     {
-        if (!$productIds) {
+        if ($productIds === []) {
             return [];
         }
 

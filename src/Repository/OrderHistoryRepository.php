@@ -38,7 +38,7 @@ class OrderHistoryRepository
      */
     public function getOrderHistoryStatuses(array $orderIds, $langId)
     {
-        if (!$orderIds) {
+        if ($orderIds === []) {
             return [];
         }
 
@@ -63,7 +63,7 @@ class OrderHistoryRepository
      */
     public function getOrderHistoryStatuseIdsByOrderIds(array $orderIds)
     {
-        if (!$orderIds) {
+        if ($orderIds === []) {
             return [];
         }
 
