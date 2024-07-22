@@ -31,13 +31,13 @@ class SupplierRepository
      */
     public function getSuppliers($offset, $limit, $langIso)
     {
-        $dbQuery = $this->getBaseQuery($langIso);
+        $query = $this->getBaseQuery($langIso);
 
-        $this->addSelectParameters($dbQuery);
+        $this->addSelectParameters($query);
 
-        $dbQuery->limit($limit, $offset);
+        $query->limit($limit, $offset);
 
-        return $this->db->executeS($dbQuery);
+        return $this->db->executeS($query);
     }
 
     /**
@@ -65,14 +65,14 @@ class SupplierRepository
      */
     public function getSuppliersIncremental($limit, $langIso, $supplierIds)
     {
-        $dbQuery = $this->getBaseQuery($langIso);
+        $query = $this->getBaseQuery($langIso);
 
-        $this->addSelectParameters($dbQuery);
+        $this->addSelectParameters($query);
 
-        $dbQuery->where('su.id_supplier IN(' . implode(',', array_map('intval', $supplierIds)) . ')')
+        $query->where('su.id_supplier IN(' . implode(',', array_map('intval', $supplierIds)) . ')')
             ->limit($limit);
 
-        return $this->db->executeS($dbQuery);
+        return $this->db->executeS($query);
     }
 
     /**
@@ -90,12 +90,12 @@ class SupplierRepository
 
         /** @var int $langId */
         $langId = (int) \Language::getIdByIso($langIso);
-        $dbQuery = new \DbQuery();
-        $dbQuery->from('supplier', 'su')
+        $query = new \DbQuery();
+        $query->from('supplier', 'su')
             ->innerJoin('supplier_lang', 'sul', 'su.id_supplier = sul.id_supplier AND sul.id_lang = ' . (int) $langId)
             ->innerJoin('supplier_shop', 'sus', 'su.id_supplier = sus.id_supplier AND sus.id_shop = ' . $shopId);
 
-        return $dbQuery;
+        return $query;
     }
 
     /**
@@ -109,28 +109,28 @@ class SupplierRepository
      */
     public function getQueryForDebug($offset, $limit, $langIso)
     {
-        $dbQuery = $this->getBaseQuery($langIso);
+        $query = $this->getBaseQuery($langIso);
 
-        $this->addSelectParameters($dbQuery);
+        $this->addSelectParameters($query);
 
-        $dbQuery->limit($limit, $offset);
+        $query->limit($limit, $offset);
 
-        $queryStringified = preg_replace('/\s+/', ' ', $dbQuery->build());
+        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
 
         return array_merge(
-            (array) $dbQuery,
+            (array) $query,
             ['queryStringified' => $queryStringified]
         );
     }
 
     /**
-     * @param \DbQuery $dbQuery
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $dbQuery)
+    private function addSelectParameters(\DbQuery $query)
     {
-        $dbQuery->select('su.id_supplier, su.name, su.date_add as created_at, su.date_upd as updated_at, su.active, sul.id_lang');
-        $dbQuery->select('sul.description, sul.meta_title, sul.meta_keywords, sul.meta_description, sus.id_shop');
+        $query->select('su.id_supplier, su.name, su.date_add as created_at, su.date_upd as updated_at, su.active, sul.id_lang');
+        $query->select('sul.description, sul.meta_title, sul.meta_keywords, sul.meta_description, sus.id_shop');
     }
 }

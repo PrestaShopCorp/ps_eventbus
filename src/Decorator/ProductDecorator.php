@@ -341,7 +341,7 @@ class ProductDecorator
                 });
 
                 // If combination has some pictures -> the first one is the cover
-                if ($productAttributeImages !== []) {
+                if (count($productAttributeImages)) {
                     $productImageIds = $this->arrayFormatter->formatValueArray($productAttributeImages, 'id_image');
                     $coverImageId = reset($productImageIds);
                 }

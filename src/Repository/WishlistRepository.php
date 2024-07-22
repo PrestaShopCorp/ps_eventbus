@@ -31,11 +31,11 @@ class WishlistRepository
 
         $shopId = (int) $this->context->shop->id;
 
-        $dbQuery = new \DbQuery();
-        $dbQuery->from('wishlist', 'w')
+        $query = new \DbQuery();
+        $query->from('wishlist', 'w')
             ->where('w.id_shop = ' . $shopId);
 
-        return $dbQuery;
+        return $query;
     }
 
     /**
@@ -53,13 +53,13 @@ class WishlistRepository
             return [];
         }
 
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $this->addSelectParameters($dbQuery);
+        $this->addSelectParameters($query);
 
-        $dbQuery->limit($limit, $offset);
+        $query->limit($limit, $offset);
 
-        return $this->db->executeS($dbQuery);
+        return $this->db->executeS($query);
     }
 
     /**
@@ -90,14 +90,14 @@ class WishlistRepository
      */
     public function getWishlistsIncremental($limit, $wishlistIds)
     {
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $this->addSelectParameters($dbQuery);
+        $this->addSelectParameters($query);
 
-        $dbQuery->where('w.id_wishlist IN(' . implode(',', array_map('intval', $wishlistIds)) . ')')
+        $query->where('w.id_wishlist IN(' . implode(',', array_map('intval', $wishlistIds)) . ')')
             ->limit($limit);
 
-        return $this->db->executeS($dbQuery);
+        return $this->db->executeS($query);
     }
 
     /**
@@ -110,29 +110,29 @@ class WishlistRepository
      */
     public function getQueryForDebug($offset, $limit)
     {
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $this->addSelectParameters($dbQuery);
+        $this->addSelectParameters($query);
 
-        $dbQuery->limit($limit, $offset);
+        $query->limit($limit, $offset);
 
-        $queryStringified = preg_replace('/\s+/', ' ', $dbQuery->build());
+        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
 
         return array_merge(
-            (array) $dbQuery,
+            (array) $query,
             ['queryStringified' => $queryStringified]
         );
     }
 
     /**
-     * @param \DbQuery $dbQuery
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $dbQuery)
+    private function addSelectParameters(\DbQuery $query)
     {
-        $dbQuery->select('w.id_wishlist, w.id_customer, w.id_shop, w.id_shop_group, w.token, w.name, w.counter');
-        $dbQuery->select('w.date_add AS created_at, w.date_upd as updated_at, w.default');
+        $query->select('w.id_wishlist, w.id_customer, w.id_shop, w.id_shop_group, w.token, w.name, w.counter');
+        $query->select('w.date_add AS created_at, w.date_upd as updated_at, w.default');
     }
 
     /**

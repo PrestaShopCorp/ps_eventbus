@@ -72,7 +72,7 @@ class SpecificPriceService
         &$specific_price_output = null,
         $use_group_reduction = true
     ) {
-        if (!$context instanceof \Context) {
+        if (!$context) {
             /** @var \Context $context */
             $context = \Context::getContext();
         }
@@ -157,7 +157,7 @@ class SpecificPriceService
      * @param bool $use_group_reduction
      * @param int $id_customization
      *
-     * @return float|int|null
+     * @return float|int|void
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -212,30 +212,30 @@ class SpecificPriceService
         // fetch price & attribute price
         $cache_id_2 = $id_product . '-' . $id_shop . '-' . $specificPriceId;
         if (!isset(self::$_pricesLevel2[$cache_id_2])) {
-            $dbQuery = new \DbQuery();
-            $dbQuery->select('product_shop.`price`, product_shop.`ecotax`');
-            $dbQuery->from('product', 'p');
-            $dbQuery->innerJoin('product_shop', 'product_shop', '(product_shop.id_product=p.id_product AND product_shop.id_shop = ' . (int) $id_shop . ')');
-            $dbQuery->where('p.`id_product` = ' . (int) $id_product);
+            $sql = new \DbQuery();
+            $sql->select('product_shop.`price`, product_shop.`ecotax`');
+            $sql->from('product', 'p');
+            $sql->innerJoin('product_shop', 'product_shop', '(product_shop.id_product=p.id_product AND product_shop.id_shop = ' . (int) $id_shop . ')');
+            $sql->where('p.`id_product` = ' . (int) $id_product);
             if (\Combination::isFeatureActive()) {
-                $dbQuery->select('IFNULL(product_attribute_shop.id_product_attribute,0) id_product_attribute, product_attribute_shop.`price` AS attribute_price, product_attribute_shop.default_on');
-                $dbQuery->leftJoin('product_attribute_shop', 'product_attribute_shop', '(product_attribute_shop.id_product = p.id_product AND product_attribute_shop.id_shop = ' . (int) $id_shop . ')');
+                $sql->select('IFNULL(product_attribute_shop.id_product_attribute,0) id_product_attribute, product_attribute_shop.`price` AS attribute_price, product_attribute_shop.default_on');
+                $sql->leftJoin('product_attribute_shop', 'product_attribute_shop', '(product_attribute_shop.id_product = p.id_product AND product_attribute_shop.id_shop = ' . (int) $id_shop . ')');
             } else {
-                $dbQuery->select('0 as id_product_attribute');
+                $sql->select('0 as id_product_attribute');
             }
 
-            $res = \Db::getInstance((bool) _PS_USE_SQL_SLAVE_)->executeS($dbQuery);
+            $res = \Db::getInstance((bool) _PS_USE_SQL_SLAVE_)->executeS($sql);
 
             if (is_array($res) && count($res)) {
-                foreach ($res as $re) {
+                foreach ($res as $row) {
                     $array_tmp = [
-                        'price' => $re['price'],
-                        'ecotax' => $re['ecotax'],
-                        'attribute_price' => (isset($re['attribute_price']) ? $re['attribute_price'] : null),
+                        'price' => $row['price'],
+                        'ecotax' => $row['ecotax'],
+                        'attribute_price' => (isset($row['attribute_price']) ? $row['attribute_price'] : null),
                     ];
-                    self::$_pricesLevel2[$cache_id_2][(int) $re['id_product_attribute']] = $array_tmp;
+                    self::$_pricesLevel2[$cache_id_2][(int) $row['id_product_attribute']] = $array_tmp;
 
-                    if (isset($re['default_on']) && $re['default_on'] == 1) {
+                    if (isset($row['default_on']) && $row['default_on'] == 1) {
                         self::$_pricesLevel2[$cache_id_2][0] = $array_tmp;
                     }
                 }
@@ -243,12 +243,16 @@ class SpecificPriceService
         }
 
         if (!isset(self::$_pricesLevel2[$cache_id_2][(int) $id_product_attribute])) {
-            return null;
+            return;
         }
 
         $result = self::$_pricesLevel2[$cache_id_2][(int) $id_product_attribute];
 
-        $price = !$specific_price || $specific_price['price'] < 0 ? (float) $result['price'] : (float) $specific_price['price'];
+        if (!$specific_price || $specific_price['price'] < 0) {
+            $price = (float) $result['price'];
+        } else {
+            $price = (float) $specific_price['price'];
+        }
         // convert only if the specific price is in the default currency (id_currency = 0)
         if (!$specific_price || !($specific_price['price'] >= 0 && $specific_price['id_currency'])) {
             $price = \Tools::convertPrice($price, $id_currency);
@@ -267,10 +271,12 @@ class SpecificPriceService
             }
         }
 
-        // Customization price
-        if (version_compare(_PS_VERSION_, '1.7.0.0', '>=') && (int) $id_customization) {
-            /* @phpstan-ignore-next-line */
-            $price += \Tools::convertPrice(\Customization::getCustomizationPrice($id_customization), $id_currency);
+        if (version_compare(_PS_VERSION_, '1.7.0.0', '>=')) {
+            // Customization price
+            if ((int) $id_customization) {
+                /* @phpstan-ignore-next-line */
+                $price += \Tools::convertPrice(\Customization::getCustomizationPrice($id_customization), $id_currency);
+            }
         }
 
         // Tax

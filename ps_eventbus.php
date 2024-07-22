@@ -254,9 +254,9 @@ class Ps_eventbus extends Module
             return defined('PS_INSTALLATION_IN_PROGRESS');
         }
 
-        $install = new Install($this, Db::getInstance());
+        $installer = new Install($this, \Db::getInstance());
 
-        return $install->installDatabaseTables()
+        return $installer->installDatabaseTables()
             && parent::install()
             && $this->registerHook($this->hookToInstall);
     }
@@ -266,10 +266,10 @@ class Ps_eventbus extends Module
      */
     public function uninstall()
     {
-        $uninstall = new Uninstall($this, Db::getInstance());
+        $uninstaller = new Uninstall($this, \Db::getInstance());
 
-        return $uninstall->uninstallMenu()
-            && $uninstall->uninstallDatabaseTables()
+        return $uninstaller->uninstallMenu()
+            && $uninstaller->uninstallDatabaseTables()
             && parent::uninstall();
     }
 
@@ -1687,14 +1687,16 @@ class Ps_eventbus extends Module
         /** @var SpecificPrice $specificPrice */
         $specificPrice = $parameters['object'];
 
-        if ($specificPrice instanceof SpecificPrice && isset($specificPrice->id)) {
-            $synchronizationService->sendLiveSync('specific-prices', $specificPrice->id, 'upsert');
-            $synchronizationService->insertIncrementalSyncObject(
-                $specificPrice->id,
-                Config::COLLECTION_SPECIFIC_PRICES,
-                date(DATE_ATOM),
-                $this->shopId
-            );
+        if ($specificPrice instanceof SpecificPrice) {
+            if (isset($specificPrice->id)) {
+                $synchronizationService->sendLiveSync('specific-prices', $specificPrice->id, 'upsert');
+                $synchronizationService->insertIncrementalSyncObject(
+                    $specificPrice->id,
+                    Config::COLLECTION_SPECIFIC_PRICES,
+                    date(DATE_ATOM),
+                    $this->shopId
+                );
+            }
         }
     }
 
@@ -1711,14 +1713,16 @@ class Ps_eventbus extends Module
         /** @var SpecificPrice $specificPrice */
         $specificPrice = $parameters['object'];
 
-        if ($specificPrice instanceof SpecificPrice && isset($specificPrice->id)) {
-            $synchronizationService->sendLiveSync('specific-prices', $specificPrice->id, 'upsert');
-            $synchronizationService->insertIncrementalSyncObject(
-                $specificPrice->id,
-                Config::COLLECTION_SPECIFIC_PRICES,
-                date(DATE_ATOM),
-                $this->shopId
-            );
+        if ($specificPrice instanceof SpecificPrice) {
+            if (isset($specificPrice->id)) {
+                $synchronizationService->sendLiveSync('specific-prices', $specificPrice->id, 'upsert');
+                $synchronizationService->insertIncrementalSyncObject(
+                    $specificPrice->id,
+                    Config::COLLECTION_SPECIFIC_PRICES,
+                    date(DATE_ATOM),
+                    $this->shopId
+                );
+            }
         }
     }
 
@@ -1735,14 +1739,16 @@ class Ps_eventbus extends Module
         /** @var SpecificPrice $specificPrice */
         $specificPrice = $parameters['object'];
 
-        if ($specificPrice instanceof SpecificPrice && isset($specificPrice->id)) {
-            $synchronizationService->sendLiveSync('specific-prices', $specificPrice->id, 'delete');
-            $synchronizationService->insertDeletedObject(
-                $specificPrice->id,
-                Config::COLLECTION_SPECIFIC_PRICES,
-                date(DATE_ATOM),
-                $this->shopId
-            );
+        if ($specificPrice instanceof SpecificPrice) {
+            if (isset($specificPrice->id)) {
+                $synchronizationService->sendLiveSync('specific-prices', $specificPrice->id, 'delete');
+                $synchronizationService->insertDeletedObject(
+                    $specificPrice->id,
+                    Config::COLLECTION_SPECIFIC_PRICES,
+                    date(DATE_ATOM),
+                    $this->shopId
+                );
+            }
         }
     }
 

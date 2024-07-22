@@ -91,12 +91,12 @@ class EventbusSyncRepository
      */
     public function findJobById($jobId)
     {
-        $dbQuery = new \DbQuery();
-        $dbQuery->select('*')
+        $query = new \DbQuery();
+        $query->select('*')
             ->from(self::JOB_TABLE_NAME)
             ->where('job_id = "' . pSQL($jobId) . '"');
 
-        return $this->db->getRow($dbQuery);
+        return $this->db->getRow($query);
     }
 
     /**
@@ -107,14 +107,14 @@ class EventbusSyncRepository
      */
     public function findTypeSync($type, $langIso = null)
     {
-        $dbQuery = new \DbQuery();
-        $dbQuery->select('*')
+        $query = new \DbQuery();
+        $query->select('*')
             ->from(self::TYPE_SYNC_TABLE_NAME)
             ->where('type = "' . pSQL($type) . '"')
             ->where('lang_iso = "' . pSQL((string) $langIso) . '"')
             ->where('id_shop = ' . $this->shopId);
 
-        return $this->db->getRow($dbQuery);
+        return $this->db->getRow($query);
     }
 
     /**
@@ -149,14 +149,14 @@ class EventbusSyncRepository
      */
     public function isFullSyncDoneForThisTypeSync($type, $langIso = null)
     {
-        $dbQuery = new \DbQuery();
+        $query = new \DbQuery();
 
-        $dbQuery->select('full_sync_finished')
+        $query->select('full_sync_finished')
             ->from(self::TYPE_SYNC_TABLE_NAME)
             ->where('type = "' . pSQL($type) . '"')
             ->where('lang_iso = "' . pSQL((string) $langIso) . '"')
             ->where('id_shop = ' . $this->shopId);
 
-        return (bool) $this->db->getValue($dbQuery);
+        return (bool) $this->db->getValue($query);
     }
 }

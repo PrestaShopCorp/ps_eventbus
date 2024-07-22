@@ -32,64 +32,64 @@ class CarrierRepository
     }
 
     /**
-     * @param \Carrier $carrier
+     * @param \Carrier $carrierObj
      *
      * @return array|false
      */
-    public function getDeliveryPriceByRange(\Carrier $carrier)
+    public function getDeliveryPriceByRange(\Carrier $carrierObj)
     {
-        $rangeTable = $carrier->getRangeTable();
+        $rangeTable = $carrierObj->getRangeTable();
         switch ($rangeTable) {
             case 'range_weight':
-                return $this->getCarrierByWeightRange($carrier, 'range_weight');
+                return $this->getCarrierByWeightRange($carrierObj, 'range_weight');
             case 'range_price':
-                return $this->getCarrierByPriceRange($carrier, 'range_price');
+                return $this->getCarrierByPriceRange($carrierObj, 'range_price');
             default:
                 return false;
         }
     }
 
     /**
-     * @param \Carrier $carrier
+     * @param \Carrier $carrierObj
      * @param string $rangeTable
      *
      * @return array
      */
     private function getCarrierByPriceRange(
-        \Carrier $carrier,
+        \Carrier $carrierObj,
         $rangeTable
     ) {
-        $deliveryPriceByRange = \Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrier->id);
+        $deliveryPriceByRange = \Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrierObj->id);
 
         $filteredRanges = [];
-        foreach ($deliveryPriceByRange as $deliveryPrice) {
-            $filteredRanges[$deliveryPrice['id_range_price']]['id_range_price'] = $deliveryPrice['id_range_price'];
-            $filteredRanges[$deliveryPrice['id_range_price']]['id_carrier'] = $deliveryPrice['id_carrier'];
-            $filteredRanges[$deliveryPrice['id_range_price']]['zones'][$deliveryPrice['id_zone']]['id_zone'] = $deliveryPrice['id_zone'];
-            $filteredRanges[$deliveryPrice['id_range_price']]['zones'][$deliveryPrice['id_zone']]['price'] = $deliveryPrice['price'];
+        foreach ($deliveryPriceByRange as $range) {
+            $filteredRanges[$range['id_range_price']]['id_range_price'] = $range['id_range_price'];
+            $filteredRanges[$range['id_range_price']]['id_carrier'] = $range['id_carrier'];
+            $filteredRanges[$range['id_range_price']]['zones'][$range['id_zone']]['id_zone'] = $range['id_zone'];
+            $filteredRanges[$range['id_range_price']]['zones'][$range['id_zone']]['price'] = $range['price'];
         }
 
         return $filteredRanges;
     }
 
     /**
-     * @param \Carrier $carrier
+     * @param \Carrier $carrierObj
      * @param string $rangeTable
      *
      * @return array
      */
     private function getCarrierByWeightRange(
-        \Carrier $carrier,
+        \Carrier $carrierObj,
         $rangeTable
     ) {
-        $deliveryPriceByRange = \Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrier->id);
+        $deliveryPriceByRange = \Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrierObj->id);
 
         $filteredRanges = [];
-        foreach ($deliveryPriceByRange as $deliveryPrice) {
-            $filteredRanges[$deliveryPrice['id_range_weight']]['id_range_weight'] = $deliveryPrice['id_range_weight'];
-            $filteredRanges[$deliveryPrice['id_range_weight']]['id_carrier'] = $deliveryPrice['id_carrier'];
-            $filteredRanges[$deliveryPrice['id_range_weight']]['zones'][$deliveryPrice['id_zone']]['id_zone'] = $deliveryPrice['id_zone'];
-            $filteredRanges[$deliveryPrice['id_range_weight']]['zones'][$deliveryPrice['id_zone']]['price'] = $deliveryPrice['price'];
+        foreach ($deliveryPriceByRange as $range) {
+            $filteredRanges[$range['id_range_weight']]['id_range_weight'] = $range['id_range_weight'];
+            $filteredRanges[$range['id_range_weight']]['id_carrier'] = $range['id_carrier'];
+            $filteredRanges[$range['id_range_weight']]['zones'][$range['id_zone']]['id_zone'] = $range['id_zone'];
+            $filteredRanges[$range['id_range_weight']]['zones'][$range['id_zone']]['price'] = $range['price'];
         }
 
         return $filteredRanges;
@@ -104,16 +104,16 @@ class CarrierRepository
      */
     private function getAllCarriersQuery($offset, $limit, $langId)
     {
-        $dbQuery = new \DbQuery();
-        $dbQuery->from('carrier', 'c');
-        $dbQuery->select('c.id_carrier');
-        $dbQuery->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
-        $dbQuery->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier');
-        $dbQuery->where('cs.id_shop = ' . $this->shopId);
-        $dbQuery->where('deleted=0');
-        $dbQuery->limit($limit, $offset);
+        $query = new \DbQuery();
+        $query->from('carrier', 'c');
+        $query->select('c.id_carrier');
+        $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
+        $query->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier');
+        $query->where('cs.id_shop = ' . $this->shopId);
+        $query->where('deleted=0');
+        $query->limit($limit, $offset);
 
-        return $dbQuery;
+        return $query;
     }
 
     /**
@@ -126,14 +126,14 @@ class CarrierRepository
      */
     public function getShippingIncremental($type, $langIso)
     {
-        $dbQuery = new \DbQuery();
-        $dbQuery->from(IncrementalSyncRepository::INCREMENTAL_SYNC_TABLE, 'aic');
-        $dbQuery->leftJoin(EventbusSyncRepository::TYPE_SYNC_TABLE_NAME, 'ts', 'ts.type = aic.type');
-        $dbQuery->where('aic.type = "' . pSQL($type) . '"');
-        $dbQuery->where('ts.id_shop = ' . $this->shopId);
-        $dbQuery->where('ts.lang_iso = "' . pSQL($langIso) . '"');
+        $query = new \DbQuery();
+        $query->from(IncrementalSyncRepository::INCREMENTAL_SYNC_TABLE, 'aic');
+        $query->leftJoin(EventbusSyncRepository::TYPE_SYNC_TABLE_NAME, 'ts', 'ts.type = aic.type');
+        $query->where('aic.type = "' . pSQL($type) . '"');
+        $query->where('ts.id_shop = ' . $this->shopId);
+        $query->where('ts.lang_iso = "' . pSQL($langIso) . '"');
 
-        return $this->db->executeS($dbQuery);
+        return $this->db->executeS($query);
     }
 
     /**
@@ -169,15 +169,15 @@ class CarrierRepository
         if (!$carrierIds) {
             return [];
         }
-        $dbQuery = new \DbQuery();
-        $dbQuery->from('carrier', 'c');
-        $dbQuery->select('c.*, cl.delay');
-        $dbQuery->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
-        $dbQuery->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier');
-        $dbQuery->where('c.id_carrier IN (' . implode(',', array_map('intval', $carrierIds)) . ')');
-        $dbQuery->where('cs.id_shop = ' . $this->shopId);
+        $query = new \DbQuery();
+        $query->from('carrier', 'c');
+        $query->select('c.*, cl.delay');
+        $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
+        $query->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier');
+        $query->where('c.id_carrier IN (' . implode(',', array_map('intval', $carrierIds)) . ')');
+        $query->where('cs.id_shop = ' . $this->shopId);
 
-        return $this->db->executeS($dbQuery);
+        return $this->db->executeS($query);
     }
 
     /**
@@ -206,7 +206,7 @@ class CarrierRepository
     {
         $carriers = $this->getAllCarrierProperties($offset, 1, $langId);
 
-        if (!is_array($carriers) || $carriers === []) {
+        if (!is_array($carriers) || empty($carriers)) {
             return 0;
         }
 
@@ -224,11 +224,11 @@ class CarrierRepository
      */
     public function getQueryForDebug($offset, $limit, $langId)
     {
-        $dbQuery = $this->getAllCarriersQuery($offset, $limit, $langId);
-        $queryStringified = preg_replace('/\s+/', ' ', $dbQuery->build());
+        $query = $this->getAllCarriersQuery($offset, $limit, $langId);
+        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
 
         return array_merge(
-            (array) $dbQuery,
+            (array) $query,
             ['queryStringified' => $queryStringified]
         );
     }

@@ -21,12 +21,12 @@ class GoogleTaxonomyRepository
      */
     public function getBaseQuery($shopId)
     {
-        $dbQuery = new \DbQuery();
+        $query = new \DbQuery();
 
-        $dbQuery->from('fb_category_match', 'cm')
+        $query->from('fb_category_match', 'cm')
             ->where('cm.id_shop = ' . (int) $shopId);
 
-        return $dbQuery;
+        return $query;
     }
 
     /**
@@ -40,12 +40,12 @@ class GoogleTaxonomyRepository
      */
     public function getTaxonomyCategories($offset, $limit, $shopId)
     {
-        $dbQuery = $this->getBaseQuery($shopId);
+        $query = $this->getBaseQuery($shopId);
 
-        $dbQuery->select('cm.id_category, cm.google_category_id')
+        $query->select('cm.id_category, cm.google_category_id')
             ->limit($limit, $offset);
 
-        return $this->db->executeS($dbQuery);
+        return $this->db->executeS($query);
     }
 
     /**
@@ -56,11 +56,11 @@ class GoogleTaxonomyRepository
      */
     public function getRemainingTaxonomyRepositories($offset, $shopId)
     {
-        $dbQuery = $this->getBaseQuery($shopId);
+        $query = $this->getBaseQuery($shopId);
 
-        $dbQuery->select('(COUNT(cm.id_category) - ' . (int) $offset . ') as count');
+        $query->select('(COUNT(cm.id_category) - ' . (int) $offset . ') as count');
 
-        return (int) $this->db->getValue($dbQuery);
+        return (int) $this->db->getValue($query);
     }
 
     /**
@@ -74,15 +74,15 @@ class GoogleTaxonomyRepository
      */
     public function getQueryForDebug($offset, $limit, $shopId)
     {
-        $dbQuery = $this->getBaseQuery($shopId);
+        $query = $this->getBaseQuery($shopId);
 
-        $dbQuery->select('cm.id_category, cm.google_category_id')
+        $query->select('cm.id_category, cm.google_category_id')
             ->limit($limit, $offset);
 
-        $queryStringified = preg_replace('/\s+/', ' ', $dbQuery->build());
+        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
 
         return array_merge(
-            (array) $dbQuery,
+            (array) $query,
             ['queryStringified' => $queryStringified]
         );
     }

@@ -21,12 +21,12 @@ class WishlistProductRepository
      */
     public function getBaseQuery(array &$wishlistIds)
     {
-        $dbQuery = new \DbQuery();
+        $query = new \DbQuery();
 
-        $dbQuery->from('wishlist_product', 'wp');
-        $dbQuery->where('wp.id_wishlist IN(' . implode(',', array_map('intval', $wishlistIds)) . ')');
+        $query->from('wishlist_product', 'wp');
+        $query->where('wp.id_wishlist IN(' . implode(',', array_map('intval', $wishlistIds)) . ')');
 
-        return $dbQuery;
+        return $query;
     }
 
     /**
@@ -43,11 +43,11 @@ class WishlistProductRepository
             return [];
         }
 
-        $dbQuery = $this->getBaseQuery($wishlistIds);
+        $query = $this->getBaseQuery($wishlistIds);
 
-        $this->addSelectParameters($dbQuery);
+        $this->addSelectParameters($query);
 
-        return $this->db->executeS($dbQuery);
+        return $this->db->executeS($query);
     }
 
     /**
@@ -63,13 +63,13 @@ class WishlistProductRepository
     }
 
     /**
-     * @param \DbQuery $dbQuery
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $dbQuery)
+    private function addSelectParameters(\DbQuery $query)
     {
-        $dbQuery->select('wp.id_wishlist_product, wp.id_wishlist, wp.id_product, wp.id_product_attribute');
-        $dbQuery->select('wp.quantity, wp.priority');
+        $query->select('wp.id_wishlist_product, wp.id_wishlist, wp.id_product, wp.id_product_attribute');
+        $query->select('wp.quantity, wp.priority');
     }
 }

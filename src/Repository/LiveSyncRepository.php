@@ -31,7 +31,7 @@ class LiveSyncRepository
 
         $result = $this->db->executeS($query);
 
-        if (is_array($result) && $result !== []) {
+        if (is_array($result) && count($result) > 0) {
             return $result[0];
         }
 

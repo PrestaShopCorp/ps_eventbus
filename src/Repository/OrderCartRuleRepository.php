@@ -21,11 +21,11 @@ class OrderCartRuleRepository
      */
     public function getBaseQuery()
     {
-        $dbQuery = new \DbQuery();
+        $query = new \DbQuery();
 
-        $dbQuery->from(self::TABLE_NAME, 'ocr');
+        $query->from(self::TABLE_NAME, 'ocr');
 
-        return $dbQuery;
+        return $query;
     }
 
     /**
@@ -37,20 +37,20 @@ class OrderCartRuleRepository
      */
     public function getOrderCartRules(array $orderIds)
     {
-        if ($orderIds === []) {
+        if (!$orderIds) {
             return [];
         }
 
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $dbQuery->select('ocr.id_order_cart_rule,ocr.id_order,ocr.id_cart_rule,ocr.id_order_invoice,ocr.name,ocr.value,ocr.value_tax_excl, ocr.free_shipping');
+        $query->select('ocr.id_order_cart_rule,ocr.id_order,ocr.id_cart_rule,ocr.id_order_invoice,ocr.name,ocr.value,ocr.value_tax_excl, ocr.free_shipping');
 
         if (\Tools::version_compare(_PS_VERSION_, '1.7.7.0', '>=')) {
-            $dbQuery->select('ocr.deleted');
+            $query->select('ocr.deleted');
         }
-        $dbQuery->where('ocr.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')');
+        $query->where('ocr.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')');
 
-        return $this->db->executeS($dbQuery);
+        return $this->db->executeS($query);
     }
 
     /**
@@ -62,16 +62,16 @@ class OrderCartRuleRepository
      */
     public function getOrderCartRuleIdsByOrderIds(array $orderIds)
     {
-        if ($orderIds === []) {
+        if (!$orderIds) {
             return [];
         }
 
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $dbQuery->select('ocr.id_order_cart_rule as id');
-        $dbQuery->where('ocr.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')');
+        $query->select('ocr.id_order_cart_rule as id');
+        $query->where('ocr.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')');
 
-        $result = $this->db->executeS($dbQuery);
+        $result = $this->db->executeS($query);
 
         return is_array($result) ? $result : [];
     }

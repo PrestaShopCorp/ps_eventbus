@@ -44,21 +44,21 @@ class ModuleRepository
      */
     public function getModules($offset, $limit)
     {
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
         /*
          * The `active` field of the "ps_module" table has been deprecated, this is why we use the "ps_module_shop" table
          * to check if a module is active or not
         */
         if (version_compare(_PS_VERSION_, '1.7', '>=')) {
-            $dbQuery->select('m.id_module as module_id, name, version as module_version, IF(m_shop.enable_device, 1, 0) as active, date_add as created_at, date_upd as updated_at')
+            $query->select('m.id_module as module_id, name, version as module_version, IF(m_shop.enable_device, 1, 0) as active, date_add as created_at, date_upd as updated_at')
                 ->limit($limit, $offset);
         } else {
-            $dbQuery->select('m.id_module as module_id, name, version as module_version, IF(m_shop.enable_device, 1, 0) as active')
+            $query->select('m.id_module as module_id, name, version as module_version, IF(m_shop.enable_device, 1, 0) as active')
             ->limit($limit, $offset);
         }
 
-        return $this->db->executeS($dbQuery);
+        return $this->db->executeS($query);
     }
 
     /**
@@ -68,11 +68,11 @@ class ModuleRepository
      */
     public function getRemainingModules($offset)
     {
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $dbQuery->select('(COUNT(m.id_module) - ' . (int) $offset . ') as count');
+        $query->select('(COUNT(m.id_module) - ' . (int) $offset . ') as count');
 
-        return (int) $this->db->getValue($dbQuery);
+        return (int) $this->db->getValue($query);
     }
 
     /**
@@ -85,24 +85,24 @@ class ModuleRepository
      */
     public function getQueryForDebug($offset, $limit)
     {
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
         /*
          * The `active` field of the "ps_module" table has been deprecated, this is why we use the "ps_module_shop" table
          * to check if a module is active or not
         */
         if (version_compare(_PS_VERSION_, '1.7', '>=')) {
-            $dbQuery->select('m.id_module as module_id, name, version as module_version, IF(m_shop.enable_device, 1, 0) as active, date_add as created_at, date_upd as updated_at')
+            $query->select('m.id_module as module_id, name, version as module_version, IF(m_shop.enable_device, 1, 0) as active, date_add as created_at, date_upd as updated_at')
                 ->limit($limit, $offset);
         } else {
-            $dbQuery->select('m.id_module as module_id, name, version as module_version, IF(m_shop.enable_device, 1, 0) as active')
+            $query->select('m.id_module as module_id, name, version as module_version, IF(m_shop.enable_device, 1, 0) as active')
             ->limit($limit, $offset);
         }
 
-        $queryStringified = preg_replace('/\s+/', ' ', $dbQuery->build());
+        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
 
         return array_merge(
-            (array) $dbQuery,
+            (array) $query,
             ['queryStringified' => $queryStringified]
         );
     }

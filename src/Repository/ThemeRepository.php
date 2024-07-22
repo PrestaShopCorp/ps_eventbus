@@ -73,7 +73,7 @@ class ThemeRepository
                         'theme_id' => md5($theme),
                         'name' => isset($themeInfo['theme_name']) ? $themeInfo['theme_name'] : '',
                         'theme_version' => isset($themeInfo['theme_version']) ? $themeInfo['theme_version'] : '',
-                        'active' => isset($themeInfo['theme_version']) ? false : (string) $this->context->theme->id === (string) $themeInfo['theme_id'],
+                        'active' => isset($themeInfo['theme_version']) ? false : (string) $this->context->theme->id == (string) $themeInfo['theme_id'],
                     ];
                 } else {
                     $themeData['properties'] = [

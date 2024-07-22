@@ -32,12 +32,12 @@ class OrderDetailsRepository
 
         $shopId = (int) $this->context->shop->id;
 
-        $dbQuery = new \DbQuery();
+        $query = new \DbQuery();
 
-        $dbQuery->from(self::TABLE_NAME, 'od')
+        $query->from(self::TABLE_NAME, 'od')
             ->where('od.id_shop = ' . $shopId);
 
-        return $dbQuery;
+        return $query;
     }
 
     /**
@@ -50,16 +50,16 @@ class OrderDetailsRepository
      */
     public function getOrderDetails(array $orderIds, $shopId)
     {
-        if ($orderIds === []) {
+        if (!$orderIds) {
             return [];
         }
 
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $dbQuery->select('od.id_order_detail, od.id_order, od.product_id, od.product_attribute_id');
-        $dbQuery->select('od.product_quantity, od.unit_price_tax_incl, od.unit_price_tax_excl, SUM(osd.total_price_tax_incl) as refund');
-        $dbQuery->select('SUM(osd.total_price_tax_excl) as refund_tax_excl, c.iso_code as currency, ps.id_category_default as category');
-        $dbQuery->select('l.iso_code, o.conversion_rate as conversion_rate')
+        $query->select('od.id_order_detail, od.id_order, od.product_id, od.product_attribute_id');
+        $query->select('od.product_quantity, od.unit_price_tax_incl, od.unit_price_tax_excl, SUM(osd.total_price_tax_incl) as refund');
+        $query->select('SUM(osd.total_price_tax_excl) as refund_tax_excl, c.iso_code as currency, ps.id_category_default as category');
+        $query->select('l.iso_code, o.conversion_rate as conversion_rate')
             ->leftJoin('order_slip_detail', 'osd', 'od.id_order_detail = osd.id_order_detail')
             ->leftJoin('product_shop', 'ps', 'od.product_id = ps.id_product AND ps.id_shop = ' . (int) $shopId)
             ->innerJoin('orders', 'o', 'od.id_order = o.id_order')
@@ -68,7 +68,7 @@ class OrderDetailsRepository
             ->where('od.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')')
             ->groupBy('od.id_order_detail');
 
-        return $this->db->executeS($dbQuery);
+        return $this->db->executeS($query);
     }
 
     /**
@@ -80,17 +80,17 @@ class OrderDetailsRepository
      */
     public function getOrderDetailIdsByOrderIds(array $orderIds)
     {
-        if ($orderIds === []) {
+        if (!$orderIds) {
             return [];
         }
 
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $dbQuery->select('od.id_order_detail as id')
+        $query->select('od.id_order_detail as id')
             ->where('od.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')')
             ->groupBy('od.id_order_detail');
 
-        $result = $this->db->executeS($dbQuery);
+        $result = $this->db->executeS($query);
 
         return is_array($result) ? $result : [];
     }

@@ -76,7 +76,7 @@ class ProductSupplierDataProvider implements PaginatedApiDataProviderInterface
     {
         $productSuppliers = $this->productSupplierRepository->getProductSuppliersIncremental($limit, $objectIds);
 
-        if (!is_array($productSuppliers) || $productSuppliers === []) {
+        if (!is_array($productSuppliers) || empty($productSuppliers)) {
             return [];
         }
 

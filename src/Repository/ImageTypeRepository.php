@@ -19,11 +19,11 @@ class ImageTypeRepository
      */
     private function getBaseQuery()
     {
-        $dbQuery = new \DbQuery();
+        $query = new \DbQuery();
 
-        $dbQuery->from('image_type', 'it');
+        $query->from('image_type', 'it');
 
-        return $dbQuery;
+        return $query;
     }
 
     /**
@@ -36,13 +36,13 @@ class ImageTypeRepository
      */
     public function getImageTypes($offset, $limit)
     {
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $this->addSelectParameters($dbQuery);
+        $this->addSelectParameters($query);
 
-        $dbQuery->limit($limit, $offset);
+        $query->limit($limit, $offset);
 
-        return $this->db->executeS($dbQuery);
+        return $this->db->executeS($query);
     }
 
     /**
@@ -68,14 +68,14 @@ class ImageTypeRepository
      */
     public function getImageTypesIncremental($limit, $imageTypeIds)
     {
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $this->addSelectParameters($dbQuery);
+        $this->addSelectParameters($query);
 
-        $dbQuery->where('it.id_image_type IN(' . implode(',', array_map('intval', $imageTypeIds)) . ')')
+        $query->where('it.id_image_type IN(' . implode(',', array_map('intval', $imageTypeIds)) . ')')
             ->limit($limit);
 
-        return $this->db->executeS($dbQuery);
+        return $this->db->executeS($query);
     }
 
     /**
@@ -88,35 +88,35 @@ class ImageTypeRepository
      */
     public function getQueryForDebug($offset, $limit)
     {
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $this->addSelectParameters($dbQuery);
+        $this->addSelectParameters($query);
 
-        $dbQuery->limit($limit, $offset);
+        $query->limit($limit, $offset);
 
-        $queryStringified = preg_replace('/\s+/', ' ', $dbQuery->build());
+        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
 
         return array_merge(
-            (array) $dbQuery,
+            (array) $query,
             ['queryStringified' => $queryStringified]
         );
     }
 
     /**
-     * @param \DbQuery $dbQuery
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $dbQuery)
+    private function addSelectParameters(\DbQuery $query)
     {
-        $dbQuery->select('it.id_image_type');
-        $dbQuery->select('it.name');
-        $dbQuery->select('it.width');
-        $dbQuery->select('it.height');
-        $dbQuery->select('it.products');
-        $dbQuery->select('it.categories');
-        $dbQuery->select('it.manufacturers');
-        $dbQuery->select('it.suppliers');
-        $dbQuery->select('it.stores');
+        $query->select('it.id_image_type');
+        $query->select('it.name');
+        $query->select('it.width');
+        $query->select('it.height');
+        $query->select('it.products');
+        $query->select('it.categories');
+        $query->select('it.manufacturers');
+        $query->select('it.suppliers');
+        $query->select('it.stores');
     }
 }

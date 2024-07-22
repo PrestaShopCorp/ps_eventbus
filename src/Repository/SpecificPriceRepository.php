@@ -21,10 +21,10 @@ class SpecificPriceRepository
      */
     public function getBaseQuery()
     {
-        $dbQuery = new \DbQuery();
-        $dbQuery->from(self::TABLE_NAME, 'sp');
+        $query = new \DbQuery();
+        $query->from(self::TABLE_NAME, 'sp');
 
-        return $dbQuery;
+        return $query;
     }
 
     /**
@@ -36,25 +36,25 @@ class SpecificPriceRepository
      */
     public function getSpecificPrice(int $specificPriceId)
     {
-        if ($specificPriceId === 0) {
+        if (!$specificPriceId) {
             return [];
         }
 
-        $dbQuery = $this->getBaseQuery();
-        $this->addSelectParameters($dbQuery);
-        $dbQuery->where('sp.id_specific_price= ' . (int) $specificPriceId);
+        $query = $this->getBaseQuery();
+        $this->addSelectParameters($query);
+        $query->where('sp.id_specific_price= ' . (int) $specificPriceId);
 
-        return $this->db->getRow($dbQuery);
+        return $this->db->getRow($query);
     }
 
     /**
-     * @param \DbQuery $dbQuery
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $dbQuery)
+    private function addSelectParameters(\DbQuery $query)
     {
-        $dbQuery->select('sp.id_specific_price, sp.id_specific_price_rule, sp.id_cart, sp.id_product, sp.id_shop, sp.id_shop_group, sp.id_currency, sp.id_country');
-        $dbQuery->select('sp.id_country, sp.id_customer, sp.id_product_attribute, sp.price, sp.from_quantity, sp.reduction, sp.reduction_tax, sp.reduction_type, sp.from, sp.to');
+        $query->select('sp.id_specific_price, sp.id_specific_price_rule, sp.id_cart, sp.id_product, sp.id_shop, sp.id_shop_group, sp.id_currency, sp.id_country');
+        $query->select('sp.id_country, sp.id_customer, sp.id_product_attribute, sp.price, sp.from_quantity, sp.reduction, sp.reduction_tax, sp.reduction_type, sp.from, sp.to');
     }
 }

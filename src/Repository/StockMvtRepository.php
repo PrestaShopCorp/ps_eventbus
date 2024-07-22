@@ -23,12 +23,12 @@ class StockMvtRepository
     {
         /** @var int $langId */
         $langId = (int) \Language::getIdByIso($langIso);
-        $dbQuery = new \DbQuery();
-        $dbQuery->from('stock_mvt', 'sm')
+        $query = new \DbQuery();
+        $query->from('stock_mvt', 'sm')
             ->innerJoin('stock_mvt_reason', 'smr', 'sm.id_stock_mvt_reason = smr.id_stock_mvt_reason')
             ->innerJoin('stock_mvt_reason_lang', 'smrl', 'sm.id_stock_mvt_reason = smrl.id_stock_mvt_reason AND smrl.id_lang = ' . (int) $langId);
 
-        return $dbQuery;
+        return $query;
     }
 
     /**
@@ -41,24 +41,24 @@ class StockMvtRepository
      */
     public function getStockMvts($langIso, $stockIds)
     {
-        $dbQuery = $this->getBaseQuery($langIso);
+        $query = $this->getBaseQuery($langIso);
 
-        $this->addSelectParameters($dbQuery);
+        $this->addSelectParameters($query);
 
-        $dbQuery->where('sm.id_stock IN(' . implode(',', array_map('intval', $stockIds)) . ')');
+        $query->where('sm.id_stock IN(' . implode(',', array_map('intval', $stockIds)) . ')');
 
-        return $this->db->executeS($dbQuery);
+        return $this->db->executeS($query);
     }
 
     /**
-     * @param \DbQuery $dbQuery
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $dbQuery)
+    private function addSelectParameters(\DbQuery $query)
     {
-        $dbQuery->select('sm.id_stock_mvt, sm.id_stock, sm.id_order, sm.id_supply_order, sm.id_stock_mvt_reason, smrl.name, smrl.id_lang');
-        $dbQuery->select('sm.id_employee, sm.employee_lastname, sm.employee_firstname, sm.physical_quantity, sm.date_add, sm.sign, sm.price_te');
-        $dbQuery->select('sm.last_wa, sm.current_wa, sm.referer, smr.deleted');
+        $query->select('sm.id_stock_mvt, sm.id_stock, sm.id_order, sm.id_supply_order, sm.id_stock_mvt_reason, smrl.name, smrl.id_lang');
+        $query->select('sm.id_employee, sm.employee_lastname, sm.employee_firstname, sm.physical_quantity, sm.date_add, sm.sign, sm.price_te');
+        $query->select('sm.last_wa, sm.current_wa, sm.referer, smr.deleted');
     }
 }

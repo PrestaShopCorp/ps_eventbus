@@ -123,18 +123,18 @@ class IncrementalSyncRepository
      */
     public function getIncrementalSyncObjectIds($type, $langIso, $limit)
     {
-        $dbQuery = new \DbQuery();
+        $query = new \DbQuery();
 
-        $dbQuery->select('id_object')
+        $query->select('id_object')
             ->from(self::INCREMENTAL_SYNC_TABLE)
             ->where('lang_iso = "' . pSQL($langIso) . '"')
             ->where('id_shop = "' . $this->shopId . '"')
             ->where('type = "' . pSQL($type) . '"')
             ->limit($limit);
 
-        $result = $this->db->executeS($dbQuery);
+        $result = $this->db->executeS($query);
 
-        if (is_array($result) && $result !== []) {
+        if (is_array($result) && !empty($result)) {
             return array_map(function ($object) {
                 return $object['id_object'];
             }, $result);
@@ -151,15 +151,15 @@ class IncrementalSyncRepository
      */
     public function getRemainingIncrementalObjects($type, $langIso)
     {
-        $dbQuery = new \DbQuery();
+        $query = new \DbQuery();
 
-        $dbQuery->select('COUNT(id_object) as count')
+        $query->select('COUNT(id_object) as count')
             ->from(self::INCREMENTAL_SYNC_TABLE)
             ->where('lang_iso = "' . pSQL($langIso) . '"')
             ->where('id_shop = "' . $this->shopId . '"')
             ->where('type = "' . pSQL($type) . '"');
 
-        return (int) $this->db->getValue($dbQuery);
+        return (int) $this->db->getValue($query);
     }
 
     /**
@@ -185,13 +185,13 @@ class IncrementalSyncRepository
      */
     public function getIncrementalSyncObjectCountByType($type)
     {
-        $dbQuery = new \DbQuery();
+        $query = new \DbQuery();
 
-        $dbQuery->select('COUNT(type) as count')
+        $query->select('COUNT(type) as count')
             ->from(self::INCREMENTAL_SYNC_TABLE)
             ->where('type = "' . psql($type) . '"');
 
-        return (int) $this->db->getValue($dbQuery);
+        return (int) $this->db->getValue($query);
     }
 
     /**

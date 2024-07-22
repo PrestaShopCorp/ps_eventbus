@@ -29,10 +29,10 @@ class TranslationRepository
             throw new \PrestaShopException('No shop context');
         }
 
-        $dbQuery = new \DbQuery();
-        $dbQuery->from('translation', 't');
+        $query = new \DbQuery();
+        $query->from('translation', 't');
 
-        return $dbQuery;
+        return $query;
     }
 
     /**
@@ -45,13 +45,13 @@ class TranslationRepository
      */
     public function getTranslations($offset, $limit)
     {
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $this->addSelectParameters($dbQuery);
+        $this->addSelectParameters($query);
 
-        $dbQuery->limit($limit, $offset);
+        $query->limit($limit, $offset);
 
-        return $this->db->executeS($dbQuery);
+        return $this->db->executeS($query);
     }
 
     /**
@@ -77,14 +77,14 @@ class TranslationRepository
      */
     public function getTranslationsIncremental($limit, $translationIds)
     {
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $this->addSelectParameters($dbQuery);
+        $this->addSelectParameters($query);
 
-        $dbQuery->where('t.id_translation IN(' . implode(',', array_map('intval', $translationIds)) . ')')
+        $query->where('t.id_translation IN(' . implode(',', array_map('intval', $translationIds)) . ')')
             ->limit($limit);
 
-        return $this->db->executeS($dbQuery);
+        return $this->db->executeS($query);
     }
 
     /**
@@ -97,27 +97,27 @@ class TranslationRepository
      */
     public function getQueryForDebug($offset, $limit)
     {
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $this->addSelectParameters($dbQuery);
+        $this->addSelectParameters($query);
 
-        $dbQuery->limit($limit, $offset);
+        $query->limit($limit, $offset);
 
-        $queryStringified = preg_replace('/\s+/', ' ', $dbQuery->build());
+        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
 
         return array_merge(
-            (array) $dbQuery,
+            (array) $query,
             ['queryStringified' => $queryStringified]
         );
     }
 
     /**
-     * @param \DbQuery $dbQuery
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $dbQuery)
+    private function addSelectParameters(\DbQuery $query)
     {
-        $dbQuery->select('t.id_translation, t.id_lang, t.key, t.translation, t.domain, t.theme');
+        $query->select('t.id_translation, t.id_lang, t.key, t.translation, t.domain, t.theme');
     }
 }

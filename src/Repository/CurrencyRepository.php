@@ -54,13 +54,13 @@ class CurrencyRepository
      */
     public function getCurrencies($offset, $limit)
     {
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $this->addSelectParameters($dbQuery);
+        $this->addSelectParameters($query);
 
-        $dbQuery->limit($limit, $offset);
+        $query->limit($limit, $offset);
 
-        return $this->db->executeS($dbQuery);
+        return $this->db->executeS($query);
     }
 
     /**
@@ -86,14 +86,14 @@ class CurrencyRepository
      */
     public function getCurrenciesIncremental($limit, $currencyIds)
     {
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $this->addSelectParameters($dbQuery);
+        $this->addSelectParameters($query);
 
-        $dbQuery->where('c.id_currency IN(' . implode(',', array_map('intval', $currencyIds)) . ')')
+        $query->where('c.id_currency IN(' . implode(',', array_map('intval', $currencyIds)) . ')')
             ->limit($limit);
 
-        return $this->db->executeS($dbQuery);
+        return $this->db->executeS($query);
     }
 
     /**
@@ -101,13 +101,13 @@ class CurrencyRepository
      */
     public function getBaseQuery()
     {
-        $dbQuery = new \DbQuery();
-        $dbQuery->from('currency', 'c');
+        $query = new \DbQuery();
+        $query->from('currency', 'c');
         if ($this->isLangAvailable()) {
-            $dbQuery->innerJoin('currency_lang', 'cl', 'cl.id_currency = c.id_currency');
+            $query->innerJoin('currency_lang', 'cl', 'cl.id_currency = c.id_currency');
         }
 
-        return $dbQuery;
+        return $query;
     }
 
     /**
@@ -120,36 +120,36 @@ class CurrencyRepository
      */
     public function getQueryForDebug($offset, $limit)
     {
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $this->addSelectParameters($dbQuery);
+        $this->addSelectParameters($query);
 
-        $dbQuery->limit($limit, $offset);
+        $query->limit($limit, $offset);
 
-        $queryStringified = preg_replace('/\s+/', ' ', $dbQuery->build());
+        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
 
         return array_merge(
-            (array) $dbQuery,
+            (array) $query,
             ['queryStringified' => $queryStringified]
         );
     }
 
     /**
-     * @param \DbQuery $dbQuery
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $dbQuery)
+    private function addSelectParameters(\DbQuery $query)
     {
         if ($this->isLangAvailable()) {
-            $dbQuery->select('c.id_currency, cl.name, c.iso_code, c.conversion_rate, c.deleted, c.active');
+            $query->select('c.id_currency, cl.name, c.iso_code, c.conversion_rate, c.deleted, c.active');
         } else {
-            $dbQuery->select('c.id_currency, \'\' as name, c.iso_code, c.conversion_rate, c.deleted, c.active');
+            $query->select('c.id_currency, \'\' as name, c.iso_code, c.conversion_rate, c.deleted, c.active');
         }
 
         // https://github.com/PrestaShop/PrestaShop/commit/37807f66b40b0cebb365ef952e919be15e9d6b2f#diff-3f41d3529ffdbfd1b994927eb91826a32a0560697025a734cf128a2c8e092a45R124
         if (version_compare(_PS_VERSION_, '1.7.6.0', '>=')) {
-            $dbQuery->select('c.precision');
+            $query->select('c.precision');
         }
     }
 }

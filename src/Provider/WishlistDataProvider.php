@@ -94,7 +94,7 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
     {
         $wishlists = $this->wishlistRepository->getWishlistsIncremental($limit, $objectIds);
 
-        if (!is_array($wishlists) || $wishlists === []) {
+        if (!is_array($wishlists) || empty($wishlists)) {
             return [];
         }
 
@@ -136,7 +136,7 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
      */
     private function getWishlistProducts(array &$wishlists)
     {
-        if ($wishlists === []) {
+        if (empty($wishlists)) {
             return [];
         }
 
@@ -144,18 +144,20 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
 
         $wishlistProducts = $this->wishlistProductRepository->getWishlistProducts($wishlistIds);
 
-        if (!is_array($wishlistProducts) || $wishlistProducts === []) {
+        if (!is_array($wishlistProducts) || empty($wishlistProducts)) {
             return [];
         }
 
         $this->wishlistDecorator->decorateWishlistProducts($wishlistProducts);
 
-        return array_map(function ($wishlistProduct) {
+        $wishlistProducts = array_map(function ($wishlistProduct) {
             return [
                 'id' => $wishlistProduct['id_wishlist_product'],
                 'collection' => Config::COLLECTION_WISHLIST_PRODUCTS,
                 'properties' => $wishlistProduct,
             ];
         }, $wishlistProducts);
+
+        return $wishlistProducts;
     }
 }

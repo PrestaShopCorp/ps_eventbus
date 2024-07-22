@@ -30,12 +30,12 @@ class CartRepository
 
         $shopId = (int) $this->context->shop->id;
 
-        $dbQuery = new \DbQuery();
+        $query = new \DbQuery();
 
-        $dbQuery->from('cart', 'c')
+        $query->from('cart', 'c')
             ->where('c.id_shop = ' . $shopId);
 
-        return $dbQuery;
+        return $query;
     }
 
     /**
@@ -48,13 +48,13 @@ class CartRepository
      */
     public function getCarts($offset, $limit)
     {
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $this->addSelectParameters($dbQuery);
+        $this->addSelectParameters($query);
 
-        $dbQuery->limit($limit, $offset);
+        $query->limit($limit, $offset);
 
-        return $this->db->executeS($dbQuery);
+        return $this->db->executeS($query);
     }
 
     /**
@@ -64,11 +64,11 @@ class CartRepository
      */
     public function getRemainingCartsCount($offset)
     {
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $dbQuery->select('(COUNT(c.id_cart) - ' . (int) $offset . ') as count');
+        $query->select('(COUNT(c.id_cart) - ' . (int) $offset . ') as count');
 
-        return (int) $this->db->getValue($dbQuery);
+        return (int) $this->db->getValue($query);
     }
 
     /**
@@ -81,14 +81,14 @@ class CartRepository
      */
     public function getCartsIncremental($limit, $cartIds)
     {
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $this->addSelectParameters($dbQuery);
+        $this->addSelectParameters($query);
 
-        $dbQuery->where('c.id_cart IN(' . implode(',', array_map('intval', $cartIds)) . ')')
+        $query->where('c.id_cart IN(' . implode(',', array_map('intval', $cartIds)) . ')')
             ->limit($limit);
 
-        $result = $this->db->executeS($dbQuery);
+        $result = $this->db->executeS($query);
 
         return is_array($result) ? $result : [];
     }
@@ -103,27 +103,27 @@ class CartRepository
      */
     public function getQueryForDebug($offset, $limit)
     {
-        $dbQuery = $this->getBaseQuery();
+        $query = $this->getBaseQuery();
 
-        $this->addSelectParameters($dbQuery);
+        $this->addSelectParameters($query);
 
-        $dbQuery->limit($limit, $offset);
+        $query->limit($limit, $offset);
 
-        $queryStringified = preg_replace('/\s+/', ' ', $dbQuery->build());
+        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
 
         return array_merge(
-            (array) $dbQuery,
+            (array) $query,
             ['queryStringified' => $queryStringified]
         );
     }
 
     /**
-     * @param \DbQuery $dbQuery
+     * @param \DbQuery $query
      *
      * @return void
      */
-    private function addSelectParameters(\DbQuery $dbQuery)
+    private function addSelectParameters(\DbQuery $query)
     {
-        $dbQuery->select('c.id_cart, date_add as created_at, date_upd as updated_at');
+        $query->select('c.id_cart, date_add as created_at, date_upd as updated_at');
     }
 }

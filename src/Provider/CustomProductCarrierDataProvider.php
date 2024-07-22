@@ -30,14 +30,15 @@ class CustomProductCarrierDataProvider implements PaginatedApiDataProviderInterf
     public function getFormattedData($offset, $limit, $langIso)
     {
         $productCarriers = $this->productCarrierRepository->getProductCarriers($offset, $limit);
-
-        return array_map(function ($productCarrier) {
+        $productCarriers = array_map(function ($productCarrier) {
             return [
                 'id' => $productCarrier['id_product'] . '-' . $productCarrier['id_carrier_reference'],
                 'collection' => Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
                 'properties' => $productCarrier,
             ];
         }, $productCarriers);
+
+        return $productCarriers;
     }
 
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)

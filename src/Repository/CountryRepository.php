@@ -38,15 +38,15 @@ class CountryRepository
             throw new \PrestaShopException('No language context');
         }
 
-        $dbQuery = new \DbQuery();
+        $query = new \DbQuery();
 
-        $dbQuery->from('country', 'c')
+        $query->from('country', 'c')
             ->innerJoin('country_shop', 'cs', 'cs.id_country = c.id_country')
             ->innerJoin('country_lang', 'cl', 'cl.id_country = c.id_country')
             ->where('cs.id_shop = ' . (int) $this->context->shop->id)
             ->where('cl.id_lang = ' . (int) $this->context->language->id);
 
-        return $dbQuery;
+        return $query;
     }
 
     /**
