@@ -18,7 +18,7 @@ return RectorConfig::configure()
 
     ->withSets([
         LevelSetList::UP_TO_PHP_56,
-        SetList::CODE_QUALITY
+        SetList::CODE_QUALITY,
     ])
 
     ->withRules([

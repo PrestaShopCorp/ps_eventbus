@@ -254,7 +254,7 @@ class Ps_eventbus extends Module
             return defined('PS_INSTALLATION_IN_PROGRESS');
         }
 
-        $installer = new Install($this, \Db::getInstance());
+        $installer = new Install($this, Db::getInstance());
 
         return $installer->installDatabaseTables()
             && parent::install()
@@ -266,7 +266,7 @@ class Ps_eventbus extends Module
      */
     public function uninstall()
     {
-        $uninstaller = new Uninstall($this, \Db::getInstance());
+        $uninstaller = new Uninstall($this, Db::getInstance());
 
         return $uninstaller->uninstallMenu()
             && $uninstaller->uninstallDatabaseTables()
