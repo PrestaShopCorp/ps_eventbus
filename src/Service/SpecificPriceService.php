@@ -62,7 +62,7 @@ class SpecificPriceService
         $specificPriceId,
         $usetax = true,
         $usereduc = true,
-        \Context $context = null,
+        ?\Context $context = null,
         $decimals = 6,
         $divisor = null,
         $only_reduc = false,

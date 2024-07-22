@@ -21,11 +21,11 @@ return RectorConfig::configure()
         SetList::NAMING,
         LevelSetList::UP_TO_PHP_56,
     ])
-    
+
     ->withRules([
-        TypedPropertyFromStrictConstructorRector::class
+        TypedPropertyFromStrictConstructorRector::class,
     ])
 
     ->withSkip([
-        StringClassNameToClassConstantRector::class
+        StringClassNameToClassConstantRector::class,
     ]);

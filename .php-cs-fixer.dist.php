@@ -10,6 +10,7 @@ $finder = (new PhpCsFixer\Finder())
 
 $config = (new PrestaShop\CodingStandards\CsFixer\Config())
     ->setUsingCache(false)
-    ->setFinder($finder);
+    ->setFinder($finder)
+    ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect());
 
 return $config;

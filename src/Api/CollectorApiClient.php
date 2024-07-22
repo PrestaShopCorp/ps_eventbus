@@ -62,7 +62,7 @@ class CollectorApiClient
      *
      * @return HttpClientInterface
      */
-    private function getClient(int $startTime = null)
+    private function getClient(?int $startTime = null)
     {
         return (new ClientFactory())->getClient([
             'allow_redirects' => true,
@@ -164,7 +164,7 @@ class CollectorApiClient
      *
      * @return float
      */
-    private function getRemainingTime(int $startTime = null)
+    private function getRemainingTime(?int $startTime = null)
     {
         /**
          * Negative remaining time means an immediate timeout (0 means infinity)

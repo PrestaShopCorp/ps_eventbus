@@ -51,9 +51,9 @@ class ModuleDataProvider implements PaginatedApiDataProviderInterface
             }
 
             return [
-              'id' => $module['module_id'],
-              'collection' => Config::COLLECTION_MODULES,
-              'properties' => $module,
+                'id' => $module['module_id'],
+                'collection' => Config::COLLECTION_MODULES,
+                'properties' => $module,
             ];
         }, $modules);
     }
