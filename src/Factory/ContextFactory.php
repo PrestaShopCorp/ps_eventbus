@@ -13,7 +13,7 @@ class ContextFactory
     }
 
     /**
-     * @return \Language|\PrestaShopBundle\Install\Language
+     * @return \Language|PrestaShopBundle\Install\Language
      */
     public static function getLanguage()
     {

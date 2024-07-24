@@ -1,3 +1,5 @@
+includes:
+  - %currentWorkingDirectory%/tests/phpstan/phpstan-1-6.neon
 parameters:
   paths:
     - ../../src

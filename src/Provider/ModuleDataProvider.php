@@ -42,7 +42,7 @@ class ModuleDataProvider implements PaginatedApiDataProviderInterface
         return array_map(function ($module) {
             $module['module_id'] = (string) $module['module_id'];
             $module['active'] = $module['active'] == '1';
-            if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+            if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>=')) {
                 $module['created_at'] = $module['created_at'] ?: $this->createdAt;
                 $module['updated_at'] = $module['updated_at'] ?: $this->createdAt;
             } else {

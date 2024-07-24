@@ -45,7 +45,7 @@ class CartRuleRepository
         $query->select('cr.reduction_currency,cr.reduction_product,cr.gift_product,cr.gift_product_attribute');
         $query->select('cr.highlight,cr.active,cr.date_add AS created_at,cr.date_upd AS updated_at');
 
-        if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>=')) {
             $query->select('cr.reduction_exclude_special');
         }
 
@@ -105,7 +105,7 @@ class CartRuleRepository
         $query->select('cr.reduction_currency,cr.reduction_product,cr.gift_product,cr.gift_product_attribute');
         $query->select('cr.highlight,cr.active,cr.date_add AS created_at,cr.date_upd AS updated_at');
 
-        if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>=')) {
             $query->select('cr.reduction_exclude_special');
         }
 

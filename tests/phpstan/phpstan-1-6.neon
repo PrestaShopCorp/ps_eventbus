@@ -1,0 +1,10 @@
+parameters:
+  ignoreErrors:
+    - '#Parameter \#1 \$hook_name of method ModuleCore::registerHook\(\) expects string, array given#'
+    - '#Access to undefined constant Module::MULTISTORE_COMPATIBILITY_YES#'
+    - '#Property ObjectModelCore::\$id \(int\) in isset\(\) is not nullable#'
+    - '#Call to method buildRepository\(\) on an unknown class PrestaShop\\PrestaShop\\Core\\Addon\\Theme\\ThemeManagerBuilder.#'
+    - '#Instantiated class PrestaShop\\PrestaShop\\Core\\Addon\\Theme\\ThemeManagerBuilder not found.#'
+    - '#Access to an undefined property Shop::\$theme.#'
+    - '#Call to static method getInstance\(\) on an unknown class PrestaShop\\PrestaShop\\Core\\Addon\\Module\\ModuleManagerBuilder#'
+    - '#Method PrestaShop\\Module\\PsEventbus\\Service\\SynchronizationService::debounceLiveSync\(\) is unused.#'

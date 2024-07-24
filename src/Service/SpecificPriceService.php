@@ -62,7 +62,7 @@ class SpecificPriceService
         $specificPriceId,
         $usetax = true,
         $usereduc = true,
-        ?\Context $context = null,
+        $context = null,
         $decimals = 6,
         $divisor = null,
         $only_reduc = false,
@@ -271,7 +271,7 @@ class SpecificPriceService
             }
         }
 
-        if (version_compare(_PS_VERSION_, '1.7.0.0', '>=')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.0.0', '>=')) {
             // Customization price
             if ((int) $id_customization) {
                 /* @phpstan-ignore-next-line */

@@ -142,7 +142,7 @@ class EmployeeRepository
         $query->select('es.id_shop as id_shop');
 
         // https://github.com/PrestaShop/PrestaShop/commit/20f1d9fe8a03559dfa9d1f7109de1f70c99f1874#diff-cde6a9d4a58afb13ff068801ee09c0e712c5e90b0cbf5632a0cc965f15cb6802R107
-        if (version_compare(_PS_VERSION_, '1.7.8.0', '>=')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.8.0', '>=')) {
             $query->select('e.has_enabled_gravatar');
         }
     }

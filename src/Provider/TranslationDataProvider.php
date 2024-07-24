@@ -36,7 +36,7 @@ class TranslationDataProvider implements PaginatedApiDataProviderInterface
     public function getFormattedData($offset, $limit, $langIso)
     {
         // translations are stored as xml files before version 1.7
-        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '<')) {
             return [];
         }
 
@@ -65,7 +65,7 @@ class TranslationDataProvider implements PaginatedApiDataProviderInterface
     public function getRemainingObjectsCount($offset, $langIso)
     {
         // translations are stored as xml files before version 1.7
-        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '<')) {
             return 0;
         }
 
@@ -84,7 +84,7 @@ class TranslationDataProvider implements PaginatedApiDataProviderInterface
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
         // translations are stored as xml files before version 1.7
-        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '<')) {
             return [];
         }
 

@@ -97,7 +97,7 @@ class LanguageRepository
     private function addSelectParameters(\DbQuery $query)
     {
         // https://github.com/PrestaShop/PrestaShop/commit/481111b8274ed005e1c4a8ce2cf2b3ebbeb9a270#diff-c123d3d30d9c9e012a826a21887fccce6600a2f2a848a58d5910e55f0f8f5093R41
-        if (version_compare(_PS_VERSION_, '1.7.0.0', '>=')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.0.0', '>=')) {
             $query->select('la.locale');
         }
 

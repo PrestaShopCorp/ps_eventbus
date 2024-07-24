@@ -190,7 +190,7 @@ class Ps_eventbus extends Module
      */
     public function __construct()
     {
-        if (version_compare(_PS_VERSION_, '1.7.8.0', '>=')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.8.0', '>=')) {
             $this->multistoreCompatibility = parent::MULTISTORE_COMPATIBILITY_YES;
         }
 
