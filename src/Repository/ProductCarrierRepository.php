@@ -47,7 +47,7 @@ class ProductCarrierRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -86,7 +86,7 @@ class ProductCarrierRepository
      * @param string $type
      * @param string $langIso
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -103,13 +103,13 @@ class ProductCarrierRepository
     }
 
     /**
-     * @param array $productIds
+     * @param array<mixed> $productIds
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getProductCarriersProperties(array $productIds)
+    public function getProductCarriersProperties($productIds)
     {
         if (!$productIds) {
             return [];
@@ -127,7 +127,7 @@ class ProductCarrierRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -148,13 +148,13 @@ class ProductCarrierRepository
     }
 
     /**
-     * @param array $productIds
+     * @param array<mixed> $productIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getProductCarrierIdsByProductIds(array $productIds)
+    public function getProductCarrierIdsByProductIds($productIds)
     {
         if (!$productIds) {
             return [];

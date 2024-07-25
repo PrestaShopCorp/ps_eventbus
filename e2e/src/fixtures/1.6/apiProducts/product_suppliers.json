@@ -1,0 +1,93 @@
+[
+  {
+    "id": 1,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 1,
+      "id_product": 1,
+      "id_product_attribute": 0,
+      "id_supplier": 1,
+      "product_supplier_reference": "",
+      "product_supplier_price_te": 0,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 2,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 2,
+      "id_product": 2,
+      "id_product_attribute": 0,
+      "id_supplier": 1,
+      "product_supplier_reference": "",
+      "product_supplier_price_te": 0,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 3,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 3,
+      "id_product": 3,
+      "id_product_attribute": 0,
+      "id_supplier": 1,
+      "product_supplier_reference": "",
+      "product_supplier_price_te": 0,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 4,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 4,
+      "id_product": 4,
+      "id_product_attribute": 0,
+      "id_supplier": 1,
+      "product_supplier_reference": "",
+      "product_supplier_price_te": 0,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 5,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 5,
+      "id_product": 5,
+      "id_product_attribute": 0,
+      "id_supplier": 1,
+      "product_supplier_reference": "",
+      "product_supplier_price_te": 0,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 6,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 6,
+      "id_product": 6,
+      "id_product_attribute": 0,
+      "id_supplier": 1,
+      "product_supplier_reference": "",
+      "product_supplier_price_te": 0,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 7,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 7,
+      "id_product": 7,
+      "id_product_attribute": 0,
+      "id_supplier": 1,
+      "product_supplier_reference": "",
+      "product_supplier_price_te": 0,
+      "id_currency": 0
+    }
+  }
+]

@@ -33,9 +33,9 @@ class StockMvtRepository
 
     /**
      * @param string $langIso
-     * @param array $stockIds
+     * @param array<mixed> $stockIds
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */

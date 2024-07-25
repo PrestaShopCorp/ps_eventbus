@@ -19,11 +19,11 @@ class CurrencyRepository
      */
     private function isLangAvailable()
     {
-        return \Tools::version_compare(_PS_VERSION_, '1.7.6', '>=');
+        return defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.6', '>=');
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getCurrenciesIsoCodes()
     {
@@ -48,7 +48,7 @@ class CurrencyRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -78,9 +78,9 @@ class CurrencyRepository
 
     /**
      * @param int $limit
-     * @param array $currencyIds
+     * @param array<mixed> $currencyIds
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -114,7 +114,7 @@ class CurrencyRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -148,7 +148,7 @@ class CurrencyRepository
         }
 
         // https://github.com/PrestaShop/PrestaShop/commit/37807f66b40b0cebb365ef952e919be15e9d6b2f#diff-3f41d3529ffdbfd1b994927eb91826a32a0560697025a734cf128a2c8e092a45R124
-        if (version_compare(_PS_VERSION_, '1.7.6.0', '>=')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.6.0', '>=')) {
             $query->select('c.precision');
         }
     }

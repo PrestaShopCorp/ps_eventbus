@@ -24,9 +24,9 @@ class MultipartBody implements StreamInterface
     private $stream;
 
     /**
-     * @param array $fields associative array of field names to values where
-     *                      each value is a string or array of strings
-     * @param array $files Associative array of PostFileInterface objects
+     * @param array<mixed> $fields associative array of field names to values where
+     *                             each value is a string or array of strings
+     * @param array<mixed> $files Associative array of PostFileInterface objects
      * @param string $boundary You can optionally provide a specific boundary
      *
      * @@throws \InvalidArgumentException
@@ -93,12 +93,12 @@ class MultipartBody implements StreamInterface
     /**
      * Create the aggregate stream that will be used to upload the POST data
      *
-     * @param array $fields
-     * @param array $files
+     * @param array<mixed> $fields
+     * @param array<mixed> $files
      *
      * @return AppendStream
      */
-    protected function createStream(array $fields, array $files)
+    protected function createStream($fields, $files)
     {
         $stream = new AppendStream();
 

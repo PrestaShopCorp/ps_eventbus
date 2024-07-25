@@ -6,7 +6,7 @@ use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
 
 class DeletedObjectsRepository
 {
-    public const DELETED_OBJECTS_TABLE = 'eventbus_deleted_objects';
+    const DELETED_OBJECTS_TABLE = 'eventbus_deleted_objects';
 
     /**
      * @var \Db
@@ -27,7 +27,7 @@ class DeletedObjectsRepository
     /**
      * @param int $shopId
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -77,7 +77,7 @@ class DeletedObjectsRepository
 
     /**
      * @param string $type
-     * @param array $objectIds
+     * @param array<mixed> $objectIds
      * @param int $shopId
      *
      * @return bool

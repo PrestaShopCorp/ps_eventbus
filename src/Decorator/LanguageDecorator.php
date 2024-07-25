@@ -5,11 +5,11 @@ namespace PrestaShop\Module\PsEventbus\Decorator;
 class LanguageDecorator
 {
     /**
-     * @param array $languages
+     * @param array<mixed> $languages
      *
      * @return void
      */
-    public function decorateLanguages(array &$languages)
+    public function decorateLanguages(&$languages)
     {
         foreach ($languages as &$language) {
             $this->castPropertyValues($language);
@@ -17,11 +17,11 @@ class LanguageDecorator
     }
 
     /**
-     * @param array $language
+     * @param array<mixed> $language
      *
      * @return void
      */
-    private function castPropertyValues(array &$language)
+    private function castPropertyValues(&$language)
     {
         $language['id_lang'] = (int) $language['id_lang'];
         $language['active'] = (bool) $language['active'];

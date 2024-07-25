@@ -15,7 +15,7 @@ class ModuleHelper
     {
         $moduleManagerBuilder = null;
 
-        if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>=')) {
             $moduleManagerBuilder = ModuleManagerBuilder::getInstance();
         }
 
@@ -33,9 +33,9 @@ class ModuleHelper
      *
      * @return bool|null
      */
-    public function isInstalled(string $moduleName)
+    public function isInstalled($moduleName)
     {
-        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '<')) {
             $module = \Module::getInstanceByName($moduleName);
 
             if ($module) {
@@ -55,9 +55,9 @@ class ModuleHelper
      *
      * @return bool|null
      */
-    public function isEnabled(string $moduleName)
+    public function isEnabled($moduleName)
     {
-        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '<')) {
             $module = \Module::getInstanceByName($moduleName);
 
             if ($module && $module->active) {
@@ -75,7 +75,7 @@ class ModuleHelper
      *
      * @return bool
      */
-    public function isInstalledAndActive(string $moduleName)
+    public function isInstalledAndActive($moduleName)
     {
         return $this->isInstalled($moduleName) && $this->isEnabled($moduleName);
     }
@@ -85,7 +85,7 @@ class ModuleHelper
      *
      * @return false|\ModuleCore
      */
-    public function getInstanceByName(string $moduleName)
+    public function getInstanceByName($moduleName)
     {
         return \ModuleCore::getInstanceByName($moduleName);
     }

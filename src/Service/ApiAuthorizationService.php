@@ -30,7 +30,7 @@ class ApiAuthorizationService
      *
      * @param string $jobId
      *
-     * @return array|bool
+     * @return array<mixed>|bool
      */
     public function authorizeCall($jobId)
     {

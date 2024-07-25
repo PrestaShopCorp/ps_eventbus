@@ -15,11 +15,11 @@ class WishlistProductRepository
     }
 
     /**
-     * @param array $wishlistIds
+     * @param array<mixed> $wishlistIds
      *
      * @return \DbQuery
      */
-    public function getBaseQuery(array &$wishlistIds)
+    public function getBaseQuery(&$wishlistIds)
     {
         $query = new \DbQuery();
 
@@ -30,13 +30,13 @@ class WishlistProductRepository
     }
 
     /**
-     * @param array $wishlistIds
+     * @param array<mixed> $wishlistIds
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getWishlistProducts(array &$wishlistIds)
+    public function getWishlistProducts(&$wishlistIds)
     {
         // need this module for this table : https://addons.prestashop.com/en/undownloadable/9131-wishlist-block.html
         if (empty($this->checkIfPsWishlistIsInstalled())) {
@@ -51,7 +51,7 @@ class WishlistProductRepository
     }
 
     /**
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */

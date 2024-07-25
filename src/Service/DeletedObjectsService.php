@@ -30,7 +30,7 @@ class DeletedObjectsService
      * @param string $jobId
      * @param int $scriptStartTime
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException|EnvVarException
      */
@@ -46,9 +46,9 @@ class DeletedObjectsService
 
         if (empty($deletedObjects)) {
             return [
-              'job_id' => $jobId,
-              'total_objects' => 0,
-              'syncType' => 'full',
+                'job_id' => $jobId,
+                'total_objects' => 0,
+                'syncType' => 'full',
             ];
         }
 
@@ -68,25 +68,25 @@ class DeletedObjectsService
 
         return array_merge(
             [
-              'job_id' => $jobId,
-              'total_objects' => count($data),
-              'syncType' => 'full',
+                'job_id' => $jobId,
+                'total_objects' => count($data),
+                'syncType' => 'full',
             ],
             $response
         );
     }
 
     /**
-     * @param array $data
+     * @param array<mixed> $data
      *
-     * @return array
+     * @return array<mixed>
      */
-    private function formatData(array $data)
+    private function formatData($data)
     {
         return array_map(function ($dataItem) {
             return [
-              'collection' => $dataItem['type'],
-              'deleteIds' => explode(';', $dataItem['ids']),
+                'collection' => $dataItem['type'],
+                'deleteIds' => explode(';', $dataItem['ids']),
             ];
         }, $data);
     }
