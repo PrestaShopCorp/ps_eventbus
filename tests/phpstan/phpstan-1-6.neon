@@ -8,3 +8,4 @@ parameters:
     - '#Access to an undefined property Shop::\$theme.#'
     - '#Call to static method getInstance\(\) on an unknown class PrestaShop\\PrestaShop\\Core\\Addon\\Module\\ModuleManagerBuilder#'
     - '#Method PrestaShop\\Module\\PsEventbus\\Service\\SynchronizationService::debounceLiveSync\(\) is unused.#'
+    - '# Method PrestaShop\\Module\\PsEventbus\\Factory\\ContextFactory::getLanguage\(\) has invalid return type PrestaShop\\Module\\PsEventbus\\Factory\\PrestaShopBundle\\Install\\Language.#'
