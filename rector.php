@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+use Rector\CodeQuality\Rector\If_\SimplifyIfElseToTernaryRector;
 use Rector\Config\RectorConfig;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Set\ValueObject\LevelSetList;
@@ -27,4 +26,5 @@ return RectorConfig::configure()
 
     ->withSkip([
         StringClassNameToClassConstantRector::class,
+        SimplifyIfElseToTernaryRector::class
     ]);

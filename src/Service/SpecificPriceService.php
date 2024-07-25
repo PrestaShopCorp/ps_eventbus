@@ -267,12 +267,10 @@ class SpecificPriceService
             }
         }
 
-        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.0.0', '>=')) {
-            // Customization price
-            if ((int) $id_customization) {
-                /* @phpstan-ignore-next-line */
-                $price += \Tools::convertPrice(\Customization::getCustomizationPrice($id_customization), $id_currency);
-            }
+        // Customization price
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.0.0', '>=') && (int) $id_customization) {
+            /* @phpstan-ignore-next-line */
+            $price += \Tools::convertPrice(\Customization::getCustomizationPrice($id_customization), $id_currency);
         }
 
         // Tax
