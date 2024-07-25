@@ -86,20 +86,20 @@ class SynchronizationService
      * @param int $scriptStartTime
      * @param bool $isFull
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException|EnvVarException|ApiException
      */
     public function handleFullSync(
         PaginatedApiDataProviderInterface $dataProvider,
-        string $type,
-        string $jobId,
-        string $langIso,
-        int $offset,
-        int $limit,
-        string $dateNow,
-        int $scriptStartTime,
-        bool $isFull
+        $type,
+        $jobId,
+        $langIso,
+        $offset,
+        $limit,
+        $dateNow,
+        $scriptStartTime,
+        $isFull
     ) {
         $response = [];
 
@@ -139,18 +139,18 @@ class SynchronizationService
      * @param int $scriptStartTime
      * @param bool $isFull
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException|EnvVarException
      */
     public function handleIncrementalSync(
         PaginatedApiDataProviderInterface $dataProvider,
-        string $type,
-        string $jobId,
-        int $limit,
-        string $langIso,
-        int $scriptStartTime,
-        bool $isFull
+        $type,
+        $jobId,
+        $limit,
+        $langIso,
+        $scriptStartTime,
+        $isFull
     ) {
         $response = [];
 
@@ -195,7 +195,7 @@ class SynchronizationService
      *
      * @return void
      */
-    public function sendLiveSync(string $shopContent, int $shopContentId, string $action)
+    public function sendLiveSync($shopContent, $shopContentId, $action)
     {
         if ($this->isFullSyncDone($shopContent)) {
             // $this->debounceLiveSync($shopContent);
@@ -211,7 +211,7 @@ class SynchronizationService
      *
      * @return void
      */
-    public function insertIncrementalSyncObject(int $objectId, string $type, string $createdAt, int $shopId, bool $hasMultiLang = false)
+    public function insertIncrementalSyncObject($objectId, $type, $createdAt, $shopId, $hasMultiLang = null)
     {
         if ((int) $objectId === 0) {
             return;
@@ -284,7 +284,7 @@ class SynchronizationService
      *
      * @return void
      */
-    public function insertDeletedObject(int $objectId, string $type, string $date, int $shopId)
+    public function insertDeletedObject($objectId, $type, $date, $shopId)
     {
         if ((int) $objectId === 0) {
             return;
@@ -301,7 +301,7 @@ class SynchronizationService
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function debounceLiveSync(string $shopContentName) // @phpstan-ignore method.unused
+    private function debounceLiveSync($shopContentName) // @phpstan-ignore method.unused
     {
         $dateNow = date('Y-m-d H:i:s');
 
@@ -327,19 +327,19 @@ class SynchronizationService
      *
      * @return bool
      */
-    private function isFullSyncDone(string $shopContent, $langIso = null)
+    private function isFullSyncDone($shopContent, $langIso = null)
     {
         return $this->eventbusSyncRepository->isFullSyncDoneForThisTypeSync($shopContent, $langIso);
     }
 
     /**
-     * @param array $data
-     * @param array $syncResponse
+     * @param array<mixed> $data
+     * @param array<mixed> $syncResponse
      * @param int $remainingObjects
      *
-     * @return array
+     * @return array<mixed>
      */
-    private function returnSyncResponse(array $data, array $syncResponse, int $remainingObjects)
+    private function returnSyncResponse($data, $syncResponse, $remainingObjects)
     {
         return array_merge([
             'total_objects' => count($data),
@@ -350,11 +350,11 @@ class SynchronizationService
     }
 
     /**
-     * @param array $payload
+     * @param array<mixed> $payload
      *
      * @return string
      */
-    private function getPayloadMd5(array $payload)
+    private function getPayloadMd5($payload)
     {
         return md5(
             implode(' ', array_map(function ($payloadItem) {

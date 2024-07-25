@@ -4,7 +4,7 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 
 class OrderDetailsRepository
 {
-    public const TABLE_NAME = 'order_detail';
+    const TABLE_NAME = 'order_detail';
 
     /**
      * @var \Db
@@ -41,14 +41,14 @@ class OrderDetailsRepository
     }
 
     /**
-     * @param array $orderIds
+     * @param array<mixed> $orderIds
      * @param int $shopId
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getOrderDetails(array $orderIds, $shopId)
+    public function getOrderDetails($orderIds, $shopId)
     {
         if ($orderIds === []) {
             return [];
@@ -72,13 +72,13 @@ class OrderDetailsRepository
     }
 
     /**
-     * @param array $orderIds
+     * @param array<mixed> $orderIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getOrderDetailIdsByOrderIds(array $orderIds)
+    public function getOrderDetailIdsByOrderIds($orderIds)
     {
         if ($orderIds === []) {
             return [];

@@ -35,13 +35,13 @@ class PayloadDecorator
     }
 
     /**
-     * @param array $payload
+     * @param array<mixed> $payload
      *
      * @return void
      *
      * @throws \Exception
      */
-    public function convertDateFormat(array &$payload)
+    public function convertDateFormat(&$payload)
     {
         foreach ($payload as &$payloadItem) {
             foreach (DATE_FIELDS as $dateField) {

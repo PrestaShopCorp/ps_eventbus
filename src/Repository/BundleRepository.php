@@ -34,7 +34,7 @@ class BundleRepository
     /**
      * @param int $productPackId
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */

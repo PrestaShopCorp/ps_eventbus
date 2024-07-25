@@ -68,7 +68,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -113,7 +113,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -148,7 +148,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -158,13 +158,13 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
-     * @param array $orders
+     * @param array<mixed> $orders
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function getOrderDetails(array $orders)
+    private function getOrderDetails($orders)
     {
         if ($orders === []) {
             return [];
@@ -190,14 +190,14 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
-     * @param array $orders
+     * @param array<mixed> $orders
      * @param int $langId
      *
-     * @return array|array[]
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function getOrderStatuses(array $orders, $langId)
+    private function getOrderStatuses($orders, $langId)
     {
         if ($orders === []) {
             return [];
@@ -216,13 +216,13 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
-     * @param array $orders
+     * @param array<mixed> $orders
      *
-     * @return array|array[]
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function getOrderCartRules(array $orders)
+    private function getOrderCartRules($orders)
     {
         if ($orders === []) {
             return [];
@@ -241,14 +241,14 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
-     * @param array $orders
+     * @param array<mixed> $orders
      * @param int $langId
      *
      * @return void
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function castOrderValues(array &$orders, int $langId)
+    private function castOrderValues(&$orders, $langId)
     {
         foreach ($orders as &$order) {
             $order['id_order'] = (int) $order['id_order'];
@@ -270,19 +270,19 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
-     * @param array $orders
-     * @param array $order
+     * @param array<mixed> $orders
+     * @param array<mixed> $order
      * @param int $langId
      *
      * @return bool
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function castIsPaidValue(array $orders, array $order, int $langId)
+    private function castIsPaidValue($orders, $order, $langId)
     {
         $isPaid = $dateAdd = 0;
         $orderIds = $this->arrayFormatter->formatValueArray($orders, 'id_order');
-        /** @var array $orderHistoryStatuses */
+        /** @var array<mixed> $orderHistoryStatuses */
         $orderHistoryStatuses = $this->orderHistoryRepository->getOrderHistoryStatuses($orderIds, $langId);
 
         foreach ($orderHistoryStatuses as &$orderHistoryStatus) {
@@ -296,11 +296,11 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
-     * @param array $orderDetails
+     * @param array<mixed> $orderDetails
      *
      * @return void
      */
-    private function castOrderDetailValues(array &$orderDetails)
+    private function castOrderDetailValues(&$orderDetails)
     {
         foreach ($orderDetails as &$orderDetail) {
             $orderDetail['id_order_detail'] = (int) $orderDetail['id_order_detail'];
@@ -318,7 +318,12 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
         }
     }
 
-    private function castOrderStatuses(array &$orderStatuses): array
+    /**
+     * @param array<mixed> $orderStatuses
+     *
+     * @return array<mixed>
+     */
+    private function castOrderStatuses(&$orderStatuses)
     {
         $castedOrderStatuses = [];
         foreach ($orderStatuses as $orderStatus) {
@@ -343,7 +348,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
-     * @param array $orderDetail
+     * @param array<mixed> $orderDetail
      *
      * @return void
      */
@@ -376,11 +381,11 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
-     * @param array $orderCartRules
+     * @param array<mixed> $orderCartRules
      *
      * @return void
      */
-    private function castOrderCartRulesValues(array &$orderCartRules)
+    private function castOrderCartRulesValues(&$orderCartRules)
     {
         foreach ($orderCartRules as &$orderCartRule) {
             $orderCartRule['id_order_cart_rule'] = (int) $orderCartRule['id_order_cart_rule'];

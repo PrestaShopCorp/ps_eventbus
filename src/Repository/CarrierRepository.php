@@ -34,7 +34,7 @@ class CarrierRepository
     /**
      * @param \Carrier $carrierObj
      *
-     * @return array|false
+     * @return array<mixed>|false
      */
     public function getDeliveryPriceByRange(\Carrier $carrierObj)
     {
@@ -53,7 +53,7 @@ class CarrierRepository
      * @param \Carrier $carrierObj
      * @param string $rangeTable
      *
-     * @return array
+     * @return array<mixed>
      */
     private function getCarrierByPriceRange(
         \Carrier $carrierObj,
@@ -76,7 +76,7 @@ class CarrierRepository
      * @param \Carrier $carrierObj
      * @param string $rangeTable
      *
-     * @return array
+     * @return array<mixed>
      */
     private function getCarrierByWeightRange(
         \Carrier $carrierObj,
@@ -120,7 +120,7 @@ class CarrierRepository
      * @param string $type
      * @param string $langIso
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -137,14 +137,14 @@ class CarrierRepository
     }
 
     /**
-     * @param array $deliveryPriceByRange
+     * @param array<mixed> $deliveryPriceByRange
      *
      * @return false|\RangeWeight|\RangePrice
      *
      * @throws \PrestaShopDatabaseException
      * @throws \PrestaShopException
      */
-    public function getCarrierRange(array $deliveryPriceByRange)
+    public function getCarrierRange($deliveryPriceByRange)
     {
         if (isset($deliveryPriceByRange['id_range_weight'])) {
             return new \RangeWeight($deliveryPriceByRange['id_range_weight']);
@@ -160,7 +160,7 @@ class CarrierRepository
      * @param int[] $carrierIds
      * @param int $langId
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -185,7 +185,7 @@ class CarrierRepository
      * @param int $limit
      * @param int $langId
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -218,7 +218,7 @@ class CarrierRepository
      * @param int $limit
      * @param int $langId
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */

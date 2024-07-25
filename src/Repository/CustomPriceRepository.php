@@ -49,7 +49,7 @@ class CustomPriceRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -98,9 +98,9 @@ class CustomPriceRepository
 
     /**
      * @param int $limit
-     * @param array $specificPriceIds
+     * @param array<mixed> $specificPriceIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -122,7 +122,7 @@ class CustomPriceRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */

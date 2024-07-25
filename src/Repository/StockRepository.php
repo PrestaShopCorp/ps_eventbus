@@ -42,7 +42,7 @@ class StockRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -72,9 +72,9 @@ class StockRepository
 
     /**
      * @param int $limit
-     * @param array $productIds
+     * @param array<mixed> $productIds
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -94,7 +94,7 @@ class StockRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -115,13 +115,13 @@ class StockRepository
     }
 
     /**
-     * @param array $productIds
+     * @param array<mixed> $productIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getStocksIdsByProductIds(array $productIds)
+    public function getStocksIdsByProductIds($productIds)
     {
         if ($productIds === []) {
             return [];
@@ -148,11 +148,11 @@ class StockRepository
         $query->select('sa.quantity, sa.depends_on_stock, sa.out_of_stock');
 
         // https://github.com/PrestaShop/PrestaShop/commit/2a3269ad93b1985f2615d6604458061d4989f0ea#diff-e98d435095567c145b49744715fd575eaab7050328c211b33aa9a37158421ff4R2186
-        if (version_compare(_PS_VERSION_, '1.7.2.0', '>=')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.2.0', '>=')) {
             $query->select('sa.physical_quantity, sa.reserved_quantity');
         }
         // https://github.com/PrestaShop/PrestaShop/commit/4c7d58a905dfb61c7fb2ef4a1f9b4fab2a8d8ecb#diff-e57fb1deeaab9e9079505333394d58f0bf7bb40280b4382aad1278c08c73e2e8R58
-        if (version_compare(_PS_VERSION_, '1.7.5.0', '>=')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.5.0', '>=')) {
             $query->select('sa.location');
         }
     }

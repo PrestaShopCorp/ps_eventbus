@@ -2,7 +2,6 @@
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
-use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository;
 
 class ps_EventbusApiInfoModuleFrontController extends AbstractApiController
@@ -32,7 +31,7 @@ class ps_EventbusApiInfoModuleFrontController extends AbstractApiController
 
         try {
             $response = $this->proxyService->upload($jobId, $serverInfo, $this->startTime, $initFullSync);
-        } catch (EnvVarException|Exception $exception) {
+        } catch (Exception $exception) {
             $this->exitWithExceptionMessage($exception);
         }
 

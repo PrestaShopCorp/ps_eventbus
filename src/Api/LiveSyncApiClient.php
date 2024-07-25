@@ -39,7 +39,7 @@ class LiveSyncApiClient
      * @param \Ps_eventbus $module
      * @param PsAccountsAdapterService $psAccountsAdapterService
      */
-    public function __construct(string $liveSyncApiUrl, \Ps_eventbus $module, PsAccountsAdapterService $psAccountsAdapterService)
+    public function __construct($liveSyncApiUrl, \Ps_eventbus $module, PsAccountsAdapterService $psAccountsAdapterService)
     {
         $this->module = $module;
         $this->jwt = $psAccountsAdapterService->getOrRefreshToken();
@@ -69,9 +69,9 @@ class LiveSyncApiClient
      * @param int $shopContentId
      * @param string $action
      *
-     * @return array
+     * @return array<mixed>
      */
-    public function liveSync(string $shopContent, int $shopContentId, string $action)
+    public function liveSync($shopContent, $shopContentId, $action)
     {
         $response = $this->getClient(3)->sendRequest(
             new Request(

@@ -30,7 +30,7 @@ class ProductSupplierDataProvider implements PaginatedApiDataProviderInterface
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -66,9 +66,9 @@ class ProductSupplierDataProvider implements PaginatedApiDataProviderInterface
     /**
      * @param int $limit
      * @param string $langIso
-     * @param array $objectIds
+     * @param array<mixed> $objectIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -96,7 +96,7 @@ class ProductSupplierDataProvider implements PaginatedApiDataProviderInterface
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */

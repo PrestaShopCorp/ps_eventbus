@@ -45,12 +45,12 @@ class CarrierDetail implements \JsonSerializable
     private $delimiter2;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     private $countryIsoCodes;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     private $stateIsoCodes;
 
@@ -208,7 +208,7 @@ class CarrierDetail implements \JsonSerializable
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getCountryIsoCodes()
     {
@@ -216,7 +216,7 @@ class CarrierDetail implements \JsonSerializable
     }
 
     /**
-     * @param array $countryIsoCodes
+     * @param array<mixed> $countryIsoCodes
      *
      * @return CarrierDetail
      */
@@ -228,7 +228,7 @@ class CarrierDetail implements \JsonSerializable
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getStateIsoCodes()
     {
@@ -236,7 +236,7 @@ class CarrierDetail implements \JsonSerializable
     }
 
     /**
-     * @param array $stateIsoCodes
+     * @param array<mixed> $stateIsoCodes
      *
      * @return CarrierDetail
      */

@@ -33,7 +33,15 @@ class ErrorHandler implements ErrorHandlerInterface
      */
     protected $client;
 
-    public function __construct(\Ps_eventbus $module, PsAccountsAdapterService $psAccountsAdapterService, string $sentryDsn, string $sentryEnv)
+    /**
+     * @param \Ps_eventbus $module
+     * @param PsAccountsAdapterService $psAccountsAdapterService
+     * @param string $sentryDsn
+     * @param string $sentryEnv
+     *
+     * @return void
+     */
+    public function __construct(\Ps_eventbus $module, PsAccountsAdapterService $psAccountsAdapterService, $sentryDsn, $sentryEnv)
     {
         try {
             $this->client = new \Raven_Client(
@@ -63,14 +71,18 @@ class ErrorHandler implements ErrorHandlerInterface
      * @param \Exception $error
      * @param mixed $code
      * @param bool|null $throw
-     * @param array|null $data
+     * @param array<mixed>|null $data
      *
      * @return void
      *
      * @@throws Exception
      */
-    public function handle($error, $code = null, $throw = true, $data = null)
+    public function handle($error, $code = null, $throw = null, $data = null)
     {
+        if ($throw == null) {
+            $throw = true;
+        }
+
         if (!$this->client) {
             return;
         }

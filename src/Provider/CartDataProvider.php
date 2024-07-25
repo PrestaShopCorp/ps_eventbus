@@ -64,11 +64,11 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
-     * @param array $carts
+     * @param array<mixed> $carts
      *
      * @return void
      */
-    private function castCartValues(array &$carts)
+    private function castCartValues(&$carts)
     {
         foreach ($carts as &$cart) {
             $cart['id_cart'] = (string) $cart['id_cart'];
@@ -76,11 +76,11 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
-     * @param array $cartProducts
+     * @param array<mixed> $cartProducts
      *
      * @return void
      */
-    private function castCartProductValues(array &$cartProducts)
+    private function castCartProductValues(&$cartProducts)
     {
         foreach ($cartProducts as &$cartProduct) {
             $cartProduct['id_cart_product'] = (string) "{$cartProduct['id_cart']}-{$cartProduct['id_product']}-{$cartProduct['id_product_attribute']}";
@@ -94,9 +94,9 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
     /**
      * @param int $limit
      * @param string $langIso
-     * @param array $objectIds
+     * @param array<mixed> $objectIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -124,13 +124,13 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
-     * @param array $carts
+     * @param array<mixed> $carts
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function getCartProducts(array $carts)
+    private function getCartProducts($carts)
     {
         $cartIds = array_map(function ($cart) {
             return (string) $cart['id_cart'];
@@ -162,7 +162,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */

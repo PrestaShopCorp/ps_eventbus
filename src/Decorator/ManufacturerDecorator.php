@@ -5,11 +5,11 @@ namespace PrestaShop\Module\PsEventbus\Decorator;
 class ManufacturerDecorator
 {
     /**
-     * @param array $manufacturers
+     * @param array<mixed> $manufacturers
      *
      * @return void
      */
-    public function decorateManufacturers(array &$manufacturers)
+    public function decorateManufacturers(&$manufacturers)
     {
         foreach ($manufacturers as &$manufacturer) {
             $this->castPropertyValues($manufacturer);
@@ -17,11 +17,11 @@ class ManufacturerDecorator
     }
 
     /**
-     * @param array $manufacturer
+     * @param array<mixed> $manufacturer
      *
      * @return void
      */
-    private function castPropertyValues(array &$manufacturer)
+    private function castPropertyValues(&$manufacturer)
     {
         $manufacturer['id_manufacturer'] = (int) $manufacturer['id_manufacturer'];
         $manufacturer['active'] = (bool) $manufacturer['active'];

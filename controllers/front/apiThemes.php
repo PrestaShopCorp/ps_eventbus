@@ -2,7 +2,6 @@
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
-use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Repository\ThemeRepository;
 
 class ps_EventbusApiThemesModuleFrontController extends AbstractApiController
@@ -24,7 +23,7 @@ class ps_EventbusApiThemesModuleFrontController extends AbstractApiController
         /** @var ThemeRepository $themeRepository */
         $themeRepository = $this->module->getService(ThemeRepository::class);
 
-        /** @var array $themeInfo */
+        /** @var array<mixed> $themeInfo */
         $themeInfo = $themeRepository->getThemes();
 
         /** @var bool $initFullSync */
@@ -32,7 +31,7 @@ class ps_EventbusApiThemesModuleFrontController extends AbstractApiController
 
         try {
             $response = $this->proxyService->upload($jobId, $themeInfo, $this->startTime, $initFullSync);
-        } catch (EnvVarException|Exception $exception) {
+        } catch (Exception $exception) {
             $this->exitWithExceptionMessage($exception);
         }
 

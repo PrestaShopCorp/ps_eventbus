@@ -4,7 +4,7 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 
 class OrderRepository
 {
-    public const ORDERS_TABLE = 'orders';
+    const ORDERS_TABLE = 'orders';
 
     /**
      * @var \Db
@@ -44,7 +44,7 @@ class OrderRepository
      * @param int $limit
      * @param int $shopId
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -79,9 +79,9 @@ class OrderRepository
     /**
      * @param int $limit
      * @param int $shopId
-     * @param array $orderIds
+     * @param array<mixed> $orderIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -104,7 +104,7 @@ class OrderRepository
      * @param int $limit
      * @param int $shopId
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */

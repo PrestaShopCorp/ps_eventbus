@@ -49,7 +49,7 @@ class CarrierDataProvider implements ProviderPaginatedApiDataProviderInterface
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -58,7 +58,7 @@ class CarrierDataProvider implements ProviderPaginatedApiDataProviderInterface
         $currency = new \Currency((int) $this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
 
         $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
-        /** @var array $carriers */
+        /** @var array<mixed> $carriers */
         $carriers = $this->carrierRepository->getAllCarrierProperties($offset, $limit, $langId);
 
         /** @var string $configurationPsWeightUnit */
@@ -76,7 +76,7 @@ class CarrierDataProvider implements ProviderPaginatedApiDataProviderInterface
 
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
-        /** @var array $shippingIncremental */
+        /** @var array<mixed> $shippingIncremental */
         $shippingIncremental = $this->carrierRepository->getShippingIncremental(Config::COLLECTION_CARRIERS, $langIso);
 
         if (!$shippingIncremental) {
@@ -88,7 +88,7 @@ class CarrierDataProvider implements ProviderPaginatedApiDataProviderInterface
         $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
 
         $carrierIds = array_column($shippingIncremental, 'id_object');
-        /** @var array $carriers */
+        /** @var array<mixed> $carriers */
         $carriers = $this->carrierRepository->getCarrierProperties($carrierIds, $langId);
 
         /** @var string $configurationPsWeightUnit */
@@ -124,7 +124,7 @@ class CarrierDataProvider implements ProviderPaginatedApiDataProviderInterface
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
