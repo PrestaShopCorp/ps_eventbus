@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Decorator;
 class StockDecorator
 {
     /**
-     * @param array $stocks
+     * @param array<mixed> $stocks
      *
      * @return void
      */
@@ -17,7 +17,7 @@ class StockDecorator
     }
 
     /**
-     * @param array $stock
+     * @param array<mixed> $stock
      *
      * @return void
      */
@@ -34,14 +34,14 @@ class StockDecorator
         $stock['out_of_stock'] = (bool) $stock['out_of_stock'];
 
         // https://github.com/PrestaShop/PrestaShop/commit/2a3269ad93b1985f2615d6604458061d4989f0ea#diff-e98d435095567c145b49744715fd575eaab7050328c211b33aa9a37158421ff4R2186
-        if (version_compare(_PS_VERSION_, '1.7.2.0', '>=')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.2.0', '>=')) {
             $stock['physical_quantity'] = (int) $stock['physical_quantity'];
             $stock['reserved_quantity'] = (int) $stock['reserved_quantity'];
         }
     }
 
     /**
-     * @param array $stockMvts
+     * @param array<mixed> $stockMvts
      *
      * @return void
      */
@@ -53,7 +53,7 @@ class StockDecorator
     }
 
     /**
-     * @param array $stockMvt
+     * @param array<mixed> $stockMvt
      *
      * @return void
      */

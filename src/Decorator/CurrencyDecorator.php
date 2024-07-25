@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Decorator;
 class CurrencyDecorator
 {
     /**
-     * @param array $currencies
+     * @param array<mixed> $currencies
      *
      * @return void
      */
@@ -17,7 +17,7 @@ class CurrencyDecorator
     }
 
     /**
-     * @param array $currency
+     * @param array<mixed> $currency
      *
      * @return void
      */
@@ -29,7 +29,7 @@ class CurrencyDecorator
         $currency['active'] = (bool) $currency['active'];
 
         // https://github.com/PrestaShop/PrestaShop/commit/37807f66b40b0cebb365ef952e919be15e9d6b2f#diff-3f41d3529ffdbfd1b994927eb91826a32a0560697025a734cf128a2c8e092a45R124
-        if (version_compare(_PS_VERSION_, '1.7.6.0', '>=')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.6.0', '>=')) {
             $currency['precision'] = (int) $currency['precision'];
         }
     }

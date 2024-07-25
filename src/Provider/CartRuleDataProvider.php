@@ -34,9 +34,9 @@ class CartRuleDataProvider implements PaginatedApiDataProviderInterface
         if (is_array($cartRules)) {
             return array_map(function ($cartRule) {
                 return [
-                  'id' => $cartRule['id_cart_rule'],
-                  'collection' => Config::COLLECTION_CART_RULES,
-                  'properties' => $cartRule,
+                    'id' => $cartRule['id_cart_rule'],
+                    'collection' => Config::COLLECTION_CART_RULES,
+                    'properties' => $cartRule,
                 ];
             }, $cartRules);
         }
@@ -58,9 +58,9 @@ class CartRuleDataProvider implements PaginatedApiDataProviderInterface
     /**
      * @param int $limit
      * @param string $langIso
-     * @param array $objectIds
+     * @param array<mixed> $objectIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -76,9 +76,9 @@ class CartRuleDataProvider implements PaginatedApiDataProviderInterface
 
         return array_map(function ($cartRule) {
             return [
-              'id' => $cartRule['id_cart_rule'],
-              'collection' => Config::COLLECTION_CART_RULES,
-              'properties' => $cartRule,
+                'id' => $cartRule['id_cart_rule'],
+                'collection' => Config::COLLECTION_CART_RULES,
+                'properties' => $cartRule,
             ];
         }, $cartRules);
     }
@@ -88,7 +88,7 @@ class CartRuleDataProvider implements PaginatedApiDataProviderInterface
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -98,7 +98,7 @@ class CartRuleDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
-     * @param array $cartRules
+     * @param array<mixed> $cartRules
      *
      * @return void
      */

@@ -69,7 +69,7 @@ class LiveSyncApiClient
      * @param int $shopContentId
      * @param string $action
      *
-     * @return array
+     * @return array<mixed>
      */
     public function liveSync($shopContent, $shopContentId, $action)
     {

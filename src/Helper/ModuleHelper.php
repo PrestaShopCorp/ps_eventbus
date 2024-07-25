@@ -15,7 +15,7 @@ class ModuleHelper
     {
         $moduleManagerBuilder = null;
 
-        if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>=')) {
             $moduleManagerBuilder = ModuleManagerBuilder::getInstance();
         }
 
@@ -35,7 +35,7 @@ class ModuleHelper
      */
     public function isInstalled($moduleName)
     {
-        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '<')) {
             $module = \Module::getInstanceByName($moduleName);
 
             if ($module) {
@@ -57,7 +57,7 @@ class ModuleHelper
      */
     public function isEnabled($moduleName)
     {
-        if (version_compare(_PS_VERSION_, '1.7', '<')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '<')) {
             $module = \Module::getInstanceByName($moduleName);
 
             if ($module && $module->active) {

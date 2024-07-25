@@ -87,7 +87,7 @@ class EventbusSyncRepository
     /**
      * @param string $jobId
      *
-     * @return array|bool|false|object|null
+     * @return array<mixed>|bool|false|object|null
      */
     public function findJobById($jobId)
     {
@@ -103,7 +103,7 @@ class EventbusSyncRepository
      * @param string $type
      * @param string $langIso
      *
-     * @return array|bool|object|null
+     * @return array<mixed>|bool|object|null
      */
     public function findTypeSync($type, $langIso = null)
     {

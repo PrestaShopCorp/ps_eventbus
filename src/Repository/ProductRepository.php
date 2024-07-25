@@ -75,7 +75,7 @@ class ProductRepository
      * @param int $limit
      * @param int $langId
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -112,10 +112,10 @@ class ProductRepository
     }
 
     /**
-     * @param array $attributeIds
+     * @param array<mixed> $attributeIds
      * @param int $langId
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -150,10 +150,10 @@ class ProductRepository
     }
 
     /**
-     * @param array $productIds
+     * @param array<mixed> $productIds
      * @param int $langId
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -187,9 +187,9 @@ class ProductRepository
     }
 
     /**
-     * @param array $productIds
+     * @param array<mixed> $productIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -211,9 +211,9 @@ class ProductRepository
     }
 
     /**
-     * @param array $attributeIds
+     * @param array<mixed> $attributeIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -280,9 +280,9 @@ class ProductRepository
     /**
      * @param int $limit
      * @param int $langId
-     * @param array $productIds
+     * @param array<mixed> $productIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -305,7 +305,7 @@ class ProductRepository
      * @param int $limit
      * @param int $langId
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -346,14 +346,14 @@ class ProductRepository
         }
 
         // https://github.com/PrestaShop/PrestaShop/commit/10268af8db4163dc2a02edb8da93d02f37f814d8#diff-e94a594ba740485c7a4882b333984d3932a2f99c0d6d0005620745087cce7a10R260
-        if (version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
             $query->select('p.additional_delivery_times');
             $query->select('pl.delivery_in_stock, pl.delivery_out_stock');
         }
 
         $query->select('p.width, p.height, p.depth, p.additional_shipping_cost');
 
-        if (version_compare(_PS_VERSION_, '1.7', '>=')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>=')) {
             $query->select('IFNULL(NULLIF(pa.isbn, ""), p.isbn) as isbn');
         }
     }

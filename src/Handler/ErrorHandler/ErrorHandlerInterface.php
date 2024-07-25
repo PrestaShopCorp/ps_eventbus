@@ -8,7 +8,7 @@ interface ErrorHandlerInterface
      * @param \Exception $error
      * @param mixed $code
      * @param bool|null $throw
-     * @param array|null $data
+     * @param array<mixed>|null $data
      *
      * @return void
      */

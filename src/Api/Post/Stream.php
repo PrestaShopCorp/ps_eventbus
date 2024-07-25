@@ -22,10 +22,10 @@ class Stream implements StreamInterface
     private $readable;
     /** @var string */
     private $uri;
-    /** @var array */
+    /** @var array<mixed> */
     private $customMetadata;
 
-    /** @var array Hash of readable and writable stream types */
+    /** @var array<mixed> Hash of readable and writable stream types */
     private static $readWriteHash = [
         'read' => [
             'r' => true, 'w+' => true, 'r+' => true, 'x+' => true, 'c+' => true,
@@ -48,7 +48,7 @@ class Stream implements StreamInterface
      * in the constructor.
      *
      * @param resource|string|StreamInterface|\Iterator $resource Entity body data
-     * @param array $options Additional options
+     * @param array<mixed> $options Additional options
      *
      * @return \GuzzleHttp\Psr7\Stream|PumpStream|Stream|StreamInterface
      *
@@ -108,7 +108,7 @@ class Stream implements StreamInterface
      *   of the stream is accessed.
      *
      * @param resource $stream Stream resource to wrap
-     * @param array $options Associative array of options
+     * @param array<mixed> $options Associative array of options
      *
      * @@throws \InvalidArgumentException if the stream is not a stream resource
      */

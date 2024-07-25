@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Decorator;
 class WishlistDecorator
 {
     /**
-     * @param array $wishlists
+     * @param array<mixed> $wishlists
      *
      * @return void
      */
@@ -17,7 +17,7 @@ class WishlistDecorator
     }
 
     /**
-     * @param array $wishlistProducts
+     * @param array<mixed> $wishlistProducts
      *
      * @return void
      */
@@ -29,7 +29,7 @@ class WishlistDecorator
     }
 
     /**
-     * @param array $wishlist
+     * @param array<mixed> $wishlist
      *
      * @return void
      */
@@ -44,7 +44,7 @@ class WishlistDecorator
     }
 
     /**
-     * @param array $wishlistProduct
+     * @param array<mixed> $wishlistProduct
      *
      * @return void
      */

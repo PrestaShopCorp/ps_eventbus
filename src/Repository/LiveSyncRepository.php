@@ -17,7 +17,7 @@ class LiveSyncRepository
     /**
      * @param string $shopContent
      *
-     * @return array|null
+     * @return array<mixed>|null
      *
      * @throws \PrestaShopDatabaseException
      */

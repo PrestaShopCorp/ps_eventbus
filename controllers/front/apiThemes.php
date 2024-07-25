@@ -23,11 +23,11 @@ class ps_EventbusApiThemesModuleFrontController extends AbstractApiController
         /** @var ThemeRepository $themeRepository */
         $themeRepository = $this->module->getService(ThemeRepository::class);
 
-        /** @var array $themeInfo */
+        /** @var array<mixed> $themeInfo */
         $themeInfo = $themeRepository->getThemes();
 
         /** @var bool $initFullSync */
-        $initFullSync = \Tools::getValue('full', 0) == 1;
+        $initFullSync = Tools::getValue('full', 0) == 1;
 
         try {
             $response = $this->proxyService->upload($jobId, $themeInfo, $this->startTime, $initFullSync);
@@ -38,11 +38,11 @@ class ps_EventbusApiThemesModuleFrontController extends AbstractApiController
         $this->exitWithResponse(
             array_merge(
                 [
-                  'remaining_objects' => 0,
-                  'total_objects' => count($themeInfo),
-                  'job_id' => $jobId,
-                  'object_type' => $this->type,
-                  'syncType' => 'full',
+                    'remaining_objects' => 0,
+                    'total_objects' => count($themeInfo),
+                    'job_id' => $jobId,
+                    'object_type' => $this->type,
+                    'syncType' => 'full',
                 ],
                 $response
             )

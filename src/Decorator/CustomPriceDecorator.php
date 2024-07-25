@@ -24,7 +24,7 @@ class CustomPriceDecorator
     }
 
     /**
-     * @param array $specificPrices
+     * @param array<mixed> $specificPrices
      *
      * @return void
      */
@@ -38,7 +38,7 @@ class CustomPriceDecorator
     }
 
     /**
-     * @param array $specificPrice
+     * @param array<mixed> $specificPrice
      *
      * @return void
      */
@@ -83,7 +83,7 @@ class CustomPriceDecorator
     }
 
     /**
-     * @param array $specificPrice
+     * @param array<mixed> $specificPrice
      *
      * @return void
      */
@@ -121,7 +121,7 @@ class CustomPriceDecorator
     }
 
     /**
-     * @param array $specificPrice
+     * @param array<mixed> $specificPrice
      *
      * @return void
      */

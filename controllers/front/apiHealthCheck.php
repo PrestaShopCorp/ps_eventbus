@@ -32,7 +32,7 @@ class ps_EventbusApiHealthCheckModuleFrontController extends AbstractApiControll
     /**
      * @return void
      *
-     * @throws \PrestaShopException
+     * @throws PrestaShopException
      */
     public function postProcess()
     {

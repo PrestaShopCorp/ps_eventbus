@@ -64,7 +64,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
-     * @param array $carts
+     * @param array<mixed> $carts
      *
      * @return void
      */
@@ -76,7 +76,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
-     * @param array $cartProducts
+     * @param array<mixed> $cartProducts
      *
      * @return void
      */
@@ -94,9 +94,9 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
     /**
      * @param int $limit
      * @param string $langIso
-     * @param array $objectIds
+     * @param array<mixed> $objectIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -124,9 +124,9 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
-     * @param array $carts
+     * @param array<mixed> $carts
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */
@@ -162,7 +162,7 @@ class CartDataProvider implements PaginatedApiDataProviderInterface
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      */

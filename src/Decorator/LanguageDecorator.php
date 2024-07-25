@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Decorator;
 class LanguageDecorator
 {
     /**
-     * @param array $languages
+     * @param array<mixed> $languages
      *
      * @return void
      */
@@ -17,7 +17,7 @@ class LanguageDecorator
     }
 
     /**
-     * @param array $language
+     * @param array<mixed> $language
      *
      * @return void
      */

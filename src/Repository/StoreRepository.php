@@ -38,7 +38,7 @@ class StoreRepository
         $query = new \DbQuery();
 
         // https://github.com/PrestaShop/PrestaShop/commit/7dda2be62d8bd606edc269fa051c36ea68f81682#diff-e98d435095567c145b49744715fd575eaab7050328c211b33aa9a37158421ff4R2004
-        if (version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
             $query->from(self::STORES_TABLE, 's')
                 ->leftJoin('store_lang', 'sl', 's.id_store = sl.id_store')
                 ->leftJoin('store_shop', 'ss', 's.id_store = ss.id_store')
@@ -56,7 +56,7 @@ class StoreRepository
      * @param int $limit
      * @param string $langIso
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -91,9 +91,9 @@ class StoreRepository
     /**
      * @param int $limit
      * @param string $langIso
-     * @param array $storeIds
+     * @param array<mixed> $storeIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -116,7 +116,7 @@ class StoreRepository
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -153,7 +153,7 @@ class StoreRepository
         $query->select('s.date_upd as updated_at');
 
         // https://github.com/PrestaShop/PrestaShop/commit/7dda2be62d8bd606edc269fa051c36ea68f81682#diff-e98d435095567c145b49744715fd575eaab7050328c211b33aa9a37158421ff4R2004
-        if (version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
             $query->select('sl.id_lang');
             $query->select('sl.name');
             $query->select('sl.address1');

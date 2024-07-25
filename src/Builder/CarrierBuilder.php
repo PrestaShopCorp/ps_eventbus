@@ -53,12 +53,12 @@ class CarrierBuilder
     }
 
     /**
-     * @param array $carriers
+     * @param array<mixed> $carriers
      * @param int $langId
      * @param \Currency $currency
      * @param string $weightUnit
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException
      * @@throws \PrestaShopException
@@ -77,7 +77,7 @@ class CarrierBuilder
         $formattedCarriers = [];
         /** @var EventBusCarrier $eventBusCarrier */
         foreach ($eventBusCarriers as $eventBusCarrier) {
-            /** @var array $eventBusCarrierSerialized */
+            /** @var array<mixed> $eventBusCarrierSerialized */
             $eventBusCarrierSerialized = $eventBusCarrier->jsonSerialize();
             $formattedCarriers = array_merge($formattedCarriers, $eventBusCarrierSerialized);
         }
@@ -165,7 +165,7 @@ class CarrierBuilder
     /**
      * @param \Carrier $carrier
      * @param \RangeWeight|\RangePrice $range
-     * @param array $zone
+     * @param array<mixed> $zone
      *
      * @return false|CarrierDetail
      *
@@ -185,14 +185,14 @@ class CarrierBuilder
         $carrierDetail->setZoneId($zone['id_zone']);
         $carrierDetail->setRangeId($rangeId);
 
-        /** @var array $countryIsoCodes */
+        /** @var array<mixed> $countryIsoCodes */
         $countryIsoCodes = $this->countryRepository->getCountyIsoCodesByZoneId($zone['id_zone']);
         if (!$countryIsoCodes) {
             return false;
         }
         $carrierDetail->setCountryIsoCodes($countryIsoCodes);
 
-        /** @var array $stateIsoCodes */
+        /** @var array<mixed> $stateIsoCodes */
         $stateIsoCodes = $this->stateRepository->getStateIsoCodesByZoneId($zone['id_zone']);
         $carrierDetail->setStateIsoCodes($stateIsoCodes);
 
@@ -211,7 +211,7 @@ class CarrierBuilder
     private function buildCarrierTaxes(\Carrier $carrier, $zoneId, $rangeId)
     {
         $taxRulesGroupId = (int) $carrier->getIdTaxRulesGroup();
-        /** @var array $carrierTaxesByZone */
+        /** @var array<mixed> $carrierTaxesByZone */
         $carrierTaxesByZone = $this->taxRepository->getCarrierTaxesByZone($zoneId, $taxRulesGroupId);
 
         if (!$carrierTaxesByZone[0]['country_iso_code']) {

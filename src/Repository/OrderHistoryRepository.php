@@ -29,10 +29,10 @@ class OrderHistoryRepository
     }
 
     /**
-     * @param array $orderIds
+     * @param array<mixed> $orderIds
      * @param int $langId
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -55,9 +55,9 @@ class OrderHistoryRepository
     }
 
     /**
-     * @param array $orderIds
+     * @param array<mixed> $orderIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
