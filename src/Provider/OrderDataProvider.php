@@ -281,7 +281,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             $order['total_products_wt'] = (int) $order['total_products_wt'];
             $order['total_shipping_tax_incl'] = (int) $order['total_shipping_tax_incl'];
             $order['total_shipping_tax_excl'] = (int) $order['total_shipping_tax_excl'];
-            
+
             $order['carrier_tax_rate'] = (int) $order['carrier_tax_rate'];
             $order['total_wrapping'] = (int) $order['total_wrapping'];
             $order['total_wrapping_tax_incl'] = (int) $order['total_wrapping_tax_incl'];
