@@ -2,8 +2,10 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
+use Behat\Behat\HelperContainer\Exception\ServiceNotFoundException;
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator;
-use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
+use PrestaShop\Module\PsEventbus\Interfaces\ShopContentServiceInterface;
 use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
@@ -48,115 +50,128 @@ class SynchronizationService
     private $payloadDecorator;
 
     /**
-     * @var int
+     * @var ProxyServiceInterface
      */
-    const RANDOM_SYNC_CHECK_MAX = 20;
+    private $proxyService;
 
-    /**
-     * @var int
-     */
-    const INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT = 100000;
 
     public function __construct(
-        \Ps_eventbus $module,
         EventbusSyncRepository $eventbusSyncRepository,
         IncrementalSyncRepository $incrementalSyncRepository,
         LiveSyncRepository $liveSyncRepository,
         DeletedObjectsRepository $deletedObjectsRepository,
         LanguageRepository $languageRepository,
+        ProxyServiceInterface $proxyService,
         PayloadDecorator $payloadDecorator
     ) {
-        $this->module = $module;
         $this->eventbusSyncRepository = $eventbusSyncRepository;
         $this->incrementalSyncRepository = $incrementalSyncRepository;
         $this->liveSyncRepository = $liveSyncRepository;
         $this->deletedObjectsRepository = $deletedObjectsRepository;
         $this->languageRepository = $languageRepository;
+        $this->proxyService = $proxyService;
         $this->payloadDecorator = $payloadDecorator;
     }
 
     /**
-     * @param PaginatedApiDataProviderInterface $dataProvider
-     * @param string $type
+     * @param string $shopContent
      * @param string $jobId
      * @param string $langIso
      * @param int $offset
      * @param int $limit
+     * @param int $startTime
      * @param string $dateNow
-     * @param int $scriptStartTime
-     * @param bool $isFull
+     * @param bool $debug
      *
-     * @return array<mixed>
+     * @return array
      *
      * @@throws \PrestaShopDatabaseException|EnvVarException|ApiException
      */
-    public function handleFullSync(
-        PaginatedApiDataProviderInterface $dataProvider,
-        $type,
-        $jobId,
-        $langIso,
-        $offset,
-        $limit,
-        $dateNow,
-        $scriptStartTime,
-        $isFull
+    public function sendFullSync(
+        string $shopContent,
+        string $jobId,
+        string $langIso,
+        int $offset,
+        int $limit,
+        int $startTime,
+        string $dateNow,
+        bool $debug
     ) {
         $response = [];
 
-        $data = $dataProvider->getFormattedData($offset, $limit, $langIso);
+        $serviceName = str_replace('-', '', ucwords($shopContent, "-"));
+        $serviceId = 'PrestaShop\Module\PsEventbusV4\Services\\' . $serviceName . 'Service'; // faire un mapping entre le service et le nom du shopcontent
+    
+        /** @var Ps_eventbus */
+        $module = \Module::getInstanceByName('ps_eventbus');
+
+        if (!$module->hasService($serviceId)) {
+            throw new ServiceNotFoundException('Service ' . $serviceName . 'doesn\'t exist !', $serviceId);
+        }
+
+        /** @var ShopContentServiceInterface $shopContentApiService */
+        $shopContentApiService = $this->module->getService($serviceId);
+
+        /** @var ConfigurationRepository $configurationRepository */
+        $configurationRepository = $this->module->getService('PrestaShop\Module\PsEventbusV4\Repository\ConfigurationRepository');
+
+        $timezone = (string) $configurationRepository->get('PS_TIMEZONE');
+        $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(Config::MYSQL_DATE_FORMAT);
+
+        $data = $shopContentApiService->getContentsForFull($offset, $limit, $langIso, $debug);
 
         $this->payloadDecorator->convertDateFormat($data);
 
         if (!empty($data)) {
-            /** @var ProxyService */
-            $proxyService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\ProxyService');
-
-            $response = $proxyService->upload($jobId, $data, $scriptStartTime, $isFull);
+            $response = $this->proxyService->upload($jobId, $data, $startTime, true);
 
             if ($response['httpCode'] == 201) {
                 $offset += $limit;
             }
         }
 
-        $remainingObjects = (int) $dataProvider->getRemainingObjectsCount($offset, $langIso);
+        $remainingObjects = (int) $shopContentApiService->countFullSyncContentLeft($offset, $langIso);
 
         if ($remainingObjects <= 0) {
             $remainingObjects = 0;
             $offset = 0;
         }
 
-        $this->eventbusSyncRepository->updateTypeSync($type, $offset, $dateNow, $remainingObjects === 0, $langIso);
+        $this->eventbusSyncRepository->updateTypeSync($shopContent, $offset, $dateNow, $remainingObjects === 0, $langIso);
 
         return $this->returnSyncResponse($data, $response, $remainingObjects);
     }
 
     /**
-     * @param PaginatedApiDataProviderInterface $dataProvider
      * @param string $type
      * @param string $jobId
-     * @param int $limit
      * @param string $langIso
-     * @param int $scriptStartTime
-     * @param bool $isFull
+     * @param int $limit
+     * @param int $startTime
+     * @param bool $debug
      *
-     * @return array<mixed>
+     * @return array
      *
      * @@throws \PrestaShopDatabaseException|EnvVarException
      */
-    public function handleIncrementalSync(
-        PaginatedApiDataProviderInterface $dataProvider,
-        $type,
-        $jobId,
-        $limit,
-        $langIso,
-        $scriptStartTime,
-        $isFull
+    public function sendIncrementalSync(
+        string $shopContent,
+        string $jobId,
+        string $langIso,
+        int $limit,
+        int $startTime,
+        bool $debug
     ) {
         $response = [];
 
-        $objectIds = $this->incrementalSyncRepository->getIncrementalSyncObjectIds($type, $langIso, $limit);
+        $serviceName = str_replace('-', '', ucwords($shopContent, "-"));
 
-        if (empty($objectIds)) {
+        /** @var ShopContentServiceInterface $shopContentApiService */
+        $shopContentApiService = $this->module->getService('PrestaShop\\Module\\PsEventbus\\Services\\' . $serviceName . 'Service');
+
+        $contentIds = $this->incrementalSyncRepository->getIncrementalSyncObjectIds($shopContent, $langIso, $limit);
+
+        if (empty($contentIds)) {
             return [
                 'total_objects' => 0,
                 'has_remaining_objects' => false,
@@ -164,24 +179,21 @@ class SynchronizationService
             ];
         }
 
-        $data = $dataProvider->getFormattedDataIncremental($limit, $langIso, $objectIds);
+        $data = $shopContentApiService->getContentsForIncremental($limit, $contentIds, $langIso, $debug);
 
         $this->payloadDecorator->convertDateFormat($data);
 
         if (!empty($data)) {
-            /** @var ProxyService */
-            $proxyService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\ProxyService');
-
-            $response = $proxyService->upload($jobId, $data, $scriptStartTime, $isFull);
+            $response = $this->proxyService->upload($jobId, $data, $startTime, false);
 
             if ($response['httpCode'] == 201) {
-                $this->incrementalSyncRepository->removeIncrementalSyncObjects($type, $objectIds, $langIso);
+                $this->incrementalSyncRepository->removeIncrementalSyncObjects($shopContent, $contentIds, $langIso);
             }
         } else {
-            $this->incrementalSyncRepository->removeIncrementalSyncObjects($type, $objectIds, $langIso);
+            $this->incrementalSyncRepository->removeIncrementalSyncObjects($shopContent, $contentIds, $langIso);
         }
 
-        $remainingObjects = $this->incrementalSyncRepository->getRemainingIncrementalObjects($type, $langIso);
+        $remainingObjects = $this->incrementalSyncRepository->getRemainingIncrementalObjects($shopContent, $langIso);
 
         return $this->returnSyncResponse($data, $response, $remainingObjects);
     }
@@ -203,17 +215,17 @@ class SynchronizationService
     }
 
     /**
-     * @param int $objectId
-     * @param string $type
+     * @param array<array<int>> $contentTypesWithIds
+     * @param string actionType
      * @param string $createdAt
      * @param int $shopId
      * @param bool $hasMultiLang
      *
      * @return void
      */
-    public function insertIncrementalSyncObject($objectId, $type, $createdAt, $shopId, $hasMultiLang = null)
+    public function insertContentIntoIncremental($contentTypesWithIds, $actionType, $createdAt, $shopId, $hasMultiLang = null)
     {
-        if ((int) $objectId === 0) {
+        if (count($contentTypesWithIds) == 0) {
             return;
         }
 
@@ -222,80 +234,71 @@ class SynchronizationService
          * When random number == 10, we count number of entry exist in database for this specific shop content
          * If count > 100 000, we removed all entry corresponding to this shop content, and we enable full sync for this
          */
-        if (mt_rand() % $this::RANDOM_SYNC_CHECK_MAX == 0) {
-            $count = $this->incrementalSyncRepository->getIncrementalSyncObjectCountByType($type);
-            if ($count > $this::INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT) {
-                $hasDeleted = $this->incrementalSyncRepository->removeIncrementaSyncObjectByType($type);
+        if (mt_rand() % Config::RANDOM_SYNC_CHECK_MAX == 0) {
+            foreach($contentTypesWithIds as $contentType => $contentIds) {
+                $count = $this->incrementalSyncRepository->getIncrementalSyncObjectCountByType($contentType);
+                
+                if ($count > Config::INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT) {
+                    $hasDeleted = $this->incrementalSyncRepository->removeIncrementaSyncObjectByType($contentType);
 
-                if ($hasDeleted) {
-                    $this->eventbusSyncRepository->updateTypeSync(
-                        $type,
-                        0,
-                        $createdAt,
-                        false,
-                        $this->languageRepository->getDefaultLanguageIsoCode()
-                    );
+                    if ($hasDeleted) {
+                        $this->eventbusSyncRepository->updateTypeSync(
+                            $contentType,
+                            0,
+                            $createdAt,
+                            false,
+                            $this->languageRepository->getDefaultLanguageIsoCode()
+                        );
+                    }
                 }
-            }
 
-            return;
+                return;
+            }
         }
 
-        $objectsData = [];
+        $contentToInsert = [];
 
         if ($hasMultiLang) {
             $allIsoCodes = $this->languageRepository->getLanguagesIsoCodes();
 
             foreach ($allIsoCodes as $langIso) {
-                if ($this->isFullSyncDone($type, $langIso)) {
-                    array_push($objectsData,
-                        [
-                            'type' => $type,
-                            'id_object' => $objectId,
-                            'id_shop' => $shopId,
-                            'lang_iso' => $langIso,
-                            'created_at' => $createdAt,
-                        ]
-                    );
+                foreach($contentTypesWithIds as $contentType => $contentIds) {
+                    if ($this->isFullSyncDone($contentType, $langIso)) {
+                        array_push($contentToInsert,
+                            [
+                                'type' => $contentType,
+                                'id_object' => $contentIds,
+                                'id_shop' => $shopId,
+                                'lang_iso' => $langIso,
+                                'action' => $actionType,
+                                'created_at' => $createdAt,
+                            ]
+                        );
+                    }
                 }
             }
         } else {
             $defaultIsoCode = $this->languageRepository->getDefaultLanguageIsoCode();
 
-            if ($this->isFullSyncDone($type, $defaultIsoCode)) {
-                array_push($objectsData,
-                    [
-                        'type' => $type,
-                        'id_object' => $objectId,
-                        'id_shop' => $shopId,
-                        'lang_iso' => $defaultIsoCode,
-                        'created_at' => $createdAt,
-                    ]
-                );
+            foreach($contentTypesWithIds as $contentType => $contentIds) {
+                if ($this->isFullSyncDone($contentType, $defaultIsoCode)) {
+                    array_push($contentToInsert,
+                        [
+                            'type' => $contentType,
+                            'id_object' => $contentIds,
+                            'id_shop' => $shopId,
+                            'lang_iso' => $defaultIsoCode,
+                            'action' => $actionType,
+                            'created_at' => $createdAt,
+                        ]
+                    );
+                }
             }
         }
 
-        if (empty($objectsData) == false) {
-            $this->incrementalSyncRepository->insertIncrementalObject($objectsData);
+        if (empty($contentToInsert) == false) {
+            $this->incrementalSyncRepository->insertIncrementalObject($contentToInsert);
         }
-    }
-
-    /**
-     * @param int $objectId
-     * @param string $type
-     * @param string $date
-     * @param int $shopId
-     *
-     * @return void
-     */
-    public function insertDeletedObject($objectId, $type, $date, $shopId)
-    {
-        if ((int) $objectId === 0) {
-            return;
-        }
-
-        $this->deletedObjectsRepository->insertDeletedObject($objectId, $type, $date, $shopId);
-        $this->incrementalSyncRepository->removeIncrementalSyncObject($type, $objectId);
     }
 
     /**
