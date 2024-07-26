@@ -17,8 +17,6 @@ use PrestaShop\Module\PsEventbus\Service\ProxyService;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
 
-const MYSQL_DATE_FORMAT = 'Y-m-d H:i:s';
-
 abstract class AbstractApiController extends \ModuleFrontController
 {
     /**
@@ -187,7 +185,7 @@ abstract class AbstractApiController extends \ModuleFrontController
         $configurationRepository = $this->module->getService(\PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository::class);
         $timezone = (string) $configurationRepository->get('PS_TIMEZONE');
 
-        $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(MYSQL_DATE_FORMAT);
+        $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(Config::MYSQL_DATE_FORMAT);
         $offset = 0;
         $incrementalSync = false;
         $response = [];

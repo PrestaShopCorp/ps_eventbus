@@ -62,6 +62,15 @@ class Config
     const COLLECTION_WISHLISTS = 'wishlists';
     const COLLECTION_WISHLIST_PRODUCTS = 'wishlist_products';
 
+    const MYSQL_DATE_FORMAT = 'Y-m-d H:i:s';
+    
+    const RANDOM_SYNC_CHECK_MAX = 20;
+    const INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT = 100000;
+
+    const INCREMENTAL_TYPE_ADD = 'incremental_type_add';
+    const INCREMENTAL_TYPE_UPDATE = 'incremental_type_update';
+    const INCREMENTAL_TYPE_DELETE = 'incremental_type_delete';
+
     /**
      * @param mixed $message
      *
