@@ -266,6 +266,32 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
             $order['shipping_cost'] = (float) $order['shipping_cost'];
             $order['total_paid_tax'] = $order['total_paid_tax_incl'] - $order['total_paid_tax_excl'];
             $order['id_carrier'] = (int) $order['id_carrier'];
+
+            $order['id_shop_group'] = (int) $order['id_shop_group'];
+            $order['id_shop'] = (int) $order['id_shop'];
+            $order['id_lang'] = (int) $order['id_lang'];
+            $order['id_currency'] = (int) $order['id_currency'];
+            $order['recyclable'] = (bool) $order['recyclable'];
+            $order['gift'] = (bool) $order['gift'];
+
+            $order['total_discounts'] = (int) $order['total_discounts'];
+            $order['total_discounts_tax_incl'] = (int) $order['total_discounts_tax_incl'];
+            $order['total_discounts_tax_excl'] = (int) $order['total_discounts_tax_excl'];
+            $order['total_products'] = (int) $order['total_products'];
+            $order['total_products_wt'] = (int) $order['total_products_wt'];
+            $order['total_shipping_tax_incl'] = (int) $order['total_shipping_tax_incl'];
+            $order['total_shipping_tax_excl'] = (int) $order['total_shipping_tax_excl'];
+
+            $order['carrier_tax_rate'] = (int) $order['carrier_tax_rate'];
+            $order['total_wrapping'] = (int) $order['total_wrapping'];
+            $order['total_wrapping_tax_incl'] = (int) $order['total_wrapping_tax_incl'];
+            $order['total_wrapping_tax_excl'] = (int) $order['total_wrapping_tax_excl'];
+            $order['round_mode'] = (int) $order['round_mode'];
+            $order['round_type'] = (int) $order['round_type'];
+            $order['invoice_number'] = (int) $order['invoice_number'];
+            $order['delivery_number'] = (int) $order['delivery_number'];
+            $order['valid'] = (bool) $order['valid'];
+
             $this->castAddressIsoCodes($order);
             unset($order['address_iso']);
         }
