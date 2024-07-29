@@ -1,6 +1,6 @@
 <?php
 
-use PrestaShop\Module\PsEventbus\Services\FrontApiService;
+use PrestaShop\Module\PsEventbus\Service\FrontApiService;
 
 class ps_EventbusApiFrontModuleFrontController extends ModuleFrontController
 {
@@ -12,7 +12,7 @@ class ps_EventbusApiFrontModuleFrontController extends ModuleFrontController
     public function postProcess()
     {
         /** @var string $shopContent */
-        $shopContent = \Tools::getValue('shopContent');
+        $shopContent = \Tools::getValue('shop_content');
 
         /** @var string $jobId */
         $jobId = \Tools::getValue('job_id');
@@ -30,7 +30,7 @@ class ps_EventbusApiFrontModuleFrontController extends ModuleFrontController
         $debug = \Tools::getValue('debug') == 1;
 
         /** @var FrontApiService $frontApiService */
-        $frontApiService =  $this->module->getService('PrestaShop\Module\PsEventbusV4\Services\ApiService');
+        $frontApiService =  $this->module->getService('PrestaShop\Module\PsEventbus\Service\FrontApiService');
 
         $frontApiService->handleDataSync($shopContent, $jobId, $langIso, $limit, $isFull, $debug);
     }

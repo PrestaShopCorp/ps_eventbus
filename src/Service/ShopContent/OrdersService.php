@@ -1,8 +1,8 @@
 <?php
 
-namespace PrestaShop\Module\PsEventbus\Services;
+namespace PrestaShop\Module\PsEventbus\Service;
 
-use PrestaShop\Module\PsEventbus\Interfaces\ShopContentServiceInterface;
+use PrestaShop\Module\PsEventbus\Interface\ShopContentServiceInterface;
 use PrestaShop\Module\PsEventbus\Repository\OrdersRepository;
 
 class OrdersService implements ShopContentServiceInterface

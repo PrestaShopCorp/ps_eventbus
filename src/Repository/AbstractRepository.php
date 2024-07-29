@@ -1,6 +1,6 @@
 <?php
 
-namespace PrestaShop\Module\PsEventbus\Repositories;
+namespace PrestaShop\Module\PsEventbus\Repository;
 
 use Context;
 use Db;
