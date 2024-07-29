@@ -4,6 +4,11 @@ namespace PrestaShop\Module\PsEventbus\Config;
 
 class Config
 {
+    const MYSQL_DATE_FORMAT = 'Y-m-d H:i:s';
+
+    const RANDOM_SYNC_CHECK_MAX = 20;
+    const INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT = 100000;
+
     const SYNC_API_MAX_TIMEOUT = 5;
     const COLLECTOR_MAX_TIMEOUT = 30;
     const COLLECTOR_MULTIPART_BOUNDARY = 'ps_eventbus_boundary';
@@ -62,14 +67,42 @@ class Config
     const COLLECTION_WISHLISTS = 'wishlists';
     const COLLECTION_WISHLIST_PRODUCTS = 'wishlist_products';
 
-    const MYSQL_DATE_FORMAT = 'Y-m-d H:i:s';
-    
-    const RANDOM_SYNC_CHECK_MAX = 20;
-    const INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT = 100000;
-
-    const INCREMENTAL_TYPE_ADD = 'incremental_type_add';
-    const INCREMENTAL_TYPE_UPDATE = 'incremental_type_update';
-    const INCREMENTAL_TYPE_DELETE = 'incremental_type_delete';
+    public const SHOP_CONTENTS = [
+        self::COLLECTION_BUNDLES,
+        self::COLLECTION_CARRIERS,
+        self::COLLECTION_CARTS,
+        self::COLLECTION_CART_PRODUCTS,
+        self::COLLECTION_CART_RULES,
+        self::COLLECTION_CATEGORIES,
+        self::COLLECTION_CURRENCIES,
+        self::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
+        self::COLLECTION_CUSTOMERS,
+        self::COLLECTION_DELETED,
+        self::COLLECTION_EMPLOYEES,
+        self::COLLECTION_IMAGES,
+        self::COLLECTION_IMAGE_TYPES,
+        self::COLLECTION_LANGUAGES,
+        self::COLLECTION_MANUFACTURERS,
+        self::COLLECTION_MODULES,
+        self::COLLECTION_ORDERS,
+        self::COLLECTION_ORDER_CART_RULES,
+        self::COLLECTION_ORDER_DETAILS,
+        self::COLLECTION_ORDER_STATUS_HISTORY,
+        self::COLLECTION_PRODUCTS,
+        self::COLLECTION_PRODUCT_ATTRIBUTES,
+        self::COLLECTION_PRODUCT_SUPPLIERS,
+        self::COLLECTION_SHOPS,
+        self::COLLECTION_SPECIFIC_PRICES,
+        self::COLLECTION_STOCKS,
+        self::COLLECTION_STOCK_MVTS,
+        self::COLLECTION_STORES,
+        self::COLLECTION_SUPPLIERS,
+        self::COLLECTION_TAXONOMIES,
+        self::COLLECTION_THEMES,
+        self::COLLECTION_TRANSLATIONS,
+        self::COLLECTION_WISHLISTS,
+        self::COLLECTION_WISHLIST_PRODUCTS,
+    ];
 
     /**
      * @param mixed $message
