@@ -59,6 +59,7 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
+      - '@PrestaShop\Module\PsEventbus\Service\ProxyService'
       - '@PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator'
 
   PrestaShop\Module\PsEventbus\Service\SpecificPriceService:
