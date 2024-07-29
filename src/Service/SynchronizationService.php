@@ -263,35 +263,40 @@ class SynchronizationService
 
             foreach ($allIsoCodes as $langIso) {
                 foreach($contentTypesWithIds as $contentType => $contentIds) {
-                    if ($this->isFullSyncDone($contentType, $langIso)) {
-                        array_push($contentToInsert,
-                            [
-                                'type' => $contentType,
-                                'id_object' => $contentIds,
-                                'id_shop' => $shopId,
-                                'lang_iso' => $langIso,
-                                'action' => $actionType,
-                                'created_at' => $createdAt,
-                            ]
-                        );
+                    foreach ($contentIds as $contentId) {
+                        if ($this->isFullSyncDone($contentType, $langIso)) {
+                            array_push($contentToInsert,
+                                [
+                                    'type' => $contentType,
+                                    'id_object' => $contentId,
+                                    'id_shop' => $shopId,
+                                    'lang_iso' => $langIso,
+                                    'action' => $actionType,
+                                    'created_at' => $createdAt,
+                                ]
+                            );
+                        }
                     }
+                    
                 }
             }
         } else {
             $defaultIsoCode = $this->languageRepository->getDefaultLanguageIsoCode();
 
             foreach($contentTypesWithIds as $contentType => $contentIds) {
-                if ($this->isFullSyncDone($contentType, $defaultIsoCode)) {
-                    array_push($contentToInsert,
-                        [
-                            'type' => $contentType,
-                            'id_object' => $contentIds,
-                            'id_shop' => $shopId,
-                            'lang_iso' => $defaultIsoCode,
-                            'action' => $actionType,
-                            'created_at' => $createdAt,
-                        ]
-                    );
+                foreach ($contentIds as $contentId) {
+                    if ($this->isFullSyncDone($contentType, $defaultIsoCode)) {
+                        array_push($contentToInsert,
+                            [
+                                'type' => $contentType,
+                                'id_object' => $contentId,
+                                'id_shop' => $shopId,
+                                'lang_iso' => $defaultIsoCode,
+                                'action' => $actionType,
+                                'created_at' => $createdAt,
+                            ]
+                        );
+                    }
                 }
             }
         }

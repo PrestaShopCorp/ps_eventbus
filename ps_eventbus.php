@@ -37,7 +37,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 class Ps_eventbus extends Module
 {
     // All hooks is here
-    use PrestaShop\Module\PsEventbus\UseHooks;
+    use PrestaShop\Module\PsEventbus\Traits\UseHooks;
 
     /**
      * @var array<mixed>
