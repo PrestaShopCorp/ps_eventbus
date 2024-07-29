@@ -2,8 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShop\Module\PsEventbusV4\Interfaces\RepositoryInterface;
-use PrestaShop\Module\PsEventbusV4\Repositories\AbstractRepository;
+use PrestaShop\Module\PsEventbus\Interfaces\RepositoryInterface;
+use PrestaShop\Module\PsEventbus\Repository\AbstractRepository;
 
 class OrdersRepository extends AbstractRepository implements RepositoryInterface
 {

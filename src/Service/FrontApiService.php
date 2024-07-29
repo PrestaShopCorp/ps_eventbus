@@ -1,5 +1,5 @@
 <?php
-namespace PrestaShop\Module\PsEventbus\Services;
+namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
@@ -7,11 +7,12 @@ use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
 use PrestaShop\Module\PsEventbus\Exception\QueryParamsException;
 use PrestaShop\Module\PsEventbus\Exception\UnauthorizedException;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
+use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
 use PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService;
 
-abstract class FrontApiService
+class FrontApiService
 {
     /**
      * Timestamp when script started
@@ -45,8 +46,10 @@ abstract class FrontApiService
      */
     private $errorHandler;
 
-    public function __construct()
-    {
+    public function __construct(\Ps_eventbus $module)
+    {  
+        $this->module = $module;
+
         $this->errorHandler = $this->module->getService(ErrorHandler::class);
 
         try {
@@ -55,6 +58,7 @@ abstract class FrontApiService
             $this->psAccountsAdapterService = $this->module->getService(PsAccountsAdapterService::class);
             $this->authorizationService = $this->module->getService(ApiAuthorizationService::class);
             $this->synchronizationService = $this->module->getService(SynchronizationService::class);
+            $this->eventbusSyncRepository = $this->module->getService(EventbusSyncRepository::class);
 
             $this->authorize();
         } catch (\Exception $exception) {
@@ -89,7 +93,7 @@ abstract class FrontApiService
             }
 
             /** @var ConfigurationRepository $configurationRepository */
-            $configurationRepository = $this->module->getService('\PrestaShop\Module\PsEventbusV4\Repository\ConfigurationRepository');
+            $configurationRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository');
 
             $timezone = (string) $configurationRepository->get('PS_TIMEZONE');
             $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(Config::MYSQL_DATE_FORMAT);

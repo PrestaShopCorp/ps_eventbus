@@ -100,7 +100,7 @@ class SynchronizationService
         $response = [];
 
         $serviceName = str_replace('-', '', ucwords($shopContent, "-"));
-        $serviceId = 'PrestaShop\Module\PsEventbusV4\Services\\' . $serviceName . 'Service'; // faire un mapping entre le service et le nom du shopcontent
+        $serviceId = 'PrestaShop\Module\PsEventbus\Service\\' . $serviceName . 'Service'; // faire un mapping entre le service et le nom du shopcontent
     
         /** @var Ps_eventbus */
         $module = \Module::getInstanceByName('ps_eventbus');
@@ -113,7 +113,7 @@ class SynchronizationService
         $shopContentApiService = $this->module->getService($serviceId);
 
         /** @var ConfigurationRepository $configurationRepository */
-        $configurationRepository = $this->module->getService('PrestaShop\Module\PsEventbusV4\Repository\ConfigurationRepository');
+        $configurationRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository');
 
         $timezone = (string) $configurationRepository->get('PS_TIMEZONE');
         $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(Config::MYSQL_DATE_FORMAT);
@@ -167,7 +167,7 @@ class SynchronizationService
         $serviceName = str_replace('-', '', ucwords($shopContent, "-"));
 
         /** @var ShopContentServiceInterface $shopContentApiService */
-        $shopContentApiService = $this->module->getService('PrestaShop\\Module\\PsEventbus\\Services\\' . $serviceName . 'Service');
+        $shopContentApiService = $this->module->getService('PrestaShop\\Module\\PsEventbus\\Service\\' . $serviceName . 'Service');
 
         $contentIds = $this->incrementalSyncRepository->getIncrementalSyncObjectIds($shopContent, $langIso, $limit);
 
