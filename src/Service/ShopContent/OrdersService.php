@@ -30,7 +30,7 @@ class OrdersService implements ShopContentServiceInterface
     }
 
     public function getContentsForFull($offset, $limit, $langIso = null, $debug = false) {
-        $result = $this->ordersRepository->getContentsForFull($offset, $limit, $langIso, $debug);
+        $orders = $this->ordersRepository->getContentsForFull($offset, $limit, $langIso, $debug);
 
         if (empty($result)) {
             return [];
@@ -48,7 +48,7 @@ class OrdersService implements ShopContentServiceInterface
     }
 
     public function getContentsForIncremental($limit, $contentIds, $langIso = null, $debug = false) {
-        $result = $this->ordersRepository->getContentsForIncremental($limit, $contentIds, $langIso = null, $debug);
+        $orders = $this->ordersRepository->getContentsForIncremental($limit, $contentIds, $langIso = null, $debug);
 
         if (empty($result)) {
             return [];

@@ -5,6 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Service;
 use Behat\Behat\HelperContainer\Exception\ServiceNotFoundException;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator;
+use PrestaShop\Module\PsEventbus\Interfaces\ProxyServiceInterface;
 use PrestaShop\Module\PsEventbus\Interfaces\ShopContentServiceInterface;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
@@ -13,11 +14,6 @@ use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
 
 class SynchronizationService
 {
-    /**
-     * @var \Ps_eventbus
-     */
-    private $module;
-
     /**
      * @var EventbusSyncRepository
      */

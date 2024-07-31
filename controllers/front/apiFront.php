@@ -18,7 +18,7 @@ class ps_EventbusApiFrontModuleFrontController extends ModuleFrontController
         $jobId = \Tools::getValue('job_id');
 
         /** @var string $langIso */
-        $langIso = \Tools::getValue('lang_iso'); 
+        $langIso = \Tools::getValue('lang_iso');
 
         /** @var int $limit */
         $limit = \Tools::getValue('limit', 50);

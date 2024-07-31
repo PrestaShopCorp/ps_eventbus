@@ -1,6 +1,6 @@
 <?php
 
-namespace PrestaShop\Module\PsEventbus\Service;
+namespace PrestaShop\Module\PsEventbus\Interfaces;
 
 interface ProxyServiceInterface
 {
