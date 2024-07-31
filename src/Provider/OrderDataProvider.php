@@ -7,14 +7,14 @@ use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository;
-use PrestaShop\Module\PsEventbus\Repository\OrderRepository;
+use PrestaShop\Module\PsEventbus\Repository\OrdersRepository;
 
 class OrderDataProvider implements PaginatedApiDataProviderInterface
 {
     /**
-     * @var OrderRepository
+     * @var OrdersRepository
      */
-    private $orderRepository;
+    private $ordersRepository;
     /**
      * @var \Context
      */
@@ -43,13 +43,13 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
 
     public function __construct(
         \Context $context,
-        OrderRepository $orderRepository,
+        OrdersRepository $ordersRepository,
         OrderDetailsRepository $orderDetailsRepository,
         ArrayFormatter $arrayFormatter,
         OrderHistoryRepository $orderHistoryRepository,
         OrderCartRuleRepository $orderCartRuleRepository
     ) {
-        $this->orderRepository = $orderRepository;
+        $this->ordersRepository = $ordersRepository;
         $this->context = $context;
         $this->arrayFormatter = $arrayFormatter;
         $this->orderDetailsRepository = $orderDetailsRepository;
@@ -74,7 +74,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getFormattedData($offset, $limit, $langIso)
     {
-        $orders = $this->orderRepository->getOrders($offset, $limit, $this->shopId);
+        $orders = $this->ordersRepository->getOrders($offset, $limit, $this->shopId);
 
         if (empty($orders)) {
             return [];
@@ -106,7 +106,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getRemainingObjectsCount($offset, $langIso)
     {
-        return (int) $this->orderRepository->getRemainingOrderCount($offset, $this->shopId);
+        return (int) $this->ordersRepository->getRemainingOrderCount($offset, $this->shopId);
     }
 
     /**
@@ -120,7 +120,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
     public function getFormattedDataIncremental($limit, $langIso, $objectIds)
     {
         $langId = (int) \Language::getIdByIso($langIso);
-        $orders = $this->orderRepository->getOrdersIncremental($limit, $this->shopId, $objectIds);
+        $orders = $this->ordersRepository->getOrdersIncremental($limit, $this->shopId, $objectIds);
 
         if (!is_array($orders) || empty($orders)) {
             return [];
@@ -154,7 +154,7 @@ class OrderDataProvider implements PaginatedApiDataProviderInterface
      */
     public function getQueryForDebug($offset, $limit, $langIso)
     {
-        return $this->orderRepository->getQueryForDebug($offset, $limit, $this->shopId);
+        return $this->ordersRepository->getQueryForDebug($offset, $limit, $this->shopId);
     }
 
     /**

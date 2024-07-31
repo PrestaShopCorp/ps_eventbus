@@ -74,6 +74,18 @@ class ServiceContainer
     }
 
     /**
+     * @param string $serviceName
+     *
+     * @return bool
+     *
+     * @throws \Exception
+     */
+    public function hasService($serviceName)
+    {
+        return $this->getContainer()->has($serviceName);
+    }
+
+    /**
      * @return ContainerInterface
      *
      * @throws \Exception

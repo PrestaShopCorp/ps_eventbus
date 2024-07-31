@@ -6,7 +6,6 @@ use Behat\Behat\HelperContainer\Exception\ServiceNotFoundException;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator;
 use PrestaShop\Module\PsEventbus\Interfaces\ShopContentServiceInterface;
-use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
@@ -35,11 +34,6 @@ class SynchronizationService
     private $liveSyncRepository;
 
     /**
-     * @var DeletedObjectsRepository
-     */
-    private $deletedObjectsRepository;
-
-    /**
      * @var LanguageRepository
      */
     private $languageRepository;
@@ -59,7 +53,6 @@ class SynchronizationService
         EventbusSyncRepository $eventbusSyncRepository,
         IncrementalSyncRepository $incrementalSyncRepository,
         LiveSyncRepository $liveSyncRepository,
-        DeletedObjectsRepository $deletedObjectsRepository,
         LanguageRepository $languageRepository,
         ProxyServiceInterface $proxyService,
         PayloadDecorator $payloadDecorator
@@ -67,7 +60,6 @@ class SynchronizationService
         $this->eventbusSyncRepository = $eventbusSyncRepository;
         $this->incrementalSyncRepository = $incrementalSyncRepository;
         $this->liveSyncRepository = $liveSyncRepository;
-        $this->deletedObjectsRepository = $deletedObjectsRepository;
         $this->languageRepository = $languageRepository;
         $this->proxyService = $proxyService;
         $this->payloadDecorator = $payloadDecorator;
@@ -100,9 +92,9 @@ class SynchronizationService
         $response = [];
 
         $serviceName = str_replace('-', '', ucwords($shopContent, "-"));
-        $serviceId = 'PrestaShop\Module\PsEventbus\Service\\' . $serviceName . 'Service'; // faire un mapping entre le service et le nom du shopcontent
+        $serviceId = 'PrestaShop\Module\PsEventbus\Service\ShopContent\\' . $serviceName . 'Service'; // faire un mapping entre le service et le nom du shopcontent
     
-        /** @var Ps_eventbus */
+        /** @var \Ps_eventbus */
         $module = \Module::getInstanceByName('ps_eventbus');
 
         if (!$module->hasService($serviceId)) {
@@ -110,10 +102,10 @@ class SynchronizationService
         }
 
         /** @var ShopContentServiceInterface $shopContentApiService */
-        $shopContentApiService = $this->module->getService($serviceId);
+        $shopContentApiService = $module->getService($serviceId);
 
         /** @var ConfigurationRepository $configurationRepository */
-        $configurationRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository');
+        $configurationRepository = $module->getService('PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository');
 
         $timezone = (string) $configurationRepository->get('PS_TIMEZONE');
         $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(Config::MYSQL_DATE_FORMAT);
@@ -165,9 +157,18 @@ class SynchronizationService
         $response = [];
 
         $serviceName = str_replace('-', '', ucwords($shopContent, "-"));
+        $serviceId = 'PrestaShop\Module\PsEventbus\Service\ShopContent\\' . $serviceName . 'Service';
+
+        
+        /** @var \Ps_eventbus */
+        $module = \Module::getInstanceByName('ps_eventbus');
+
+        if (!$module->hasService($serviceId)) {
+            throw new ServiceNotFoundException('Service ' . $serviceName . 'doesn\'t exist !', $serviceId);
+        }
 
         /** @var ShopContentServiceInterface $shopContentApiService */
-        $shopContentApiService = $this->module->getService('PrestaShop\\Module\\PsEventbus\\Service\\' . $serviceName . 'Service');
+        $shopContentApiService = $module->getService($serviceId);
 
         $contentIds = $this->incrementalSyncRepository->getIncrementalSyncObjectIds($shopContent, $langIso, $limit);
 

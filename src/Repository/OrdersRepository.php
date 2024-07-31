@@ -9,11 +9,6 @@ class OrdersRepository extends AbstractRepository implements RepositoryInterface
 {
     public const ORDERS_TABLE = 'orders';
 
-    public function __construct(\Context $context)
-    {
-        parent::__construct($context);
-    }
-
     public function generateBaseQuery()
     {
         $this->query = new \DbQuery();
@@ -61,6 +56,8 @@ class OrdersRepository extends AbstractRepository implements RepositoryInterface
         if ($debug) {
             return $this->debugQuery();
         } else {
+            dump("test");
+            die;
             return $this->executeQuery();
         }
         

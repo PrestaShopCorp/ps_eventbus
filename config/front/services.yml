@@ -8,46 +8,12 @@ imports:
   - { resource: context.yml }
 
 services:
-  PrestaShop\Module\PsEventbus\Formatter\JsonFormatter:
-    class: PrestaShop\Module\PsEventbus\Formatter\JsonFormatter
-    public: true
-
-  PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter:
-    class: PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter
-    public: true
-
-  PrestaShop\Module\PsEventbus\Service\CacheService:
-    class: PrestaShop\Module\PsEventbus\Service\CacheService
-    public: true
-
-  PrestaShop\Module\PsEventbus\Service\CompressionService:
-    class: PrestaShop\Module\PsEventbus\Service\CompressionService
-    public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Formatter\JsonFormatter'
-
-  PrestaShop\Module\PsEventbus\Service\ProxyService:
-    class: PrestaShop\Module\PsEventbus\Service\ProxyService
-    public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Api\CollectorApiClient'
-      - '@PrestaShop\Module\PsEventbus\Formatter\JsonFormatter'
-      - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
-
   PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService:
     class: PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Api\SyncApiClient'
-
-  PrestaShop\Module\PsEventbus\Service\DeletedObjectsService:
-    class: PrestaShop\Module\PsEventbus\Service\DeletedObjectsService
-    public: true
-    arguments:
-      - "@ps_eventbus.context"
-      - '@PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository'
-      - '@PrestaShop\Module\PsEventbus\Service\ProxyService'
 
   PrestaShop\Module\PsEventbus\Service\SynchronizationService:
     class: PrestaShop\Module\PsEventbus\Service\SynchronizationService
@@ -56,7 +22,6 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository'
-      - '@PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
       - '@PrestaShop\Module\PsEventbus\Service\ProxyService'
       - '@PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator'
@@ -76,3 +41,12 @@ services:
     public: true
     arguments:
       - '@ps_eventbus'
+
+  # SHOP CONTENT SERVICES 
+  PrestaShop\Module\PsEventbus\Service\ShopContent\OrdersService:
+    class:  PrestaShop\Module\PsEventbus\Service\ShopContent\OrdersService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\OrdersRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository'
+      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
