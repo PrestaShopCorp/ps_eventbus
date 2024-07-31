@@ -225,8 +225,18 @@ class Ps_eventbus extends Module
      * @return mixed
      */
     public function getService($serviceName)
-    {
+    {    
         return $this->getServiceContainer()->getService($serviceName);
+    }
+
+    /**
+     * @param string $serviceName
+     *
+     * @return mixed
+     */
+    public function hasService($serviceName)
+    {
+        return $this->getServiceContainer()->hasService($serviceName);
     }
 
     /**

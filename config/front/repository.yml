@@ -68,8 +68,8 @@ services:
     arguments:
       - '@ps_eventbus.context'
 
-  PrestaShop\Module\PsEventbus\Repository\OrderRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\OrderRepository
+  PrestaShop\Module\PsEventbus\Repository\OrdersRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\OrdersRepository
     public: true
 
   PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository:

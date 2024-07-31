@@ -21,11 +21,11 @@ abstract class AbstractRepository
     /**
      * @var DbQuery
      */
-    private $query;
+    protected $query;
 
-    public function __construct(Context $context)
+    public function __construct()
     {
-        $this->context = $context;
+        $this->context = Context::getContext();
         $this->db = Db::getInstance();
     }
 
