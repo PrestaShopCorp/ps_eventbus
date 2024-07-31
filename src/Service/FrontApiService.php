@@ -8,6 +8,8 @@ use PrestaShop\Module\PsEventbus\Exception\QueryParamsException;
 use PrestaShop\Module\PsEventbus\Exception\UnauthorizedException;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
+use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
+use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
 use PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService;
@@ -70,13 +72,13 @@ class FrontApiService
 
             if ($exception instanceof \PrestaShopDatabaseException) {
                 $this->errorHandler->handle($exception);
-                $this->exitWithExceptionMessage($exception);
+                CommonService::exitWithExceptionMessage($exception);
             } elseif ($exception instanceof EnvVarException) {
                 $this->errorHandler->handle($exception);
-                $this->exitWithExceptionMessage($exception);
+                CommonService::exitWithExceptionMessage($exception);
             } elseif ($exception instanceof FirebaseException) {
                 $this->errorHandler->handle($exception);
-                $this->exitWithExceptionMessage($exception);
+                CommonService::exitWithExceptionMessage($exception);
             }
         }
     }
@@ -85,27 +87,48 @@ class FrontApiService
     {
         try {
             if (!in_array($shopContent, Config::SHOP_CONTENTS, true)) {
-                 $this->exitWithExceptionMessage(new QueryParamsException('404 - ShopContent not found', Config::INVALID_URL_QUERY));
+                CommonService::exitWithExceptionMessage(new QueryParamsException('404 - ShopContent not found', Config::INVALID_URL_QUERY));
             }
 
             if ($limit < 0) {
-                $this->exitWithExceptionMessage(new QueryParamsException('Invalid URL Parameters', Config::INVALID_URL_QUERY));
+                CommonService::exitWithExceptionMessage(new QueryParamsException('Invalid URL Parameters', Config::INVALID_URL_QUERY));
             }
 
             /** @var ConfigurationRepository $configurationRepository */
             $configurationRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository');
+            /** @var LanguageRepository $languageRepository */
+            $languageRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\LanguageRepository');
+            /** @var IncrementalSyncRepository $incrementalSyncRepository */
+            $incrementalSyncRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository');
 
             $timezone = (string) $configurationRepository->get('PS_TIMEZONE');
             $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(Config::MYSQL_DATE_FORMAT);
             
+            $langIso = $langIso ? $langIso : $languageRepository->getDefaultLanguageIsoCode();
+
             $offset = 0;
-            $incrementalSync = false;
             $response = [];
 
             $typeSync = $this->eventbusSyncRepository->findTypeSync($shopContent, $langIso);
 
-            if ($typeSync == false) {
+            if (is_array($typeSync)) {
+                if (!$isFull) {
+                    $offset = (int) $typeSync['offset'];
+                } else {
+                    $this->eventbusSyncRepository->updateTypeSync(
+                        $shopContent,
+                        $offset,
+                        $dateNow,
+                        false,
+                        $langIso
+                    );
+
+                    $incrementalSyncRepository->removeIncrementaSyncObjectByType($shopContent);
+                }
+            } else {
                 $this->eventbusSyncRepository->insertTypeSync($shopContent, $offset, $dateNow, $langIso);
+
+                $isFull = true;
             }
 
             if ($isFull) {
@@ -129,27 +152,29 @@ class FrontApiService
                     $debug
                 );
             }
-
-            $this->exitWithResponse(
-                [
-                    'job_id' => $jobId,
-                    'object_type' => $shopContent,
-                    'syncType' => $incrementalSync ? 'incremental' : 'full',
-                ],
-                $response
+            
+            CommonService::exitWithResponse(
+                array_merge(
+                    [
+                        'job_id' => $jobId,
+                        'object_type' => $shopContent,
+                        'syncType' => $isFull ? 'full' : 'incremental',
+                    ],
+                    $response
+                )
             );
         } catch (\PrestaShopDatabaseException $exception) {
             $this->errorHandler->handle($exception);
-            $this->exitWithExceptionMessage($exception);
+            CommonService::exitWithExceptionMessage($exception);
         } catch (EnvVarException $exception) {
             $this->errorHandler->handle($exception);
-            $this->exitWithExceptionMessage($exception);
+            CommonService::exitWithExceptionMessage($exception);
         } catch (FirebaseException $exception) {
             $this->errorHandler->handle($exception);
-            $this->exitWithExceptionMessage($exception);
+            CommonService::exitWithExceptionMessage($exception);
         } catch (\Exception $exception) {
             $this->errorHandler->handle($exception);
-            $this->exitWithExceptionMessage($exception);
+            CommonService::exitWithExceptionMessage($exception);
         }
     }
 
@@ -166,7 +191,7 @@ class FrontApiService
         $authorizationResponse = $this->authorizationService->authorizeCall($jobId);
 
         if (is_array($authorizationResponse)) {
-            $this->exitWithResponse($authorizationResponse);
+            CommonService::exitWithResponse($authorizationResponse);
         } elseif (!$authorizationResponse) {
             throw new \PrestaShopDatabaseException('Failed saving job id to database');
         }
@@ -180,73 +205,5 @@ class FrontApiService
         if (!$token) {
             throw new FirebaseException('Invalid token');
         }
-    }
-
-    /**
-     * @param array $response
-     *
-     * @return void
-     */
-    private function exitWithResponse(array $response)
-    {
-        $httpCode = isset($response['httpCode']) ? (int) $response['httpCode'] : 200;
-
-        $this->dieWithResponse($response, $httpCode);
-    }
-
-    /**
-     * @param \Exception $exception
-     *
-     * @return void
-     */
-    private function exitWithExceptionMessage(\Exception $exception)
-    {
-        $code = $exception->getCode() == 0 ? 500 : $exception->getCode();
-
-        if ($exception instanceof \PrestaShopDatabaseException) {
-            $code = Config::DATABASE_QUERY_ERROR_CODE;
-        } elseif ($exception instanceof EnvVarException) {
-            $code = Config::ENV_MISCONFIGURED_ERROR_CODE;
-        } elseif ($exception instanceof FirebaseException) {
-            $code = Config::REFRESH_TOKEN_ERROR_CODE;
-        } elseif ($exception instanceof QueryParamsException) {
-            $code = Config::INVALID_URL_QUERY;
-        }
-
-        $response = [
-            'object_type' => \Tools::getValue('shopContent'),
-            'status' => false,
-            'httpCode' => $code,
-            'message' => $exception->getMessage(),
-        ];
-
-        $this->dieWithResponse($response, (int) $code);
-    }
-
-    /**
-     * @param array $response
-     * @param int $code
-     *
-     * @return void
-     */
-    private function dieWithResponse(array $response, $code)
-    {
-        $httpStatusText = "HTTP/1.1 $code";
-
-        if (array_key_exists((int) $code, Config::HTTP_STATUS_MESSAGES)) {
-            $httpStatusText .= ' ' . Config::HTTP_STATUS_MESSAGES[(int) $code];
-        } elseif (isset($response['body']['statusText'])) {
-            $httpStatusText .= ' ' . $response['body']['statusText'];
-        }
-
-        $response['httpCode'] = (int) $code;
-
-        header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
-        header('Content-Type: application/json;charset=utf-8');
-        header($httpStatusText);
-
-        echo json_encode($response, JSON_UNESCAPED_SLASHES);
-
-        exit;
     }
 }

@@ -53,14 +53,7 @@ class OrdersRepository extends AbstractRepository implements RepositoryInterface
 
         $this->query->limit((int) $limit, (int) $offset);
 
-        if ($debug) {
-            return $this->debugQuery();
-        } else {
-            dump("test");
-            die;
-            return $this->executeQuery();
-        }
-        
+        return $this->runQuery($debug);
     }
 
     public function getContentsForIncremental($limit, $contentIds, $langIso = null, $debug = false)
@@ -69,17 +62,13 @@ class OrdersRepository extends AbstractRepository implements RepositoryInterface
 
         $this->query->where('o.id_order IN(' . implode(',', array_map('intval', $contentIds)) . ')')
             ->limit($limit);
-
-        if ($debug) {
-            return $this->debugQuery();
-        } else {
-            return $this->executeQuery();
-        }
+        
+        return $this->runQuery($debug);
     }
 
     public function countFullSyncContentLeft($offset, $langIso = null, $debug = false)
     {
-        $orders = $this->getContentsForFull($offset, 1, parent::getShopId());
+        $orders = $this->getContentsForFull($offset, 1, parent::getShopId(), $debug);
 
         if (!is_array($orders) || empty($orders)) {
             return 0;

@@ -5,6 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 use Context;
 use Db;
 use DbQuery;
+use PrestaShop\Module\PsEventbus\Service\CommonService;
 
 abstract class AbstractRepository
 {
@@ -38,18 +39,24 @@ abstract class AbstractRepository
         return (int) $this->context->shop->id;
     }
 
-    protected function debugQuery()
+    protected function runQuery($debug)
+    {
+        if ($debug) {
+            $this->debugQuery();
+        }
+
+        return $this->db->executeS($this->query);
+    }
+
+    private function debugQuery()
     {
         $queryStringified = preg_replace('/\s+/', ' ', $this->query->build());
 
-        return array_merge(
+        $response = array_merge(
             (array) $this->query,
             ['queryStringified' => $queryStringified]
         );
-    }
 
-    protected function executeQuery()
-    {
-        return $this->db->executeS($this->query);
+        CommonService::exitWithResponse($response);
     }
 }

@@ -5,7 +5,6 @@ imports:
   - { resource: provider.yml }
   - { resource: repository.yml }
   - { resource: builder.yml }
-  - { resource: context.yml }
 
 services:
   PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService:
