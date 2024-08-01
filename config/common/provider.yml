@@ -47,7 +47,7 @@ services:
     class: PrestaShop\Module\PsEventbus\Provider\OrderDataProvider
     public: true
     arguments:
-      - "@ps_eventbus.context"
+      - '@=service("prestashop.adapter.legacy.context").getContext()'
       - '@PrestaShop\Module\PsEventbus\Repository\OrdersRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
@@ -72,7 +72,7 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\GoogleTaxonomyRepository'
-      - "@ps_eventbus.context"
+      - '@=service("prestashop.adapter.legacy.context").getContext()'
 
   PrestaShop\Module\PsEventbus\Provider\CarrierDataProvider:
     class: PrestaShop\Module\PsEventbus\Provider\CarrierDataProvider
@@ -148,7 +148,6 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
       - '@PrestaShop\Module\PsEventbus\Decorator\LanguageDecorator'
-
 
   PrestaShop\Module\PsEventbus\Provider\ImageDataProvider:
     class: PrestaShop\Module\PsEventbus\Provider\ImageDataProvider

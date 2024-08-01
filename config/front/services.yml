@@ -1,10 +1,10 @@
 imports:
-  - { resource: ../common.yml }
   - { resource: api.yml }
-  - { resource: decorator.yml }
-  - { resource: provider.yml }
-  - { resource: repository.yml }
-  - { resource: builder.yml }
+  - { resource: ../common/common.yml }
+  - { resource: ../common/decorator.yml }
+  - { resource: ../common/provider.yml }
+  - { resource: ../common/repository.yml }
+  - { resource: ../common/builder.yml }
 
 services:
   PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService:

@@ -1,7 +1,7 @@
 imports:
-  - { resource: ../common.yml }
-  - { resource: ../front/repository.yml }
-  - { resource: ../front/services.yml }
+  - { resource: ../common/common.yml }
+  - { resource: ../common/repository.yml }
+  - { resource: ../common/services.yml }
 
 services:
   ps_eventbus.service.presenter:

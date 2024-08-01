@@ -152,7 +152,7 @@ class FrontApiService
                     $debug
                 );
             }
-            
+
             CommonService::exitWithResponse(
                 array_merge(
                     [
@@ -174,7 +174,8 @@ class FrontApiService
             CommonService::exitWithExceptionMessage($exception);
         } catch (\Exception $exception) {
             $this->errorHandler->handle($exception);
-            CommonService::exitWithExceptionMessage($exception);
+
+            CommonService::dieWithResponse(["message" => "An error occured. Please check logs for more information"], 500);
         }
     }
 

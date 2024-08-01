@@ -1,6 +1,5 @@
 imports:
-  - { resource: parameters.yml }
-  - { resource: common/handler.yml }
+  - { resource: ../parameters.yml }
 
 services:
   ps_eventbus.db:
@@ -15,6 +14,11 @@ services:
     arguments:
       - 'ps_eventbus'
   
+  ps_eventbus.context:
+    class: 'Context'
+    public: true
+    factory: ['PrestaShop\Module\PsEventbus\Factory\ContextFactory', 'getContext']
+
   ps_eventbus.helper.module:
     class: 'PrestaShop\Module\PsEventbus\Helper\ModuleHelper'
     public: true
@@ -41,3 +45,13 @@ services:
       - '@PrestaShop\Module\PsEventbus\Formatter\JsonFormatter'
       - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
 
+  PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface: '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler'
+
+  PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler:
+    class: PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler
+    public: true
+    arguments:
+      - '@ps_eventbus'
+      - '@PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService'
+      - '%ps_eventbus.sentry_dsn%'
+      - '%ps_eventbus.sentry_env%'
