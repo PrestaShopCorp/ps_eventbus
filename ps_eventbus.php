@@ -27,6 +27,7 @@
 use PrestaShop\Module\PsEventbus\Module\Install;
 use PrestaShop\Module\PsEventbus\Module\Uninstall;
 use PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -226,7 +227,11 @@ class Ps_eventbus extends Module
      */
     public function getService($serviceName)
     {    
-        return $this->getServiceContainer()->getService($serviceName);
+        try {
+            return $this->getServiceContainer()->getService($serviceName);
+        } catch (ServiceNotFoundException $exception) {
+            return $this->get($serviceName);
+        }
     }
 
     /**

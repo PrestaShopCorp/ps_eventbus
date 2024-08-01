@@ -3,7 +3,7 @@ services:
     class: PrestaShop\Module\PsEventbus\Decorator\ProductDecorator
     public: true
     arguments:
-      - '@ps_eventbus.context'
+      - '@=service("prestashop.adapter.legacy.context").getContext()'
       - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\ProductRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\CategoryRepository'
@@ -32,7 +32,7 @@ services:
     class: PrestaShop\Module\PsEventbus\Decorator\CustomPriceDecorator
     public: true
     arguments:
-      - '@ps_eventbus.context'
+      - '@=service("prestashop.adapter.legacy.context").getContext()'
       - '@PrestaShop\Module\PsEventbus\Service\SpecificPriceService'
 
   PrestaShop\Module\PsEventbus\Decorator\WishlistDecorator:
