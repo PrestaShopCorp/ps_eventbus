@@ -40,6 +40,17 @@ services:
     public: true
     arguments:
       - '@ps_eventbus'
+      - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler'
+      - '@PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService'
+      - '@PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService'
+      - '@PrestaShop\Module\PsEventbus\Service\SynchronizationService'
+      - '@PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository'
+
+  PrestaShop\Module\PsEventbus\Service\HealthCheckService:
+    class: PrestaShop\Module\PsEventbus\Service\HealthCheckService
+    public: true
+    arguments:
+      - '@ps_eventbus'
 
   # SHOP CONTENT SERVICES 
   PrestaShop\Module\PsEventbus\Service\ShopContent\OrdersService:
