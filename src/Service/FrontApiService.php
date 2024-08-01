@@ -72,17 +72,19 @@ class FrontApiService
 
     public function handleDataSync($shopContent, $jobId, $langIso, $limit, $isFull, $debug = false)
     {   
-        $isAuthentified = $this->authorize($jobId, $shopContent == 'HealthCheck');
-
-        if ($shopContent == 'HealthCheck') {
-            /** @var HealthCheckService $healthCheckService */
-            $healthCheckService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\HealthCheckService');
-            return $healthCheckService->getHealthCheck($isAuthentified);
-        }
-    
         try {
             if (!in_array($shopContent, Config::SHOP_CONTENTS, true)) {
                 CommonService::exitWithExceptionMessage(new QueryParamsException('404 - ShopContent not found', Config::INVALID_URL_QUERY));
+            }
+
+            $isHealthCheck = $shopContent == Config::COLLECTION_HEALTHCHECK;
+
+            $isAuthentified = $this->authorize($jobId, $isHealthCheck);
+
+            if ($isHealthCheck) {
+                /** @var HealthCheckService $healthCheckService */
+                $healthCheckService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\HealthCheckService');
+                return $healthCheckService->getHealthCheck($isAuthentified);
             }
 
             if ($limit < 0) {

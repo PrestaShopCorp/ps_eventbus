@@ -43,6 +43,7 @@ class Config
     const COLLECTION_CUSTOMERS = 'customers';
     const COLLECTION_DELETED = 'deleted';
     const COLLECTION_EMPLOYEES = 'employees';
+    const COLLECTION_HEALTHCHECK = 'healthcheck';
     const COLLECTION_IMAGES = 'images';
     const COLLECTION_IMAGE_TYPES = 'image_types';
     const COLLECTION_LANGUAGES = 'languages';
@@ -81,6 +82,7 @@ class Config
         self::COLLECTION_EMPLOYEES,
         self::COLLECTION_IMAGES,
         self::COLLECTION_IMAGE_TYPES,
+        self::COLLECTION_HEALTHCHECK,
         self::COLLECTION_LANGUAGES,
         self::COLLECTION_MANUFACTURERS,
         self::COLLECTION_MODULES,
