@@ -14,7 +14,7 @@ use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
 use PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService;
-use PrestaShop\Module\PsEventbus\Service\ShopContent\HealthCheckService;
+use PrestaShop\Module\PsEventbus\Service\HealthCheckService;
 use PrestaShopDatabaseException;
 use Ps_eventbus;
 
