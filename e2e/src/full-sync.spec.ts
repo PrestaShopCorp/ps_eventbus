@@ -10,19 +10,19 @@ import {
   omitProperties,
   sortUploadData,
 } from "./helpers/data-helper";
-import { Controller, controllerList } from "./helpers/controllers";
+import { ShopContent, shopContentList } from "./helpers/shop-contents";
 
 expect.extend(matchers);
 
-// these controllers will be excluded from the following test suite
-const EXCLUDED_API: Controller[] = ["apiGoogleTaxonomies"];
+// these ShopContent will be excluded from the following test suite
+const EXCLUDED_API: ShopContent[] = ["google-taxonomies"];
 
 // FIXME : these api can't send anything to the mock api because the database is empty from the factory
-const MISSING_TEST_DATA: Controller[] = [
-  "apiCartRules",
-  "apiCustomProductCarriers",
-  "apiTranslations",
-  "apiWishlists",
+const MISSING_TEST_DATA: ShopContent[] = [
+  "cart-rules",
+  "custom-product-carriers",
+  "translations",
+  "wishlists",
 ];
 
 // these fields change from test run to test run, so we replace them with a matcher to only ensure the type and format are correct
@@ -53,7 +53,7 @@ describe('Full Sync', () => {
   let testIndex = 0;
 
   // gérer les cas ou un shopContent n'existe pas (pas de fixture du coup)
-  const controllers: Controller[] = controllerList.filter(
+  const shopContents: ShopContent[] = shopContentList.filter(
     (it) => !EXCLUDED_API.includes(it)
   );
 
@@ -64,17 +64,17 @@ describe('Full Sync', () => {
   });
 
   // TODO : some versions of prestashop include ps_facebook out of the box, this test can't reliably be run for all versions
-  describe.skip("apiGoogleTaxonomies", () => {
-    const controller = "apiGoogleTaxonomies";
+  describe.skip("google-taxonomies", () => {
+    const shoContent = "google-taxonomies";
 
     // TODO : apiGoogleTaxonomies requires an additional module to be present : devise a specific test setup for this endpoint
-    it.skip(`${controller} should accept full sync`, async () => {});
+    it.skip(`${shoContent} should accept full sync`, async () => {});
 
-    it.skip(`${controller} should upload to collector`, async () => {});
+    it.skip(`${shoContent} should upload to collector`, async () => {});
 
-    it(`${controller} should reject full sync when ps_facebook is not installed`, async () => {
+    it(`${shoContent} should reject full sync when ps_facebook is not installed`, async () => {
       // arrange
-      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
+      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=${shoContent}&limit=5&full=1&job_id=${jobId}`;
 
       const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
 
@@ -98,10 +98,10 @@ describe('Full Sync', () => {
     });
   });
 
-  describe.each(controllers)("%s", (controller) => {
-    it(`${controller} should accept full sync`, async () => {
+  describe.each(shopContents)("%s", (shopContent) => {
+    it(`${shopContent} should accept full sync`, async () => {
       // arrange
-      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
+      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=${shopContent}&limit=5&full=1&job_id=${jobId}`;
 
       const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
 
@@ -128,12 +128,12 @@ describe('Full Sync', () => {
       });
     });
 
-    if (MISSING_TEST_DATA.includes(controller)) {
-      it.skip(`${controller} should upload to collector`, () => {});
+    if (MISSING_TEST_DATA.includes(shopContent)) {
+      it.skip(`${shopContent} should upload to collector`, () => {});
     } else {
-      it(`${controller} should upload to collector`, async () => {
+      it(`${shopContent} should upload to collector`, async () => {
         // arrange
-        const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
+        const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=${shopContent}&limit=5&full=1&job_id=${jobId}`;
         const message$ = probe({ url: `/upload/${jobId}` });
 
         const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
@@ -168,13 +168,13 @@ describe('Full Sync', () => {
     }
     
 
-    if (MISSING_TEST_DATA.includes(controller)) {
-      it.skip(`${controller} should upload complete dataset to collector`, () => {});
+    if (MISSING_TEST_DATA.includes(shopContent)) {
+      it.skip(`${shopContent} should upload complete dataset to collector`, () => {});
     } else {
-      it(`${controller} should upload complete dataset collector`, async () => {
+      it(`${shopContent} should upload complete dataset collector`, async () => {
         
         // arrange
-        const fullSync$ = doFullSync(jobId, controller, { timeout: 4000 });
+        const fullSync$ = doFullSync(jobId, shopContent, { timeout: 4000 });
         const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 4000 });
 
         // act
@@ -187,18 +187,18 @@ describe('Full Sync', () => {
             toArray()
           )
         );
-
+        console.log('test', testConfig.dumpFullSyncData);
         // dump data for easier debugging or updating fixtures
         if (testConfig.dumpFullSyncData) {
-          await dumpUploadData(syncedData, controller);
+          await dumpUploadData(syncedData, shopContent);
         }
 
-        const fixture = await loadFixture(controller);
+        const fixture = await loadFixture(shopContent);
 
         // we need to process fixtures and data returned from ps_eventbus to make them easier to compare
         let processedData = syncedData;
         let processedFixture = fixture;
-        if (controller === "apiModules") {
+        if (shopContent === "modules") {
           processedData = generatePredictableModuleId(processedData);
           processedFixture = generatePredictableModuleId(processedFixture);
         }

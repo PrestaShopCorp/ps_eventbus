@@ -3,12 +3,12 @@ import {beforeEach, describe, expect} from "@jest/globals";
 import axios from "axios";
 import {from, lastValueFrom, map, toArray, zip} from "rxjs";
 import {probe} from "./helpers/mock-probe";
-import {Controller, controllerList} from "./helpers/controllers";
+import { ShopContent, shopContentList } from "./helpers/shop-contents";
 
 describe('Reject invalid job-id', () => {
   let testIndex = 0;
 
-  const controllers: Controller[] = controllerList
+  const shopContents: ShopContent[] = shopContentList
 
   let jobId: string;
 
@@ -16,10 +16,10 @@ describe('Reject invalid job-id', () => {
     jobId = `invalid-job-id-${testIndex++}`
   });
 
-  it.each(controllers)(`%s should return 454 with an invalid job id (sync-api status 454)`, async (controller) => {
+  it.each(shopContents)(`%s should return 454 with an invalid job id (sync-api status 454)`, async (shopContent) => {
       expect.assertions(6);
       // arrange
-      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&job_id=${jobId}`
+      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=${shopContent}&limit=5&job_id=${jobId}`
       const message$ = probe({params: {id: jobId}});
 
       //act
