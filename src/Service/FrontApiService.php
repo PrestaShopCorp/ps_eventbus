@@ -6,7 +6,6 @@ use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
 use PrestaShop\Module\PsEventbus\Exception\QueryParamsException;
-use PrestaShop\Module\PsEventbus\Exception\UnauthorizedException;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
@@ -73,7 +72,7 @@ class FrontApiService
     public function handleDataSync($shopContent, $jobId, $langIso, $limit, $isFull, $debug = false)
     {   
         try {
-            if (!in_array($shopContent, Config::SHOP_CONTENTS, true)) {
+            if (!in_array($shopContent, array_merge(Config::SHOP_CONTENTS, [CONFIG::COLLECTION_HEALTHCHECK]), true)) {
                 CommonService::exitWithExceptionMessage(new QueryParamsException('404 - ShopContent not found', Config::INVALID_URL_QUERY));
             }
 

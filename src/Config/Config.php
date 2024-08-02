@@ -82,7 +82,6 @@ class Config
         self::COLLECTION_EMPLOYEES,
         self::COLLECTION_IMAGES,
         self::COLLECTION_IMAGE_TYPES,
-        self::COLLECTION_HEALTHCHECK,
         self::COLLECTION_LANGUAGES,
         self::COLLECTION_MANUFACTURERS,
         self::COLLECTION_MODULES,
