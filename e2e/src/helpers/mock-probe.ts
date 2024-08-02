@@ -13,7 +13,7 @@ import {
 import R from 'ramda';
 import testConfig from "./test.config";
 import axios from "axios";
-import {Controller} from "./controllers";
+import {ShopContent} from "./shop-contents";
 import {anyBoolean} from "jest-mock-extended";
 
 const DEFAULT_OPTIONS = {
@@ -77,13 +77,13 @@ export type PsEventbusSyncUpload = {
   collection: Collection, id: string, properties: any
 }
 
-export function doFullSync(jobId: string, controller: Controller, options?: MockClientOptions): Observable<PsEventbusSyncResponse> {
+export function doFullSync(jobId: string, shopContent: ShopContent, options?: MockClientOptions): Observable<PsEventbusSyncResponse> {
   options = R.mergeLeft(options, DEFAULT_OPTIONS);
   
   const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
 
   const requestNext = (full: number) => axios.post<PsEventbusSyncResponse>(
-    `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=${full}&job_id=${jobId}`,
+    `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=${shopContent}&limit=5&full=${full}&job_id=${jobId}`,
     callId,
     {
       headers: {

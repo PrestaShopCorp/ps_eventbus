@@ -1,7 +1,7 @@
 import R from "ramda";
 import { PsEventbusSyncUpload } from "./mock-probe";
 import fs from "fs";
-import { Content, contentControllerMapping, Controller } from "./controllers";
+import { Content, shopContentMapping, ShopContent } from "./shop-contents";
 import axios from "axios";
 import testConfig from "./test.config";
 import { HealthCheck } from "../type/health-check";
@@ -39,9 +39,9 @@ export function omitProperties(
   }));
 }
 
-export function getControllerContent(controller: Controller): Content[] {
-  return Object.entries(contentControllerMapping)
-    .filter((it) => it[1] === controller)
+export function getControllerContent(shopContent: ShopContent): Content[] {
+  return Object.entries(shopContentMapping)
+    .filter((it) => it[1] === shopContent)
     .map((it) => it[0]) as Content[];
 }
 
@@ -56,7 +56,7 @@ export async function getShopHealthCheck(options?: {
     healthCheck = cachedHealthCheck;
   } else {
     const res = await axios.get<HealthCheck>(
-      `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck&job_id=valid-job-healthcheck`
+      `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=helathcheck&job_id=valid-job-healthcheck`
     );
     healthCheck = res.data;
     cachedHealthCheck = healthCheck;
@@ -67,9 +67,9 @@ export async function getShopHealthCheck(options?: {
 const FIXTURE_DIR = "./src/fixtures";
 
 export async function loadFixture(
-  controller: Controller
+  shopContent: ShopContent
 ): Promise<PsEventbusSyncUpload[]> {
-  const contents = getControllerContent(controller);
+  const contents = getControllerContent(shopContent);
   const shopVersion = (await getShopHealthCheck()).prestashop_version;
   const shopSemver = semver.coerce(shopVersion);
   const fixture = [];
@@ -95,7 +95,7 @@ export async function loadFixture(
 
   const files = contents.map((content) =>
     fs.promises.readFile(
-      `${FIXTURE_DIR}/${useFixture}/${controller}/${content}.json`,
+      `${FIXTURE_DIR}/${useFixture}/${shopContent}/${content}.json`,
       "utf-8"
     )
   );
