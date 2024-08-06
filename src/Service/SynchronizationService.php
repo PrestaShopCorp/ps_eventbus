@@ -44,7 +44,6 @@ class SynchronizationService
      */
     private $proxyService;
 
-
     public function __construct(
         EventbusSyncRepository $eventbusSyncRepository,
         IncrementalSyncRepository $incrementalSyncRepository,
@@ -87,9 +86,9 @@ class SynchronizationService
     ) {
         $response = [];
 
-        $serviceName = str_replace('-', '', ucwords($shopContent, "-"));
+        $serviceName = str_replace('-', '', ucwords($shopContent, '-'));
         $serviceId = 'PrestaShop\Module\PsEventbus\Service\ShopContent\\' . $serviceName . 'Service'; // faire un mapping entre le service et le nom du shopcontent
-    
+
         /** @var \Ps_eventbus */
         $module = \Module::getInstanceByName('ps_eventbus');
 
@@ -152,10 +151,9 @@ class SynchronizationService
     ) {
         $response = [];
 
-        $serviceName = str_replace('-', '', ucwords($shopContent, "-"));
+        $serviceName = str_replace('-', '', ucwords($shopContent, '-'));
         $serviceId = 'PrestaShop\Module\PsEventbus\Service\ShopContent\\' . $serviceName . 'Service';
 
-        
         /** @var \Ps_eventbus */
         $module = \Module::getInstanceByName('ps_eventbus');
 
@@ -232,9 +230,9 @@ class SynchronizationService
          * If count > 100 000, we removed all entry corresponding to this shop content, and we enable full sync for this
          */
         if (mt_rand() % Config::RANDOM_SYNC_CHECK_MAX == 0) {
-            foreach($contentTypesWithIds as $contentType => $contentIds) {
+            foreach ($contentTypesWithIds as $contentType => $contentIds) {
                 $count = $this->incrementalSyncRepository->getIncrementalSyncObjectCountByType($contentType);
-                
+
                 if ($count > Config::INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT) {
                     $hasDeleted = $this->incrementalSyncRepository->removeIncrementaSyncObjectByType($contentType);
 
@@ -259,7 +257,7 @@ class SynchronizationService
             $allIsoCodes = $this->languageRepository->getLanguagesIsoCodes();
 
             foreach ($allIsoCodes as $langIso) {
-                foreach($contentTypesWithIds as $contentType => $contentIds) {
+                foreach ($contentTypesWithIds as $contentType => $contentIds) {
                     foreach ($contentIds as $contentId) {
                         if ($this->isFullSyncDone($contentType, $langIso)) {
                             array_push($contentToInsert,
@@ -274,13 +272,12 @@ class SynchronizationService
                             );
                         }
                     }
-                    
                 }
             }
         } else {
             $defaultIsoCode = $this->languageRepository->getDefaultLanguageIsoCode();
 
-            foreach($contentTypesWithIds as $contentType => $contentIds) {
+            foreach ($contentTypesWithIds as $contentType => $contentIds) {
                 foreach ($contentIds as $contentId) {
                     if ($this->isFullSyncDone($contentType, $defaultIsoCode)) {
                         array_push($contentToInsert,

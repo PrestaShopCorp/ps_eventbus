@@ -2,32 +2,29 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use Context;
-use Db;
-use DbQuery;
 use PrestaShop\Module\PsEventbus\Service\CommonService;
 
 abstract class AbstractRepository
 {
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
 
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
     /**
-     * @var DbQuery
+     * @var \DbQuery
      */
     protected $query;
 
     public function __construct()
     {
-        $this->context = Context::getContext();
-        $this->db = Db::getInstance();
+        $this->context = \Context::getContext();
+        $this->db = \Db::getInstance();
     }
 
     public function getShopId()

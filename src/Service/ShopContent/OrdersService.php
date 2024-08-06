@@ -10,7 +10,7 @@ use PrestaShop\Module\PsEventbus\Repository\OrdersRepository;
 
 class OrdersService implements ShopContentServiceInterface
 {
-    /** @var OrdersRepository $ordersRepository */
+    /** @var OrdersRepository */
     private $ordersRepository;
 
     /** @var OrderHistoryRepository */
@@ -29,7 +29,8 @@ class OrdersService implements ShopContentServiceInterface
         $this->arrayFormatter = $arrayFormatter;
     }
 
-    public function getContentsForFull($offset, $limit, $langIso = null, $debug = false) {
+    public function getContentsForFull($offset, $limit, $langIso = null, $debug = false)
+    {
         $orders = $this->ordersRepository->getContentsForFull($offset, $limit, $langIso, $debug);
 
         if (empty($result)) {
@@ -47,7 +48,8 @@ class OrdersService implements ShopContentServiceInterface
         }, $orders);
     }
 
-    public function getContentsForIncremental($limit, $contentIds, $langIso = null, $debug = false) {
+    public function getContentsForIncremental($limit, $contentIds, $langIso = null, $debug = false)
+    {
         $orders = $this->ordersRepository->getContentsForIncremental($limit, $contentIds, $langIso = null, $debug);
 
         if (empty($result)) {
@@ -65,14 +67,15 @@ class OrdersService implements ShopContentServiceInterface
         }, $orders);
     }
 
-    public function countFullSyncContentLeft($offset, $langIso = null) {
+    public function countFullSyncContentLeft($offset, $langIso = null)
+    {
         return (int) $this->ordersRepository->countFullSyncContentLeft($offset, $langIso);
     }
 
     public function castOrders(&$orders, $langIso)
     {
         $langId = (int) \Language::getIdByIso($langIso);
-        
+
         foreach ($orders as &$order) {
             $order['id_order'] = (int) $order['id_order'];
             $order['id_customer'] = (int) $order['id_customer'];
@@ -176,5 +179,4 @@ class OrdersService implements ShopContentServiceInterface
             }
         }
     }
-
 }

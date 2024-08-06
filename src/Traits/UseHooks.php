@@ -2,102 +2,102 @@
 
 namespace PrestaShop\Module\PsEventbus\Traits;
 
-use Exception;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
-use SpecificPrice;
 
-trait UseHooks {
-    public function getHooks() {
+trait UseHooks
+{
+    public function getHooks()
+    {
         // Retourne la liste des hooks a register
         return [
             'actionObjectCarrierAddAfter',
             'actionObjectCarrierDeleteAfter',
             'actionObjectCarrierUpdateAfter',
-    
+
             'actionObjectCartAddAfter',
             'actionObjectCartUpdateAfter',
-    
+
             'actionObjectCartRuleAddAfter',
             'actionObjectCartRuleDeleteAfter',
             'actionObjectCartRuleUpdateAfter',
-    
+
             'actionObjectCategoryAddAfter',
             'actionObjectCategoryDeleteAfter',
             'actionObjectCategoryUpdateAfter',
-    
+
             'actionObjectCombinationDeleteAfter',
-    
+
             'actionObjectCountryAddAfter',
             'actionObjectCountryDeleteAfter',
             'actionObjectCountryUpdateAfter',
-    
+
             'actionObjectCurrencyAddAfter',
             'actionObjectCurrencyUpdateAfter',
-    
+
             'actionObjectCustomerAddAfter',
             'actionObjectCustomerDeleteAfter',
             'actionObjectCustomerUpdateAfter',
-    
+
             'actionObjectImageAddAfter',
             'actionObjectImageDeleteAfter',
             'actionObjectImageUpdateAfter',
-    
+
             'actionObjectLanguageAddAfter',
             'actionObjectLanguageDeleteAfter',
             'actionObjectLanguageUpdateAfter',
-    
+
             'actionObjectManufacturerAddAfter',
             'actionObjectManufacturerDeleteAfter',
             'actionObjectManufacturerUpdateAfter',
-    
+
             'actionObjectOrderAddAfter',
             'actionObjectOrderUpdateAfter',
-    
+
             'actionObjectProductAddAfter',
             'actionObjectProductDeleteAfter',
             'actionObjectProductUpdateAfter',
-    
+
             'actionObjectSpecificPriceAddAfter',
             'actionObjectSpecificPriceDeleteAfter',
             'actionObjectSpecificPriceUpdateAfter',
-    
+
             'actionObjectStateAddAfter',
             'actionObjectStateDeleteAfter',
             'actionObjectStateUpdateAfter',
-    
+
             'actionObjectStockAddAfter',
             'actionObjectStockUpdateAfter',
-    
+
             'actionObjectStoreAddAfter',
             'actionObjectStoreDeleteAfter',
             'actionObjectStoreUpdateAfter',
-    
+
             'actionObjectSupplierAddAfter',
             'actionObjectSupplierDeleteAfter',
             'actionObjectSupplierUpdateAfter',
-    
+
             'actionObjectTaxAddAfter',
             'actionObjectTaxDeleteAfter',
             'actionObjectTaxRulesGroupAddAfter',
             'actionObjectTaxRulesGroupDeleteAfter',
             'actionObjectTaxRulesGroupUpdateAfter',
             'actionObjectTaxUpdateAfter',
-    
+
             'actionObjectWishlistAddAfter',
             'actionObjectWishlistDeleteAfter',
             'actionObjectWishlistUpdateAfter',
-    
+
             'actionObjectZoneAddAfter',
             'actionObjectZoneDeleteAfter',
             'actionObjectZoneUpdateAfter',
-    
+
             'actionShippingPreferencesPageSave',
-    
+
             'actionObjectEmployeeAddAfter',
             'actionObjectEmployeeDeleteAfter',
             'actionObjectEmployeeUpdateAfter',
-    
+
             'actionDispatcherBefore',
         ];
     }
@@ -1441,14 +1441,14 @@ trait UseHooks {
                 // when translation is edited or reset, add to incremental sync
                 if ($route == 'api_translation_value_edit' || $route == 'api_translation_value_reset') {
                     $synchronizationService->insertContentIntoIncremental(
-                        [Config::COLLECTION_TRANSLATIONS => 0], 
+                        [Config::COLLECTION_TRANSLATIONS => 0],
                         Config::INCREMENTAL_TYPE_UPDATE,
                         date(DATE_ATOM),
                         $this->shopId
                     );
                 }
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return;
         }
     }
@@ -1463,10 +1463,10 @@ trait UseHooks {
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
-        /** @var SpecificPrice $specificPrice */
+        /** @var \SpecificPrice $specificPrice */
         $specificPrice = $parameters['object'];
 
-        if ($specificPrice instanceof SpecificPrice) {
+        if ($specificPrice instanceof \SpecificPrice) {
             if (isset($specificPrice->id)) {
                 $synchronizationService->sendLiveSync('specific-prices', $specificPrice->id, 'upsert');
                 $synchronizationService->insertContentIntoIncremental(
@@ -1489,10 +1489,10 @@ trait UseHooks {
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
-        /** @var SpecificPrice $specificPrice */
+        /** @var \SpecificPrice $specificPrice */
         $specificPrice = $parameters['object'];
 
-        if ($specificPrice instanceof SpecificPrice) {
+        if ($specificPrice instanceof \SpecificPrice) {
             if (isset($specificPrice->id)) {
                 $synchronizationService->sendLiveSync('specific-prices', $specificPrice->id, 'upsert');
                 $synchronizationService->insertContentIntoIncremental(
@@ -1515,10 +1515,10 @@ trait UseHooks {
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
-        /** @var SpecificPrice $specificPrice */
+        /** @var \SpecificPrice $specificPrice */
         $specificPrice = $parameters['object'];
 
-        if ($specificPrice instanceof SpecificPrice) {
+        if ($specificPrice instanceof \SpecificPrice) {
             if (isset($specificPrice->id)) {
                 $synchronizationService->sendLiveSync('specific-prices', $specificPrice->id, 'delete');
                 $synchronizationService->insertContentIntoIncremental(
