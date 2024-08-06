@@ -24,9 +24,9 @@
  * International Registered Trademark & Property of PrestaShop SA
  */
 
+use PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer;
 use PrestaShop\Module\PsEventbus\Module\Install;
 use PrestaShop\Module\PsEventbus\Module\Uninstall;
-use PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 if (!defined('_PS_VERSION_')) {
@@ -199,7 +199,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @return PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer
+     * @return ServiceContainer
      *
      * @throws Exception
      */
@@ -207,7 +207,7 @@ class Ps_eventbus extends Module
     {
         if (null === $this->serviceContainer) {
             // append version number to force cache generation (1.6 Core won't clear it)
-            $this->serviceContainer = new PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer(
+            $this->serviceContainer = new ServiceContainer(
                 $this->name . str_replace(['.', '-', '+'], '', $this->version),
                 $this->getLocalPath(),
                 $this->getModuleEnv()
@@ -226,7 +226,7 @@ class Ps_eventbus extends Module
      * @return mixed
      */
     public function getService($serviceName)
-    {    
+    {
         try {
             return $this->getServiceContainer()->getService($serviceName);
         } catch (ServiceNotFoundException $exception) {

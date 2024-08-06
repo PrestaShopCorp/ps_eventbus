@@ -1,18 +1,16 @@
 <?php
 
-use PrestaShop\Module\PsEventbus\Config\Config;
-
 /**
  * @return bool
  */
 function upgrade_module_4_0_0()
 {
     $db = Db::getInstance();
-    
+
     // Update eventbus_incremental_sync and add 'action' column
     $editIncrementalTable = 'ALTER TABLE `' . _DB_PREFIX_ . 'eventbus_incremental_sync` ADD action varchar(50) NOT NULL;';
     $editIncrementalTableResult = $db->query($editIncrementalTable);
- 
+
     // If ALTER is failed, stop update process
     if (!$editIncrementalTableResult) {
         return false;

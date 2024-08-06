@@ -30,9 +30,8 @@ class ps_EventbusApiFrontModuleFrontController extends ModuleFrontController
         $debug = Tools::getValue('debug') == 1;
 
         /** @var FrontApiService $frontApiService */
-        $frontApiService =  $this->module->getService('PrestaShop\Module\PsEventbus\Service\FrontApiService');
+        $frontApiService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\FrontApiService');
 
         $frontApiService->handleDataSync($shopContent, $jobId, $langIso, $limit, $isFull, $debug);
     }
 }
-

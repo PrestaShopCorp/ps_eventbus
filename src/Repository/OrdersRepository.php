@@ -3,7 +3,6 @@
 namespace PrestaShop\Module\PsEventbus\Repository;
 
 use PrestaShop\Module\PsEventbus\Interfaces\RepositoryInterface;
-use PrestaShop\Module\PsEventbus\Repository\AbstractRepository;
 
 class OrdersRepository extends AbstractRepository implements RepositoryInterface
 {
@@ -62,7 +61,7 @@ class OrdersRepository extends AbstractRepository implements RepositoryInterface
 
         $this->query->where('o.id_order IN(' . implode(',', array_map('intval', $contentIds)) . ')')
             ->limit($limit);
-        
+
         return $this->runQuery($debug);
     }
 

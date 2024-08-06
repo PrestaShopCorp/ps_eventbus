@@ -1,7 +1,7 @@
 <?php
+
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use Exception;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
@@ -10,12 +10,6 @@ use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
-use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
-use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
-use PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService;
-use PrestaShop\Module\PsEventbus\Service\HealthCheckService;
-use PrestaShopDatabaseException;
-use Ps_eventbus;
 
 class FrontApiService
 {
@@ -52,13 +46,13 @@ class FrontApiService
     private $errorHandler;
 
     public function __construct(
-        Ps_eventbus $module,
+        \Ps_eventbus $module,
         ErrorHandler $errorHandler,
         PsAccountsAdapterService $psAccountsAdapterService,
         ApiAuthorizationService $apiAuthorizationService,
         SynchronizationService $synchronizationService,
         EventbusSyncRepository $eventbusSyncRepository
-    ) {  
+    ) {
         $this->startTime = time();
 
         $this->module = $module;
@@ -70,9 +64,9 @@ class FrontApiService
     }
 
     public function handleDataSync($shopContent, $jobId, $langIso, $limit, $isFull, $debug = false)
-    {   
+    {
         try {
-            if (!in_array($shopContent, array_merge(Config::SHOP_CONTENTS, [CONFIG::COLLECTION_HEALTHCHECK]), true)) {
+            if (!in_array($shopContent, array_merge(Config::SHOP_CONTENTS, [Config::COLLECTION_HEALTHCHECK]), true)) {
                 CommonService::exitWithExceptionMessage(new QueryParamsException('404 - ShopContent not found', Config::INVALID_URL_QUERY));
             }
 
@@ -83,6 +77,7 @@ class FrontApiService
             if ($isHealthCheck) {
                 /** @var HealthCheckService $healthCheckService */
                 $healthCheckService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\HealthCheckService');
+
                 return $healthCheckService->getHealthCheck($isAuthentified);
             }
 
@@ -99,7 +94,7 @@ class FrontApiService
 
             $timezone = (string) $configurationRepository->get('PS_TIMEZONE');
             $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(Config::MYSQL_DATE_FORMAT);
-            
+
             $langIso = $langIso ? $langIso : $languageRepository->getDefaultLanguageIsoCode();
 
             $offset = 0;
@@ -159,7 +154,7 @@ class FrontApiService
                     $response
                 )
             );
-        } catch (PrestaShopDatabaseException $exception) {
+        } catch (\PrestaShopDatabaseException $exception) {
             $this->errorHandler->handle($exception);
             CommonService::exitWithExceptionMessage($exception);
         } catch (EnvVarException $exception) {
@@ -171,7 +166,7 @@ class FrontApiService
         } catch (\Exception $exception) {
             $this->errorHandler->handle($exception);
 
-            CommonService::dieWithResponse(["message" => "An error occured. Please check logs for more information"], 500);
+            CommonService::dieWithResponse(['message' => 'An error occured. Please check logs for more information'], 500);
         }
     }
 
@@ -188,12 +183,12 @@ class FrontApiService
             if (is_array($authorizationResponse)) {
                 CommonService::exitWithResponse($authorizationResponse);
             } elseif (!$authorizationResponse) {
-                throw new PrestaShopDatabaseException('Failed saving job id to database');
+                throw new \PrestaShopDatabaseException('Failed saving job id to database');
             }
 
             try {
                 $token = $this->psAccountsAdapterService->getOrRefreshToken();
-            } catch (Exception $exception) {
+            } catch (\Exception $exception) {
                 throw new FirebaseException($exception->getMessage());
             }
 
@@ -208,7 +203,7 @@ class FrontApiService
                 return false;
             }
 
-            if ($exception instanceof PrestaShopDatabaseException) {
+            if ($exception instanceof \PrestaShopDatabaseException) {
                 $this->errorHandler->handle($exception);
                 CommonService::exitWithExceptionMessage($exception);
             } elseif ($exception instanceof EnvVarException) {

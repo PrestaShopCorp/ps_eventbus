@@ -1,4 +1,5 @@
 <?php
+
 namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Config\Config;

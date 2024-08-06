@@ -3,15 +3,13 @@
 namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository;
-use PrestaShop\Module\PsEventbus\Service\CommonService;
-use Ps_eventbus;
 
 class HealthCheckService
 {
-    /** @var Ps_Eventbus $module */
+    /** @var \Ps_eventbus */
     private $module;
 
-    public function __construct(Ps_eventbus $module) 
+    public function __construct(\Ps_eventbus $module)
     {
         $this->module = $module;
     }
@@ -34,5 +32,4 @@ class HealthCheckService
 
         CommonService::exitWithResponse($status);
     }
-
 }
