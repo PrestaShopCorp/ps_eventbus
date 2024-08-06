@@ -56,7 +56,7 @@ export async function getShopHealthCheck(options?: {
     healthCheck = cachedHealthCheck;
   } else {
     const res = await axios.get<HealthCheck>(
-      `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=helathcheck&job_id=valid-job-healthcheck`
+      `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=healthcheck&job_id=valid-job-healthcheck`
     );
     healthCheck = res.data;
     cachedHealthCheck = healthCheck;
