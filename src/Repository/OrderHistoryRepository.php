@@ -30,7 +30,7 @@ class OrderHistoryRepository
 
     /**
      * @param array<mixed> $orderIds
-     * @param int $langId
+     * @param int|null $langId
      *
      * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *

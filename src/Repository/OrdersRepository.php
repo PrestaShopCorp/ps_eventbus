@@ -8,6 +8,11 @@ class OrdersRepository extends AbstractRepository implements RepositoryInterface
 {
     public const ORDERS_TABLE = 'orders';
 
+    /**
+     * @return mixed
+     *
+     * @throws \PrestaShopException
+     */
     public function generateBaseQuery()
     {
         $this->query = new \DbQuery();
@@ -46,7 +51,18 @@ class OrdersRepository extends AbstractRepository implements RepositoryInterface
         $this->query->select('o.round_mode, o.round_type, o.invoice_number, o.delivery_number, o.invoice_date, o.delivery_date, o.valid');
     }
 
-    public function getContentsForFull($offset, $limit, $langIso = null, $debug = false)
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     * @param bool $debug
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
         $this->generateBaseQuery();
 
@@ -55,7 +71,18 @@ class OrdersRepository extends AbstractRepository implements RepositoryInterface
         return $this->runQuery($debug);
     }
 
-    public function getContentsForIncremental($limit, $contentIds, $langIso = null, $debug = false)
+    /**
+     * @param int $limit
+     * @param array<mixed> $contentIds
+     * @param string $langIso
+     * @param bool $debug
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
         $this->generateBaseQuery();
 
@@ -65,9 +92,19 @@ class OrdersRepository extends AbstractRepository implements RepositoryInterface
         return $this->runQuery($debug);
     }
 
-    public function countFullSyncContentLeft($offset, $langIso = null, $debug = false)
+    /**
+     * @param int $offset
+     * @param string $langIso
+     * @param bool $debug
+     *
+     * @return int
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function countFullSyncContentLeft($offset, $langIso, $debug)
     {
-        $orders = $this->getContentsForFull($offset, 1, parent::getShopId(), $debug);
+        $orders = $this->getContentsForFull($offset, 1, $langIso, $debug);
 
         if (!is_array($orders) || empty($orders)) {
             return 0;

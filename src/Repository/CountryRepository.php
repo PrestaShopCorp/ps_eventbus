@@ -57,12 +57,8 @@ class CountryRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getCountyIsoCodesByZoneId($zoneId, $active = null)
+    public function getCountyIsoCodesByZoneId($zoneId, $active)
     {
-        if ($active == null) {
-            $active = true;
-        }
-
         $cacheKey = $zoneId . '-' . (int) $active;
 
         if (!isset($this->countryIsoCodeCache[$cacheKey])) {

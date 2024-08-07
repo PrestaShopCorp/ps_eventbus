@@ -7,6 +7,7 @@ use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
 use PrestaShop\Module\PsEventbus\Exception\QueryParamsException;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
+use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
@@ -63,7 +64,17 @@ class FrontApiService
         $this->eventbusSyncRepository = $eventbusSyncRepository;
     }
 
-    public function handleDataSync($shopContent, $jobId, $langIso, $limit, $isFull, $debug = false)
+    /**
+     * @param string $shopContent
+     * @param string $jobId
+     * @param string $langIso
+     * @param int $limit
+     * @param bool $isFull
+     * @param bool $debug
+     *
+     * @return void
+     */
+    public function handleDataSync($shopContent, $jobId, $langIso, $limit, $isFull, $debug)
     {
         try {
             if (!in_array($shopContent, array_merge(Config::SHOP_CONTENTS, [Config::COLLECTION_HEALTHCHECK]), true)) {
@@ -78,7 +89,9 @@ class FrontApiService
                 /** @var HealthCheckService $healthCheckService */
                 $healthCheckService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\HealthCheckService');
 
-                return $healthCheckService->getHealthCheck($isAuthentified);
+                $healthCheckService->getHealthCheck($isAuthentified);
+
+                return;
             }
 
             if ($limit < 0) {
@@ -171,11 +184,14 @@ class FrontApiService
     }
 
     /**
-     * @return bool|void
+     * @param string $jobId
+     * @param bool $isHealthCheck
+     *
+     * @return bool
      *
      * @throws \PrestaShopDatabaseException|EnvVarException|FirebaseException
      */
-    private function authorize($jobId, $isHealthCheck = null)
+    private function authorize($jobId, $isHealthCheck)
     {
         try {
             $authorizationResponse = $this->apiAuthorizationService->authorizeCall($jobId);
@@ -213,6 +229,8 @@ class FrontApiService
                 $this->errorHandler->handle($exception);
                 CommonService::exitWithExceptionMessage($exception);
             }
+
+            return false;
         }
     }
 }

@@ -23,14 +23,17 @@ class ps_EventbusApiFrontModuleFrontController extends ModuleFrontController
         /** @var int $limit */
         $limit = Tools::getValue('limit', 50);
 
-        /** @var bool $initFullSync */
+        /** @var bool $isFull */
         $isFull = Tools::getValue('full', 0) == 1;
 
         /** @var bool $debug */
         $debug = Tools::getValue('debug') == 1;
 
+        /** @var Ps_eventbus $module */
+        $module = Module::getInstanceByName('ps_eventbus');
+
         /** @var FrontApiService $frontApiService */
-        $frontApiService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\FrontApiService');
+        $frontApiService = $module->getService('PrestaShop\Module\PsEventbus\Service\FrontApiService');
 
         $frontApiService->handleDataSync($shopContent, $jobId, $langIso, $limit, $isFull, $debug);
     }

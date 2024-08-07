@@ -4,9 +4,13 @@ namespace PrestaShop\Module\PsEventbus\Traits;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
+use Product;
 
 trait UseHooks
 {
+    /**
+     * @return array<string>
+     */
     public function getHooks()
     {
         // Retourne la liste des hooks a register
@@ -112,9 +116,10 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Image $image */
         $image = $parameters['object'];
 
-        if (isset($image->id_product)) {
+        if ($image->id_product) {
             $synchronizationService->sendLiveSync('products', $image->id_product, 'delete');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_PRODUCTS => $image->id_product],
@@ -136,8 +141,10 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Image $image */
         $image = $parameters['object'];
-        if (isset($image->id_product)) {
+
+        if ($image->id_product) {
             $synchronizationService->sendLiveSync('products', $image->id_product, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_PRODUCTS => $image->id_product],
@@ -159,8 +166,10 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Image $image */
         $image = $parameters['object'];
-        if (isset($image->id_product)) {
+
+        if ($image->id_product) {
             $synchronizationService->sendLiveSync('products', $image->id_product, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_PRODUCTS => $image->id_product],
@@ -182,14 +191,17 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Language $language */
         $language = $parameters['object'];
-        if (isset($language->id)) {
+
+        if ($language->id) {
             $synchronizationService->sendLiveSync('languages', $language->id, 'delete');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_LANGUAGES => $language->id],
                 Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
-                $this->shopId
+                $this->shopId,
+                false
             );
         }
     }
@@ -204,9 +216,11 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Language $language */
         $language = $parameters['object'];
-        if (isset($language->id) && isset($language->id_product)) {
-            $synchronizationService->sendLiveSync('languages', $language->id_product, 'upsert');
+
+        if ($language->id) {
+            $synchronizationService->sendLiveSync('languages', $language->id, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_LANGUAGES => $language->id],
                 Config::INCREMENTAL_TYPE_ADD,
@@ -227,9 +241,11 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Language $language */
         $language = $parameters['object'];
-        if (isset($language->id) && isset($language->id_product)) {
-            $synchronizationService->sendLiveSync('languages', $language->id_product, 'upsert');
+
+        if ($language->id) {
+            $synchronizationService->sendLiveSync('languages', $language->id, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_LANGUAGES => $language->id],
                 Config::INCREMENTAL_TYPE_UPDATE,
@@ -250,14 +266,17 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Manufacturer $manufacturer */
         $manufacturer = $parameters['object'];
+
         if (isset($manufacturer->id)) {
             $synchronizationService->sendLiveSync('manufacturers', $manufacturer->id, 'delete');
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_MANUFACTURERS, $manufacturer->id],
+                [Config::COLLECTION_MANUFACTURERS => $manufacturer->id],
                 Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
-                $this->shopId
+                $this->shopId,
+                false
             );
         }
     }
@@ -272,7 +291,9 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Manufacturer $manufacturer */
         $manufacturer = $parameters['object'];
+
         if (isset($manufacturer->id)) {
             $synchronizationService->sendLiveSync('manufacturers', $manufacturer->id, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
@@ -295,7 +316,9 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Manufacturer $manufacturer */
         $manufacturer = $parameters['object'];
+
         if (isset($manufacturer->id)) {
             $synchronizationService->sendLiveSync('manufacturers', $manufacturer->id, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
@@ -318,14 +341,17 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Supplier $supplier */
         $supplier = $parameters['object'];
+
         if (isset($supplier->id)) {
             $synchronizationService->sendLiveSync('suppliers', $supplier->id, 'delete');
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_SUPPLIERS, $supplier->id],
+                [Config::COLLECTION_SUPPLIERS => $supplier->id],
                 Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
-                $this->shopId
+                $this->shopId,
+                false
             );
         }
     }
@@ -340,7 +366,9 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Supplier $supplier */
         $supplier = $parameters['object'];
+
         if (isset($supplier->id)) {
             $synchronizationService->sendLiveSync('suppliers', $supplier->id, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
@@ -363,7 +391,9 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Supplier $supplier */
         $supplier = $parameters['object'];
+
         if (isset($supplier->id)) {
             $synchronizationService->sendLiveSync('suppliers', $supplier->id, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
@@ -386,15 +416,17 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Product $product */
         $product = $parameters['object'];
 
         if (isset($product->id)) {
             $synchronizationService->sendLiveSync('products', $product->id, 'delete');
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_PRODUCTS, $product->id],
+                [Config::COLLECTION_PRODUCTS => $product->id],
                 Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
-                $this->shopId
+                $this->shopId,
+                false
             );
         }
     }
@@ -409,11 +441,15 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Product $product */
         $product = $parameters['object'];
+
         if (isset($product->id)) {
             $synchronizationService->sendLiveSync('products', $product->id, 'upsert');
             $synchronizationService->sendLiveSync('custom-product-carriers', $product->id, 'upsert');
             $synchronizationService->sendLiveSync('stocks', $product->id, 'upsert');
+
+            // TODO: Need to insertContentIntoIncremental custom-product-carriers and stocks
 
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_PRODUCTS => $product->id],
@@ -435,13 +471,15 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
-        /** @var Product $product */
+        /** @var \Product $product */
         $product = $parameters['object'];
 
         if (isset($product->id)) {
             $synchronizationService->sendLiveSync('products', $product->id, 'upsert');
             $synchronizationService->sendLiveSync('custom-product-carriers', $product->id, 'upsert');
             $synchronizationService->sendLiveSync('stocks', $product->id, 'upsert');
+
+            // TODO: Need to insertContentIntoIncremental custom-product-carriers and stocks
 
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_PRODUCTS => $product->id],
@@ -463,14 +501,17 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \WishList $wishlist */
         $wishlist = $parameters['object'];
-        if (isset($wishlist->id)) {
+
+        if ($wishlist->id) {
             $synchronizationService->sendLiveSync('wishlists', $wishlist->id, 'delete');
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_WISHLISTS, $wishlist->id],
+                [Config::COLLECTION_WISHLISTS => $wishlist->id],
                 Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
-                $this->shopId
+                $this->shopId,
+                false
             );
         }
     }
@@ -485,8 +526,10 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \WishList $wishlist */
         $wishlist = $parameters['object'];
-        if (isset($wishlist->id)) {
+
+        if ($wishlist->id) {
             $synchronizationService->sendLiveSync('wishlists', $wishlist->id, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_WISHLISTS => $wishlist->id],
@@ -508,8 +551,10 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \WishList $wishlist */
         $wishlist = $parameters['object'];
-        if (isset($wishlist->id)) {
+
+        if ($wishlist->id) {
             $synchronizationService->sendLiveSync('wishlists', $wishlist->id, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_WISHLISTS => $wishlist->id],
@@ -531,7 +576,9 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Stock $stock */
         $stock = $parameters['object'];
+
         if (isset($stock->id)) {
             $synchronizationService->sendLiveSync('stocks', $stock->id, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
@@ -554,7 +601,9 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Stock $stock */
         $stock = $parameters['object'];
+
         if (isset($stock->id)) {
             $synchronizationService->sendLiveSync('stocks', $stock->id, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
@@ -577,14 +626,17 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
-        $product = $parameters['object'];
-        if (isset($product->id)) {
-            $synchronizationService->sendLiveSync('stores', $product->id, 'delete');
+        /** @var \Store $store */
+        $store = $parameters['object'];
+
+        if ($store->id) {
+            $synchronizationService->sendLiveSync('stores', $store->id, 'delete');
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_STORES, $product->id],
+                [Config::COLLECTION_STORES => $store->id],
                 Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
-                $this->shopId
+                $this->shopId,
+                false
             );
         }
     }
@@ -599,11 +651,13 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
-        $product = $parameters['object'];
-        if (isset($product->id)) {
-            $synchronizationService->sendLiveSync('stores', $product->id, 'upsert');
+        /** @var \Store $store */
+        $store = $parameters['object'];
+
+        if ($store->id) {
+            $synchronizationService->sendLiveSync('stores', $store->id, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_STORES => $product->id],
+                [Config::COLLECTION_STORES => $store->id],
                 Config::INCREMENTAL_TYPE_ADD,
                 date(DATE_ATOM),
                 $this->shopId,
@@ -622,8 +676,10 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Store $store */
         $store = $parameters['object'];
-        if (isset($store->id)) {
+
+        if ($store->id) {
             $synchronizationService->sendLiveSync('stores', $store->id, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STORES => $store->id],
@@ -645,16 +701,17 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
-        /** @var Combination $combination */
+        /** @var \Combination $combination */
         $combination = $parameters['object'];
 
         if (isset($combination->id)) {
             $synchronizationService->sendLiveSync('products', $combination->id, 'delete');
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_PRODUCT_ATTRIBUTES, $combination->id],
+                [Config::COLLECTION_PRODUCT_ATTRIBUTES => $combination->id],
                 Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
-                $this->shopId
+                $this->shopId,
+                false
             );
         }
     }
@@ -669,6 +726,7 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Category $category * */
         $category = $parameters['object'];
 
         if (isset($category->id)) {
@@ -693,6 +751,7 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Category $category * */
         $category = $parameters['object'];
 
         if (isset($category->id)) {
@@ -717,15 +776,17 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Category $category * */
         $category = $parameters['object'];
 
         if (isset($category->id)) {
             $synchronizationService->sendLiveSync('categories', $category->id, 'delete');
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_CATEGORIES, $category->id],
+                [Config::COLLECTION_CATEGORIES => $category->id],
                 Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
-                $this->shopId
+                $this->shopId,
+                false
             );
         }
     }
@@ -740,9 +801,10 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Customer $customer * */
         $customer = $parameters['object'];
 
-        if (isset($customer->id)) {
+        if ($customer->id) {
             $synchronizationService->sendLiveSync('customers', $customer->id, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CUSTOMERS => $customer->id],
@@ -764,9 +826,10 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Customer $customer * */
         $customer = $parameters['object'];
 
-        if (isset($customer->id)) {
+        if ($customer->id) {
             $synchronizationService->sendLiveSync('customers', $customer->id, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CUSTOMERS => $customer->id],
@@ -788,15 +851,17 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Customer $customer * */
         $customer = $parameters['object'];
 
-        if (isset($customer->id)) {
+        if ($customer->id) {
             $synchronizationService->sendLiveSync('customers', $customer->id, 'delete');
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_CUSTOMERS, $customer->id],
+                [Config::COLLECTION_CUSTOMERS => $customer->id],
                 Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
-                $this->shopId
+                $this->shopId,
+                false
             );
         }
     }
@@ -811,6 +876,7 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Currency $currency * */
         $currency = $parameters['object'];
 
         if (isset($currency->id)) {
@@ -835,6 +901,7 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Currency $currency * */
         $currency = $parameters['object'];
 
         if (isset($currency->id)) {
@@ -859,15 +926,17 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
+        /** @var \Currency $currency * */
         $currency = $parameters['object'];
 
         if (isset($currency->id)) {
             $synchronizationService->sendLiveSync('currencies', $currency->id, 'delete');
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_CURRENCIES, $currency->id],
+                [Config::COLLECTION_CURRENCIES => $currency->id],
                 Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
-                $this->shopId
+                $this->shopId,
+                false
             );
         }
     }
@@ -890,7 +959,8 @@ trait UseHooks
                 [Config::COLLECTION_CARTS => $cart->id],
                 Config::INCREMENTAL_TYPE_ADD,
                 date(DATE_ATOM),
-                $this->shopId
+                $this->shopId,
+                false
             );
         }
     }
@@ -913,7 +983,8 @@ trait UseHooks
                 [Config::COLLECTION_CARTS => $cart->id],
                 Config::INCREMENTAL_TYPE_UPDATE,
                 date(DATE_ATOM),
-                $this->shopId
+                $this->shopId,
+                false
             );
         }
     }
@@ -936,7 +1007,8 @@ trait UseHooks
                 [Config::COLLECTION_CART_RULES => $cartRule->id],
                 Config::INCREMENTAL_TYPE_ADD,
                 date(DATE_ATOM),
-                $this->shopId
+                $this->shopId,
+                false
             );
         }
     }
@@ -959,7 +1031,8 @@ trait UseHooks
                 [Config::COLLECTION_CART_RULES => $cartRule->id],
                 Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
-                $this->shopId
+                $this->shopId,
+                false
             );
         }
     }
@@ -982,7 +1055,8 @@ trait UseHooks
                 [Config::COLLECTION_CART_RULES => $cartRule->id],
                 Config::INCREMENTAL_TYPE_UPDATE,
                 date(DATE_ATOM),
-                $this->shopId
+                $this->shopId,
+                false
             );
         }
     }
@@ -1005,7 +1079,8 @@ trait UseHooks
                 [Config::COLLECTION_ORDERS => $order->id],
                 Config::INCREMENTAL_TYPE_ADD,
                 date(DATE_ATOM),
-                $this->shopId
+                $this->shopId,
+                false
             );
         }
     }
@@ -1028,7 +1103,8 @@ trait UseHooks
                 [Config::COLLECTION_ORDERS => $order->id],
                 Config::INCREMENTAL_TYPE_UPDATE,
                 date(DATE_ATOM),
-                $this->shopId
+                $this->shopId,
+                false
             );
         }
     }
@@ -1043,7 +1119,7 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
-        /** @var Carrier $carrier */
+        /** @var \Carrier $carrier */
         $carrier = $parameters['object'];
 
         if (isset($carrier->id)) {
@@ -1052,7 +1128,8 @@ trait UseHooks
                 [Config::COLLECTION_CARRIERS => $carrier->id],
                 Config::INCREMENTAL_TYPE_ADD,
                 date(DATE_ATOM),
-                $this->shopId
+                $this->shopId,
+                false
             );
         }
     }
@@ -1067,7 +1144,7 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
-        /** @var Carrier $carrier */
+        /** @var \Carrier $carrier */
         $carrier = $parameters['object'];
 
         if (isset($carrier->id)) {
@@ -1076,7 +1153,8 @@ trait UseHooks
                 [Config::COLLECTION_CARRIERS => $carrier->id],
                 Config::INCREMENTAL_TYPE_UPDATE,
                 date(DATE_ATOM),
-                $this->shopId
+                $this->shopId,
+                false
             );
         }
     }
@@ -1090,8 +1168,7 @@ trait UseHooks
     {
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
-
-        /** @var Carrier $carrier */
+        /** @var \Carrier $carrier */
         $carrier = $parameters['object'];
 
         if (isset($carrier->id)) {
@@ -1100,7 +1177,8 @@ trait UseHooks
                 [Config::COLLECTION_CARRIERS => $carrier->id],
                 Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
-                $this->shopId
+                $this->shopId,
+                false
             );
         }
     }
@@ -1117,7 +1195,8 @@ trait UseHooks
             [Config::COLLECTION_CARRIERS => 0],
             Config::INCREMENTAL_TYPE_ADD,
             date(DATE_ATOM),
-            $this->shopId
+            $this->shopId,
+            false
         );
     }
 
@@ -1133,7 +1212,8 @@ trait UseHooks
             [Config::COLLECTION_CARRIERS => 0],
             Config::INCREMENTAL_TYPE_UPDATE,
             date(DATE_ATOM),
-            $this->shopId
+            $this->shopId,
+            false
         );
     }
 
@@ -1149,7 +1229,8 @@ trait UseHooks
             [Config::COLLECTION_CARRIERS => 0],
             Config::INCREMENTAL_TYPE_DELETE,
             date(DATE_ATOM),
-            $this->shopId
+            $this->shopId,
+            false
         );
     }
 
@@ -1165,7 +1246,8 @@ trait UseHooks
             [Config::COLLECTION_CARRIERS => 0],
             Config::INCREMENTAL_TYPE_ADD,
             date(DATE_ATOM),
-            $this->shopId
+            $this->shopId,
+            false
         );
     }
 
@@ -1181,7 +1263,8 @@ trait UseHooks
             [Config::COLLECTION_CARRIERS => 0],
             Config::INCREMENTAL_TYPE_UPDATE,
             date(DATE_ATOM),
-            $this->shopId
+            $this->shopId,
+            false
         );
     }
 
@@ -1197,7 +1280,8 @@ trait UseHooks
             [Config::COLLECTION_CARRIERS => 0],
             Config::INCREMENTAL_TYPE_DELETE,
             date(DATE_ATOM),
-            $this->shopId
+            $this->shopId,
+            false
         );
     }
 
@@ -1213,7 +1297,8 @@ trait UseHooks
             [Config::COLLECTION_CARRIERS => 0],
             Config::INCREMENTAL_TYPE_ADD,
             date(DATE_ATOM),
-            $this->shopId
+            $this->shopId,
+            false
         );
     }
 
@@ -1229,7 +1314,8 @@ trait UseHooks
             [Config::COLLECTION_CARRIERS => 0],
             Config::INCREMENTAL_TYPE_UPDATE,
             date(DATE_ATOM),
-            $this->shopId
+            $this->shopId,
+            false
         );
     }
 
@@ -1245,7 +1331,8 @@ trait UseHooks
             [Config::COLLECTION_CARRIERS => 0],
             Config::INCREMENTAL_TYPE_DELETE,
             date(DATE_ATOM),
-            $this->shopId
+            $this->shopId,
+            false
         );
     }
 
@@ -1261,7 +1348,8 @@ trait UseHooks
             [Config::COLLECTION_CARRIERS => 0],
             Config::INCREMENTAL_TYPE_ADD,
             date(DATE_ATOM),
-            $this->shopId
+            $this->shopId,
+            false
         );
     }
 
@@ -1277,7 +1365,8 @@ trait UseHooks
             [Config::COLLECTION_CARRIERS => 0],
             Config::INCREMENTAL_TYPE_UPDATE,
             date(DATE_ATOM),
-            $this->shopId
+            $this->shopId,
+            false
         );
     }
 
@@ -1293,7 +1382,8 @@ trait UseHooks
             [Config::COLLECTION_CARRIERS => 0],
             Config::INCREMENTAL_TYPE_DELETE,
             date(DATE_ATOM),
-            $this->shopId
+            $this->shopId,
+            false
         );
     }
 
@@ -1309,7 +1399,8 @@ trait UseHooks
             [Config::COLLECTION_CARRIERS => 0],
             Config::INCREMENTAL_TYPE_ADD,
             date(DATE_ATOM),
-            $this->shopId
+            $this->shopId,
+            false
         );
     }
 
@@ -1325,7 +1416,8 @@ trait UseHooks
             [Config::COLLECTION_CARRIERS => 0],
             Config::INCREMENTAL_TYPE_UPDATE,
             date(DATE_ATOM),
-            $this->shopId
+            $this->shopId,
+            false
         );
     }
 
@@ -1341,7 +1433,8 @@ trait UseHooks
             [Config::COLLECTION_CARRIERS => 0],
             Config::INCREMENTAL_TYPE_DELETE,
             date(DATE_ATOM),
-            $this->shopId
+            $this->shopId,
+            false
         );
     }
 
@@ -1357,7 +1450,8 @@ trait UseHooks
             [Config::COLLECTION_CARRIERS => 0],
             Config::INCREMENTAL_TYPE_DELETE,
             date(DATE_ATOM),
-            $this->shopId
+            $this->shopId,
+            false
         );
     }
 
@@ -1373,7 +1467,8 @@ trait UseHooks
             [Config::COLLECTION_EMPLOYEES => 0],
             Config::INCREMENTAL_TYPE_ADD,
             date(DATE_ATOM),
-            $this->shopId
+            $this->shopId,
+            false
         );
     }
 
@@ -1388,7 +1483,8 @@ trait UseHooks
             [Config::COLLECTION_EMPLOYEES => 0],
             Config::INCREMENTAL_TYPE_DELETE,
             date(DATE_ATOM),
-            $this->shopId
+            $this->shopId,
+            false
         );
     }
 
@@ -1404,7 +1500,8 @@ trait UseHooks
             [Config::COLLECTION_EMPLOYEES => 0],
             Config::INCREMENTAL_TYPE_UPDATE,
             date(DATE_ATOM),
-            $this->shopId
+            $this->shopId,
+            false
         );
     }
 
@@ -1444,7 +1541,8 @@ trait UseHooks
                         [Config::COLLECTION_TRANSLATIONS => 0],
                         Config::INCREMENTAL_TYPE_UPDATE,
                         date(DATE_ATOM),
-                        $this->shopId
+                        $this->shopId,
+                        false
                     );
                 }
             }
@@ -1473,7 +1571,8 @@ trait UseHooks
                     [Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id],
                     Config::INCREMENTAL_TYPE_ADD,
                     date(DATE_ATOM),
-                    $this->shopId
+                    $this->shopId,
+                    false
                 );
             }
         }
@@ -1499,7 +1598,8 @@ trait UseHooks
                     [Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id],
                     Config::INCREMENTAL_TYPE_UPDATE,
                     date(DATE_ATOM),
-                    $this->shopId
+                    $this->shopId,
+                    false
                 );
             }
         }
@@ -1522,11 +1622,11 @@ trait UseHooks
             if (isset($specificPrice->id)) {
                 $synchronizationService->sendLiveSync('specific-prices', $specificPrice->id, 'delete');
                 $synchronizationService->insertContentIntoIncremental(
-                    $specificPrice->id,
-                    Config::COLLECTION_SPECIFIC_PRICES,
+                    [Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id],
                     Config::INCREMENTAL_TYPE_DELETE,
                     date(DATE_ATOM),
-                    $this->shopId
+                    $this->shopId,
+                    false
                 );
             }
         }
