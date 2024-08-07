@@ -10,11 +10,11 @@ use PrestaShop\Module\PsEventbus\Exception\QueryParamsException;
 class CommonService
 {
     /**
-     * @param array $response
+     * @param array<mixed> $response
      *
      * @return void
      */
-    public static function exitWithResponse(array $response)
+    public static function exitWithResponse($response)
     {
         $httpCode = isset($response['httpCode']) ? (int) $response['httpCode'] : 200;
 
@@ -51,12 +51,12 @@ class CommonService
     }
 
     /**
-     * @param array $response
+     * @param array<mixed> $response
      * @param int $code
      *
      * @return void
      */
-    public static function dieWithResponse(array $response, $code)
+    public static function dieWithResponse($response, $code)
     {
         $httpStatusText = "HTTP/1.1 $code";
 

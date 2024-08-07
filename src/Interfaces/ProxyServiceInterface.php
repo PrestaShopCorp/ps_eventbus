@@ -12,7 +12,7 @@ interface ProxyServiceInterface
      *
      * @return array<mixed>
      */
-    public function upload($jobId, $data, $scriptStartTime, $isFull = null);
+    public function upload($jobId, $data, $scriptStartTime, $isFull);
 
     /**
      * @param string $jobId

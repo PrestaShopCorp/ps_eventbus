@@ -15,16 +15,14 @@ class HealthCheckService
     }
 
     /**
+     * @param bool $isAuthentified
+     *
      * @return void
      *
-     * @throws PrestaShopException
+     * @throws \PrestaShopException
      */
-    public function getHealthCheck($isAuthentified = null)
+    public function getHealthCheck($isAuthentified)
     {
-        if ($isAuthentified == null) {
-            $isAuthentified = false;
-        }
-
         /** @var ServerInformationRepository $serverInformationRepository */
         $serverInformationRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository');
 

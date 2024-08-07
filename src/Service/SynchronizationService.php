@@ -2,15 +2,16 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use Behat\Behat\HelperContainer\Exception\ServiceNotFoundException;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator;
 use PrestaShop\Module\PsEventbus\Interfaces\ProxyServiceInterface;
 use PrestaShop\Module\PsEventbus\Interfaces\ShopContentServiceInterface;
+use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 class SynchronizationService
 {
@@ -70,7 +71,7 @@ class SynchronizationService
      * @param string $dateNow
      * @param bool $debug
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException|EnvVarException|ApiException
      */
@@ -117,7 +118,7 @@ class SynchronizationService
             }
         }
 
-        $remainingObjects = (int) $shopContentApiService->countFullSyncContentLeft($offset, $langIso);
+        $remainingObjects = (int) $shopContentApiService->countFullSyncContentLeft($offset, $langIso, $debug);
 
         if ($remainingObjects <= 0) {
             $remainingObjects = 0;
@@ -130,14 +131,14 @@ class SynchronizationService
     }
 
     /**
-     * @param string $type
+     * @param string $shopContent
      * @param string $jobId
      * @param string $langIso
      * @param int $limit
      * @param int $startTime
      * @param bool $debug
      *
-     * @return array
+     * @return array<mixed>
      *
      * @@throws \PrestaShopDatabaseException|EnvVarException
      */
@@ -204,21 +205,21 @@ class SynchronizationService
      */
     public function sendLiveSync($shopContent, $shopContentId, $action)
     {
-        if ($this->isFullSyncDone($shopContent)) {
+        if ($this->isFullSyncDone($shopContent, '')) {
             // $this->debounceLiveSync($shopContent);
         }
     }
 
     /**
-     * @param array<array<int>> $contentTypesWithIds
-     * @param string actionType
+     * @param array<string, int> $contentTypesWithIds
+     * @param string $actionType
      * @param string $createdAt
      * @param int $shopId
      * @param bool $hasMultiLang
      *
      * @return void
      */
-    public function insertContentIntoIncremental($contentTypesWithIds, $actionType, $createdAt, $shopId, $hasMultiLang = null)
+    public function insertContentIntoIncremental($contentTypesWithIds, $actionType, $createdAt, $shopId, $hasMultiLang)
     {
         if (count($contentTypesWithIds) == 0) {
             return;
@@ -257,40 +258,36 @@ class SynchronizationService
             $allIsoCodes = $this->languageRepository->getLanguagesIsoCodes();
 
             foreach ($allIsoCodes as $langIso) {
-                foreach ($contentTypesWithIds as $contentType => $contentIds) {
-                    foreach ($contentIds as $contentId) {
-                        if ($this->isFullSyncDone($contentType, $langIso)) {
-                            array_push($contentToInsert,
-                                [
-                                    'type' => $contentType,
-                                    'id_object' => $contentId,
-                                    'id_shop' => $shopId,
-                                    'lang_iso' => $langIso,
-                                    'action' => $actionType,
-                                    'created_at' => $createdAt,
-                                ]
-                            );
-                        }
+                foreach ($contentTypesWithIds as $contentType => $contentId) {
+                    if ($this->isFullSyncDone($contentType, $langIso)) {
+                        array_push($contentToInsert,
+                            [
+                                'type' => $contentType,
+                                'id_object' => $contentId,
+                                'id_shop' => $shopId,
+                                'lang_iso' => $langIso,
+                                'action' => $actionType,
+                                'created_at' => $createdAt,
+                            ]
+                        );
                     }
                 }
             }
         } else {
             $defaultIsoCode = $this->languageRepository->getDefaultLanguageIsoCode();
 
-            foreach ($contentTypesWithIds as $contentType => $contentIds) {
-                foreach ($contentIds as $contentId) {
-                    if ($this->isFullSyncDone($contentType, $defaultIsoCode)) {
-                        array_push($contentToInsert,
-                            [
-                                'type' => $contentType,
-                                'id_object' => $contentId,
-                                'id_shop' => $shopId,
-                                'lang_iso' => $defaultIsoCode,
-                                'action' => $actionType,
-                                'created_at' => $createdAt,
-                            ]
-                        );
-                    }
+            foreach ($contentTypesWithIds as $contentType => $contentId) {
+                if ($this->isFullSyncDone($contentType, $defaultIsoCode)) {
+                    array_push($contentToInsert,
+                        [
+                            'type' => $contentType,
+                            'id_object' => $contentId,
+                            'id_shop' => $shopId,
+                            'lang_iso' => $defaultIsoCode,
+                            'action' => $actionType,
+                            'created_at' => $createdAt,
+                        ]
+                    );
                 }
             }
         }
@@ -329,11 +326,11 @@ class SynchronizationService
      * Return true if full sync is done for this shop content
      *
      * @param string $shopContent
-     * @param string|null $langIso
+     * @param string $langIso
      *
      * @return bool
      */
-    private function isFullSyncDone($shopContent, $langIso = null)
+    private function isFullSyncDone($shopContent, $langIso)
     {
         return $this->eventbusSyncRepository->isFullSyncDoneForThisTypeSync($shopContent, $langIso);
     }

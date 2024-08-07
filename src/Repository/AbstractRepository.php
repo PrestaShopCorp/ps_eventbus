@@ -23,10 +23,21 @@ abstract class AbstractRepository
 
     public function __construct()
     {
-        $this->context = \Context::getContext();
+        $context = \Context::getContext();
+
+        if ($context == null) {
+            throw new \PrestaShopException('Context not found');
+        }
+
+        $this->context = $context;
         $this->db = \Db::getInstance();
     }
 
+    /**
+     * @return int
+     *
+     * @throws \PrestaShopException
+     */
     public function getShopId()
     {
         if ($this->context->shop === null) {
@@ -36,15 +47,30 @@ abstract class AbstractRepository
         return (int) $this->context->shop->id;
     }
 
+    /**
+     * @param bool $debug
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
     protected function runQuery($debug)
     {
-        if ($debug) {
+        if ($debug != null && $debug === true) {
             $this->debugQuery();
         }
 
-        return $this->db->executeS($this->query);
+        $result = $this->db->executeS($this->query);
+
+        return is_array($result) ? $result : [];
     }
 
+    /**
+     * @return void
+     *
+     * @throws \PrestaShopException
+     */
     private function debugQuery()
     {
         $queryStringified = preg_replace('/\s+/', ' ', $this->query->build());

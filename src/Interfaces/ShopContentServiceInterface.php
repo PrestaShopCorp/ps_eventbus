@@ -4,9 +4,32 @@ namespace PrestaShop\Module\PsEventbus\Interfaces;
 
 interface ShopContentServiceInterface
 {
-    public function getContentsForFull($offset, $limit, $langIso = null, $debug = false);
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     * @param bool $debug
+     *
+     * @return array<mixed>
+     */
+    public function getContentsForFull($offset, $limit, $langIso, $debug);
 
-    public function getContentsForIncremental($limit, $contentIds, $langIso = null, $debug = false);
+    /**
+     * @param int $limit
+     * @param mixed $contentIds
+     * @param string $langIso
+     * @param bool $debug
+     *
+     * @return array<mixed>
+     */
+    public function getContentsForIncremental($limit, $contentIds, $langIso, $debug);
 
-    public function countFullSyncContentLeft($offset, $langIso = null);
+    /**
+     * @param int $offset
+     * @param string $langIso
+     * @param bool $debug
+     *
+     * @return int
+     */
+    public function countFullSyncContentLeft($offset, $langIso, $debug);
 }
