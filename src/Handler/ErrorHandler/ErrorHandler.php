@@ -21,6 +21,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
+use Exception;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 
 /**
@@ -86,7 +87,18 @@ class ErrorHandler implements ErrorHandlerInterface
         if (!$this->client) {
             return;
         }
+
         $this->client->captureException($error, $data);
+
+        \PrestaShopLogger::addLog(
+            $error->getMessage() . ' : ' . $error->getFile() . ':' . $error->getLine() . ' | ' . $error->getTraceAsString(),
+            3,
+            $error->getCode(),
+            'Module',
+            \Module::getModuleIdByName('ps_eventbus'),
+            true
+        );
+
         if (is_int($code) && true === $throw) {
             http_response_code($code);
             throw $error;

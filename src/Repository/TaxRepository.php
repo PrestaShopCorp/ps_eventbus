@@ -64,12 +64,8 @@ class TaxRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getCarrierTaxesByZone($zoneId, $taxRulesGroupId, $active = null)
+    public function getCarrierTaxesByZone($zoneId, $taxRulesGroupId, $active)
     {
-        if ($active == null) {
-            $active = true;
-        }
-
         $cacheKey = $zoneId . '-' . (int) $active;
 
         if (!isset($this->countryIsoCodeCache[$cacheKey])) {

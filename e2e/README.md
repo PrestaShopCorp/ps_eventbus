@@ -17,13 +17,13 @@ import { MockProbe } from './helpers/mock-probe';
 import testConfig from './helpers/test.config';
 import request from 'supertest';
 
-const controller = 'apiCategories';
-const endpoint = `/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5`;
+const controller = 'categories';
+const endpoint = `/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=${shopContent}&limit=5`;
 
-describe('CategoriesController', () => {
-  it(`${controller} should upload to collector`, async () => {
+describe('CategoriesShopContent', () => {
+  it(`${shopContent} should upload to collector`, async () => {
     // arrange
-    const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
+    const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=${shopContent}&limit=5&full=1&job_id=${jobId}`;
     // jobId starting with "valid-job-" will be considered valid by the mock sync-api and will always return 201;
     // other values will be rejected by the mock
     const jobId = 'valid-job-1'

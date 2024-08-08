@@ -39,12 +39,8 @@ class StateRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getStateIsoCodesByZoneId($zoneId, $active = null)
+    public function getStateIsoCodesByZoneId($zoneId, $active)
     {
-        if ($active == null) {
-            $active = true;
-        }
-
         $cacheKey = $zoneId . '-' . (int) $active;
 
         if (!isset($this->stateIsoCodeCache[$cacheKey])) {

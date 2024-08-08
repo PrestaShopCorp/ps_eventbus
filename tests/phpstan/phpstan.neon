@@ -17,7 +17,6 @@ parameters:
     - '#Cannot call method getOrRefreshToken\(\) on mixed.#'
     - '#Cannot call method getMetadata\(\) on mixed.#'
     - '#Method PrestaShop\\Module\\PsEventbus\\Api\\Post\\PostFileApi::getContent\(\) should return Psr\\Http\\Message\\StreamInterface but returns mixed.#'
-    - '#Property PrestaShop\\Module\\PsEventbus\\Controller\\AbstractApiController::[a-zA-Z0-9\\_\$\(\) ]+ does not accept mixed.#'
     - '#Cannot call method getShopUuid\(\) on mixed.#'
     - '#Cannot call method getPsAccountsService\(\) on mixed.#'
     - '#Cannot call method handle\(\) on mixed.#'

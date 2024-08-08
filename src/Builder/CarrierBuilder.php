@@ -186,14 +186,14 @@ class CarrierBuilder
         $carrierDetail->setRangeId($rangeId);
 
         /** @var array<mixed> $countryIsoCodes */
-        $countryIsoCodes = $this->countryRepository->getCountyIsoCodesByZoneId($zone['id_zone']);
+        $countryIsoCodes = $this->countryRepository->getCountyIsoCodesByZoneId($zone['id_zone'], true);
         if (!$countryIsoCodes) {
             return false;
         }
         $carrierDetail->setCountryIsoCodes($countryIsoCodes);
 
         /** @var array<mixed> $stateIsoCodes */
-        $stateIsoCodes = $this->stateRepository->getStateIsoCodesByZoneId($zone['id_zone']);
+        $stateIsoCodes = $this->stateRepository->getStateIsoCodesByZoneId($zone['id_zone'], true);
         $carrierDetail->setStateIsoCodes($stateIsoCodes);
 
         return $carrierDetail;
@@ -212,7 +212,7 @@ class CarrierBuilder
     {
         $taxRulesGroupId = (int) $carrier->getIdTaxRulesGroup();
         /** @var array<mixed> $carrierTaxesByZone */
-        $carrierTaxesByZone = $this->taxRepository->getCarrierTaxesByZone($zoneId, $taxRulesGroupId);
+        $carrierTaxesByZone = $this->taxRepository->getCarrierTaxesByZone($zoneId, $taxRulesGroupId, true);
 
         if (!$carrierTaxesByZone[0]['country_iso_code']) {
             return null;

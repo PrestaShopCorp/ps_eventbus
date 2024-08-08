@@ -8,6 +8,7 @@ use PrestaShop\Module\PsEventbus\Api\CollectorApiClient;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
+use PrestaShop\Module\PsEventbus\Interfaces\ProxyServiceInterface;
 
 class ProxyService implements ProxyServiceInterface
 {
@@ -41,7 +42,7 @@ class ProxyService implements ProxyServiceInterface
      *
      * @throws EnvVarException
      */
-    public function upload($jobId, $data, $scriptStartTime, $isFull = null)
+    public function upload($jobId, $data, $scriptStartTime, $isFull)
     {
         $dataJson = $this->jsonFormatter->formatNewlineJsonString($data);
 
