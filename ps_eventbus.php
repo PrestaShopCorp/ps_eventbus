@@ -230,7 +230,11 @@ class Ps_eventbus extends Module
         try {
             return $this->getServiceContainer()->getService($serviceName);
         } catch (ServiceNotFoundException $exception) {
-            return $this->get($serviceName);
+            if (method_exists($this, 'get')) {
+                return $this->get($serviceName);
+            }
+
+            throw new ServiceNotFoundException('Service not found');
         }
     }
 

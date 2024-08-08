@@ -103,7 +103,7 @@ class OrdersService implements ShopContentServiceInterface
      */
     public function castOrders(&$orders, $langIso)
     {
-        $langId = \Language::getIdByIso($langIso);
+        $langId = (int) \Language::getIdByIso($langIso);
 
         foreach ($orders as &$order) {
             $order['id_order'] = (int) $order['id_order'];
