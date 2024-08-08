@@ -501,7 +501,6 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
-
         $wishlist = $parameters['object'];
 
         if ($wishlist->id) {
