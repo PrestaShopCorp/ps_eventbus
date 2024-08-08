@@ -2,6 +2,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
+use Behat\Behat\HelperContainer\Exception\ServiceNotFoundException;
+use Exception;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
@@ -178,8 +180,7 @@ class FrontApiService
             CommonService::exitWithExceptionMessage($exception);
         } catch (\Exception $exception) {
             $this->errorHandler->handle($exception);
-
-            CommonService::dieWithResponse(['message' => 'An error occured. Please check logs for more information'], 500);
+            CommonService::dieWithResponse(['message' => 'An error occured. Please check shop logs for more information'], 500);
         }
     }
 

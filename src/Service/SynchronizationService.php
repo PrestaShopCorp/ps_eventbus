@@ -94,7 +94,7 @@ class SynchronizationService
         $module = \Module::getInstanceByName('ps_eventbus');
 
         if (!$module->hasService($serviceId)) {
-            throw new ServiceNotFoundException('Service ' . $serviceName . 'doesn\'t exist !', $serviceId);
+            throw new ServiceNotFoundException($serviceId);
         }
 
         /** @var ShopContentServiceInterface $shopContentApiService */
@@ -159,7 +159,7 @@ class SynchronizationService
         $module = \Module::getInstanceByName('ps_eventbus');
 
         if (!$module->hasService($serviceId)) {
-            throw new ServiceNotFoundException('Service ' . $serviceName . 'doesn\'t exist !', $serviceId);
+            throw new ServiceNotFoundException($serviceId);
         }
 
         /** @var ShopContentServiceInterface $shopContentApiService */

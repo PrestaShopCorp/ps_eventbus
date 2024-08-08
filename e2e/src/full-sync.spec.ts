@@ -187,7 +187,7 @@ describe('Full Sync', () => {
             toArray()
           )
         );
-        console.log('test', testConfig.dumpFullSyncData);
+
         // dump data for easier debugging or updating fixtures
         if (testConfig.dumpFullSyncData) {
           await dumpUploadData(syncedData, shopContent);

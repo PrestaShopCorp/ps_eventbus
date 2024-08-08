@@ -7,7 +7,13 @@ import {getShopHealthCheck} from "./data-helper";
 
 export function logAxiosError(err: Error) {
   if(err instanceof AxiosError) {
-    console.log(R.pick(['status', 'statusText' ,'data',], err.response))
+    const data = {
+      
+      ...R.pick(['url'], err.response.config),
+      ...R.pick(['status', 'statusText' ,'data'], err.response)
+    }
+
+    console.log(data)
   }
 }
 
