@@ -95,7 +95,7 @@ export async function loadFixture(
 
   const files = contents.map((content) =>
     fs.promises.readFile(
-      `${FIXTURE_DIR}/${useFixture}/${shopContent}/${content}.json`,
+      `${FIXTURE_DIR}/${useFixture}/${content}.json`,
       "utf-8"
     )
   );

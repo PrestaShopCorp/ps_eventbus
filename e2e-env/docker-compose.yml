@@ -12,7 +12,7 @@ services:
           "-sI",
           "-H",
           "Host: localhost:8000",
-          "http://localhost:80/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck",
+          "http://localhost:80/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=healthcheck",
         ]
       interval: 30s
     volumes:

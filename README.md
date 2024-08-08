@@ -45,7 +45,7 @@ To check the module healthiness (authentified route):
 
 ```sh
 BASE_URL="http://localhost:8000"
-curl -s -L "$BASE_URL/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck&job_id=valid-job-stuff" | jq .
+curl -s -L "$BASE_URL/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=healthcheck&job_id=valid-job-stuff" | jq .
 {
   "prestashop_version": "1.6.1.24",
   "ps_eventbus_version": "0.0.0",
@@ -66,7 +66,7 @@ To check the fallback route (unauthentified):
 
 ```sh
 BASE_URL="http://localhost:8000"
-curl -s -L "$BASE_URL/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck" | jq .
+curl -s -L "$BASE_URL/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=healthcheck" | jq .
 {
   "ps_account": true,
   "is_valid_jwt": true,
