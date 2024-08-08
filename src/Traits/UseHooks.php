@@ -501,7 +501,7 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
-        /** @var \WishList $wishlist */
+
         $wishlist = $parameters['object'];
 
         if ($wishlist->id) {
@@ -526,7 +526,6 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
-        /** @var \WishList $wishlist */
         $wishlist = $parameters['object'];
 
         if ($wishlist->id) {
@@ -551,7 +550,6 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
-        /** @var \WishList $wishlist */
         $wishlist = $parameters['object'];
 
         if ($wishlist->id) {
