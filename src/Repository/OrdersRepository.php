@@ -6,7 +6,7 @@ use PrestaShop\Module\PsEventbus\Interfaces\RepositoryInterface;
 
 class OrdersRepository extends AbstractRepository implements RepositoryInterface
 {
-    public const ORDERS_TABLE = 'orders';
+    const ORDERS_TABLE = 'orders';
 
     /**
      * @return mixed

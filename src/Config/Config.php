@@ -68,7 +68,7 @@ class Config
     const COLLECTION_WISHLISTS = 'wishlists';
     const COLLECTION_WISHLIST_PRODUCTS = 'wishlist_products';
 
-    public const SHOP_CONTENTS = [
+    const SHOP_CONTENTS = [
         self::COLLECTION_BUNDLES,
         self::COLLECTION_CARRIERS,
         self::COLLECTION_CARTS,
