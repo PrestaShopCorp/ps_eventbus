@@ -38,7 +38,7 @@ class ServerInformationRepository
      */
     private $psAccountsAdapterService;
     /**
-     * @var array
+     * @var array<mixed>
      */
     private $configuration;
     /**
@@ -46,6 +46,20 @@ class ServerInformationRepository
      */
     private $errorHandler;
 
+    /**
+     * @param \Context $context
+     * @param PsAccountsAdapterService $psAccountsAdapterService
+     * @param CurrencyRepository $currencyRepository
+     * @param LanguageRepository $languageRepository
+     * @param ConfigurationRepository $configurationRepository
+     * @param ShopRepository $shopRepository
+     * @param ErrorHandlerInterface $errorHandler
+     * @param string $eventbusSyncApiUrl
+     * @param string $eventbusLiveSyncApiUrl
+     * @param string $eventbusProxyApiUrl
+     *
+     * @return void
+     */
     public function __construct(
         \Context $context,
         PsAccountsAdapterService $psAccountsAdapterService,
@@ -54,9 +68,9 @@ class ServerInformationRepository
         ConfigurationRepository $configurationRepository,
         ShopRepository $shopRepository,
         ErrorHandlerInterface $errorHandler,
-        string $eventbusSyncApiUrl,
-        string $eventbusLiveSyncApiUrl,
-        string $eventbusProxyApiUrl
+        $eventbusSyncApiUrl,
+        $eventbusLiveSyncApiUrl,
+        $eventbusProxyApiUrl
     ) {
         $this->currencyRepository = $currencyRepository;
         $this->languageRepository = $languageRepository;
@@ -76,7 +90,7 @@ class ServerInformationRepository
     /**
      * @param string $langIso
      *
-     * @return array[]
+     * @return array<mixed>[]
      *
      * @throws \PrestaShopException
      */
@@ -130,9 +144,11 @@ class ServerInformationRepository
     }
 
     /**
-     * @return array
+     * @param bool $isAuthentifiedCall
+     *
+     * @return array<mixed>
      */
-    public function getHealthCheckData(bool $isAuthentifiedCall)
+    public function getHealthCheckData($isAuthentifiedCall)
     {
         $tokenValid = false;
         $tokenIsSet = false;

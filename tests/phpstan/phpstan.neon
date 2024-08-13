@@ -1,3 +1,5 @@
+includes:
+  - %currentWorkingDirectory%/tests/phpstan/phpstan-1-6.neon
 parameters:
   paths:
     - ../../src
@@ -6,8 +8,6 @@ parameters:
     - ../../ps_eventbus.php
   reportUnmatchedIgnoredErrors: false
   ignoreErrors:
-    -
-        identifier: missingType.iterableValue
     - '#Call to method getOrRefreshToken\(\) on an unknown class PrestaShop\\AccountsAuth\\Service\\PsAccountsService.#'
     - '#Instantiated class Symfony\\Component\\Cache\\Adapter\\FilesystemAdapter not found.#'
     - '#Call to method getItem\(\) on an unknown class Symfony\\Component\\Cache\\Adapter\\FilesystemAdapter.#'
@@ -46,4 +46,4 @@ parameters:
     - '#Property PrestaShop\\Module\\PsEventbus\\Helper\\ModuleHelper::\$moduleManager has unknown class PrestaShop\\PrestaShop\\Core\\Addon\\Module\\ModuleManager as its type.#'
     - '#Call to method isInstalled\(\) on an unknown class PrestaShop\\PrestaShop\\Core\\Addon\\Module\\ModuleManager.#'
     - '#Call to method isEnabled\(\) on an unknown class PrestaShop\\PrestaShop\\Core\\Addon\\Module\\ModuleManager.#'
-  level: 9
+  level: 8

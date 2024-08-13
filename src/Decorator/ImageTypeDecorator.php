@@ -5,11 +5,11 @@ namespace PrestaShop\Module\PsEventbus\Decorator;
 class ImageTypeDecorator
 {
     /**
-     * @param array $imageTypes
+     * @param array<mixed> $imageTypes
      *
      * @return void
      */
-    public function decorateImageTypes(array &$imageTypes)
+    public function decorateImageTypes(&$imageTypes)
     {
         foreach ($imageTypes as &$imageType) {
             $this->castPropertyValues($imageType);
@@ -17,11 +17,11 @@ class ImageTypeDecorator
     }
 
     /**
-     * @param array $imageType
+     * @param array<mixed> $imageType
      *
      * @return void
      */
-    private function castPropertyValues(array &$imageType)
+    private function castPropertyValues(&$imageType)
     {
         $imageType['id_image_type'] = (int) $imageType['id_image_type'];
         $imageType['name'] = (string) $imageType['name'];

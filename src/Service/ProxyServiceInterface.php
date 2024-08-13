@@ -6,20 +6,20 @@ interface ProxyServiceInterface
 {
     /**
      * @param string $jobId
-     * @param array $data
+     * @param array<mixed> $data
      * @param int $scriptStartTime
      * @param bool $isFull
      *
-     * @return array
+     * @return array<mixed>
      */
-    public function upload($jobId, $data, $scriptStartTime, bool $isFull = false);
+    public function upload($jobId, $data, $scriptStartTime, $isFull = null);
 
     /**
      * @param string $jobId
-     * @param array $data
+     * @param array<mixed> $data
      * @param int $scriptStartTime
      *
-     * @return array
+     * @return array<mixed>
      */
     public function delete($jobId, $data, $scriptStartTime);
 }

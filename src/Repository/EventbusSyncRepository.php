@@ -6,8 +6,8 @@ use PrestaShop\Module\PsEventbus\Config\Config;
 
 class EventbusSyncRepository
 {
-    public const TYPE_SYNC_TABLE_NAME = 'eventbus_type_sync';
-    public const JOB_TABLE_NAME = 'eventbus_job';
+    const TYPE_SYNC_TABLE_NAME = 'eventbus_type_sync';
+    const JOB_TABLE_NAME = 'eventbus_job';
 
     /**
      * @var \Db
@@ -87,7 +87,7 @@ class EventbusSyncRepository
     /**
      * @param string $jobId
      *
-     * @return array|bool|false|object|null
+     * @return array<mixed>|bool|false|object|null
      */
     public function findJobById($jobId)
     {
@@ -103,7 +103,7 @@ class EventbusSyncRepository
      * @param string $type
      * @param string $langIso
      *
-     * @return array|bool|object|null
+     * @return array<mixed>|bool|object|null
      */
     public function findTypeSync($type, $langIso = null)
     {

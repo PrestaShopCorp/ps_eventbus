@@ -39,13 +39,13 @@ class CartProductRepository
     }
 
     /**
-     * @param array $cartIds
+     * @param array<mixed> $cartIds
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getCartProducts(array $cartIds)
+    public function getCartProducts($cartIds)
     {
         $query = $this->getBaseQuery();
 

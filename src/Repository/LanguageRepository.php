@@ -24,7 +24,7 @@ class LanguageRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -54,9 +54,9 @@ class LanguageRepository
 
     /**
      * @param int $limit
-     * @param array $languageIds
+     * @param array<mixed> $languageIds
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -97,7 +97,7 @@ class LanguageRepository
     private function addSelectParameters(\DbQuery $query)
     {
         // https://github.com/PrestaShop/PrestaShop/commit/481111b8274ed005e1c4a8ce2cf2b3ebbeb9a270#diff-c123d3d30d9c9e012a826a21887fccce6600a2f2a848a58d5910e55f0f8f5093R41
-        if (version_compare(_PS_VERSION_, '1.7.0.0', '>=')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.0.0', '>=')) {
             $query->select('la.locale');
         }
 
@@ -106,11 +106,11 @@ class LanguageRepository
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getLanguagesIsoCodes()
     {
-        /** @var array $languages */
+        /** @var array<mixed> $languages */
         $languages = \Language::getLanguages();
 
         return array_map(function ($language) {
@@ -143,7 +143,7 @@ class LanguageRepository
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getLanguages()
     {
@@ -154,7 +154,7 @@ class LanguageRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
