@@ -18,7 +18,7 @@ run_user() {
 
 ps_accounts_mock_install() {
   echo "* [ps_accounts_mock] downloading..."
-  PS_ACCOUNTS_MOCK_VERSION="v1.1.1"
+  PS_ACCOUNTS_MOCK_VERSION="v7.0.2"
   echo "* [ps_accounts_mock] downloading..."
   wget -q -O /tmp/ps_accounts.zip "https://github.com/PrestaShopCorp/ps_accounts_mock/releases/download/${PS_ACCOUNTS_MOCK_VERSION}/ps_accounts_mock-${PS_ACCOUNTS_MOCK_VERSION}.zip"
   echo "* [ps_accounts_mock] unziping..."
