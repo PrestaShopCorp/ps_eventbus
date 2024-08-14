@@ -5,11 +5,11 @@ namespace PrestaShop\Module\PsEventbus\Decorator;
 class EmployeeDecorator
 {
     /**
-     * @param array $employees
+     * @param array<mixed> $employees
      *
      * @return void
      */
-    public function decorateEmployees(array &$employees)
+    public function decorateEmployees(&$employees)
     {
         foreach ($employees as &$employee) {
             $this->castPropertyValues($employee);
@@ -18,11 +18,11 @@ class EmployeeDecorator
     }
 
     /**
-     * @param array $employee
+     * @param array<mixed> $employee
      *
      * @return void
      */
-    private function castPropertyValues(array &$employee)
+    private function castPropertyValues(&$employee)
     {
         $employee['id_employee'] = (int) $employee['id_employee'];
         $employee['id_profile'] = (int) $employee['id_profile'];
@@ -44,17 +44,17 @@ class EmployeeDecorator
         $employee['id_shop'] = (int) $employee['id_shop'];
 
         // https://github.com/PrestaShop/PrestaShop/commit/20f1d9fe8a03559dfa9d1f7109de1f70c99f1874#diff-cde6a9d4a58afb13ff068801ee09c0e712c5e90b0cbf5632a0cc965f15cb6802R107
-        if (version_compare(_PS_VERSION_, '1.7.8.0', '>=')) {
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.8.0', '>=')) {
             $employee['has_enabled_gravatar'] = (bool) $employee['has_enabled_gravatar'];
         }
     }
 
     /**
-     * @param array $employee
+     * @param array<mixed> $employee
      *
      * @return void
      */
-    private function hashEmail(array &$employee)
+    private function hashEmail(&$employee)
     {
         // FIXME : use a random salt generated during module install
         $employee['email_hash'] = hash('sha256', $employee['email'] . 'dUj4GMBD6689pL9pyr');

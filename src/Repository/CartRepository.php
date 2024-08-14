@@ -42,7 +42,7 @@ class CartRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -73,9 +73,9 @@ class CartRepository
 
     /**
      * @param int $limit
-     * @param array $cartIds
+     * @param array<mixed> $cartIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -97,7 +97,7 @@ class CartRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */

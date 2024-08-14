@@ -52,6 +52,7 @@ const specialFieldAssert: { [index: string]: (val) => void } = {
 describe('Full Sync', () => {
   let testIndex = 0;
 
+  // gérer les cas ou un shopContent n'existe pas (pas de fixture du coup)
   const controllers: Controller[] = controllerList.filter(
     (it) => !EXCLUDED_API.includes(it)
   );
@@ -75,10 +76,15 @@ describe('Full Sync', () => {
       // arrange
       const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
 
+      const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
+
       // act
       const response = await axios
-        .post(url, {
-          headers: { Host: testConfig.prestaShopHostHeader },
+        .post(url, callId, {
+          headers: { 
+            Host: testConfig.prestaShopHostHeader,
+            'Content-Type': 'application/x-www-form-urlencoded' // for compat PHP 5.6
+          },
         })
         .catch((err) => {
           expect(err).toBeInstanceOf(AxiosError);
@@ -97,11 +103,14 @@ describe('Full Sync', () => {
       // arrange
       const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
 
+      const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
+
       // act
       const response = await axios
-        .post(url, {
+        .post(url, callId, {
           headers: {
             Host: testConfig.prestaShopHostHeader,
+            'Content-Type': 'application/x-www-form-urlencoded' // for compat PHP 5.6
           },
         })
         .catch((err) => {
@@ -127,11 +136,14 @@ describe('Full Sync', () => {
         const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
         const message$ = probe({ url: `/upload/${jobId}` });
 
+        const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
+
         // act
         const request$ = from(
-          axios.post(url, {
+          axios.post(url, callId, {
             headers: {
               Host: testConfig.prestaShopHostHeader,
+              'Content-Type': 'application/x-www-form-urlencoded' // for compat PHP 5.6
             },
           })
         );
@@ -154,15 +166,16 @@ describe('Full Sync', () => {
         });
       });
     }
+    
 
     if (MISSING_TEST_DATA.includes(controller)) {
       it.skip(`${controller} should upload complete dataset to collector`, () => {});
     } else {
       it(`${controller} should upload complete dataset collector`, async () => {
+        
         // arrange
         const fullSync$ = doFullSync(jobId, controller, { timeout: 4000 });
         const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 4000 });
-        const fixture = await loadFixture(controller);
 
         // act
         const syncedData: PsEventbusSyncUpload[] = await lastValueFrom(
@@ -179,6 +192,8 @@ describe('Full Sync', () => {
         if (testConfig.dumpFullSyncData) {
           await dumpUploadData(syncedData, controller);
         }
+
+        const fixture = await loadFixture(controller);
 
         // we need to process fixtures and data returned from ps_eventbus to make them easier to compare
         let processedData = syncedData;

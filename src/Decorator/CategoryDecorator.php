@@ -5,11 +5,11 @@ namespace PrestaShop\Module\PsEventbus\Decorator;
 class CategoryDecorator
 {
     /**
-     * @param array $categories
+     * @param array<mixed> $categories
      *
      * @return void
      */
-    public function decorateCategories(array &$categories)
+    public function decorateCategories(&$categories)
     {
         foreach ($categories as &$category) {
             $this->castPropertyValues($category);
@@ -18,22 +18,22 @@ class CategoryDecorator
     }
 
     /**
-     * @param array $category
+     * @param array<mixed> $category
      *
      * @return void
      */
-    private function castPropertyValues(array &$category)
+    private function castPropertyValues(&$category)
     {
         $category['id_category'] = (int) $category['id_category'];
         $category['id_parent'] = (int) $category['id_parent'];
     }
 
     /**
-     * @param array $category
+     * @param array<mixed> $category
      *
      * @return void
      */
-    private function formatDescription(array &$category)
+    private function formatDescription(&$category)
     {
         $category['description'] = base64_encode($category['description']);
     }

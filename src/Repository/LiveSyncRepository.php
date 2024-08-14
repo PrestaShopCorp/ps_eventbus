@@ -17,11 +17,11 @@ class LiveSyncRepository
     /**
      * @param string $shopContent
      *
-     * @return array|null
+     * @return array<mixed>|null
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getShopContentInfo(string $shopContent)
+    public function getShopContentInfo($shopContent)
     {
         $query = '
             SELECT `eb_ls`.`shop_content`, `eb_ls`.`last_change_at`
@@ -46,7 +46,7 @@ class LiveSyncRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function upsertDebounce(string $shopContent, string $lastChangeAt)
+    public function upsertDebounce($shopContent, $lastChangeAt)
     {
         $query = '
             INSERT INTO `' . _DB_PREFIX_ . 'eventbus_live_sync` (`shop_content`, `last_change_at`)

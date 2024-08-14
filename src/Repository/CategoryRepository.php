@@ -10,7 +10,7 @@ class CategoryRepository
     private $db;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     private $categoryLangCache;
 
@@ -55,7 +55,7 @@ class CategoryRepository
      * @param int $langId
      * @param int $shopId
      *
-     * @return array
+     * @return array<mixed>
      */
     public function getCategoryPaths($topCategoryId, $langId, $shopId)
     {
@@ -92,9 +92,9 @@ class CategoryRepository
     }
 
     /**
-     * @param array $categoriesWithParentsInfo
+     * @param array<mixed> $categoriesWithParentsInfo
      * @param int $currentCategoryId
-     * @param array $categories
+     * @param array<mixed> $categories
      *
      * @return void
      */
@@ -112,7 +112,7 @@ class CategoryRepository
      * @param int $langId
      * @param int $shopId
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -148,7 +148,7 @@ class CategoryRepository
      * @param int $limit
      * @param string $langIso
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -180,9 +180,9 @@ class CategoryRepository
     /**
      * @param int $limit
      * @param string $langIso
-     * @param array $categoryIds
+     * @param array<mixed> $categoryIds
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -203,7 +203,7 @@ class CategoryRepository
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */

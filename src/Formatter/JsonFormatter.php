@@ -5,7 +5,7 @@ namespace PrestaShop\Module\PsEventbus\Formatter;
 class JsonFormatter
 {
     /**
-     * @param array $data
+     * @param array<mixed> $data
      *
      * @return string
      */

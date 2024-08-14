@@ -4,7 +4,7 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 
 class OrderHistoryRepository
 {
-    public const TABLE_NAME = 'order_history';
+    const TABLE_NAME = 'order_history';
 
     /**
      * @var \Db
@@ -29,14 +29,14 @@ class OrderHistoryRepository
     }
 
     /**
-     * @param array $orderIds
+     * @param array<mixed> $orderIds
      * @param int $langId
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getOrderHistoryStatuses(array $orderIds, $langId)
+    public function getOrderHistoryStatuses($orderIds, $langId)
     {
         if (!$orderIds) {
             return [];
@@ -55,13 +55,13 @@ class OrderHistoryRepository
     }
 
     /**
-     * @param array $orderIds
+     * @param array<mixed> $orderIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getOrderHistoryStatuseIdsByOrderIds(array $orderIds)
+    public function getOrderHistoryStatuseIdsByOrderIds($orderIds)
     {
         if (!$orderIds) {
             return [];

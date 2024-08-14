@@ -42,7 +42,7 @@ class WishlistRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -82,9 +82,9 @@ class WishlistRepository
 
     /**
      * @param int $limit
-     * @param array $wishlistIds
+     * @param array<mixed> $wishlistIds
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -104,7 +104,7 @@ class WishlistRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -136,7 +136,7 @@ class WishlistRepository
     }
 
     /**
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
