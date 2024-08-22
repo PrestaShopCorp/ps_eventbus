@@ -18,8 +18,9 @@ services:
     volumes:
       - ..:/var/www/html/modules/ps_eventbus:rw
       - ./init-scripts:/tmp/init-scripts:ro
-      - /var/www/html/modules/ps_eventbus/vendor
-      - /var/www/html/modules/ps_eventbus/tools/vendor
+      # Notice: you might enable this if your uid is not 1000, or encounter permission issues
+      # - /var/www/html/modules/ps_eventbus/vendor
+      # - /var/www/html/modules/ps_eventbus/tools/vendor
     environment:
       - PS_DOMAIN=localhost:8000
       - ON_INIT_SCRIPT_FAILURE=fail
