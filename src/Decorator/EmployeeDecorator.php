@@ -39,7 +39,11 @@ class EmployeeDecorator
         $employee['id_last_customer_message'] = (int) $employee['id_last_customer_message'];
         $employee['id_last_customer'] = (int) $employee['id_last_customer'];
 
-        $employee['last_connection_date'] = (string) $employee['last_connection_date'];
+        if ($employee['last_connection_date'] == '0000-00-00') {
+            $employee['last_connection_date'] = null;
+        } else {
+            $employee['last_connection_date'] = (string) $employee['last_connection_date'];
+        } 
 
         $employee['id_shop'] = (int) $employee['id_shop'];
 
