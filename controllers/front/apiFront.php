@@ -35,6 +35,9 @@ class ps_EventbusApiFrontModuleFrontController extends ModuleFrontController
         /** @var FrontApiService $frontApiService */
         $frontApiService = $module->getService('PrestaShop\Module\PsEventbus\Service\FrontApiService');
 
-        $frontApiService->handleDataSync($shopContent, $jobId, $langIso, $limit, $isFull, $debug);
+        // edit shopContent for matching Config.php const
+        $shopContentEdited = str_replace('-', '_', $shopContent);
+
+        $frontApiService->handleDataSync($shopContentEdited, $jobId, $langIso, $limit, $isFull, $debug);
     }
 }
