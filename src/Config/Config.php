@@ -32,8 +32,8 @@ class Config
         self::PS_ACCOUNTS_NOT_INSTALLED => 'PsAccounts not installed',
     ];
 
-    const COLLECTION_BUNDLES = 'bundles';
     const COLLECTION_CARRIERS = 'carriers';
+    const COLLECTION_CARRIER_DETAILS = 'carrier_details';
     const COLLECTION_CARTS = 'carts';
     const COLLECTION_CART_PRODUCTS = 'cart_products';
     const COLLECTION_CART_RULES = 'cart_rules';
@@ -46,15 +46,17 @@ class Config
     const COLLECTION_HEALTHCHECK = 'healthcheck';
     const COLLECTION_IMAGES = 'images';
     const COLLECTION_IMAGE_TYPES = 'image_types';
+    const COLLECTION_INFO = 'info';
     const COLLECTION_LANGUAGES = 'languages';
     const COLLECTION_MANUFACTURERS = 'manufacturers';
     const COLLECTION_MODULES = 'modules';
     const COLLECTION_ORDERS = 'orders';
     const COLLECTION_ORDER_CART_RULES = 'order_cart_rules';
     const COLLECTION_ORDER_DETAILS = 'order_details';
-    const COLLECTION_ORDER_STATUS_HISTORY = 'order_status_history';
+    const COLLECTION_ORDER_STATUS_HISTORIES = 'order_status_histories';
     const COLLECTION_PRODUCTS = 'products';
     const COLLECTION_PRODUCT_ATTRIBUTES = 'attributes';
+    const COLLECTION_PRODUCT_BUNDLES = 'product_bundles';
     const COLLECTION_PRODUCT_SUPPLIERS = 'product_suppliers';
     const COLLECTION_SHOPS = 'shops';
     const COLLECTION_SPECIFIC_PRICES = 'specific_prices';
@@ -69,8 +71,8 @@ class Config
     const COLLECTION_WISHLIST_PRODUCTS = 'wishlist_products';
 
     const SHOP_CONTENTS = [
-        self::COLLECTION_BUNDLES,
         self::COLLECTION_CARRIERS,
+        self::COLLECTION_CARRIER_DETAILS,
         self::COLLECTION_CARTS,
         self::COLLECTION_CART_PRODUCTS,
         self::COLLECTION_CART_RULES,
@@ -82,15 +84,17 @@ class Config
         self::COLLECTION_EMPLOYEES,
         self::COLLECTION_IMAGES,
         self::COLLECTION_IMAGE_TYPES,
+        self::COLLECTION_INFO,
         self::COLLECTION_LANGUAGES,
         self::COLLECTION_MANUFACTURERS,
         self::COLLECTION_MODULES,
         self::COLLECTION_ORDERS,
         self::COLLECTION_ORDER_CART_RULES,
         self::COLLECTION_ORDER_DETAILS,
-        self::COLLECTION_ORDER_STATUS_HISTORY,
+        self::COLLECTION_ORDER_STATUS_HISTORIES,
         self::COLLECTION_PRODUCTS,
         self::COLLECTION_PRODUCT_ATTRIBUTES,
+        self::COLLECTION_PRODUCT_BUNDLES,
         self::COLLECTION_PRODUCT_SUPPLIERS,
         self::COLLECTION_SHOPS,
         self::COLLECTION_SPECIFIC_PRICES,

@@ -2,7 +2,7 @@ import R from "ramda";
 
 export const shopContentMapping = {
   'carriers': 'carriers',
-  'carrier_details': 'carriers-details',
+  'carrier_details': 'carrier-details',
   'carts' : 'carts',
   'cart_products': 'carts',
   'cart_rules' : 'cart-rules',
@@ -25,10 +25,10 @@ export const shopContentMapping = {
   'wishlists': 'wishlists',
   'wishlist_products': 'wishlist-products',
   'stocks': 'stocks',
-  'stock_movements': 'stock_movements',
+  'stock_movements': 'stock-movements',
   'manufacturers': 'manufacturers',
   'suppliers': 'suppliers',
-  'product_suppliers': 'product_suppliers',
+  'product_suppliers': 'product-suppliers',
   'languages': 'languages',
   'employees': 'employees',
   'translations': 'translations',
