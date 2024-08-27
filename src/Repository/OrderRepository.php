@@ -4,7 +4,7 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 
 use PrestaShop\Module\PsEventbus\Interfaces\RepositoryInterface;
 
-class OrdersRepository extends AbstractRepository implements RepositoryInterface
+class OrderRepository extends AbstractRepository implements RepositoryInterface
 {
     const ORDERS_TABLE = 'orders';
 

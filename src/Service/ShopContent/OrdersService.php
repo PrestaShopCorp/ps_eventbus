@@ -6,12 +6,12 @@ use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Interfaces\ShopContentServiceInterface;
 use PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository;
-use PrestaShop\Module\PsEventbus\Repository\OrdersRepository;
+use PrestaShop\Module\PsEventbus\Repository\OrderRepository;
 
 class OrdersService implements ShopContentServiceInterface
 {
-    /** @var OrdersRepository */
-    private $ordersRepository;
+    /** @var OrderRepository */
+    private $orderRepository;
 
     /** @var OrderHistoryRepository */
     private $orderHistoryRepository;
@@ -20,11 +20,11 @@ class OrdersService implements ShopContentServiceInterface
     private $arrayFormatter;
 
     public function __construct(
-        OrdersRepository $ordersRepository,
+        OrderRepository $orderRepository,
         OrderHistoryRepository $orderHistoryRepository,
         ArrayFormatter $arrayFormatter
     ) {
-        $this->ordersRepository = $ordersRepository;
+        $this->orderRepository = $orderRepository;
         $this->orderHistoryRepository = $orderHistoryRepository;
         $this->arrayFormatter = $arrayFormatter;
     }
@@ -39,7 +39,7 @@ class OrdersService implements ShopContentServiceInterface
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $orders = $this->ordersRepository->getContentsForFull($offset, $limit, $langIso, $debug);
+        $orders = $this->orderRepository->getContentsForFull($offset, $limit, $langIso, $debug);
 
         if (empty($orders)) {
             return [];
@@ -66,7 +66,7 @@ class OrdersService implements ShopContentServiceInterface
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $orders = $this->ordersRepository->getContentsForIncremental($limit, $contentIds, $langIso, $debug);
+        $orders = $this->orderRepository->getContentsForIncremental($limit, $contentIds, $langIso, $debug);
 
         if (empty($orders)) {
             return [];
@@ -92,7 +92,7 @@ class OrdersService implements ShopContentServiceInterface
      */
     public function countFullSyncContentLeft($offset, $langIso, $debug)
     {
-        return (int) $this->ordersRepository->countFullSyncContentLeft($offset, $langIso, $debug);
+        return (int) $this->orderRepository->countFullSyncContentLeft($offset, $langIso, $debug);
     }
 
     /**

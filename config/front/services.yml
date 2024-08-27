@@ -57,6 +57,6 @@ services:
     class:  PrestaShop\Module\PsEventbus\Service\ShopContent\OrdersService
     public: true
     arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\OrdersRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\OrderRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'

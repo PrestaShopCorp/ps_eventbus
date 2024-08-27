@@ -48,7 +48,7 @@ services:
     public: true
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
-      - '@PrestaShop\Module\PsEventbus\Repository\OrdersRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\OrderRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
       - '@PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository'

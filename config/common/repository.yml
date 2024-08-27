@@ -68,8 +68,8 @@ services:
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
 
-  PrestaShop\Module\PsEventbus\Repository\OrdersRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\OrdersRepository
+  PrestaShop\Module\PsEventbus\Repository\OrderRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\OrderRepository
     public: true
 
   PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository:
