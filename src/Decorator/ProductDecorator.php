@@ -165,7 +165,7 @@ class ProductDecorator
         return array_map(function ($bundleProduct) use ($uniqueProductId) {
             return [
                 'id' => $bundleProduct['id_bundle'],
-                'collection' => Config::COLLECTION_BUNDLES,
+                'collection' => Config::COLLECTION_PRODUCT_BUNDLES,
                 'properties' => [
                     'id_bundle' => $bundleProduct['id_bundle'],
                     'id_product' => $bundleProduct['id_product'],

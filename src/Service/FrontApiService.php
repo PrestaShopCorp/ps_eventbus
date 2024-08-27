@@ -2,8 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use Behat\Behat\HelperContainer\Exception\ServiceNotFoundException;
-use Exception;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
