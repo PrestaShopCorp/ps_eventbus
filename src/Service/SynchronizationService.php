@@ -87,7 +87,7 @@ class SynchronizationService
     ) {
         $response = [];
 
-        $serviceName = str_replace('-', '', ucwords($shopContent, '-'));
+        $serviceName = str_replace('_', '', ucwords($shopContent, '_'));
         $serviceId = 'PrestaShop\Module\PsEventbus\Service\ShopContent\\' . $serviceName . 'Service'; // faire un mapping entre le service et le nom du shopcontent
 
         /** @var \Ps_eventbus */
@@ -152,7 +152,7 @@ class SynchronizationService
     ) {
         $response = [];
 
-        $serviceName = str_replace('-', '', ucwords($shopContent, '-'));
+        $serviceName = str_replace('_', '', ucwords($shopContent, '_'));
         $serviceId = 'PrestaShop\Module\PsEventbus\Service\ShopContent\\' . $serviceName . 'Service';
 
         /** @var \Ps_eventbus */

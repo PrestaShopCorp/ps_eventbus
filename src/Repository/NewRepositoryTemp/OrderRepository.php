@@ -30,26 +30,58 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
             ->where('o.id_shop = ' . (int) parent::getShopId())
             ->groupBy('o.id_order');
 
-        $this->query->select('o.id_order, o.reference, o.id_customer, o.id_cart, o.current_state');
-        $this->query->select('o.conversion_rate, o.total_paid_tax_excl, o.total_paid_tax_incl');
-        $this->query->select('IF((SELECT so.id_order FROM `' . _DB_PREFIX_ . 'orders` so WHERE so.id_customer = o.id_customer AND so.id_order < o.id_order LIMIT 1) > 0, 0, 1) as new_customer');
-        $this->query->select('c.iso_code as currency, SUM(os.total_products_tax_incl + os.total_shipping_tax_incl) as refund');
-        $this->query->select('SUM(os.total_products_tax_excl + os.total_shipping_tax_excl) as refund_tax_excl, o.module as payment_module');
-        $this->query->select('o.payment as payment_mode, o.total_paid_real, o.total_shipping as shipping_cost, o.date_add as created_at');
-        $this->query->select('o.date_upd as updated_at, o.id_carrier');
+        $this->query->select('o.id_order');
+        $this->query->select('o.reference');
+        $this->query->select('o.id_customer');
+        $this->query->select('o.id_cart');
+        $this->query->select('o.current_state');
+        $this->query->select('o.conversion_rate');
+        $this->query->select('o.total_paid_tax_excl');
+        $this->query->select('o.total_paid_tax_incl');
+        
+        $this->query->select('c.iso_code as currency');
+        $this->query->select('o.module as payment_module');
+        $this->query->select('o.payment as payment_mode');
+        $this->query->select('o.total_paid_real');
+        $this->query->select('o.total_shipping as shipping_cost');
+        $this->query->select('o.date_add as created_at');
+        $this->query->select('o.date_upd as updated_at');
+        $this->query->select('o.id_carrier');
         $this->query->select('o.payment as payment_name');
-        $this->query->select('CONCAT(CONCAT("delivery", ":", cntd.iso_code), ",", CONCAT("invoice", ":", cnti.iso_code)) as address_iso');
         $this->query->select('o.valid as is_validated');
         $this->query->select('ost.paid as is_paid');
         $this->query->select('ost.shipped as is_shipped');
         $this->query->select('osl.name as status_label');
         $this->query->select('o.module as payment_name');
+        $this->query->select('o.id_shop_group');
+        $this->query->select('o.id_shop');
+        $this->query->select('o.id_lang');
+        $this->query->select('o.id_currency');
+        $this->query->select('o.recyclable');
+        $this->query->select('o.gift');
+        $this->query->select('o.total_discounts');
+        $this->query->select('o.total_discounts_tax_incl');
+        $this->query->select('o.total_discounts_tax_excl');
+        $this->query->select('o.total_products');
+        $this->query->select('o.total_products_wt');
+        $this->query->select('o.total_shipping_tax_incl');
+        $this->query->select('o.total_shipping_tax_excl');
+        $this->query->select('o.carrier_tax_rate');
+        $this->query->select('o.total_wrapping');
+        $this->query->select('o.total_wrapping_tax_incl');
+        $this->query->select('o.total_wrapping_tax_excl');
+        $this->query->select('o.round_mode');
+        $this->query->select('o.round_type');
+        $this->query->select('o.invoice_number');
+        $this->query->select('o.delivery_number');
+        $this->query->select('o.invoice_date');
+        $this->query->select('o.delivery_date');
+        $this->query->select('o.valid');
 
-        $this->query->select('o.id_shop_group, o.id_shop, o.id_lang, o.id_currency, o.recyclable, o.gift');
-        $this->query->select('o.total_discounts, o.total_discounts_tax_incl, o.total_discounts_tax_excl');
-        $this->query->select('o.total_products, o.total_products_wt, o.total_shipping_tax_incl, o.total_shipping_tax_excl');
-        $this->query->select('o.carrier_tax_rate, o.total_wrapping, o.total_wrapping_tax_incl, o.total_wrapping_tax_excl');
-        $this->query->select('o.round_mode, o.round_type, o.invoice_number, o.delivery_number, o.invoice_date, o.delivery_date, o.valid');
+        $this->query->select('SUM(os.total_products_tax_incl + os.total_shipping_tax_incl) as refund');
+        $this->query->select('SUM(os.total_products_tax_excl + os.total_shipping_tax_excl) as refund_tax_excl');
+        $this->query->select('CONCAT(CONCAT("delivery", ":", cntd.iso_code), ",", CONCAT("invoice", ":", cnti.iso_code)) as address_iso');
+        $this->query->select('IF((SELECT so.id_order FROM `' . _DB_PREFIX_ . 'orders` so WHERE so.id_customer = o.id_customer AND so.id_order < o.id_order LIMIT 1) > 0, 0, 1) as new_customer');
     }
 
     /**
@@ -105,12 +137,12 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
      */
     public function countFullSyncContentLeft($offset, $langIso, $debug)
     {
-        $orders = $this->getContentsForFull($offset, 1, $langIso, $debug);
+        $result = $this->getContentsForFull($offset, 1, $langIso, $debug);
 
-        if (!is_array($orders) || empty($orders)) {
+        if (!is_array($result) || empty($result)) {
             return 0;
         }
 
-        return count($orders);
+        return count($result);
     }
 }

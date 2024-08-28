@@ -178,6 +178,12 @@ class FrontApiService
             CommonService::exitWithExceptionMessage($exception);
         } catch (\Exception $exception) {
             $this->errorHandler->handle($exception);
+
+            // if debug mode enabled, print error
+            if (_PS_MODE_DEV_ == true) {
+                throw $exception;
+            }
+
             CommonService::dieWithResponse(['message' => 'An error occured. Please check shop logs for more information'], 500);
         }
     }

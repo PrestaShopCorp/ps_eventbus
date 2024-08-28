@@ -59,3 +59,9 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepositoryTemp\OrderRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
+  
+  PrestaShop\Module\PsEventbus\Service\ShopContent\OrderCartRulesService:
+    class:  PrestaShop\Module\PsEventbus\Service\ShopContent\OrderCartRulesService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository'

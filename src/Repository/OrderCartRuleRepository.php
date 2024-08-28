@@ -2,77 +2,96 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-class OrderCartRuleRepository
+use PrestaShop\Module\PsEventbus\Interfaces\RepositoryInterface;
+
+class OrderCartRuleRepository extends AbstractRepository implements RepositoryInterface
 {
     const TABLE_NAME = 'order_cart_rule';
 
     /**
-     * @var \Db
-     */
-    private $db;
-
-    public function __construct()
-    {
-        $this->db = \Db::getInstance();
-    }
-
-    /**
-     * @return \DbQuery
-     */
-    public function getBaseQuery()
-    {
-        $query = new \DbQuery();
-
-        $query->from(self::TABLE_NAME, 'ocr');
-
-        return $query;
-    }
-
-    /**
-     * @param array<mixed> $orderIds
+     * @return mixed
      *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
-     * @throws \PrestaShopDatabaseException
+     * @throws \PrestaShopException
      */
-    public function getOrderCartRules($orderIds)
+    public function generateBaseQuery()
     {
-        if (!$orderIds) {
-            return [];
-        }
+        $this->query = new \DbQuery();
 
-        $query = $this->getBaseQuery();
+        $this->query->from(self::TABLE_NAME, 'ocr');
 
-        $query->select('ocr.id_order_cart_rule,ocr.id_order,ocr.id_cart_rule,ocr.id_order_invoice,ocr.name,ocr.value,ocr.value_tax_excl, ocr.free_shipping');
+        $this->query->select('ocr.id_order_cart_rule');
+        $this->query->select('ocr.id_order');
+        $this->query->select('ocr.id_cart_rule');
+        $this->query->select('ocr.id_order_invoice');
+        $this->query->select('ocr.name');
+        $this->query->select('ocr.value');
+        $this->query->select('ocr.value_tax_excl');
+        $this->query->select('ocr.free_shipping');
 
         if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.7.0', '>=')) {
-            $query->select('ocr.deleted');
+            $this->query->select('ocr.deleted');
         }
-        $query->where('ocr.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')');
-
-        return $this->db->executeS($query);
     }
 
     /**
-     * @param array<mixed> $orderIds
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     * @param bool $debug
      *
      * @return array<mixed>
      *
+     * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getOrderCartRuleIdsByOrderIds($orderIds)
+    public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
-        if (!$orderIds) {
-            return [];
+        $this->generateBaseQuery();
+
+        $this->query->limit((int) $limit, (int) $offset);
+
+        return $this->runQuery($debug);
+    }
+
+    /**
+     * @param int $limit
+     * @param array<mixed> $contentIds
+     * @param string $langIso
+     * @param bool $debug
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
+    {
+        $this->generateBaseQuery();
+
+        $this->query->where('ocr.id_order IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->limit($limit);
+
+        return $this->runQuery($debug);
+    }
+
+    /**
+     * @param int $offset
+     * @param string $langIso
+     * @param bool $debug
+     *
+     * @return int
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function countFullSyncContentLeft($offset, $langIso, $debug)
+    {
+        $result = $this->getContentsForFull($offset, 1, $langIso, $debug);
+
+        if (!is_array($result) || empty($result)) {
+            return 0;
         }
 
-        $query = $this->getBaseQuery();
-
-        $query->select('ocr.id_order_cart_rule as id');
-        $query->where('ocr.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')');
-
-        $result = $this->db->executeS($query);
-
-        return is_array($result) ? $result : [];
+        return count($result);
     }
 }
