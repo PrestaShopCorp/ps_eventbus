@@ -4,8 +4,8 @@ namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator;
-use PrestaShop\Module\PsEventbus\Interfaces\ProxyServiceInterface;
-use PrestaShop\Module\PsEventbus\Interfaces\ShopContentServiceInterface;
+use PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface;
+use PrestaShop\Module\PsEventbus\Service\ShopContent\ShopContentServiceInterface;
 use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;

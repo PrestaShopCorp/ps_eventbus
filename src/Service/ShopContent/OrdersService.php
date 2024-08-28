@@ -4,7 +4,7 @@ namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
-use PrestaShop\Module\PsEventbus\Interfaces\ShopContentServiceInterface;
+use PrestaShop\Module\PsEventbus\Service\ShopContent\ShopContentServiceInterface;
 use PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository;
 use PrestaShop\Module\PsEventbus\Repository\NewRepositoryTemp\OrderRepository;
 

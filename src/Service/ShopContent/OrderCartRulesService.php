@@ -3,7 +3,7 @@
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Interfaces\ShopContentServiceInterface;
+use PrestaShop\Module\PsEventbus\Service\ShopContent\ShopContentServiceInterface;
 use PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository;
 
 class OrderCartRulesService implements ShopContentServiceInterface
@@ -84,7 +84,7 @@ class OrderCartRulesService implements ShopContentServiceInterface
     }
 
     /**
-     * @param array<mixed> $orders
+     * @param array<mixed> $cartRules
      * @param string $langIso
      *
      * @return void
