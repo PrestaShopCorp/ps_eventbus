@@ -1,6 +1,6 @@
 <?php
 
-namespace PrestaShop\Module\PsEventbus\Repository;
+namespace PrestaShop\Module\PsEventbus\Repository\NewRepositoryTemp;
 
 use PrestaShop\Module\PsEventbus\Service\CommonService;
 
