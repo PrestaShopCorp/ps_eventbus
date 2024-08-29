@@ -11,7 +11,7 @@ class OrderCartRulesService implements ShopContentServiceInterface
     private $orderCartRuleRepository;
 
     public function __construct(
-        OrderCartRuleRepository $orderCartRuleRepository,
+        OrderCartRuleRepository $orderCartRuleRepository
     ) {
         $this->orderCartRuleRepository = $orderCartRuleRepository;
     }
