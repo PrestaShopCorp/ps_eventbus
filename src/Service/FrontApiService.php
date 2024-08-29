@@ -2,8 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use LogicException;
-use Exception;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
@@ -13,11 +11,7 @@ use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
-use PrestaShopException;
-use PrestaShopDatabaseException;
-use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
-use Symfony\Component\Translation\Exception\InvalidArgumentException;
 
 class FrontApiService
 {
@@ -192,22 +186,23 @@ class FrontApiService
     }
 
     /**
-     * 
-     * @param mixed $exception 
-     * @param mixed $ise2e 
+     * @param mixed $exception
+     * @param mixed $ise2e
+     *
      * @return void
-     * 
-     * @throws Exception 
+     *
+     * @throws \Exception
      */
-    private function catchGenericException($exception, $ise2e) {
+    private function catchGenericException($exception, $ise2e)
+    {
         $this->errorHandler->handle($exception);
 
-            // if debug mode enabled, print error
-            if (_PS_MODE_DEV_ == true && $ise2e == false) {
-                throw $exception;
-            }
+        // if debug mode enabled, print error
+        if (_PS_MODE_DEV_ == true && $ise2e == false) {
+            throw $exception;
+        }
 
-            CommonService::dieWithResponse(['message' => 'An error occured. Please check shop logs for more information'], 500);
+        CommonService::dieWithResponse(['message' => 'An error occured. Please check shop logs for more information'], 500);
     }
 
     /**
