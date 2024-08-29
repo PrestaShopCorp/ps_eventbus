@@ -1,0 +1,8 @@
+services:
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderCartRuleRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderCartRuleRepository
+    public: true

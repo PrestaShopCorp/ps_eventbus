@@ -29,6 +29,9 @@ class ps_EventbusApiFrontModuleFrontController extends ModuleFrontController
         /** @var bool $debug */
         $debug = Tools::getValue('debug') == 1;
 
+        /** @var bool $ise2e */
+        $ise2e = Tools::getValue('is_e2e') == 1;
+
         /** @var Ps_eventbus $module */
         $module = Module::getInstanceByName('ps_eventbus');
 
@@ -38,6 +41,6 @@ class ps_EventbusApiFrontModuleFrontController extends ModuleFrontController
         // edit shopContent for matching Config.php const
         $shopContentEdited = str_replace('-', '_', $shopContent);
 
-        $frontApiService->handleDataSync($shopContentEdited, $jobId, $langIso, $limit, $isFull, $debug);
+        $frontApiService->handleDataSync($shopContentEdited, $jobId, $langIso, $limit, $isFull, $debug, $ise2e);
     }
 }

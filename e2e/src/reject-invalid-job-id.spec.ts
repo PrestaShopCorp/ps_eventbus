@@ -19,7 +19,7 @@ describe('Reject invalid job-id', () => {
   it.each(shopContents)(`%s should return 454 with an invalid job id (sync-api status 454)`, async (shopContent) => {
       expect.assertions(6);
       // arrange
-      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=${shopContent}&limit=5&job_id=${jobId}`
+      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&is_e2e=1&shop_content=${shopContent}&limit=5&job_id=${jobId}`
       const message$ = probe({params: {id: jobId}});
 
       //act

@@ -4,13 +4,12 @@ namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator;
-use PrestaShop\Module\PsEventbus\Interfaces\ProxyServiceInterface;
-use PrestaShop\Module\PsEventbus\Interfaces\ShopContentServiceInterface;
 use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
+use PrestaShop\Module\PsEventbus\Service\ShopContent\ShopContentServiceInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 class SynchronizationService
@@ -87,7 +86,7 @@ class SynchronizationService
     ) {
         $response = [];
 
-        $serviceName = str_replace('-', '', ucwords($shopContent, '-'));
+        $serviceName = str_replace('_', '', ucwords($shopContent, '_'));
         $serviceId = 'PrestaShop\Module\PsEventbus\Service\ShopContent\\' . $serviceName . 'Service'; // faire un mapping entre le service et le nom du shopcontent
 
         /** @var \Ps_eventbus */
@@ -152,7 +151,7 @@ class SynchronizationService
     ) {
         $response = [];
 
-        $serviceName = str_replace('-', '', ucwords($shopContent, '-'));
+        $serviceName = str_replace('_', '', ucwords($shopContent, '_'));
         $serviceId = 'PrestaShop\Module\PsEventbus\Service\ShopContent\\' . $serviceName . 'Service';
 
         /** @var \Ps_eventbus */

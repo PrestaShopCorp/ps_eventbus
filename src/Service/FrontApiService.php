@@ -11,6 +11,7 @@ use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 class FrontApiService
 {
@@ -71,10 +72,11 @@ class FrontApiService
      * @param int $limit
      * @param bool $isFull
      * @param bool $debug
+     * @param bool $ise2e
      *
      * @return void
      */
-    public function handleDataSync($shopContent, $jobId, $langIso, $limit, $isFull, $debug)
+    public function handleDataSync($shopContent, $jobId, $langIso, $limit, $isFull, $debug, $ise2e)
     {
         try {
             if (!in_array($shopContent, array_merge(Config::SHOP_CONTENTS, [Config::COLLECTION_HEALTHCHECK]), true)) {
@@ -176,10 +178,31 @@ class FrontApiService
         } catch (FirebaseException $exception) {
             $this->errorHandler->handle($exception);
             CommonService::exitWithExceptionMessage($exception);
+        } catch (ServiceNotFoundException $exception) {
+            $this->catchGenericException($exception, $ise2e);
         } catch (\Exception $exception) {
-            $this->errorHandler->handle($exception);
-            CommonService::dieWithResponse(['message' => 'An error occured. Please check shop logs for more information'], 500);
+            $this->catchGenericException($exception, $ise2e);
         }
+    }
+
+    /**
+     * @param mixed $exception
+     * @param mixed $ise2e
+     *
+     * @return void
+     *
+     * @throws \Exception
+     */
+    private function catchGenericException($exception, $ise2e)
+    {
+        $this->errorHandler->handle($exception);
+
+        // if debug mode enabled, print error
+        if (_PS_MODE_DEV_ == true && $ise2e == false) {
+            throw $exception;
+        }
+
+        CommonService::dieWithResponse(['message' => 'An error occured. Please check shop logs for more information'], 500);
     }
 
     /**

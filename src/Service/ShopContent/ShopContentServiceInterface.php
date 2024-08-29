@@ -1,17 +1,9 @@
 <?php
 
-namespace PrestaShop\Module\PsEventbus\Interfaces;
+namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
-/**
- * @property \DbQuery $query
- */
-interface RepositoryInterface
+interface ShopContentServiceInterface
 {
-    /**
-     * @return mixed
-     */
-    public function generateBaseQuery();
-
     /**
      * @param int $offset
      * @param int $limit
@@ -24,7 +16,7 @@ interface RepositoryInterface
 
     /**
      * @param int $limit
-     * @param array<mixed> $contentIds
+     * @param mixed $contentIds
      * @param string $langIso
      * @param bool $debug
      *

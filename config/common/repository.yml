@@ -68,10 +68,6 @@ services:
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
 
-  PrestaShop\Module\PsEventbus\Repository\NewRepositoryTemp\OrderRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\NewRepositoryTemp\OrderRepository
-    public: true
-
   PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository:
     class: PrestaShop\Module\PsEventbus\Repository\OrderDetailsRepository
     public: true
@@ -80,10 +76,6 @@ services:
 
   PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository:
     class: PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository
-    public: true
-
-  PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository
     public: true
 
   PrestaShop\Module\PsEventbus\Repository\CartRepository:
