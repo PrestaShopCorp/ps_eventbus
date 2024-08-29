@@ -2,7 +2,6 @@ imports:
   - { resource: api.yml }
   - { resource: ../common/common.yml }
   - { resource: ../common/decorator.yml }
-  - { resource: ../common/provider.yml }
   - { resource: ../common/repository.yml }
   - { resource: ../common/builder.yml }
 
