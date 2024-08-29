@@ -11,6 +11,7 @@ use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 class FrontApiService
 {
@@ -74,7 +75,7 @@ class FrontApiService
      *
      * @return void
      */
-    public function handleDataSync($shopContent, $jobId, $langIso, $limit, $isFull, $debug)
+    public function handleDataSync($shopContent, $jobId, $langIso, $limit, $isFull, $debug, $ise2e)
     {
         try {
             if (!in_array($shopContent, array_merge(Config::SHOP_CONTENTS, [Config::COLLECTION_HEALTHCHECK]), true)) {
@@ -176,11 +177,11 @@ class FrontApiService
         } catch (FirebaseException $exception) {
             $this->errorHandler->handle($exception);
             CommonService::exitWithExceptionMessage($exception);
-        } catch (\Exception $exception) {
+        } catch (\Exception | ServiceNotFoundException $exception) {
             $this->errorHandler->handle($exception);
 
             // if debug mode enabled, print error
-            if (_PS_MODE_DEV_ == true) {
+            if (_PS_MODE_DEV_ == true && $ise2e == false) {
                 throw $exception;
             }
 

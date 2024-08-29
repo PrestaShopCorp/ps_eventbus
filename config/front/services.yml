@@ -65,4 +65,4 @@ services:
     class:  PrestaShop\Module\PsEventbus\Service\ShopContent\OrderCartRulesService
     public: true
     arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderCartRuleRepository'

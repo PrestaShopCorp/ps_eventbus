@@ -83,7 +83,7 @@ export function doFullSync(jobId: string, shopContent: ShopContent, options?: Mo
   const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
 
   const requestNext = (full: number) => axios.post<PsEventbusSyncResponse>(
-    `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=${shopContent}&limit=5&full=${full}&job_id=${jobId}`,
+    `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&is_e2e=1&shop_content=${shopContent}&limit=5&full=${full}&job_id=${jobId}`,
     callId,
     {
       headers: {

@@ -11,7 +11,7 @@ export const shopContentMapping = {
   'specific_prices': 'specific-prices',
   'custom_product_carriers' : 'custom-product-carriers',
   'customers': 'customers',
-  'taxonomies': 'google-taxonomies',
+  'taxonomies': 'taxonomies',
   'modules': 'modules',
   'orders': 'orders',
   'order_details': 'order-details',

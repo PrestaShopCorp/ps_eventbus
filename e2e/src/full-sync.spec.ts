@@ -15,7 +15,7 @@ import { ShopContent, shopContentList } from "./helpers/shop-contents";
 expect.extend(matchers);
 
 // these ShopContent will be excluded from the following test suite
-const EXCLUDED_API: ShopContent[] = ["google-taxonomies"];
+const EXCLUDED_API: ShopContent[] = ["taxonomies"];
 
 // FIXME : these api can't send anything to the mock api because the database is empty from the factory
 const MISSING_TEST_DATA: ShopContent[] = [
@@ -64,8 +64,8 @@ describe('Full Sync', () => {
   });
 
   // TODO : some versions of prestashop include ps_facebook out of the box, this test can't reliably be run for all versions
-  describe.skip("google-taxonomies", () => {
-    const shoContent = "google-taxonomies";
+  describe.skip("taxonomies", () => {
+    const shoContent = "taxonomies";
 
     // TODO : apiGoogleTaxonomies requires an additional module to be present : devise a specific test setup for this endpoint
     it.skip(`${shoContent} should accept full sync`, async () => {});
@@ -74,7 +74,7 @@ describe('Full Sync', () => {
 
     it(`${shoContent} should reject full sync when ps_facebook is not installed`, async () => {
       // arrange
-      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=${shoContent}&limit=5&full=1&job_id=${jobId}`;
+      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&is_e2e=1&shop_content=${shoContent}&limit=5&full=1&job_id=${jobId}`;
 
       const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
 
@@ -101,7 +101,7 @@ describe('Full Sync', () => {
   describe.each(shopContents)("%s", (shopContent) => {
     it(`${shopContent} should accept full sync`, async () => {
       // arrange
-      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=${shopContent}&limit=5&full=1&job_id=${jobId}`;
+      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&is_e2e=1&shop_content=${shopContent}&limit=5&full=1&job_id=${jobId}`;
 
       const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
 
@@ -133,7 +133,7 @@ describe('Full Sync', () => {
     } else {
       it(`${shopContent} should upload to collector`, async () => {
         // arrange
-        const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=${shopContent}&limit=5&full=1&job_id=${jobId}`;
+        const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&is_e2e=1&shop_content=${shopContent}&limit=5&full=1&job_id=${jobId}`;
         const message$ = probe({ url: `/upload/${jobId}` });
 
         const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
