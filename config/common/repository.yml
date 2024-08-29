@@ -74,10 +74,6 @@ services:
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
 
-  PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository
-    public: true
-
   PrestaShop\Module\PsEventbus\Repository\CartRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CartRepository
     public: true

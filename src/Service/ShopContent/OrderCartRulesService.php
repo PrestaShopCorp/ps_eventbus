@@ -26,21 +26,21 @@ class OrderCartRulesService implements ShopContentServiceInterface
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $orders = $this->orderCartRuleRepository->getContentsForFull($offset, $limit, $langIso, $debug);
+        $orderCartRules = $this->orderCartRuleRepository->getContentsForFull($offset, $limit, $langIso, $debug);
 
-        if (empty($orders)) {
+        if (empty($orderCartRules)) {
             return [];
         }
 
-        $this->castOrderCartRules($orders, $langIso);
+        $this->castOrderCartRules($orderCartRules, $langIso);
 
-        return array_map(function ($order) {
+        return array_map(function ($orderCartRule) {
             return [
-                'id' => $order['id_order'],
-                'collection' => Config::COLLECTION_ORDERS,
-                'properties' => $order,
+                'id' => $orderCartRule['id_order_cart_rule'],
+                'collection' => Config::COLLECTION_ORDER_CART_RULES,
+                'properties' => $orderCartRule,
             ];
-        }, $orders);
+        }, $orderCartRules);
     }
 
     /**
@@ -53,21 +53,21 @@ class OrderCartRulesService implements ShopContentServiceInterface
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $orders = $this->orderCartRuleRepository->getContentsForIncremental($limit, $contentIds, $langIso, $debug);
+        $orderCartRules = $this->orderCartRuleRepository->getContentsForIncremental($limit, $contentIds, $langIso, $debug);
 
-        if (empty($orders)) {
+        if (empty($orderCartRules)) {
             return [];
         }
 
-        $this->castOrderCartRules($orders, $langIso);
+        $this->castOrderCartRules($orderCartRules, $langIso);
 
-        return array_map(function ($order) {
+        return array_map(function ($orderCartRule) {
             return [
-                'id' => $order['id_order'],
-                'collection' => Config::COLLECTION_ORDERS,
-                'properties' => $order,
+                'id' => $orderCartRule['id_order_cart_rule'],
+                'collection' => Config::COLLECTION_ORDER_CART_RULES,
+                'properties' => $orderCartRule,
             ];
-        }, $orders);
+        }, $orderCartRules);
     }
 
     /**
@@ -83,41 +83,41 @@ class OrderCartRulesService implements ShopContentServiceInterface
     }
 
     /**
-     * @param array<mixed> $cartRules
+     * @param array<mixed> $orderCartRules
      * @param string $langIso
      *
      * @return void
      */
-    public function castOrderCartRules(&$cartRules, $langIso)
+    public function castOrderCartRules(&$orderCartRules, $langIso)
     {
-        foreach ($cartRules as &$cartRule) {
-            $cartRule['id_cart_rule'] = (int) $cartRule['id_cart_rule'];
-            $cartRule['id_customer'] = (int) $cartRule['id_customer'];
-            $cartRule['quantity'] = (int) $cartRule['quantity'];
-            $cartRule['quantity_per_user'] = (int) $cartRule['quantity_per_user'];
-            $cartRule['priority'] = (int) $cartRule['priority'];
-            $cartRule['partial_use'] = (bool) $cartRule['partial_use'];
-            $cartRule['minimum_amount'] = (float) $cartRule['minimum_amount'];
-            $cartRule['minimum_amount_tax'] = (bool) $cartRule['minimum_amount_tax'];
-            $cartRule['minimum_amount_currency'] = (int) $cartRule['minimum_amount_currency'];
-            $cartRule['minimum_amount_shipping'] = (bool) $cartRule['minimum_amount_shipping'];
-            $cartRule['country_restriction'] = (bool) $cartRule['country_restriction'];
-            $cartRule['carrier_restriction'] = (bool) $cartRule['carrier_restriction'];
-            $cartRule['group_restriction'] = (bool) $cartRule['group_restriction'];
-            $cartRule['cart_rule_restriction'] = (bool) $cartRule['cart_rule_restriction'];
-            $cartRule['product_restriction'] = (bool) $cartRule['product_restriction'];
-            $cartRule['shop_restriction'] = (bool) $cartRule['shop_restriction'];
-            $cartRule['free_shipping'] = (bool) $cartRule['free_shipping'];
-            $cartRule['reduction_percent'] = (float) $cartRule['reduction_percent'];
-            $cartRule['reduction_amount'] = (float) $cartRule['reduction_amount'];
-            $cartRule['reduction_tax'] = (bool) $cartRule['reduction_tax'];
-            $cartRule['reduction_currency'] = (int) $cartRule['reduction_currency'];
-            $cartRule['reduction_product'] = (int) $cartRule['reduction_product'];
-            $cartRule['reduction_exclude_special'] = (bool) $cartRule['reduction_exclude_special'];
-            $cartRule['gift_product'] = (int) $cartRule['gift_product'];
-            $cartRule['gift_product_attribute'] = (int) $cartRule['gift_product_attribute'];
-            $cartRule['highlight'] = (bool) $cartRule['highlight'];
-            $cartRule['active'] = (bool) $cartRule['active'];
+        foreach ($orderCartRules as &$orderCartRule) {
+            $orderCartRule['id_cart_rule'] = (int) $orderCartRule['id_cart_rule'];
+            $orderCartRule['id_customer'] = (int) $orderCartRule['id_customer'];
+            $orderCartRule['quantity'] = (int) $orderCartRule['quantity'];
+            $orderCartRule['quantity_per_user'] = (int) $orderCartRule['quantity_per_user'];
+            $orderCartRule['priority'] = (int) $orderCartRule['priority'];
+            $orderCartRule['partial_use'] = (bool) $orderCartRule['partial_use'];
+            $orderCartRule['minimum_amount'] = (float) $orderCartRule['minimum_amount'];
+            $orderCartRule['minimum_amount_tax'] = (bool) $orderCartRule['minimum_amount_tax'];
+            $orderCartRule['minimum_amount_currency'] = (int) $orderCartRule['minimum_amount_currency'];
+            $orderCartRule['minimum_amount_shipping'] = (bool) $orderCartRule['minimum_amount_shipping'];
+            $orderCartRule['country_restriction'] = (bool) $orderCartRule['country_restriction'];
+            $orderCartRule['carrier_restriction'] = (bool) $orderCartRule['carrier_restriction'];
+            $orderCartRule['group_restriction'] = (bool) $orderCartRule['group_restriction'];
+            $orderCartRule['cart_rule_restriction'] = (bool) $orderCartRule['cart_rule_restriction'];
+            $orderCartRule['product_restriction'] = (bool) $orderCartRule['product_restriction'];
+            $orderCartRule['shop_restriction'] = (bool) $orderCartRule['shop_restriction'];
+            $orderCartRule['free_shipping'] = (bool) $orderCartRule['free_shipping'];
+            $orderCartRule['reduction_percent'] = (float) $orderCartRule['reduction_percent'];
+            $orderCartRule['reduction_amount'] = (float) $orderCartRule['reduction_amount'];
+            $orderCartRule['reduction_tax'] = (bool) $orderCartRule['reduction_tax'];
+            $orderCartRule['reduction_currency'] = (int) $orderCartRule['reduction_currency'];
+            $orderCartRule['reduction_product'] = (int) $orderCartRule['reduction_product'];
+            $orderCartRule['reduction_exclude_special'] = (bool) $orderCartRule['reduction_exclude_special'];
+            $orderCartRule['gift_product'] = (int) $orderCartRule['gift_product'];
+            $orderCartRule['gift_product_attribute'] = (int) $orderCartRule['gift_product_attribute'];
+            $orderCartRule['highlight'] = (bool) $orderCartRule['highlight'];
+            $orderCartRule['active'] = (bool) $orderCartRule['active'];
         }
     }
 }

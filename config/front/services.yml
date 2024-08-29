@@ -66,3 +66,9 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderCartRuleRepository'
+  
+  PrestaShop\Module\PsEventbus\Service\ShopContent\OrderStatuseHistoriesService:
+    class:  PrestaShop\Module\PsEventbus\Service\ShopContent\OrderStatuseHistoriesService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderStatuseHistoryRepository'
