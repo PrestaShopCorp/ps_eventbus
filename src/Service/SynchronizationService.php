@@ -4,13 +4,12 @@ namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator;
-use PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface;
-use PrestaShop\Module\PsEventbus\Service\ShopContent\ShopContentServiceInterface;
 use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
+use PrestaShop\Module\PsEventbus\Service\ShopContent\ShopContentServiceInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 class SynchronizationService

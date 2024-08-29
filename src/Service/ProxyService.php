@@ -8,7 +8,6 @@ use PrestaShop\Module\PsEventbus\Api\CollectorApiClient;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
-use PrestaShop\Module\PsEventbus\Service\ProxyServiceInterface;
 
 class ProxyService implements ProxyServiceInterface
 {

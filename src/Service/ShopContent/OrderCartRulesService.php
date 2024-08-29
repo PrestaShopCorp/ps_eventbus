@@ -3,7 +3,6 @@
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Service\ShopContent\ShopContentServiceInterface;
 use PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderCartRuleRepository;
 
 class OrderCartRulesService implements ShopContentServiceInterface

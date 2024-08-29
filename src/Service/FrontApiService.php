@@ -72,6 +72,7 @@ class FrontApiService
      * @param int $limit
      * @param bool $isFull
      * @param bool $debug
+     * @param bool $ise2e
      *
      * @return void
      */
@@ -177,7 +178,7 @@ class FrontApiService
         } catch (FirebaseException $exception) {
             $this->errorHandler->handle($exception);
             CommonService::exitWithExceptionMessage($exception);
-        } catch (\Exception | ServiceNotFoundException $exception) {
+        } catch (\Exception|ServiceNotFoundException $exception) {
             $this->errorHandler->handle($exception);
 
             // if debug mode enabled, print error

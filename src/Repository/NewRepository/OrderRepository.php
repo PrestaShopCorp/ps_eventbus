@@ -2,9 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
-use PrestaShop\Module\PsEventbus\Repository\NewRepository\RepositoryInterface;
-use PrestaShop\Module\PsEventbus\Repository\NewRepository\AbstractRepository;
-
 class OrderRepository extends AbstractRepository implements RepositoryInterface
 {
     const ORDERS_TABLE = 'orders';
@@ -38,7 +35,7 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
         $this->query->select('o.conversion_rate');
         $this->query->select('o.total_paid_tax_excl');
         $this->query->select('o.total_paid_tax_incl');
-        
+
         $this->query->select('c.iso_code as currency');
         $this->query->select('o.module as payment_module');
         $this->query->select('o.payment as payment_mode');

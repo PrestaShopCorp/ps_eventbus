@@ -2,9 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
-use PrestaShop\Module\PsEventbus\Repository\NewRepository\RepositoryInterface;
-use PrestaShop\Module\PsEventbus\Repository\NewRepository\AbstractRepository;
-
 class OrderCartRuleRepository extends AbstractRepository implements RepositoryInterface
 {
     const TABLE_NAME = 'order_cart_rule';
