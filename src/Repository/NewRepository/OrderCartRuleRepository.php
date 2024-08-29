@@ -1,9 +1,9 @@
 <?php
 
-namespace PrestaShop\Module\PsEventbus\Repository;
+namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
-use PrestaShop\Module\PsEventbus\Repository\RepositoryInterface;
-use PrestaShop\Module\PsEventbus\Repository\AbstractRepository;
+use PrestaShop\Module\PsEventbus\Repository\NewRepository\RepositoryInterface;
+use PrestaShop\Module\PsEventbus\Repository\NewRepository\AbstractRepository;
 
 class OrderCartRuleRepository extends AbstractRepository implements RepositoryInterface
 {

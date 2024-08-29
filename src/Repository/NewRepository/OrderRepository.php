@@ -1,9 +1,9 @@
 <?php
 
-namespace PrestaShop\Module\PsEventbus\Repository\NewRepositoryTemp;
+namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
-use PrestaShop\Module\PsEventbus\Interfaces\RepositoryInterface;
-use PrestaShop\Module\PsEventbus\Repository\NewRepositoryTemp\AbstractRepository;
+use PrestaShop\Module\PsEventbus\Repository\NewRepository\RepositoryInterface;
+use PrestaShop\Module\PsEventbus\Repository\NewRepository\AbstractRepository;
 
 class OrderRepository extends AbstractRepository implements RepositoryInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace PrestaShop\Module\PsEventbus\Repository;
+namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
 /**
  * @property \DbQuery $query

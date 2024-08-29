@@ -1,6 +1,7 @@
 imports:
   - { resource: ../common/common.yml }
   - { resource: ../common/repository.yml }
+  - { resource: ../common/new-repository.yml }
   - { resource: ../front/services.yml }
 
 services:

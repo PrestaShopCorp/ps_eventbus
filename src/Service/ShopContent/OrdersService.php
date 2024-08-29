@@ -6,7 +6,7 @@ use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\ShopContentServiceInterface;
 use PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository;
-use PrestaShop\Module\PsEventbus\Repository\NewRepositoryTemp\OrderRepository;
+use PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderRepository;
 
 class OrdersService implements ShopContentServiceInterface
 {

@@ -3,6 +3,7 @@ imports:
   - { resource: ../common/common.yml }
   - { resource: ../common/decorator.yml }
   - { resource: ../common/repository.yml }
+  - { resource: ../common/new-repository.yml }
   - { resource: ../common/builder.yml }
 
 services:
@@ -56,7 +57,7 @@ services:
     class:  PrestaShop\Module\PsEventbus\Service\ShopContent\OrdersService
     public: true
     arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\NewRepositoryTemp\OrderRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
   
