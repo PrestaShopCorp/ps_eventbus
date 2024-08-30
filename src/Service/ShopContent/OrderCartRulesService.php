@@ -32,7 +32,7 @@ class OrderCartRulesService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castOrderCartRules($orderCartRules, $langIso);
+        $this->castOrderCartRules($orderCartRules);
 
         return array_map(function ($orderCartRule) {
             return [
@@ -59,7 +59,7 @@ class OrderCartRulesService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castOrderCartRules($orderCartRules, $langIso);
+        $this->castOrderCartRules($orderCartRules);
 
         return array_map(function ($orderCartRule) {
             return [

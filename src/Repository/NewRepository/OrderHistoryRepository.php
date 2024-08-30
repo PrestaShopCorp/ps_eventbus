@@ -8,7 +8,7 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
 
     /**
      * @param string $langIso
-     * 
+     *
      * @return mixed
      *
      * @throws \PrestaShopException
@@ -123,7 +123,6 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
 
         $this->query->where('oh.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')');
 
-
         return $this->runQuery($debug);
-}
+    }
 }

@@ -10,7 +10,8 @@ class OrderHistoriesService implements ShopContentServiceInterface
     /** @var OrderHistoryRepository */
     private $orderHistoryRepository;
 
-    public function __construct(OrderHistoryRepository $orderHistoryRepository) {
+    public function __construct(OrderHistoryRepository $orderHistoryRepository)
+    {
         $this->orderHistoryRepository = $orderHistoryRepository;
     }
 

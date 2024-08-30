@@ -8,7 +8,7 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
 
     /**
      * @param string $langIso
-     * 
+     *
      * @return mixed
      *
      * @throws \PrestaShopException

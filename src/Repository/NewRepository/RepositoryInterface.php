@@ -9,7 +9,7 @@ interface RepositoryInterface
 {
     /**
      * @param string $langIso
-     * 
+     *
      * @return mixed
      */
     public function generateBaseQuery($langIso);

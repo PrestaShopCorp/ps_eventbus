@@ -4,8 +4,8 @@ namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
-use PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderRepository;
 use PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderHistoryRepository;
+use PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderRepository;
 
 class OrdersService implements ShopContentServiceInterface
 {
@@ -151,7 +151,7 @@ class OrdersService implements ShopContentServiceInterface
     /**
      * @param array<mixed> $orders
      * @param array<mixed> $order
-     * @param int|null $langIso
+     * @param string $langIso
      * @param bool $debug
      *
      * @return bool

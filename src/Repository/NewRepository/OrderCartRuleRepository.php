@@ -8,7 +8,7 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
 
     /**
      * @param string $langIso
-     * 
+     *
      * @return mixed
      *
      * @throws \PrestaShopException
