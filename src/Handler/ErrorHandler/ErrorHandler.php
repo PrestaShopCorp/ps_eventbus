@@ -93,7 +93,7 @@ class ErrorHandler implements ErrorHandlerInterface
         \PrestaShopLogger::addLog(
             $error->getMessage() . ' : ' . $error->getFile() . ':' . $error->getLine() . ' | ' . $error->getTraceAsString(),
             3,
-            $error->getCode(),
+            $error->getCode() > 0 ? $error->getCode() : 500,
             'Module',
             \Module::getModuleIdByName('ps_eventbus'),
             true

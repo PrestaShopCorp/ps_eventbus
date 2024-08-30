@@ -2,9 +2,9 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
-class OrderCartRuleRepository extends AbstractRepository implements RepositoryInterface
+class OrderStatusHistoryRepository extends AbstractRepository implements RepositoryInterface
 {
-    const TABLE_NAME = 'order_cart_rule';
+    const TABLE_NAME = 'order_history';
 
     /**
      * @param string $langIso
@@ -15,24 +15,29 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
      */
     public function generateBaseQuery($langIso)
     {
+        $langId = (int) \Language::getIdByIso($langIso);
+
         $this->query = new \DbQuery();
 
         $this->query
-            ->from(self::TABLE_NAME, 'ocr');
+            ->from(self::TABLE_NAME, 'osh')
+            ->innerJoin('order_state', 'os', 'os.id_order_state = osh.id_order_State')
+            ->innerJoin('order_state_lang', 'osl', 'osl.id_order_state = os.id_order_State AND osl.id_lang = ' . (int) $langId)
+        ;
 
         $this->query
-            ->select('ocr.id_order_cart_rule')
-            ->select('ocr.id_order')
-            ->select('ocr.id_cart_rule')
-            ->select('ocr.id_order_invoice')
-            ->select('ocr.name')
-            ->select('ocr.value')
-            ->select('ocr.value_tax_excl')
-            ->select('ocr.free_shipping');
-
-        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.7.0', '>=')) {
-            $this->query->select('ocr.deleted');
-        }
+            ->select('osh.id_order_state')
+            ->select('osl.name')
+            ->select('osl.template')
+            ->select('osh.date_add')
+            ->select('osh.id_order')
+            ->select('osh.id_order_history')
+            ->select('os.logable')
+            ->select('os.delivery')
+            ->select('os.shipped')
+            ->select('os.paid')
+            ->select('os.deleted')
+        ;
     }
 
     /**
@@ -72,7 +77,8 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
 
         $this->query
             ->where('ocr.id_order IN(' . implode(',', array_map('intval', $contentIds)) . ')')
-            ->limit($limit);
+            ->limit($limit)
+        ;
 
         return $this->runQuery($debug);
     }
@@ -97,4 +103,25 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
 
         return count($result);
     }
+
+    /**
+     * @param array<mixed> $orderIds
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getOrderStatusHistoryIdsByOrderIds($orderIds, $langIso, $debug)
+    {
+        if (!$orderIds) {
+            return [];
+        }
+
+        $this->generateBaseQuery($langIso);
+
+        $this->query->where('osh.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')');
+
+
+        return $this->runQuery($debug);
+}
 }
