@@ -4,8 +4,8 @@ namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
+use PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderHistoryRepository;
 use PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderRepository;
-use PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository;
 
 class OrdersService implements ShopContentServiceInterface
 {
@@ -44,7 +44,7 @@ class OrdersService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castOrders($orders, $langIso);
+        $this->castOrders($orders, $langIso, $debug);
 
         return array_map(function ($order) {
             return [
@@ -71,7 +71,7 @@ class OrdersService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castOrders($orders, $langIso);
+        $this->castOrders($orders, $langIso, $debug);
 
         return array_map(function ($order) {
             return [
@@ -97,13 +97,12 @@ class OrdersService implements ShopContentServiceInterface
     /**
      * @param array<mixed> $orders
      * @param string $langIso
+     * @param bool $debug
      *
      * @return void
      */
-    public function castOrders(&$orders, $langIso)
+    public function castOrders(&$orders, $langIso, $debug)
     {
-        $langId = (int) \Language::getIdByIso($langIso);
-
         foreach ($orders as &$order) {
             $order['id_order'] = (int) $order['id_order'];
             $order['id_customer'] = (int) $order['id_customer'];
@@ -114,7 +113,7 @@ class OrdersService implements ShopContentServiceInterface
             $order['refund'] = (float) $order['refund'];
             $order['refund_tax_excl'] = (float) $order['refund_tax_excl'];
             $order['new_customer'] = $order['new_customer'] == 1;
-            $order['is_paid'] = $this->castIsPaidValue($orders, $order, $langId);
+            $order['is_paid'] = $this->castIsPaidValue($orders, $order, $langIso, $debug);
             $order['shipping_cost'] = (float) $order['shipping_cost'];
             $order['total_paid_tax'] = $order['total_paid_tax_incl'] - $order['total_paid_tax_excl'];
             $order['id_carrier'] = (int) $order['id_carrier'];
@@ -152,20 +151,21 @@ class OrdersService implements ShopContentServiceInterface
     /**
      * @param array<mixed> $orders
      * @param array<mixed> $order
-     * @param int|null $langId
+     * @param string $langIso
+     * @param bool $debug
      *
      * @return bool
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function castIsPaidValue($orders, $order, $langId)
+    private function castIsPaidValue($orders, $order, $langIso, $debug)
     {
         $isPaid = $dateAdd = 0;
         $orderIds = $this->arrayFormatter->formatValueArray($orders, 'id_order');
-        /** @var array<mixed> $orderHistoryStatuses */
-        $orderHistoryStatuses = $this->orderHistoryRepository->getOrderHistoryStatuses($orderIds, $langId);
+        /** @var array<mixed> $orderHistoryStatuss */
+        $orderHistoryStatuss = $this->orderHistoryRepository->getOrderHistoryIdsByOrderIds($orderIds, $langIso, $debug);
 
-        foreach ($orderHistoryStatuses as &$orderHistoryStatus) {
+        foreach ($orderHistoryStatuss as &$orderHistoryStatus) {
             if ($order['id_order'] == $orderHistoryStatus['id_order'] && $dateAdd < $orderHistoryStatus['date_add']) {
                 $isPaid = (bool) $orderHistoryStatus['paid'];
                 $dateAdd = $orderHistoryStatus['date_add'];

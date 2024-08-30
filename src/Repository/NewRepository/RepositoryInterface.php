@@ -8,9 +8,11 @@ namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 interface RepositoryInterface
 {
     /**
+     * @param string $langIso
+     *
      * @return mixed
      */
-    public function generateBaseQuery();
+    public function generateBaseQuery($langIso);
 
     /**
      * @param int $offset

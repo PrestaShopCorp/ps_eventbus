@@ -1,6 +1,8 @@
 import R from "ramda";
 
-export const shopContentMapping = {
+// TEMPORARY DISABLED, WAIT ADD ALL SHOP CONTENT
+// AFTER UNCOMMENT THIS, CHANGE ALL "as ShopContent"CAST IN FULLSYNC TEST
+/* export const shopContentMapping = {
   'carriers': 'carriers',
   'carrier_details': 'carrier-details',
   'carts' : 'carts',
@@ -15,7 +17,7 @@ export const shopContentMapping = {
   'modules': 'modules',
   'orders': 'orders',
   'order_details': 'order-details',
-  'order_status_histories': 'order-status-histories',
+  'order_histories': 'order-histories',
   'order_cart_rules': 'order-cart-rules',
   'products': 'products',
   'shops': 'info',
@@ -34,6 +36,12 @@ export const shopContentMapping = {
   'translations': 'translations',
   'images': 'images',
   'image_types': 'image-types'
+} as const; */
+
+export const shopContentMapping = {
+  'orders': 'orders',
+  'order_histories': 'order-histories',
+  'order_cart_rules': 'order-cart-rules',
 } as const;
 
 type ShopContentMapping = typeof shopContentMapping;

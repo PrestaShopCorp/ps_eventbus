@@ -6,3 +6,7 @@ services:
   PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderCartRuleRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderCartRuleRepository
     public: true
+  
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderHistoryRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderHistoryRepository
+    public: true

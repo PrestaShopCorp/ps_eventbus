@@ -15,14 +15,14 @@ import { ShopContent, shopContentList } from "./helpers/shop-contents";
 expect.extend(matchers);
 
 // these ShopContent will be excluded from the following test suite
-const EXCLUDED_API: ShopContent[] = ["taxonomies"];
+const EXCLUDED_API: ShopContent[] = ["taxonomies" as ShopContent];
 
 // FIXME : these api can't send anything to the mock api because the database is empty from the factory
 const MISSING_TEST_DATA: ShopContent[] = [
-  "cart-rules",
-  "custom-product-carriers",
-  "translations",
-  "wishlists",
+  "cart-rules" as ShopContent,
+  "custom-product-carriers" as ShopContent,
+  "translations" as ShopContent,
+  "wishlists" as ShopContent,
 ];
 
 // these fields change from test run to test run, so we replace them with a matcher to only ensure the type and format are correct
@@ -198,7 +198,7 @@ describe('Full Sync', () => {
         // we need to process fixtures and data returned from ps_eventbus to make them easier to compare
         let processedData = syncedData;
         let processedFixture = fixture;
-        if (shopContent === "modules") {
+        if (shopContent  === "modules" as ShopContent) {
           processedData = generatePredictableModuleId(processedData);
           processedFixture = generatePredictableModuleId(processedFixture);
         }

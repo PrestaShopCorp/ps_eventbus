@@ -53,7 +53,7 @@ class Config
     const COLLECTION_ORDERS = 'orders';
     const COLLECTION_ORDER_CART_RULES = 'order_cart_rules';
     const COLLECTION_ORDER_DETAILS = 'order_details';
-    const COLLECTION_ORDER_STATUS_HISTORIES = 'order_status_histories';
+    const COLLECTION_ORDER_HISTORIES = 'order_histories';
     const COLLECTION_PRODUCTS = 'products';
     const COLLECTION_PRODUCT_ATTRIBUTES = 'attributes';
     const COLLECTION_PRODUCT_BUNDLES = 'product_bundles';
@@ -91,7 +91,7 @@ class Config
         self::COLLECTION_ORDERS,
         self::COLLECTION_ORDER_CART_RULES,
         self::COLLECTION_ORDER_DETAILS,
-        self::COLLECTION_ORDER_STATUS_HISTORIES,
+        self::COLLECTION_ORDER_HISTORIES,
         self::COLLECTION_PRODUCTS,
         self::COLLECTION_PRODUCT_ATTRIBUTES,
         self::COLLECTION_PRODUCT_BUNDLES,

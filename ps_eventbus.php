@@ -234,7 +234,7 @@ class Ps_eventbus extends Module
                 return $this->get($serviceName);
             }
 
-            throw new ServiceNotFoundException('Service not found');
+            throw new ServiceNotFoundException($serviceName);
         }
     }
 

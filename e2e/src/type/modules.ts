@@ -1,4 +1,4 @@
-import fixture from '../fixtures/latest/apiModules/modules.json'
+import fixture from '../fixtures/latest/modules.json'
 
 // test type
 const t: Modules[] = fixture;

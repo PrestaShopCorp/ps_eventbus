@@ -1,4 +1,4 @@
-import fixture from '../fixtures/latest/apiProducts/product_suppliers.json';
+import fixture from '../fixtures/latest/product_suppliers.json';
 
 // test type
 const t: ProductSuppliers[] = fixture;

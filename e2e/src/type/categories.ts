@@ -1,4 +1,4 @@
-import fixture from "../fixtures/latest/apiCategories/categories.json"
+import fixture from "../fixtures/latest/categories.json"
 
 // test type
 const t: Categories[] = fixture;
