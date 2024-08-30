@@ -1,4 +1,4 @@
-import fixture from '../fixtures/latest/order_history.json'
+import fixture from '../fixtures/latest/order_histories.json'
 
 // test type
 const t: OrderHistory[] = fixture;
@@ -10,7 +10,7 @@ export type OrderHistory = {
     created_at: string,
     date_add: string,
     id_order: number,
-    id_order_history: number,
+    id_order_histories: number,
     id_order_state: number,
     is_deleted: boolean,
     is_delivered: boolean,
