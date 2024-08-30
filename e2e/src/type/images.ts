@@ -1,4 +1,4 @@
-import fixture from '../fixtures/latest/apiImages/images.json'
+import fixture from '../fixtures/latest/images.json'
 
 // test type
 const t: Images[] = fixture;

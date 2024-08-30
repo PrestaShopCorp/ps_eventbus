@@ -1,9 +1,9 @@
-import fixture from '../fixtures/latest/apiOrders/order_status_history.json'
+import fixture from '../fixtures/latest/order_history.json'
 
 // test type
-const t: OrderStatusHistory[] = fixture;
+const t: OrderHistory[] = fixture;
 
-export type OrderStatusHistory = {
+export type OrderHistory = {
   id: number,
   collection: string,
   properties: {

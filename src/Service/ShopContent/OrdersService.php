@@ -5,26 +5,26 @@ namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderRepository;
-use PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderStatusHistoryRepository;
+use PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderHistoryRepository;
 
 class OrdersService implements ShopContentServiceInterface
 {
     /** @var OrderRepository */
     private $orderRepository;
 
-    /** @var OrderStatusHistoryRepository */
-    private $orderStatusHistoryRepository;
+    /** @var OrderHistoryRepository */
+    private $orderHistoryRepository;
 
     /** @var ArrayFormatter */
     private $arrayFormatter;
 
     public function __construct(
         OrderRepository $orderRepository,
-        OrderStatusHistoryRepository $orderStatusHistoryRepository,
+        OrderHistoryRepository $orderHistoryRepository,
         ArrayFormatter $arrayFormatter
     ) {
         $this->orderRepository = $orderRepository;
-        $this->orderStatusHistoryRepository = $orderStatusHistoryRepository;
+        $this->orderHistoryRepository = $orderHistoryRepository;
         $this->arrayFormatter = $arrayFormatter;
     }
 
@@ -163,7 +163,7 @@ class OrdersService implements ShopContentServiceInterface
         $isPaid = $dateAdd = 0;
         $orderIds = $this->arrayFormatter->formatValueArray($orders, 'id_order');
         /** @var array<mixed> $orderHistoryStatuss */
-        $orderHistoryStatuss = $this->orderStatusHistoryRepository->getOrderStatusHistoryIdsByOrderIds($orderIds, $langIso, $debug);
+        $orderHistoryStatuss = $this->orderHistoryRepository->getOrderHistoryIdsByOrderIds($orderIds, $langIso, $debug);
 
         foreach ($orderHistoryStatuss as &$orderHistoryStatus) {
             if ($order['id_order'] == $orderHistoryStatus['id_order'] && $dateAdd < $orderHistoryStatus['date_add']) {

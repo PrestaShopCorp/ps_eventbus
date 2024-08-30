@@ -1,4 +1,4 @@
-import fixture from '../fixtures/latest/apiSpecificPrices/specific_prices.json'
+import fixture from '../fixtures/latest/specific_prices.json'
 
 // test type
 const t: SpecificPrices[] = fixture;

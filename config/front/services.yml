@@ -58,7 +58,7 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderRepository'
-      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderStatusHistoryRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderHistoryRepository'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
   
   PrestaShop\Module\PsEventbus\Service\ShopContent\OrderCartRulesService:
@@ -67,8 +67,8 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderCartRuleRepository'
   
-  PrestaShop\Module\PsEventbus\Service\ShopContent\OrderStatusHistoriesService:
-    class:  PrestaShop\Module\PsEventbus\Service\ShopContent\OrderStatusHistoriesService
+  PrestaShop\Module\PsEventbus\Service\ShopContent\OrderHistoriesService:
+    class:  PrestaShop\Module\PsEventbus\Service\ShopContent\OrderHistoriesService
     public: true
     arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderStatusHistoryRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderHistoryRepository'

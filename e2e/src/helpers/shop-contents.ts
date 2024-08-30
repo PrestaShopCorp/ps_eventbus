@@ -15,7 +15,7 @@ export const shopContentMapping = {
   'modules': 'modules',
   'orders': 'orders',
   'order_details': 'order-details',
-  'order_status_histories': 'order-status-histories',
+  'order_histories': 'order-histories',
   'order_cart_rules': 'order-cart-rules',
   'products': 'products',
   'shops': 'info',

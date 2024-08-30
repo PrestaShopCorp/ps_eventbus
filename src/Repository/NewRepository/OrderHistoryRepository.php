@@ -2,7 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
-class OrderStatusHistoryRepository extends AbstractRepository implements RepositoryInterface
+class OrderHistoryRepository extends AbstractRepository implements RepositoryInterface
 {
     const TABLE_NAME = 'order_history';
 
@@ -20,18 +20,18 @@ class OrderStatusHistoryRepository extends AbstractRepository implements Reposit
         $this->query = new \DbQuery();
 
         $this->query
-            ->from(self::TABLE_NAME, 'osh')
-            ->innerJoin('order_state', 'os', 'os.id_order_state = osh.id_order_State')
+            ->from(self::TABLE_NAME, 'oh')
+            ->innerJoin('order_state', 'os', 'os.id_order_state = oh.id_order_State')
             ->innerJoin('order_state_lang', 'osl', 'osl.id_order_state = os.id_order_State AND osl.id_lang = ' . (int) $langId)
         ;
 
         $this->query
-            ->select('osh.id_order_state')
+            ->select('oh.id_order_state')
             ->select('osl.name')
             ->select('osl.template')
-            ->select('osh.date_add')
-            ->select('osh.id_order')
-            ->select('osh.id_order_history')
+            ->select('oh.date_add')
+            ->select('oh.id_order')
+            ->select('oh.id_order_history')
             ->select('os.logable')
             ->select('os.delivery')
             ->select('os.shipped')
@@ -76,7 +76,7 @@ class OrderStatusHistoryRepository extends AbstractRepository implements Reposit
         $this->generateBaseQuery($langIso);
 
         $this->query
-            ->where('ocr.id_order IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('oh.id_order IN(' . implode(',', array_map('intval', $contentIds)) . ')')
             ->limit($limit)
         ;
 
@@ -106,12 +106,14 @@ class OrderStatusHistoryRepository extends AbstractRepository implements Reposit
 
     /**
      * @param array<mixed> $orderIds
+     * @param string $langIso
+     * @param bool $debug
      *
      * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getOrderStatusHistoryIdsByOrderIds($orderIds, $langIso, $debug)
+    public function getOrderHistoryIdsByOrderIds($orderIds, $langIso, $debug)
     {
         if (!$orderIds) {
             return [];
@@ -119,7 +121,7 @@ class OrderStatusHistoryRepository extends AbstractRepository implements Reposit
 
         $this->generateBaseQuery($langIso);
 
-        $this->query->where('osh.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')');
+        $this->query->where('oh.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')');
 
 
         return $this->runQuery($debug);
