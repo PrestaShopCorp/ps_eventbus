@@ -30,7 +30,7 @@ class OrderHistoriesService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castOrderHistories($orderHistories, $langIso);
+        $this->castOrderHistories($orderHistories);
 
         return array_map(function ($orderHistory) {
             return [
@@ -57,7 +57,7 @@ class OrderHistoriesService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castOrderHistories($orderHistories, $langIso);
+        $this->castOrderHistories($orderHistories);
 
         return array_map(function ($orderHistory) {
             return [
@@ -87,26 +87,20 @@ class OrderHistoriesService implements ShopContentServiceInterface
      */
     public function castOrderHistories(&$orderHistories)
     {
-        $castedOrderHistories = [];
-
-        foreach ($orderHistories as $orderHistory) {
-            $castedOrderHistory = [];
-            $castedOrderHistory['id_order_state'] = (int) $orderHistory['id_order_state'];
-            $castedOrderHistory['id_order'] = (int) $orderHistory['id_order'];
-            $castedOrderHistory['id_order_histories'] = (int) $orderHistory['id_order_histories'];
-            $castedOrderHistory['name'] = (string) $orderHistory['name'];
-            $castedOrderHistory['template'] = (string) $orderHistory['template'];
-            $castedOrderHistory['date_add'] = $orderHistory['date_add'];
-            $castedOrderHistory['is_validated'] = (bool) $orderHistory['logable'];
-            $castedOrderHistory['is_delivered'] = (bool) $orderHistory['delivery'];
-            $castedOrderHistory['is_shipped'] = (bool) $orderHistory['shipped'];
-            $castedOrderHistory['is_paid'] = (bool) $orderHistory['paid'];
-            $castedOrderHistory['is_deleted'] = (bool) $orderHistory['deleted'];
-            $castedOrderHistory['created_at'] = $castedOrderHistory['date_add'];
-            $castedOrderHistory['updated_at'] = $castedOrderHistory['date_add'];
-            $castedOrderHistories[] = $castedOrderHistory;
+        foreach ($orderHistories as &$orderHistory) {
+            $orderHistory['id_order_state'] = (int) $orderHistory['id_order_state'];
+            $orderHistory['id_order'] = (int) $orderHistory['id_order'];
+            $orderHistory['id_order_histories'] = (int) $orderHistory['id_order_histories'];
+            $orderHistory['name'] = (string) $orderHistory['name'];
+            $orderHistory['template'] = (string) $orderHistory['template'];
+            $orderHistory['date_add'] = $orderHistory['date_add'];
+            $orderHistory['is_validated'] = (bool) $orderHistory['logable'];
+            $orderHistory['is_delivered'] = (bool) $orderHistory['delivery'];
+            $orderHistory['is_shipped'] = (bool) $orderHistory['shipped'];
+            $orderHistory['is_paid'] = (bool) $orderHistory['paid'];
+            $orderHistory['is_deleted'] = (bool) $orderHistory['deleted'];
+            $orderHistory['created_at'] = $orderHistory['date_add'];
+            $orderHistory['updated_at'] = $orderHistory['date_add'];
         }
-
-        return $castedOrderHistories;
     }
 }

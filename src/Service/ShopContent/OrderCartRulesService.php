@@ -84,11 +84,10 @@ class OrderCartRulesService implements ShopContentServiceInterface
 
     /**
      * @param array<mixed> $orderCartRules
-     * @param string $langIso
      *
      * @return void
      */
-    public function castOrderCartRules(&$orderCartRules, $langIso)
+    public function castOrderCartRules(&$orderCartRules)
     {
         foreach ($orderCartRules as &$orderCartRule) {
             $orderCartRule['id_cart_rule'] = (int) $orderCartRule['id_cart_rule'];
