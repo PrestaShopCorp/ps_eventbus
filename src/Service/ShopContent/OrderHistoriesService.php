@@ -35,7 +35,7 @@ class OrderHistoriesService implements ShopContentServiceInterface
 
         return array_map(function ($orderHistory) {
             return [
-                'id' => $orderHistory['id_order_histories'],
+                'id' => $orderHistory['id_order_history'],
                 'collection' => Config::COLLECTION_ORDER_HISTORIES,
                 'properties' => $orderHistory,
             ];
@@ -62,7 +62,7 @@ class OrderHistoriesService implements ShopContentServiceInterface
 
         return array_map(function ($orderHistory) {
             return [
-                'id' => $orderHistory['id_order_histories'],
+                'id' => $orderHistory['id_order_history'],
                 'collection' => Config::COLLECTION_ORDER_HISTORIES,
                 'properties' => $orderHistory,
             ];
@@ -91,7 +91,7 @@ class OrderHistoriesService implements ShopContentServiceInterface
         foreach ($orderHistories as &$orderHistory) {
             $orderHistory['id_order_state'] = (int) $orderHistory['id_order_state'];
             $orderHistory['id_order'] = (int) $orderHistory['id_order'];
-            $orderHistory['id_order_histories'] = (int) $orderHistory['id_order_histories'];
+            $orderHistory['id_order_history'] = (int) $orderHistory['id_order_history'];
             $orderHistory['name'] = (string) $orderHistory['name'];
             $orderHistory['template'] = (string) $orderHistory['template'];
             $orderHistory['date_add'] = $orderHistory['date_add'];
