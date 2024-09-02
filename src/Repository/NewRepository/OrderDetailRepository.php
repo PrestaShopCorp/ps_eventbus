@@ -30,11 +30,11 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
         $this->query
             ->from(self::TABLE_NAME, 'od')
             ->where('od.id_shop = ' . $context->shop->id)
+            ->innerJoin('orders', 'o', 'od.id_order = o.id_order')
             ->leftJoin('order_slip_detail', 'osd', 'od.id_order_detail = osd.id_order_detail')
             ->leftJoin('product_shop', 'ps', 'od.product_id = ps.id_product AND ps.id_shop = ' . (int) $context->shop->id)
             ->leftJoin('currency', 'c', 'c.id_currency = o.id_currency')
             ->leftJoin('lang', 'l', 'o.id_lang = l.id_lang')
-            ->innerJoin('orders', 'o', 'od.id_order = o.id_order')
             ->groupBy('od.id_order_detail')
         ;
 
