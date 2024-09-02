@@ -25,21 +25,21 @@ class OrderHistoriesService implements ShopContentServiceInterface
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $orderHistories = $this->orderHistoryRepository->getContentsForFull($offset, $limit, $langIso, $debug);
+        $result = $this->orderHistoryRepository->getContentsForFull($offset, $limit, $langIso, $debug);
 
-        if (empty($orderHistories)) {
+        if (empty($result)) {
             return [];
         }
 
-        $this->castOrderHistories($orderHistories);
+        $this->castOrderHistories($result);
 
-        return array_map(function ($orderHistory) {
+        return array_map(function ($item) {
             return [
-                'id' => $orderHistory['id_order_history'],
+                'id' => $item['id_order_history'],
                 'collection' => Config::COLLECTION_ORDER_HISTORIES,
-                'properties' => $orderHistory,
+                'properties' => $item,
             ];
-        }, $orderHistories);
+        }, $result);
     }
 
     /**
@@ -52,21 +52,21 @@ class OrderHistoriesService implements ShopContentServiceInterface
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $orderHistories = $this->orderHistoryRepository->getContentsForIncremental($limit, $contentIds, $langIso, $debug);
+        $result = $this->orderHistoryRepository->getContentsForIncremental($limit, $contentIds, $langIso, $debug);
 
-        if (empty($orderHistories)) {
+        if (empty($result)) {
             return [];
         }
 
-        $this->castOrderHistories($orderHistories);
+        $this->castOrderHistories($result);
 
-        return array_map(function ($orderHistory) {
+        return array_map(function ($item) {
             return [
-                'id' => $orderHistory['id_order_history'],
+                'id' => $item['id_order_history'],
                 'collection' => Config::COLLECTION_ORDER_HISTORIES,
-                'properties' => $orderHistory,
+                'properties' => $item,
             ];
-        }, $orderHistories);
+        }, $result);
     }
 
     /**

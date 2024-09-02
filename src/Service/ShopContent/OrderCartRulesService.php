@@ -10,9 +10,8 @@ class OrderCartRulesService implements ShopContentServiceInterface
     /** @var OrderCartRuleRepository */
     private $orderCartRuleRepository;
 
-    public function __construct(
-        OrderCartRuleRepository $orderCartRuleRepository
-    ) {
+    public function __construct(OrderCartRuleRepository $orderCartRuleRepository)
+    {
         $this->orderCartRuleRepository = $orderCartRuleRepository;
     }
 
@@ -26,21 +25,21 @@ class OrderCartRulesService implements ShopContentServiceInterface
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $orderCartRules = $this->orderCartRuleRepository->getContentsForFull($offset, $limit, $langIso, $debug);
+        $result = $this->orderCartRuleRepository->getContentsForFull($offset, $limit, $langIso, $debug);
 
-        if (empty($orderCartRules)) {
+        if (empty($result)) {
             return [];
         }
 
-        $this->castOrderCartRules($orderCartRules);
+        $this->castOrderCartRules($result);
 
-        return array_map(function ($orderCartRule) {
+        return array_map(function ($item) {
             return [
-                'id' => $orderCartRule['id_order_cart_rule'],
+                'id' => $item['id_order_cart_rule'],
                 'collection' => Config::COLLECTION_ORDER_CART_RULES,
-                'properties' => $orderCartRule,
+                'properties' => $item,
             ];
-        }, $orderCartRules);
+        }, $result);
     }
 
     /**
@@ -53,21 +52,21 @@ class OrderCartRulesService implements ShopContentServiceInterface
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $orderCartRules = $this->orderCartRuleRepository->getContentsForIncremental($limit, $contentIds, $langIso, $debug);
+        $result = $this->orderCartRuleRepository->getContentsForIncremental($limit, $contentIds, $langIso, $debug);
 
-        if (empty($orderCartRules)) {
+        if (empty($result)) {
             return [];
         }
 
-        $this->castOrderCartRules($orderCartRules);
+        $this->castOrderCartRules($result);
 
-        return array_map(function ($orderCartRule) {
+        return array_map(function ($item) {
             return [
-                'id' => $orderCartRule['id_order_cart_rule'],
+                'id' => $item['id_order_cart_rule'],
                 'collection' => Config::COLLECTION_ORDER_CART_RULES,
-                'properties' => $orderCartRule,
+                'properties' => $item,
             ];
-        }, $orderCartRules);
+        }, $result);
     }
 
     /**

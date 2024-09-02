@@ -10,3 +10,7 @@ services:
   PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderHistoryRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderHistoryRepository
     public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderDetailRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderDetailRepository
+    public: true
