@@ -30,7 +30,7 @@ class ImageTypeRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -60,9 +60,9 @@ class ImageTypeRepository
 
     /**
      * @param int $limit
-     * @param array $imageTypeIds
+     * @param array<mixed> $imageTypeIds
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -82,7 +82,7 @@ class ImageTypeRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */

@@ -4,7 +4,7 @@ namespace PrestaShop\Module\PsEventbus\Repository;
 
 class OrderRepository
 {
-    public const ORDERS_TABLE = 'orders';
+    const ORDERS_TABLE = 'orders';
 
     /**
      * @var \Db
@@ -44,7 +44,7 @@ class OrderRepository
      * @param int $limit
      * @param int $shopId
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -79,9 +79,9 @@ class OrderRepository
     /**
      * @param int $limit
      * @param int $shopId
-     * @param array $orderIds
+     * @param array<mixed> $orderIds
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -104,7 +104,7 @@ class OrderRepository
      * @param int $limit
      * @param int $shopId
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -145,5 +145,11 @@ class OrderRepository
         $query->select('ost.shipped as is_shipped');
         $query->select('osl.name as status_label');
         $query->select('o.module as payment_name');
+
+        $query->select('o.id_shop_group, o.id_shop, o.id_lang, o.id_currency, o.recyclable, o.gift');
+        $query->select('o.total_discounts, o.total_discounts_tax_incl, o.total_discounts_tax_excl');
+        $query->select('o.total_products, o.total_products_wt, o.total_shipping_tax_incl, o.total_shipping_tax_excl');
+        $query->select('o.carrier_tax_rate, o.total_wrapping, o.total_wrapping_tax_incl, o.total_wrapping_tax_excl');
+        $query->select('o.round_mode, o.round_type, o.invoice_number, o.delivery_number, o.invoice_date, o.delivery_date, o.valid');
     }
 }

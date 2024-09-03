@@ -18,14 +18,14 @@ class PostFileApi implements PostFileInterface
     /** @var StreamInterface|MultipartBody|mixed */
     private $content;
 
-    /** @var array */
+    /** @var array<mixed> */
     private $headers = [];
 
     /**
      * @param string $name Name of the form field
      * @param StreamInterface|MultipartBody|string $content Data to send
      * @param string|null $filename Filename content-disposition attribute
-     * @param array $headers Array of headers to set on the file (can override any default headers)
+     * @param array<mixed> $headers Array of headers to set on the file (can override any default headers)
      *
      * @@throws \RuntimeException when filename is not passed or can't be determined
      */

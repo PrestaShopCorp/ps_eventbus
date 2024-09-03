@@ -79,12 +79,16 @@ export type PsEventbusSyncUpload = {
 
 export function doFullSync(jobId: string, controller: Controller, options?: MockClientOptions): Observable<PsEventbusSyncResponse> {
   options = R.mergeLeft(options, DEFAULT_OPTIONS);
+  
+  const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
+
   const requestNext = (full: number) => axios.post<PsEventbusSyncResponse>(
     `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=${full}&job_id=${jobId}`,
+    callId,
     {
       headers: {
-        'Host':
-        testConfig.prestaShopHostHeader
+        'Host': testConfig.prestaShopHostHeader,
+        'Content-Type': 'application/x-www-form-urlencoded' // for compat PHP 5.6
       }
     });
 

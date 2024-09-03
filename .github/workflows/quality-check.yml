@@ -1,7 +1,6 @@
 name: Quality Control
 
 env:
-  DOCKER_COMPOSE_VERSION: v2.27.0
   NODE_BUILDER_VERSION: "20"
 
 on:
@@ -15,7 +14,7 @@ jobs:
     timeout-minutes: 15
     strategy:
       matrix:
-        php_version: ["7.1", "7.2", "7.3", "7.4", "8.0", "8.1", "8.2"]
+        php_version: ["5.6", "7.1", "7.2", "7.3", "7.4", "8.0", "8.1", "8.2"]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -57,7 +56,7 @@ jobs:
     strategy:
       matrix:
         # @TODO: "1.6.1.24" is temporarily disabled here
-        ps_version: ["1.7.8.10", "8.1.6"]
+        ps_version: ["1.6.1.11", "1.7.8.10", "8.1.6"]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -91,7 +90,7 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
     strategy:
       matrix:
-        ps_version: ["1.7.8.10", "8.1.4", "nightly"]
+        ps_version: ["1.6.1.11", "1.7.8.10", "8.1.4", "nightly"]
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
@@ -113,15 +112,6 @@ jobs:
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
-
-      - name: Install docker compose
-        run: |
-          DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
-          mkdir -p $DOCKER_CONFIG/cli-plugins
-          rm -f $DOCKER_CONFIG/cli-plugins/docker-compose
-          curl -SL https://github.com/docker/compose/releases/download/${{ env.DOCKER_COMPOSE_VERSION }}/docker-compose-linux-x86_64 \
-          -o $DOCKER_CONFIG/cli-plugins/docker-compose
-          chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 
       - name: Install dependencies and setup e2e
         run: pnpm install --no-optional --force

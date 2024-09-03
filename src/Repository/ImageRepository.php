@@ -32,7 +32,7 @@ class ImageRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -62,9 +62,9 @@ class ImageRepository
 
     /**
      * @param int $limit
-     * @param array $imageIds
+     * @param array<mixed> $imageIds
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -105,11 +105,11 @@ class ImageRepository
      * @param int $shopId
      * @param bool $includeCover
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getProductImages($productId, $attributeId, $shopId, $includeCover = false)
+    public function getProductImages($productId, $attributeId, $shopId, $includeCover = null)
     {
         $query = new \DbQuery();
 
@@ -139,7 +139,7 @@ class ImageRepository
      * @param int $offset
      * @param int $limit
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */

@@ -33,15 +33,15 @@ class ProxyService implements ProxyServiceInterface
 
     /**
      * @param string $jobId
-     * @param array $data
+     * @param array<mixed> $data
      * @param int $scriptStartTime
      * @param bool $isFull
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws EnvVarException
      */
-    public function upload($jobId, $data, $scriptStartTime, bool $isFull = false)
+    public function upload($jobId, $data, $scriptStartTime, $isFull = null)
     {
         $dataJson = $this->jsonFormatter->formatNewlineJsonString($data);
 
@@ -60,10 +60,10 @@ class ProxyService implements ProxyServiceInterface
 
     /**
      * @param string $jobId
-     * @param array $data
+     * @param array<mixed> $data
      * @param int $scriptStartTime
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws EnvVarException
      */

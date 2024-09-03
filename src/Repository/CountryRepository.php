@@ -15,7 +15,7 @@ class CountryRepository
     private $context;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     private $countryIsoCodeCache = [];
 
@@ -53,12 +53,16 @@ class CountryRepository
      * @param int $zoneId
      * @param bool $active
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getCountyIsoCodesByZoneId($zoneId, $active = true)
+    public function getCountyIsoCodesByZoneId($zoneId, $active = null)
     {
+        if ($active == null) {
+            $active = true;
+        }
+
         $cacheKey = $zoneId . '-' . (int) $active;
 
         if (!isset($this->countryIsoCodeCache[$cacheKey])) {

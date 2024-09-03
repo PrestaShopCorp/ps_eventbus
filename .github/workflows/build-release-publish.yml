@@ -50,7 +50,10 @@ jobs:
           -o $DOCKER_CONFIG/cli-plugins/docker-compose
           chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 
-      - name: Install dependencies and setup e2e
+      - name: install php dependencies
+        run: composer install
+
+      - name: Install node dependencies and setup e2e
         run: pnpm install --no-optional --force
         working-directory: e2e
 

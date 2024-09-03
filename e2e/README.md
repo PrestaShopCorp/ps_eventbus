@@ -34,12 +34,17 @@ describe('CategoriesController', () => {
     // As such, timing is not critical here.
     const message$ = probe({ url: `/upload/${jobId}` });
 
+    // Define a random callId. This param is set into body for define the compat with PHP 5.6,
+    // with header 'Content-Type': 'application/x-www-form-urlencoded'
+    const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
+
     // act
     // call ps_eventbus api, which should in turn upload data to the mock.
     const request$ = from(
-      axios.post(url, {
+      axios.post(url, callId, {
         headers: {
           Host: testConfig.prestaShopHostHeader,
+          'Content-Type': 'application/x-www-form-urlencoded' // for compat PHP 5.6
         },
       })
     );

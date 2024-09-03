@@ -25,7 +25,7 @@ class SupplierRepository
      * @param int $limit
      * @param string $langIso
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -57,9 +57,9 @@ class SupplierRepository
     /**
      * @param int $limit
      * @param string $langIso
-     * @param array $supplierIds
+     * @param array<mixed> $supplierIds
      *
-     * @return array|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -103,7 +103,7 @@ class SupplierRepository
      * @param int $limit
      * @param string $langIso
      *
-     * @return array
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
