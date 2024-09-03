@@ -3,7 +3,7 @@ import * as matchers from "jest-extended";
 import { dumpUploadData, logAxiosError } from "./helpers/log-helper";
 import axios, { AxiosError } from "axios";
 import { doFullSync, probe, PsEventbusSyncUpload } from "./helpers/mock-probe";
-import { concatMap, from, lastValueFrom, map, toArray, zip } from "rxjs";
+import { concatMap, from, lastValueFrom, map, TimeoutError, toArray, zip } from "rxjs";
 import {
   generatePredictableModuleId,
   loadFixture,
@@ -148,15 +148,23 @@ describe('Full Sync', () => {
           })
         );
 
-        const results = await lastValueFrom(
-          zip(message$, request$).pipe(
-            map((result) => ({
-              probeMessage: result[0],
-              psEventbusReq: result[1],
-            })),
-            toArray()
-          )
-        );
+        let results;
+
+        try {
+          results = await lastValueFrom(
+            zip(message$, request$).pipe(
+              map((result) => ({
+                probeMessage: result[0],
+                psEventbusReq: result[1],
+              })),
+              toArray()
+            )
+          );
+        } catch (error) {
+          if (error instanceof TimeoutError) {
+            throw new Error(`Upload to collector for "${shopContent}" throw TimeoutError with jobId "${jobId}"`)
+          } 
+        }
 
         // assert
         expect(results.length).toEqual(1);
@@ -172,21 +180,28 @@ describe('Full Sync', () => {
       it.skip(`${shopContent} should upload complete dataset to collector`, () => {});
     } else {
       it(`${shopContent} should upload complete dataset collector`, async () => {
-        
         // arrange
         const fullSync$ = doFullSync(jobId, shopContent, { timeout: 4000 });
         const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 4000 });
+        
+        let syncedData: PsEventbusSyncUpload[];
 
-        // act
-        const syncedData: PsEventbusSyncUpload[] = await lastValueFrom(
-          zip(fullSync$, message$).pipe(
-            map((msg) => msg[1].body.file),
-            concatMap((syncedPage) => {
-              return from(syncedPage);
-            }),
-            toArray()
-          )
-        );
+        try {
+          // act
+          syncedData = await lastValueFrom(
+            zip(fullSync$, message$).pipe(
+              map((msg) => msg[1].body.file),
+              concatMap((syncedPage) => {
+                return from(syncedPage);
+              }),
+              toArray()
+            )
+          );
+        } catch (error) {
+          if (error instanceof TimeoutError) {
+            throw new Error(`Upload complete dataset collector for "${shopContent}" throw TimeoutError with jobId "${jobId}"`)
+          } 
+        }
 
         // dump data for easier debugging or updating fixtures
         if (testConfig.dumpFullSyncData) {
