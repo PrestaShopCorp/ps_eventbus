@@ -3,7 +3,7 @@ import R from "ramda";
 // TEMPORARY DISABLED, WAIT ADD ALL SHOP CONTENT
 // AFTER UNCOMMENT THIS, CHANGE ALL "as ShopContent"CAST IN FULLSYNC TEST
 /* export const shopContentMapping = {
-  'carriers': 'carriers'
+  'carriers': 'carriers',
   'carrier_details': 'carrier-details',
   'carts' : 'carts',
   'cart_products': 'carts',
