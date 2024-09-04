@@ -144,6 +144,8 @@ class OrdersService implements ShopContentServiceInterface
             $order['valid'] = (bool) $order['valid'];
 
             $this->castAddressIsoCodes($order);
+
+            // remove extra properties
             unset($order['address_iso']);
         }
     }

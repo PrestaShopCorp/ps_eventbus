@@ -32,11 +32,11 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
             ->select('oh.date_add')
             ->select('oh.id_order')
             ->select('oh.id_order_history')
-            ->select('os.logable')
-            ->select('os.delivery')
-            ->select('os.shipped')
-            ->select('os.paid')
-            ->select('os.deleted')
+            ->select('os.logable AS is_validated')
+            ->select('os.delivery AS is_delivered')
+            ->select('os.shipped AS is_shipped')
+            ->select('os.paid AS is_paid')
+            ->select('os.deleted AS is_deleted')
         ;
     }
 
