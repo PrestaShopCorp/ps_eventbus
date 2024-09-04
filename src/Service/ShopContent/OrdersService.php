@@ -38,21 +38,21 @@ class OrdersService implements ShopContentServiceInterface
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $orders = $this->orderRepository->getContentsForFull($offset, $limit, $langIso, $debug);
+        $result = $this->orderRepository->getContentsForFull($offset, $limit, $langIso, $debug);
 
-        if (empty($orders)) {
+        if (empty($result)) {
             return [];
         }
 
-        $this->castOrders($orders, $langIso, $debug);
+        $this->castOrders($result, $langIso, $debug);
 
-        return array_map(function ($order) {
+        return array_map(function ($item) {
             return [
-                'id' => $order['id_order'],
+                'id' => $item['id_order'],
                 'collection' => Config::COLLECTION_ORDERS,
-                'properties' => $order,
+                'properties' => $item,
             ];
-        }, $orders);
+        }, $result);
     }
 
     /**
@@ -65,21 +65,21 @@ class OrdersService implements ShopContentServiceInterface
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $orders = $this->orderRepository->getContentsForIncremental($limit, $contentIds, $langIso, $debug);
+        $result = $this->orderRepository->getContentsForIncremental($limit, $contentIds, $langIso, $debug);
 
-        if (empty($orders)) {
+        if (empty($result)) {
             return [];
         }
 
-        $this->castOrders($orders, $langIso, $debug);
+        $this->castOrders($result, $langIso, $debug);
 
-        return array_map(function ($order) {
+        return array_map(function ($item) {
             return [
-                'id' => $order['id_order'],
+                'id' => $item['id_order'],
                 'collection' => Config::COLLECTION_ORDERS,
-                'properties' => $order,
+                'properties' => $item,
             ];
-        }, $orders);
+        }, $result);
     }
 
     /**
@@ -144,6 +144,8 @@ class OrdersService implements ShopContentServiceInterface
             $order['valid'] = (bool) $order['valid'];
 
             $this->castAddressIsoCodes($order);
+
+            // remove extra properties
             unset($order['address_iso']);
         }
     }
@@ -167,7 +169,7 @@ class OrdersService implements ShopContentServiceInterface
 
         foreach ($orderHistoryStatuss as &$orderHistoryStatus) {
             if ($order['id_order'] == $orderHistoryStatus['id_order'] && $dateAdd < $orderHistoryStatus['date_add']) {
-                $isPaid = (bool) $orderHistoryStatus['paid'];
+                $isPaid = (bool) $orderHistoryStatus['is_paid'];
                 $dateAdd = $orderHistoryStatus['date_add'];
             }
         }

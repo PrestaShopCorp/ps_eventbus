@@ -2,9 +2,9 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
-class OrderHistoryRepository extends AbstractRepository implements RepositoryInterface
+class OrderDetailRepository extends AbstractRepository implements RepositoryInterface
 {
-    const TABLE_NAME = 'order_history';
+    const TABLE_NAME = 'order_detail';
 
     /**
      * @param string $langIso
@@ -15,28 +15,43 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
      */
     public function generateBaseQuery($langIso)
     {
-        $langId = (int) \Language::getIdByIso($langIso);
+        $context = \Context::getContext();
+
+        if ($context === null) {
+            throw new \PrestaShopException('Context is null');
+        }
+
+        if ($context->shop === null) {
+            throw new \PrestaShopException('No shop context');
+        }
 
         $this->query = new \DbQuery();
 
         $this->query
-            ->from(self::TABLE_NAME, 'oh')
-            ->innerJoin('order_state', 'os', 'os.id_order_state = oh.id_order_State')
-            ->innerJoin('order_state_lang', 'osl', 'osl.id_order_state = os.id_order_State AND osl.id_lang = ' . (int) $langId)
+            ->from(self::TABLE_NAME, 'od')
+            ->where('od.id_shop = ' . $context->shop->id)
+            ->innerJoin('orders', 'o', 'od.id_order = o.id_order')
+            ->leftJoin('order_slip_detail', 'osd', 'od.id_order_detail = osd.id_order_detail')
+            ->leftJoin('product_shop', 'ps', 'od.product_id = ps.id_product AND ps.id_shop = ' . (int) $context->shop->id)
+            ->leftJoin('currency', 'c', 'c.id_currency = o.id_currency')
+            ->leftJoin('lang', 'l', 'o.id_lang = l.id_lang')
+            ->groupBy('od.id_order_detail')
         ;
 
         $this->query
-            ->select('oh.id_order_state')
-            ->select('osl.name')
-            ->select('osl.template')
-            ->select('oh.date_add')
-            ->select('oh.id_order')
-            ->select('oh.id_order_history')
-            ->select('os.logable AS is_validated')
-            ->select('os.delivery AS is_delivered')
-            ->select('os.shipped AS is_shipped')
-            ->select('os.paid AS is_paid')
-            ->select('os.deleted AS is_deleted')
+            ->select('od.id_order_detail')
+            ->select('od.id_order')
+            ->select('od.product_id')
+            ->select('od.product_attribute_id')
+            ->select('od.product_quantity')
+            ->select('od.unit_price_tax_incl')
+            ->select('od.unit_price_tax_excl')
+            ->select('SUM(osd.total_price_tax_incl) as refund')
+            ->select('SUM(osd.total_price_tax_excl) as refund_tax_excl')
+            ->select('c.iso_code as currency')
+            ->select('ps.id_category_default as category')
+            ->select('l.iso_code')
+            ->select('o.conversion_rate as conversion_rate')
         ;
     }
 
@@ -76,7 +91,7 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
         $this->generateBaseQuery($langIso);
 
         $this->query
-            ->where('oh.id_order IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('o.id_order IN(' . implode(',', array_map('intval', $contentIds)) . ')')
             ->limit($limit)
         ;
 
@@ -102,27 +117,5 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
         }
 
         return count($result);
-    }
-
-    /**
-     * @param array<mixed> $orderIds
-     * @param string $langIso
-     * @param bool $debug
-     *
-     * @return array<mixed>
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getOrderHistoryIdsByOrderIds($orderIds, $langIso, $debug)
-    {
-        if (!$orderIds) {
-            return [];
-        }
-
-        $this->generateBaseQuery($langIso);
-
-        $this->query->where('oh.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')');
-
-        return $this->runQuery($debug);
     }
 }

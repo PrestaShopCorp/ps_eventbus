@@ -72,3 +72,9 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderHistoryRepository'
+  
+  PrestaShop\Module\PsEventbus\Service\ShopContent\OrderDetailsService:
+    class:  PrestaShop\Module\PsEventbus\Service\ShopContent\OrderDetailsService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderDetailRepository'
