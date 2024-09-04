@@ -169,7 +169,7 @@ class OrdersService implements ShopContentServiceInterface
 
         foreach ($orderHistoryStatuss as &$orderHistoryStatus) {
             if ($order['id_order'] == $orderHistoryStatus['id_order'] && $dateAdd < $orderHistoryStatus['date_add']) {
-                $isPaid = (bool) $orderHistoryStatus['paid'];
+                $isPaid = (bool) $orderHistoryStatus['is_paid'];
                 $dateAdd = $orderHistoryStatus['date_add'];
             }
         }

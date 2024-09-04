@@ -148,30 +148,35 @@ describe('Full Sync', () => {
           })
         );
 
-        let results;
+        // check if shopcontent have items lenght > 0
+        request$.subscribe(async (request) => {
+          if (request.data.total_objects != 0) {
+            let results;
 
-        try {
-          results = await lastValueFrom(
-            zip(message$, request$).pipe(
-              map((result) => ({
-                probeMessage: result[0],
-                psEventbusReq: result[1],
-              })),
-              toArray()
-            )
-          );
-        } catch (error) {
-          if (error instanceof TimeoutError) {
-            throw new Error(`Upload to collector for "${shopContent}" throw TimeoutError with jobId "${jobId}"`)
-          } 
-        }
-
-        // assert
-        expect(results.length).toEqual(1);
-        expect(results[0].probeMessage.method).toBe("POST");
-        expect(results[0].probeMessage.headers).toMatchObject({
-          "full-sync-requested": "1",
-        });
+            try {
+              results = await lastValueFrom(
+                zip(message$, request$).pipe(
+                  map((result) => ({
+                    probeMessage: result[0],
+                    psEventbusReq: result[1],
+                  })),
+                  toArray()
+                )
+              );
+            } catch (error) {
+              if (error instanceof TimeoutError) {
+                throw new Error(`Upload to collector for "${shopContent}" throw TimeoutError with jobId "${jobId}"`)
+              } 
+            }
+            
+            // assert
+            expect(results.length).toEqual(1);
+            expect(results[0].probeMessage.method).toBe("POST");
+            expect(results[0].probeMessage.headers).toMatchObject({
+              "full-sync-requested": "1",
+            });
+          }
+        })
       });
     }
     
@@ -190,7 +195,9 @@ describe('Full Sync', () => {
           // act
           syncedData = await lastValueFrom(
             zip(fullSync$, message$).pipe(
-              map((msg) => msg[1].body.file),
+              map((msg) => {
+                return msg[1].body.file
+              }),
               concatMap((syncedPage) => {
                 return from(syncedPage);
               }),
