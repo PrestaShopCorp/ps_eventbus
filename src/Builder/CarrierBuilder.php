@@ -8,53 +8,44 @@ use PrestaShop\Module\PsEventbus\DTO\CarrierTax;
 use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
 use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\CountryRepository;
+use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\StateRepository;
 use PrestaShop\Module\PsEventbus\Repository\TaxRepository;
 
 class CarrierBuilder
 {
-    /**
-     * @var CarrierRepository
-     */
-    private $carrierRepository;
-
-    /**
-     * @var CountryRepository
-     */
+    /** @var CountryRepository */
     private $countryRepository;
 
-    /**
-     * @var StateRepository
-     */
+    /** @var StateRepository */
     private $stateRepository;
 
-    /**
-     * @var TaxRepository
-     */
+    /** @var TaxRepository */
     private $taxRepository;
 
-    /**
-     * @var ConfigurationRepository
-     */
+    /** @var ConfigurationRepository */
     private $configurationRepository;
 
+    /** @var LanguageRepository */
+    private $languageRepository;
+
     public function __construct(
-        CarrierRepository $carrierRepository,
         CountryRepository $countryRepository,
         StateRepository $stateRepository,
         TaxRepository $taxRepository,
-        ConfigurationRepository $configurationRepository
+        ConfigurationRepository $configurationRepository,
+        LanguageRepository $languageRepository
     ) {
-        $this->carrierRepository = $carrierRepository;
         $this->countryRepository = $countryRepository;
         $this->stateRepository = $stateRepository;
         $this->taxRepository = $taxRepository;
         $this->configurationRepository = $configurationRepository;
+        $this->languageRepository = $languageRepository;
     }
 
     /**
      * @param array<mixed> $carriers
-     * @param int $langId
+     * @param int $langIso
      * @param \Currency $currency
      * @param string $weightUnit
      *
@@ -63,8 +54,10 @@ class CarrierBuilder
      * @@throws \PrestaShopDatabaseException
      * @@throws \PrestaShopException
      */
-    public function buildCarriers($carriers, $langId, \Currency $currency, $weightUnit)
+    public function buildCarriers($carriers, $langIso, \Currency $currency, $weightUnit)
     {
+        $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
+
         $eventBusCarriers = [];
         foreach ($carriers as $carrier) {
             $eventBusCarriers[] = $this->buildCarrier(
@@ -128,7 +121,7 @@ class CarrierBuilder
             ->setCurrency($currencyIsoCode)
             ->setWeightUnit($weightUnit);
 
-        $deliveryPriceByRanges = $this->carrierRepository->getDeliveryPriceByRange($carrier);
+        $deliveryPriceByRanges = $this->getDeliveryPriceByRange($carrier);
 
         if (!$deliveryPriceByRanges) {
             return $eventBusCarrier;
@@ -137,7 +130,7 @@ class CarrierBuilder
         $carrierDetails = [];
         $carrierTaxes = [];
         foreach ($deliveryPriceByRanges as $deliveryPriceByRange) {
-            $range = $this->carrierRepository->getCarrierRange($deliveryPriceByRange);
+            $range = $this->getCarrierRange($deliveryPriceByRange);
             if (!$range) {
                 continue;
             }
@@ -160,6 +153,90 @@ class CarrierBuilder
         $eventBusCarrier->setCarrierTaxes($carrierTaxes);
 
         return $eventBusCarrier;
+    }
+
+        /**
+     * @param \Carrier $carrierObj
+     *
+     * @return array<mixed>|false
+     */
+    public function getDeliveryPriceByRange(\Carrier $carrierObj)
+    {
+        $rangeTable = $carrierObj->getRangeTable();
+        switch ($rangeTable) {
+            case 'range_weight':
+                return $this->getCarrierByWeightRange($carrierObj, 'range_weight');
+            case 'range_price':
+                return $this->getCarrierByPriceRange($carrierObj, 'range_price');
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * @param \Carrier $carrierObj
+     * @param string $rangeTable
+     *
+     * @return array<mixed>
+     */
+    private function getCarrierByPriceRange(
+        \Carrier $carrierObj,
+        $rangeTable
+    ) {
+        $deliveryPriceByRange = \Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrierObj->id);
+
+        $filteredRanges = [];
+        foreach ($deliveryPriceByRange as $range) {
+            $filteredRanges[$range['id_range_price']]['id_range_price'] = $range['id_range_price'];
+            $filteredRanges[$range['id_range_price']]['id_carrier'] = $range['id_carrier'];
+            $filteredRanges[$range['id_range_price']]['zones'][$range['id_zone']]['id_zone'] = $range['id_zone'];
+            $filteredRanges[$range['id_range_price']]['zones'][$range['id_zone']]['price'] = $range['price'];
+        }
+
+        return $filteredRanges;
+    }
+
+    /**
+     * @param \Carrier $carrierObj
+     * @param string $rangeTable
+     *
+     * @return array<mixed>
+     */
+    private function getCarrierByWeightRange(
+        \Carrier $carrierObj,
+        $rangeTable
+    ) {
+        $deliveryPriceByRange = \Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrierObj->id);
+
+        $filteredRanges = [];
+        foreach ($deliveryPriceByRange as $range) {
+            $filteredRanges[$range['id_range_weight']]['id_range_weight'] = $range['id_range_weight'];
+            $filteredRanges[$range['id_range_weight']]['id_carrier'] = $range['id_carrier'];
+            $filteredRanges[$range['id_range_weight']]['zones'][$range['id_zone']]['id_zone'] = $range['id_zone'];
+            $filteredRanges[$range['id_range_weight']]['zones'][$range['id_zone']]['price'] = $range['price'];
+        }
+
+        return $filteredRanges;
+    }
+
+    /**
+     * @param array<mixed> $deliveryPriceByRange
+     *
+     * @return false|\RangeWeight|\RangePrice
+     *
+     * @throws \PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     */
+    public function getCarrierRange($deliveryPriceByRange)
+    {
+        if (isset($deliveryPriceByRange['id_range_weight'])) {
+            return new \RangeWeight($deliveryPriceByRange['id_range_weight']);
+        }
+        if (isset($deliveryPriceByRange['id_range_price'])) {
+            return new \RangePrice($deliveryPriceByRange['id_range_price']);
+        }
+
+        return false;
     }
 
     /**
