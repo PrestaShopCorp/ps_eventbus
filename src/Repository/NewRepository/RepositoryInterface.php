@@ -2,8 +2,10 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
+use DbQuery;
+
 /**
- * @property \DbQuery $query
+ * @property DbQuery $query
  */
 interface RepositoryInterface
 {

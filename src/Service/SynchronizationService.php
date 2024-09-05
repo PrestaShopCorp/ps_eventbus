@@ -11,6 +11,9 @@ use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\ShopContentServiceInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use Module;
+use DateTime;
+use DateTimeZone;
 
 class SynchronizationService
 {
@@ -72,7 +75,7 @@ class SynchronizationService
      *
      * @return array<mixed>
      *
-     * @@throws \PrestaShopDatabaseException|EnvVarException|ApiException
+     * @@throws PrestaShopDatabaseException|EnvVarException|ApiException
      */
     public function sendFullSync(
         string $shopContent,
@@ -89,8 +92,8 @@ class SynchronizationService
         $serviceName = str_replace('_', '', ucwords($shopContent, '_'));
         $serviceId = 'PrestaShop\Module\PsEventbus\Service\ShopContent\\' . $serviceName . 'Service'; // faire un mapping entre le service et le nom du shopcontent
 
-        /** @var \Ps_eventbus */
-        $module = \Module::getInstanceByName('ps_eventbus');
+        /** @var Ps_eventbus */
+        $module = Module::getInstanceByName('ps_eventbus');
 
         if (!$module->hasService($serviceId)) {
             throw new ServiceNotFoundException($serviceId);
@@ -103,7 +106,7 @@ class SynchronizationService
         $configurationRepository = $module->getService('PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository');
 
         $timezone = (string) $configurationRepository->get('PS_TIMEZONE');
-        $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(Config::MYSQL_DATE_FORMAT);
+        $dateNow = (new DateTime('now', new DateTimeZone($timezone)))->format(Config::MYSQL_DATE_FORMAT);
 
         $data = $shopContentApiService->getContentsForFull($offset, $limit, $langIso, $debug);
 
@@ -139,7 +142,7 @@ class SynchronizationService
      *
      * @return array<mixed>
      *
-     * @@throws \PrestaShopDatabaseException|EnvVarException
+     * @@throws PrestaShopDatabaseException|EnvVarException
      */
     public function sendIncrementalSync(
         string $shopContent,
@@ -154,8 +157,8 @@ class SynchronizationService
         $serviceName = str_replace('_', '', ucwords($shopContent, '_'));
         $serviceId = 'PrestaShop\Module\PsEventbus\Service\ShopContent\\' . $serviceName . 'Service';
 
-        /** @var \Ps_eventbus */
-        $module = \Module::getInstanceByName('ps_eventbus');
+        /** @var Ps_eventbus */
+        $module = Module::getInstanceByName('ps_eventbus');
 
         if (!$module->hasService($serviceId)) {
             throw new ServiceNotFoundException($serviceId);
@@ -301,7 +304,7 @@ class SynchronizationService
      *
      * @return bool
      *
-     * @@throws \PrestaShopDatabaseException
+     * @@throws PrestaShopDatabaseException
      */
     private function debounceLiveSync($shopContentName) // @phpstan-ignore method.unused
     {

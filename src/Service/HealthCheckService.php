@@ -3,13 +3,14 @@
 namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository;
+use Ps_eventbus;
 
 class HealthCheckService
 {
-    /** @var \Ps_eventbus */
+    /** @var Ps_eventbus */
     private $module;
 
-    public function __construct(\Ps_eventbus $module)
+    public function __construct(Ps_eventbus $module)
     {
         $this->module = $module;
     }
@@ -19,7 +20,7 @@ class HealthCheckService
      *
      * @return void
      *
-     * @throws \PrestaShopException
+     * @throws PrestaShopException
      */
     public function getHealthCheck($isAuthentified)
     {

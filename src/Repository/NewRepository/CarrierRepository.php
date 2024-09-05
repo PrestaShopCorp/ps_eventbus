@@ -1,34 +1,91 @@
 <?php
 
-namespace PrestaShop\Module\PsEventbus\Repository;
+namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
-class CarrierRepository
+use Context;
+use DbQuery;
+use Language;
+use PrestaShopException;
+
+class CarrierRepository extends AbstractRepository implements RepositoryInterface
 {
-    /**
-     * @var \Db
-     */
-    private $db;
+    const TABLE_NAME = 'carrier';
 
     /**
-     * @var \Context
+     * @param string $langIso
+     *
+     * @return mixed
+     *
+     * @throws PrestaShopException
      */
-    private $context;
+    public function generateBaseQuery($langIso)
+    { 
+        $langId = (int) Language::getIdByIso($langIso);
+        $context = Context::getContext();
 
-    /**
-     * @var int
-     */
-    private $shopId;
-
-    public function __construct(\Context $context)
-    {
-        $this->db = \Db::getInstance();
-        $this->context = $context;
-
-        if ($this->context->shop === null) {
-            throw new \PrestaShopException('No shop context');
+        if ($context === null) {
+            throw new PrestaShopException('Context is null');
         }
 
-        $this->shopId = (int) $this->context->shop->id;
+        if ($context->shop === null) {
+            throw new PrestaShopException('No shop context');
+        }
+
+        $this->query = new DbQuery();
+
+        $this->query->from('carrier', 'c');
+        $this->query->select('c.id_carrier');
+        $this->query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . $langId);
+        $this->query->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier');
+        $this->query->where('cs.id_shop = ' . $context->shop->id);
+        $this->query->where('deleted=0');
+    }
+    
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     * @param bool $debug
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getContentsForFull($offset, $limit, $langIso, $debug)
+    {
+
+    }
+
+    /**
+     * @param int $limit
+     * @param array<mixed> $contentIds
+     * @param string $langIso
+     * @param bool $debug
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
+    {
+
+    }
+    
+    /**
+     * @param int $offset
+     * @param string $langIso
+     * @param bool $debug
+     *
+     * @return int
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function countFullSyncContentLeft($offset, $langIso, $debug)
+    {
+
     }
 
     /**
