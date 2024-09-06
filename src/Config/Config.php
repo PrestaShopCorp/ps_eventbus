@@ -34,6 +34,7 @@ class Config
 
     const COLLECTION_CARRIERS = 'carriers';
     const COLLECTION_CARRIER_DETAILS = 'carrier_details';
+    CONST COLLECTION_CARRIER_TAXES = 'carrier_taxes';
     const COLLECTION_CARTS = 'carts';
     const COLLECTION_CART_PRODUCTS = 'cart_products';
     const COLLECTION_CART_RULES = 'cart_rules';
@@ -73,6 +74,7 @@ class Config
     const SHOP_CONTENTS = [
         self::COLLECTION_CARRIERS,
         self::COLLECTION_CARRIER_DETAILS,
+        self::COLLECTION_CARRIER_TAXES,
         self::COLLECTION_CARTS,
         self::COLLECTION_CART_PRODUCTS,
         self::COLLECTION_CART_RULES,

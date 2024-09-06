@@ -78,3 +78,12 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderDetailRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\CarriersService:
+    class:  PrestaShop\Module\PsEventbus\Service\ShopContent\CarriersService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\CarrierRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
+      - '@PrestaShop\Module\PsEventbus\Builder\CarrierBuilder'
+      - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'

@@ -127,12 +127,6 @@ services:
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
 
-  PrestaShop\Module\PsEventbus\Repository\CarrierRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\CarrierRepository
-    public: true
-    arguments:
-      - '@=service("prestashop.adapter.legacy.context").getContext()'
-
   PrestaShop\Module\PsEventbus\Repository\CustomPriceRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CustomPriceRepository
     public: true

@@ -67,15 +67,11 @@ class CarrierBuilder
             );
         }
 
-        $formattedCarriers = [];
         /** @var EventBusCarrier $eventBusCarrier */
-        foreach ($eventBusCarriers as $eventBusCarrier) {
+        return array_map(function ($eventBusCarrier) {
             /** @var array<mixed> $eventBusCarrierSerialized */
-            $eventBusCarrierSerialized = $eventBusCarrier->jsonSerialize();
-            $formattedCarriers = array_merge($formattedCarriers, $eventBusCarrierSerialized);
-        }
-
-        return $formattedCarriers;
+            return $eventBusCarrier->jsonSerialize();
+        }, $eventBusCarriers);
     }
 
     /**

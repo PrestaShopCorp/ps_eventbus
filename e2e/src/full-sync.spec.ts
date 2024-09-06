@@ -50,7 +50,7 @@ const specialFieldAssert: { [index: string]: (val) => void } = {
 }
 
 describe('Full Sync', () => {
-  let testIndex = 0;
+  let testTimestamp = 0;
 
   // gérer les cas ou un shopContent n'existe pas (pas de fixture du coup)
   const shopContents: ShopContent[] = shopContentList.filter(
@@ -60,7 +60,8 @@ describe('Full Sync', () => {
   let jobId: string;
 
   beforeEach(() => {
-    jobId = `valid-job-full-${testIndex++}`;
+    testTimestamp = Date.now();
+    jobId = `valid-job-full-${testTimestamp}`;
   });
 
   // TODO : some versions of prestashop include ps_facebook out of the box, this test can't reliably be run for all versions

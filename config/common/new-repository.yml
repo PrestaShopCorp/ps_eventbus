@@ -14,3 +14,7 @@ services:
   PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderDetailRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderDetailRepository
     public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\CarrierRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\CarrierRepository
+    public: true

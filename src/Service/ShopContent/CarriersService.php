@@ -63,8 +63,9 @@ class CarriersService implements ShopContentServiceInterface
         );
 
         return array_map(function ($item) {
+
             return [
-                'id' => $item['id_carrier'],
+                'id' => $item['id_reference'],
                 'collection' => Config::COLLECTION_CARRIERS,
                 'properties' => $item,
             ];
@@ -102,7 +103,7 @@ class CarriersService implements ShopContentServiceInterface
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_carrier'],
+                'id' => $item['id_reference'],
                 'collection' => Config::COLLECTION_CARRIERS,
                 'properties' => $item,
             ];
