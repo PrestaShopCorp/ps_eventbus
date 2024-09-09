@@ -231,13 +231,10 @@ class ProductDecorator
         $product['available_date'] = (string) $product['available_date'];
         $product['is_bundle'] = $product['is_bundle'] == '1';
         $product['is_virtual'] = $product['is_virtual'] == '1';
-        if ($product['unit_price_ratio'] == 0) {
-            unset($product['unit_price_ratio']);
-            unset($product['unity']);
-        } else {
-            $product['unit_price_ratio'] = (float) $product['unit_price_ratio'];
-            $product['unity'] = (string) $product['unity'];
-            $product['price_per_unit'] = (float) ($product['price_tax_excl'] / $product['unit_price_ratio']);
+        $product['unit_price_ratio'] = (float) $product['unit_price_ratio'];
+        $product['unity'] = (string) $product['unity'];
+        if ($product['unit_price_ratio'] != 0) {
+            $product['price_per_unit'] = (float) $product['price_tax_excl'] / (float) $product['unit_price_ratio'];
         }
     }
 
@@ -345,7 +342,7 @@ class ProductDecorator
                     return $image['id_product_attribute'] === $product['id_attribute'];
                 });
 
-                // If combination has some pictures -> the first one is the cover
+                // If a combination has some pictures -> the first one is the cover
                 if (count($productAttributeImages)) {
                     $productImageIds = $this->arrayFormatter->formatValueArray($productAttributeImages, 'id_image');
                     $coverImageId = reset($productImageIds);
@@ -364,11 +361,9 @@ class ProductDecorator
 
             $link = $this->context->link;
 
-            /*
-            Ici pour certaines boutique on aurait un comporterment qui pourrait être adapté.
-            et aller chercher dans une table des images le bon libellé pour appeler ce que le marchand a.
-            */
-
+            // For some stores, we might implement a behavior that dynamically adapts,
+            // retrieving the appropriate label from an image table to accurately reflect
+            // the merchant's available items.
             $product['images'] = $this->arrayFormatter->arrayToString(
                 array_map(function ($imageId) use ($product, $link) {
                     return $link->getImageLink($product['link_rewrite'], (string) $imageId);
