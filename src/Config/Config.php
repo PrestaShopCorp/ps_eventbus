@@ -34,7 +34,7 @@ class Config
 
     const COLLECTION_CARRIERS = 'carriers';
     const COLLECTION_CARRIER_DETAILS = 'carrier_details';
-    CONST COLLECTION_CARRIER_TAXES = 'carrier_taxes';
+    const COLLECTION_CARRIER_TAXES = 'carrier_taxes';
     const COLLECTION_CARTS = 'carts';
     const COLLECTION_CART_PRODUCTS = 'cart_products';
     const COLLECTION_CART_RULES = 'cart_rules';

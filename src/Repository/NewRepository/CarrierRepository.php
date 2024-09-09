@@ -2,11 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
-use Context;
-use DbQuery;
-use Language;
-use PrestaShopException;
-
 class CarrierRepository extends AbstractRepository implements RepositoryInterface
 {
     const TABLE_NAME = 'carrier';
@@ -16,24 +11,24 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
      *
      * @return mixed
      *
-     * @throws PrestaShopException
+     * @throws \PrestaShopException
      */
     public function generateBaseQuery($langIso)
-    { 
-        $langId = (int) Language::getIdByIso($langIso);
-        $context = Context::getContext();
+    {
+        $langId = (int) \Language::getIdByIso($langIso);
+        $context = \Context::getContext();
 
         if ($context === null) {
-            throw new PrestaShopException('Context is null');
+            throw new \PrestaShopException('Context is null');
         }
 
         if ($context->shop === null) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
-        $this->query = new DbQuery();
+        $this->query = new \DbQuery();
 
-        $this->query->from('carrier', 'c')    
+        $this->query->from('carrier', 'c')
             ->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . $langId)
             ->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier')
             ->where('cs.id_shop = ' . $context->shop->id)
@@ -42,7 +37,7 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
 
         $this->query->select('c.*');
     }
-    
+
     /**
      * @param int $offset
      * @param int $limit
@@ -51,8 +46,8 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
      *
      * @return array<mixed>
      *
-     * @throws PrestaShopException
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
@@ -71,8 +66,8 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
      *
      * @return array<mixed>
      *
-     * @throws PrestaShopException
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
@@ -92,8 +87,8 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
      *
      * @return int
      *
-     * @throws PrestaShopException
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
     public function countFullSyncContentLeft($offset, $langIso, $debug)
     {

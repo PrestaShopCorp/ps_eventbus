@@ -2,10 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
-use PrestaShopException;
-use PrestaShopDatabaseException;
-use DbQuery;
-
 class OrderRepository extends AbstractRepository implements RepositoryInterface
 {
     const TABLE_NAME = 'orders';
@@ -15,11 +11,11 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
      *
      * @return mixed
      *
-     * @throws PrestaShopException
+     * @throws \PrestaShopException
      */
     public function generateBaseQuery($langIso)
     {
-        $this->query = new DbQuery();
+        $this->query = new \DbQuery();
 
         $this->query
             ->from(self::TABLE_NAME, 'o')
@@ -97,8 +93,8 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
      *
      * @return array<mixed>
      *
-     * @throws PrestaShopException
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
@@ -117,8 +113,8 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
      *
      * @return array<mixed>
      *
-     * @throws PrestaShopException
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
@@ -139,8 +135,8 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
      *
      * @return int
      *
-     * @throws PrestaShopException
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
     public function countFullSyncContentLeft($offset, $langIso, $debug)
     {

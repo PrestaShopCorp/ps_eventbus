@@ -2,13 +2,10 @@
 
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
-use Currency;
 use PrestaShop\Module\PsEventbus\Builder\CarrierBuilder;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
-use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\NewRepository\CarrierRepository;
-use PrestaShop\Module\PsEventbus\DTO\Carrier as EventBusCarrier;
 
 class CarriersService implements ShopContentServiceInterface
 {
@@ -21,19 +18,14 @@ class CarriersService implements ShopContentServiceInterface
     /** @var CarrierBuilder */
     private $carrierBuilder;
 
-    /** @var LanguageRepository */
-    private $languageRepository;
-
     public function __construct(
         CarrierRepository $carrierRepository,
         ConfigurationRepository $configurationRepository,
         CarrierBuilder $carrierBuilder,
-        LanguageRepository $languageRepository
     ) {
         $this->carrierRepository = $carrierRepository;
         $this->configurationRepository = $configurationRepository;
         $this->carrierBuilder = $carrierBuilder;
-        $this->languageRepository = $languageRepository;
     }
 
     /**
@@ -46,15 +38,14 @@ class CarriersService implements ShopContentServiceInterface
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $currency = new Currency((int) $this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
-        
+        $currency = new \Currency((int) $this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
+
         /** @var array<mixed> $carriers */
         $carriers = $this->carrierRepository->getContentsForFull($offset, $limit, $langIso, $debug);
 
         /** @var string $psWeightUnit */
         $psWeightUnit = $this->configurationRepository->get('PS_WEIGHT_UNIT');
 
-        /** @var EventBusCarrier[] $eventBusCarriers */
         $eventBusCarriers = $this->carrierBuilder->buildCarriers(
             $carriers,
             $langIso,
@@ -92,7 +83,6 @@ class CarriersService implements ShopContentServiceInterface
         /** @var string $psWeightUnit */
         $psWeightUnit = $this->configurationRepository->get('PS_WEIGHT_UNIT');
 
-        /** @var EventBusCarrier[] $eventBusCarriers */
         $eventBusCarriers = $this->carrierBuilder->buildCarriers(
             $result,
             $langIso,

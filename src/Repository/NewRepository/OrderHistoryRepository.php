@@ -2,10 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
-use PrestaShopException;
-use PrestaShopDatabaseException;
-use Language;
-use DbQuery;
 class OrderHistoryRepository extends AbstractRepository implements RepositoryInterface
 {
     const TABLE_NAME = 'order_history';
@@ -15,13 +11,13 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
      *
      * @return mixed
      *
-     * @throws PrestaShopException
+     * @throws \PrestaShopException
      */
     public function generateBaseQuery($langIso)
     {
-        $langId = (int) Language::getIdByIso($langIso);
+        $langId = (int) \Language::getIdByIso($langIso);
 
-        $this->query = new DbQuery();
+        $this->query = new \DbQuery();
 
         $this->query
             ->from(self::TABLE_NAME, 'oh')
@@ -52,8 +48,8 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
      *
      * @return array<mixed>
      *
-     * @throws PrestaShopException
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
@@ -72,8 +68,8 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
      *
      * @return array<mixed>
      *
-     * @throws PrestaShopException
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
@@ -94,8 +90,8 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
      *
      * @return int
      *
-     * @throws PrestaShopException
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
     public function countFullSyncContentLeft($offset, $langIso, $debug)
     {
@@ -115,7 +111,7 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
      *
      * @return array<mixed>
      *
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopDatabaseException
      */
     public function getOrderHistoryIdsByOrderIds($orderIds, $langIso, $debug)
     {

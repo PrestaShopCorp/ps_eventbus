@@ -3,50 +3,45 @@
 namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
 use PrestaShop\Module\PsEventbus\Service\CommonService;
-use PrestaShopException;
-use PrestaShopDatabaseException;
-use Db;
-use Context;
-use DbQuery;
 
 abstract class AbstractRepository
 {
     /**
-     * @var Context
+     * @var \Context
      */
     private $context;
 
     /**
-     * @var Db
+     * @var \Db
      */
     private $db;
 
     /**
-     * @var DbQuery
+     * @var \DbQuery
      */
     protected $query;
 
     public function __construct()
     {
-        $context = Context::getContext();
+        $context = \Context::getContext();
 
         if ($context == null) {
-            throw new PrestaShopException('Context not found');
+            throw new \PrestaShopException('Context not found');
         }
 
         $this->context = $context;
-        $this->db = Db::getInstance();
+        $this->db = \Db::getInstance();
     }
 
     /**
      * @return int
      *
-     * @throws PrestaShopException
+     * @throws \PrestaShopException
      */
     public function getShopId()
     {
         if ($this->context->shop === null) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
         return (int) $this->context->shop->id;
@@ -57,8 +52,8 @@ abstract class AbstractRepository
      *
      * @return array<mixed>
      *
-     * @throws PrestaShopException
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
     protected function runQuery($debug)
     {
@@ -74,7 +69,7 @@ abstract class AbstractRepository
     /**
      * @return void
      *
-     * @throws PrestaShopException
+     * @throws \PrestaShopException
      */
     private function debugQuery()
     {

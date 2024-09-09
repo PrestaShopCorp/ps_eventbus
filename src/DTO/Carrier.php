@@ -694,7 +694,7 @@ class Carrier implements \JsonSerializable
             'grade' => (int) $this->getGrade(),
             'delay' => (string) $this->getDelay(),
             'currency' => (string) $this->getCurrency(),
-            'weight_unit' => (string) $this->getWeightUnit()
+            'weight_unit' => (string) $this->getWeightUnit(),
         ];
     }
 }

@@ -5,12 +5,13 @@ namespace PrestaShop\Module\PsEventbus\Builder;
 use PrestaShop\Module\PsEventbus\DTO\Carrier as EventBusCarrier;
 use PrestaShop\Module\PsEventbus\DTO\CarrierDetail;
 use PrestaShop\Module\PsEventbus\DTO\CarrierTax;
-use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
 use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\CountryRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\StateRepository;
 use PrestaShop\Module\PsEventbus\Repository\TaxRepository;
+use PrestaShopDatabaseException;
+use PrestaShopException;
 
 class CarrierBuilder
 {
@@ -45,14 +46,14 @@ class CarrierBuilder
 
     /**
      * @param array<mixed> $carriers
-     * @param int $langIso
+     * @param string $langIso
      * @param \Currency $currency
      * @param string $weightUnit
      *
      * @return array<mixed>
      *
-     * @@throws \PrestaShopDatabaseException
-     * @@throws \PrestaShopException
+     * @@throws PrestaShopDatabaseException
+     * @@throws PrestaShopException
      */
     public function buildCarriers($carriers, $langIso, \Currency $currency, $weightUnit)
     {
@@ -67,9 +68,7 @@ class CarrierBuilder
             );
         }
 
-        /** @var EventBusCarrier $eventBusCarrier */
         return array_map(function ($eventBusCarrier) {
-            /** @var array<mixed> $eventBusCarrierSerialized */
             return $eventBusCarrier->jsonSerialize();
         }, $eventBusCarriers);
     }
@@ -81,8 +80,8 @@ class CarrierBuilder
      *
      * @return EventBusCarrier
      *
-     * @@throws \PrestaShopDatabaseException
-     * @@throws \PrestaShopException
+     * @@throws PrestaShopDatabaseException
+     * @@throws PrestaShopException
      */
     public function buildCarrier(\Carrier $carrier, $currencyIsoCode, $weightUnit)
     {
@@ -151,7 +150,7 @@ class CarrierBuilder
         return $eventBusCarrier;
     }
 
-        /**
+    /**
      * @param \Carrier $carrierObj
      *
      * @return array<mixed>|false
@@ -242,7 +241,7 @@ class CarrierBuilder
      *
      * @return false|CarrierDetail
      *
-     * @@throws \PrestaShopDatabaseException
+     * @@throws PrestaShopDatabaseException
      */
     private function buildCarrierDetails(\Carrier $carrier, $range, $zone)
     {
@@ -279,7 +278,7 @@ class CarrierBuilder
      *
      * @return CarrierTax|null
      *
-     * @@throws \PrestaShopDatabaseException
+     * @@throws PrestaShopDatabaseException
      */
     private function buildCarrierTaxes(\Carrier $carrier, $zoneId, $rangeId)
     {

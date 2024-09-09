@@ -2,10 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
-use PrestaShopException;
-use PrestaShopDatabaseException;
-use DbQuery;
-
 class OrderCartRuleRepository extends AbstractRepository implements RepositoryInterface
 {
     const TABLE_NAME = 'order_cart_rule';
@@ -15,11 +11,11 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
      *
      * @return mixed
      *
-     * @throws PrestaShopException
+     * @throws \PrestaShopException
      */
     public function generateBaseQuery($langIso)
     {
-        $this->query = new DbQuery();
+        $this->query = new \DbQuery();
 
         $this->query
             ->from(self::TABLE_NAME, 'ocr');
@@ -47,8 +43,8 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
      *
      * @return array<mixed>
      *
-     * @throws PrestaShopException
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
@@ -67,8 +63,8 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
      *
      * @return array<mixed>
      *
-     * @throws PrestaShopException
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
@@ -88,8 +84,8 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
      *
      * @return int
      *
-     * @throws PrestaShopException
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
     public function countFullSyncContentLeft($offset, $langIso, $debug)
     {

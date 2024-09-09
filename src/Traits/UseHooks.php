@@ -1128,6 +1128,9 @@ trait UseHooks
                 $this->shopId,
                 false
             );
+
+            // TODO INSERT INCREMENTAL SYNC AND LIVE SYNC OF CARRIER DETAILS
+            // TODO INSERT INCREMENTAL SYNC AND LIVE SYNC OF CARRIER TAXES
         }
     }
 
@@ -1153,6 +1156,9 @@ trait UseHooks
                 $this->shopId,
                 false
             );
+
+            // TODO INSERT INCREMENTAL SYNC AND LIVE SYNC OF CARRIER DETAILS
+            // TODO INSERT INCREMENTAL SYNC AND LIVE SYNC OF CARRIER TAXES
         }
     }
 
@@ -1177,6 +1183,9 @@ trait UseHooks
                 $this->shopId,
                 false
             );
+
+            // TODO INSERT INCREMENTAL SYNC AND LIVE SYNC OF CARRIER DETAILS
+            // TODO INSERT INCREMENTAL SYNC AND LIVE SYNC OF CARRIER TAXES
         }
     }
 

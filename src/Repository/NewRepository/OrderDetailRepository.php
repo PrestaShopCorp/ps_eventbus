@@ -2,11 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
-use PrestaShopException;
-use PrestaShopDatabaseException;
-use Context;
-use DbQuery;
-
 class OrderDetailRepository extends AbstractRepository implements RepositoryInterface
 {
     const TABLE_NAME = 'order_detail';
@@ -16,21 +11,21 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
      *
      * @return mixed
      *
-     * @throws PrestaShopException
+     * @throws \PrestaShopException
      */
     public function generateBaseQuery($langIso)
     {
-        $context = Context::getContext();
+        $context = \Context::getContext();
 
         if ($context === null) {
-            throw new PrestaShopException('Context is null');
+            throw new \PrestaShopException('Context is null');
         }
 
         if ($context->shop === null) {
-            throw new PrestaShopException('No shop context');
+            throw new \PrestaShopException('No shop context');
         }
 
-        $this->query = new DbQuery();
+        $this->query = new \DbQuery();
 
         $this->query
             ->from(self::TABLE_NAME, 'od')
@@ -68,8 +63,8 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
      *
      * @return array<mixed>
      *
-     * @throws PrestaShopException
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
@@ -88,8 +83,8 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
      *
      * @return array<mixed>
      *
-     * @throws PrestaShopException
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
@@ -110,8 +105,8 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
      *
      * @return int
      *
-     * @throws PrestaShopException
-     * @throws PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
     public function countFullSyncContentLeft($offset, $langIso, $debug)
     {

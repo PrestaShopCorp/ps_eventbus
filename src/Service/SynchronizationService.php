@@ -11,9 +11,6 @@ use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\ShopContentServiceInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
-use Module;
-use DateTime;
-use DateTimeZone;
 
 class SynchronizationService
 {
@@ -92,8 +89,8 @@ class SynchronizationService
         $serviceName = str_replace('_', '', ucwords($shopContent, '_'));
         $serviceId = 'PrestaShop\Module\PsEventbus\Service\ShopContent\\' . $serviceName . 'Service'; // faire un mapping entre le service et le nom du shopcontent
 
-        /** @var Ps_eventbus */
-        $module = Module::getInstanceByName('ps_eventbus');
+        /** @var \Ps_eventbus */
+        $module = \Module::getInstanceByName('ps_eventbus');
 
         if (!$module->hasService($serviceId)) {
             throw new ServiceNotFoundException($serviceId);
@@ -106,7 +103,7 @@ class SynchronizationService
         $configurationRepository = $module->getService('PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository');
 
         $timezone = (string) $configurationRepository->get('PS_TIMEZONE');
-        $dateNow = (new DateTime('now', new DateTimeZone($timezone)))->format(Config::MYSQL_DATE_FORMAT);
+        $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(Config::MYSQL_DATE_FORMAT);
 
         $data = $shopContentApiService->getContentsForFull($offset, $limit, $langIso, $debug);
 
@@ -157,8 +154,8 @@ class SynchronizationService
         $serviceName = str_replace('_', '', ucwords($shopContent, '_'));
         $serviceId = 'PrestaShop\Module\PsEventbus\Service\ShopContent\\' . $serviceName . 'Service';
 
-        /** @var Ps_eventbus */
-        $module = Module::getInstanceByName('ps_eventbus');
+        /** @var \Ps_eventbus */
+        $module = \Module::getInstanceByName('ps_eventbus');
 
         if (!$module->hasService($serviceId)) {
             throw new ServiceNotFoundException($serviceId);
