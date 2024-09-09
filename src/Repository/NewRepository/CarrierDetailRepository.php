@@ -4,7 +4,7 @@ namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
 class CarrierRepository extends AbstractRepository implements RepositoryInterface
 {
-    const TABLE_NAME = 'carrier';
+    const TABLE_NAME = 'carrier_detail';
 
     /**
      * @param string $langIso
@@ -35,8 +35,7 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
             ->where('deleted=0')
         ;
 
-        $this->query->select('c.*')
-            ->select('cl.delay AS delay');
+        $this->query->select('c.*');
     }
 
     /**

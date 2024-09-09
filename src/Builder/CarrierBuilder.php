@@ -97,7 +97,7 @@ class CarrierBuilder
             ->setIdCarrier((int) $carrier->id)
             ->setIdReference((int) $carrier->id_reference)
             ->setName($carrier->name)
-            ->setTaxesRatesGroupId((int) $carrier->getIdTaxRulesGroup())
+            ->setTaxesRatesGroupId((int) $carrier->getIdTaxRulesGroup()) // TODO
             ->setUrl($carrier->url)
             ->setActive($carrier->active)
             ->setDeleted($carrier->deleted)
@@ -217,7 +217,7 @@ class CarrierBuilder
     /**
      * @param array<mixed> $deliveryPriceByRange
      *
-     * @return false|\RangeWeight|\RangePrice
+     * @return false|\RangeWeight|RangePrice
      *
      * @throws \PrestaShopDatabaseException
      * @throws \PrestaShopException
@@ -236,7 +236,7 @@ class CarrierBuilder
 
     /**
      * @param \Carrier $carrier
-     * @param \RangeWeight|\RangePrice $range
+     * @param \RangeWeight|RangePrice $range
      * @param array<mixed> $zone
      *
      * @return false|CarrierDetail
