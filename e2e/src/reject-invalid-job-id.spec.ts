@@ -6,14 +6,15 @@ import {probe} from "./helpers/mock-probe";
 import { ShopContent, shopContentList } from "./helpers/shop-contents";
 
 describe('Reject invalid job-id', () => {
-  let testIndex = 0;
+  let testTimestamp = 0;
 
   const shopContents: ShopContent[] = shopContentList
 
   let jobId: string;
 
   beforeEach(() => {
-    jobId = `invalid-job-id-${testIndex++}`
+    testTimestamp = Date.now();
+    jobId = `invalid-job-id-${testTimestamp}`
   });
 
   it.each(shopContents)(`%s should return 454 with an invalid job id (sync-api status 454)`, async (shopContent) => {

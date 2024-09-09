@@ -3,7 +3,6 @@ import R from "ramda";
 // TEMPORARY DISABLED, WAIT ADD ALL SHOP CONTENT
 // AFTER UNCOMMENT THIS, CHANGE ALL "as ShopContent"CAST IN FULLSYNC TEST
 /* export const shopContentMapping = {
-  'carriers': 'carriers',
   'carrier_details': 'carrier-details',
   'carts' : 'carts',
   'cart_products': 'carts',
@@ -35,10 +34,11 @@ import R from "ramda";
 } as const; */
 
 export const shopContentMapping = {
+  'carriers': 'carriers',
   'orders': 'orders',
-  'order_histories': 'order-histories',
   'order_cart_rules': 'order-cart-rules',
-  'order_details': 'order-details'
+  'order_details': 'order-details',
+  'order_histories': 'order-histories'
 } as const;
 
 type ShopContentMapping = typeof shopContentMapping;

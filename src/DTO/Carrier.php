@@ -5,11 +5,6 @@ namespace PrestaShop\Module\PsEventbus\DTO;
 class Carrier implements \JsonSerializable
 {
     /**
-     * @var string
-     */
-    private $collection = 'carriers';
-
-    /**
      * @var int
      */
     private $idCarrier;
@@ -138,14 +133,6 @@ class Carrier implements \JsonSerializable
      * @var CarrierTax[]
      */
     private $carrierTaxes = [];
-
-    /**
-     * @return string
-     */
-    public function getCollection()
-    {
-        return $this->collection;
-    }
 
     /**
      * @return int
@@ -683,49 +670,31 @@ class Carrier implements \JsonSerializable
          */
         error_reporting(E_ALL ^ E_WARNING);
 
-        $return = [];
-
-        $return[] = [
-            'collection' => $this->getCollection(),
-            'id' => (string) $this->getIdReference(),
-            'properties' => [
-                'id_carrier' => (string) $this->getIdCarrier(),
-                'id_reference' => (string) $this->getIdReference(),
-                'name' => (string) $this->getName(),
-                'carrier_taxes_rates_group_id' => (string) $this->getTaxesRatesGroupId(),
-                'url' => (string) $this->getUrl(),
-                'active' => (bool) $this->isActive(),
-                'deleted' => (bool) $this->isDeleted(),
-                'shipping_handling' => (float) $this->getShippingHandling(),
-                'free_shipping_starts_at_price' => (float) $this->getFreeShippingStartsAtPrice(),
-                'free_shipping_starts_at_weight' => (float) $this->getFreeShippingStartsAtWeight(),
-                'disable_carrier_when_out_of_range' => (bool) $this->isDisableCarrierWhenOutOfRange(),
-                'is_module' => (bool) $this->isModule(),
-                'is_free' => (bool) $this->isFree(),
-                'shipping_external' => (bool) $this->isShippingExternal(),
-                'need_range' => (bool) $this->isNeedRange(),
-                'external_module_name' => (string) $this->getExternalModuleName(),
-                'max_width' => (float) $this->getMaxWidth(),
-                'max_height' => (float) $this->getMaxHeight(),
-                'max_depth' => (float) $this->getMaxDepth(),
-                'max_weight' => (float) $this->getMaxWeight(),
-                'grade' => (int) $this->getGrade(),
-                'delay' => (string) $this->getDelay(),
-                'currency' => (string) $this->getCurrency(),
-                'weight_unit' => (string) $this->getWeightUnit(),
-            ],
+        return [
+            'id_carrier' => (string) $this->getIdCarrier(),
+            'id_reference' => (string) $this->getIdReference(),
+            'name' => (string) $this->getName(),
+            'carrier_taxes_rates_group_id' => (string) $this->getTaxesRatesGroupId(),
+            'url' => (string) $this->getUrl(),
+            'active' => (bool) $this->isActive(),
+            'deleted' => (bool) $this->isDeleted(),
+            'shipping_handling' => (float) $this->getShippingHandling(),
+            'free_shipping_starts_at_price' => (float) $this->getFreeShippingStartsAtPrice(),
+            'free_shipping_starts_at_weight' => (float) $this->getFreeShippingStartsAtWeight(),
+            'disable_carrier_when_out_of_range' => (bool) $this->isDisableCarrierWhenOutOfRange(),
+            'is_module' => (bool) $this->isModule(),
+            'is_free' => (bool) $this->isFree(),
+            'shipping_external' => (bool) $this->isShippingExternal(),
+            'need_range' => (bool) $this->isNeedRange(),
+            'external_module_name' => (string) $this->getExternalModuleName(),
+            'max_width' => (float) $this->getMaxWidth(),
+            'max_height' => (float) $this->getMaxHeight(),
+            'max_depth' => (float) $this->getMaxDepth(),
+            'max_weight' => (float) $this->getMaxWeight(),
+            'grade' => (int) $this->getGrade(),
+            'delay' => (string) $this->getDelay(),
+            'currency' => (string) $this->getCurrency(),
+            'weight_unit' => (string) $this->getWeightUnit(),
         ];
-
-        $carrierDetails = [];
-        foreach ($this->getCarrierDetails() as $carrierDetail) {
-            $carrierDetails[] = $carrierDetail->jsonSerialize();
-        }
-
-        $carrierTaxRates = [];
-        foreach ($this->getCarrierTaxes() as $carrierTax) {
-            $carrierTaxRates[] = $carrierTax->jsonSerialize();
-        }
-
-        return array_merge($return, $carrierDetails, $carrierTaxRates);
     }
 }

@@ -72,7 +72,7 @@ class SynchronizationService
      *
      * @return array<mixed>
      *
-     * @@throws \PrestaShopDatabaseException|EnvVarException|ApiException
+     * @@throws PrestaShopDatabaseException|EnvVarException|ApiException
      */
     public function sendFullSync(
         string $shopContent,
@@ -139,7 +139,7 @@ class SynchronizationService
      *
      * @return array<mixed>
      *
-     * @@throws \PrestaShopDatabaseException|EnvVarException
+     * @@throws PrestaShopDatabaseException|EnvVarException
      */
     public function sendIncrementalSync(
         string $shopContent,
@@ -301,7 +301,7 @@ class SynchronizationService
      *
      * @return bool
      *
-     * @@throws \PrestaShopDatabaseException
+     * @@throws PrestaShopDatabaseException
      */
     private function debounceLiveSync($shopContentName) // @phpstan-ignore method.unused
     {
