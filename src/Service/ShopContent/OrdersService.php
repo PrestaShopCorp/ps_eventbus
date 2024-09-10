@@ -101,7 +101,7 @@ class OrdersService implements ShopContentServiceInterface
      *
      * @return void
      */
-    public function castOrders(&$orders, $langIso, $debug)
+    private function castOrders(&$orders, $langIso, $debug)
     {
         foreach ($orders as &$order) {
             $order['id_order'] = (int) $order['id_order'];

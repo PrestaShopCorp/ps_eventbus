@@ -88,7 +88,7 @@ class OrderDetailsService implements ShopContentServiceInterface
      *
      * @return void
      */
-    private function castOrderDetails(&$orderDetails, $langIso, $debug)
+    private function castOrderDetails(&$orderDetails)
     {
         foreach ($orderDetails as &$orderDetail) {
             $orderDetail['id_order_detail'] = (int) $orderDetail['id_order_detail'];

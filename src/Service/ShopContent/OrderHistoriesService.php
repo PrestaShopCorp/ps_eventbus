@@ -86,7 +86,7 @@ class OrderHistoriesService implements ShopContentServiceInterface
      *
      * @return void
      */
-    public function castOrderHistories(&$orderHistories)
+    private function castOrderHistories(&$orderHistories)
     {
         foreach ($orderHistories as &$orderHistory) {
             $orderHistory['id_order_state'] = (int) $orderHistory['id_order_state'];

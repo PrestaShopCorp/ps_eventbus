@@ -4,7 +4,6 @@ imports:
   - { resource: ../common/decorator.yml }
   - { resource: ../common/repository.yml }
   - { resource: ../common/new-repository.yml }
-  - { resource: ../common/builder.yml }
 
 services:
   PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService:
@@ -85,3 +84,15 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\CarrierRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\CarrierDetailsService:
+    class:  PrestaShop\Module\PsEventbus\Service\ShopContent\CarrierDetailsService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\CarrierRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\CarrierTaxesService:
+    class:  PrestaShop\Module\PsEventbus\Service\ShopContent\CarrierTaxesService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\CarrierRepository'

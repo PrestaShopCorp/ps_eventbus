@@ -86,7 +86,7 @@ class OrderCartRulesService implements ShopContentServiceInterface
      *
      * @return void
      */
-    public function castOrderCartRules(&$orderCartRules)
+    private function castOrderCartRules(&$orderCartRules)
     {
         foreach ($orderCartRules as &$orderCartRule) {
             $orderCartRule['id_cart_rule'] = (int) $orderCartRule['id_cart_rule'];

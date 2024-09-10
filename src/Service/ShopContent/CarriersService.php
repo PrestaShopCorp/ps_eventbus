@@ -95,7 +95,7 @@ class CarriersService implements ShopContentServiceInterface
      *
      * @return void
      */
-    public function castCarriers(&$carriers) 
+    private function castCarriers(&$carriers) 
     {
         $context = Context::getContext();
         

@@ -2,7 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-class TaxRepository
+class TaxeRepository
 {
     /**
      * @var \Db

@@ -6,7 +6,7 @@ use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Helper\CarrierHelper;
 use PrestaShop\Module\PsEventbus\Repository\NewRepository\CarrierRepository;
 
-class CarrierDetailsService implements ShopContentServiceInterface
+class CarrierTaxesService implements ShopContentServiceInterface
 {
     /** @var CarrierRepository */
     private $carrierRepository;
@@ -32,21 +32,21 @@ class CarrierDetailsService implements ShopContentServiceInterface
             return [];
         }
 
-        $carrierDetails = [];
+        $carrierTaxes = [];
 
         foreach ($result as $carrierData) {
-            array_merge($carrierDetails, CarrierHelper::buildCarrierDetails($carrierData));
+            array_merge($carrierTaxes, CarrierHelper::buildCarrierTaxes($carrierData));
         }
 
-        $this->castCarrierDetails($result, $langIso);
+        $this->castCarrierTaxes($result, $langIso);
 
         return array_map(function ($item) {
             return [
-                'id' => (string) $item['id_reference'] . '-' . $item['id_zone'] . '-' . $item['shipping_method'] . '-' . $item['id_range'],
-                'collection' => Config::COLLECTION_CARRIER_DETAILS,
+                'id' => (string) $item['id_reference'] . '-' . $item['id_zone'] . '-' . $item['id_range'],
+                'collection' => Config::COLLECTION_CARRIER_TAXES,
                 'properties' => $item,
             ];
-        }, $carrierDetails);
+        }, $carrierTaxes);
     }
 
     /**
@@ -65,21 +65,20 @@ class CarrierDetailsService implements ShopContentServiceInterface
             return [];
         }
 
-        $carrierDetails = [];
+        $carrierTaxes = [];
 
         foreach ($result as $carrierData) {
-            array_merge($carrierDetails, CarrierHelper::buildCarrierDetails($carrierData));
+            array_merge($carrierTaxes, CarrierHelper::buildCarrierDetails($carrierData));
         }
 
-        $this->castCarrierDetails($result, $langIso);
-
+        $this->castCarrierTaxes($result, $langIso);
         return array_map(function ($item) {
             return [
-                'id' => (string) $item['id_reference'] . '-' . $item['id_zone'] . '-' . $item['shipping_method'] . '-' . $item['id_range'],
-                'collection' => Config::COLLECTION_CARRIER_DETAILS,
+                'id' => (string) $item['id_reference'] . '-' . $item['id_zone'] . '-' . $item['id_range'],
+                'collection' => Config::COLLECTION_CARRIER_TAXES,
                 'properties' => $item,
             ];
-        }, $carrierDetails);
+        }, $carrierTaxes);
     }
 
     /**
@@ -95,23 +94,20 @@ class CarrierDetailsService implements ShopContentServiceInterface
     }
 
     /**
-     * @param array<mixed> $carrierDetails
+     * @param array<mixed> $carrierTaxes
      *
      * @return void
      */
-    private function castCarrierDetails(&$carrierDetails) 
+    private function castCarrierTaxes(&$carrierTaxes) 
     {
-        foreach ($carrierDetails as &$carrierDetail) {
-            $carrierDetail['id_reference'] = (string) $carrierDetail['id_reference'];
-            $carrierDetail['id_zone'] = (string) $carrierDetail['id_zone'];
-            $carrierDetail['id_range'] = (string) $carrierDetail['id_range'];
-            $carrierDetail['id_carrier_detail'] = (string) $carrierDetail['id_carrier_detail'];
-            $carrierDetail['shipping_method'] = (string) $carrierDetail['shipping_method'];
-            $carrierDetail['delimiter1'] = (float) $carrierDetail['delimiter1'];
-            $carrierDetail['delimiter2'] = (float) $carrierDetail['delimiter2'];
-            $carrierDetail['country_ids'] = (string) $carrierDetail['country_ids'];
-            $carrierDetail['state_ids'] = (string) $carrierDetail['state_ids'];
-            $carrierDetail['price'] = (float) $carrierDetail['id_reference'];
+        foreach ($carrierTaxes as &$carrierTaxe) {
+            $carrierTaxe['id_reference'] = (string) $carrierTaxe['id_reference'];
+            $carrierTaxe['id_zone'] = (string) $carrierTaxe['id_zone'];
+            $carrierTaxe['id_range'] = (string) $carrierTaxe['id_range'];
+            $carrierTaxe['id_carrier_tax'] = (string) $carrierTaxe['id_carrier_tax'];
+            $carrierTaxe['country_ids'] = (string) $carrierTaxe['country_ids'];
+            $carrierTaxe['state_ids'] = (string) $carrierTaxe['state_ids'];
+            $carrierTaxe['tax_rate'] = (float) $carrierTaxe['tax_rate'];
         }
     }
 }
