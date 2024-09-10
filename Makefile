@@ -2,29 +2,36 @@ SHELL=/bin/bash -o pipefail
 MODULE_NAME = ps_eventbus
 VERSION ?= $(shell git describe --tags 2> /dev/null || echo "v0.0.0")
 SEM_VERSION ?= $(shell echo ${VERSION} | sed 's/^v//')
+BRANCH_NAME ?= $(shell git rev-parse --abbrev-ref HEAD | sed -e 's/\//_/g')
 PACKAGE ?= ${MODULE_NAME}-${VERSION}
 PS_VERSION ?= 8.1.7
 TESTING_IMAGE ?= prestashop/prestashop-flashlight:${PS_VERSION}
 PS_ROOT_DIR ?= $(shell pwd)/prestashop/prestashop-${PS_VERSION}
+WORKDIR ?= ./
 
 export PHP_CS_FIXER_IGNORE_ENV = 1
 export _PS_ROOT_DIR_ ?= ${PS_ROOT_DIR}
 export PATH := ./vendor/bin:./tools/vendor/bin:$(PATH)
 
-# target: default                                              - Calling build by default
+# target: (default)                                            - Build the module
 default: build
+
+# target: build                                                - Setup PHP & Node.js locally
+.PHONY: build
+build: vendor tools/vendor
 
 # target: help                                                 - Get help on this file
 .PHONY: help
 help:
-	@egrep "^#" Makefile
+	@echo -e "##\n# ${MODULE_NAME}:\n#  version: ${VERSION}\n#  branch:  ${BRANCH_NAME}\n##"
+	@egrep "^# target" Makefile
 
 # target: clean                                                - Clean up the repository
 .PHONY: clean
 clean:
-	git -c core.excludesfile=/dev/null clean -X -d -f
+	git clean -fdX --exclude="!.npmrc" --exclude="!.env*"
 
-# target: zip                                                  - Make zip bundles
+# target: zip                                                  - Make all zip bundles
 .PHONY: zip
 zip: zip-prod zip-inte zip-e2e
 
@@ -47,10 +54,6 @@ zip-prod: vendor tools/vendor dist
 .PHONY: zip-unzipped
 zip-unzipped: vendor tools/vendor dist
 	@$(call no_zip_it,.config.prod.yml)
-
-# target: build                                                - Setup PHP & Node.js locally
-.PHONY: build
-build: vendor tools/vendor
 
 dist:
 	@mkdir -p ./dist
@@ -157,11 +160,9 @@ define COMMENT
 	- allure-framework/allure-phpunit v2.1.0 requires phpunit/phpunit ^9 -> found phpunit/phpunit[9.0.0, ..., 9.6.4] but it conflicts with your root composer.json require (^10.0.14).
 	allure:
 		./node_modules/.bin/allure serve build/allure-results/
-
 	allure-report:
 		./node_modules/.bin/allure generate build/allure-results/
 endef
-
 
 define replace_version
 	echo "Setting up version: ${VERSION}..."
