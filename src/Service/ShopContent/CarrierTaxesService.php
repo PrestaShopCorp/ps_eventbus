@@ -35,10 +35,11 @@ class CarrierTaxesService implements ShopContentServiceInterface
         $carrierTaxes = [];
 
         foreach ($result as $carrierData) {
-            array_merge($carrierTaxes, CarrierHelper::buildCarrierTaxes($carrierData));
+            $carrierTaxes = array_merge($carrierTaxes, CarrierHelper::buildCarrierTaxes($carrierData));
         }
 
-        $this->castCarrierTaxes($result, $langIso);
+
+        $this->castCarrierTaxes($result);
 
         return array_map(function ($item) {
             return [
@@ -68,10 +69,11 @@ class CarrierTaxesService implements ShopContentServiceInterface
         $carrierTaxes = [];
 
         foreach ($result as $carrierData) {
-            array_merge($carrierTaxes, CarrierHelper::buildCarrierDetails($carrierData));
+            $carrierTaxes = array_merge($carrierTaxes, CarrierHelper::buildCarrierDetails($carrierData));
         }
 
-        $this->castCarrierTaxes($result, $langIso);
+        $this->castCarrierTaxes($result);
+
         return array_map(function ($item) {
             return [
                 'id' => (string) $item['id_reference'] . '-' . $item['id_zone'] . '-' . $item['id_range'],
@@ -98,7 +100,7 @@ class CarrierTaxesService implements ShopContentServiceInterface
      *
      * @return void
      */
-    private function castCarrierTaxes(&$carrierTaxes) 
+    private function castCarrierTaxes(&$carrierTaxes)
     {
         foreach ($carrierTaxes as &$carrierTaxe) {
             $carrierTaxe['id_reference'] = (string) $carrierTaxe['id_reference'];

@@ -2,8 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
-use Carrier;
-use Context;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\NewRepository\CarrierRepository;
@@ -40,7 +38,7 @@ class CarriersService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castCarriers($result, $langIso);
+        $this->castCarriers($result);
 
         return array_map(function ($item) {
             return [
@@ -67,7 +65,7 @@ class CarriersService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castCarriers($result, $langIso);
+        $this->castCarriers($result);
 
         return array_map(function ($item) {
             return [
@@ -95,10 +93,10 @@ class CarriersService implements ShopContentServiceInterface
      *
      * @return void
      */
-    private function castCarriers(&$carriers) 
+    private function castCarriers(&$carriers)
     {
-        $context = Context::getContext();
-        
+        $context = \Context::getContext();
+
         if ($context === null) {
             throw new \PrestaShopException('Context is null');
         }
@@ -111,7 +109,7 @@ class CarriersService implements ShopContentServiceInterface
         $psWeightUnit = $this->configurationRepository->get('PS_WEIGHT_UNIT');
 
         foreach ($carriers as &$carrier) {
-            $carrierTaxesRatesGroupId = Carrier::getIdTaxRulesGroupByIdCarrier((int) $carrier['id_carrier'], Context::getContext());
+            $carrierTaxesRatesGroupId = \Carrier::getIdTaxRulesGroupByIdCarrier((int) $carrier['id_carrier'], \Context::getContext());
 
             $shippingHandling = 0.0;
 

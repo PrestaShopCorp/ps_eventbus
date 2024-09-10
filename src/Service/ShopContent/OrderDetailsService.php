@@ -31,7 +31,7 @@ class OrderDetailsService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castOrderDetails($result, $langIso, $debug);
+        $this->castOrderDetails($result);
 
         return array_map(function ($item) {
             return [
@@ -58,7 +58,7 @@ class OrderDetailsService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castOrderDetails($result, $langIso, $debug);
+        $this->castOrderDetails($result);
 
         return array_map(function ($item) {
             return [
@@ -83,8 +83,6 @@ class OrderDetailsService implements ShopContentServiceInterface
 
     /**
      * @param array<mixed> $orderDetails
-     * @param string $langIso
-     * @param bool $debug
      *
      * @return void
      */

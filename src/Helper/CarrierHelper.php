@@ -6,25 +6,22 @@ use Carrier;
 use PrestaShop\Module\PsEventbus\Repository\CountryRepository;
 use PrestaShop\Module\PsEventbus\Repository\StateRepository;
 use PrestaShop\Module\PsEventbus\Repository\TaxeRepository;
-use PrestaShopDatabaseException;
-use PrestaShopException;
-use Ps_eventbus;
 
 class CarrierHelper
 {
     /**
      * Build a CarrierDetail from Carrier data
-     * 
+     *
      * @param array<mixed> $carrierData
-     * 
-     * @return array<mixed> 
-     * 
-     * @throws PrestaShopDatabaseException 
-     * @throws PrestaShopException 
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopDatabaseException
+     * @throws \PrestaShopException
      */
     public static function buildCarrierDetails($carrierData)
     {
-        /** @var Ps_Eventbus $module */
+        /** @var \Ps_eventbus $module */
         $module = \Module::getInstanceByName('ps_eventbus');
 
         /** @var CountryRepository $countryRepository */
@@ -33,10 +30,14 @@ class CarrierHelper
         /** @var StateRepository $stateRepository */
         $stateRepository = $module->getService('PrestaShop\Module\PsEventbus\Repository\StateRepository');
 
-        $carrier = new Carrier($carrierData);
+        $carrier = new \Carrier($carrierData['id_reference']);
 
         $deliveryPriceByRanges = CarrierHelper::getDeliveryPriceByRange($carrier);
 
+        if (!$deliveryPriceByRanges) {
+            return [];
+        }
+        
         $carrierDetails = [];
 
         foreach ($deliveryPriceByRanges as $deliveryPriceByRange) {
@@ -71,28 +72,33 @@ class CarrierHelper
 
         return $carrierDetails;
     }
+
     /**
      * Build a CarrierTaxes from Carrier
-     * 
+     *
      * @param array<mixed> $carrierData
-     * 
-     * @return array<mixed> 
-     * 
-     * @throws PrestaShopDatabaseException 
-     * @throws PrestaShopException 
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopDatabaseException
+     * @throws \PrestaShopException
      */
     public static function buildCarrierTaxes($carrierData)
     {
-        /** @var Ps_Eventbus $module */
+        /** @var \Ps_eventbus $module */
         $module = \Module::getInstanceByName('ps_eventbus');
 
         /** @var TaxeRepository $taxeRepository */
         $taxeRepository = $module->getService('PrestaShop\Module\PsEventbus\Repository\TaxeRepository');
 
-        $carrier = new Carrier($carrierData);
+        $carrier = new \Carrier($carrierData['id_reference']);
 
         $deliveryPriceByRanges = CarrierHelper::getDeliveryPriceByRange($carrier);
-
+        
+        if (!$deliveryPriceByRanges) {
+            return [];
+        }
+        
         $carrierTaxes = [];
 
         foreach ($deliveryPriceByRanges as $deliveryPriceByRange) {
@@ -109,7 +115,7 @@ class CarrierHelper
                 $carrierTaxesByZone = $taxeRepository->getCarrierTaxesByZone($zone['id_zone'], $taxRulesGroupId, true);
 
                 if (!$carrierTaxesByZone[0]['country_iso_code']) {
-                    return null;
+                    continue;
                 }
 
                 $carrierTaxesByZone = $carrierTaxesByZone[0];
@@ -134,7 +140,7 @@ class CarrierHelper
     /**
      * @param array<mixed> $deliveryPriceByRange
      *
-     * @return false|\RangeWeight|RangePrice
+     * @return false|\RangeWeight|\RangePrice
      *
      * @throws \PrestaShopDatabaseException
      * @throws \PrestaShopException
@@ -159,7 +165,7 @@ class CarrierHelper
     private static function getDeliveryPriceByRange(\Carrier $carrierObj)
     {
         $rangeTable = $carrierObj->getRangeTable();
-    
+
         switch ($rangeTable) {
             case 'range_weight':
                 return CarrierHelper::getCarrierByWeightRange($carrierObj, 'range_weight');

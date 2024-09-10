@@ -35,10 +35,10 @@ class CarrierDetailsService implements ShopContentServiceInterface
         $carrierDetails = [];
 
         foreach ($result as $carrierData) {
-            array_merge($carrierDetails, CarrierHelper::buildCarrierDetails($carrierData));
+            $carrierDetails = array_merge($carrierDetails, CarrierHelper::buildCarrierDetails($carrierData));
         }
 
-        $this->castCarrierDetails($result, $langIso);
+        $this->castCarrierDetails($result);
 
         return array_map(function ($item) {
             return [
@@ -68,10 +68,10 @@ class CarrierDetailsService implements ShopContentServiceInterface
         $carrierDetails = [];
 
         foreach ($result as $carrierData) {
-            array_merge($carrierDetails, CarrierHelper::buildCarrierDetails($carrierData));
+            $carrierDetails = array_merge($carrierDetails, CarrierHelper::buildCarrierDetails($carrierData));
         }
 
-        $this->castCarrierDetails($result, $langIso);
+        $this->castCarrierDetails($result);
 
         return array_map(function ($item) {
             return [
@@ -99,7 +99,7 @@ class CarrierDetailsService implements ShopContentServiceInterface
      *
      * @return void
      */
-    private function castCarrierDetails(&$carrierDetails) 
+    private function castCarrierDetails(&$carrierDetails)
     {
         foreach ($carrierDetails as &$carrierDetail) {
             $carrierDetail['id_reference'] = (string) $carrierDetail['id_reference'];
