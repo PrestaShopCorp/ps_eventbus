@@ -113,7 +113,7 @@ class CarrierHelper
 
                 /** @var array<mixed> $carrierTaxesByZone */
                 $carrierTaxesByZone = $taxeRepository->getCarrierTaxesByZone($zone['id_zone'], $taxRulesGroupId, true);
-                
+
                 if (!$carrierTaxesByZone[0]['country_iso_code']) {
                     continue;
                 }
