@@ -38,7 +38,7 @@ class CarrierDetailsService implements ShopContentServiceInterface
             $carrierDetails = array_merge($carrierDetails, CarrierHelper::buildCarrierDetails($carrierData));
         }
 
-        $this->castCarrierDetails($result);
+        $this->castCarrierDetails($carrierDetails);
 
         return array_map(function ($item) {
             return [
@@ -71,7 +71,7 @@ class CarrierDetailsService implements ShopContentServiceInterface
             $carrierDetails = array_merge($carrierDetails, CarrierHelper::buildCarrierDetails($carrierData));
         }
 
-        $this->castCarrierDetails($result);
+        $this->castCarrierDetails($carrierDetails);
 
         return array_map(function ($item) {
             return [
@@ -111,7 +111,7 @@ class CarrierDetailsService implements ShopContentServiceInterface
             $carrierDetail['delimiter2'] = (float) $carrierDetail['delimiter2'];
             $carrierDetail['country_ids'] = (string) $carrierDetail['country_ids'];
             $carrierDetail['state_ids'] = (string) $carrierDetail['state_ids'];
-            $carrierDetail['price'] = (float) $carrierDetail['id_reference'];
+            $carrierDetail['price'] = (float) $carrierDetail['price'];
         }
     }
 }

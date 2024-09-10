@@ -70,13 +70,13 @@ class FrontApiService
      * @param string $jobId
      * @param string $langIso
      * @param int $limit
-     * @param bool $isFull
+     * @param bool $fullSyncRequested
      * @param bool $debug
      * @param bool $ise2e
      *
      * @return void
      */
-    public function handleDataSync($shopContent, $jobId, $langIso, $limit, $isFull, $debug, $ise2e)
+    public function handleDataSync($shopContent, $jobId, $langIso, $limit, $fullSyncRequested, $debug, $ise2e)
     {
         try {
             if (!in_array($shopContent, array_merge(Config::SHOP_CONTENTS, [Config::COLLECTION_HEALTHCHECK]), true)) {
@@ -84,8 +84,8 @@ class FrontApiService
             }
 
             $isHealthCheck = $shopContent == Config::COLLECTION_HEALTHCHECK;
-
             $isAuthentified = $this->authorize($jobId, $isHealthCheck);
+            $isIncrementalSync = false;
 
             if ($isHealthCheck) {
                 /** @var HealthCheckService $healthCheckService */
@@ -118,9 +118,12 @@ class FrontApiService
             $typeSync = $this->eventbusSyncRepository->findTypeSync($shopContent, $langIso);
 
             if (is_array($typeSync)) {
-                if (!$isFull) {
-                    $offset = (int) $typeSync['offset'];
-                } else {
+                $offset = (int) $typeSync['offset'];
+
+                if ((int) $typeSync['full_sync_finished'] === 1 && !$fullSyncRequested) {
+                    $isIncrementalSync = true;
+                } elseif ($fullSyncRequested) {
+                    $offset = 0;
                     $this->eventbusSyncRepository->updateTypeSync(
                         $shopContent,
                         $offset,
@@ -134,10 +137,10 @@ class FrontApiService
             } else {
                 $this->eventbusSyncRepository->insertTypeSync($shopContent, $offset, $dateNow, $langIso);
 
-                $isFull = true;
+                $fullSyncRequested = true;
             }
 
-            if ($isFull) {
+            if (!$isIncrementalSync) {
                 $response = $this->synchronizationService->sendFullSync(
                     $shopContent,
                     $jobId,
@@ -164,7 +167,7 @@ class FrontApiService
                     [
                         'job_id' => $jobId,
                         'object_type' => $shopContent,
-                        'syncType' => $isFull ? 'full' : 'incremental',
+                        'syncType' => $fullSyncRequested ? 'full' : 'incremental',
                     ],
                     $response
                 )

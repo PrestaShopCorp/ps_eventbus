@@ -38,7 +38,7 @@ class CarrierTaxesService implements ShopContentServiceInterface
             $carrierTaxes = array_merge($carrierTaxes, CarrierHelper::buildCarrierTaxes($carrierData));
         }
 
-        $this->castCarrierTaxes($result);
+        $this->castCarrierTaxes($carrierTaxes);
 
         return array_map(function ($item) {
             return [
@@ -71,7 +71,7 @@ class CarrierTaxesService implements ShopContentServiceInterface
             $carrierTaxes = array_merge($carrierTaxes, CarrierHelper::buildCarrierDetails($carrierData));
         }
 
-        $this->castCarrierTaxes($result);
+        $this->castCarrierTaxes($carrierTaxes);
 
         return array_map(function ($item) {
             return [

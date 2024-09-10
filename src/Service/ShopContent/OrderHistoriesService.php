@@ -30,7 +30,7 @@ class OrderHistoriesService implements ShopContentServiceInterface
         if (empty($result)) {
             return [];
         }
-
+ 
         $this->castOrderHistories($result);
 
         return array_map(function ($item) {

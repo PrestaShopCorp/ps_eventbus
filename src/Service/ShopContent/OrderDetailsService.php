@@ -101,9 +101,6 @@ class OrderDetailsService implements ShopContentServiceInterface
             $orderDetail['category'] = (int) $orderDetail['category'];
             $orderDetail['unique_product_id'] = "{$orderDetail['product_id']}-{$orderDetail['product_attribute_id']}-{$orderDetail['iso_code']}";
             $orderDetail['conversion_rate'] = (float) $orderDetail['conversion_rate'];
-
-            // remove extra properties
-            unset($orderDetail['iso_code']);
         }
     }
 }
