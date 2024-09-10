@@ -37,7 +37,7 @@ class CarrierHelper
         if (!$deliveryPriceByRanges) {
             return [];
         }
-        
+
         $carrierDetails = [];
 
         foreach ($deliveryPriceByRanges as $deliveryPriceByRange) {
@@ -94,11 +94,11 @@ class CarrierHelper
         $carrier = new \Carrier($carrierData['id_reference']);
 
         $deliveryPriceByRanges = CarrierHelper::getDeliveryPriceByRange($carrier);
-        
+
         if (!$deliveryPriceByRanges) {
             return [];
         }
-        
+
         $carrierTaxes = [];
 
         foreach ($deliveryPriceByRanges as $deliveryPriceByRange) {
