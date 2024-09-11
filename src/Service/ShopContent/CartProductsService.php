@@ -80,7 +80,7 @@ class CartProductsService implements ShopContentServiceInterface
     }
 
     /**
-     * @param array<mixed> $carts
+     * @param array<mixed> $cartProducts
      *
      * @return void
      */
