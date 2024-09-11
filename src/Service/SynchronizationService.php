@@ -117,7 +117,7 @@ class SynchronizationService
             }
         }
 
-        $remainingObjects = (int) $shopContentApiService->countFullSyncContentLeft($offset);
+        $remainingObjects = (int) $shopContentApiService->countFullSyncContentLeft($offset, $limit, $langIso);
 
         if ($remainingObjects <= 0) {
             $remainingObjects = 0;
@@ -165,7 +165,7 @@ class SynchronizationService
         $shopContentApiService = $module->getService($serviceId);
 
         $contentIds = $this->incrementalSyncRepository->getIncrementalSyncObjectIds($shopContent, $langIso, $limit);
-
+        
         if (empty($contentIds)) {
             return [
                 'total_objects' => 0,

@@ -123,6 +123,7 @@ class FrontApiService
                 if ((int) $typeSync['full_sync_finished'] === 1 && !$fullSyncRequested) {
                     $isIncrementalSync = true;
                 } elseif ($fullSyncRequested) {
+
                     $offset = 0;
                     $this->eventbusSyncRepository->updateTypeSync(
                         $shopContent,
@@ -152,6 +153,7 @@ class FrontApiService
                     $debug
                 );
             } else {
+
                 $response = $this->synchronizationService->sendIncrementalSync(
                     $shopContent,
                     $jobId,

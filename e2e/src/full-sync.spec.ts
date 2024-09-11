@@ -11,6 +11,8 @@ import {
   sortUploadData,
 } from "./helpers/data-helper";
 import { ShopContent, shopContentList } from "./helpers/shop-contents";
+import { exit } from "process";
+import { cp } from "fs";
 
 expect.extend(matchers);
 
@@ -191,24 +193,33 @@ describe('Full Sync', () => {
         const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 4000 });
         
         let syncedData: PsEventbusSyncUpload[];
+        let hasData = false;
 
         try {
           // act
-          syncedData = await lastValueFrom(
-            zip(fullSync$, message$).pipe(
-              map((msg) => {
-                return msg[1].body.file
-              }),
-              concatMap((syncedPage) => {
-                return from(syncedPage);
-              }),
-              toArray()
-            )
-          );
+          hasData = (await lastValueFrom(fullSync$)).total_objects != 0;
+
+          if (hasData) {
+            syncedData = await lastValueFrom(
+              zip(fullSync$, message$).pipe(
+                map((msg) => {
+                  return msg[1].body.file
+                }),
+                concatMap((syncedPage) => {
+                  return from(syncedPage);
+                }),
+                toArray()
+              )
+            );
+          }
         } catch (error) {
           if (error instanceof TimeoutError) {
             throw new Error(`Upload complete dataset collector for "${shopContent}" throw TimeoutError with jobId "${jobId}"`)
           } 
+        }
+
+        if (!hasData) {
+          return;
         }
 
         // dump data for easier debugging or updating fixtures

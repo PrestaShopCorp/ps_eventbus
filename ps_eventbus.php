@@ -233,7 +233,7 @@ class Ps_eventbus extends Module
             if (method_exists($this, 'get')) {
                 return $this->get($serviceName);
             }
-            var_dump($serviceName);
+
             throw new ServiceNotFoundException($serviceName);
         }
     }

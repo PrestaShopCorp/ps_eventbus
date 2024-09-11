@@ -27,7 +27,7 @@ class CarrierTaxesService implements ShopContentServiceInterface
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
         $result = $this->carrierRepository->getContentsForFull($offset, $limit, $langIso, $debug);
-
+    
         if (empty($result)) {
             return [];
         }
@@ -37,7 +37,7 @@ class CarrierTaxesService implements ShopContentServiceInterface
         foreach ($result as $carrierData) {
             $carrierTaxes = array_merge($carrierTaxes, CarrierHelper::buildCarrierTaxes($carrierData));
         }
-
+        
         $this->castCarrierTaxes($carrierTaxes);
 
         return array_map(function ($item) {
@@ -84,12 +84,16 @@ class CarrierTaxesService implements ShopContentServiceInterface
 
     /**
      * @param int $offset
+     * @param int $limit
+     * @param string $langIso
      *
      * @return int
      */
-    public function countFullSyncContentLeft($offset)
+    public function countFullSyncContentLeft($offset, $limit, $langIso)
     {
-        return $this->carrierRepository->countFullSyncContentLeft($offset);
+        $data = $this->getContentsForFull($offset, 50, $langIso, false);
+
+        return count($data);
     }
 
     /**
