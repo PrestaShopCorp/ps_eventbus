@@ -28,7 +28,7 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
         $langId = (int) \Language::getIdByIso($langIso);
         $context = \Context::getContext();
 
-        if ($context === null) {
+        if ($context == null) {
             throw new \PrestaShopException('Context is null');
         }
 

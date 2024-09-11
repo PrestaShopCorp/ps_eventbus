@@ -6,7 +6,7 @@ class CartRepository extends AbstractRepository implements RepositoryInterface
 {
     const TABLE_NAME = 'cart';
 
-        /**
+    /**
      * @return void
      */
     public function generateMinimalQuery()

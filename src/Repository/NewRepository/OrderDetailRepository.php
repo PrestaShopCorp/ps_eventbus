@@ -27,7 +27,7 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
     {
         $context = \Context::getContext();
 
-        if ($context === null) {
+        if ($context == null) {
             throw new \PrestaShopException('Context is null');
         }
 
