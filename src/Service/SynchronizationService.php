@@ -165,7 +165,7 @@ class SynchronizationService
         $shopContentApiService = $module->getService($serviceId);
 
         $contentIds = $this->incrementalSyncRepository->getIncrementalSyncObjectIds($shopContent, $langIso, $limit);
-        
+
         if (empty($contentIds)) {
             return [
                 'total_objects' => 0,
