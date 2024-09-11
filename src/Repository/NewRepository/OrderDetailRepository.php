@@ -101,7 +101,7 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
         $this->generateFullQuery($langIso);
 
         $this->query
-            ->where('o.id_order_detail IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('od.id_order_detail IN(' . implode(',', array_map('intval', $contentIds)) . ')')
             ->limit($limit)
         ;
 
@@ -120,7 +120,7 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
     {
         $this->generateMinimalQuery();
 
-        $this->query->select('(COUNT(o.id_order_detail) - ' . (int) $offset . ') as count');
+        $this->query->select('(COUNT(od.id_order_detail) - ' . (int) $offset . ') as count');
 
         $result = $this->runQuery(false);
 

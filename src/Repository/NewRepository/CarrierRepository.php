@@ -104,7 +104,7 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
     {
         $this->generateMinimalQuery();
 
-        $this->query->select('(COUNT(o.id_carrier) - ' . (int) $offset . ') as count');
+        $this->query->select('(COUNT(c.id_carrier) - ' . (int) $offset . ') as count');
 
         $result = $this->runQuery(false);
 

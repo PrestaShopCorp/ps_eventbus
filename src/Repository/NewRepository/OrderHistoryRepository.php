@@ -105,7 +105,7 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
     {
         $this->generateMinimalQuery();
 
-        $this->query->select('(COUNT(o.id_order_state) - ' . (int) $offset . ') as count');
+        $this->query->select('(COUNT(oh.id_order_state) - ' . (int) $offset . ') as count');
 
         $result = $this->runQuery(false);
 

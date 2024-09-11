@@ -97,7 +97,7 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
     {
         $this->generateMinimalQuery();
 
-        $this->query->select('(COUNT(o.id_order_cart_rule) - ' . (int) $offset . ') as count');
+        $this->query->select('(COUNT(ocr.id_order_cart_rule) - ' . (int) $offset . ') as count');
 
         $result = $this->runQuery(false);
 
