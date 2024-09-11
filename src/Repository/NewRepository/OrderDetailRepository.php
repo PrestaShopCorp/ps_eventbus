@@ -7,13 +7,24 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
     const TABLE_NAME = 'order_detail';
 
     /**
+     *
+     * @return void
+     */
+    public function generateMinimalQuery()
+    {
+        $this->query = new \DbQuery();
+
+        $this->query->from(self::TABLE_NAME, 'od');
+    }
+
+    /**
      * @param string $langIso
      *
      * @return mixed
      *
      * @throws \PrestaShopException
      */
-    public function generateBaseQuery($langIso)
+    public function generateFullQuery($langIso)
     {
         $context = \Context::getContext();
 
@@ -25,10 +36,9 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
             throw new \PrestaShopException('No shop context');
         }
 
-        $this->query = new \DbQuery();
+        $this->generateMinimalQuery();
 
         $this->query
-            ->from(self::TABLE_NAME, 'od')
             ->where('od.id_shop = ' . $context->shop->id)
             ->innerJoin('orders', 'o', 'od.id_order = o.id_order')
             ->leftJoin('order_slip_detail', 'osd', 'od.id_order_detail = osd.id_order_detail')
@@ -68,7 +78,7 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $this->generateBaseQuery($langIso);
+        $this->generateFullQuery($langIso);
 
         $this->query->limit((int) $limit, (int) $offset);
 
@@ -88,10 +98,10 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $this->generateBaseQuery($langIso);
+        $this->generateFullQuery($langIso);
 
         $this->query
-            ->where('o.id_order IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('o.id_order_detail IN(' . implode(',', array_map('intval', $contentIds)) . ')')
             ->limit($limit)
         ;
 
@@ -100,22 +110,20 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
 
     /**
      * @param int $offset
-     * @param string $langIso
-     * @param bool $debug
      *
      * @return int
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $langIso, $debug)
+    public function countFullSyncContentLeft($offset)
     {
-        $result = $this->getContentsForFull($offset, 1, $langIso, $debug);
+        $this->generateMinimalQuery();
 
-        if (!is_array($result) || empty($result)) {
-            return 0;
-        }
+        $this->query->select('(COUNT(o.id_order_detail) - ' . (int) $offset . ') as count');
 
-        return count($result);
+        $result = $this->runQuery(false);
+
+        return is_array($result) ? $result[0]['count'] : 0;
     }
 }

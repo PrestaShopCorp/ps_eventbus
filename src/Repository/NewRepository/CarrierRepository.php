@@ -7,13 +7,24 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
     const TABLE_NAME = 'carrier';
 
     /**
+     *
+     * @return void
+     */
+    public function generateMinimalQuery()
+    {
+        $this->query = new \DbQuery();
+
+        $this->query->from(self::TABLE_NAME, 'c');
+    }
+
+    /**
      * @param string $langIso
      *
      * @return mixed
      *
      * @throws \PrestaShopException
      */
-    public function generateBaseQuery($langIso)
+    public function generateFullQuery($langIso)
     {
         $langId = (int) \Language::getIdByIso($langIso);
         $context = \Context::getContext();
@@ -26,9 +37,9 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
             throw new \PrestaShopException('No shop context');
         }
 
-        $this->query = new \DbQuery();
+        $this->generateMinimalQuery();
 
-        $this->query->from('carrier', 'c')
+        $this->query
             ->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . $langId)
             ->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier')
             ->where('cs.id_shop = ' . $context->shop->id)
@@ -52,7 +63,7 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $this->generateBaseQuery($langIso);
+        $this->generateFullQuery($langIso);
 
         $this->query->limit((int) $limit, (int) $offset);
 
@@ -72,7 +83,7 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $this->generateBaseQuery($langIso);
+        $this->generateFullQuery($langIso);
 
         $this->query
             ->where('c.id_carrier IN(' . implode(',', array_map('intval', $contentIds)) . ')')
@@ -83,22 +94,20 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
 
     /**
      * @param int $offset
-     * @param string $langIso
-     * @param bool $debug
      *
      * @return int
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $langIso, $debug)
+    public function countFullSyncContentLeft($offset)
     {
-        $result = $this->getContentsForFull($offset, 1, $langIso, $debug);
+        $this->generateMinimalQuery();
 
-        if (!is_array($result) || empty($result)) {
-            return 0;
-        }
+        $this->query->select('(COUNT(o.id_carrier) - ' . (int) $offset . ') as count');
 
-        return count($result);
+        $result = $this->runQuery(false);
+
+        return is_array($result) ? $result[0]['count'] : 0;
     }
 }

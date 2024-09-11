@@ -7,18 +7,26 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
     const TABLE_NAME = 'order_cart_rule';
 
     /**
+     *
+     * @return void
+     */
+    public function generateMinimalQuery()
+    {
+        $this->query = new \DbQuery();
+
+        $this->query->from(self::TABLE_NAME, 'ocr');
+    }
+
+    /**
      * @param string $langIso
      *
      * @return mixed
      *
      * @throws \PrestaShopException
      */
-    public function generateBaseQuery($langIso)
+    public function generateFullQuery($langIso)
     {
-        $this->query = new \DbQuery();
-
-        $this->query
-            ->from(self::TABLE_NAME, 'ocr');
+        $this->generateMinimalQuery();
 
         $this->query
             ->select('ocr.id_order_cart_rule')
@@ -48,7 +56,7 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $this->generateBaseQuery($langIso);
+        $this->generateFullQuery($langIso);
 
         $this->query->limit((int) $limit, (int) $offset);
 
@@ -68,10 +76,10 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $this->generateBaseQuery($langIso);
+        $this->generateFullQuery($langIso);
 
         $this->query
-            ->where('ocr.id_order IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('ocr.id_order_cart_rule IN(' . implode(',', array_map('intval', $contentIds)) . ')')
             ->limit($limit);
 
         return $this->runQuery($debug);
@@ -79,22 +87,20 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
 
     /**
      * @param int $offset
-     * @param string $langIso
-     * @param bool $debug
      *
      * @return int
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $langIso, $debug)
+    public function countFullSyncContentLeft($offset)
     {
-        $result = $this->getContentsForFull($offset, 1, $langIso, $debug);
+        $this->generateMinimalQuery();
 
-        if (!is_array($result) || empty($result)) {
-            return 0;
-        }
+        $this->query->select('(COUNT(o.id_order_cart_rule) - ' . (int) $offset . ') as count');
 
-        return count($result);
+        $result = $this->runQuery(false);
+
+        return is_array($result) ? $result[0]['count'] : 0;
     }
 }

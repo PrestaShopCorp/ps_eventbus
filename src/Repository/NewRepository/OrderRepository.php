@@ -7,18 +7,28 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
     const TABLE_NAME = 'orders';
 
     /**
+     *
+     * @return void
+     */
+    public function generateMinimalQuery()
+    {
+        $this->query = new \DbQuery();
+
+        $this->query->from(self::TABLE_NAME, 'o');
+    }
+
+    /**
      * @param string $langIso
      *
      * @return mixed
      *
      * @throws \PrestaShopException
      */
-    public function generateBaseQuery($langIso)
+    public function generateFullQuery($langIso)
     {
-        $this->query = new \DbQuery();
+        $this->generateMinimalQuery();
 
         $this->query
-            ->from(self::TABLE_NAME, 'o')
             ->leftJoin('currency', 'c', 'o.id_currency = c.id_currency')
             ->leftJoin('order_slip', 'os', 'o.id_order = os.id_order')
             ->leftJoin('address', 'ad', 'ad.id_address = o.id_address_delivery')
@@ -98,7 +108,7 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $this->generateBaseQuery($langIso);
+        $this->generateFullQuery($langIso);
 
         $this->query->limit((int) $limit, (int) $offset);
 
@@ -118,7 +128,7 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $this->generateBaseQuery($langIso);
+        $this->generateFullQuery($langIso);
 
         $this->query
             ->where('o.id_order IN(' . implode(',', array_map('intval', $contentIds)) . ')')
@@ -130,22 +140,20 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
 
     /**
      * @param int $offset
-     * @param string $langIso
-     * @param bool $debug
      *
      * @return int
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $langIso, $debug)
+    public function countFullSyncContentLeft($offset)
     {
-        $result = $this->getContentsForFull($offset, 1, $langIso, $debug);
+        $this->generateMinimalQuery();
 
-        if (!is_array($result) || empty($result)) {
-            return 0;
-        }
+        $this->query->select('(COUNT(o.id_order) - ' . (int) $offset . ') as count');
 
-        return count($result);
+        $result = $this->runQuery(false);
+
+        return is_array($result) ? $result[0]['count'] : 0;
     }
 }

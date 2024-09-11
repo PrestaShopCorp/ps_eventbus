@@ -62,7 +62,7 @@ abstract class AbstractRepository
         }
 
         $result = $this->db->executeS($this->query);
-
+        dump($result);
         return is_array($result) ? $result : [];
     }
 
