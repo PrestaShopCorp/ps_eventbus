@@ -7,7 +7,6 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
     const TABLE_NAME = 'orders';
 
     /**
-     *
      * @return void
      */
     public function generateMinimalQuery()
@@ -154,6 +153,6 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
 
         $result = $this->runQuery(false);
 
-        return is_array($result) ? $result[0]['count'] : 0;
+        return $result[0]['count'];
     }
 }

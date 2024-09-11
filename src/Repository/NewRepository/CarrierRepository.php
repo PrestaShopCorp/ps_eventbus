@@ -7,7 +7,6 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
     const TABLE_NAME = 'carrier';
 
     /**
-     *
      * @return void
      */
     public function generateMinimalQuery()
@@ -108,6 +107,6 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
 
         $result = $this->runQuery(false);
 
-        return is_array($result) ? $result[0]['count'] : 0;
+        return $result[0]['count'];
     }
 }

@@ -7,7 +7,6 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
     const TABLE_NAME = 'order_detail';
 
     /**
-     *
      * @return void
      */
     public function generateMinimalQuery()
@@ -124,6 +123,6 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
 
         $result = $this->runQuery(false);
 
-        return is_array($result) ? $result[0]['count'] : 0;
+        return $result[0]['count'];
     }
 }

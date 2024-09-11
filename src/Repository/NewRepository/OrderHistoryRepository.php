@@ -5,9 +5,8 @@ namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 class OrderHistoryRepository extends AbstractRepository implements RepositoryInterface
 {
     const TABLE_NAME = 'order_history';
-    
+
     /**
-     *
      * @return void
      */
     public function generateMinimalQuery()
@@ -109,7 +108,7 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
 
         $result = $this->runQuery(false);
 
-        return is_array($result) ? $result[0]['count'] : 0;
+        return $result[0]['count'];
     }
 
     /**

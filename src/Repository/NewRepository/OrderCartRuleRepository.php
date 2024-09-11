@@ -7,7 +7,6 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
     const TABLE_NAME = 'order_cart_rule';
 
     /**
-     *
      * @return void
      */
     public function generateMinimalQuery()
@@ -101,6 +100,6 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
 
         $result = $this->runQuery(false);
 
-        return is_array($result) ? $result[0]['count'] : 0;
+        return $result[0]['count'];
     }
 }

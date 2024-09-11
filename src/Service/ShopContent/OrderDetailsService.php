@@ -71,14 +71,12 @@ class OrderDetailsService implements ShopContentServiceInterface
 
     /**
      * @param int $offset
-     * @param string $langIso
-     * @param bool $debug
      *
      * @return int
      */
-    public function countFullSyncContentLeft($offset, $langIso, $debug)
+    public function countFullSyncContentLeft($offset)
     {
-        return (int) $this->orderDetailRepository->countFullSyncContentLeft($offset, $langIso, $debug);
+        return $this->orderDetailRepository->countFullSyncContentLeft($offset);
     }
 
     /**

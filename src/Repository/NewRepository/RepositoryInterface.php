@@ -8,7 +8,6 @@ namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 interface RepositoryInterface
 {
     /**
-     *
      * @return void
      */
     public function generateMinimalQuery();
