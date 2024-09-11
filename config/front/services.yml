@@ -96,3 +96,9 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\CarrierRepository'
+  
+  PrestaShop\Module\PsEventbus\Service\ShopContent\CartsService:
+    class:  PrestaShop\Module\PsEventbus\Service\ShopContent\CartsService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\CartRepository'
