@@ -38,6 +38,7 @@ export const shopContentMapping = {
   'carrier_details': 'carrier-details',
   'carrier_taxes': 'carrier-taxes',
   'carts': 'carts',
+  'cart_products': 'cart-products',
   'orders': 'orders',
   'order_cart_rules': 'order-cart-rules',
   'order_details': 'order-details',

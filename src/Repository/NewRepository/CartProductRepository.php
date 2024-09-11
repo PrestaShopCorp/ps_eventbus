@@ -2,9 +2,9 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
-class CarrierRepository extends AbstractRepository implements RepositoryInterface
+class CartProductRepository extends AbstractRepository implements RepositoryInterface
 {
-    const TABLE_NAME = 'carrier';
+    const TABLE_NAME = 'cart_product';
 
     /**
      * @return void
@@ -13,7 +13,7 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
     {
         $this->query = new \DbQuery();
 
-        $this->query->from(self::TABLE_NAME, 'c');
+        $this->query->from(self::TABLE_NAME, 'cp');
     }
 
     /**
@@ -25,22 +25,17 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
      */
     public function generateFullQuery($langIso)
     {
-        $langId = (int) \Language::getIdByIso($langIso);
-
         $this->generateMinimalQuery();
 
-        $this->query
-            ->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . $langId)
-            ->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier')
-        ;
+        $this->query->where('cp.id_shop = ' . (int) parent::getShopId());
 
         $this->query
-            ->where('cs.id_shop = ' . (int) parent::getShopId())
-            ->where('deleted=0')
+            ->select('cp.id_cart')
+            ->select('cp.id_product')
+            ->select('cp.id_product_attribute')
+            ->select('cp.quantity')
+            ->select('cp.date_add as created_at')
         ;
-
-        $this->query->select('c.*')
-            ->select('cl.delay AS delay');
     }
 
     /**
@@ -79,8 +74,9 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
         $this->generateFullQuery($langIso);
 
         $this->query
-            ->where('c.id_carrier IN(' . implode(',', array_map('intval', $contentIds)) . ')')
-            ->limit($limit);
+            ->where('cp.id_cart IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->limit($limit)
+        ;
 
         return $this->runQuery($debug);
     }
@@ -97,7 +93,7 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
     {
         $this->generateMinimalQuery();
 
-        $this->query->select('(COUNT(c.id_carrier) - ' . (int) $offset . ') as count');
+        $this->query->select('(COUNT(cp.id_cart) - ' . (int) $offset . ') as count');
 
         $result = $this->runQuery(false);
 
