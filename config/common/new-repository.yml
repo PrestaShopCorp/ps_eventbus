@@ -18,3 +18,7 @@ services:
   PrestaShop\Module\PsEventbus\Repository\NewRepository\CarrierRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\CarrierRepository
     public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\CartRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\CartRepository
+    public: true
