@@ -8,11 +8,16 @@ namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 interface RepositoryInterface
 {
     /**
+     * @return void
+     */
+    public function generateMinimalQuery();
+
+    /**
      * @param string $langIso
      *
      * @return mixed
      */
-    public function generateBaseQuery($langIso);
+    public function generateFullQuery($langIso);
 
     /**
      * @param int $offset
@@ -36,10 +41,8 @@ interface RepositoryInterface
 
     /**
      * @param int $offset
-     * @param string $langIso
-     * @param bool $debug
      *
      * @return int
      */
-    public function countFullSyncContentLeft($offset, $langIso, $debug);
+    public function countFullSyncContentLeft($offset);
 }

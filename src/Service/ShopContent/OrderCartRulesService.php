@@ -71,14 +71,12 @@ class OrderCartRulesService implements ShopContentServiceInterface
 
     /**
      * @param int $offset
-     * @param string $langIso
-     * @param bool $debug
      *
      * @return int
      */
-    public function countFullSyncContentLeft($offset, $langIso, $debug)
+    public function countFullSyncContentLeft($offset)
     {
-        return (int) $this->orderCartRuleRepository->countFullSyncContentLeft($offset, $langIso, $debug);
+        return $this->orderCartRuleRepository->countFullSyncContentLeft($offset);
     }
 
     /**
@@ -86,7 +84,7 @@ class OrderCartRulesService implements ShopContentServiceInterface
      *
      * @return void
      */
-    public function castOrderCartRules(&$orderCartRules)
+    private function castOrderCartRules(&$orderCartRules)
     {
         foreach ($orderCartRules as &$orderCartRule) {
             $orderCartRule['id_cart_rule'] = (int) $orderCartRule['id_cart_rule'];

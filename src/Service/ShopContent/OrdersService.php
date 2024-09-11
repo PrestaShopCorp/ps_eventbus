@@ -84,14 +84,12 @@ class OrdersService implements ShopContentServiceInterface
 
     /**
      * @param int $offset
-     * @param string $langIso
-     * @param bool $debug
      *
      * @return int
      */
-    public function countFullSyncContentLeft($offset, $langIso, $debug)
+    public function countFullSyncContentLeft($offset)
     {
-        return (int) $this->orderRepository->countFullSyncContentLeft($offset, $langIso, $debug);
+        return $this->orderRepository->countFullSyncContentLeft($offset);
     }
 
     /**
@@ -101,7 +99,7 @@ class OrdersService implements ShopContentServiceInterface
      *
      * @return void
      */
-    public function castOrders(&$orders, $langIso, $debug)
+    private function castOrders(&$orders, $langIso, $debug)
     {
         foreach ($orders as &$order) {
             $order['id_order'] = (int) $order['id_order'];

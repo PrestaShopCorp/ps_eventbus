@@ -23,8 +23,8 @@ class ps_EventbusApiFrontModuleFrontController extends ModuleFrontController
         /** @var int $limit */
         $limit = Tools::getValue('limit', 50);
 
-        /** @var bool $isFull */
-        $isFull = Tools::getValue('full', 0) == 1;
+        /** @var bool $fullSyncRequested */
+        $fullSyncRequested = Tools::getValue('full', 0) == 1;
 
         /** @var bool $debug */
         $debug = Tools::getValue('debug') == 1;
@@ -41,6 +41,6 @@ class ps_EventbusApiFrontModuleFrontController extends ModuleFrontController
         // edit shopContent for matching Config.php const
         $shopContentEdited = str_replace('-', '_', $shopContent);
 
-        $frontApiService->handleDataSync($shopContentEdited, $jobId, $langIso, $limit, $isFull, $debug, $ise2e);
+        $frontApiService->handleDataSync($shopContentEdited, $jobId, $langIso, $limit, $fullSyncRequested, $debug, $ise2e);
     }
 }

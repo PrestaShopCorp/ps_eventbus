@@ -35,6 +35,8 @@ import R from "ramda";
 
 export const shopContentMapping = {
   'carriers': 'carriers',
+  'carrier_details': 'carrier-details',
+  'carrier_taxes': 'carrier-taxes',
   'orders': 'orders',
   'order_cart_rules': 'order-cart-rules',
   'order_details': 'order-details',

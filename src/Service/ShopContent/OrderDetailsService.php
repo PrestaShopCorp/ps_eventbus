@@ -31,7 +31,7 @@ class OrderDetailsService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castOrderDetails($result, $langIso, $debug);
+        $this->castOrderDetails($result);
 
         return array_map(function ($item) {
             return [
@@ -58,7 +58,7 @@ class OrderDetailsService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castOrderDetails($result, $langIso, $debug);
+        $this->castOrderDetails($result);
 
         return array_map(function ($item) {
             return [
@@ -71,24 +71,20 @@ class OrderDetailsService implements ShopContentServiceInterface
 
     /**
      * @param int $offset
-     * @param string $langIso
-     * @param bool $debug
      *
      * @return int
      */
-    public function countFullSyncContentLeft($offset, $langIso, $debug)
+    public function countFullSyncContentLeft($offset)
     {
-        return (int) $this->orderDetailRepository->countFullSyncContentLeft($offset, $langIso, $debug);
+        return $this->orderDetailRepository->countFullSyncContentLeft($offset);
     }
 
     /**
      * @param array<mixed> $orderDetails
-     * @param string $langIso
-     * @param bool $debug
      *
      * @return void
      */
-    private function castOrderDetails(&$orderDetails, $langIso, $debug)
+    private function castOrderDetails(&$orderDetails)
     {
         foreach ($orderDetails as &$orderDetail) {
             $orderDetail['id_order_detail'] = (int) $orderDetail['id_order_detail'];
@@ -103,9 +99,6 @@ class OrderDetailsService implements ShopContentServiceInterface
             $orderDetail['category'] = (int) $orderDetail['category'];
             $orderDetail['unique_product_id'] = "{$orderDetail['product_id']}-{$orderDetail['product_attribute_id']}-{$orderDetail['iso_code']}";
             $orderDetail['conversion_rate'] = (float) $orderDetail['conversion_rate'];
-
-            // remove extra properties
-            unset($orderDetail['iso_code']);
         }
     }
 }

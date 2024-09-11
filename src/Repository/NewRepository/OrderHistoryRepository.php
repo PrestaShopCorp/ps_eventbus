@@ -7,20 +7,29 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
     const TABLE_NAME = 'order_history';
 
     /**
+     * @return void
+     */
+    public function generateMinimalQuery()
+    {
+        $this->query = new \DbQuery();
+
+        $this->query->from(self::TABLE_NAME, 'oh');
+    }
+
+    /**
      * @param string $langIso
      *
      * @return mixed
      *
      * @throws \PrestaShopException
      */
-    public function generateBaseQuery($langIso)
+    public function generateFullQuery($langIso)
     {
         $langId = (int) \Language::getIdByIso($langIso);
 
-        $this->query = new \DbQuery();
+        $this->generateMinimalQuery();
 
         $this->query
-            ->from(self::TABLE_NAME, 'oh')
             ->innerJoin('order_state', 'os', 'os.id_order_state = oh.id_order_State')
             ->innerJoin('order_state_lang', 'osl', 'osl.id_order_state = os.id_order_State AND osl.id_lang = ' . (int) $langId)
         ;
@@ -53,7 +62,7 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $this->generateBaseQuery($langIso);
+        $this->generateFullQuery($langIso);
 
         $this->query->limit((int) $limit, (int) $offset);
 
@@ -73,10 +82,10 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $this->generateBaseQuery($langIso);
+        $this->generateFullQuery($langIso);
 
         $this->query
-            ->where('oh.id_order IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('oh.id_order_state IN(' . implode(',', array_map('intval', $contentIds)) . ')')
             ->limit($limit)
         ;
 
@@ -85,23 +94,21 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
 
     /**
      * @param int $offset
-     * @param string $langIso
-     * @param bool $debug
      *
      * @return int
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $langIso, $debug)
+    public function countFullSyncContentLeft($offset)
     {
-        $result = $this->getContentsForFull($offset, 1, $langIso, $debug);
+        $this->generateMinimalQuery();
 
-        if (!is_array($result) || empty($result)) {
-            return 0;
-        }
+        $this->query->select('(COUNT(oh.id_order_state) - ' . (int) $offset . ') as count');
 
-        return count($result);
+        $result = $this->runQuery(false);
+
+        return $result[0]['count'];
     }
 
     /**
@@ -119,7 +126,7 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
             return [];
         }
 
-        $this->generateBaseQuery($langIso);
+        $this->generateFullQuery($langIso);
 
         $this->query->where('oh.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')');
 
