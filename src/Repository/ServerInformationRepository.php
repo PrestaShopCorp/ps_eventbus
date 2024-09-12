@@ -180,6 +180,8 @@ class ServerInformationRepository
             try {
                 $this->db->executeS($query);
             } catch (\PrestaShopDatabaseException $e) {
+                dump($e);
+                die;
                 $allTablesInstalled = false;
                 break;
             }

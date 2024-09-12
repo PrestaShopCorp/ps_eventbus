@@ -58,7 +58,6 @@ class Ps_eventbus extends Module
     const REQUIRED_TABLES = [
         'eventbus_type_sync',
         'eventbus_job',
-        'eventbus_deleted_objects',
         'eventbus_incremental_sync',
     ];
 
