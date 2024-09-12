@@ -74,18 +74,6 @@ services:
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
 
-  PrestaShop\Module\PsEventbus\Repository\CartRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\CartRepository
-    public: true
-    arguments:
-      - '@=service("prestashop.adapter.legacy.context").getContext()'
-
-  PrestaShop\Module\PsEventbus\Repository\CartProductRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\CartProductRepository
-    public: true
-    arguments:
-      - '@=service("prestashop.adapter.legacy.context").getContext()'
-
   PrestaShop\Module\PsEventbus\Repository\CartRuleRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CartRuleRepository
     public: true
