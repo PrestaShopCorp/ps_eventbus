@@ -7,6 +7,15 @@ function upgrade_module_4_0_0()
 {
     $db = Db::getInstance();
 
+    // Add primary key to eventbus_type_sync
+    $editTypeSyncTable = 'ALTER TABLE `' . _DB_PREFIX_ . 'eventbus_type_sync` ADD PRIMARY KEY (type, id_shop, lang_iso);';
+    $editTypeSyncTableResult = $db->query($editTypeSyncTable);
+
+    // If ALTER is failed, stop update process
+    if (!$editTypeSyncTableResult) {
+        return false;
+    }
+
     // Update eventbus_incremental_sync and add 'action' column
     $editIncrementalTable = 'ALTER TABLE `' . _DB_PREFIX_ . 'eventbus_incremental_sync` ADD action varchar(50) NOT NULL;';
     $editIncrementalTableResult = $db->query($editIncrementalTable);

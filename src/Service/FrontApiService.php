@@ -15,36 +15,25 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 class FrontApiService
 {
-    /**
-     * Timestamp when script started
-     *
-     * @var int
-     */
+    /** @var int */
     public $startTime;
 
-    /**
-     * @var ApiAuthorizationService
-     */
+    /** @var ApiAuthorizationService */
     private $apiAuthorizationService;
-    /**
-     * @var EventbusSyncRepository
-     */
+
+    /** @var EventbusSyncRepository */
     private $eventbusSyncRepository;
-    /**
-     * @var PsAccountsAdapterService
-     */
+
+    /** @var PsAccountsAdapterService */
     private $psAccountsAdapterService;
-    /**
-     * @var SynchronizationService
-     */
+
+    /** @var SynchronizationService */
     private $synchronizationService;
-    /**
-     * @var \Ps_eventbus
-     */
+
+    /** @var \Ps_eventbus */
     private $module;
-    /**
-     * @var ErrorHandler
-     */
+
+    /** @var ErrorHandler */
     private $errorHandler;
 
     public function __construct(
@@ -85,7 +74,6 @@ class FrontApiService
 
             $isHealthCheck = $shopContent == Config::COLLECTION_HEALTHCHECK;
             $isAuthentified = $this->authorize($jobId, $isHealthCheck);
-            $isIncrementalSync = false;
 
             if ($isHealthCheck) {
                 /** @var HealthCheckService $healthCheckService */
@@ -109,38 +97,42 @@ class FrontApiService
 
             $timezone = (string) $configurationRepository->get('PS_TIMEZONE');
             $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(Config::MYSQL_DATE_FORMAT);
-
             $langIso = $langIso ? $langIso : $languageRepository->getDefaultLanguageIsoCode();
 
-            $offset = 0;
             $response = [];
 
             $typeSync = $this->eventbusSyncRepository->findTypeSync($shopContent, $langIso);
 
-            if (is_array($typeSync)) {
-                $offset = (int) $typeSync['offset'];
+            // If no typesync exist, or if fullsync is requested by user
+            if (!is_array($typeSync) || $fullSyncRequested) {
+                $isFullSync = true;
+                $fullSyncIsFinished = false;
+                $offset = 0;
 
-                if ((int) $typeSync['full_sync_finished'] === 1 && !$fullSyncRequested) {
-                    $isIncrementalSync = true;
-                } elseif ($fullSyncRequested) {
-                    $offset = 0;
-                    $this->eventbusSyncRepository->updateTypeSync(
-                        $shopContent,
-                        $offset,
-                        $dateNow,
-                        false,
-                        $langIso
-                    );
-
+                if ($typeSync) {
                     $incrementalSyncRepository->removeIncrementaSyncObjectByType($shopContent);
                 }
-            } else {
-                $this->eventbusSyncRepository->insertTypeSync($shopContent, $offset, $dateNow, $langIso);
 
-                $fullSyncRequested = true;
+                $this->eventbusSyncRepository->upsertTypeSync(
+                    $shopContent,
+                    $offset,
+                    $dateNow,
+                    $fullSyncIsFinished,
+                    $langIso
+                );
+            // Else if fullsync is not finished
+            } elseif (!boolval($typeSync['full_sync_finished'])) {
+                $isFullSync = true;
+                $fullSyncIsFinished = false;
+                $offset = (int) $typeSync['offset'];
+            // Else, we are in incremental sync
+            } else {
+                $isFullSync = false;
+                $fullSyncIsFinished = $typeSync['full_sync_finished'];
+                $offset = (int) $typeSync['offset'];
             }
 
-            if (!$isIncrementalSync) {
+            if ($isFullSync) {
                 $response = $this->synchronizationService->sendFullSync(
                     $shopContent,
                     $jobId,
@@ -167,7 +159,7 @@ class FrontApiService
                     [
                         'job_id' => $jobId,
                         'object_type' => $shopContent,
-                        'syncType' => $fullSyncRequested ? 'full' : 'incremental',
+                        'syncType' => $isFullSync ? 'full' : 'incremental',
                     ],
                     $response
                 )

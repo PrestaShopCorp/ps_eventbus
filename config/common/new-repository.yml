@@ -22,3 +22,7 @@ services:
   PrestaShop\Module\PsEventbus\Repository\NewRepository\CartRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\CartRepository
     public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\CartProductRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\CartProductRepository
+    public: true

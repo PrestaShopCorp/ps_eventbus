@@ -26,8 +26,10 @@ interface ShopContentServiceInterface
 
     /**
      * @param int $offset
+     * @param int $limit
+     * @param string $langIso
      *
      * @return int
      */
-    public function countFullSyncContentLeft($offset);
+    public function countFullSyncContentLeft($offset, $limit, $langIso);
 }
