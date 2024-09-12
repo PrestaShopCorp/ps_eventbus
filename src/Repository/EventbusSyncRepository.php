@@ -2,8 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShop\Module\PsEventbus\Config\Config;
-
 class EventbusSyncRepository
 {
     const TYPE_SYNC_TABLE_NAME = 'eventbus_type_sync';
@@ -35,7 +33,7 @@ class EventbusSyncRepository
         $this->shopId = (int) $this->context->shop->id;
     }
 
-/**
+    /**
      * @param string $type
      * @param int $offset
      * @param string $date
@@ -51,7 +49,7 @@ class EventbusSyncRepository
             [
                 'type' => pSQL((string) $type),
                 'offset' => (int) $offset,
-                'id_shop' => $this->shopId,        
+                'id_shop' => $this->shopId,
                 'lang_iso' => pSQL((string) $langIso),
                 'full_sync_finished' => (int) $fullSyncFinished,
                 'last_sync_date' => pSQL($date),

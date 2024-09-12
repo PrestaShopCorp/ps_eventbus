@@ -24,7 +24,7 @@ class FrontApiService
     /** @var EventbusSyncRepository */
     private $eventbusSyncRepository;
 
-    /**  @var PsAccountsAdapterService */
+    /** @var PsAccountsAdapterService */
     private $psAccountsAdapterService;
 
     /** @var SynchronizationService */
@@ -104,7 +104,7 @@ class FrontApiService
             $typeSync = $this->eventbusSyncRepository->findTypeSync($shopContent, $langIso);
 
             // If no typesync exist, or if fullsync is requested by user
-            if (!$typeSync || $fullSyncRequested) {
+            if (!is_array($typeSync) || $fullSyncRequested) {
                 $isFullSync = true;
                 $fullSyncIsFinished = false;
                 $offset = 0;
@@ -121,14 +121,15 @@ class FrontApiService
                     $langIso
                 );
             // Else if fullsync is not finished
-            } else if (!boolval($typeSync['full_sync_finished'])) {
+            } elseif (!boolval($typeSync['full_sync_finished'])) {
                 $isFullSync = true;
                 $fullSyncIsFinished = false;
                 $offset = (int) $typeSync['offset'];
             // Else, we are in incremental sync
             } else {
                 $isFullSync = false;
-                $fullSyncIsFinished = true;
+                $fullSyncIsFinished = $typeSync['full_sync_finished'];
+                $offset = (int) $typeSync['offset'];
             }
 
             if ($isFullSync) {
