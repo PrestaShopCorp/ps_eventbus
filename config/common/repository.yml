@@ -94,12 +94,6 @@ services:
     class: PrestaShop\Module\PsEventbus\Repository\GoogleTaxonomyRepository
     public: true
 
-  PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository
-    public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
-
   PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository:
     class: PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository
     public: true
