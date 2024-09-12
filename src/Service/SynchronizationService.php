@@ -124,7 +124,7 @@ class SynchronizationService
             $offset = 0;
         }
 
-        $this->eventbusSyncRepository->updateTypeSync($shopContent, $offset, $dateNow, $remainingObjects === 0, $langIso);
+        $this->eventbusSyncRepository->upsertTypeSync($shopContent, $offset, $dateNow, $remainingObjects === 0, $langIso);
 
         return $this->returnSyncResponse($data, $response, $remainingObjects);
     }
@@ -237,7 +237,7 @@ class SynchronizationService
                     $hasDeleted = $this->incrementalSyncRepository->removeIncrementaSyncObjectByType($contentType);
 
                     if ($hasDeleted) {
-                        $this->eventbusSyncRepository->updateTypeSync(
+                        $this->eventbusSyncRepository->upsertTypeSync(
                             $contentType,
                             0,
                             $createdAt,

@@ -35,34 +35,31 @@ class EventbusSyncRepository
         $this->shopId = (int) $this->context->shop->id;
     }
 
-    /**
+/**
      * @param string $type
      * @param int $offset
-     * @param string $lastSyncDate
+     * @param string $date
+     * @param bool $fullSyncFinished
      * @param string $langIso
      *
      * @return bool
-     *
-     * @throws \PrestaShopDatabaseException
      */
-    public function insertTypeSync($type, $offset, $lastSyncDate, $langIso = null)
+    public function upsertTypeSync($type, $offset, $date, $fullSyncFinished, $langIso = null)
     {
-        $result = $this->db->insert(
+        return $this->db->insert(
             self::TYPE_SYNC_TABLE_NAME,
             [
-                'id_shop' => $this->shopId,
                 'type' => pSQL((string) $type),
                 'offset' => (int) $offset,
-                'last_sync_date' => pSQL((string) $lastSyncDate),
+                'id_shop' => $this->shopId,        
                 'lang_iso' => pSQL((string) $langIso),
-            ]
+                'full_sync_finished' => (int) $fullSyncFinished,
+                'last_sync_date' => pSQL($date),
+            ],
+            false,
+            true,
+            \Db::ON_DUPLICATE_KEY
         );
-
-        if (!$result) {
-            throw new \PrestaShopDatabaseException('Failed to insert type sync', Config::DATABASE_INSERT_ERROR_CODE);
-        }
-
-        return $result;
     }
 
     /**
@@ -115,30 +112,6 @@ class EventbusSyncRepository
             ->where('id_shop = ' . $this->shopId);
 
         return $this->db->getRow($query);
-    }
-
-    /**
-     * @param string $type
-     * @param int $offset
-     * @param string $date
-     * @param bool $fullSyncFinished
-     * @param string $langIso
-     *
-     * @return bool
-     */
-    public function updateTypeSync($type, $offset, $date, $fullSyncFinished, $langIso = null)
-    {
-        return $this->db->update(
-            self::TYPE_SYNC_TABLE_NAME,
-            [
-                'offset' => (int) $offset,
-                'full_sync_finished' => (int) $fullSyncFinished,
-                'last_sync_date' => pSQL($date),
-            ],
-            'type = "' . pSQL($type) . '"
-            AND lang_iso = "' . pSQL((string) $langIso) . '"
-            AND id_shop = ' . $this->shopId
-        );
     }
 
     /**
