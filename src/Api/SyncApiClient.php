@@ -88,34 +88,4 @@ class SyncApiClient
             'httpCode' => $response->getStatusCode(),
         ];
     }
-
-    /**
-     * @param array<mixed> $shopContent
-     * @param int $shopContentId
-     * @param string $action
-     *
-     * @return array<mixed>
-     */
-    public function liveSync($shopContent, $shopContentId, $action)
-    {
-        $response = $this->getClient(3)->sendRequest(
-            new Request(
-                'POST',
-                $this->syncApiUrl . '/notify/' . $this->shopId,
-                [
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->jwt,
-                    'User-Agent' => 'ps-eventbus/' . $this->module->version,
-                    'Content-Type' => 'application/json',
-                ],
-                '{"shopContents":' . json_encode($shopContent) . ', "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}'
-            )
-        );
-
-        return [
-            'status' => substr((string) $response->getStatusCode(), 0, 1) === '2',
-            'httpCode' => $response->getStatusCode(),
-            'body' => $response->getBody(),
-        ];
-    }
 }

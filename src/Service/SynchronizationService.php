@@ -187,7 +187,7 @@ class SynchronizationService
     }
 
     /**
-     * disables liveSync
+     * liveSync
      *
      * @param string $shopContent
      * @param int $shopContentId
@@ -198,7 +198,16 @@ class SynchronizationService
     public function sendLiveSync($shopContent, $shopContentId, $action)
     {
         if ($this->isFullSyncDone($shopContent)) {
-            // $this->debounceLiveSync($shopContent);
+          dump("isFullSyncDone");
+            if ($this->debounceLiveSync($shopContent)) {
+              dump("debounceLiveSync");
+              try {
+                    $this->liveSyncApiClient->liveSync($shopContent, (int) $shopContentId, $action);
+                } catch (\Exception $e) {
+                    // FIXME : report this error somehow
+                }
+            }
+
         }
     }
 
