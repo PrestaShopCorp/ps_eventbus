@@ -97,7 +97,7 @@ describe("Reject invalid job-id", () => {
             })
             .catch((err) => {
               return err.response;
-            })
+            }),
         );
 
         const results = await lastValueFrom(
@@ -106,8 +106,8 @@ describe("Reject invalid job-id", () => {
               probeMessage: result[0],
               psEventbusReq: result[1],
             })),
-            toArray()
-          )
+            toArray(),
+          ),
         );
 
         // assert
@@ -122,7 +122,7 @@ describe("Reject invalid job-id", () => {
           status: false,
           httpCode: 454,
         });
-      }
+      },
     );
   });
 });

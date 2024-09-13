@@ -33,28 +33,28 @@ const isString = (val) =>
 const isNumber = (val) =>
   val ? expect(val).toBeNumber() : expect(val).toBeNull();
 const specialFieldAssert: { [index: string]: (val) => void } = {
-  'created_at': isDateString,
-  'updated_at': isDateString,
-  'last_connection_date': isDateString,
-  'folder_created_at': isDateString,
-  'date_add': isDateString,
-  'from': isDateString,
-  'to': isDateString,
-  'conversion_rate': isNumber,
-  'cms_version': isString,
-  'module_id': isString,
-  'module_version': isString,
-  'theme_version': isString,
-  'php_version': isString,
-  'http_server' : isString,
-}
+  created_at: isDateString,
+  updated_at: isDateString,
+  last_connection_date: isDateString,
+  folder_created_at: isDateString,
+  date_add: isDateString,
+  from: isDateString,
+  to: isDateString,
+  conversion_rate: isNumber,
+  cms_version: isString,
+  module_id: isString,
+  module_version: isString,
+  theme_version: isString,
+  php_version: isString,
+  http_server: isString,
+};
 
-describe('Full Sync', () => {
+describe("Full Sync", () => {
   let testIndex = 0;
 
   // gérer les cas ou un shopContent n'existe pas (pas de fixture du coup)
   const controllers: Controller[] = controllerList.filter(
-    (it) => !EXCLUDED_API.includes(it)
+    (it) => !EXCLUDED_API.includes(it),
   );
 
   let jobId: string;
@@ -76,14 +76,14 @@ describe('Full Sync', () => {
       // arrange
       const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
 
-      const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
+      const callId = { call_id: Math.random().toString(36).substring(2, 11) };
 
       // act
       const response = await axios
         .post(url, callId, {
-          headers: { 
+          headers: {
             Host: testConfig.prestaShopHostHeader,
-            'Content-Type': 'application/x-www-form-urlencoded' // for compat PHP 5.6
+            "Content-Type": "application/x-www-form-urlencoded", // for compat PHP 5.6
           },
         })
         .catch((err) => {
@@ -103,14 +103,14 @@ describe('Full Sync', () => {
       // arrange
       const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
 
-      const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
+      const callId = { call_id: Math.random().toString(36).substring(2, 11) };
 
       // act
       const response = await axios
         .post(url, callId, {
           headers: {
             Host: testConfig.prestaShopHostHeader,
-            'Content-Type': 'application/x-www-form-urlencoded' // for compat PHP 5.6
+            "Content-Type": "application/x-www-form-urlencoded", // for compat PHP 5.6
           },
         })
         .catch((err) => {
@@ -136,16 +136,16 @@ describe('Full Sync', () => {
         const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
         const message$ = probe({ url: `/upload/${jobId}` });
 
-        const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
+        const callId = { call_id: Math.random().toString(36).substring(2, 11) };
 
         // act
         const request$ = from(
           axios.post(url, callId, {
             headers: {
               Host: testConfig.prestaShopHostHeader,
-              'Content-Type': 'application/x-www-form-urlencoded' // for compat PHP 5.6
+              "Content-Type": "application/x-www-form-urlencoded", // for compat PHP 5.6
             },
-          })
+          }),
         );
 
         const results = await lastValueFrom(
@@ -154,8 +154,8 @@ describe('Full Sync', () => {
               probeMessage: result[0],
               psEventbusReq: result[1],
             })),
-            toArray()
-          )
+            toArray(),
+          ),
         );
 
         // assert
@@ -166,13 +166,11 @@ describe('Full Sync', () => {
         });
       });
     }
-    
 
     if (MISSING_TEST_DATA.includes(controller)) {
       it.skip(`${controller} should upload complete dataset to collector`, () => {});
     } else {
       it(`${controller} should upload complete dataset collector`, async () => {
-        
         // arrange
         const fullSync$ = doFullSync(jobId, controller, { timeout: 4000 });
         const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 4000 });
@@ -184,8 +182,8 @@ describe('Full Sync', () => {
             concatMap((syncedPage) => {
               return from(syncedPage);
             }),
-            toArray()
-          )
+            toArray(),
+          ),
         );
 
         // dump data for easier debugging or updating fixtures
@@ -204,12 +202,12 @@ describe('Full Sync', () => {
         }
         processedData = omitProperties(
           processedData,
-          Object.keys(specialFieldAssert)
+          Object.keys(specialFieldAssert),
         );
         processedData = sortUploadData(processedData);
         processedFixture = omitProperties(
           processedFixture,
-          Object.keys(specialFieldAssert)
+          Object.keys(specialFieldAssert),
         );
         processedFixture = sortUploadData(processedFixture);
 
@@ -221,7 +219,7 @@ describe('Full Sync', () => {
           for (const specialFieldName of Object.keys(specialFieldAssert)) {
             if (data.properties[specialFieldName] !== undefined) {
               specialFieldAssert[specialFieldName](
-                data.properties[specialFieldName]
+                data.properties[specialFieldName],
               );
             }
           }

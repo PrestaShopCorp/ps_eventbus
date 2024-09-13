@@ -43,5 +43,5 @@ export const contentList = Object.keys(contentControllerMapping) as Content[];
 
 export type Controller = ContentControllerMapping[Content];
 export const controllerList = R.uniq(
-  Object.values(contentControllerMapping)
+  Object.values(contentControllerMapping),
 ) as Controller[];
