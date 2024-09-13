@@ -35,13 +35,16 @@ services:
     image: mariadb:${DOCKER_VERSION_MARIADB:?See e2e-env/.env.dist}
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
     environment:
-      - MYSQL_HOST=mysql
-      - MYSQL_USER=prestashop
-      - MYSQL_PASSWORD=prestashop
-      - MYSQL_ROOT_PASSWORD=prestashop
-      - MYSQL_PORT=3306
-      - MYSQL_DATABASE=prestashop
+      - MARIADB_USER=prestashop
+      - MARIADB_PASSWORD=prestashop
+      - MARIADB_ROOT_PASSWORD=prestashop
+      - MARIADB_PORT=3306
+      - MARIADB_DATABASE=prestashop
     ports:
       - ${HOST_PORT_BIND_MYSQL:?See e2e-env/.env.dist}:3306
     networks:
@@ -59,7 +62,7 @@ services:
       - PMA_PORT=3306
       - PMA_USER=prestashop
       - PMA_PASSWORD=prestashop
-      - MYSQL_ROOT_PASSWORD=prestashop
+      - MARIADB_ROOT_PASSWORD=prestashop
     networks:
       - prestashop
 
