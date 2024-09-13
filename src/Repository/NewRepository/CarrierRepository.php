@@ -7,13 +7,16 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
     const TABLE_NAME = 'carrier';
 
     /**
+     * @param string $tableName
+     * @param string alias
+     * 
      * @return void
      */
-    public function generateMinimalQuery()
+    public function generateMinimalQuery($tableName, $alias)
     {
         $this->query = new \DbQuery();
 
-        $this->query->from(self::TABLE_NAME, 'c');
+        $this->query->from($tableName, $alias);
     }
 
     /**
@@ -27,7 +30,7 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
     {
         $langId = (int) \Language::getIdByIso($langIso);
 
-        $this->generateMinimalQuery();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'c');
 
         $this->query
             ->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . $langId)
@@ -35,7 +38,7 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
         ;
 
         $this->query
-            ->where('cs.id_shop = ' . (int) parent::getShopId())
+            ->where('cs.id_shop = ' . (int) parent::getShopContext()->id)
             ->where('deleted=0')
         ;
 
@@ -95,7 +98,7 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
      */
     public function countFullSyncContentLeft($offset)
     {
-        $this->generateMinimalQuery();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'c');
 
         $this->query->select('(COUNT(c.id_carrier) - ' . (int) $offset . ') as count');
 

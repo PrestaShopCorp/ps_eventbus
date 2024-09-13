@@ -7,13 +7,16 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
     const TABLE_NAME = 'cart_product';
 
     /**
+     * @param string $tableName
+     * @param string alias
+     * 
      * @return void
      */
-    public function generateMinimalQuery()
+    public function generateMinimalQuery($tableName, $alias)
     {
         $this->query = new \DbQuery();
 
-        $this->query->from(self::TABLE_NAME, 'cp');
+        $this->query->from($tableName, $alias);
     }
 
     /**
@@ -25,9 +28,9 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
      */
     public function generateFullQuery($langIso)
     {
-        $this->generateMinimalQuery();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'cp');
 
-        $this->query->where('cp.id_shop = ' . (int) parent::getShopId());
+        $this->query->where('cp.id_shop = ' . (int) parent::getShopContext()->id);
 
         $this->query
             ->select('cp.id_cart')
@@ -91,7 +94,7 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
      */
     public function countFullSyncContentLeft($offset)
     {
-        $this->generateMinimalQuery();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'cp');
 
         $this->query->select('(COUNT(cp.id_cart) - ' . (int) $offset . ') as count');
 

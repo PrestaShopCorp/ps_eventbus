@@ -7,13 +7,16 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
     const TABLE_NAME = 'order_history';
 
     /**
+     * @param string $tableName
+     * @param string alias
+     * 
      * @return void
      */
-    public function generateMinimalQuery()
+    public function generateMinimalQuery($tableName, $alias)
     {
         $this->query = new \DbQuery();
 
-        $this->query->from(self::TABLE_NAME, 'oh');
+        $this->query->from($tableName, $alias);
     }
 
     /**
@@ -27,7 +30,7 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
     {
         $langId = (int) \Language::getIdByIso($langIso);
 
-        $this->generateMinimalQuery();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'oh');
 
         $this->query
             ->innerJoin('order_state', 'os', 'os.id_order_state = oh.id_order_State')
@@ -102,7 +105,7 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
      */
     public function countFullSyncContentLeft($offset)
     {
-        $this->generateMinimalQuery();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'oh');
 
         $this->query->select('(COUNT(oh.id_order_state) - ' . (int) $offset . ') as count');
 

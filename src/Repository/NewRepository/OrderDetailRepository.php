@@ -7,13 +7,16 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
     const TABLE_NAME = 'order_detail';
 
     /**
+     * @param string $tableName
+     * @param string alias
+     * 
      * @return void
      */
-    public function generateMinimalQuery()
+    public function generateMinimalQuery($tableName, $alias)
     {
         $this->query = new \DbQuery();
 
-        $this->query->from(self::TABLE_NAME, 'od');
+        $this->query->from($tableName, $alias);
     }
 
     /**
@@ -35,7 +38,7 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
             throw new \PrestaShopException('No shop context');
         }
 
-        $this->generateMinimalQuery();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'od');
 
         $this->query
             ->where('od.id_shop = ' . $context->shop->id)
@@ -117,7 +120,7 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
      */
     public function countFullSyncContentLeft($offset)
     {
-        $this->generateMinimalQuery();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'od');
 
         $this->query->select('(COUNT(od.id_order_detail) - ' . (int) $offset . ') as count');
 

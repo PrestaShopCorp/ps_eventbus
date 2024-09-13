@@ -7,13 +7,16 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
     const TABLE_NAME = 'order_cart_rule';
 
     /**
+     * @param string $tableName
+     * @param string alias
+     * 
      * @return void
      */
-    public function generateMinimalQuery()
+    public function generateMinimalQuery($tableName, $alias)
     {
         $this->query = new \DbQuery();
 
-        $this->query->from(self::TABLE_NAME, 'ocr');
+        $this->query->from($tableName, $alias);
     }
 
     /**
@@ -25,7 +28,7 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
      */
     public function generateFullQuery($langIso)
     {
-        $this->generateMinimalQuery();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'ocr');
 
         $this->query
             ->select('ocr.id_order_cart_rule')
@@ -94,7 +97,7 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
      */
     public function countFullSyncContentLeft($offset)
     {
-        $this->generateMinimalQuery();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'ocr');
 
         $this->query->select('(COUNT(ocr.id_order_cart_rule) - ' . (int) $offset . ') as count');
 

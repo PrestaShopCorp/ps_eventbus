@@ -7,13 +7,16 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
     const TABLE_NAME = 'orders';
 
     /**
+     * @param string $tableName
+     * @param string alias
+     * 
      * @return void
      */
-    public function generateMinimalQuery()
+    public function generateMinimalQuery($tableName, $alias)
     {
         $this->query = new \DbQuery();
 
-        $this->query->from(self::TABLE_NAME, 'o');
+        $this->query->from($tableName, $alias);
     }
 
     /**
@@ -25,7 +28,7 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
      */
     public function generateFullQuery($langIso)
     {
-        $this->generateMinimalQuery();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'o');
 
         $this->query
             ->leftJoin('currency', 'c', 'o.id_currency = c.id_currency')
@@ -36,7 +39,7 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
             ->leftJoin('country', 'cnti', 'cnti.id_country = ai.id_country')
             ->leftJoin('order_state_lang', 'osl', 'o.current_state = osl.id_order_state')
             ->leftJoin('order_state', 'ost', 'o.current_state = ost.id_order_state')
-            ->where('o.id_shop = ' . (int) parent::getShopId())
+            ->where('o.id_shop = ' . (int) parent::getShopContext()->id)
             ->groupBy('o.id_order')
         ;
 
@@ -147,7 +150,7 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
      */
     public function countFullSyncContentLeft($offset)
     {
-        $this->generateMinimalQuery();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'o');
 
         $this->query->select('(COUNT(o.id_order) - ' . (int) $offset . ') as count');
 
