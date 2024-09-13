@@ -1,32 +1,33 @@
 # e2e testing ps_eventbus
 
-ps_eventbus works by listening to calls and pushing data to the Cloudsync server synchronously.
-In order to test the calls made to Cloudsync, tests connect to mock Cloudsync servers using Websocket.
+ps_eventbus works by listening to calls and pushing data to the CloudSync server synchronously.
+In order to test the calls made to CloudSync, tests connect to mock CloudSync servers using Websocket.
 
 ## Running tests
 
-First start e2e environment in ```e2e-env``` (see e2e-env [README.md](../e2e-env/README.md)) then simply run ```pnpm test:e2e```.
+First start e2e environment in `e2e-env` (see e2e-env [README.md](../e2e-env/README.md)) then simply run `pnpm test:e2e`.
 
 ## Writing tests
 
 The `MockProbe` object allows to connect to a mock and check uploaded contents against the query we made.
 
 example :
-```typescript
-import { MockProbe } from './helpers/mock-probe';
-import testConfig from './helpers/test.config';
-import request from 'supertest';
 
-const controller = 'apiCategories';
+````typescript
+import { MockProbe } from "./helpers/mock-probe";
+import testConfig from "./helpers/test.config";
+import request from "supertest";
+
+const controller = "apiCategories";
 const endpoint = `/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5`;
 
-describe('CategoriesController', () => {
+describe("CategoriesController", () => {
   it(`${controller} should upload to collector`, async () => {
     // arrange
     const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
     // jobId starting with "valid-job-" will be considered valid by the mock sync-api and will always return 201;
     // other values will be rejected by the mock
-    const jobId = 'valid-job-1'
+    const jobId = "valid-job-1";
     // get values sent to the mock as Observable.
     // only values maching the given parameter will be received, which allows to exclude values sent by other tests.
     // The obsevable given by ```probe()``` establishes a websocket connection with the mock only on first subscribe,
@@ -36,7 +37,7 @@ describe('CategoriesController', () => {
 
     // Define a random callId. This param is set into body for define the compat with PHP 5.6,
     // with header 'Content-Type': 'application/x-www-form-urlencoded'
-    const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
+    const callId = { call_id: Math.random().toString(36).substring(2, 11) };
 
     // act
     // call ps_eventbus api, which should in turn upload data to the mock.
@@ -44,7 +45,7 @@ describe('CategoriesController', () => {
       axios.post(url, callId, {
         headers: {
           Host: testConfig.prestaShopHostHeader,
-          'Content-Type': 'application/x-www-form-urlencoded' // for compat PHP 5.6
+          "Content-Type": "application/x-www-form-urlencoded", // for compat PHP 5.6
         },
       })
     );
@@ -72,13 +73,13 @@ describe('CategoriesController', () => {
     });
   });
 });
-```
+````
 
 ## Using fixtures
 
-Fixtures for prestashop versions should be placed in [src/fixtures](src/fixtures). The correct version is loaded 
-automatically by ```loadFixture()```. If no fixture matches the version given by prestashop's healthcheck,
+Fixtures for prestashop versions should be placed in [src/fixtures](src/fixtures). The correct version is loaded
+automatically by `loadFixture()`. If no fixture matches the version given by prestashop's healthcheck,
 [src/fixtures/latest](src/fixtures/latest) is loaded instead.
 
-```dumpUploadData()``` will write data in [dumps](dumps) using the same format used by ```loadFixture()```
+`dumpUploadData()` will write data in [dumps](dumps) using the same format used by `loadFixture()`
 to make it easier to make or update fixtures.
