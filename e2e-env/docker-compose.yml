@@ -34,7 +34,7 @@ services:
   mysql:
     image: mariadb:${DOCKER_VERSION_MARIADB:?See e2e-env/.env.dist}
     healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect"]
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
     environment:
       - MYSQL_HOST=mysql
       - MYSQL_USER=prestashop
