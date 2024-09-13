@@ -202,7 +202,7 @@ class SynchronizationService
 
         if ($this->isFullSyncDone($shopContent, $defaultIsoCode)) {
             if ($this->debounceLiveSync($shopContent)) {
-              try {
+                try {
                     /** @var LiveSyncApiClient $liveSyncApiClient */
                     $liveSyncApiClient = $this->module->getService('PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient');
 
@@ -211,7 +211,6 @@ class SynchronizationService
                     // FIXME : report this error somehow
                 }
             }
-
         }
     }
 
