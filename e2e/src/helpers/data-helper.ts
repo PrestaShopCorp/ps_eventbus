@@ -12,10 +12,10 @@ import semver from "semver";
  * @param data ps_eventbus upload data
  */
 export const sortUploadData: (
-  data: PsEventbusSyncUpload[]
+  data: PsEventbusSyncUpload[],
 ) => PsEventbusSyncUpload[] = R.pipe(
   R.sortBy(R.prop("collection")),
-  R.sortBy(R.prop("id"))
+  R.sortBy(R.prop("id")),
 );
 
 /**
@@ -24,14 +24,14 @@ export const sortUploadData: (
  * @param data
  */
 export function generatePredictableModuleId(
-  data: PsEventbusSyncUpload[]
+  data: PsEventbusSyncUpload[],
 ): PsEventbusSyncUpload[] {
   return data.map((it) => ({ ...it, id: `${it.properties.name}` }));
 }
 
 export function omitProperties(
   data: PsEventbusSyncUpload[],
-  omitFields: string[]
+  omitFields: string[],
 ): PsEventbusSyncUpload[] {
   return data.map((it) => ({
     ...it,
@@ -56,7 +56,7 @@ export async function getShopHealthCheck(options?: {
     healthCheck = cachedHealthCheck;
   } else {
     const res = await axios.get<HealthCheck>(
-      `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck&job_id=valid-job-healthcheck`
+      `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck&job_id=valid-job-healthcheck`,
     );
     healthCheck = res.data;
     cachedHealthCheck = healthCheck;
@@ -67,37 +67,39 @@ export async function getShopHealthCheck(options?: {
 const FIXTURE_DIR = "./src/fixtures";
 
 export async function loadFixture(
-  controller: Controller
+  controller: Controller,
 ): Promise<PsEventbusSyncUpload[]> {
   const contents = getControllerContent(controller);
   const shopVersion = (await getShopHealthCheck()).prestashop_version;
   const shopSemver = semver.coerce(shopVersion);
   const fixture = [];
 
-  const fixtureVersions = await fs.promises.readdir(
-    `${FIXTURE_DIR}`,
-    {encoding: 'utf-8', withFileTypes: true}
-  )
+  const fixtureVersions = await fs.promises.readdir(`${FIXTURE_DIR}`, {
+    encoding: "utf-8",
+    withFileTypes: true,
+  });
 
   // use either fixture specific to PS version or latest fixture
   const matchingFixtures = fixtureVersions
-    .filter(version => version.isDirectory())
-    .map(version => version.name)
-    .filter(fixtureDir => semver.satisfies(shopSemver, fixtureDir));
+    .filter((version) => version.isDirectory())
+    .map((version) => version.name)
+    .filter((fixtureDir) => semver.satisfies(shopSemver, fixtureDir));
 
-  let useFixture = 'latest';
+  let useFixture = "latest";
 
-  if(matchingFixtures.length > 1) {
-    throw new Error(`More than one fixture matches prestashop version ${shopVersion} : ${JSON.stringify(useFixture)}`)
-  } else if(matchingFixtures.length === 1) {
+  if (matchingFixtures.length > 1) {
+    throw new Error(
+      `More than one fixture matches prestashop version ${shopVersion} : ${JSON.stringify(useFixture)}`,
+    );
+  } else if (matchingFixtures.length === 1) {
     useFixture = matchingFixtures[0];
   }
 
   const files = contents.map((content) =>
     fs.promises.readFile(
       `${FIXTURE_DIR}/${useFixture}/${controller}/${content}.json`,
-      "utf-8"
-    )
+      "utf-8",
+    ),
   );
 
   for await (const file of files) {
