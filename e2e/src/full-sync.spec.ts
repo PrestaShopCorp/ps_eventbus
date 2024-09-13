@@ -176,7 +176,7 @@ describe("Full Sync", () => {
         const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 4000 });
 
         // act
-        const syncedData: PsEventbusSyncUpload[] = await lastValueFrom(
+        const syncedData = await lastValueFrom(
           zip(fullSync$, message$).pipe(
             map((msg) => msg[1].body.file),
             concatMap((syncedPage) => {
@@ -187,14 +187,14 @@ describe("Full Sync", () => {
         );
 
         // dump data for easier debugging or updating fixtures
+        let processedData = syncedData as PsEventbusSyncUpload[];
         if (testConfig.dumpFullSyncData) {
-          await dumpUploadData(syncedData, controller);
+          await dumpUploadData(processedData, controller);
         }
 
         const fixture = await loadFixture(controller);
 
         // we need to process fixtures and data returned from ps_eventbus to make them easier to compare
-        let processedData = syncedData;
         let processedFixture = fixture;
         if (controller === "apiModules") {
           processedData = generatePredictableModuleId(processedData);
@@ -215,7 +215,7 @@ describe("Full Sync", () => {
         expect(processedData).toMatchObject(processedFixture);
 
         // assert special field using custom matcher
-        for (const data of syncedData) {
+        for (const data of processedData) {
           for (const specialFieldName of Object.keys(specialFieldAssert)) {
             if (data.properties[specialFieldName] !== undefined) {
               specialFieldAssert[specialFieldName](

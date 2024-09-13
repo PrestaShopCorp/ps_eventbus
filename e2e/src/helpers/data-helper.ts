@@ -26,7 +26,10 @@ export const sortUploadData: (
 export function generatePredictableModuleId(
   data: PsEventbusSyncUpload[],
 ): PsEventbusSyncUpload[] {
-  return data.map((it) => ({ ...it, id: `${it.properties.name}` }));
+  return data.map((it) => ({
+    ...it,
+    id: `${(it.properties as { name: string }).name}`,
+  }));
 }
 
 export function omitProperties(
@@ -35,7 +38,7 @@ export function omitProperties(
 ): PsEventbusSyncUpload[] {
   return data.map((it) => ({
     ...it,
-    properties: R.omit(omitFields, it.properties),
+    properties: R.omit(omitFields as never[], it.properties),
   }));
 }
 
