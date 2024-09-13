@@ -149,7 +149,7 @@ docker-phpunit-cov: tools/vendor
 phpstan: tools/vendor prestashop/prestashop-${PS_VERSION}
 	phpstan analyse --memory-limit=-1 --configuration=./tests/phpstan/phpstan-local.neon;
 docker-phpstan:
-	@$(call in_docker,/usr/bin/phpstan,analyse --memory-limit=-1 --configuration=./tests/phpstan/phpstan-docker.neon)
+	@$(call in_docker,phpstan,analyse --memory-limit=-1 --configuration=./tests/phpstan/phpstan-docker.neon)
 
 define COMMENT
 	Fixme: add "allure-framework/allure-phpunit" in composer.json to solve this.
