@@ -136,3 +136,38 @@ jobs:
           docker compose logs cloudsync-mock prestashop
           docker compose down -v
         working-directory: e2e-env
+
+  e2e-lint:
+    name: Lint E2E tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: latest
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_BUILDER_VERSION }}
+          cache: "pnpm"
+          cache-dependency-path: e2e/pnpm-lock.yaml
+
+      - name: Cache vendor folder
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: php-${{ hashFiles('composer.lock') }}
+
+      - name: Install dependencies
+        run: pnpm install --no-optional --force
+        working-directory: e2e
+
+      - name: Lint test files
+        run: pnpm lint && pnpm format
+        working-directory: e2e
