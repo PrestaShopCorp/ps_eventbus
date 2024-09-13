@@ -1,4 +1,4 @@
-name: Quality Control
+name: PRs Quality Check
 
 env:
   NODE_BUILDER_VERSION: "20"
@@ -50,13 +50,12 @@ jobs:
         run: make lint
 
   phpstan:
-    name: PHPStan
+    name: PHPStan for PrestaShop ${{ matrix.presta-versions }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     strategy:
       matrix:
-        # @TODO: "1.6.1.24" is temporarily disabled here
-        ps_version: ["1.6.1.11", "1.7.8.10", "8.1.6"]
+        ps_version: ["1.6.1.11", "1.7.8.10", "8.1.7"]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
