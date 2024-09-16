@@ -117,7 +117,7 @@ class SynchronizationService
             }
         }
 
-        $remainingObjects = (int) $shopContentApiService->countFullSyncContentLeft($offset, $limit, $langIso);
+        $remainingObjects = (int) $shopContentApiService->getFullSyncContentLeft($offset, $limit, $langIso);
 
         if ($remainingObjects <= 0) {
             $remainingObjects = 0;

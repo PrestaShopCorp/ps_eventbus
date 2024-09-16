@@ -21,12 +21,13 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
 
     /**
      * @param string $langIso
+     * @param bool $withSelecParameters
      *
      * @return mixed
      *
      * @throws \PrestaShopException
      */
-    public function generateFullQuery($langIso)
+    public function generateFullQuery($langIso, $withSelecParameters)
     {
         $langId = (int) \Language::getIdByIso($langIso);
 
@@ -42,8 +43,10 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
             ->where('deleted=0')
         ;
 
-        $this->query->select('c.*')
-            ->select('cl.delay AS delay');
+        if ($withSelecParameters) {
+            $this->query->select('c.*')
+                ->select('cl.delay AS delay');
+        }
     }
 
     /**
@@ -57,9 +60,9 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getContentsForFull($offset, $limit, $langIso, $debug)
+    public function retrieveContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $this->generateFullQuery($langIso);
+        $this->generateFullQuery($langIso, true);
 
         $this->query->limit((int) $limit, (int) $offset);
 
@@ -77,9 +80,9 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $this->generateFullQuery($langIso);
+        $this->generateFullQuery($langIso, true);
 
         $this->query
             ->where('c.id_carrier IN(' . implode(',', array_map('intval', $contentIds)) . ')')
@@ -90,17 +93,19 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
 
     /**
      * @param int $offset
-     *
+     * @param int $limit
+     * @param $langIso
+     * 
      * @return int
-     *
+     * 
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset)
+    public function countFullSyncContentLeft($offset, $limit, $langIso)
     {
-        $this->generateMinimalQuery(self::TABLE_NAME, 'c');
+        $this->generateFullQuery($langIso, false);
 
-        $this->query->select('(COUNT(c.id_carrier) - ' . (int) $offset . ') as count');
+        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
 
         $result = $this->runQuery(false);
 

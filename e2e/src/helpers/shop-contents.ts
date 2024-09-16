@@ -34,7 +34,7 @@ import R from "ramda";
 } as const; */
 
 export const shopContentMapping = {
-  'carriers': 'carriers',
+/*   'carriers': 'carriers',
   'carrier_details': 'carrier-details',
   'carrier_taxes': 'carrier-taxes',
   'carts': 'carts',
@@ -43,7 +43,7 @@ export const shopContentMapping = {
   'orders': 'orders',
   'order_cart_rules': 'order-cart-rules',
   'order_details': 'order-details',
-  'order_histories': 'order-histories',
+  'order_histories': 'order-histories', */
   'products': 'products'
 } as const;
 

@@ -21,24 +21,27 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
 
     /**
      * @param string $langIso
+     * @param bool $withSelecParameters
      *
      * @return mixed
      *
      * @throws \PrestaShopException
      */
-    public function generateFullQuery($langIso)
+    public function generateFullQuery($langIso, $withSelecParameters)
     {
         $this->generateMinimalQuery(self::TABLE_NAME, 'cp');
 
         $this->query->where('cp.id_shop = ' . (int) parent::getShopContext()->id);
-
-        $this->query
-            ->select('cp.id_cart')
-            ->select('cp.id_product')
-            ->select('cp.id_product_attribute')
-            ->select('cp.quantity')
-            ->select('cp.date_add as created_at')
-        ;
+        
+        if ($withSelecParameters) {
+            $this->query
+                ->select('cp.id_cart')
+                ->select('cp.id_product')
+                ->select('cp.id_product_attribute')
+                ->select('cp.quantity')
+                ->select('cp.date_add as created_at')
+            ;
+        }
     }
 
     /**
@@ -52,9 +55,9 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getContentsForFull($offset, $limit, $langIso, $debug)
+    public function retrieveContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $this->generateFullQuery($langIso);
+        $this->generateFullQuery($langIso, true);
 
         $this->query->limit((int) $limit, (int) $offset);
 
@@ -72,9 +75,9 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $this->generateFullQuery($langIso);
+        $this->generateFullQuery($langIso, true);
 
         $this->query
             ->where('cp.id_cart IN(' . implode(',', array_map('intval', $contentIds)) . ')')
@@ -86,17 +89,19 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
 
     /**
      * @param int $offset
-     *
+     * @param int $limit
+     * @param $langIso
+     * 
      * @return int
-     *
+     * 
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset)
+    public function countFullSyncContentLeft($offset, $limit, $langIso)
     {
-        $this->generateMinimalQuery(self::TABLE_NAME, 'cp');
+        $this->generateFullQuery($langIso, false);
 
-        $this->query->select('(COUNT(cp.id_cart) - ' . (int) $offset . ') as count');
+        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
 
         $result = $this->runQuery(false);
 

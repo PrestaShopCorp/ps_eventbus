@@ -21,12 +21,13 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
 
     /**
      * @param string $langIso
+     * @param bool $withSelecParameters
      *
      * @return mixed
      *
      * @throws \PrestaShopException
      */
-    public function generateFullQuery($langIso)
+    public function generateFullQuery($langIso, $withSelecParameters)
     {
         $shopIdGroup = (int) parent::getShopContext()->id_shop_group;
         $langId = (int) \Language::getIdByIso($langIso);
@@ -62,59 +63,61 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
             ;
         }
 
-        $this->query
-            ->select('p.id_product')
-            ->select('p.id_manufacturer')
-            ->select('p.id_supplier')
-            ->select('IFNULL(pas.id_product_attribute, 0) as id_attribute')
-            ->select('pas.default_on as is_default_attribute')
-            ->select('pl.name')
-            ->select('pl.description')
-            ->select('pl.description_short')
-            ->select('pl.link_rewrite')
-            ->select('cl.name as default_category')
-            ->select('ps.id_category_default')
-            ->select('IFNULL(NULLIF(pa.reference, ""), p.reference) as reference')
-            ->select('IFNULL(NULLIF(pa.upc, ""), p.upc) as upc')
-            ->select('IFNULL(NULLIF(pa.ean13, ""), p.ean13) as ean')
-            ->select('ps.condition')
-            ->select('ps.visibility')
-            ->select('ps.active')
-            ->select('sa.quantity')
-            ->select('m.name as manufacturer')
-            ->select('(p.weight + IFNULL(pas.weight, 0)) as weight')
-            ->select('(ps.price + IFNULL(pas.price, 0)) as price_tax_excl')
-            ->select('p.date_add as created_at')
-            ->select('p.date_upd as updated_at')
-            ->select('p.available_for_order')
-            ->select('p.available_date')
-            ->select('p.cache_is_pack as is_bundle')
-            ->select('p.is_virtual')
-            ->select('p.unity')
-            ->select('p.unit_price_ratio')
-            ->select('p.width')
-            ->select('p.height')
-            ->select('p.depth')
-            ->select('p.additional_shipping_cost');
-        ;
-
-        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>=')) {
-            $this->query->select('IFNULL(NULLIF(pa.isbn, ""), p.isbn) as isbn');
-        }
-
-        // https://github.com/PrestaShop/PrestaShop/commit/10268af8db4163dc2a02edb8da93d02f37f814d8#diff-e94a594ba740485c7a4882b333984d3932a2f99c0d6d0005620745087cce7a10R260
-        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
+        if ($withSelecParameters) {
             $this->query
-                ->select('p.additional_delivery_times')
-                ->select('pl.delivery_in_stock')
-                ->select('pl.delivery_out_stock')
+                ->select('p.id_product')
+                ->select('p.id_manufacturer')
+                ->select('p.id_supplier')
+                ->select('IFNULL(pas.id_product_attribute, 0) as id_attribute')
+                ->select('pas.default_on as is_default_attribute')
+                ->select('pl.name')
+                ->select('pl.description')
+                ->select('pl.description_short')
+                ->select('pl.link_rewrite')
+                ->select('cl.name as default_category')
+                ->select('ps.id_category_default')
+                ->select('IFNULL(NULLIF(pa.reference, ""), p.reference) as reference')
+                ->select('IFNULL(NULLIF(pa.upc, ""), p.upc) as upc')
+                ->select('IFNULL(NULLIF(pa.ean13, ""), p.ean13) as ean')
+                ->select('ps.condition')
+                ->select('ps.visibility')
+                ->select('ps.active')
+                ->select('sa.quantity')
+                ->select('m.name as manufacturer')
+                ->select('(p.weight + IFNULL(pas.weight, 0)) as weight')
+                ->select('(ps.price + IFNULL(pas.price, 0)) as price_tax_excl')
+                ->select('p.date_add as created_at')
+                ->select('p.date_upd as updated_at')
+                ->select('p.available_for_order')
+                ->select('p.available_date')
+                ->select('p.cache_is_pack as is_bundle')
+                ->select('p.is_virtual')
+                ->select('p.unity')
+                ->select('p.unit_price_ratio')
+                ->select('p.width')
+                ->select('p.height')
+                ->select('p.depth')
+                ->select('p.additional_shipping_cost');
             ;
-        }
 
-        // https://github.com/PrestaShop/PrestaShop/commit/75fcc335a85c4e3acb2444ef9584590a59fc2d62#diff-e98d435095567c145b49744715fd575eaab7050328c211b33aa9a37158421ff4R1615
-        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.7.0', '>=')) {
-            $this->query->select('p.mpn');
-        }
+            if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>=')) {
+                $this->query->select('IFNULL(NULLIF(pa.isbn, ""), p.isbn) as isbn');
+            }
+
+            // https://github.com/PrestaShop/PrestaShop/commit/10268af8db4163dc2a02edb8da93d02f37f814d8#diff-e94a594ba740485c7a4882b333984d3932a2f99c0d6d0005620745087cce7a10R260
+            if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
+                $this->query
+                    ->select('p.additional_delivery_times')
+                    ->select('pl.delivery_in_stock')
+                    ->select('pl.delivery_out_stock')
+                ;
+            }
+
+            // https://github.com/PrestaShop/PrestaShop/commit/75fcc335a85c4e3acb2444ef9584590a59fc2d62#diff-e98d435095567c145b49744715fd575eaab7050328c211b33aa9a37158421ff4R1615
+            if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.7.0', '>=')) {
+                $this->query->select('p.mpn');
+            }
+        }        
     }
 
     /**
@@ -128,9 +131,9 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getContentsForFull($offset, $limit, $langIso, $debug)
+    public function retrieveContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $this->generateFullQuery($langIso);
+        $this->generateFullQuery($langIso, true);
 
         $this->query->limit((int) $limit, (int) $offset);
 
@@ -148,9 +151,9 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $this->generateFullQuery($langIso);
+        $this->generateFullQuery($langIso, true);
 
         $this->query
             ->where('p.id_product IN(' . implode(',', array_map('intval', $contentIds)) . ')')
@@ -162,17 +165,19 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
 
     /**
      * @param int $offset
-     *
+     * @param int $limit
+     * @param $langIso
+     * 
      * @return int
-     *
+     * 
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset)
+    public function countFullSyncContentLeft($offset, $limit, $langIso)
     {
-        $this->generateMinimalQuery(self::TABLE_NAME, 'p');
+        $this->generateFullQuery($langIso, false);
 
-        $this->query->select('(COUNT(p.id_product) - ' . (int) $offset . ') as count');
+        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
 
         $result = $this->runQuery(false);
 
@@ -198,7 +203,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
             ->leftJoin('attribute', 'a', 'a.id_attribute = pac.id_attribute')
             ->leftJoin('attribute_group_lang', 'agl', 'agl.id_attribute_group = a.id_attribute_group AND agl.id_lang = ' . $langId)
             ->leftJoin('attribute_lang', 'al', 'al.id_attribute = pac.id_attribute AND al.id_lang = agl.id_lang')
-            ->where('pas.id_product_attribute IN (' . implode(',', array_map('intval', $attributeIds)) . ') AND pas.id_shop = ' . $this->shopId)
+            ->where('pas.id_product_attribute IN (' . implode(',', array_map('intval', $attributeIds)) . ') AND pas.id_shop = ' . parent::getShopContext()->id)
         ;
 
         $this->query
