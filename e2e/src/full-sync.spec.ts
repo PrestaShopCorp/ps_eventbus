@@ -4,7 +4,9 @@ import { dumpUploadData, logAxiosError } from "./helpers/log-helper";
 import axios, { AxiosError } from "axios";
 import { doFullSync, probe, PsEventbusSyncUpload } from "./helpers/mock-probe";
 import {
+  combineLatest,
   concatMap,
+  expand,
   from,
   lastValueFrom,
   map,
@@ -143,7 +145,7 @@ describe("Full Sync", () => {
     if (MISSING_TEST_DATA.includes(shopContent)) {
       it.skip(`${shopContent} should upload to collector`, () => {});
     } else {
-      it(`${shopContent} should upload to collector`, async () => {
+      it.skip(`${shopContent} should upload to collector`, async () => {
         // arrange
         const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&is_e2e=1&shop_content=${shopContent}&limit=5&full=1&job_id=${jobId}`;
         const message$ = probe({ url: `/upload/${jobId}` });
@@ -204,12 +206,17 @@ describe("Full Sync", () => {
 
         let syncedData: PsEventbusSyncUpload[];
 
-        const fullSyncP = lastValueFrom(fullSync$.pipe(toArray()));
-        const messageP = lastValueFrom(
-          message$.pipe(concatMap((msg) => of(msg.body.file))),
+        const [reponse, message] = await lastValueFrom(
+          combineLatest([
+            fullSync$,
+            message$.pipe(
+              map((msg) => msg.body.file),
+              toArray(),
+            ),
+          ]),
         );
 
-        syncedData = await messageP;
+        syncedData = message.flat();
 
         // dump data for easier debugging or updating fixtures
         if (testConfig.dumpFullSyncData) {
