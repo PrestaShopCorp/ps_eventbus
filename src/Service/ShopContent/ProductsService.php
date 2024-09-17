@@ -303,6 +303,9 @@ class ProductsService implements ShopContentServiceInterface
         $productIds = $this->arrayFormatter->formatValueArray($products, 'id_product', true);
         $features = $this->productRepository->getProductFeatures($productIds, $langIso);
 
+        dump($products, $features);
+        die;
+
         foreach ($products as &$product) {
             $product['features'] = isset($features[$product['id_product']]) ? $features[$product['id_product']] : '';
         }
