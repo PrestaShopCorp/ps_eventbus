@@ -47,6 +47,22 @@ Or specifically, only starting PrestaShop (and its dependencies) with special co
 docker compose up prestashop --force-recreate --renew-anon-volumes
 ```
 
+## Testing
+
+Simple!
+
+Is the module healthy?
+
+```sh
+curl -s "http://localhost:8000/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck&job_id=valid-job-1" | jq .
+```
+
+Capture orders:
+
+```sh
+curl -s "http://localhost:8000/index.php?fc=module&module=ps_eventbus&controller=apiOrders&job_id=valid-job-1" | jq .
+```
+
 ## Make changes to the mock
 
 If you need to make change to the mocks, they can be built and run locally using scripts in `package.json`.
