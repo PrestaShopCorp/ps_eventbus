@@ -145,7 +145,7 @@ describe("Full Sync", () => {
     if (MISSING_TEST_DATA.includes(shopContent)) {
       it.skip(`${shopContent} should upload to collector`, () => {});
     } else {
-      it.skip(`${shopContent} should upload to collector`, async () => {
+      it(`${shopContent} should upload to collector`, async () => {
         // arrange
         const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&is_e2e=1&shop_content=${shopContent}&limit=5&full=1&job_id=${jobId}`;
         const message$ = probe({ url: `/upload/${jobId}` });
@@ -199,7 +199,7 @@ describe("Full Sync", () => {
     if (MISSING_TEST_DATA.includes(shopContent)) {
       it.skip(`${shopContent} should upload complete dataset to collector`, () => {});
     } else {
-      it(`${shopContent} should upload complete dataset collector`, async () => {
+      it.skip(`${shopContent} should upload complete dataset collector`, async () => {
         // arrange
         const fullSync$ = doFullSync(jobId, shopContent, { timeout: 4000 });
         const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 4000 });

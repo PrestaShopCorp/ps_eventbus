@@ -8,8 +8,8 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
 
     /**
      * @param string $tableName
-     * @param string alias
-     * 
+     * @param string $alias
+     *
      * @return void
      */
     public function generateMinimalQuery($tableName, $alias)
@@ -32,7 +32,7 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
         $this->generateMinimalQuery(self::TABLE_NAME, 'cp');
 
         $this->query->where('cp.id_shop = ' . (int) parent::getShopContext()->id);
-        
+
         if ($withSelecParameters) {
             $this->query
                 ->select('cp.id_cart')
@@ -90,10 +90,10 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
     /**
      * @param int $offset
      * @param int $limit
-     * @param $langIso
-     * 
+     * @param string $langIso
+     *
      * @return int
-     * 
+     *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */

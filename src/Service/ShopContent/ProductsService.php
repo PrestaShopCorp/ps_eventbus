@@ -25,7 +25,7 @@ class ProductsService implements ShopContentServiceInterface
     /** @var \Context */
     private $context;
 
-    /** @var int|null */
+    /** @var int */
     private $shopId;
 
     public function __construct(
@@ -51,7 +51,7 @@ class ProductsService implements ShopContentServiceInterface
             throw new \PrestaShopException('No shop context');
         }
 
-        $this->shopId = $this->context->shop->id;
+        $this->shopId = (int) $this->context->shop->id;
     }
 
     /**
@@ -122,7 +122,7 @@ class ProductsService implements ShopContentServiceInterface
         return $this->productRepository->countFullSyncContentLeft($offset, $limit, $langIso);
     }
 
-        /**
+    /**
      * @param array<mixed> $products
      * @param string $langIso
      *
@@ -174,7 +174,7 @@ class ProductsService implements ShopContentServiceInterface
             $product['available_date'] = (string) $product['available_date'];
             $product['is_bundle'] = $product['is_bundle'] == '1';
             $product['is_virtual'] = $product['is_virtual'] == '1';
-            
+
             if ($product['unit_price_ratio'] == 0) {
                 unset($product['unit_price_ratio']);
                 unset($product['unity']);
@@ -193,6 +193,10 @@ class ProductsService implements ShopContentServiceInterface
      */
     private function addLink(&$product)
     {
+        if ($this->context->link === null) {
+            throw new \PrestaShopException('No link context');
+        }
+
         try {
             $product['link'] = $this->context->link->getProductLink(
                 $product,
@@ -288,7 +292,7 @@ class ProductsService implements ShopContentServiceInterface
 
     /**
      * @param array<mixed> $products
-     * @param int $langIso
+     * @param string $langIso
      *
      * @return void
      *
@@ -378,7 +382,7 @@ class ProductsService implements ShopContentServiceInterface
 
             $link = $this->context->link;
 
-            /**
+            /*
              * Ici pour certaines boutique on aurait un comportement qui pourrait être adapté.
              * et aller chercher dans la table des images le bon libellé pour appeler ce que le marchand possède.
              */

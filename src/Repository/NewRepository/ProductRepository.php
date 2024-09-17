@@ -8,8 +8,8 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
 
     /**
      * @param string $tableName
-     * @param string alias
-     * 
+     * @param string $alias
+     *
      * @return void
      */
     public function generateMinimalQuery($tableName, $alias)
@@ -31,7 +31,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
     {
         $shopIdGroup = (int) parent::getShopContext()->id_shop_group;
         $langId = (int) \Language::getIdByIso($langIso);
-        
+
         // WTF IS THAT ?
         if (!parent::getContext()->employee instanceof \Employee) {
             if (($employees = \Employee::getEmployees()) !== false) {
@@ -48,7 +48,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
             ->leftJoin('product_attribute', 'pa', 'pas.id_product_attribute = pa.id_product_attribute')
             ->leftJoin('category_lang', 'cl', 'ps.id_category_default = cl.id_category AND ps.id_shop = cl.id_shop AND cl.id_lang = ' . $langId)
             ->leftJoin('manufacturer', 'm', 'p.id_manufacturer = m.id_manufacturer');
-    
+
         if (parent::getShopContext()->getGroup()->share_stock) {
             $this->query->leftJoin(
                 'stock_available',
@@ -98,7 +98,6 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
                 ->select('p.height')
                 ->select('p.depth')
                 ->select('p.additional_shipping_cost');
-            ;
 
             if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>=')) {
                 $this->query->select('IFNULL(NULLIF(pa.isbn, ""), p.isbn) as isbn');
@@ -117,7 +116,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
             if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.7.0', '>=')) {
                 $this->query->select('p.mpn');
             }
-        }        
+        }
     }
 
     /**
@@ -166,10 +165,10 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
     /**
      * @param int $offset
      * @param int $limit
-     * @param $langIso
-     * 
+     * @param string $langIso
+     *
      * @return int
-     * 
+     *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
@@ -211,20 +210,12 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
             ->select('agl.name as name')
             ->select('al.name as value')
         ;
-            
+
         $attributes = $this->runQuery(false);
 
-        if (is_array($attributes)) {
-            $result = [];
-
-            foreach ($attributes as $attribute) {
-                $result[$attribute['id_product_attribute']][$attribute['name']] = $attribute['value'];
-            }
-
-            return $result;
-        }
-
-        return [];
+        return array_reduce($attributes, function ($key, $attribute) {
+            return $attribute[$attribute['id_product_attribute']][$attribute['name']] = $attribute['value'];
+        });
     }
 
     /**
@@ -255,17 +246,9 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
 
         $features = $this->runQuery(false);
 
-        if (is_array($features)) {
-            $result = [];
-            
-            foreach ($features as $feature) {
-                $result[$feature['id_product']][$feature['name']] = $feature['value'];
-            }
-
-            return $result;
-        }
-
-        return [];
+        return array_reduce($features, function ($key, $feature) {
+            return $feature[$feature['id_product']][$feature['name']] = $feature['value'];
+        });
     }
 
     /**
@@ -287,10 +270,8 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
             ->select('imgs.id_image')
             ->select('IFNULL(imgs.cover, 0) as cover')
         ;
-    
-        $result = $this->runQuery(false);
 
-        return is_array($result) ? $result : [];
+        return $this->runQuery(false);
     }
 
     /**
@@ -312,9 +293,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
             ->select('id_product_attribute, id_image')
             ->select('id_image')
         ;
-            
-        $result = $this->runQuery(false);
 
-        return is_array($result) ? $result : [];
+        return $this->runQuery(false);
     }
 }

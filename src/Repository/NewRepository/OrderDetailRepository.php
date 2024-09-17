@@ -8,8 +8,8 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
 
     /**
      * @param string $tableName
-     * @param string alias
-     * 
+     * @param string $alias
+     *
      * @return void
      */
     public function generateMinimalQuery($tableName, $alias)
@@ -49,7 +49,7 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
             ->leftJoin('currency', 'c', 'c.id_currency = o.id_currency')
             ->leftJoin('lang', 'l', 'o.id_lang = l.id_lang')
         ;
-        
+
         if ($withSelecParameters) {
             $this->query
                 ->select('od.id_order_detail')
@@ -83,7 +83,7 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
     public function retrieveContentsForFull($offset, $limit, $langIso, $debug)
     {
         $this->generateFullQuery($langIso, true);
-        
+
         $this->query->groupBy('od.id_order_detail');
 
         $this->query->limit((int) $limit, (int) $offset);
@@ -117,10 +117,10 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
     /**
      * @param int $offset
      * @param int $limit
-     * @param $langIso
-     * 
+     * @param string $langIso
+     *
      * @return int
-     * 
+     *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */

@@ -8,8 +8,8 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
 
     /**
      * @param string $tableName
-     * @param string alias
-     * 
+     * @param string $alias
+     *
      * @return void
      */
     public function generateMinimalQuery($tableName, $alias)
@@ -147,10 +147,10 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
     /**
      * @param int $offset
      * @param int $limit
-     * @param $langIso
-     * 
+     * @param string $langIso
+     *
      * @return int
-     * 
+     *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */

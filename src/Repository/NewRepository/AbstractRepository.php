@@ -2,9 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
-use Context;
 use PrestaShop\Module\PsEventbus\Service\CommonService;
-use Shop;
 
 abstract class AbstractRepository
 {
@@ -49,7 +47,7 @@ abstract class AbstractRepository
      * @throws \PrestaShopException
      */
     public function getShopContext()
-    {   
+    {
         if ($this->context->shop === null) {
             throw new \PrestaShopException('No shop context');
         }

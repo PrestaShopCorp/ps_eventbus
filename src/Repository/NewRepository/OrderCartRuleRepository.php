@@ -8,8 +8,8 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
 
     /**
      * @param string $tableName
-     * @param string alias
-     * 
+     * @param string $alias
+     *
      * @return void
      */
     public function generateMinimalQuery($tableName, $alias)
@@ -93,10 +93,10 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
     /**
      * @param int $offset
      * @param int $limit
-     * @param $langIso
-     * 
+     * @param string $langIso
+     *
      * @return int
-     * 
+     *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
