@@ -1,60 +1,51 @@
 <?php
 
-namespace PrestaShop\Module\PsEventbus\Decorator;
+namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
-use PrestaShop\Module\PsEventbus\Repository\BundleRepository;
 use PrestaShop\Module\PsEventbus\Repository\CategoryRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
-use PrestaShop\Module\PsEventbus\Repository\ProductRepository;
+use PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductRepository;
 
-class ProductDecorator
+class ProductsService implements ShopContentServiceInterface
 {
-    /**
-     * @var \Context
-     */
-    private $context;
-    /**
-     * @var LanguageRepository
-     */
-    private $languageRepository;
-    /**
-     * @var ProductRepository
-     */
+    /** @var ProductRepository */
     private $productRepository;
-    /**
-     * @var CategoryRepository
-     */
-    private $categoryRepository;
-    /**
-     * @var ArrayFormatter
-     */
-    private $arrayFormatter;
-    /**
-     * @var BundleRepository
-     */
-    private $bundleRepository;
 
-    /**
-     * @var int
-     */
+    /** @var CategoryRepository */
+    private $categoryRepository;
+
+    /** @var LanguageRepository */
+    private $languageRepository;
+
+    /** @var ArrayFormatter */
+    private $arrayFormatter;
+
+    /** @var \Context */
+    private $context;
+
+    /** @var int */
     private $shopId;
 
     public function __construct(
-        \Context $context,
-        LanguageRepository $languageRepository,
         ProductRepository $productRepository,
         CategoryRepository $categoryRepository,
-        ArrayFormatter $arrayFormatter,
-        BundleRepository $bundleRepository
+        LanguageRepository $languageRepository,
+        ArrayFormatter $arrayFormatter
     ) {
-        $this->context = $context;
-        $this->languageRepository = $languageRepository;
         $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;
+        $this->languageRepository = $languageRepository;
         $this->arrayFormatter = $arrayFormatter;
-        $this->bundleRepository = $bundleRepository;
+
+        $context = \Context::getContext();
+
+        if ($context == null) {
+            throw new \PrestaShopException('Context not found');
+        }
+
+        $this->context = $context;
 
         if ($this->context->shop === null) {
             throw new \PrestaShopException('No shop context');
@@ -64,18 +55,85 @@ class ProductDecorator
     }
 
     /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     * @param bool $debug
+     *
+     * @return array<mixed>
+     */
+    public function getContentsForFull($offset, $limit, $langIso, $debug)
+    {
+        $result = $this->productRepository->retrieveContentsForFull($offset, $limit, $langIso, $debug);
+
+        if (empty($result)) {
+            return [];
+        }
+
+        $this->decorateProducts($result, $langIso);
+        $this->castProducts($result);
+
+        return array_map(function ($item) {
+            return [
+                'id' => $item['unique_product_id'],
+                'collection' => Config::COLLECTION_PRODUCTS,
+                'properties' => $item,
+            ];
+        }, $result);
+    }
+
+    /**
+     * @param int $limit
+     * @param array<string, int> $contentIds
+     * @param string $langIso
+     * @param bool $debug
+     *
+     * @return array<mixed>
+     */
+    public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
+    {
+        $result = $this->productRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug);
+
+        if (empty($result)) {
+            return [];
+        }
+
+        $this->decorateProducts($result, $langIso);
+        $this->castProducts($result);
+
+        return array_map(function ($item) {
+            return [
+                'id' => $item['unique_product_id'],
+                'collection' => Config::COLLECTION_PRODUCTS,
+                'properties' => $item,
+            ];
+        }, $result);
+    }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return int
+     */
+    public function getFullSyncContentLeft($offset, $limit, $langIso)
+    {
+        return $this->productRepository->countFullSyncContentLeft($offset, $limit, $langIso);
+    }
+
+    /**
      * @param array<mixed> $products
      * @param string $langIso
-     * @param int $langId
      *
      * @return void
      *
      * @@throws \PrestaShopDatabaseException
      */
-    public function decorateProducts(&$products, $langIso, $langId)
+    private function decorateProducts(&$products, $langIso)
     {
-        $this->addFeatureValues($products, $langId);
-        $this->addAttributeValues($products, $langId);
+        $this->addFeatureValues($products, $langIso);
+        $this->addAttributeValues($products, $langIso);
         $this->addImages($products);
 
         foreach ($products as &$product) {
@@ -86,25 +144,46 @@ class ProductDecorator
             $this->addProductPrices($product);
             $this->formatDescriptions($product);
             $this->addCategoryTree($product);
-            $this->castPropertyValues($product);
         }
     }
 
     /**
      * @param array<mixed> $products
      *
-     * @return array<mixed>
+     * @return void
      */
-    public function getBundles($products)
+    private function castProducts(&$products)
     {
-        $bundles = [];
-        foreach ($products as $product) {
-            if ($product['is_bundle']) {
-                $bundles = array_merge($bundles, $this->getBundleCollection($product));
+        foreach ($products as &$product) {
+            $product['id_product'] = (int) $product['id_product'];
+            $product['id_manufacturer'] = (int) $product['id_manufacturer'];
+            $product['id_supplier'] = (int) $product['id_supplier'];
+            $product['id_attribute'] = (int) $product['id_attribute'];
+            $product['id_category_default'] = (int) $product['id_category_default'];
+            $product['quantity'] = (int) $product['quantity'];
+            $product['weight'] = (float) $product['weight'];
+            $product['active'] = $product['active'] == '1';
+            $product['manufacturer'] = (string) $product['manufacturer'];
+            $product['default_category'] = (string) $product['default_category'];
+            $product['isbn'] = isset($product['isbn']) ? (string) $product['isbn'] : '';
+            $product['mpn'] = isset($product['mpn']) ? (string) $product['mpn'] : '';
+            $product['ean'] = (string) $product['ean'];
+            $product['upc'] = (string) $product['upc'];
+            $product['is_default_attribute'] = $product['id_attribute'] === 0 ? true : $product['is_default_attribute'] == 1;
+            $product['available_for_order'] = $product['available_for_order'] == '1';
+            $product['available_date'] = (string) $product['available_date'];
+            $product['is_bundle'] = $product['is_bundle'] == '1';
+            $product['is_virtual'] = $product['is_virtual'] == '1';
+
+            if ($product['unit_price_ratio'] == 0) {
+                unset($product['unit_price_ratio']);
+                unset($product['unity']);
+            } else {
+                $product['unit_price_ratio'] = (float) $product['unit_price_ratio'];
+                $product['unity'] = (string) $product['unity'];
+                $product['price_per_unit'] = (float) ($product['price_tax_excl'] / $product['unit_price_ratio']);
             }
         }
-
-        return $bundles;
     }
 
     /**
@@ -114,11 +193,11 @@ class ProductDecorator
      */
     private function addLink(&$product)
     {
-        try {
-            if ($this->context->link === null) {
-                throw new \PrestaShopException('No link context');
-            }
+        if ($this->context->link === null) {
+            throw new \PrestaShopException('No link context');
+        }
 
+        try {
             $product['link'] = $this->context->link->getProductLink(
                 $product,
                 null,
@@ -142,39 +221,14 @@ class ProductDecorator
     {
         $product['price_tax_excl'] = (float) $product['price_tax_excl'];
         $product['price_tax_incl'] =
-            (float) $this->productRepository->getPriceTaxIncluded($product['id_product'], $product['id_attribute']);
+            (float) \Product::getPriceStatic($product['id_product'], true, $product['id_attribute'], 6, null, false, false);
         $product['sale_price_tax_excl'] =
-            (float) $this->productRepository->getSalePriceTaxExcluded($product['id_product'], $product['id_attribute']);
+            (float) \Product::getPriceStatic($product['id_product'], false, $product['id_attribute'], 6);
         $product['sale_price_tax_incl'] =
-            (float) $this->productRepository->getSalePriceTaxIncluded($product['id_product'], $product['id_attribute']);
+            (float) \Product::getPriceStatic($product['id_product'], true, $product['id_attribute'], 6);
 
         $product['tax'] = $product['price_tax_incl'] - $product['price_tax_excl'];
         $product['sale_tax'] = $product['sale_price_tax_incl'] - $product['sale_price_tax_excl'];
-    }
-
-    /**
-     * @param array<mixed> $product
-     *
-     * @return array<mixed>
-     */
-    private function getBundleCollection($product)
-    {
-        $bundleProducts = $this->bundleRepository->getBundleProducts($product['id_product']);
-        $uniqueProductId = $product['unique_product_id'];
-
-        return array_map(function ($bundleProduct) use ($uniqueProductId) {
-            return [
-                'id' => $bundleProduct['id_bundle'],
-                'collection' => Config::COLLECTION_PRODUCT_BUNDLES,
-                'properties' => [
-                    'id_bundle' => $bundleProduct['id_bundle'],
-                    'id_product' => $bundleProduct['id_product'],
-                    'id_product_attribute' => $bundleProduct['id_product_attribute'],
-                    'unique_product_id' => $uniqueProductId,
-                    'quantity' => $bundleProduct['quantity'],
-                ],
-            ];
-        }, $bundleProducts);
     }
 
     /**
@@ -210,42 +264,6 @@ class ProductDecorator
      *
      * @return void
      */
-    private function castPropertyValues(&$product)
-    {
-        $product['id_product'] = (int) $product['id_product'];
-        $product['id_manufacturer'] = (int) $product['id_manufacturer'];
-        $product['id_supplier'] = (int) $product['id_supplier'];
-        $product['id_attribute'] = (int) $product['id_attribute'];
-        $product['id_category_default'] = (int) $product['id_category_default'];
-        $product['quantity'] = (int) $product['quantity'];
-        $product['weight'] = (float) $product['weight'];
-        $product['active'] = $product['active'] == '1';
-        $product['manufacturer'] = (string) $product['manufacturer'];
-        $product['default_category'] = (string) $product['default_category'];
-        $product['isbn'] = isset($product['isbn']) ? (string) $product['isbn'] : '';
-        $product['mpn'] = isset($product['mpn']) ? (string) $product['mpn'] : '';
-        $product['ean'] = (string) $product['ean'];
-        $product['upc'] = (string) $product['upc'];
-        $product['is_default_attribute'] = $product['id_attribute'] === 0 ? true : $product['is_default_attribute'] == 1;
-        $product['available_for_order'] = $product['available_for_order'] == '1';
-        $product['available_date'] = (string) $product['available_date'];
-        $product['is_bundle'] = $product['is_bundle'] == '1';
-        $product['is_virtual'] = $product['is_virtual'] == '1';
-        if ($product['unit_price_ratio'] == 0) {
-            unset($product['unit_price_ratio']);
-            unset($product['unity']);
-        } else {
-            $product['unit_price_ratio'] = (float) $product['unit_price_ratio'];
-            $product['unity'] = (string) $product['unity'];
-            $product['price_per_unit'] = (float) ($product['price_tax_excl'] / $product['unit_price_ratio']);
-        }
-    }
-
-    /**
-     * @param array<mixed> $product
-     *
-     * @return void
-     */
     private function addUniqueId(&$product)
     {
         $product['unique_product_id'] = "{$product['id_product']}-{$product['id_attribute']}-{$product['iso_code']}";
@@ -274,16 +292,16 @@ class ProductDecorator
 
     /**
      * @param array<mixed> $products
-     * @param int $langId
+     * @param string $langIso
      *
      * @return void
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function addFeatureValues(&$products, $langId)
+    private function addFeatureValues(&$products, $langIso)
     {
         $productIds = $this->arrayFormatter->formatValueArray($products, 'id_product', true);
-        $features = $this->productRepository->getProductFeatures($productIds, $langId);
+        $features = $this->productRepository->getProductFeatures($productIds, $langIso);
 
         foreach ($products as &$product) {
             $product['features'] = isset($features[$product['id_product']]) ? $features[$product['id_product']] : '';
@@ -292,16 +310,16 @@ class ProductDecorator
 
     /**
      * @param array<mixed> $products
-     * @param int $langId
+     * @param string $langIso
      *
      * @return void
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function addAttributeValues(&$products, $langId)
+    private function addAttributeValues(&$products, $langIso)
     {
         $attributeIds = $this->arrayFormatter->formatValueArray($products, 'id_attribute', true);
-        $attributes = $this->productRepository->getProductAttributeValues($attributeIds, $langId);
+        $attributes = $this->productRepository->getProductAttributeValues($attributeIds, $langIso);
 
         foreach ($products as &$product) {
             $product['attributes'] = isset($attributes[$product['id_attribute']]) ? $attributes[$product['id_attribute']] : '';
@@ -365,19 +383,16 @@ class ProductDecorator
             $link = $this->context->link;
 
             /*
-            Ici pour certaines boutique on aurait un comporterment qui pourrait être adapté.
-            et aller chercher dans une table des images le bon libellé pour appeler ce que le marchand a.
-            */
-
+             * Ici pour certaines boutique on aurait un comportement qui pourrait être adapté.
+             * et aller chercher dans la table des images le bon libellé pour appeler ce que le marchand possède.
+             */
             $product['images'] = $this->arrayFormatter->arrayToString(
                 array_map(function ($imageId) use ($product, $link) {
                     return $link->getImageLink($product['link_rewrite'], (string) $imageId);
                 }, $productImageIds)
             );
 
-            $product['cover'] = $coverImageId == '0' ?
-                '' :
-                $link->getImageLink($product['link_rewrite'], (string) $coverImageId);
+            $product['cover'] = $coverImageId == '0' ? '' : $link->getImageLink($product['link_rewrite'], (string) $coverImageId);
         }
     }
 }

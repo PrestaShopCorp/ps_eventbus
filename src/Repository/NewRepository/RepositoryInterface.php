@@ -8,16 +8,20 @@ namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 interface RepositoryInterface
 {
     /**
+     * @param string $tableName
+     * @param string $alias
+     *
      * @return void
      */
-    public function generateMinimalQuery();
+    public function generateMinimalQuery($tableName, $alias);
 
     /**
      * @param string $langIso
+     * @param bool $withSelecParameters
      *
      * @return mixed
      */
-    public function generateFullQuery($langIso);
+    public function generateFullQuery($langIso, $withSelecParameters);
 
     /**
      * @param int $offset
@@ -27,7 +31,7 @@ interface RepositoryInterface
      *
      * @return array<mixed>
      */
-    public function getContentsForFull($offset, $limit, $langIso, $debug);
+    public function retrieveContentsForFull($offset, $limit, $langIso, $debug);
 
     /**
      * @param int $limit
@@ -37,12 +41,17 @@ interface RepositoryInterface
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso, $debug);
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug);
 
     /**
      * @param int $offset
+     * @param int $limit
+     * @param string $langIso
      *
      * @return int
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset);
+    public function countFullSyncContentLeft($offset, $limit, $langIso);
 }

@@ -57,7 +57,7 @@ class ProductDataProvider implements PaginatedApiDataProviderInterface
             return [];
         }
 
-        $this->productDecorator->decorateProducts($products, $langIso, $langId);
+        $this->productDecorator->decorateProducts($products, $langIso);
 
         $bundles = $this->productDecorator->getBundles($products);
 
@@ -72,21 +72,6 @@ class ProductDataProvider implements PaginatedApiDataProviderInterface
         }, $products);
 
         return array_merge($products, $bundles, $productSuppliers);
-    }
-
-    /**
-     * @param int $offset
-     * @param string $langIso
-     *
-     * @return int
-     *
-     * @@throws \PrestaShopDatabaseException
-     */
-    public function getRemainingObjectsCount($offset, $langIso)
-    {
-        $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
-
-        return (int) $this->productRepository->getRemainingProductsCount($offset, $langId);
     }
 
     /**
@@ -105,7 +90,7 @@ class ProductDataProvider implements PaginatedApiDataProviderInterface
         $products = $this->productRepository->getProductsIncremental($limit, $langId, $objectIds);
 
         if (!empty($products)) {
-            $this->productDecorator->decorateProducts($products, $langIso, $langId);
+            $this->productDecorator->decorateProducts($products, $langIso);
         } else {
             return [];
         }
@@ -123,21 +108,5 @@ class ProductDataProvider implements PaginatedApiDataProviderInterface
         }, $products);
 
         return array_merge($products, $bundles, $productSuppliers);
-    }
-
-    /**
-     * @param int $offset
-     * @param int $limit
-     * @param string $langIso
-     *
-     * @return array<mixed>
-     *
-     * @@throws \PrestaShopDatabaseException
-     */
-    public function getQueryForDebug($offset, $limit, $langIso)
-    {
-        $langId = $this->languageRepository->getLanguageIdByIsoCode($langIso);
-
-        return $this->productRepository->getQueryForDebug($offset, $limit, $langId);
     }
 }

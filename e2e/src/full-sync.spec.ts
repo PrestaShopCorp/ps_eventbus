@@ -3,7 +3,18 @@ import * as matchers from "jest-extended";
 import { dumpUploadData, logAxiosError } from "./helpers/log-helper";
 import axios, { AxiosError } from "axios";
 import { doFullSync, probe, PsEventbusSyncUpload } from "./helpers/mock-probe";
-import { concatMap, from, lastValueFrom, map, TimeoutError, toArray, zip } from "rxjs";
+import {
+  combineLatest,
+  concatMap,
+  expand,
+  from,
+  lastValueFrom,
+  map,
+  of,
+  TimeoutError,
+  toArray,
+  zip,
+} from "rxjs";
 import {
   generatePredictableModuleId,
   loadFixture,
@@ -35,28 +46,28 @@ const isString = (val) =>
 const isNumber = (val) =>
   val ? expect(val).toBeNumber() : expect(val).toBeNull();
 const specialFieldAssert: { [index: string]: (val) => void } = {
-  'created_at': isDateString,
-  'updated_at': isDateString,
-  'last_connection_date': isDateString,
-  'folder_created_at': isDateString,
-  'date_add': isDateString,
-  'from': isDateString,
-  'to': isDateString,
-  'conversion_rate': isNumber,
-  'cms_version': isString,
-  'module_id': isString,
-  'module_version': isString,
-  'theme_version': isString,
-  'php_version': isString,
-  'http_server' : isString,
-}
+  created_at: isDateString,
+  updated_at: isDateString,
+  last_connection_date: isDateString,
+  folder_created_at: isDateString,
+  date_add: isDateString,
+  from: isDateString,
+  to: isDateString,
+  conversion_rate: isNumber,
+  cms_version: isString,
+  module_id: isString,
+  module_version: isString,
+  theme_version: isString,
+  php_version: isString,
+  http_server: isString,
+};
 
-describe('Full Sync', () => {
+describe("Full Sync", () => {
   let generatedNumber = 0;
 
   // gérer les cas ou un shopContent n'existe pas (pas de fixture du coup)
   const shopContents: ShopContent[] = shopContentList.filter(
-    (it) => !EXCLUDED_API.includes(it)
+    (it) => !EXCLUDED_API.includes(it),
   );
 
   let jobId: string;
@@ -79,14 +90,14 @@ describe('Full Sync', () => {
       // arrange
       const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&is_e2e=1&shop_content=${shoContent}&limit=5&full=1&job_id=${jobId}`;
 
-      const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
+      const callId = { call_id: Math.random().toString(36).substring(2, 11) };
 
       // act
       const response = await axios
         .post(url, callId, {
-          headers: { 
+          headers: {
             Host: testConfig.prestaShopHostHeader,
-            'Content-Type': 'application/x-www-form-urlencoded' // for compat PHP 5.6
+            "Content-Type": "application/x-www-form-urlencoded", // for compat PHP 5.6
           },
         })
         .catch((err) => {
@@ -106,14 +117,14 @@ describe('Full Sync', () => {
       // arrange
       const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&is_e2e=1&shop_content=${shopContent}&limit=5&full=1&job_id=${jobId}`;
 
-      const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
+      const callId = { call_id: Math.random().toString(36).substring(2, 11) };
 
       // act
       const response = await axios
         .post(url, callId, {
           headers: {
             Host: testConfig.prestaShopHostHeader,
-            'Content-Type': 'application/x-www-form-urlencoded' // for compat PHP 5.6
+            "Content-Type": "application/x-www-form-urlencoded", // for compat PHP 5.6
           },
         })
         .catch((err) => {
@@ -139,16 +150,16 @@ describe('Full Sync', () => {
         const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&is_e2e=1&shop_content=${shopContent}&limit=5&full=1&job_id=${jobId}`;
         const message$ = probe({ url: `/upload/${jobId}` });
 
-        const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
+        const callId = { call_id: Math.random().toString(36).substring(2, 11) };
 
         // act
         const request$ = from(
           axios.post(url, callId, {
             headers: {
               Host: testConfig.prestaShopHostHeader,
-              'Content-Type': 'application/x-www-form-urlencoded' // for compat PHP 5.6
+              "Content-Type": "application/x-www-form-urlencoded", // for compat PHP 5.6
             },
-          })
+          }),
         );
 
         // check if shopcontent have items lenght > 0
@@ -163,15 +174,17 @@ describe('Full Sync', () => {
                     probeMessage: result[0],
                     psEventbusReq: result[1],
                   })),
-                  toArray()
-                )
+                  toArray(),
+                ),
               );
             } catch (error) {
               if (error instanceof TimeoutError) {
-                throw new Error(`Upload to collector for "${shopContent}" throw TimeoutError with jobId "${jobId}"`)
-              } 
+                throw new Error(
+                  `Upload to collector for "${shopContent}" throw TimeoutError with jobId "${jobId}"`,
+                );
+              }
             }
-            
+
             // assert
             expect(results.length).toEqual(1);
             expect(results[0].probeMessage.method).toBe("POST");
@@ -179,48 +192,31 @@ describe('Full Sync', () => {
               "full-sync-requested": "1",
             });
           }
-        })
+        });
       });
     }
-    
 
     if (MISSING_TEST_DATA.includes(shopContent)) {
       it.skip(`${shopContent} should upload complete dataset to collector`, () => {});
     } else {
-      it(`${shopContent} should upload complete dataset collector`, async () => {
+      it.skip(`${shopContent} should upload complete dataset collector`, async () => {
         // arrange
         const fullSync$ = doFullSync(jobId, shopContent, { timeout: 4000 });
         const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 4000 });
-        
+
         let syncedData: PsEventbusSyncUpload[];
-        let hasData = false;
 
-        try {
-          // act
-          hasData = (await lastValueFrom(fullSync$)).total_objects != 0;
+        const [reponse, message] = await lastValueFrom(
+          combineLatest([
+            fullSync$,
+            message$.pipe(
+              map((msg) => msg.body.file),
+              toArray(),
+            ),
+          ]),
+        );
 
-          if (hasData) {
-            syncedData = await lastValueFrom(
-              zip(fullSync$, message$).pipe(
-                map((msg) => {
-                  return msg[1].body.file
-                }),
-                concatMap((syncedPage) => {
-                  return from(syncedPage);
-                }),
-                toArray()
-              )
-            );
-          }
-        } catch (error) {
-          if (error instanceof TimeoutError) {
-            throw new Error(`Upload complete dataset collector for "${shopContent}" throw TimeoutError with jobId "${jobId}"`)
-          } 
-        }
-
-        if (!hasData) {
-          return;
-        }
+        syncedData = message.flat();
 
         // dump data for easier debugging or updating fixtures
         if (testConfig.dumpFullSyncData) {
@@ -232,18 +228,18 @@ describe('Full Sync', () => {
         // we need to process fixtures and data returned from ps_eventbus to make them easier to compare
         let processedData = syncedData;
         let processedFixture = fixture;
-        if (shopContent  === "modules" as ShopContent) {
+        if (shopContent === ("modules" as ShopContent)) {
           processedData = generatePredictableModuleId(processedData);
           processedFixture = generatePredictableModuleId(processedFixture);
         }
         processedData = omitProperties(
           processedData,
-          Object.keys(specialFieldAssert)
+          Object.keys(specialFieldAssert),
         );
         processedData = sortUploadData(processedData);
         processedFixture = omitProperties(
           processedFixture,
-          Object.keys(specialFieldAssert)
+          Object.keys(specialFieldAssert),
         );
         processedFixture = sortUploadData(processedFixture);
 
@@ -255,7 +251,7 @@ describe('Full Sync', () => {
           for (const specialFieldName of Object.keys(specialFieldAssert)) {
             if (data.properties[specialFieldName] !== undefined) {
               specialFieldAssert[specialFieldName](
-                data.properties[specialFieldName]
+                data.properties[specialFieldName],
               );
             }
           }

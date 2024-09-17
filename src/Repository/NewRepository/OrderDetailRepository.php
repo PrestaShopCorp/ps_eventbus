@@ -7,23 +7,27 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
     const TABLE_NAME = 'order_detail';
 
     /**
+     * @param string $tableName
+     * @param string $alias
+     *
      * @return void
      */
-    public function generateMinimalQuery()
+    public function generateMinimalQuery($tableName, $alias)
     {
         $this->query = new \DbQuery();
 
-        $this->query->from(self::TABLE_NAME, 'od');
+        $this->query->from($tableName, $alias);
     }
 
     /**
      * @param string $langIso
+     * @param bool $withSelecParameters
      *
      * @return mixed
      *
      * @throws \PrestaShopException
      */
-    public function generateFullQuery($langIso)
+    public function generateFullQuery($langIso, $withSelecParameters)
     {
         $context = \Context::getContext();
 
@@ -35,7 +39,7 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
             throw new \PrestaShopException('No shop context');
         }
 
-        $this->generateMinimalQuery();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'od');
 
         $this->query
             ->where('od.id_shop = ' . $context->shop->id)
@@ -44,24 +48,25 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
             ->leftJoin('product_shop', 'ps', 'od.product_id = ps.id_product AND ps.id_shop = ' . (int) $context->shop->id)
             ->leftJoin('currency', 'c', 'c.id_currency = o.id_currency')
             ->leftJoin('lang', 'l', 'o.id_lang = l.id_lang')
-            ->groupBy('od.id_order_detail')
         ;
 
-        $this->query
-            ->select('od.id_order_detail')
-            ->select('od.id_order')
-            ->select('od.product_id')
-            ->select('od.product_attribute_id')
-            ->select('od.product_quantity')
-            ->select('od.unit_price_tax_incl')
-            ->select('od.unit_price_tax_excl')
-            ->select('SUM(osd.total_price_tax_incl) as refund')
-            ->select('SUM(osd.total_price_tax_excl) as refund_tax_excl')
-            ->select('c.iso_code as currency')
-            ->select('ps.id_category_default as category')
-            ->select('l.iso_code')
-            ->select('o.conversion_rate as conversion_rate')
-        ;
+        if ($withSelecParameters) {
+            $this->query
+                ->select('od.id_order_detail')
+                ->select('od.id_order')
+                ->select('od.product_id')
+                ->select('od.product_attribute_id')
+                ->select('od.product_quantity')
+                ->select('od.unit_price_tax_incl')
+                ->select('od.unit_price_tax_excl')
+                ->select('SUM(osd.total_price_tax_incl) as refund')
+                ->select('SUM(osd.total_price_tax_excl) as refund_tax_excl')
+                ->select('c.iso_code as currency')
+                ->select('ps.id_category_default as category')
+                ->select('l.iso_code')
+                ->select('o.conversion_rate as conversion_rate')
+            ;
+        }
     }
 
     /**
@@ -75,9 +80,11 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getContentsForFull($offset, $limit, $langIso, $debug)
+    public function retrieveContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $this->generateFullQuery($langIso);
+        $this->generateFullQuery($langIso, true);
+
+        $this->query->groupBy('od.id_order_detail');
 
         $this->query->limit((int) $limit, (int) $offset);
 
@@ -95,9 +102,9 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $this->generateFullQuery($langIso);
+        $this->generateFullQuery($langIso, true);
 
         $this->query
             ->where('od.id_order_detail IN(' . implode(',', array_map('intval', $contentIds)) . ')')
@@ -109,17 +116,19 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
 
     /**
      * @param int $offset
+     * @param int $limit
+     * @param string $langIso
      *
      * @return int
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset)
+    public function countFullSyncContentLeft($offset, $limit, $langIso)
     {
-        $this->generateMinimalQuery();
+        $this->generateFullQuery($langIso, false);
 
-        $this->query->select('(COUNT(od.id_order_detail) - ' . (int) $offset . ') as count');
+        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
 
         $result = $this->runQuery(false);
 

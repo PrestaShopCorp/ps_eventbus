@@ -34,17 +34,25 @@ abstract class AbstractRepository
     }
 
     /**
-     * @return int
+     * @return \Context
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
+
+    /**
+     * @return \Shop
      *
      * @throws \PrestaShopException
      */
-    public function getShopId()
+    public function getShopContext()
     {
         if ($this->context->shop === null) {
             throw new \PrestaShopException('No shop context');
         }
 
-        return (int) $this->context->shop->id;
+        return $this->context->shop;
     }
 
     /**

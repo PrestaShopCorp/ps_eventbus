@@ -38,7 +38,7 @@ class OrdersService implements ShopContentServiceInterface
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $result = $this->orderRepository->getContentsForFull($offset, $limit, $langIso, $debug);
+        $result = $this->orderRepository->retrieveContentsForFull($offset, $limit, $langIso, $debug);
 
         if (empty($result)) {
             return [];
@@ -65,7 +65,7 @@ class OrdersService implements ShopContentServiceInterface
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $result = $this->orderRepository->getContentsForIncremental($limit, $contentIds, $langIso, $debug);
+        $result = $this->orderRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug);
 
         if (empty($result)) {
             return [];
@@ -89,9 +89,9 @@ class OrdersService implements ShopContentServiceInterface
      *
      * @return int
      */
-    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    public function getFullSyncContentLeft($offset, $limit, $langIso)
     {
-        return $this->orderRepository->countFullSyncContentLeft($offset);
+        return $this->orderRepository->countFullSyncContentLeft($offset, $limit, $langIso);
     }
 
     /**

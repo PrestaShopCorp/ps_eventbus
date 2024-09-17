@@ -7,63 +7,69 @@ class CartRuleRepository extends AbstractRepository implements RepositoryInterfa
     const TABLE_NAME = 'cart_rule';
 
     /**
+     * @param string $tableName
+     * @param string $alias
+     *
      * @return void
      */
-    public function generateMinimalQuery()
+    public function generateMinimalQuery($tableName, $alias)
     {
         $this->query = new \DbQuery();
 
-        $this->query->from(self::TABLE_NAME, 'cr');
+        $this->query->from($tableName, $alias);
     }
 
     /**
      * @param string $langIso
+     * @param bool $withSelecParameters
      *
      * @return mixed
      *
      * @throws \PrestaShopException
      */
-    public function generateFullQuery($langIso)
+    public function generateFullQuery($langIso, $withSelecParameters)
     {
-        $this->generateMinimalQuery();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'cr');
 
-        $this->query
-            ->select('cr.id_cart_rule')
-            ->select('cr.id_customer')
-            ->select('cr.code')
-            ->select('cr.date_from AS "from"')
-            ->select('cr.date_to AS "to"')
-            ->select('cr.description')
-            ->select('cr.quantity')
-            ->select('cr.quantity_per_user')
-            ->select('cr.priority')
-            ->select('cr.partial_use')
-            ->select('cr.minimum_amount')
-            ->select('cr.minimum_amount_tax')
-            ->select('cr.minimum_amount_currency')
-            ->select('cr.minimum_amount_shipping')
-            ->select('cr.country_restriction')
-            ->select('cr.carrier_restriction')
-            ->select('cr.group_restriction')
-            ->select('cr.cart_rule_restriction')
-            ->select('cr.product_restriction')
-            ->select('cr.shop_restriction')
-            ->select('cr.free_shipping')
-            ->select('cr.reduction_percent')
-            ->select('cr.reduction_amount')
-            ->select('cr.reduction_tax')
-            ->select('cr.reduction_currency')
-            ->select('cr.reduction_product')
-            ->select('cr.gift_product')
-            ->select('cr.gift_product_attribute')
-            ->select('cr.highlight')
-            ->select('cr.active')
-            ->select('cr.date_add AS created_at')
-            ->select('cr.date_upd AS updated_at')
-        ;
+        if ($withSelecParameters) {
+            $this->query
+                ->select('cr.id_cart_rule')
+                ->select('cr.id_customer')
+                ->select('cr.code')
+                ->select('cr.date_from AS "from"')
+                ->select('cr.date_to AS "to"')
+                ->select('cr.description')
+                ->select('cr.quantity')
+                ->select('cr.quantity_per_user')
+                ->select('cr.priority')
+                ->select('cr.partial_use')
+                ->select('cr.minimum_amount')
+                ->select('cr.minimum_amount_tax')
+                ->select('cr.minimum_amount_currency')
+                ->select('cr.minimum_amount_shipping')
+                ->select('cr.country_restriction')
+                ->select('cr.carrier_restriction')
+                ->select('cr.group_restriction')
+                ->select('cr.cart_rule_restriction')
+                ->select('cr.product_restriction')
+                ->select('cr.shop_restriction')
+                ->select('cr.free_shipping')
+                ->select('cr.reduction_percent')
+                ->select('cr.reduction_amount')
+                ->select('cr.reduction_tax')
+                ->select('cr.reduction_currency')
+                ->select('cr.reduction_product')
+                ->select('cr.gift_product')
+                ->select('cr.gift_product_attribute')
+                ->select('cr.highlight')
+                ->select('cr.active')
+                ->select('cr.date_add AS created_at')
+                ->select('cr.date_upd AS updated_at')
+            ;
 
-        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>=')) {
-            $this->query->select('cr.reduction_exclude_special');
+            if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>=')) {
+                $this->query->select('cr.reduction_exclude_special');
+            }
         }
     }
 
@@ -78,9 +84,9 @@ class CartRuleRepository extends AbstractRepository implements RepositoryInterfa
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getContentsForFull($offset, $limit, $langIso, $debug)
+    public function retrieveContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $this->generateFullQuery($langIso);
+        $this->generateFullQuery($langIso, true);
 
         $this->query->limit((int) $limit, (int) $offset);
 
@@ -98,9 +104,9 @@ class CartRuleRepository extends AbstractRepository implements RepositoryInterfa
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $this->generateFullQuery($langIso);
+        $this->generateFullQuery($langIso, true);
 
         $this->query
             ->where('cr.id_cart_rule IN(' . implode(',', array_map('intval', $contentIds)) . ')')
@@ -112,17 +118,19 @@ class CartRuleRepository extends AbstractRepository implements RepositoryInterfa
 
     /**
      * @param int $offset
+     * @param int $limit
+     * @param string $langIso
      *
      * @return int
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset)
+    public function countFullSyncContentLeft($offset, $limit, $langIso)
     {
-        $this->generateMinimalQuery();
+        $this->generateFullQuery($langIso, false);
 
-        $this->query->select('(COUNT(cr.id_cart_rule) - ' . (int) $offset . ') as count');
+        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
 
         $result = $this->runQuery(false);
 

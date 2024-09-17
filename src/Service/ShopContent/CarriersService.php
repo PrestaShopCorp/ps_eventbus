@@ -32,7 +32,7 @@ class CarriersService implements ShopContentServiceInterface
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $result = $this->carrierRepository->getContentsForFull($offset, $limit, $langIso, $debug);
+        $result = $this->carrierRepository->retrieveContentsForFull($offset, $limit, $langIso, $debug);
 
         if (empty($result)) {
             return [];
@@ -59,7 +59,7 @@ class CarriersService implements ShopContentServiceInterface
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $result = $this->carrierRepository->getContentsForIncremental($limit, $contentIds, $langIso, $debug);
+        $result = $this->carrierRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug);
 
         if (empty($result)) {
             return [];
@@ -83,9 +83,9 @@ class CarriersService implements ShopContentServiceInterface
      *
      * @return int
      */
-    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    public function getFullSyncContentLeft($offset, $limit, $langIso)
     {
-        return $this->carrierRepository->countFullSyncContentLeft($offset);
+        return $this->carrierRepository->countFullSyncContentLeft($offset, $limit, $langIso);
     }
 
     /**

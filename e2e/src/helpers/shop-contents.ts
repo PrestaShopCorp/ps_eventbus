@@ -34,24 +34,25 @@ import R from "ramda";
 } as const; */
 
 export const shopContentMapping = {
-  'carriers': 'carriers',
-  'carrier_details': 'carrier-details',
-  'carrier_taxes': 'carrier-taxes',
-  'carts': 'carts',
-  'cart_products': 'cart-products',
-  'cart_rules': 'cart-rules',
-  'orders': 'orders',
-  'order_cart_rules': 'order-cart-rules',
-  'order_details': 'order-details',
-  'order_histories': 'order-histories'
+  carriers: "carriers",
+  carrier_details: "carrier-details",
+  carrier_taxes: "carrier-taxes",
+  carts: "carts",
+  cart_products: "cart-products",
+  cart_rules: "cart-rules",
+  orders: "orders",
+  order_cart_rules: "order-cart-rules",
+  order_details: "order-details",
+  order_histories: "order-histories",
+  products: "products",
 } as const;
 
 type ShopContentMapping = typeof shopContentMapping;
 
 export type Content = keyof ShopContentMapping;
-export const contentList  = Object.keys(shopContentMapping) as Content[];
+export const contentList = Object.keys(shopContentMapping) as Content[];
 
 export type ShopContent = ShopContentMapping[Content];
-export const shopContentList = R.uniq(Object.values(shopContentMapping)) as ShopContent[];
-
-
+export const shopContentList = R.uniq(
+  Object.values(shopContentMapping),
+) as ShopContent[];

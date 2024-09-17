@@ -30,3 +30,7 @@ services:
   PrestaShop\Module\PsEventbus\Repository\NewRepository\CartRuleRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\CartRuleRepository
     public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductRepository
+    public: true

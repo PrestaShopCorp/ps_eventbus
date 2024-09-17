@@ -25,7 +25,7 @@ class CartsService implements ShopContentServiceInterface
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $result = $this->cartRepository->getContentsForFull($offset, $limit, $langIso, $debug);
+        $result = $this->cartRepository->retrieveContentsForFull($offset, $limit, $langIso, $debug);
 
         if (empty($result)) {
             return [];
@@ -52,7 +52,7 @@ class CartsService implements ShopContentServiceInterface
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $result = $this->cartRepository->getContentsForIncremental($limit, $contentIds, $langIso, $debug);
+        $result = $this->cartRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug);
 
         if (empty($result)) {
             return [];
@@ -76,9 +76,9 @@ class CartsService implements ShopContentServiceInterface
      *
      * @return int
      */
-    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    public function getFullSyncContentLeft($offset, $limit, $langIso)
     {
-        return $this->cartRepository->countFullSyncContentLeft($offset);
+        return $this->cartRepository->countFullSyncContentLeft($offset, $limit, $langIso);
     }
 
     /**

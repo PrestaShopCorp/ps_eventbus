@@ -114,3 +114,12 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\CartRuleRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\ProductsService:
+    class:  PrestaShop\Module\PsEventbus\Service\ShopContent\ProductsService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\CategoryRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
+      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'

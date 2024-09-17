@@ -7,46 +7,52 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
     const TABLE_NAME = 'order_history';
 
     /**
+     * @param string $tableName
+     * @param string $alias
+     *
      * @return void
      */
-    public function generateMinimalQuery()
+    public function generateMinimalQuery($tableName, $alias)
     {
         $this->query = new \DbQuery();
 
-        $this->query->from(self::TABLE_NAME, 'oh');
+        $this->query->from($tableName, $alias);
     }
 
     /**
      * @param string $langIso
+     * @param bool $withSelecParameters
      *
      * @return mixed
      *
      * @throws \PrestaShopException
      */
-    public function generateFullQuery($langIso)
+    public function generateFullQuery($langIso, $withSelecParameters)
     {
         $langId = (int) \Language::getIdByIso($langIso);
 
-        $this->generateMinimalQuery();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'oh');
 
         $this->query
             ->innerJoin('order_state', 'os', 'os.id_order_state = oh.id_order_State')
             ->innerJoin('order_state_lang', 'osl', 'osl.id_order_state = os.id_order_State AND osl.id_lang = ' . (int) $langId)
         ;
 
-        $this->query
-            ->select('oh.id_order_state')
-            ->select('osl.name')
-            ->select('osl.template')
-            ->select('oh.date_add')
-            ->select('oh.id_order')
-            ->select('oh.id_order_history')
-            ->select('os.logable AS is_validated')
-            ->select('os.delivery AS is_delivered')
-            ->select('os.shipped AS is_shipped')
-            ->select('os.paid AS is_paid')
-            ->select('os.deleted AS is_deleted')
-        ;
+        if ($withSelecParameters) {
+            $this->query
+                ->select('oh.id_order_state')
+                ->select('osl.name')
+                ->select('osl.template')
+                ->select('oh.date_add')
+                ->select('oh.id_order')
+                ->select('oh.id_order_history')
+                ->select('os.logable AS is_validated')
+                ->select('os.delivery AS is_delivered')
+                ->select('os.shipped AS is_shipped')
+                ->select('os.paid AS is_paid')
+                ->select('os.deleted AS is_deleted')
+            ;
+        }
     }
 
     /**
@@ -60,9 +66,9 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getContentsForFull($offset, $limit, $langIso, $debug)
+    public function retrieveContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $this->generateFullQuery($langIso);
+        $this->generateFullQuery($langIso, true);
 
         $this->query->limit((int) $limit, (int) $offset);
 
@@ -80,9 +86,9 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $this->generateFullQuery($langIso);
+        $this->generateFullQuery($langIso, true);
 
         $this->query
             ->where('oh.id_order_state IN(' . implode(',', array_map('intval', $contentIds)) . ')')
@@ -94,17 +100,19 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
 
     /**
      * @param int $offset
+     * @param int $limit
+     * @param string $langIso
      *
      * @return int
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset)
+    public function countFullSyncContentLeft($offset, $limit, $langIso)
     {
-        $this->generateMinimalQuery();
+        $this->generateFullQuery($langIso, false);
 
-        $this->query->select('(COUNT(oh.id_order_state) - ' . (int) $offset . ') as count');
+        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
 
         $result = $this->runQuery(false);
 
@@ -126,7 +134,7 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
             return [];
         }
 
-        $this->generateFullQuery($langIso);
+        $this->generateFullQuery($langIso, true);
 
         $this->query->where('oh.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')');
 

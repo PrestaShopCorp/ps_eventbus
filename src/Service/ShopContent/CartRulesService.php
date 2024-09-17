@@ -25,7 +25,7 @@ class CartRulesService implements ShopContentServiceInterface
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $result = $this->cartRuleRepository->getContentsForFull($offset, $limit, $langIso, $debug);
+        $result = $this->cartRuleRepository->retrieveContentsForFull($offset, $limit, $langIso, $debug);
 
         if (empty($result)) {
             return [];
@@ -52,7 +52,7 @@ class CartRulesService implements ShopContentServiceInterface
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $result = $this->cartRuleRepository->getContentsForIncremental($limit, $contentIds, $langIso, $debug);
+        $result = $this->cartRuleRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug);
 
         if (empty($result)) {
             return [];
@@ -76,9 +76,9 @@ class CartRulesService implements ShopContentServiceInterface
      *
      * @return int
      */
-    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    public function getFullSyncContentLeft($offset, $limit, $langIso)
     {
-        return $this->cartRuleRepository->countFullSyncContentLeft($offset);
+        return $this->cartRuleRepository->countFullSyncContentLeft($offset, $limit, $langIso);
     }
 
     /**
