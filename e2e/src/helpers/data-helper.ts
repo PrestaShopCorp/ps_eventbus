@@ -59,7 +59,7 @@ export async function getShopHealthCheck(options?: {
     healthCheck = cachedHealthCheck;
   } else {
     const res = await axios.get<HealthCheck>(
-      `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&is_e2e=1&shop_content=healthcheck&job_id=valid-job-healthcheck`
+      `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&is_e2e=1&shop_content=healthcheck&job_id=valid-job-healthcheck`,
     );
     healthCheck = res.data;
     cachedHealthCheck = healthCheck;
@@ -70,7 +70,7 @@ export async function getShopHealthCheck(options?: {
 const FIXTURE_DIR = "./src/fixtures";
 
 export async function loadFixture(
-  shopContent: ShopContent
+  shopContent: ShopContent,
 ): Promise<PsEventbusSyncUpload[]> {
   const contents = getControllerContent(shopContent);
   const shopVersion = (await getShopHealthCheck()).prestashop_version;
@@ -101,8 +101,8 @@ export async function loadFixture(
   const files = contents.map((content) =>
     fs.promises.readFile(
       `${FIXTURE_DIR}/${useFixture}/${content}.json`,
-      "utf-8"
-    )
+      "utf-8",
+    ),
   );
 
   for await (const file of files) {

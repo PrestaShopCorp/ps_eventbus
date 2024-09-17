@@ -6,14 +6,13 @@ import { PsEventbusSyncUpload } from "./mock-probe";
 import { getShopHealthCheck } from "./data-helper";
 
 export function logAxiosError(err: Error) {
-  if(err instanceof AxiosError) {
+  if (err instanceof AxiosError) {
     const data = {
-      
-      ...R.pick(['url'], err.response.config),
-      ...R.pick(['status', 'statusText' ,'data'], err.response)
-    }
+      ...R.pick(["url"], err.response.config),
+      ...R.pick(["status", "statusText", "data"], err.response),
+    };
 
-    console.log(data)
+    console.log(data);
   }
 }
 
@@ -24,11 +23,13 @@ export async function dumpUploadData(
   const shopVersion = (await getShopHealthCheck()).prestashop_version;
   const dir = `./dumps/${testConfig.testRunTime}/${shopVersion}/${filename}`;
 
-  await fs.promises.mkdir(dir, {recursive: true});
-  const groupedData = R.groupBy( el => el.collection, data )
-  const files = Object.keys(groupedData).map(collection => {
-    return fs.promises.writeFile(`${dir}/${collection}.json`,
-      JSON.stringify(groupedData[collection], null, 2) + '\n');
-  })
+  await fs.promises.mkdir(dir, { recursive: true });
+  const groupedData = R.groupBy((el) => el.collection, data);
+  const files = Object.keys(groupedData).map((collection) => {
+    return fs.promises.writeFile(
+      `${dir}/${collection}.json`,
+      JSON.stringify(groupedData[collection], null, 2) + "\n",
+    );
+  });
   await Promise.all(files);
 }
