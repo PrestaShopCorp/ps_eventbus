@@ -31,8 +31,6 @@ class ProductBundleRepository extends AbstractRepository implements RepositoryIn
     {
         $this->generateMinimalQuery(self::TABLE_NAME, 'pac');
 
-
-
         $this->query
             ->innerJoin('product', 'p', 'p.id_product = pac.id_product_pack')
             ->innerJoin('product_shop', 'ps', 'ps.id_product = p.id_product AND ps.id_shop = ' . parent::getShopContext()->id)
@@ -40,7 +38,7 @@ class ProductBundleRepository extends AbstractRepository implements RepositoryIn
             ->leftJoin('product_attribute', 'pa', 'pas.id_product_attribute = pa.id_product_attribute')
             ->where('p.cache_is_pack=1')
         ;
-        
+
         if ($withSelecParameters) {
             $this->query
                 ->select('p.id_product')

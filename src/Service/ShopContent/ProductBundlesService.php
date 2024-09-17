@@ -10,7 +10,8 @@ class ProductBundlesService implements ShopContentServiceInterface
     /** @var ProductBundleRepository */
     private $productBundleRepository;
 
-    public function __construct(ProductBundleRepository $productBundleRepository) {
+    public function __construct(ProductBundleRepository $productBundleRepository)
+    {
         $this->productBundleRepository = $productBundleRepository;
     }
 
@@ -82,6 +83,7 @@ class ProductBundlesService implements ShopContentServiceInterface
 
     /**
      * @param array<mixed> $productBundles
+     * @param string $langIso
      *
      * @return void
      */
