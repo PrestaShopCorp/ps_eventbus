@@ -41,7 +41,6 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
             ->leftJoin('order_state_lang', 'osl', 'o.current_state = osl.id_order_state')
             ->leftJoin('order_state', 'ost', 'o.current_state = ost.id_order_state')
             ->where('o.id_shop = ' . (int) parent::getShopContext()->id)
-            ->groupBy('o.id_order')
         ;
 
         if ($withSelecParameters) {
@@ -114,6 +113,8 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
     public function retrieveContentsForFull($offset, $limit, $langIso, $debug)
     {
         $this->generateFullQuery($langIso, true);
+
+        $this->query->groupBy('o.id_order');
 
         $this->query->limit((int) $limit, (int) $offset);
 

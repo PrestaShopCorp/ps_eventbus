@@ -48,7 +48,6 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
             ->leftJoin('product_shop', 'ps', 'od.product_id = ps.id_product AND ps.id_shop = ' . (int) $context->shop->id)
             ->leftJoin('currency', 'c', 'c.id_currency = o.id_currency')
             ->leftJoin('lang', 'l', 'o.id_lang = l.id_lang')
-            ->groupBy('od.id_order_detail')
         ;
         
         if ($withSelecParameters) {
@@ -84,6 +83,8 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
     public function retrieveContentsForFull($offset, $limit, $langIso, $debug)
     {
         $this->generateFullQuery($langIso, true);
+        
+        $this->query->groupBy('od.id_order_detail');
 
         $this->query->limit((int) $limit, (int) $offset);
 
