@@ -5,12 +5,9 @@ import axios, { AxiosError } from "axios";
 import { doFullSync, probe, PsEventbusSyncUpload } from "./helpers/mock-probe";
 import {
   combineLatest,
-  concatMap,
-  expand,
   from,
   lastValueFrom,
   map,
-  of,
   TimeoutError,
   toArray,
   zip,
@@ -22,8 +19,6 @@ import {
   sortUploadData,
 } from "./helpers/data-helper";
 import { ShopContent, shopContentList } from "./helpers/shop-contents";
-import { exit } from "process";
-import { cp } from "fs";
 
 expect.extend(matchers);
 
@@ -204,9 +199,7 @@ describe("Full Sync", () => {
         const fullSync$ = doFullSync(jobId, shopContent, { timeout: 4000 });
         const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 4000 });
 
-        let syncedData: PsEventbusSyncUpload[];
-
-        const [reponse, message] = await lastValueFrom(
+        const [, message] = await lastValueFrom(
           combineLatest([
             fullSync$,
             message$.pipe(
@@ -216,9 +209,10 @@ describe("Full Sync", () => {
           ]),
         );
 
-        syncedData = message.flat();
+        const syncedData: PsEventbusSyncUpload[] = message.flat();
 
         // dump data for easier debugging or updating fixtures
+        let processedData = syncedData as PsEventbusSyncUpload[];
         if (testConfig.dumpFullSyncData) {
           await dumpUploadData(syncedData, shopContent);
         }
@@ -226,7 +220,6 @@ describe("Full Sync", () => {
         const fixture = await loadFixture(shopContent);
 
         // we need to process fixtures and data returned from ps_eventbus to make them easier to compare
-        let processedData = syncedData;
         let processedFixture = fixture;
         if (shopContent === ("modules" as ShopContent)) {
           processedData = generatePredictableModuleId(processedData);
@@ -247,7 +240,7 @@ describe("Full Sync", () => {
         expect(processedData).toMatchObject(processedFixture);
 
         // assert special field using custom matcher
-        for (const data of syncedData) {
+        for (const data of processedData) {
           for (const specialFieldName of Object.keys(specialFieldAssert)) {
             if (data.properties[specialFieldName] !== undefined) {
               specialFieldAssert[specialFieldName](

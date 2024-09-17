@@ -1,6 +1,7 @@
 import fixture from "../fixtures/latest/carrier_details.json"
 
 // test type
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const t: CarrierDetails[] = fixture;
 
 export type CarrierDetails = {
@@ -17,5 +18,5 @@ export type CarrierDetails = {
     price: number;
     shipping_method: string;
     state_ids: string;
-  }
-}
+  };
+};

@@ -1,6 +1,7 @@
 import fixture from '../fixtures/latest/employees.json'
 
 // test type
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const t: Employees[] = fixture;
 
 export type Employees = {
@@ -25,5 +26,5 @@ export type Employees = {
     id_shop: number;
     last_connection_date?: string;
     optin: boolean;
-  }
-}
+  };
+};

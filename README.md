@@ -14,6 +14,12 @@
 
 PS Accounts compatibility matrix [can be viewed here](https://github.com/PrestaShopCorp/ps_accounts#compatibility-matrix).
 
+### Product Images Issue in PHP 8.1
+
+Please note that starting from PHP 8.1, product images may be missing due to a known issue.
+This is a recognized problem and is being tracked in the PrestaShop repository.
+You can follow the progress and find more details about the resolution [here](https://github.com/PrestaShop/PrestaShop/issues/36836).
+
 ## Use
 
 ```sh
@@ -41,7 +47,7 @@ make docker-<stuff>    # same as above, but in a docker container
 
 ## Healthiness
 
-To check the module healthiness (authentified route):
+To check the module healthiness (authenticated route):
 
 ```sh
 BASE_URL="http://localhost:8000"
@@ -62,7 +68,7 @@ curl -s -L "$BASE_URL/index.php?fc=module&module=ps_eventbus&controller=apiFront
 }
 ```
 
-To check the fallback route (unauthentified):
+To check the fallback route (unauthenticated):
 
 ```sh
 BASE_URL="http://localhost:8000"
@@ -91,9 +97,9 @@ Dev requirements:
   - [gd](https://www.php.net/manual/en/book.image.php)
   - [zip](https://www.php.net/manual/en/book.zip.php)
 
-Or an up to date [Docker engine](https://docs.docker.com/engine/install).
+Or an up-to-date [Docker engine](https://docs.docker.com/engine/install).
 
-## List of missing data in database and why is missing
+## List of missing data in a database and why is missing
 
 |           Object content           |        Reason        | Added in PS version |                                                                              Link with more info                                                                              |
 |:----------------------------------:|:--------------------:|:-------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|

@@ -1,9 +1,9 @@
-import axios, {AxiosError} from "axios";
+import { AxiosError } from "axios";
 import R from "ramda";
 import fs from "fs";
 import testConfig from "./test.config";
-import {PsEventbusSyncUpload} from "./mock-probe";
-import {getShopHealthCheck} from "./data-helper";
+import { PsEventbusSyncUpload } from "./mock-probe";
+import { getShopHealthCheck } from "./data-helper";
 
 export function logAxiosError(err: Error) {
   if(err instanceof AxiosError) {
@@ -17,7 +17,10 @@ export function logAxiosError(err: Error) {
   }
 }
 
-export async function dumpUploadData(data: PsEventbusSyncUpload[], filename: string) {
+export async function dumpUploadData(
+  data: PsEventbusSyncUpload[],
+  filename: string,
+) {
   const shopVersion = (await getShopHealthCheck()).prestashop_version;
   const dir = `./dumps/${testConfig.testRunTime}/${shopVersion}/${filename}`;
 

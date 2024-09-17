@@ -4,14 +4,10 @@ import {
   EMPTY,
   expand,
   filter,
-  firstValueFrom,
   from,
   map,
   Observable,
-  take,
   takeUntil,
-  tap,
-  throwIfEmpty,
   timeout,
   timer,
 } from "rxjs";
@@ -19,7 +15,6 @@ import R from "ramda";
 import testConfig from "./test.config";
 import axios from "axios";
 import { ShopContent } from "./shop-contents";
-import { anyBoolean } from "jest-mock-extended";
 
 const DEFAULT_OPTIONS = {
   timeout: 3000,
@@ -30,6 +25,7 @@ export type MockClientOptions = typeof DEFAULT_OPTIONS;
 
 // no Websocket implementation seems to exist in jest runner
 if (!global.WebSocket) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (global as any).WebSocket = WebSocket;
 }
 
@@ -76,7 +72,7 @@ export type Collection = string;
 export type PsEventbusSyncUpload = {
   collection: Collection;
   id: string;
-  properties: any;
+  properties: unknown;
 };
 
 export type MockProbeResponse = {
@@ -86,7 +82,7 @@ export type MockProbeResponse = {
   url: string;
   query: Record<string, string>;
   params: Record<string, string>;
-  body: Record<string, any> & { file: PsEventbusSyncUpload[] };
+  body: Record<string, unknown> & { file: PsEventbusSyncUpload[] };
 };
 
 export function doFullSync(

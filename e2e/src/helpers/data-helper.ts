@@ -12,10 +12,10 @@ import semver from "semver";
  * @param data ps_eventbus upload data
  */
 export const sortUploadData: (
-  data: PsEventbusSyncUpload[]
+  data: PsEventbusSyncUpload[],
 ) => PsEventbusSyncUpload[] = R.pipe(
   R.sortBy(R.prop("collection")),
-  R.sortBy(R.prop("id"))
+  R.sortBy(R.prop("id")),
 );
 
 /**
@@ -24,18 +24,21 @@ export const sortUploadData: (
  * @param data
  */
 export function generatePredictableModuleId(
-  data: PsEventbusSyncUpload[]
+  data: PsEventbusSyncUpload[],
 ): PsEventbusSyncUpload[] {
-  return data.map((it) => ({ ...it, id: `${it.properties.name}` }));
+  return data.map((it) => ({
+    ...it,
+    id: `${(it.properties as { name: string }).name}`,
+  }));
 }
 
 export function omitProperties(
   data: PsEventbusSyncUpload[],
-  omitFields: string[]
+  omitFields: string[],
 ): PsEventbusSyncUpload[] {
   return data.map((it) => ({
     ...it,
-    properties: R.omit(omitFields, it.properties),
+    properties: R.omit(omitFields as never[], it.properties),
   }));
 }
 
@@ -74,22 +77,24 @@ export async function loadFixture(
   const shopSemver = semver.coerce(shopVersion);
   const fixture = [];
 
-  const fixtureVersions = await fs.promises.readdir(
-    `${FIXTURE_DIR}`,
-    {encoding: 'utf-8', withFileTypes: true}
-  )
+  const fixtureVersions = await fs.promises.readdir(`${FIXTURE_DIR}`, {
+    encoding: "utf-8",
+    withFileTypes: true,
+  });
 
   // use either fixture specific to PS version or latest fixture
   const matchingFixtures = fixtureVersions
-    .filter(version => version.isDirectory())
-    .map(version => version.name)
-    .filter(fixtureDir => semver.satisfies(shopSemver, fixtureDir));
+    .filter((version) => version.isDirectory())
+    .map((version) => version.name)
+    .filter((fixtureDir) => semver.satisfies(shopSemver, fixtureDir));
 
-  let useFixture = 'latest';
+  let useFixture = "latest";
 
-  if(matchingFixtures.length > 1) {
-    throw new Error(`More than one fixture matches prestashop version ${shopVersion} : ${JSON.stringify(useFixture)}`)
-  } else if(matchingFixtures.length === 1) {
+  if (matchingFixtures.length > 1) {
+    throw new Error(
+      `More than one fixture matches prestashop version ${shopVersion} : ${JSON.stringify(useFixture)}`,
+    );
+  } else if (matchingFixtures.length === 1) {
     useFixture = matchingFixtures[0];
   }
 

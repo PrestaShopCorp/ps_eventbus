@@ -363,7 +363,7 @@ class ProductsService implements ShopContentServiceInterface
                     return $image['id_product_attribute'] === $product['id_attribute'];
                 });
 
-                // If combination has some pictures -> the first one is the cover
+                // If a combination has some pictures -> the first one is the cover
                 if (count($productAttributeImages)) {
                     $productImageIds = $this->arrayFormatter->formatValueArray($productAttributeImages, 'id_image');
                     $coverImageId = reset($productImageIds);

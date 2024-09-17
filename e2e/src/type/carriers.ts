@@ -1,6 +1,7 @@
 import fixture from "../fixtures/latest/carriers.json";
 
 // test type
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const t: Carriers[] = fixture;
 
 export type Carriers = {
@@ -31,5 +32,5 @@ export type Carriers = {
     shipping_handling: number;
     url: string;
     weight_unit: string;
-  }
-}
+  };
+};
