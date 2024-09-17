@@ -123,3 +123,9 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\CategoryRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\ProductBundlesService:
+    class:  PrestaShop\Module\PsEventbus\Service\ShopContent\ProductBundlesService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductBundleRepository'
