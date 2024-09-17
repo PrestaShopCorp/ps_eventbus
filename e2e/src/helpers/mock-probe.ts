@@ -7,7 +7,7 @@ import axios from "axios";
 import { Controller } from "./controllers";
 
 const DEFAULT_OPTIONS = {
-  timeout: 3000,
+  timeout: 500,
 };
 
 export type MockProbeOptions = typeof DEFAULT_OPTIONS;
