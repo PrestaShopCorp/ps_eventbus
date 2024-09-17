@@ -85,7 +85,7 @@ class CarriersService implements ShopContentServiceInterface
      */
     public function getFullSyncContentLeft($offset, $limit, $langIso)
     {
-        return $this->carrierRepository->countFullSyncContentLeft($offset, $langIso);
+        return $this->carrierRepository->countFullSyncContentLeft($offset, $limit, $langIso);
     }
 
     /**
