@@ -213,9 +213,17 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
 
         $attributes = $this->runQuery(false);
 
-        return array_reduce($attributes, function ($key, $attribute) {
+        $resultArray = [];
+
+        foreach ($attributes as $attribute) {
+            $resultArray[$attribute['id_product_attribute']][$attribute['name']] = $attribute['value'];
+        }
+
+        return $resultArray;
+
+        /* return array_reduce($attributes, function ($key, $attribute) {
             return $attribute[$attribute['id_product_attribute']][$attribute['name']] = $attribute['value'];
-        });
+        }); */
     }
 
     /**
@@ -246,9 +254,17 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
 
         $features = $this->runQuery(false);
 
-        return array_reduce($features, function ($key, $feature) {
+        $resultArray = [];
+
+        foreach ($features as $feature) {
+            $resultArray[$feature['id_product']][$feature['name']] = $feature['value'];
+        }
+
+        return $resultArray;
+
+        /* return array_reduce($features, function ($key, $feature) {
             return $feature[$feature['id_product']][$feature['name']] = $feature['value'];
-        });
+        }); */
     }
 
     /**

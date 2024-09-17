@@ -34,3 +34,7 @@ services:
   PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductRepository
     public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductBundleRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductBundleRepository
+    public: true
