@@ -82,9 +82,7 @@ export function doFullSync(jobId: string, shopContent: ShopContent, options?: Mo
   
   const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
 
-  const requestNext = (full: number) => {
-    console.log('isFull', full === 1);
-    return axios.post<PsEventbusSyncResponse>(
+  const requestNext = (full: number) => axios.post<PsEventbusSyncResponse>(
     `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&is_e2e=1&shop_content=${shopContent}&limit=5&full=${full}&job_id=${jobId}`,
     callId,
     {
@@ -92,18 +90,13 @@ export function doFullSync(jobId: string, shopContent: ShopContent, options?: Mo
         'Host': testConfig.prestaShopHostHeader,
         'Content-Type': 'application/x-www-form-urlencoded' // for compat PHP 5.6
       }
-    })
-  };
-
-  console.log('doFullSync');
+    });
 
   return from(requestNext(1)).pipe(
     expand(response => {
-      console.log(response.data.remaining_objects + ' remaining objects');
       if (response.data.has_remaining_objects) {
         return from(requestNext(0));
       } else {
-        console.log('has empty');
         return EMPTY
       }
     }),
