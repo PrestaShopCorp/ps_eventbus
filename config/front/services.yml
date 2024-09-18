@@ -135,3 +135,9 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductSupplierRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\ProductCarriersService:
+    class:  PrestaShop\Module\PsEventbus\Service\ShopContent\ProductCarriersService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductCarrierRepository'

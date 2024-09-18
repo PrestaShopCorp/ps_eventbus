@@ -648,5 +648,265 @@
       "product_supplier_price_te": 5.49,
       "id_currency": 0
     }
+  },
+  {
+    "id": 51,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 51,
+      "id_product": 10,
+      "id_product_attribute": 25,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_16_82",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 52,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 52,
+      "id_product": 11,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_17_83",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 53,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 53,
+      "id_product": 11,
+      "id_product_attribute": 26,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_17_83",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 54,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 54,
+      "id_product": 11,
+      "id_product_attribute": 27,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_17_84",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 55,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 55,
+      "id_product": 16,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_8_85",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 56,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 56,
+      "id_product": 16,
+      "id_product_attribute": 28,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_8_85",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 57,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 57,
+      "id_product": 16,
+      "id_product_attribute": 29,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_8_86",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 58,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 58,
+      "id_product": 16,
+      "id_product_attribute": 30,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_8_87",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 59,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 59,
+      "id_product": 16,
+      "id_product_attribute": 31,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_8_88",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 60,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 60,
+      "id_product": 17,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_9_89",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 61,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 61,
+      "id_product": 17,
+      "id_product_attribute": 32,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_9_89",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 62,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 62,
+      "id_product": 17,
+      "id_product_attribute": 33,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_9_90",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 63,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 63,
+      "id_product": 17,
+      "id_product_attribute": 34,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_9_91",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 64,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 64,
+      "id_product": 17,
+      "id_product_attribute": 35,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_9_92",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 65,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 65,
+      "id_product": 18,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_10_93",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 66,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 66,
+      "id_product": 18,
+      "id_product_attribute": 36,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_10_93",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 67,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 67,
+      "id_product": 18,
+      "id_product_attribute": 37,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_10_94",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 68,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 68,
+      "id_product": 18,
+      "id_product_attribute": 38,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_10_95",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 69,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 69,
+      "id_product": 18,
+      "id_product_attribute": 39,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_10_96",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 0
+    }
+  },
+  {
+    "id": 70,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 70,
+      "id_product": 15,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "",
+      "product_supplier_price_te": 0,
+      "id_currency": 0
+    }
   }
 ]

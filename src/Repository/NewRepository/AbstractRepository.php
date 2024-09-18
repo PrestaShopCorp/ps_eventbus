@@ -34,6 +34,19 @@ abstract class AbstractRepository
     }
 
     /**
+     * @param string $tableName
+     * @param string $alias
+     *
+     * @return void
+     */
+    public function generateMinimalQuery($tableName, $alias)
+    {
+        $this->query = new \DbQuery();
+
+        $this->query->from($tableName, $alias);
+    }
+
+    /**
      * @return \Context
      */
     public function getContext()
