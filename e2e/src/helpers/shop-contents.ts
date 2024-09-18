@@ -46,6 +46,7 @@ export const shopContentMapping = {
   order_histories: "order-histories",
   products: "products",
   product_bundles: "product-bundles",
+  product_suppliers: "product-suppliers",
 } as const;
 
 type ShopContentMapping = typeof shopContentMapping;
