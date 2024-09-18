@@ -90,9 +90,9 @@ class ProductBundlesService implements ShopContentServiceInterface
     private function castProductsBundles(&$productBundles, $langIso)
     {
         foreach ($productBundles as &$productBundle) {
-            $productBundle['id_bundle'] = (int) $productBundle['id_bundle'];
-            $productBundle['id_product'] = (int) $productBundle['id_product_item'];
-            $productBundle['id_product_attribute'] = (int) $productBundle['id_product_attribute'];
+            $productBundle['id_bundle'] = $productBundle['id_bundle'];
+            $productBundle['id_product'] = $productBundle['id_product_item'];
+            $productBundle['id_product_attribute'] = $productBundle['id_product_attribute'];
             $productBundle['unique_product_id'] = "{$productBundle['id_bundle']}-{$productBundle['product_id_attribute']}-{$langIso}";
             $productBundle['quantity'] = $productBundle['quantity'];
 
