@@ -35,12 +35,6 @@ services:
     class: PrestaShop\Module\PsEventbus\Repository\ModuleRepository
     public: true
 
-  PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository
-    public: true
-    arguments:
-      - '@=service("prestashop.adapter.legacy.context").getContext()'
-
   PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository
     public: true
@@ -140,6 +134,7 @@ services:
     public: true
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
+
 
   PrestaShop\Module\PsEventbus\Repository\EmployeeRepository:
     class: PrestaShop\Module\PsEventbus\Repository\EmployeeRepository

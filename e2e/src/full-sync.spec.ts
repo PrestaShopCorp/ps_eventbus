@@ -28,7 +28,6 @@ const EXCLUDED_API: ShopContent[] = ["taxonomies" as ShopContent];
 // FIXME : these api can't send anything to the mock api because the database is empty from the factory
 const MISSING_TEST_DATA: ShopContent[] = [
   "cart-rules" as ShopContent,
-  "custom-product-carriers" as ShopContent,
   "translations" as ShopContent,
   "wishlists" as ShopContent,
 ];

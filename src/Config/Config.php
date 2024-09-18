@@ -40,7 +40,6 @@ class Config
     const COLLECTION_CART_RULES = 'cart_rules';
     const COLLECTION_CATEGORIES = 'categories';
     const COLLECTION_CURRENCIES = 'currencies';
-    const COLLECTION_CUSTOM_PRODUCT_CARRIERS = 'custom_product_carriers';
     const COLLECTION_CUSTOMERS = 'customers';
     const COLLECTION_DELETED = 'deleted';
     const COLLECTION_EMPLOYEES = 'employees';
@@ -58,6 +57,7 @@ class Config
     const COLLECTION_PRODUCTS = 'products';
     const COLLECTION_PRODUCT_ATTRIBUTES = 'attributes';
     const COLLECTION_PRODUCT_BUNDLES = 'product_bundles';
+    const COLLECTION_PRODUCT_CARRIERS = 'product_carriers';
     const COLLECTION_PRODUCT_SUPPLIERS = 'product_suppliers';
     const COLLECTION_SHOPS = 'shops';
     const COLLECTION_SPECIFIC_PRICES = 'specific_prices';
@@ -80,7 +80,6 @@ class Config
         self::COLLECTION_CART_RULES,
         self::COLLECTION_CATEGORIES,
         self::COLLECTION_CURRENCIES,
-        self::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
         self::COLLECTION_CUSTOMERS,
         self::COLLECTION_DELETED,
         self::COLLECTION_EMPLOYEES,
@@ -97,6 +96,7 @@ class Config
         self::COLLECTION_PRODUCTS,
         self::COLLECTION_PRODUCT_ATTRIBUTES,
         self::COLLECTION_PRODUCT_BUNDLES,
+        self::COLLECTION_PRODUCT_CARRIERS,
         self::COLLECTION_PRODUCT_SUPPLIERS,
         self::COLLECTION_SHOPS,
         self::COLLECTION_SPECIFIC_PRICES,

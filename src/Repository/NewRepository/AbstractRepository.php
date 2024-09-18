@@ -45,7 +45,7 @@ abstract class AbstractRepository
 
         $this->query->from($tableName, $alias);
     }
-    
+
     /**
      * @return \Context
      */
