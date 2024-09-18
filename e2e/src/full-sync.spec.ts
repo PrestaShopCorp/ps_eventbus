@@ -169,8 +169,6 @@ describe("Full Sync", () => {
         const response$ = doFullSync(jobId, controller, { timeout: 4000 });
         const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 4000 });
 
-        let syncedData: PsEventbusSyncUpload[];
-
         // this combines each response from ps_eventbus to the last request captured by the probe.
         // it works because ps_eventbus sends a response after calling our mock collector server
         // if ps_eventbus doesn't need to call the collector, the probe completes without value after its timeout
@@ -181,7 +179,7 @@ describe("Full Sync", () => {
           ),
         );
 
-        syncedData = messages.flat();
+        const syncedData: PsEventbusSyncUpload[] = messages.flat();
 
         // dump data for easier debugging or updating fixtures
         let processedData = syncedData as PsEventbusSyncUpload[];
