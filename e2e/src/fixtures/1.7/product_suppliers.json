@@ -9,7 +9,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_11",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -22,7 +22,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_12",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -35,7 +35,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_13",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -48,7 +48,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_14",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -61,7 +61,7 @@
       "id_supplier": 2,
       "product_supplier_reference": "demo_18",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -69,12 +69,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 6,
-      "id_product": 13,
+      "id_product": 12,
       "id_product_attribute": 0,
-      "id_supplier": 2,
-      "product_supplier_reference": "demo_19",
-      "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_18",
+      "product_supplier_price_te": 6.49,
+      "id_currency": 1
     }
   },
   {
@@ -82,12 +82,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 7,
-      "id_product": 14,
+      "id_product": 13,
       "id_product_attribute": 0,
       "id_supplier": 2,
-      "product_supplier_reference": "demo_20",
+      "product_supplier_reference": "demo_19",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -95,12 +95,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 8,
-      "id_product": 1,
+      "id_product": 13,
       "id_product_attribute": 0,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_1_46",
-      "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "product_supplier_reference": "demo_19",
+      "product_supplier_price_te": 6.49,
+      "id_currency": 1
     }
   },
   {
@@ -108,12 +108,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 9,
-      "id_product": 1,
-      "id_product_attribute": 1,
-      "id_supplier": 1,
-      "product_supplier_reference": "demo_1_46",
+      "id_product": 14,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_20",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -121,12 +121,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 10,
-      "id_product": 1,
-      "id_product_attribute": 2,
+      "id_product": 14,
+      "id_product_attribute": 0,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_1_47",
-      "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "product_supplier_reference": "demo_20",
+      "product_supplier_price_te": 6.49,
+      "id_currency": 1
     }
   },
   {
@@ -135,11 +135,11 @@
     "properties": {
       "id_product_supplier": 11,
       "id_product": 1,
-      "id_product_attribute": 3,
+      "id_product_attribute": 0,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_1_48",
+      "product_supplier_reference": "demo_1_46",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -148,11 +148,11 @@
     "properties": {
       "id_product_supplier": 12,
       "id_product": 1,
-      "id_product_attribute": 4,
+      "id_product_attribute": 1,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_1_49",
+      "product_supplier_reference": "demo_1_46",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -161,11 +161,11 @@
     "properties": {
       "id_product_supplier": 13,
       "id_product": 1,
-      "id_product_attribute": 5,
+      "id_product_attribute": 2,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_1_50",
+      "product_supplier_reference": "demo_1_47",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -174,11 +174,11 @@
     "properties": {
       "id_product_supplier": 14,
       "id_product": 1,
-      "id_product_attribute": 6,
+      "id_product_attribute": 3,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_1_51",
+      "product_supplier_reference": "demo_1_48",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -187,11 +187,11 @@
     "properties": {
       "id_product_supplier": 15,
       "id_product": 1,
-      "id_product_attribute": 7,
+      "id_product_attribute": 4,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_1_52",
+      "product_supplier_reference": "demo_1_49",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -200,11 +200,11 @@
     "properties": {
       "id_product_supplier": 16,
       "id_product": 1,
-      "id_product_attribute": 8,
+      "id_product_attribute": 5,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_1_53",
+      "product_supplier_reference": "demo_1_50",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -212,12 +212,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 17,
-      "id_product": 2,
-      "id_product_attribute": 0,
+      "id_product": 1,
+      "id_product_attribute": 6,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_3_62",
+      "product_supplier_reference": "demo_1_51",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -225,12 +225,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 18,
-      "id_product": 2,
-      "id_product_attribute": 9,
+      "id_product": 1,
+      "id_product_attribute": 7,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_3_62",
+      "product_supplier_reference": "demo_1_52",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -238,12 +238,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 19,
-      "id_product": 2,
-      "id_product_attribute": 10,
+      "id_product": 1,
+      "id_product_attribute": 8,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_3_63",
+      "product_supplier_reference": "demo_1_53",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -252,11 +252,11 @@
     "properties": {
       "id_product_supplier": 20,
       "id_product": 2,
-      "id_product_attribute": 11,
+      "id_product_attribute": 0,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_3_64",
+      "product_supplier_reference": "demo_3_62",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -265,11 +265,11 @@
     "properties": {
       "id_product_supplier": 21,
       "id_product": 2,
-      "id_product_attribute": 12,
+      "id_product_attribute": 9,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_3_65",
+      "product_supplier_reference": "demo_3_62",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -277,12 +277,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 22,
-      "id_product": 3,
-      "id_product_attribute": 0,
+      "id_product": 2,
+      "id_product_attribute": 10,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_6_70",
+      "product_supplier_reference": "demo_3_63",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -290,12 +290,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 23,
-      "id_product": 3,
-      "id_product_attribute": 13,
+      "id_product": 2,
+      "id_product_attribute": 11,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_6_70",
+      "product_supplier_reference": "demo_3_64",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -303,12 +303,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 24,
-      "id_product": 3,
-      "id_product_attribute": 14,
+      "id_product": 2,
+      "id_product_attribute": 12,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_6_71",
+      "product_supplier_reference": "demo_3_65",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -317,11 +317,11 @@
     "properties": {
       "id_product_supplier": 25,
       "id_product": 3,
-      "id_product_attribute": 15,
+      "id_product_attribute": 0,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_6_72",
+      "product_supplier_reference": "demo_6_70",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -329,12 +329,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 26,
-      "id_product": 4,
-      "id_product_attribute": 0,
+      "id_product": 3,
+      "id_product_attribute": 13,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_5_73",
+      "product_supplier_reference": "demo_6_70",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -342,12 +342,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 27,
-      "id_product": 4,
-      "id_product_attribute": 16,
+      "id_product": 3,
+      "id_product_attribute": 14,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_5_73",
+      "product_supplier_reference": "demo_6_71",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -355,12 +355,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 28,
-      "id_product": 4,
-      "id_product_attribute": 17,
+      "id_product": 3,
+      "id_product_attribute": 15,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_5_74",
+      "product_supplier_reference": "demo_6_72",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -369,11 +369,11 @@
     "properties": {
       "id_product_supplier": 29,
       "id_product": 4,
-      "id_product_attribute": 18,
+      "id_product_attribute": 0,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_5_75",
+      "product_supplier_reference": "demo_5_73",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -381,12 +381,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 30,
-      "id_product": 5,
-      "id_product_attribute": 0,
+      "id_product": 4,
+      "id_product_attribute": 16,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_5_76",
+      "product_supplier_reference": "demo_5_73",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -394,12 +394,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 31,
-      "id_product": 5,
-      "id_product_attribute": 19,
+      "id_product": 4,
+      "id_product_attribute": 17,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_5_76",
+      "product_supplier_reference": "demo_5_74",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -407,12 +407,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 32,
-      "id_product": 5,
-      "id_product_attribute": 20,
+      "id_product": 4,
+      "id_product_attribute": 18,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_5_77",
+      "product_supplier_reference": "demo_5_75",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -421,11 +421,11 @@
     "properties": {
       "id_product_supplier": 33,
       "id_product": 5,
-      "id_product_attribute": 21,
+      "id_product_attribute": 0,
       "id_supplier": 1,
-      "product_supplier_reference": "demo_5_78",
+      "product_supplier_reference": "demo_5_76",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -433,12 +433,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 34,
-      "id_product": 3,
-      "id_product_attribute": 0,
-      "id_supplier": 2,
-      "product_supplier_reference": "demo_6_70",
-      "product_supplier_price_te": 2.49,
-      "id_currency": 0
+      "id_product": 5,
+      "id_product_attribute": 19,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_5_76",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
     }
   },
   {
@@ -446,12 +446,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 35,
-      "id_product": 3,
-      "id_product_attribute": 13,
-      "id_supplier": 2,
-      "product_supplier_reference": "demo_6_70",
-      "product_supplier_price_te": 2.49,
-      "id_currency": 0
+      "id_product": 5,
+      "id_product_attribute": 20,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_5_77",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
     }
   },
   {
@@ -459,12 +459,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 36,
-      "id_product": 3,
-      "id_product_attribute": 14,
-      "id_supplier": 2,
-      "product_supplier_reference": "demo_6_71",
-      "product_supplier_price_te": 2.49,
-      "id_currency": 0
+      "id_product": 5,
+      "id_product_attribute": 21,
+      "id_supplier": 1,
+      "product_supplier_reference": "demo_5_78",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
     }
   },
   {
@@ -473,11 +473,11 @@
     "properties": {
       "id_product_supplier": 37,
       "id_product": 3,
-      "id_product_attribute": 15,
+      "id_product_attribute": 0,
       "id_supplier": 2,
-      "product_supplier_reference": "demo_6_72",
+      "product_supplier_reference": "demo_6_70",
       "product_supplier_price_te": 2.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -485,12 +485,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 38,
-      "id_product": 4,
-      "id_product_attribute": 0,
+      "id_product": 3,
+      "id_product_attribute": 13,
       "id_supplier": 2,
-      "product_supplier_reference": "demo_5_73",
+      "product_supplier_reference": "demo_6_70",
       "product_supplier_price_te": 2.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -498,12 +498,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 39,
-      "id_product": 4,
-      "id_product_attribute": 16,
+      "id_product": 3,
+      "id_product_attribute": 14,
       "id_supplier": 2,
-      "product_supplier_reference": "demo_5_73",
+      "product_supplier_reference": "demo_6_71",
       "product_supplier_price_te": 2.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -511,12 +511,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 40,
-      "id_product": 4,
-      "id_product_attribute": 17,
+      "id_product": 3,
+      "id_product_attribute": 15,
       "id_supplier": 2,
-      "product_supplier_reference": "demo_5_74",
+      "product_supplier_reference": "demo_6_72",
       "product_supplier_price_te": 2.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -525,11 +525,11 @@
     "properties": {
       "id_product_supplier": 41,
       "id_product": 4,
-      "id_product_attribute": 18,
+      "id_product_attribute": 0,
       "id_supplier": 2,
-      "product_supplier_reference": "demo_5_75",
+      "product_supplier_reference": "demo_5_73",
       "product_supplier_price_te": 2.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -537,12 +537,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 42,
-      "id_product": 5,
-      "id_product_attribute": 0,
+      "id_product": 4,
+      "id_product_attribute": 16,
       "id_supplier": 2,
-      "product_supplier_reference": "demo_5_76",
+      "product_supplier_reference": "demo_5_73",
       "product_supplier_price_te": 2.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -550,12 +550,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 43,
-      "id_product": 5,
-      "id_product_attribute": 19,
+      "id_product": 4,
+      "id_product_attribute": 17,
       "id_supplier": 2,
-      "product_supplier_reference": "demo_5_76",
+      "product_supplier_reference": "demo_5_74",
       "product_supplier_price_te": 2.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -563,12 +563,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 44,
-      "id_product": 5,
-      "id_product_attribute": 20,
+      "id_product": 4,
+      "id_product_attribute": 18,
       "id_supplier": 2,
-      "product_supplier_reference": "demo_5_77",
+      "product_supplier_reference": "demo_5_75",
       "product_supplier_price_te": 2.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -577,11 +577,11 @@
     "properties": {
       "id_product_supplier": 45,
       "id_product": 5,
-      "id_product_attribute": 21,
+      "id_product_attribute": 0,
       "id_supplier": 2,
-      "product_supplier_reference": "demo_5_78",
+      "product_supplier_reference": "demo_5_76",
       "product_supplier_price_te": 2.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -589,12 +589,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 46,
-      "id_product": 9,
-      "id_product_attribute": 0,
+      "id_product": 5,
+      "id_product_attribute": 19,
       "id_supplier": 2,
-      "product_supplier_reference": "demo_15_79",
-      "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "product_supplier_reference": "demo_5_76",
+      "product_supplier_price_te": 2.49,
+      "id_currency": 1
     }
   },
   {
@@ -602,12 +602,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 47,
-      "id_product": 9,
-      "id_product_attribute": 22,
+      "id_product": 5,
+      "id_product_attribute": 20,
       "id_supplier": 2,
-      "product_supplier_reference": "demo_15_79",
-      "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "product_supplier_reference": "demo_5_77",
+      "product_supplier_price_te": 2.49,
+      "id_currency": 1
     }
   },
   {
@@ -615,12 +615,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 48,
-      "id_product": 9,
-      "id_product_attribute": 23,
+      "id_product": 5,
+      "id_product_attribute": 21,
       "id_supplier": 2,
-      "product_supplier_reference": "demo_15_80",
-      "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "product_supplier_reference": "demo_5_78",
+      "product_supplier_price_te": 2.49,
+      "id_currency": 1
     }
   },
   {
@@ -628,12 +628,12 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 49,
-      "id_product": 10,
+      "id_product": 9,
       "id_product_attribute": 0,
       "id_supplier": 2,
-      "product_supplier_reference": "demo_16_81",
+      "product_supplier_reference": "demo_15_79",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
     }
   },
   {
@@ -641,12 +641,311 @@
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 50,
+      "id_product": 9,
+      "id_product_attribute": 22,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_15_79",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 51,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 51,
+      "id_product": 9,
+      "id_product_attribute": 23,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_15_80",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 52,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 52,
+      "id_product": 10,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_16_81",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 53,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 53,
       "id_product": 10,
       "id_product_attribute": 24,
       "id_supplier": 2,
       "product_supplier_reference": "demo_16_81",
       "product_supplier_price_te": 5.49,
-      "id_currency": 0
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 54,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 54,
+      "id_product": 10,
+      "id_product_attribute": 25,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_16_82",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 55,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 55,
+      "id_product": 11,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_17_83",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 56,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 56,
+      "id_product": 11,
+      "id_product_attribute": 26,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_17_83",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 57,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 57,
+      "id_product": 11,
+      "id_product_attribute": 27,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_17_84",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 58,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 58,
+      "id_product": 16,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_8_85",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 59,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 59,
+      "id_product": 16,
+      "id_product_attribute": 28,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_8_85",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 60,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 60,
+      "id_product": 16,
+      "id_product_attribute": 29,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_8_86",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 61,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 61,
+      "id_product": 16,
+      "id_product_attribute": 30,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_8_87",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 62,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 62,
+      "id_product": 16,
+      "id_product_attribute": 31,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_8_88",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 63,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 63,
+      "id_product": 17,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_9_89",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 64,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 64,
+      "id_product": 17,
+      "id_product_attribute": 32,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_9_89",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 65,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 65,
+      "id_product": 17,
+      "id_product_attribute": 33,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_9_90",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 66,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 66,
+      "id_product": 17,
+      "id_product_attribute": 34,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_9_91",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 67,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 67,
+      "id_product": 17,
+      "id_product_attribute": 35,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_9_92",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 68,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 68,
+      "id_product": 18,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_10_93",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 69,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 69,
+      "id_product": 18,
+      "id_product_attribute": 36,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_10_93",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 70,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 70,
+      "id_product": 18,
+      "id_product_attribute": 37,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_10_94",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 71,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 71,
+      "id_product": 18,
+      "id_product_attribute": 38,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_10_95",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 72,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 72,
+      "id_product": 18,
+      "id_product_attribute": 39,
+      "id_supplier": 2,
+      "product_supplier_reference": "demo_10_96",
+      "product_supplier_price_te": 5.49,
+      "id_currency": 1
+    }
+  },
+  {
+    "id": 73,
+    "collection": "product_suppliers",
+    "properties": {
+      "id_product_supplier": 73,
+      "id_product": 15,
+      "id_product_attribute": 0,
+      "id_supplier": 2,
+      "product_supplier_reference": "",
+      "product_supplier_price_te": 0,
+      "id_currency": 1
     }
   }
 ]
