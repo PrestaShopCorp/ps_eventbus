@@ -8,14 +8,6 @@ namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 interface RepositoryInterface
 {
     /**
-     * @param string $tableName
-     * @param string $alias
-     *
-     * @return void
-     */
-    public function generateMinimalQuery($tableName, $alias);
-
-    /**
      * @param string $langIso
      * @param bool $withSelecParameters
      *

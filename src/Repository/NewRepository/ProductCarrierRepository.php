@@ -1,33 +1,98 @@
 <?php
 
-namespace PrestaShop\Module\PsEventbus\Repository;
+namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
-class ProductCarrierRepository
+class ProductCarrierRepository extends AbstractRepository implements RepositoryInterface
 {
-    /**
-     * @var \Db
-     */
-    private $db;
-    /**
-     * @var \Context
-     */
-    private $context;
+    const TABLE_NAME = 'product_carrier';
 
     /**
-     * @var int
+     * @param string $langIso
+     * @param bool $withSelecParameters
+     *
+     * @return mixed
+     *
+     * @throws \PrestaShopException
      */
-    private $shopId;
-
-    public function __construct(\Context $context)
+    public function generateFullQuery($langIso, $withSelecParameters)
     {
-        $this->db = \Db::getInstance();
-        $this->context = $context;
+        $this->generateMinimalQuery(self::TABLE_NAME, 'ps');
 
-        if ($this->context->shop === null) {
-            throw new \PrestaShopException('No shop context');
+        if ($withSelecParameters) {
+            $this->query
+                ->select('ps.id_product_supplier')
+                ->select('ps.id_product')
+                ->select('ps.id_product_attribute')
+                ->select('ps.id_supplier')
+                ->select('ps.product_supplier_reference')
+                ->select('ps.product_supplier_price_te')
+                ->select('ps.id_currency')
+            ;
         }
+    }
 
-        $this->shopId = (int) $this->context->shop->id;
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     * @param bool $debug
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function retrieveContentsForFull($offset, $limit, $langIso, $debug)
+    {
+        $this->generateFullQuery($langIso, true);
+
+        $this->query->limit((int) $limit, (int) $offset);
+
+        return $this->runQuery($debug);
+    }
+
+    /**
+     * @param int $limit
+     * @param array<mixed> $contentIds
+     * @param string $langIso
+     * @param bool $debug
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug)
+    {
+        $this->generateFullQuery($langIso, true);
+
+        $this->query
+            ->where('ps.id_product_supplier IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->limit($limit)
+        ;
+
+        return $this->runQuery($debug);
+    }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return int
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    {
+        $this->generateFullQuery($langIso, false);
+
+        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+
+        $result = $this->runQuery(false);
+
+        return $result[0]['count'];
     }
 
     /**

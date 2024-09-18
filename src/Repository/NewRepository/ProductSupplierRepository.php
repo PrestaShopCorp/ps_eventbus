@@ -7,19 +7,6 @@ class ProductSupplierRepository extends AbstractRepository implements Repository
     const TABLE_NAME = 'product_supplier';
 
     /**
-     * @param string $tableName
-     * @param string $alias
-     *
-     * @return void
-     */
-    public function generateMinimalQuery($tableName, $alias)
-    {
-        $this->query = new \DbQuery();
-
-        $this->query->from($tableName, $alias);
-    }
-
-    /**
      * @param string $langIso
      * @param bool $withSelecParameters
      *

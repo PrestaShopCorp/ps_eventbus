@@ -7,19 +7,6 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
     const TABLE_NAME = 'carrier';
 
     /**
-     * @param string $tableName
-     * @param string $alias
-     *
-     * @return void
-     */
-    public function generateMinimalQuery($tableName, $alias)
-    {
-        $this->query = new \DbQuery();
-
-        $this->query->from($tableName, $alias);
-    }
-
-    /**
      * @param string $langIso
      * @param bool $withSelecParameters
      *
