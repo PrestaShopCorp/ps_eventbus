@@ -46,3 +46,7 @@ services:
   PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductCarrierRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductCarrierRepository
     public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\CategoryRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\CategoryRepository
+    public: true
