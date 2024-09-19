@@ -3,7 +3,7 @@ import * as matchers from "jest-extended";
 import { dumpUploadData, logAxiosError } from "./helpers/log-helper";
 import axios, { AxiosError } from "axios";
 import { doFullSync, probe, PsEventbusSyncUpload } from "./helpers/mock-probe";
-import { concatMap, from, lastValueFrom, map, toArray, zip } from "rxjs";
+import { from, lastValueFrom, toArray, withLatestFrom } from "rxjs";
 import {
   generatePredictableModuleId,
   loadFixture,
@@ -148,20 +148,14 @@ describe("Full Sync", () => {
           }),
         );
 
-        const results = await lastValueFrom(
-          zip(message$, request$).pipe(
-            map((result) => ({
-              probeMessage: result[0],
-              psEventbusReq: result[1],
-            })),
-            toArray(),
-          ),
+        const probeMessage = await lastValueFrom(
+          request$.pipe(withLatestFrom(message$, (_, message) => message)),
         );
 
         // assert
-        expect(results.length).toEqual(1);
-        expect(results[0].probeMessage.method).toBe("POST");
-        expect(results[0].probeMessage.headers).toMatchObject({
+        expect(probeMessage).toBeTruthy();
+        expect(probeMessage.method).toBe("POST");
+        expect(probeMessage.headers).toMatchObject({
           "full-sync-requested": "1",
         });
       });
@@ -172,19 +166,20 @@ describe("Full Sync", () => {
     } else {
       it(`${controller} should upload complete dataset collector`, async () => {
         // arrange
-        const fullSync$ = doFullSync(jobId, controller, { timeout: 4000 });
+        const response$ = doFullSync(jobId, controller, { timeout: 4000 });
         const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 4000 });
 
-        // act
-        const syncedData = await lastValueFrom(
-          zip(fullSync$, message$).pipe(
-            map((msg) => msg[1].body.file),
-            concatMap((syncedPage) => {
-              return from(syncedPage);
-            }),
+        // this combines each response from ps_eventbus to the last request captured by the probe.
+        // it works because ps_eventbus sends a response after calling our mock collector server
+        // if ps_eventbus doesn't need to call the collector, the probe completes without value after its timeout
+        const messages = await lastValueFrom(
+          response$.pipe(
+            withLatestFrom(message$, (_, message) => message.body.file),
             toArray(),
           ),
         );
+
+        const syncedData: PsEventbusSyncUpload[] = messages.flat();
 
         // dump data for easier debugging or updating fixtures
         let processedData = syncedData as PsEventbusSyncUpload[];
