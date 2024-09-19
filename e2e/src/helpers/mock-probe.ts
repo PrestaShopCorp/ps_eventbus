@@ -1,6 +1,7 @@
 import WebSocket from "ws";
 import { WebSocketSubject } from "rxjs/webSocket";
 import {
+  defaultIfEmpty,
   EMPTY,
   expand,
   filter,
@@ -81,7 +82,7 @@ export function probe(
 
   return socket.pipe(
     filter((message) => (match ? R.whereEq(match, message) : true)),
-    takeUntil(timer(options.timeout)),
+    takeUntil(timer(options.timeout))
   );
 }
 

@@ -34,10 +34,10 @@ import R from "ramda";
 } as const; */
 
 export const shopContentMapping = {
-/*   carriers: "carriers",
-  carrier_details: "carrier-details", */
+  carriers: "carriers",
+  carrier_details: "carrier-details",
   carrier_taxes: "carrier-taxes",
-/*   carts: "carts",
+  carts: "carts",
   cart_products: "cart-products",
   cart_rules: "cart-rules",
   orders: "orders",
@@ -48,7 +48,7 @@ export const shopContentMapping = {
   product_bundles: "product-bundles",
   product_suppliers: "product-suppliers",
   product_carriers: "product-carriers",
-  categories: "categories" */
+  categories: "categories"
 } as const;
 
 type ShopContentMapping = typeof shopContentMapping;
