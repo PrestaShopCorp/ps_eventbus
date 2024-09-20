@@ -1,22 +1,27 @@
 services:
   PrestaShop\Module\PsEventbus\Repository\LanguageRepository:
     class: PrestaShop\Module\PsEventbus\Repository\LanguageRepository
+    public: true
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
 
   PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository
+    public: true
 
   PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository:
     class: PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository
+    public: true
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
 
   PrestaShop\Module\PsEventbus\Repository\ModuleRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ModuleRepository
+    public: true
 
   PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository
+    public: true
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
       - '@PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService'
@@ -31,83 +36,103 @@ services:
 
   PrestaShop\Module\PsEventbus\Repository\ThemeRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ThemeRepository
+    public: true
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
 
   PrestaShop\Module\PsEventbus\Repository\GoogleTaxonomyRepository:
     class: PrestaShop\Module\PsEventbus\Repository\GoogleTaxonomyRepository
+    public: true
 
   PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository:
     class: PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository
+    public: true
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
       - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
 
   PrestaShop\Module\PsEventbus\Repository\ShopRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ShopRepository
+    public: true
 
   PrestaShop\Module\PsEventbus\Repository\CountryRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CountryRepository
+    public: true
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
 
   PrestaShop\Module\PsEventbus\Repository\StateRepository:
     class: PrestaShop\Module\PsEventbus\Repository\StateRepository
+    public: true
 
   PrestaShop\Module\PsEventbus\Repository\TaxeRepository:
     class: PrestaShop\Module\PsEventbus\Repository\TaxeRepository
+    public: true
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
 
   PrestaShop\Module\PsEventbus\Repository\CustomPriceRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CustomPriceRepository
+    public: true
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
 
   PrestaShop\Module\PsEventbus\Repository\WishlistRepository:
     class: PrestaShop\Module\PsEventbus\Repository\WishlistRepository
+    public: true
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
 
   PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository:
     class: PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository
+    public: true
 
   PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository:
     class: PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository
+    public: true
 
   PrestaShop\Module\PsEventbus\Repository\StoreRepository:
     class: PrestaShop\Module\PsEventbus\Repository\StoreRepository
+    public: true
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
 
   PrestaShop\Module\PsEventbus\Repository\StockRepository:
     class: PrestaShop\Module\PsEventbus\Repository\StockRepository
+    public: true
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
 
   PrestaShop\Module\PsEventbus\Repository\StockMvtRepository:
     class: PrestaShop\Module\PsEventbus\Repository\StockMvtRepository
+    public: true
 
   PrestaShop\Module\PsEventbus\Repository\ManufacturerRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ManufacturerRepository
+    public: true
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
 
   PrestaShop\Module\PsEventbus\Repository\SupplierRepository:
     class: PrestaShop\Module\PsEventbus\Repository\SupplierRepository
+    public: true
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
   
   PrestaShop\Module\PsEventbus\Repository\ImageRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ImageRepository
+    public: true
 
   PrestaShop\Module\PsEventbus\Repository\ImageTypeRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ImageTypeRepository
+    public: true
   
   PrestaShop\Module\PsEventbus\Repository\TranslationRepository:
     class: PrestaShop\Module\PsEventbus\Repository\TranslationRepository
+    public: true
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
       
   PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository:
     class: PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository
+    public: true
