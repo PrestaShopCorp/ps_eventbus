@@ -15,12 +15,6 @@ services:
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
 
-  PrestaShop\Module\PsEventbus\Repository\CustomerRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\CustomerRepository
-    public: true
-    arguments:
-      - '@=service("prestashop.adapter.legacy.context").getContext()'
-
   PrestaShop\Module\PsEventbus\Repository\CurrencyRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CurrencyRepository
     public: true
