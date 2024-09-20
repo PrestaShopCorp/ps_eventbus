@@ -23,7 +23,6 @@ class CurrencyRepository extends AbstractRepository implements RepositoryInterfa
         }
 
         if ($withSelecParameters) {
-            
             $this->query
                 ->select('c.id_currency')
                 ->select('c.iso_code')
@@ -37,7 +36,7 @@ class CurrencyRepository extends AbstractRepository implements RepositoryInterfa
             } else {
                 $this->query->select('\'\' as name');
             }
-    
+
             // https://github.com/PrestaShop/PrestaShop/commit/37807f66b40b0cebb365ef952e919be15e9d6b2f#diff-3f41d3529ffdbfd1b994927eb91826a32a0560697025a734cf128a2c8e092a45R124
             if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.6.0', '>=')) {
                 $this->query->select('c.precision');
