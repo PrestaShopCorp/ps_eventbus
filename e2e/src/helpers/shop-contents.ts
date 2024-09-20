@@ -51,6 +51,7 @@ export const shopContentMapping = {
   categories: "categories",
   customers: "customers",
   currencies: "currencies",
+  employees: "employees",
 } as const;
 
 type ShopContentMapping = typeof shopContentMapping;

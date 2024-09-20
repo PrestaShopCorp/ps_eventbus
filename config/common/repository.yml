@@ -118,13 +118,6 @@ services:
     public: true
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
-
-
-  PrestaShop\Module\PsEventbus\Repository\EmployeeRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\EmployeeRepository
-    public: true
-    arguments:
-      - '@=service("prestashop.adapter.legacy.context").getContext()'
   
   PrestaShop\Module\PsEventbus\Repository\ImageRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ImageRepository

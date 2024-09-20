@@ -58,3 +58,7 @@ services:
   PrestaShop\Module\PsEventbus\Repository\NewRepository\CurrencyRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\CurrencyRepository
     public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\EmployeeRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\EmployeeRepository
+    public: true
