@@ -3,34 +3,20 @@ import R from "ramda";
 // TEMPORARY DISABLED, WAIT ADD ALL SHOP CONTENT
 // AFTER UNCOMMENT THIS, CHANGE ALL "as ShopContent"CAST IN FULLSYNC TEST
 /* export const shopContentMapping = {
-  'carrier_details': 'carrier-details',
-  'carts' : 'carts',
-  'cart_products': 'carts',
-  'cart_rules' : 'cart-rules',
-  'categories' : 'categories',
-  'currencies' : 'currencies',
   'specific_prices': 'specific-prices',
-  'custom_product_carriers' : 'custom-product-carriers',
-  'customers': 'customers',
   'taxonomies': 'taxonomies',
   'modules': 'modules',
-  'products': 'products',
   'shops': 'info',
   'stores': 'stores',
   'themes': 'themes',
-  'product_bundles': 'product-bundles',
   'wishlists': 'wishlists',
   'wishlist_products': 'wishlist-products',
   'stocks': 'stocks',
   'stock_movements': 'stock-movements',
   'manufacturers': 'manufacturers',
   'suppliers': 'suppliers',
-  'product_suppliers': 'product-suppliers',
   'languages': 'languages',
-  'employees': 'employees',
   'translations': 'translations',
-  'images': 'images',
-  'image_types': 'image-types'
 } as const; */
 
 export const shopContentMapping = {
@@ -52,6 +38,8 @@ export const shopContentMapping = {
   customers: "customers",
   currencies: "currencies",
   employees: "employees",
+  images: "images",
+  image_types: "image-types",
 } as const;
 
 type ShopContentMapping = typeof shopContentMapping;

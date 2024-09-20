@@ -2,9 +2,9 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
-class EmployeeRepository extends AbstractRepository implements RepositoryInterface
+class ImageRepository extends AbstractRepository implements RepositoryInterface
 {
-    const TABLE_NAME = 'employee';
+    const TABLE_NAME = 'image';
 
     /**
      * @param string $langIso
@@ -16,38 +16,22 @@ class EmployeeRepository extends AbstractRepository implements RepositoryInterfa
      */
     public function generateFullQuery($langIso, $withSelecParameters)
     {
-        $this->generateMinimalQuery(self::TABLE_NAME, 'e');
+        $this->generateMinimalQuery(self::TABLE_NAME, 'i');
 
         $this->query
-            ->leftJoin('employee_shop', 'es', 'es.id_employee = e.id_employee')
-            ->where('es.id_shop = ' . parent::getShopContext()->id)
-        ;
+            ->leftJoin('image_lang', 'il', 'il.id_image = i.id_image')
+            ->leftJoin('image_shop', 'is', 'is.id_image = i.id_image');
 
         if ($withSelecParameters) {
             $this->query
-                ->select('e.id_employee')
-                ->select('e.id_profile')
-                ->select('e.id_lang')
-                ->select('e.email')
-                ->select('e.bo_color')
-                ->select('e.bo_theme')
-                ->select('e.bo_css')
-                ->select('e.default_tab')
-                ->select('e.bo_width')
-                ->select('e.bo_menu')
-                ->select('e.active')
-                ->select('e.optin')
-                ->select('e.id_last_order')
-                ->select('e.id_last_customer_message')
-                ->select('e.id_last_customer')
-                ->select('e.last_connection_date')
-                ->select('es.id_shop as id_shop')
+                ->select('i.id_image')
+                ->select('i.id_product')
+                ->select('i.position')
+                ->select('i.cover')
+                ->select('il.id_lang')
+                ->select('il.legend')
+                ->select('is.id_shop')
             ;
-
-            // https://github.com/PrestaShop/PrestaShop/commit/20f1d9fe8a03559dfa9d1f7109de1f70c99f1874#diff-cde6a9d4a58afb13ff068801ee09c0e712c5e90b0cbf5632a0cc965f15cb6802R107
-            if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.8.0', '>=')) {
-                $this->query->select('e.has_enabled_gravatar');
-            }
         }
     }
 
@@ -87,7 +71,7 @@ class EmployeeRepository extends AbstractRepository implements RepositoryInterfa
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('e.id_employee IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('i.id_image IN(' . implode(',', array_map('intval', $contentIds)) . ')')
             ->limit($limit)
         ;
 

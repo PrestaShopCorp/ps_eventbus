@@ -62,3 +62,11 @@ services:
   PrestaShop\Module\PsEventbus\Repository\NewRepository\EmployeeRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\EmployeeRepository
     public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\ImageRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\ImageRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\ImageTypeRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\ImageTypeRepository
+    public: true
