@@ -151,7 +151,7 @@ docker-phpunit-cov: tools/vendor
 .PHONY: phpstan docker-phpstan
 phpstan: tools/vendor prestashop/prestashop-${PS_VERSION}
 	phpstan analyse --memory-limit=-1 --configuration=./tests/phpstan/phpstan-local.neon;
-docker-phpstan:
+docker-phpstan: tools/vendor
 	@$(call in_docker,/usr/bin/phpstan,analyse --memory-limit=-1 --configuration=./tests/phpstan/phpstan-docker.neon)
 
 define COMMENT

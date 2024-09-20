@@ -139,7 +139,6 @@ class CategoriesService implements ShopContentServiceInterface
         }
     }
 
-
     /**
      * @param array<mixed> $categories
      * @param string $langIso
