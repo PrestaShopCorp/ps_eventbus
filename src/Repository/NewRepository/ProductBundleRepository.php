@@ -75,7 +75,7 @@ class ProductBundleRepository extends AbstractRepository implements RepositoryIn
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('p.id_bundle IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('pac.id_bundle IN(' . implode(',', array_map('intval', $contentIds)) . ')')
             ->limit($limit)
         ;
 
