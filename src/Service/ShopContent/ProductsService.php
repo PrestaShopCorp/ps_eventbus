@@ -4,7 +4,6 @@ namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
-use PrestaShop\Module\PsEventbus\Repository\CategoryRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductRepository;
 
@@ -13,11 +12,11 @@ class ProductsService implements ShopContentServiceInterface
     /** @var ProductRepository */
     private $productRepository;
 
-    /** @var CategoryRepository */
-    private $categoryRepository;
-
     /** @var LanguageRepository */
     private $languageRepository;
+
+    /** @var CategoriesService */
+    private $categoriesService;
 
     /** @var ArrayFormatter */
     private $arrayFormatter;
@@ -30,13 +29,13 @@ class ProductsService implements ShopContentServiceInterface
 
     public function __construct(
         ProductRepository $productRepository,
-        CategoryRepository $categoryRepository,
         LanguageRepository $languageRepository,
+        CategoriesService $categoriesService,
         ArrayFormatter $arrayFormatter
     ) {
         $this->productRepository = $productRepository;
-        $this->categoryRepository = $categoryRepository;
         $this->languageRepository = $languageRepository;
+        $this->categoriesService = $categoriesService;
         $this->arrayFormatter = $arrayFormatter;
 
         $context = \Context::getContext();
@@ -249,7 +248,7 @@ class ProductsService implements ShopContentServiceInterface
      */
     private function addCategoryTree(&$product)
     {
-        $categoryPaths = $this->categoryRepository->getCategoryPaths(
+        $categoryPaths = $this->categoriesService->getCategoryPaths(
             $product['id_category_default'],
             $this->languageRepository->getLanguageIdByIsoCode($product['iso_code']),
             $this->shopId

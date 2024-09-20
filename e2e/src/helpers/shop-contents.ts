@@ -48,6 +48,7 @@ export const shopContentMapping = {
   product_bundles: "product-bundles",
   product_suppliers: "product-suppliers",
   product_carriers: "product-carriers",
+  categories: "categories"
 } as const;
 
 type ShopContentMapping = typeof shopContentMapping;

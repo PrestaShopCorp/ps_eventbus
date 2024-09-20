@@ -119,9 +119,9 @@ services:
     class:  PrestaShop\Module\PsEventbus\Service\ShopContent\ProductsService
     public: true
     arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductRepository'
-      - '@PrestaShop\Module\PsEventbus\Repository\CategoryRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductRepository' 
       - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
+      - '@PrestaShop\Module\PsEventbus\Service\ShopContent\CategoriesService'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
 
   PrestaShop\Module\PsEventbus\Service\ShopContent\ProductBundlesService:
@@ -141,3 +141,9 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductCarrierRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\CategoriesService:
+    class:  PrestaShop\Module\PsEventbus\Service\ShopContent\CategoriesService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\CategoryRepository'

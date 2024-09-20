@@ -81,7 +81,7 @@ export function probe(
 
   return socket.pipe(
     filter((message) => (match ? R.whereEq(match, message) : true)),
-    takeUntil(timer(options.timeout)),
+    takeUntil(timer(options.timeout))
   );
 }
 
