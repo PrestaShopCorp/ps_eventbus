@@ -153,3 +153,9 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\CustomerRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\CurrenciesService:
+    class:  PrestaShop\Module\PsEventbus\Service\ShopContent\CurrenciesService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\CurrencyRepository'
