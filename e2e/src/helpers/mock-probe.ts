@@ -1,7 +1,6 @@
 import WebSocket from "ws";
 import { WebSocketSubject } from "rxjs/webSocket";
 import {
-  defaultIfEmpty,
   EMPTY,
   expand,
   filter,
