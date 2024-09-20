@@ -1,60 +1,48 @@
 services:
   PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderRepository
-    public: true
 
   PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderCartRuleRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderCartRuleRepository
-    public: true
   
   PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderHistoryRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderHistoryRepository
-    public: true
 
   PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderDetailRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderDetailRepository
-    public: true
 
   PrestaShop\Module\PsEventbus\Repository\NewRepository\CarrierRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\CarrierRepository
-    public: true
 
   PrestaShop\Module\PsEventbus\Repository\NewRepository\CartRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\CartRepository
-    public: true
 
   PrestaShop\Module\PsEventbus\Repository\NewRepository\CartProductRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\CartProductRepository
-    public: true
 
   PrestaShop\Module\PsEventbus\Repository\NewRepository\CartRuleRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\CartRuleRepository
-    public: true
 
   PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductRepository
-    public: true
 
   PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductBundleRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductBundleRepository
-    public: true
 
   PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductSupplierRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductSupplierRepository
-    public: true
 
   PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductCarrierRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductCarrierRepository
-    public: true
 
   PrestaShop\Module\PsEventbus\Repository\NewRepository\CategoryRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\CategoryRepository
-    public: true
   
   PrestaShop\Module\PsEventbus\Repository\NewRepository\CustomerRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\CustomerRepository
-    public: true
 
   PrestaShop\Module\PsEventbus\Repository\NewRepository\CurrencyRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\CurrencyRepository
-    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\EmployeeRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\EmployeeRepository
