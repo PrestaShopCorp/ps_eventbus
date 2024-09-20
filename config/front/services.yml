@@ -147,3 +147,9 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\CategoryRepository'
+  
+  PrestaShop\Module\PsEventbus\Service\ShopContent\CustomersService:
+    class:  PrestaShop\Module\PsEventbus\Service\ShopContent\CustomersService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\CustomerRepository'

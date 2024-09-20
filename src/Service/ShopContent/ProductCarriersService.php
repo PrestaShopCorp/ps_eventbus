@@ -33,7 +33,7 @@ class ProductCarriersService implements ShopContentServiceInterface
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_carrier_reference'],
+                'id' => $item['id_product'] . '-' . $item['id_carrier_reference'],
                 'collection' => Config::COLLECTION_PRODUCT_CARRIERS,
                 'properties' => $item,
             ];
