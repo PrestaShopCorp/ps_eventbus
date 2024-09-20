@@ -31,7 +31,7 @@ class CustomersService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castCustomers($result, $langIso);
+        $this->castCustomers($result);
 
         return array_map(function ($item) {
             return [
@@ -58,7 +58,7 @@ class CustomersService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castCustomers($result, $langIso);
+        $this->castCustomers($result);
 
         return array_map(function ($item) {
             return [
