@@ -15,10 +15,6 @@ services:
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
 
-  PrestaShop\Module\PsEventbus\Repository\CurrencyRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\CurrencyRepository
-    public: true
-
   PrestaShop\Module\PsEventbus\Repository\ModuleRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ModuleRepository
     public: true
@@ -29,10 +25,10 @@ services:
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
       - '@PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService'
-      - '@PrestaShop\Module\PsEventbus\Repository\CurrencyRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
+      - '@PrestaShop\Module\PsEventbus\Service\ShopContent\CurrenciesService'
       - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
       - '%ps_eventbus.sync_api_url%'
       - '%ps_eventbus.live_sync_api_url%'

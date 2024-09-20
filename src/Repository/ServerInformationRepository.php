@@ -6,13 +6,14 @@ use PrestaShop\Module\PsAccounts\Api\Client\AccountsClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
+use PrestaShop\Module\PsEventbus\Service\ShopContent\CurrenciesService;
 
 class ServerInformationRepository
 {
     /**
-     * @var CurrencyRepository
+     * @var CurrenciesService
      */
-    private $currencyRepository;
+    private $currenciesService;
     /**
      * @var LanguageRepository
      */
@@ -49,10 +50,10 @@ class ServerInformationRepository
     /**
      * @param \Context $context
      * @param PsAccountsAdapterService $psAccountsAdapterService
-     * @param CurrencyRepository $currencyRepository
      * @param LanguageRepository $languageRepository
      * @param ConfigurationRepository $configurationRepository
      * @param ShopRepository $shopRepository
+     * @param CurrenciesService $currenciesService
      * @param ErrorHandlerInterface $errorHandler
      * @param string $eventbusSyncApiUrl
      * @param string $eventbusLiveSyncApiUrl
@@ -63,16 +64,16 @@ class ServerInformationRepository
     public function __construct(
         \Context $context,
         PsAccountsAdapterService $psAccountsAdapterService,
-        CurrencyRepository $currencyRepository,
         LanguageRepository $languageRepository,
         ConfigurationRepository $configurationRepository,
         ShopRepository $shopRepository,
+        CurrenciesService $currenciesService,
         ErrorHandlerInterface $errorHandler,
         $eventbusSyncApiUrl,
         $eventbusLiveSyncApiUrl,
         $eventbusProxyApiUrl
     ) {
-        $this->currencyRepository = $currencyRepository;
+        $this->currenciesService = $currenciesService;
         $this->languageRepository = $languageRepository;
         $this->configurationRepository = $configurationRepository;
         $this->shopRepository = $shopRepository;
@@ -123,8 +124,8 @@ class ServerInformationRepository
                     'cart_is_persistent' => $this->configurationRepository->get('PS_CART_FOLLOWING') == '1',
                     'default_language' => $this->languageRepository->getDefaultLanguageIsoCode(),
                     'languages' => implode(';', $this->languageRepository->getLanguagesIsoCodes()),
-                    'default_currency' => $this->currencyRepository->getDefaultCurrencyIsoCode(),
-                    'currencies' => implode(';', $this->currencyRepository->getCurrenciesIsoCodes()),
+                    'default_currency' => $this->currenciesService->getDefaultCurrencyIsoCode(),
+                    'currencies' => implode(';', $this->currenciesService->getCurrenciesIsoCodes()),
                     'weight_unit' => $this->configurationRepository->get('PS_WEIGHT_UNIT'),
                     'distance_unit' => $this->configurationRepository->get('PS_BASE_DISTANCE_UNIT'),
                     'volume_unit' => $this->configurationRepository->get('PS_VOLUME_UNIT'),
