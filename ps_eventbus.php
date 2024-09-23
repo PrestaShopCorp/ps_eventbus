@@ -53,15 +53,6 @@ class Ps_eventbus extends Module
     const DEFAULT_ENV = '';
 
     /**
-     * @var array<mixed>
-     */
-    const REQUIRED_TABLES = [
-        'eventbus_type_sync',
-        'eventbus_job',
-        'eventbus_incremental_sync',
-    ];
-
-    /**
      * @var string
      */
     public $version;

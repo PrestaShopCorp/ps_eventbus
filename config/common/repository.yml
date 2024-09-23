@@ -19,21 +19,6 @@ services:
     class: PrestaShop\Module\PsEventbus\Repository\ModuleRepository
     public: true
 
-  PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository
-    public: true
-    arguments:
-      - '@=service("prestashop.adapter.legacy.context").getContext()'
-      - '@PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService'
-      - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
-      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
-      - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
-      - '@PrestaShop\Module\PsEventbus\Service\ShopContent\CurrenciesService'
-      - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
-      - '%ps_eventbus.sync_api_url%'
-      - '%ps_eventbus.live_sync_api_url%'
-      - '%ps_eventbus.proxy_api_url%'
-
   PrestaShop\Module\PsEventbus\Repository\ThemeRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ThemeRepository
     public: true

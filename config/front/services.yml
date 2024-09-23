@@ -50,6 +50,11 @@ services:
     public: true
     arguments:
       - '@ps_eventbus'
+      - '@PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService'
+      - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
+      - '%ps_eventbus.sync_api_url%'
+      - '%ps_eventbus.live_sync_api_url%'
+      - '%ps_eventbus.proxy_api_url%'
 
   # SHOP CONTENT SERVICES 
   PrestaShop\Module\PsEventbus\Service\ShopContent\OrdersService:
@@ -177,3 +182,13 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\ImageTypeRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\ShopInformationService:
+    class:  PrestaShop\Module\PsEventbus\Service\ShopContent\ShopInformationService
+    public: true
+    arguments:
+      - '@=service("prestashop.adapter.legacy.context").getContext()'
+      - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
+      - '@PrestaShop\Module\PsEventbus\Service\ShopContent\CurrenciesService'
