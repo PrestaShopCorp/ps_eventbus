@@ -59,7 +59,7 @@ class Config
     const COLLECTION_PRODUCT_BUNDLES = 'product_bundles';
     const COLLECTION_PRODUCT_CARRIERS = 'product_carriers';
     const COLLECTION_PRODUCT_SUPPLIERS = 'product_suppliers';
-    const COLLECTION_SHOP_INFORMATION = 'shop_information';
+    const COLLECTION_SHOP_INFORMATIONS = 'shop_informations';
     const COLLECTION_SPECIFIC_PRICES = 'specific_prices';
     const COLLECTION_STOCKS = 'stocks';
     const COLLECTION_STOCK_MVTS = 'stock_movements';
@@ -97,7 +97,7 @@ class Config
         self::COLLECTION_PRODUCT_BUNDLES,
         self::COLLECTION_PRODUCT_CARRIERS,
         self::COLLECTION_PRODUCT_SUPPLIERS,
-        self::COLLECTION_SHOP_INFORMATION,
+        self::COLLECTION_SHOP_INFORMATIONS,
         self::COLLECTION_SPECIFIC_PRICES,
         self::COLLECTION_STOCKS,
         self::COLLECTION_STOCK_MVTS,

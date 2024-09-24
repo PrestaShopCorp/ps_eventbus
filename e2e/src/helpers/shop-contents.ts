@@ -38,7 +38,7 @@ export const shopContentMapping = {
   employees: "employees",
   images: "images",
   image_types: "image-types",
-  shop_information: "shop-information",
+  shop_informations: "shops-informations",
   modules: "modules",
 } as const;
 

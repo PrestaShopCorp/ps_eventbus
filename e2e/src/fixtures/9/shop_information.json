@@ -1,7 +1,7 @@
 [
   {
     "id": "1",
-    "collection": "shop_information",
+    "collection": "shop_informations",
     "properties": {
       "created_at": "2024-06-10 02:27:21",
       "folder_created_at": "2024-06-10 18:01:29",
