@@ -1,11 +1,11 @@
 [
   {
     "id": "1",
-    "collection": "shops",
+    "collection": "shop_information",
     "properties": {
-      "created_at": "2024-06-10 02:27:21",
-      "folder_created_at": "2024-06-10 18:01:29",
-      "cms_version": "9.0.0",
+      "created_at": "2024-08-22T12:27:09+0200",
+      "folder_created_at": "2024-08-27T10:07:19+0200",
+      "cms_version": "8.1.7",
       "url_is_simplified": true,
       "cart_is_persistent": false,
       "default_language": "en",
@@ -20,7 +20,7 @@
       "is_order_return_enabled": false,
       "order_return_nb_days": 14,
       "php_version": "8.1.29",
-      "http_server": "nginx/1.26.1",
+      "http_server": "nginx/1.26.2",
       "url": "http://localhost:8000/",
       "ssl": false,
       "multi_shop_count": 1,

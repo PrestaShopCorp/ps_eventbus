@@ -6,7 +6,6 @@ import R from "ramda";
   'specific_prices': 'specific-prices',
   'taxonomies': 'taxonomies',
   'modules': 'modules',
-  'shops': 'info',
   'stores': 'stores',
   'themes': 'themes',
   'wishlists': 'wishlists',
@@ -40,6 +39,7 @@ export const shopContentMapping = {
   employees: "employees",
   images: "images",
   image_types: "image-types",
+  shop_information: "shop-information",
 } as const;
 
 type ShopContentMapping = typeof shopContentMapping;

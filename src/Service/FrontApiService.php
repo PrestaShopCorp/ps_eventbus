@@ -72,34 +72,31 @@ class FrontApiService
                 CommonService::exitWithExceptionMessage(new QueryParamsException('404 - ShopContent not found', Config::INVALID_URL_QUERY));
             }
 
+            if ($limit < 0) {
+                CommonService::exitWithExceptionMessage(new QueryParamsException('Invalid URL Parameters', Config::INVALID_URL_QUERY));
+            }
+
             $isHealthCheck = $shopContent == Config::COLLECTION_HEALTHCHECK;
             $isAuthentified = $this->authorize($jobId, $isHealthCheck);
+            $response = [];
 
+            // If is healthcheck, return healthcheck response
             if ($isHealthCheck) {
                 /** @var HealthCheckService $healthCheckService */
                 $healthCheckService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\HealthCheckService');
+                $response = $healthCheckService->getHealthCheck($isAuthentified);
 
-                $healthCheckService->getHealthCheck($isAuthentified);
-
-                return;
-            }
-
-            if ($limit < 0) {
-                CommonService::exitWithExceptionMessage(new QueryParamsException('Invalid URL Parameters', Config::INVALID_URL_QUERY));
+                CommonService::exitWithResponse($response);
             }
 
             /** @var ConfigurationRepository $configurationRepository */
             $configurationRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository');
             /** @var LanguageRepository $languageRepository */
             $languageRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\LanguageRepository');
-            /** @var IncrementalSyncRepository $incrementalSyncRepository */
-            $incrementalSyncRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository');
 
             $timezone = (string) $configurationRepository->get('PS_TIMEZONE');
             $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(Config::MYSQL_DATE_FORMAT);
             $langIso = $langIso ? $langIso : $languageRepository->getDefaultLanguageIsoCode();
-
-            $response = [];
 
             $typeSync = $this->eventbusSyncRepository->findTypeSync($shopContent, $langIso);
 
@@ -110,6 +107,8 @@ class FrontApiService
                 $offset = 0;
 
                 if ($typeSync) {
+                    /** @var IncrementalSyncRepository $incrementalSyncRepository */
+                    $incrementalSyncRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository');
                     $incrementalSyncRepository->removeIncrementaSyncObjectByType($shopContent);
                 }
 
