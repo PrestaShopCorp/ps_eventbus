@@ -6,7 +6,6 @@ use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\ShopRepository;
-use PrestaShop\Module\PsEventbus\Service\ShopContent\CurrenciesService;
 
 class ShopInformationService implements ShopContentServiceInterface
 {
@@ -57,7 +56,7 @@ class ShopInformationService implements ShopContentServiceInterface
      * @return array<mixed>
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
-    { 
+    {
         $langId = !empty($langIso) ? (int) \Language::getIdByIso($langIso) : null;
 
         /* This file is created on installation and never modified.
@@ -113,7 +112,8 @@ class ShopInformationService implements ShopContentServiceInterface
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso, $debug) {
+    public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
+    {
         return [];
     }
 
@@ -124,8 +124,8 @@ class ShopInformationService implements ShopContentServiceInterface
      *
      * @return int
      */
-    public function getFullSyncContentLeft($offset, $limit, $langIso) {
+    public function getFullSyncContentLeft($offset, $limit, $langIso)
+    {
         return 0;
     }
-
 }

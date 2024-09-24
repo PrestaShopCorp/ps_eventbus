@@ -10,12 +10,16 @@ use PrestaShop\Module\PsEventbus\Exception\QueryParamsException;
 class CommonService
 {
     /**
-     * @param array<mixed> $response
+     * @param mixed $response
      *
      * @return void
      */
     public static function exitWithResponse($response)
     {
+        if (!is_array($response)) {
+            $response = [$response];
+        }
+
         $httpCode = isset($response['httpCode']) ? (int) $response['httpCode'] : 200;
 
         self::dieWithResponse($response, $httpCode);

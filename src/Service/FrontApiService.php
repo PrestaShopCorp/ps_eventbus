@@ -97,7 +97,7 @@ class FrontApiService
             $timezone = (string) $configurationRepository->get('PS_TIMEZONE');
             $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(Config::MYSQL_DATE_FORMAT);
             $langIso = $langIso ? $langIso : $languageRepository->getDefaultLanguageIsoCode();
-            
+
             $typeSync = $this->eventbusSyncRepository->findTypeSync($shopContent, $langIso);
 
             // If no typesync exist, or if fullsync is requested by user
@@ -120,7 +120,7 @@ class FrontApiService
                     $langIso
                 );
             // Else if fullsync is not finished
-            } else if (!boolval($typeSync['full_sync_finished'])) {
+            } elseif (!boolval($typeSync['full_sync_finished'])) {
                 $isFullSync = true;
                 $fullSyncIsFinished = false;
                 $offset = (int) $typeSync['offset'];

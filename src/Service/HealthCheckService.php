@@ -3,13 +3,12 @@
 namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
-use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 
 class HealthCheckService
 {
     /** @var \Ps_eventbus */
     private $module;
-    
+
     /** @var \Db */
     private $db;
 
@@ -32,7 +31,7 @@ class HealthCheckService
     ];
 
     /**
-     * @param \Ps_Eventbus $module
+     * @param \Ps_eventbus $module
      * @param PsAccountsAdapterService $psAccountsAdapterService
      * @param ErrorHandlerInterface $errorHandler
      * @param string $eventbusSyncApiUrl
@@ -42,7 +41,7 @@ class HealthCheckService
      * @return void
      */
     public function __construct(
-        \Module $module,
+        \Ps_eventbus $module,
         PsAccountsAdapterService $psAccountsAdapterService,
         ErrorHandlerInterface $errorHandler,
         $eventbusSyncApiUrl,
@@ -63,7 +62,7 @@ class HealthCheckService
     /**
      * @param bool $isAuthentified
      *
-     * @return void
+     * @return array<mixed>
      *
      * @throws \PrestaShopException
      */
@@ -77,7 +76,7 @@ class HealthCheckService
             $token = $this->psAccountsAdapterService->getOrRefreshToken();
             if ($token) {
                 $accountsClient = $this->module->getService('PrestaShop\Module\PsAccounts\Api\Client\AccountsClient');
-            
+
                 $tokenIsSet = true;
 
                 /** @phpstan-ignore-next-line */
