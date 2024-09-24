@@ -39,7 +39,7 @@ export const shopContentMapping = {
   employees: "employees",
   images: "images",
   image_types: "image-types",
-  shop_information: "shop-information"
+  shop_information: "shop-information",
 } as const;
 
 type ShopContentMapping = typeof shopContentMapping;
