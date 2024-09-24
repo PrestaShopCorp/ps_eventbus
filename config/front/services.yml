@@ -192,3 +192,10 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
       - '@PrestaShop\Module\PsEventbus\Service\ShopContent\CurrenciesService'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\ModulesService:
+    class:  PrestaShop\Module\PsEventbus\Service\ShopContent\ModulesService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\ModuleRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'

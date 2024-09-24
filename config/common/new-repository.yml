@@ -70,3 +70,7 @@ services:
   PrestaShop\Module\PsEventbus\Repository\NewRepository\ImageTypeRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\ImageTypeRepository
     public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\ModuleRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\ModuleRepository
+    public: true
