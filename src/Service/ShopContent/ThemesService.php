@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
-use Exception;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\PrestaShop\Core\Addon\Theme\ThemeManagerBuilder;
 
@@ -82,7 +81,14 @@ class ThemesService implements ShopContentServiceInterface
         return 0;
     }
 
-    private function getAllThemes() 
+    /**
+     * Get all Themes
+     *
+     * @return mixed
+     *
+     * @throws \PrestaShopException
+     */
+    private function getAllThemes()
     {
         if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>')) {
             if ($this->context->shop === null) {
@@ -90,6 +96,7 @@ class ThemesService implements ShopContentServiceInterface
             }
 
             $themeRepository = (new ThemeManagerBuilder($this->context, \Db::getInstance()))->buildRepository($this->context->shop);
+
             return $themeRepository->getList();
         } else {
             /* @phpstan-ignore-next-line */
@@ -97,6 +104,13 @@ class ThemesService implements ShopContentServiceInterface
         }
     }
 
+    /**
+     * @param array<mixed> $themes
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     */
     private function formatThemes($themes)
     {
         if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>')) {
@@ -105,7 +119,7 @@ class ThemesService implements ShopContentServiceInterface
             }
 
             $currentTheme = $this->context->shop->theme;
-        
+
             return array_map(function ($key, $theme) use ($currentTheme) {
                 return [
                     'theme_id' => md5((string) $key),
@@ -118,12 +132,12 @@ class ThemesService implements ShopContentServiceInterface
             return array_map(function ($theme) {
                 /* @phpstan-ignore-next-line */
                 $themeObj = \Theme::getByDirectory($theme);
-        
+
                 /* @phpstan-ignore-next-line */
                 if ($themeObj instanceof \Theme) {
                     /* @phpstan-ignore-next-line */
                     $themeInfo = \Theme::getThemeInfo($themeObj->id);
-        
+
                     return [
                         'theme_id' => md5($theme),
                         'name' => isset($themeInfo['theme_name']) ? $themeInfo['theme_name'] : '',
