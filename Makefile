@@ -154,6 +154,11 @@ phpstan: tools/vendor prestashop/prestashop-${PS_VERSION}
 docker-phpstan: tools/vendor
 	@$(call in_docker,/usr/bin/phpstan,analyse --memory-limit=-1 --configuration=./tests/phpstan/phpstan-docker.neon)
 
+# target: header-stamp                                         - check Headers of PHP files
+.PHONY:header-stamp
+header-stamp:
+	tools/vendor/bin/header-stamp --license=tools/vendor/prestashop/header-stamp/assets/afl.txt --exclude=vendor,tools,e2e,e2e-env,tests,composer.json,scoper.inc.php
+
 define COMMENT
 	Fixme: add "allure-framework/allure-phpunit" in composer.json to solve this.
 	Currently failing to resolve devDeps:
