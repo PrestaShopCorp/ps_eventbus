@@ -41,6 +41,8 @@ export const shopContentMapping = {
   shop_details: "shop-details",
   modules: "modules",
   themes: "themes",
+  wishlists: "wishlists",
+  wishlist_products: "wishlist-products",
 } as const;
 
 type ShopContentMapping = typeof shopContentMapping;

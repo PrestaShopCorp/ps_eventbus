@@ -14,7 +14,7 @@ abstract class AbstractRepository
     /**
      * @var \Db
      */
-    private $db;
+    protected $db;
 
     /**
      * @var \DbQuery

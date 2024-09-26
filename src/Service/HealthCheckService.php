@@ -70,7 +70,7 @@ class HealthCheckService
     {
         $tokenValid = false;
         $tokenIsSet = false;
-        $allTablesInstalled = true;
+        $allTablesInstalled = false;
 
         try {
             $token = $this->psAccountsAdapterService->getOrRefreshToken();
@@ -90,19 +90,10 @@ class HealthCheckService
             $tokenIsSet = false;
         }
 
-        foreach (self::REQUIRED_TABLES as $requiredTable) {
-            $query = new \DbQuery();
+        $missingTables = $this->getMissingRequiredTables();
 
-            $query->select('*')
-                ->from($requiredTable)
-                ->limit(1);
-
-            try {
-                $this->db->executeS($query);
-            } catch (\PrestaShopDatabaseException $e) {
-                $allTablesInstalled = false;
-                break;
-            }
+        if (count($missingTables) == 0) {
+            $allTablesInstalled = true;
         }
 
         if (defined('PHP_VERSION') && defined('PHP_EXTRA_VERSION')) {
@@ -135,5 +126,27 @@ class HealthCheckService
         }
 
         return $serverInformation;
+    }
+
+    /**
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    private function getMissingRequiredTables()
+    {
+        $requiredTablesQuery = 'SELECT TABLE_NAME FROM information_schema.tables WHERE table_name LIKE \'%eventbus%\';';
+        $requiredTablesResponse = (array) $this->db->executeS($requiredTablesQuery);
+
+        // Transform 2D array into array<string>
+        $requiredTables = array_column($requiredTablesResponse, 'TABLE_NAME');
+
+        // Remove the prefix of the tables (ex: ps_)
+        $filteredRequiredTables = array_map(function ($item) {
+            return substr($item, strpos($item, '_') + 1);
+        }, $requiredTables);
+
+        // return array<string>, with list of missing required table
+        return array_diff(self::REQUIRED_TABLES, $filteredRequiredTables);
     }
 }

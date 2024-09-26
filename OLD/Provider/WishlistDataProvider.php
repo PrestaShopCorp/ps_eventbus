@@ -72,17 +72,6 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
     }
 
     /**
-     * @param int $offset
-     * @param string $langIso
-     *
-     * @return int
-     */
-    public function getRemainingObjectsCount($offset, $langIso)
-    {
-        return (int) $this->wishlistRepository->getRemainingWishlistsCount($offset);
-    }
-
-    /**
      * @param int $limit
      * @param string $langIso
      *
@@ -111,20 +100,6 @@ class WishlistDataProvider implements PaginatedApiDataProviderInterface
         }, $wishlists);
 
         return array_merge($wishlists, $wishlistProducts);
-    }
-
-    /**
-     * @param int $offset
-     * @param int $limit
-     * @param string $langIso
-     *
-     * @return array<mixed>
-     *
-     * @@throws \PrestaShopDatabaseException
-     */
-    public function getQueryForDebug($offset, $limit, $langIso)
-    {
-        return $this->wishlistRepository->getQueryForDebug($offset, $limit);
     }
 
     /**

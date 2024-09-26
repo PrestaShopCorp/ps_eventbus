@@ -52,16 +52,6 @@ services:
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
 
-  PrestaShop\Module\PsEventbus\Repository\WishlistRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\WishlistRepository
-    public: true
-    arguments:
-      - '@=service("prestashop.adapter.legacy.context").getContext()'
-
-  PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository
-    public: true
-
   PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository:
     class: PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository
     public: true
