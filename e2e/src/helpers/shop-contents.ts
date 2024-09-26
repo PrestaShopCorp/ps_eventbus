@@ -40,7 +40,7 @@ export const shopContentMapping = {
   image_types: "image-types",
   shop_details: "shop-details",
   modules: "modules",
-  themes: "themes"
+  themes: "themes",
 } as const;
 
 type ShopContentMapping = typeof shopContentMapping;
