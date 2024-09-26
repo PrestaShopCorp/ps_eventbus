@@ -114,6 +114,9 @@ jobs:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
 
+      - name: install php dependencies
+        run: composer install
+
       - name: Install dependencies and setup e2e
         run: pnpm install --no-optional --force
         working-directory: e2e
