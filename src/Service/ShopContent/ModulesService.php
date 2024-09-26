@@ -18,15 +18,17 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
+
 
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Repository\NewRepository\ModuleRepository;
 use PrestaShop\Module\PsEventbus\Repository\ShopRepository;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 class ModulesService implements ShopContentServiceInterface
 {

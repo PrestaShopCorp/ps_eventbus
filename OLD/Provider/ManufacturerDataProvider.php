@@ -18,15 +18,17 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
+
 
 namespace PrestaShop\Module\PsEventbus\Provider;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\ManufacturerDecorator;
 use PrestaShop\Module\PsEventbus\Repository\ManufacturerRepository;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 class ManufacturerDataProvider implements PaginatedApiDataProviderInterface
 {

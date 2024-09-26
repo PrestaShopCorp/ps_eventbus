@@ -18,9 +18,7 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
+
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
@@ -33,6 +31,10 @@ use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\ShopContentServiceInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 class SynchronizationService
 {

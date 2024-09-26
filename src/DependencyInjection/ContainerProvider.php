@@ -18,9 +18,7 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
+
 
 namespace PrestaShop\Module\PsEventbus\DependencyInjection;
 
@@ -31,6 +29,10 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 class ContainerProvider
 {

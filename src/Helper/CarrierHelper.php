@@ -18,9 +18,7 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
+
 
 namespace PrestaShop\Module\PsEventbus\Helper;
 
@@ -28,6 +26,10 @@ use Carrier;
 use PrestaShop\Module\PsEventbus\Repository\CountryRepository;
 use PrestaShop\Module\PsEventbus\Repository\StateRepository;
 use PrestaShop\Module\PsEventbus\Repository\TaxeRepository;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 class CarrierHelper
 {

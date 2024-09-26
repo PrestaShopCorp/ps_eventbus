@@ -18,9 +18,7 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
+
 
 use PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer;
 use PrestaShop\Module\PsEventbus\Module\Install;
@@ -29,6 +27,10 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 
 require_once __DIR__ . '/vendor/autoload.php';
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 class Ps_eventbus extends Module
 {

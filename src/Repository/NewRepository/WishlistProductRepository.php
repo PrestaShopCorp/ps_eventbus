@@ -18,11 +18,13 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 
+
+
+namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
-
-namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
 class WishlistProductRepository extends AbstractRepository implements RepositoryInterface
 {

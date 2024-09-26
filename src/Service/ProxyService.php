@@ -18,9 +18,7 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
+
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
@@ -30,6 +28,10 @@ use PrestaShop\Module\PsEventbus\Api\CollectorApiClient;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 class ProxyService implements ProxyServiceInterface
 {
