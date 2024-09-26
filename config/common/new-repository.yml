@@ -74,3 +74,11 @@ services:
   PrestaShop\Module\PsEventbus\Repository\NewRepository\ModuleRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\ModuleRepository
     public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\WishlistRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\WishlistRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\WishlistProductRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\WishlistProductRepository
+    public: true

@@ -205,3 +205,15 @@ services:
     public: true
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\WishlistsService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\WishlistsService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\WishlistRepository'
+  
+  PrestaShop\Module\PsEventbus\Service\ShopContent\WishlistProductsService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\WishlistProductsService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\WishlistProductRepository'
