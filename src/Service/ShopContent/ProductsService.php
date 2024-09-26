@@ -4,7 +4,6 @@ namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
-use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductRepository;
 
 class ProductsService implements ShopContentServiceInterface
@@ -12,8 +11,8 @@ class ProductsService implements ShopContentServiceInterface
     /** @var ProductRepository */
     private $productRepository;
 
-    /** @var LanguageRepository */
-    private $languageRepository;
+    /** @var LanguagesService */
+    private $languagesService;
 
     /** @var CategoriesService */
     private $categoriesService;
@@ -29,12 +28,12 @@ class ProductsService implements ShopContentServiceInterface
 
     public function __construct(
         ProductRepository $productRepository,
-        LanguageRepository $languageRepository,
+        LanguagesService $languagesService,
         CategoriesService $categoriesService,
         ArrayFormatter $arrayFormatter
     ) {
         $this->productRepository = $productRepository;
-        $this->languageRepository = $languageRepository;
+        $this->languagesService = $languagesService;
         $this->categoriesService = $categoriesService;
         $this->arrayFormatter = $arrayFormatter;
 
@@ -202,7 +201,7 @@ class ProductsService implements ShopContentServiceInterface
                 null,
                 null,
                 null,
-                $this->languageRepository->getLanguageIdByIsoCode($product['iso_code']),
+                $this->languagesService->getLanguageIdByIsoCode($product['iso_code']),
                 $this->shopId,
                 $product['id_attribute']
             );
@@ -250,7 +249,7 @@ class ProductsService implements ShopContentServiceInterface
     {
         $categoryPaths = $this->categoriesService->getCategoryPaths(
             $product['id_category_default'],
-            $this->languageRepository->getLanguageIdByIsoCode($product['iso_code']),
+            $this->languagesService->getLanguageIdByIsoCode($product['iso_code']),
             $this->shopId
         );
 

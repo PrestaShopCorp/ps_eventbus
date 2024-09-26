@@ -1,10 +1,4 @@
 services:
-  PrestaShop\Module\PsEventbus\Repository\LanguageRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\LanguageRepository
-    public: true
-    arguments:
-      - '@=service("prestashop.adapter.legacy.context").getContext()'
-
   PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository
     public: true

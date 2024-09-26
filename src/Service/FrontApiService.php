@@ -10,7 +10,7 @@ use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
-use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
+use PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 class FrontApiService
@@ -91,12 +91,12 @@ class FrontApiService
 
             /** @var ConfigurationRepository $configurationRepository */
             $configurationRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository');
-            /** @var LanguageRepository $languageRepository */
-            $languageRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\LanguageRepository');
+            /** @var LanguagesService $languagesService */
+            $languagesService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService');
 
             $timezone = (string) $configurationRepository->get('PS_TIMEZONE');
             $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(Config::MYSQL_DATE_FORMAT);
-            $langIso = $langIso ? $langIso : $languageRepository->getDefaultLanguageIsoCode();
+            $langIso = $langIso ? $langIso : $languagesService->getDefaultLanguageIsoCode();
 
             $typeSync = $this->eventbusSyncRepository->findTypeSync($shopContent, $langIso);
 
