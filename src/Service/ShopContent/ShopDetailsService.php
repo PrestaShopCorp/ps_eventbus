@@ -4,7 +4,6 @@ namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
-use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\ShopRepository;
 
 class ShopDetailsService implements ShopContentServiceInterface
@@ -12,8 +11,8 @@ class ShopDetailsService implements ShopContentServiceInterface
     /** @var CurrenciesService */
     private $currenciesService;
 
-    /** @var LanguageRepository */
-    private $languageRepository;
+    /** @var LanguagesService */
+    private $languagesService;
 
     /** @var ConfigurationRepository */
     private $configurationRepository;
@@ -26,22 +25,22 @@ class ShopDetailsService implements ShopContentServiceInterface
 
     /**
      * @param \Context $context
-     * @param LanguageRepository $languageRepository
      * @param ConfigurationRepository $configurationRepository
      * @param ShopRepository $shopRepository
+     * @param LanguagesService $languagesService
      * @param CurrenciesService $currenciesService
      *
      * @return void
      */
     public function __construct(
         \Context $context,
-        LanguageRepository $languageRepository,
         ConfigurationRepository $configurationRepository,
         ShopRepository $shopRepository,
+        LanguagesService $languagesService,
         CurrenciesService $currenciesService
     ) {
         $this->currenciesService = $currenciesService;
-        $this->languageRepository = $languageRepository;
+        $this->languagesService = $languagesService;
         $this->configurationRepository = $configurationRepository;
         $this->shopRepository = $shopRepository;
         $this->context = $context;
@@ -82,8 +81,8 @@ class ShopDetailsService implements ShopContentServiceInterface
                     'cms_version' => _PS_VERSION_,
                     'url_is_simplified' => $this->configurationRepository->get('PS_REWRITING_SETTINGS') == '1',
                     'cart_is_persistent' => $this->configurationRepository->get('PS_CART_FOLLOWING') == '1',
-                    'default_language' => $this->languageRepository->getDefaultLanguageIsoCode(),
-                    'languages' => implode(';', $this->languageRepository->getLanguagesIsoCodes()),
+                    'default_language' => $this->languagesService->getDefaultLanguageIsoCode(),
+                    'languages' => implode(';', $this->languagesService->getLanguagesIsoCodes()),
                     'default_currency' => $this->currenciesService->getDefaultCurrencyIsoCode(),
                     'currencies' => implode(';', $this->currenciesService->getCurrenciesIsoCodes()),
                     'weight_unit' => $this->configurationRepository->get('PS_WEIGHT_UNIT'),

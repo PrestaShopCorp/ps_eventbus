@@ -82,3 +82,7 @@ services:
   PrestaShop\Module\PsEventbus\Repository\NewRepository\WishlistProductRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\WishlistProductRepository
     public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\LanguageRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\LanguageRepository
+    public: true

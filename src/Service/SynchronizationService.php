@@ -7,8 +7,8 @@ use PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator;
 use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
-use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
+use PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\ShopContentServiceInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
@@ -30,9 +30,9 @@ class SynchronizationService
     private $liveSyncRepository;
 
     /**
-     * @var LanguageRepository
+     * @var LanguagesService
      */
-    private $languageRepository;
+    private $languagesService;
 
     /**
      * @var PayloadDecorator
@@ -48,14 +48,14 @@ class SynchronizationService
         EventbusSyncRepository $eventbusSyncRepository,
         IncrementalSyncRepository $incrementalSyncRepository,
         LiveSyncRepository $liveSyncRepository,
-        LanguageRepository $languageRepository,
+        LanguagesService $languagesService,
         ProxyServiceInterface $proxyService,
         PayloadDecorator $payloadDecorator
     ) {
         $this->eventbusSyncRepository = $eventbusSyncRepository;
         $this->incrementalSyncRepository = $incrementalSyncRepository;
         $this->liveSyncRepository = $liveSyncRepository;
-        $this->languageRepository = $languageRepository;
+        $this->languagesService = $languagesService;
         $this->proxyService = $proxyService;
         $this->payloadDecorator = $payloadDecorator;
     }
@@ -242,7 +242,7 @@ class SynchronizationService
                             0,
                             $createdAt,
                             false,
-                            $this->languageRepository->getDefaultLanguageIsoCode()
+                            $this->languagesService->getDefaultLanguageIsoCode()
                         );
                     }
                 }
@@ -254,7 +254,7 @@ class SynchronizationService
         $contentToInsert = [];
 
         if ($hasMultiLang) {
-            $allIsoCodes = $this->languageRepository->getLanguagesIsoCodes();
+            $allIsoCodes = $this->languagesService->getLanguagesIsoCodes();
 
             foreach ($allIsoCodes as $langIso) {
                 foreach ($contentTypesWithIds as $contentType => $contentId) {
@@ -273,7 +273,7 @@ class SynchronizationService
                 }
             }
         } else {
-            $defaultIsoCode = $this->languageRepository->getDefaultLanguageIsoCode();
+            $defaultIsoCode = $this->languagesService->getDefaultLanguageIsoCode();
 
             foreach ($contentTypesWithIds as $contentType => $contentId) {
                 if ($this->isFullSyncDone($contentType, $defaultIsoCode)) {

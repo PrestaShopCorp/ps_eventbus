@@ -20,7 +20,7 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository'
-      - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
+      - '@PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService'
       - '@PrestaShop\Module\PsEventbus\Service\ProxyService'
       - '@PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator'
 
@@ -125,7 +125,7 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductRepository' 
-      - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
+      - '@PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService'
       - '@PrestaShop\Module\PsEventbus\Service\ShopContent\CategoriesService'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
 
@@ -188,9 +188,9 @@ services:
     public: true
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
-      - '@PrestaShop\Module\PsEventbus\Repository\LanguageRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
+      - '@PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService'
       - '@PrestaShop\Module\PsEventbus\Service\ShopContent\CurrenciesService'
 
   PrestaShop\Module\PsEventbus\Service\ShopContent\ModulesService:
@@ -217,3 +217,9 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\WishlistProductRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\LanguageRepository'
