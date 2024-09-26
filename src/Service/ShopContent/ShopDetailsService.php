@@ -7,7 +7,7 @@ use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\ShopRepository;
 
-class ShopInformationService implements ShopContentServiceInterface
+class ShopDetailsService implements ShopContentServiceInterface
 {
     /** @var CurrenciesService */
     private $currenciesService;
@@ -75,7 +75,7 @@ class ShopInformationService implements ShopContentServiceInterface
         return [
             [
                 'id' => '1',
-                'collection' => Config::COLLECTION_SHOP_INFORMATION,
+                'collection' => Config::COLLECTION_SHOP_DETAILS,
                 'properties' => [
                     'created_at' => $this->shopRepository->getCreatedAt(),
                     'folder_created_at' => $folderCreatedAt,
