@@ -157,7 +157,7 @@ docker-phpstan: tools/vendor
 # target: header-stamp                                         - check Headers of PHP files
 .PHONY:header-stamp
 header-stamp:
-	tools/vendor/bin/header-stamp --license=tools/vendor/prestashop/header-stamp/assets/afl.txt --exclude=vendor,tools,e2e,e2e-env,tests,composer.json,scoper.inc.php
+	tools/vendor/bin/header-stamp --license=tools/vendor/prestashop/header-stamp/assets/afl.txt --exclude=vendor,tools,e2e,e2e-env,tests,composer.json,scoper.inc.php --dry-run
 
 define COMMENT
 	Fixme: add "allure-framework/allure-phpunit" in composer.json to solve this.
@@ -183,6 +183,7 @@ define create_module
 	cp -r $(shell cat .zip-contents) ${TMP_DIR}/${MODULE_NAME};
 	$(call replace_version,${TMP_DIR}/${MODULE_NAME},${SEM_VERSION})
 	./tools/vendor/bin/autoindex prestashop:add:index ${TMP_DIR}
+	tools/vendor/bin/header-stamp --target=${TMP_DIR}/${MODULE_NAME} --license=tools/vendor/prestashop/header-stamp/assets/afl.txt --exclude=vendor,e2e,e2e-env,tests,composer.json,scoper.inc.php
 	cp $1 ${TMP_DIR}/${MODULE_NAME}/config/parameters.yml
 	cd ${TMP_DIR}/${MODULE_NAME} && composer dump-autoload
 endef

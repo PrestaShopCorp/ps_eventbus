@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -19,12 +18,14 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 
-
-
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
 use Exception;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 /**
  * Handle Error.

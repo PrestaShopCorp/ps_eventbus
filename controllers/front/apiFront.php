@@ -18,8 +18,6 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 
-
-
 use PrestaShop\Module\PsEventbus\Service\FrontApiService;
 
 if (!defined('_PS_VERSION_')) {

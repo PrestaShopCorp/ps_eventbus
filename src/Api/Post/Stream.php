@@ -18,12 +18,14 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 
-
-
 namespace PrestaShop\Module\PsEventbus\Api\Post;
 
 use GuzzleHttp\Psr7\PumpStream;
 use Psr\Http\Message\StreamInterface;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 /**
  * PHP stream implementation

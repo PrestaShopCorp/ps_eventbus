@@ -18,8 +18,6 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 
-
-
 namespace PrestaShop\Module\PsEventbus\Exception;
 
 if (!defined('_PS_VERSION_')) {

@@ -18,13 +18,15 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 
-
-
 namespace PrestaShop\Module\PsEventbus\Api\Post;
 
 use GuzzleHttp\Psr7\AppendStream;
 use GuzzleHttp\Psr7\StreamDecoratorTrait;
 use Psr\Http\Message\StreamInterface;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 /**
  * Stream that when read returns bytes for a streaming multipart/form-data body
