@@ -18,14 +18,15 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer;
 use PrestaShop\Module\PsEventbus\Module\Install;
 use PrestaShop\Module\PsEventbus\Module\Uninstall;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
 
 require_once __DIR__ . '/vendor/autoload.php';
 

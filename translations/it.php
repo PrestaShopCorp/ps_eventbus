@@ -18,6 +18,10 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{ps_eventbus}prestashop>ps_eventbus_5aa8d80fbd2c1cd4eb908ed27db0e4f2'] = 'PrestaShop EventBus';
