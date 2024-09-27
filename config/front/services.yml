@@ -223,3 +223,9 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\LanguageRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\ManufacturersService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\ManufacturersService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\ManufacturerRepository'

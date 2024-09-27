@@ -8,9 +8,7 @@ import R from "ramda";
   'stores': 'stores',
   'stocks': 'stocks',
   'stock_movements': 'stock-movements',
-  'manufacturers': 'manufacturers',
   'suppliers': 'suppliers',
-  'languages': 'languages',
   'translations': 'translations',
 } as const; */
 
@@ -28,6 +26,7 @@ export const shopContentMapping = {
   images: "images",
   image_types: "image-types",
   languages: "languages",
+  manufacturers: "manufacturers",
   modules: "modules",
   orders: "orders",
   order_cart_rules: "order-cart-rules",
