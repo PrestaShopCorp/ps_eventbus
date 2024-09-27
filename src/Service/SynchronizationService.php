@@ -200,16 +200,14 @@ class SynchronizationService
     {
         $defaultIsoCode = $this->languageRepository->getDefaultLanguageIsoCode();
 
-        if ($this->isFullSyncDone($shopContent, $defaultIsoCode)) {
-            if ($this->debounceLiveSync($shopContent)) {
-                try {
-                    /** @var LiveSyncApiClient $liveSyncApiClient */
-                    $liveSyncApiClient = $this->module->getService('PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient');
+        if ($this->isFullSyncDone($shopContent, $defaultIsoCode) && $this->debounceLiveSync($shopContent)) {
+            try {
+                /** @var LiveSyncApiClient $liveSyncApiClient */
+                $liveSyncApiClient = $this->module->getService('PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient');
 
-                    $liveSyncApiClient->liveSync($shopContent, (int) $shopContentId, $action);
-                } catch (\Exception $e) {
-                    // FIXME : report this error somehow
-                }
+                $liveSyncApiClient->liveSync($shopContent, (int) $shopContentId, $action);
+            } catch (\Exception $e) {
+                // FIXME : report this error somehow
             }
         }
     }
