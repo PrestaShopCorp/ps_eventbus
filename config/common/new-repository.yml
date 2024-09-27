@@ -86,3 +86,7 @@ services:
   PrestaShop\Module\PsEventbus\Repository\NewRepository\LanguageRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\LanguageRepository
     public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\ManufacturerRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\ManufacturerRepository
+    public: true
