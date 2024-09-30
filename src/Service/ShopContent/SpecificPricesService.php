@@ -18,44 +18,187 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 
-namespace PrestaShop\Module\PsEventbus\Service;
+namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
-use PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository;
+use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Repository\NewRepository\SpecificPriceRepository;
+use PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductRepository;
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class SpecificPriceService
+class SpecificPricesService implements ShopContentServiceInterface
 {
-    /** @var array<mixed> */
-    private static $_pricesLevel2;
-
-    /**
-     * @var SpecificPriceRepository
-     */
+    /** @var SpecificPriceRepository */
     private $specificPriceRepository;
+    
+    /** @var ProductRepository */
+    private $productRepository;
 
-    public function __construct(SpecificPriceRepository $specificPriceRepository)
-    {
+    public function __construct(
+        SpecificPriceRepository $specificPriceRepository,
+        ProductRepository $productRepository
+    ) {
         $this->specificPriceRepository = $specificPriceRepository;
+        $this->productRepository = $productRepository;
     }
 
     /**
-     * @param int $productId
-     * @param int $attributeId
-     * @param int $specificPriceId
-     * @param bool $useTax
-     * @param bool $usereduc
-     * @param \Context|null $context
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     * @param bool $debug
      *
-     * @return float|int|void
-     *
-     * @@throws \PrestaShopException
+     * @return array<mixed>
      */
-    public function getSpecificProductPrice($productId, $attributeId, $specificPriceId, $useTax, $usereduc, $context)
+    public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
-        return $this->getPriceStatic($productId, $attributeId, $specificPriceId, $useTax, $usereduc, $context);
+        $result = $this->specificPriceRepository->retrieveContentsForFull($offset, $limit, $langIso, $debug);
+
+        if (empty($result)) {
+            return [];
+        }
+
+        $this->castCustomPrices($result);
+
+        return array_map(function ($item) {
+            return [
+                'id' => $item['id_specific_price'],
+                'collection' => Config::COLLECTION_SPECIFIC_PRICES,
+                'properties' => $item,
+            ];
+        }, $result);
+    }
+
+    /**
+     * @param int $limit
+     * @param array<string, int> $contentIds
+     * @param string $langIso
+     * @param bool $debug
+     *
+     * @return array<mixed>
+     */
+    public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
+    {
+        $result = $this->specificPriceRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug);
+
+        if (empty($result)) {
+            return [];
+        }
+
+        $this->castCustomPrices($result);
+
+        return array_map(function ($item) {
+            return [
+                'id' => $item['id_specific_price'],
+                'collection' => Config::COLLECTION_SPECIFIC_PRICES,
+                'properties' => $item,
+            ];
+        }, $result);
+    }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return int
+     */
+    public function getFullSyncContentLeft($offset, $limit, $langIso)
+    {
+        return $this->specificPriceRepository->countFullSyncContentLeft($offset, $limit, $langIso);
+    }
+
+    /**
+     * @param array<mixed> $customPrices
+     *
+     * @return void
+     */
+    private function castCustomPrices(&$customPrices)
+    {
+        foreach ($customPrices as &$customPrice) {
+            $context = \Context::getContext();
+
+            if ($context == null) {
+                throw new \PrestaShopException('Context not found');
+            }
+
+            if ($context->shop === null) {
+                throw new \PrestaShopException('No shop context');
+            }
+    
+            $context->country = new \Country($customPrice['id_country']);
+            $context->currency = new \Currency($customPrice['id_currency']);
+    
+            $customPrice['price_tax_included'] = $this->getPriceStatic(
+                $customPrice['id_product'],
+                $customPrice['id_product_attribute'],
+                $customPrice['id_specific_price'],
+                true,
+                false,
+                $context
+            );
+    
+            $customPrice['price_tax_excluded'] = $this->getPriceStatic(
+                $customPrice['id_product'],
+                $customPrice['id_product_attribute'],
+                $customPrice['id_specific_price'],
+                false,
+                false,
+                $context
+            );
+            $customPrice['sale_price_tax_incl'] = $this->getPriceStatic(
+                $customPrice['id_product'],
+                $customPrice['id_product_attribute'],
+                $customPrice['id_specific_price'],
+                true,
+                true,
+                $context
+            );
+            $customPrice['sale_price_tax_excl'] = $this->getPriceStatic(
+                $customPrice['id_product'],
+                $customPrice['id_product_attribute'],
+                $customPrice['id_specific_price'],
+                false,
+                true,
+                $context
+            );
+    
+            if ($customPrice['id_shop']) {
+                $customPrice['id_shop'] = $context->shop->id;
+            }
+
+            $customPrice['id_specific_price'] = (int) $customPrice['id_specific_price'];
+            $customPrice['id_product'] = (int) $customPrice['id_product'];
+            $customPrice['id_shop'] = (int) $customPrice['id_shop'];
+            $customPrice['id_group'] = (int) $customPrice['id_group'];
+            $customPrice['id_shop_group'] = (int) $customPrice['id_shop_group'];
+            $customPrice['id_product_attribute'] = (int) $customPrice['id_product_attribute'];
+            $customPrice['price'] = (float) $customPrice['price'];
+            $customPrice['from_quantity'] = (int) $customPrice['from_quantity'];
+            $customPrice['reduction'] = (float) $customPrice['reduction'];
+            $customPrice['reduction_tax'] = (int) $customPrice['reduction_tax'];
+            $customPrice['id_currency'] = (int) $customPrice['id_currency'];
+            $customPrice['id_country'] = (int) $customPrice['id_country'];
+            $customPrice['id_customer'] = (int) $customPrice['id_customer'];
+            $customPrice['currency'] = $customPrice['currency'] ?: 'ALL';
+            $customPrice['country'] = $customPrice['country'] ?: 'ALL';
+            $customPrice['price_tax_included'] = (float) $customPrice['price_tax_included'];
+            $customPrice['price_tax_excluded'] = (float) $customPrice['price_tax_excluded'];
+            $customPrice['sale_price_tax_incl'] = (float) $customPrice['sale_price_tax_incl'];
+            $customPrice['sale_price_tax_excl'] = (float) $customPrice['sale_price_tax_excl'];
+
+            if ($customPrice['reduction_type'] === 'percentage') {
+                $customPrice['discount_percentage'] = $customPrice['reduction'] * 100;
+                $customPrice['discount_value_tax_incl'] = 0.0;
+                $customPrice['discount_value_tax_excl'] = 0.0;
+            } else {
+                $customPrice['discount_percentage'] = 0;
+                $customPrice['discount_value_tax_incl'] = $customPrice['price_tax_included'] - $customPrice['sale_price_tax_incl'];
+                $customPrice['discount_value_tax_excl'] = $customPrice['price_tax_excluded'] - $customPrice['sale_price_tax_excl'];
+            }
+        }
     }
 
     /**
@@ -204,6 +347,9 @@ class SpecificPriceService
         static $address = null;
         static $context = null;
 
+        /** @var array<mixed> */
+        static $pricesLevel2;
+    
         if ($context == null) {
             /** @var \Context $context */
             $context = \Context::getContext();
@@ -233,42 +379,30 @@ class SpecificPriceService
 
         // fetch price & attribute price
         $cache_id_2 = $id_product . '-' . $id_shop . '-' . $specificPriceId;
-        if (!isset(self::$_pricesLevel2[$cache_id_2])) {
-            $sql = new \DbQuery();
-            $sql->select('product_shop.`price`, product_shop.`ecotax`');
-            $sql->from('product', 'p');
-            $sql->innerJoin('product_shop', 'product_shop', '(product_shop.id_product=p.id_product AND product_shop.id_shop = ' . (int) $id_shop . ')');
-            $sql->where('p.`id_product` = ' . (int) $id_product);
-            if (\Combination::isFeatureActive()) {
-                $sql->select('IFNULL(product_attribute_shop.id_product_attribute,0) id_product_attribute, product_attribute_shop.`price` AS attribute_price, product_attribute_shop.default_on');
-                $sql->leftJoin('product_attribute_shop', 'product_attribute_shop', '(product_attribute_shop.id_product = p.id_product AND product_attribute_shop.id_shop = ' . (int) $id_shop . ')');
-            } else {
-                $sql->select('0 as id_product_attribute');
-            }
+        if (!isset($pricesLevel2[$cache_id_2])) {
+            $result = $this->productRepository->getProductPriceAndDeclinations($id_product);
 
-            $res = \Db::getInstance((bool) _PS_USE_SQL_SLAVE_)->executeS($sql);
-
-            if (is_array($res) && count($res)) {
-                foreach ($res as $row) {
+            if (is_array($result) && count($result)) {
+                foreach ($result as $row) {
                     $array_tmp = [
                         'price' => $row['price'],
                         'ecotax' => $row['ecotax'],
                         'attribute_price' => (isset($row['attribute_price']) ? $row['attribute_price'] : null),
                     ];
-                    self::$_pricesLevel2[$cache_id_2][(int) $row['id_product_attribute']] = $array_tmp;
+                    $pricesLevel2[$cache_id_2][(int) $row['id_product_attribute']] = $array_tmp;
 
                     if (isset($row['default_on']) && $row['default_on'] == 1) {
-                        self::$_pricesLevel2[$cache_id_2][0] = $array_tmp;
+                        $pricesLevel2[$cache_id_2][0] = $array_tmp;
                     }
                 }
             }
         }
 
-        if (!isset(self::$_pricesLevel2[$cache_id_2][(int) $id_product_attribute])) {
+        if (!isset($pricesLevel2[$cache_id_2][(int) $id_product_attribute])) {
             return;
         }
 
-        $result = self::$_pricesLevel2[$cache_id_2][(int) $id_product_attribute];
+        $result = $pricesLevel2[$cache_id_2][(int) $id_product_attribute];
 
         if (!$specific_price || $specific_price['price'] < 0) {
             $price = (float) $result['price'];
@@ -400,7 +534,7 @@ class SpecificPriceService
      *
      * @param int $specificPriceId
      *
-     * @return array<mixed>|bool|false|object|null
+     * @return array<mixed>
      */
     private function getSpecificPrice($specificPriceId)
     {
@@ -408,6 +542,6 @@ class SpecificPriceService
             return [];
         }
 
-        return $this->specificPriceRepository->getSpecificPrice($specificPriceId);
+        return $this->specificPriceRepository->getSpecificPriceById($specificPriceId)[0];
     }
 }

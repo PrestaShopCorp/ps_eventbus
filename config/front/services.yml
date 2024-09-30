@@ -24,12 +24,6 @@ services:
       - '@PrestaShop\Module\PsEventbus\Service\ProxyService'
       - '@PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator'
 
-  PrestaShop\Module\PsEventbus\Service\SpecificPriceService:
-    class: PrestaShop\Module\PsEventbus\Service\SpecificPriceService
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository'
-    public: true
-
   PrestaShop\Module\PsEventbus\Service\PresenterService:
     class: PrestaShop\Module\PsEventbus\Service\PresenterService
     public: true
@@ -247,3 +241,10 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\StockMvtRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\SpecificPricesService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\SpecificPricesService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\SpecificPriceRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductRepository'

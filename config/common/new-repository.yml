@@ -103,3 +103,6 @@ services:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\StockMvtRepository
     public: true
     
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\SpecificPriceRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\SpecificPriceRepository
+    public: true

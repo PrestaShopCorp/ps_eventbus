@@ -20,6 +20,9 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository\NewRepository;
 
+use PrestaShopException;
+use PrestaShopDatabaseException;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -318,6 +321,44 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
             ->select('id_product_attribute, id_image')
             ->select('id_image')
         ;
+
+        return $this->runQuery(false);
+    }
+
+    /**
+     * @param int $productId 
+     * 
+     * @return array<mixed>
+     * 
+     * @throws PrestaShopException 
+     * @throws PrestaShopDatabaseException 
+     */
+    public function getProductPriceAndDeclinations($productId)
+    {
+        $this->generateMinimalQuery('product', 'p');
+        
+        $this->query->where('p.`id_product` = ' . (int) $productId);
+
+        $this->query->innerJoin(
+            'product_shop', 'ps','(ps.id_product=p.id_product AND ps.id_shop = ' . (int) parent::getShopContext()->id . ')');
+
+        $this->query
+            ->select('ps.price')
+            ->select('ps.ecotax')
+        ;  
+            
+        if (\Combination::isFeatureActive()) {
+            $this->query->leftJoin(
+                'product_attribute_shop','pas','(pas.id_product = p.id_product AND pas.id_shop = ' . (int) parent::getShopContext()->id . ')');
+            
+            $this->query
+                ->select('IFNULL(pas.id_product_attribute,0) id_product_attribute')
+                ->select('pas.`price` AS attribute_price')
+                ->select('pas.default_on')
+            ;
+        } else {
+            $this->query->select('0 as id_product_attribute');
+        }
 
         return $this->runQuery(false);
     }
