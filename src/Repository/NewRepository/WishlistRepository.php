@@ -99,7 +99,7 @@ class WishlistRepository extends AbstractRepository implements RepositoryInterfa
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('ps.id_wishlist IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('w.id_wishlist IN(' . implode(',', array_map('intval', $contentIds)) . ')')
             ->limit($limit)
         ;
 

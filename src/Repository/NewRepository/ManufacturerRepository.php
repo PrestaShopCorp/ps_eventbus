@@ -98,7 +98,7 @@ class ManufacturerRepository extends AbstractRepository implements RepositoryInt
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('la.id_manufacturer IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('ma.id_manufacturer IN(' . implode(',', array_map('intval', $contentIds)) . ')')
             ->limit($limit)
         ;
 

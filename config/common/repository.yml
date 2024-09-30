@@ -72,12 +72,6 @@ services:
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
   
-  PrestaShop\Module\PsEventbus\Repository\TranslationRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\TranslationRepository
-    public: true
-    arguments:
-      - '@=service("prestashop.adapter.legacy.context").getContext()'
-      
   PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository:
     class: PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository
     public: true
