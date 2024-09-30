@@ -40,16 +40,6 @@ services:
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
 
-  PrestaShop\Module\PsEventbus\Repository\CustomPriceRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\CustomPriceRepository
-    public: true
-    arguments:
-      - '@=service("prestashop.adapter.legacy.context").getContext()'
-
-  PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository
-    public: true
-
   PrestaShop\Module\PsEventbus\Repository\StoreRepository:
     class: PrestaShop\Module\PsEventbus\Repository\StoreRepository
     public: true

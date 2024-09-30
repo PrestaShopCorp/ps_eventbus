@@ -5,37 +5,10 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
 
-  PrestaShop\Module\PsEventbus\Decorator\CustomPriceDecorator:
-    class: PrestaShop\Module\PsEventbus\Decorator\CustomPriceDecorator
-    public: true
-    arguments:
-      - '@=service("prestashop.adapter.legacy.context").getContext()'
-      - '@PrestaShop\Module\PsEventbus\Service\SpecificPriceService'
-
-  PrestaShop\Module\PsEventbus\Decorator\WishlistDecorator:
-    class: PrestaShop\Module\PsEventbus\Decorator\WishlistDecorator
-    public: true
-
   PrestaShop\Module\PsEventbus\Decorator\StoreDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\StoreDecorator
     public: true
 
-  PrestaShop\Module\PsEventbus\Decorator\StockDecorator:
-    class: PrestaShop\Module\PsEventbus\Decorator\StockDecorator
-    public: true
-
-  PrestaShop\Module\PsEventbus\Decorator\ManufacturerDecorator:
-    class: PrestaShop\Module\PsEventbus\Decorator\ManufacturerDecorator
-    public: true
-
   PrestaShop\Module\PsEventbus\Decorator\SupplierDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\SupplierDecorator
-    public: true
-
-  PrestaShop\Module\PsEventbus\Decorator\LanguageDecorator:
-    class: PrestaShop\Module\PsEventbus\Decorator\LanguageDecorator
-    public: true
-
-  PrestaShop\Module\PsEventbus\Decorator\TranslationDecorator:
-    class: PrestaShop\Module\PsEventbus\Decorator\TranslationDecorator
     public: true
