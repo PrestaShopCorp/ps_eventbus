@@ -83,7 +83,7 @@ class Config
     const COLLECTION_SHOP_DETAILS = 'shop_details';
     const COLLECTION_SPECIFIC_PRICES = 'specific_prices';
     const COLLECTION_STOCKS = 'stocks';
-    const COLLECTION_STOCK_MVTS = 'stock_movements';
+    const COLLECTION_STOCK_MVTS = 'stock_mvts';
     const COLLECTION_STORES = 'stores';
     const COLLECTION_SUPPLIERS = 'suppliers';
     const COLLECTION_TAXONOMIES = 'taxonomies';

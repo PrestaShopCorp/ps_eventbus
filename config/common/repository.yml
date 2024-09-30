@@ -56,16 +56,6 @@ services:
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
 
-  PrestaShop\Module\PsEventbus\Repository\StockRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\StockRepository
-    public: true
-    arguments:
-      - '@=service("prestashop.adapter.legacy.context").getContext()'
-
-  PrestaShop\Module\PsEventbus\Repository\StockMvtRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\StockMvtRepository
-    public: true
-
   PrestaShop\Module\PsEventbus\Repository\SupplierRepository:
     class: PrestaShop\Module\PsEventbus\Repository\SupplierRepository
     public: true
