@@ -235,3 +235,15 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\TranslationRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\StocksService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\StocksService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\StockRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\StockMvtsService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\StockMvtsService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\StockMvtRepository'

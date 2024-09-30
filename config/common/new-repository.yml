@@ -94,3 +94,12 @@ services:
   PrestaShop\Module\PsEventbus\Repository\NewRepository\TranslationRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\TranslationRepository
     public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\StockRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\StockRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\StockMvtRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\StockMvtRepository
+    public: true
+    
