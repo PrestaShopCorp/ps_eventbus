@@ -21,8 +21,8 @@
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Repository\NewRepository\SpecificPriceRepository;
 use PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductRepository;
+use PrestaShop\Module\PsEventbus\Repository\NewRepository\SpecificPriceRepository;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -32,7 +32,7 @@ class SpecificPricesService implements ShopContentServiceInterface
 {
     /** @var SpecificPriceRepository */
     private $specificPriceRepository;
-    
+
     /** @var ProductRepository */
     private $productRepository;
 
@@ -127,10 +127,10 @@ class SpecificPricesService implements ShopContentServiceInterface
             if ($context->shop === null) {
                 throw new \PrestaShopException('No shop context');
             }
-    
+
             $context->country = new \Country($customPrice['id_country']);
             $context->currency = new \Currency($customPrice['id_currency']);
-    
+
             $customPrice['price_tax_included'] = $this->getPriceStatic(
                 $customPrice['id_product'],
                 $customPrice['id_product_attribute'],
@@ -139,7 +139,7 @@ class SpecificPricesService implements ShopContentServiceInterface
                 false,
                 $context
             );
-    
+
             $customPrice['price_tax_excluded'] = $this->getPriceStatic(
                 $customPrice['id_product'],
                 $customPrice['id_product_attribute'],
@@ -164,7 +164,7 @@ class SpecificPricesService implements ShopContentServiceInterface
                 true,
                 $context
             );
-    
+
             if ($customPrice['id_shop']) {
                 $customPrice['id_shop'] = $context->shop->id;
             }
@@ -349,7 +349,7 @@ class SpecificPricesService implements ShopContentServiceInterface
 
         /** @var array<mixed> */
         static $pricesLevel2;
-    
+
         if ($context == null) {
             /** @var \Context $context */
             $context = \Context::getContext();

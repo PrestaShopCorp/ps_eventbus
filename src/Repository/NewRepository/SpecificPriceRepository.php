@@ -174,5 +174,4 @@ class SpecificPriceRepository extends AbstractRepository implements RepositoryIn
 
         return $this->runQuery(false);
     }
-
 }
