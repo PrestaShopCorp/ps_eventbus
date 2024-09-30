@@ -34,14 +34,14 @@ class ApiAuthorizationService
      */
     public function authorizeCall($jobId)
     {
-        // Check if job already exist
+        // Check if the job already exists
         $job = $this->eventbusSyncRepository->findJobById($jobId);
 
         if ($job) {
             return true;
         }
 
-        // Check the jobId validity to avoid Dnial Of Service
+        // Check the jobId validity to avoid Denial Of Service
         $jobValidationResponse = $this->syncApiClient->validateJobId($jobId);
 
         if (!is_array($jobValidationResponse) || (int) $jobValidationResponse['httpCode'] !== 201) {
