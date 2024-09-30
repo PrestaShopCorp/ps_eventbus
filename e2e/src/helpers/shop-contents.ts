@@ -9,7 +9,6 @@ import R from "ramda";
   'stocks': 'stocks',
   'stock_movements': 'stock-movements',
   'suppliers': 'suppliers',
-  'translations': 'translations',
 } as const; */
 
 export const shopContentMapping = {
@@ -38,6 +37,7 @@ export const shopContentMapping = {
   product_suppliers: "product-suppliers",
   shop_details: "shop-details",
   themes: "themes",
+  translations: "translations",
   wishlists: "wishlists",
   wishlist_products: "wishlist-products",
 } as const;

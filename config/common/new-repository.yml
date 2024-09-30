@@ -90,3 +90,7 @@ services:
   PrestaShop\Module\PsEventbus\Repository\NewRepository\ManufacturerRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\ManufacturerRepository
     public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\TranslationRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\TranslationRepository
+    public: true
