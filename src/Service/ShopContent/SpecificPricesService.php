@@ -202,40 +202,40 @@ class SpecificPricesService implements ShopContentServiceInterface
     }
 
     /**
-     * @param int $id_product
-     * @param int $id_product_attribute
+     * @param int $idProduct
+     * @param int $idProductAttribute
      * @param int $specificPriceId
      * @param bool $usetax
      * @param bool $usereduc
      * @param \Context|null $context
      * @param int $decimals
      * @param null $divisor
-     * @param bool $only_reduc
-     * @param null $id_customer
-     * @param null $id_cart
-     * @param null $id_address
-     * @param null $specific_price_output
-     * @param bool $use_group_reduction
+     * @param bool $onlyReduc
+     * @param null $idCustomer
+     * @param null $idCart
+     * @param null $idAddress
+     * @param null $specificPriceOutput
+     * @param bool $useGroupReduction
      *
      * @return float|int|void
      *
      * @@throws \PrestaShopException
      */
     private function getPriceStatic(
-        $id_product,
-        $id_product_attribute,
+        $idProduct,
+        $idProductAttribute,
         $specificPriceId,
         $usetax = true,
         $usereduc = true,
         $context = null,
         $decimals = 6,
         $divisor = null,
-        $only_reduc = false,
-        $id_customer = null,
-        $id_cart = null,
-        $id_address = null,
-        &$specific_price_output = null,
-        $use_group_reduction = true
+        $onlyReduc = false,
+        $idCustomer = null,
+        $idCart = null,
+        $idAddress = null,
+        &$specificPriceOutput = null,
+        $useGroupReduction = true
     ) {
         if (!$context) {
             /** @var \Context $context */
@@ -244,26 +244,26 @@ class SpecificPricesService implements ShopContentServiceInterface
 
         \Tools::displayParameterAsDeprecated('divisor');
 
-        if (!\Validate::isBool($usetax) || !\Validate::isUnsignedId($id_product)) {
+        if (!\Validate::isBool($usetax) || !\Validate::isUnsignedId($idProduct)) {
             exit(\Tools::displayError());
         }
 
         // Initializations
-        $id_group = (int) \Group::getCurrent()->id;
+        $idGroup = (int) \Group::getCurrent()->id;
 
         /** @var \Currency $currency */
         $currency = $context->currency;
-        $id_currency = \Validate::isLoadedObject($currency) ? (int) $currency->id : (int) \Configuration::get('PS_CURRENCY_DEFAULT');
+        $idCurrency = \Validate::isLoadedObject($currency) ? (int) $currency->id : (int) \Configuration::get('PS_CURRENCY_DEFAULT');
 
-        $current_cart = $context->cart;
-        if ($current_cart != null && \Validate::isLoadedObject($current_cart)) {
-            $id_address = $current_cart->{\Configuration::get('PS_TAX_ADDRESS_TYPE')};
+        $currentCart = $context->cart;
+        if ($currentCart != null && \Validate::isLoadedObject($currentCart)) {
+            $idAddress = $currentCart->{\Configuration::get('PS_TAX_ADDRESS_TYPE')};
         }
 
         // retrieve address informations
-        $address = \Address::initialize($id_address, true);
-        $id_country = (int) $address->id_country;
-        $id_state = (int) $address->id_state;
+        $address = \Address::initialize($idAddress, true);
+        $idCountry = (int) $address->id_country;
+        $idState = (int) $address->id_state;
         $zipcode = $address->postcode;
 
         if (\Tax::excludeTaxeOption()) {
@@ -287,62 +287,62 @@ class SpecificPricesService implements ShopContentServiceInterface
 
         return $this->priceCalculation(
             $shopId,
-            $id_product,
-            $id_product_attribute,
+            $idProduct,
+            $idProductAttribute,
             $specificPriceId,
-            $id_country,
-            $id_state,
+            $idCountry,
+            $idState,
             $zipcode,
-            $id_currency,
-            $id_group,
+            $idCurrency,
+            $idGroup,
             $usetax,
             $decimals,
-            $only_reduc,
+            $onlyReduc,
             $usereduc,
-            $specific_price_output,
-            $use_group_reduction
+            $specificPriceOutput,
+            $useGroupReduction
         );
     }
 
     /**
-     * @param int $id_shop
-     * @param int $id_product
-     * @param int $id_product_attribute
+     * @param int $idShop
+     * @param int $idProduct
+     * @param int $idProductAttribute
      * @param int $specificPriceId
-     * @param int $id_country
-     * @param int $id_state
+     * @param int $idCountry
+     * @param int $idState
      * @param string $zipcode
-     * @param int $id_currency
-     * @param int $id_group
-     * @param bool $use_tax
+     * @param int $idCurrency
+     * @param int $idGroup
+     * @param bool $useTax
      * @param int $decimals
-     * @param bool $only_reduc
-     * @param bool $use_reduc
-     * @param null $specific_price
-     * @param bool $use_group_reduction
-     * @param int $id_customization
+     * @param bool $onlyReduc
+     * @param bool $useReduc
+     * @param null $specificPrice
+     * @param bool $useGroupReduction
+     * @param int $idCustomization
      *
      * @return float|int|void
      *
      * @@throws \PrestaShopDatabaseException
      */
     private function priceCalculation(
-        $id_shop,
-        $id_product,
-        $id_product_attribute,
+        $idShop,
+        $idProduct,
+        $idProductAttribute,
         $specificPriceId,
-        $id_country,
-        $id_state,
+        $idCountry,
+        $idState,
         $zipcode,
-        $id_currency,
-        $id_group,
-        $use_tax,
+        $idCurrency,
+        $idGroup,
+        $useTax,
         $decimals,
-        $only_reduc,
-        $use_reduc,
-        &$specific_price,
-        $use_group_reduction,
-        $id_customization = 0
+        $onlyReduc,
+        $useReduc,
+        &$specificPrice,
+        $useGroupReduction,
+        $idCustomization = 0
     ) {
         static $address = null;
         static $context = null;
@@ -358,29 +358,29 @@ class SpecificPricesService implements ShopContentServiceInterface
 
         if ($address === null) {
             if (is_object($context->cart) && $context->cart->{\Configuration::get('PS_TAX_ADDRESS_TYPE')} != null) {
-                $id_address = $context->cart->{\Configuration::get('PS_TAX_ADDRESS_TYPE')};
-                $address = new \Address($id_address);
+                $idAddress = $context->cart->{\Configuration::get('PS_TAX_ADDRESS_TYPE')};
+                $address = new \Address($idAddress);
             } else {
                 $address = new \Address();
             }
         }
 
-        if ($id_shop !== null && $context->shop->id != (int) $id_shop) {
-            $context->shop = new \Shop((int) $id_shop);
+        if ($idShop !== null && $context->shop->id != (int) $idShop) {
+            $context->shop = new \Shop((int) $idShop);
         }
 
-        if ($id_product_attribute == null) {
-            $id_product_attribute = \Product::getDefaultAttribute($id_product);
+        if ($idProductAttribute == null) {
+            $idProductAttribute = \Product::getDefaultAttribute($idProduct);
         }
 
         // reference parameter is filled before any returns
-        /** @var array<mixed> $specific_price */
-        $specific_price = $this->getSpecificPrice($specificPriceId);
+        /** @var array<mixed> $specificPrice */
+        $specificPrice = $this->getSpecificPrice($specificPriceId);
 
         // fetch price & attribute price
-        $cache_id_2 = $id_product . '-' . $id_shop . '-' . $specificPriceId;
-        if (!isset($pricesLevel2[$cache_id_2])) {
-            $result = $this->productRepository->getProductPriceAndDeclinations($id_product);
+        $cacheId2 = $idProduct . '-' . $idShop . '-' . $specificPriceId;
+        if (!isset($pricesLevel2[$cacheId2])) {
+            $result = $this->productRepository->getProductPriceAndDeclinations($idProduct);
 
             if (is_array($result) && count($result)) {
                 foreach ($result as $row) {
@@ -389,63 +389,63 @@ class SpecificPricesService implements ShopContentServiceInterface
                         'ecotax' => $row['ecotax'],
                         'attribute_price' => (isset($row['attribute_price']) ? $row['attribute_price'] : null),
                     ];
-                    $pricesLevel2[$cache_id_2][(int) $row['id_product_attribute']] = $array_tmp;
+                    $pricesLevel2[$cacheId2][(int) $row['id_product_attribute']] = $array_tmp;
 
                     if (isset($row['default_on']) && $row['default_on'] == 1) {
-                        $pricesLevel2[$cache_id_2][0] = $array_tmp;
+                        $pricesLevel2[$cacheId2][0] = $array_tmp;
                     }
                 }
             }
         }
 
-        if (!isset($pricesLevel2[$cache_id_2][(int) $id_product_attribute])) {
+        if (!isset($pricesLevel2[$cacheId2][(int) $idProductAttribute])) {
             return;
         }
 
-        $result = $pricesLevel2[$cache_id_2][(int) $id_product_attribute];
+        $result = $pricesLevel2[$cacheId2][(int) $idProductAttribute];
 
-        if (!$specific_price || $specific_price['price'] < 0) {
+        if (!$specificPrice || $specificPrice['price'] < 0) {
             $price = (float) $result['price'];
         } else {
-            $price = (float) $specific_price['price'];
+            $price = (float) $specificPrice['price'];
         }
         // convert only if the specific price is in the default currency (id_currency = 0)
-        if (!$specific_price || !($specific_price['price'] >= 0 && $specific_price['id_currency'])) {
-            $price = \Tools::convertPrice($price, $id_currency);
+        if (!$specificPrice || !($specificPrice['price'] >= 0 && $specificPrice['id_currency'])) {
+            $price = \Tools::convertPrice($price, $idCurrency);
 
-            if (isset($specific_price['price']) && $specific_price['price'] >= 0) {
-                $specific_price['price'] = $price;
+            if (isset($specificPrice['price']) && $specificPrice['price'] >= 0) {
+                $specificPrice['price'] = $price;
             }
         }
 
         // Attribute price
-        if (is_array($result) && (!$specific_price || !$specific_price['id_product_attribute'] || $specific_price['price'] < 0)) {
-            $attribute_price = \Tools::convertPrice($result['attribute_price'] !== null ? (float) $result['attribute_price'] : 0, $id_currency);
+        if (is_array($result) && (!$specificPrice || !$specificPrice['id_product_attribute'] || $specificPrice['price'] < 0)) {
+            $attributePrice = \Tools::convertPrice($result['attribute_price'] !== null ? (float) $result['attribute_price'] : 0, $idCurrency);
             // If you want the default combination, please use NULL value instead
-            if ($id_product_attribute !== false) {
-                $price += $attribute_price;
+            if ($idProductAttribute !== false) {
+                $price += $attributePrice;
             }
         }
 
         if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.0.0', '>=')) {
             // Customization price
-            if ((int) $id_customization) {
+            if ((int) $idCustomization) {
                 /* @phpstan-ignore-next-line */
-                $price += \Tools::convertPrice(\Customization::getCustomizationPrice($id_customization), $id_currency);
+                $price += \Tools::convertPrice(\Customization::getCustomizationPrice($idCustomization), $idCurrency);
             }
         }
 
         // Tax
-        $address->id_country = $id_country;
-        $address->id_state = $id_state;
+        $address->id_country = $idCountry;
+        $address->id_state = $idState;
         $address->postcode = $zipcode;
 
-        $tax_manager = \TaxManagerFactory::getManager($address, \Product::getIdTaxRulesGroupByIdProduct((int) $id_product, $context));
-        $product_tax_calculator = $tax_manager->getTaxCalculator();
+        $tax_manager = \TaxManagerFactory::getManager($address, \Product::getIdTaxRulesGroupByIdProduct((int) $idProduct, $context));
+        $productTaxCalculator = $tax_manager->getTaxCalculator();
 
         // Add Tax
-        if ($use_tax) {
-            $price = $product_tax_calculator->addTaxes((float) $price);
+        if ($useTax) {
+            $price = $productTaxCalculator->addTaxes((float) $price);
         }
 
         // Eco Tax
@@ -455,10 +455,10 @@ class SpecificPricesService implements ShopContentServiceInterface
                 $ecotax = $result['attribute_ecotax'];
             }
 
-            if ($id_currency) {
-                $ecotax = \Tools::convertPrice($ecotax, $id_currency);
+            if ($idCurrency) {
+                $ecotax = \Tools::convertPrice($ecotax, $idCurrency);
             }
-            if ($use_tax) {
+            if ($useTax) {
                 static $psEcotaxTaxRulesGroupId = null;
                 if ($psEcotaxTaxRulesGroupId === null) {
                     $psEcotaxTaxRulesGroupId = (int) \Configuration::get('PS_ECOTAX_TAX_RULES_GROUP_ID');
@@ -468,56 +468,56 @@ class SpecificPricesService implements ShopContentServiceInterface
                     $address,
                     $psEcotaxTaxRulesGroupId
                 );
-                $ecotax_tax_calculator = $tax_manager->getTaxCalculator();
-                $price += $ecotax_tax_calculator->addTaxes($ecotax);
+                $ecotaxTaxCalculator = $tax_manager->getTaxCalculator();
+                $price += $ecotaxTaxCalculator->addTaxes($ecotax);
             } else {
                 $price += $ecotax;
             }
         }
 
         // Reduction
-        $specific_price_reduction = 0;
-        if (($only_reduc || $use_reduc) && $specific_price) {
-            if ($specific_price['reduction_type'] == 'amount') {
-                $reduction_amount = $specific_price['reduction'];
+        $specificPriceReduction = 0;
+        if (($onlyReduc || $useReduc) && $specificPrice) {
+            if ($specificPrice['reduction_type'] == 'amount') {
+                $reductionAmount = $specificPrice['reduction'];
 
-                if (!$specific_price['id_currency']) {
-                    $reduction_amount = \Tools::convertPrice($reduction_amount, $id_currency);
+                if (!$specificPrice['id_currency']) {
+                    $reductionAmount = \Tools::convertPrice($reductionAmount, $idCurrency);
                 }
 
-                $specific_price_reduction = $reduction_amount;
+                $specificPriceReduction = $reductionAmount;
 
                 // Adjust taxes if required
 
-                if (!$use_tax && $specific_price['reduction_tax']) {
-                    $specific_price_reduction = $product_tax_calculator->removeTaxes($specific_price_reduction);
+                if (!$useTax && $specificPrice['reduction_tax']) {
+                    $specificPriceReduction = $productTaxCalculator->removeTaxes($specificPriceReduction);
                 }
-                if ($use_tax && !$specific_price['reduction_tax']) {
-                    $specific_price_reduction = $product_tax_calculator->addTaxes($specific_price_reduction);
+                if ($useTax && !$specificPrice['reduction_tax']) {
+                    $specificPriceReduction = $productTaxCalculator->addTaxes($specificPriceReduction);
                 }
             } else {
-                $specific_price_reduction = $price * $specific_price['reduction'];
+                $specificPriceReduction = $price * $specificPrice['reduction'];
             }
         }
 
-        if ($use_reduc) {
-            $price -= $specific_price_reduction;
+        if ($useReduc) {
+            $price -= $specificPriceReduction;
         }
 
         // Group reduction
-        if ($use_group_reduction) {
-            $reduction_from_category = \GroupReduction::getValueForProduct($id_product, $id_group);
-            if ($reduction_from_category !== false) {
-                $group_reduction = $price * (float) $reduction_from_category;
+        if ($useGroupReduction) {
+            $reductionFromCategory = \GroupReduction::getValueForProduct($idProduct, $idGroup);
+            if ($reductionFromCategory !== false) {
+                $groupReduction = $price * (float) $reductionFromCategory;
             } else { // apply group reduction if there is no group reduction for this category
-                $group_reduction = (($reduc = \Group::getReductionByIdGroup($id_group)) != 0) ? ($price * $reduc / 100) : 0;
+                $groupReduction = (($reduc = \Group::getReductionByIdGroup($idGroup)) != 0) ? ($price * $reduc / 100) : 0;
             }
 
-            $price -= $group_reduction;
+            $price -= $groupReduction;
         }
 
-        if ($only_reduc) {
-            return \Tools::ps_round($specific_price_reduction, $decimals);
+        if ($onlyReduc) {
+            return \Tools::ps_round($specificPriceReduction, $decimals);
         }
 
         $price = \Tools::ps_round((float) $price, $decimals);
