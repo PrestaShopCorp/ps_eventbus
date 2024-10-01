@@ -53,7 +53,7 @@ class CategoriesService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castCategories($result, $langIso);
+        $this->castCategories($result);
 
         return array_map(function ($item) {
             return [
@@ -80,7 +80,7 @@ class CategoriesService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castCategories($result, $langIso);
+        $this->castCategories($result);
 
         return array_map(function ($item) {
             return [
@@ -163,11 +163,10 @@ class CategoriesService implements ShopContentServiceInterface
 
     /**
      * @param array<mixed> $categories
-     * @param string $langIso
      *
      * @return void
      */
-    private function castCategories(&$categories, $langIso)
+    private function castCategories(&$categories)
     {
         foreach ($categories as &$category) {
             $category['id_category'] = (int) $category['id_category'];

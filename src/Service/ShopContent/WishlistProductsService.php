@@ -53,7 +53,7 @@ class WishlistProductsService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castWishlistProducts($result, $langIso);
+        $this->castWishlistProducts($result);
 
         return array_map(function ($item) {
             return [
@@ -80,7 +80,7 @@ class WishlistProductsService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castWishlistProducts($result, $langIso);
+        $this->castWishlistProducts($result);
 
         return array_map(function ($item) {
             return [
@@ -105,11 +105,10 @@ class WishlistProductsService implements ShopContentServiceInterface
 
     /**
      * @param array<mixed> $wishlistProducts
-     * @param string $langIso
      *
      * @return void
      */
-    private function castWishlistProducts(&$wishlistProducts, $langIso)
+    private function castWishlistProducts(&$wishlistProducts)
     {
         foreach ($wishlistProducts as &$wishlistProduct) {
             $wishlistProduct['id_wishlist_product'] = (int) $wishlistProduct['id_wishlist_product'];

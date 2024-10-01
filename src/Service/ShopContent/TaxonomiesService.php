@@ -21,20 +21,20 @@
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Repository\NewRepository\StockMvtRepository;
+use PrestaShop\Module\PsEventbus\Repository\NewRepository\TaxonomyRepository;
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class StockMvtsService implements ShopContentServiceInterface
+class TaxonomiesService implements ShopContentServiceInterface
 {
-    /** @var StockMvtRepository */
-    private $stockMvtRepository;
+    /** @var TaxonomyRepository */
+    private $taxonomyRepository;
 
-    public function __construct(StockMvtRepository $stockMvtRepository)
+    public function __construct(TaxonomyRepository $taxonomyRepository)
     {
-        $this->stockMvtRepository = $stockMvtRepository;
+        $this->taxonomyRepository = $taxonomyRepository;
     }
 
     /**
@@ -47,18 +47,18 @@ class StockMvtsService implements ShopContentServiceInterface
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $result = $this->stockMvtRepository->retrieveContentsForFull($offset, $limit, $langIso, $debug);
+        $result = $this->taxonomyRepository->retrieveContentsForFull($offset, $limit, $langIso, $debug);
 
         if (empty($result)) {
             return [];
         }
 
-        $this->castStockMvts($result);
+        $this->castTaxonomies($result);
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_stock_mvt'],
-                'collection' => Config::COLLECTION_STOCK_MVTS,
+                'id' => $item['taxonomy_id'],
+                'collection' => Config::COLLECTION_TAXONOMIES,
                 'properties' => $item,
             ];
         }, $result);
@@ -74,18 +74,18 @@ class StockMvtsService implements ShopContentServiceInterface
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $result = $this->stockMvtRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug);
+        $result = $this->taxonomyRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug);
 
         if (empty($result)) {
             return [];
         }
 
-        $this->castStockMvts($result);
+        $this->castTaxonomies($result);
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_stock_mvt'],
-                'collection' => Config::COLLECTION_STOCK_MVTS,
+                'id' => $item['taxonomy_id'],
+                'collection' => Config::COLLECTION_TAXONOMIES,
                 'properties' => $item,
             ];
         }, $result);
@@ -100,35 +100,18 @@ class StockMvtsService implements ShopContentServiceInterface
      */
     public function getFullSyncContentLeft($offset, $limit, $langIso)
     {
-        return $this->stockMvtRepository->countFullSyncContentLeft($offset, $limit, $langIso);
+        return $this->taxonomyRepository->countFullSyncContentLeft($offset, $limit, $langIso);
     }
 
     /**
-     * @param array<mixed> $stockMvts
+     * @param array<mixed> $taxonomies
      *
      * @return void
      */
-    private function castStockMvts(&$stockMvts)
+    private function castTaxonomies(&$taxonomies)
     {
-        foreach ($stockMvts as &$stockMvt) {
-            $date = $stockMvt['date_add'];
-
-            $stockMvt['id_stock_mvt'] = (int) $stockMvt['id_stock_mvt'];
-            $stockMvt['id_stock'] = (int) $stockMvt['id_stock'];
-            $stockMvt['id_order'] = (int) $stockMvt['id_order'];
-            $stockMvt['id_supply_order'] = (int) $stockMvt['id_supply_order'];
-            $stockMvt['id_stock_mvt_reason'] = (int) $stockMvt['id_stock_mvt_reason'];
-            $stockMvt['id_lang'] = (int) $stockMvt['id_lang'];
-            $stockMvt['id_employee'] = (int) $stockMvt['id_employee'];
-            $stockMvt['physical_quantity'] = (int) $stockMvt['physical_quantity'];
-            $stockMvt['date_add'] = $date;
-            $stockMvt['sign'] = (int) $stockMvt['sign'];
-            $stockMvt['price_te'] = (float) $stockMvt['price_te'];
-            $stockMvt['last_wa'] = (float) $stockMvt['last_wa'];
-            $stockMvt['current_wa'] = (float) $stockMvt['current_wa'];
-            $stockMvt['referer'] = (int) $stockMvt['referer'];
-            $stockMvt['deleted'] = (bool) $stockMvt['deleted'];
-            $stockMvt['created_at'] = $date;
+        foreach ($taxonomies as &$taxonomy) {
+            $googleTaxonomy['taxonomy_id'] = "{$taxonomy['id_category']}-{$taxonomy['id_category']}";
         }
     }
 }

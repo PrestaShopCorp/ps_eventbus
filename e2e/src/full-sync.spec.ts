@@ -1,7 +1,7 @@
 import testConfig from "./helpers/test.config";
 import * as matchers from "jest-extended";
 import { dumpUploadData, logAxiosError } from "./helpers/log-helper";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { doFullSync, probe, PsEventbusSyncUpload } from "./helpers/mock-probe";
 import { lastValueFrom, toArray, withLatestFrom } from "rxjs";
 import {
@@ -13,9 +13,6 @@ import {
 import { ShopContent, shopContentList } from "./helpers/shop-contents";
 
 expect.extend(matchers);
-
-// these ShopContent will be excluded from the following test suite
-const EXCLUDED_API: ShopContent[] = ["taxonomies" as ShopContent];
 
 // these fields change from test run to test run, so we replace them with a matcher to only ensure the type and format are correct
 const isDateString = (val) =>
@@ -44,11 +41,6 @@ const specialFieldAssert: { [index: string]: (val) => void } = {
 describe("Full Sync", () => {
   let generatedNumber = 0;
 
-  // gérer les cas ou un shopContent n'existe pas (pas de fixture du coup)
-  const shopContents: ShopContent[] = shopContentList.filter(
-    (it) => !EXCLUDED_API.includes(it),
-  );
-
   let jobId: string;
 
   beforeEach(() => {
@@ -56,40 +48,7 @@ describe("Full Sync", () => {
     jobId = `valid-job-full-${generatedNumber}`;
   });
 
-  // TODO : some versions of prestashop include ps_facebook out of the box, this test can't reliably be run for all versions
-  describe.skip("taxonomies", () => {
-    const shoContent = "taxonomies";
-
-    // TODO : apiGoogleTaxonomies requires an additional module to be present : devise a specific test setup for this endpoint
-    it.skip(`${shoContent} should accept full sync`, async () => {});
-
-    it(`${shoContent} should reject full sync when ps_facebook is not installed`, async () => {
-      // arrange
-      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&is_e2e=0&shop_content=${shoContent}&limit=5&full=1&job_id=${jobId}`;
-
-      const callId = { call_id: Math.random().toString(36).substring(2, 11) };
-
-      // act
-      const response = await axios
-        .post(url, callId, {
-          headers: {
-            Host: testConfig.prestaShopHostHeader,
-            "Content-Type": "application/x-www-form-urlencoded", // for compat PHP 5.6
-          },
-        })
-        .catch((err) => {
-          expect(err).toBeInstanceOf(AxiosError);
-          return err.response;
-        });
-
-      // assert
-      expect(response.status).toEqual(456);
-      // expect some explanation to be given to the user
-      expect(response.statusText).toMatch(/[Ff]acebook/);
-    });
-  });
-
-  describe.each(shopContents)("%s", (shopContent) => {
+  describe.each(shopContentList)("%s", (shopContent) => {
     it(`${shopContent} should accept full sync`, async () => {
       // arrange
       const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront&is_e2e=0&shop_content=${shopContent}&limit=5&full=1&job_id=${jobId}`;

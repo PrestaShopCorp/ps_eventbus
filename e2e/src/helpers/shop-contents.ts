@@ -40,6 +40,7 @@ export const shopContentMapping = {
   translations: "translations",
   wishlists: "wishlists",
   wishlist_products: "wishlist-products",
+  taxonomies: "taxonomies",
 } as const;
 
 type ShopContentMapping = typeof shopContentMapping;
