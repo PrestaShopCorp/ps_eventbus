@@ -24,79 +24,49 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class CountryRepository
+class CountryRepository extends AbstractRepository
 {
-    /**
-     * @var \Db
-     */
-    private $db;
-
-    /**
-     * @var \Context
-     */
-    private $context;
+    const TABLE_NAME = 'country';
 
     /**
      * @var array<mixed>
      */
     private $countryIsoCodeCache = [];
 
-    public function __construct(\Context $context)
-    {
-        $this->db = \Db::getInstance();
-        $this->context = $context;
-    }
-
-    /**
-     * @return \DbQuery
-     */
-    private function getBaseQuery()
-    {
-        if ($this->context->shop == null) {
-            throw new \PrestaShopException('No shop context');
-        }
-
-        if ($this->context->language == null) {
-            throw new \PrestaShopException('No language context');
-        }
-
-        $query = new \DbQuery();
-
-        $query->from('country', 'c')
-            ->innerJoin('country_shop', 'cs', 'cs.id_country = c.id_country')
-            ->innerJoin('country_lang', 'cl', 'cl.id_country = c.id_country')
-            ->where('cs.id_shop = ' . (int) $this->context->shop->id)
-            ->where('cl.id_lang = ' . (int) $this->context->language->id);
-
-        return $query;
-    }
-
     /**
      * @param int $zoneId
      * @param bool $active
      *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
     public function getCountyIsoCodesByZoneId($zoneId, $active)
     {
         $cacheKey = $zoneId . '-' . (int) $active;
+        $isoCodes = [];
 
         if (!isset($this->countryIsoCodeCache[$cacheKey])) {
-            $query = $this->getBaseQuery();
+            $this->generateMinimalQuery(self::TABLE_NAME, 'c');
+        
+            $this->query
+                ->innerJoin('country_shop', 'cs', 'cs.id_country = c.id_country')
+                ->innerJoin('country_lang', 'cl', 'cl.id_country = c.id_country')
+                ->where('cs.id_shop = ' . (int) parent::getShopContext()->id)
+                ->where('cl.id_lang = ' . (int) parent::getContext()->language->id)
+                ->where('id_zone = ' . (int) $zoneId)
+                ->where('active = ' . (bool) $active)
+            ;
 
-            $query->select('iso_code');
-            $query->where('id_zone = ' . (int) $zoneId);
-            $query->where('active = ' . (bool) $active);
+            $this->query->select('iso_code');
 
-            $isoCodes = [];
-            $result = $this->db->executeS($query);
-            if (is_array($result)) {
-                foreach ($result as $country) {
-                    $isoCodes[] = $country['iso_code'];
-                }
+            
+            $result = $this->runQuery(false);
+
+            foreach ($result as $country) {
+                $isoCodes[] = $country['iso_code'];
             }
+
             $this->countryIsoCodeCache[$cacheKey] = $isoCodes;
         }
 

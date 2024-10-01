@@ -24,30 +24,19 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class ShopRepository
+class ShopRepository extends AbstractRepository
 {
-    /**
-     * @var \Db
-     */
-    private $db;
-
-    public function __construct()
-    {
-        $this->db = \Db::getInstance();
-    }
-
     /**
      * @return int
      */
     public function getMultiShopCount()
     {
-        $query = new \DbQuery();
+        $this->generateMinimalQuery('shop', 's');
 
-        $query->select('COUNT(id_shop)')
-            ->from('shop')
-            ->where('active = 1 and deleted = 0');
-
-        return (int) $this->db->getValue($query);
+        $this->query->where('s.active = 1 and s.deleted = 0');
+        $this->query->select('COUNT(s.id_shop)');
+            
+        return (int) $this->db->getValue($this->query);
     }
 
     /**
@@ -55,13 +44,12 @@ class ShopRepository
      */
     public function getCreatedAt()
     {
-        $query = new \DbQuery();
+        $this->generateMinimalQuery('configuration', 'c');
 
-        $query->select('date_add as created_at')
-          ->from('configuration')
-          ->where('name = "PS_INSTALL_VERSION"');
+        $this->query->where('c.name = "PS_INSTALL_VERSION"');
+        $this->query->select('c.date_add as created_at');
 
-        return (string) $this->db->getValue($query);
+        return (string) $this->db->getValue($this->query);
     }
 
     /**
@@ -71,12 +59,11 @@ class ShopRepository
      */
     public function getShopCountryCode()
     {
-        $query = new \DbQuery();
+        $this->generateMinimalQuery('country', 'c');
 
-        $query->select('iso_code')
-          ->from('country')
-          ->where('active = 1');
-
-        return (string) $this->db->getValue($query);
+        $this->query->where('c.active = 1');
+        $this->query->select('c.iso_code');
+    
+        return (string) $this->db->getValue($this->query);
     }
 }

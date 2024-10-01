@@ -24,36 +24,10 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class EventbusSyncRepository
+class EventbusSyncRepository extends AbstractRepository
 {
     const TYPE_SYNC_TABLE_NAME = 'eventbus_type_sync';
     const JOB_TABLE_NAME = 'eventbus_job';
-
-    /**
-     * @var \Db
-     */
-    private $db;
-    /**
-     * @var \Context
-     */
-    private $context;
-
-    /**
-     * @var int
-     */
-    private $shopId;
-
-    public function __construct(\Context $context)
-    {
-        $this->db = \Db::getInstance();
-        $this->context = $context;
-
-        if ($this->context->shop === null) {
-            throw new \PrestaShopException('No shop context');
-        }
-
-        $this->shopId = (int) $this->context->shop->id;
-    }
 
     /**
      * @param string $type
@@ -108,12 +82,12 @@ class EventbusSyncRepository
      */
     public function findJobById($jobId)
     {
-        $query = new \DbQuery();
-        $query->select('*')
-            ->from(self::JOB_TABLE_NAME)
-            ->where('job_id = "' . pSQL($jobId) . '"');
-
-        return $this->db->getRow($query);
+        $this->generateMinimalQuery(self::JOB_TABLE_NAME, 'j');
+    
+        $this->query->where('j.job_id = "' . pSQL($jobId) . '"');
+        $this->query->select('*');
+            
+        return $this->db->getRow($this->query);
     }
 
     /**
@@ -124,14 +98,17 @@ class EventbusSyncRepository
      */
     public function findTypeSync($type, $langIso = null)
     {
-        $query = new \DbQuery();
-        $query->select('*')
-            ->from(self::TYPE_SYNC_TABLE_NAME)
-            ->where('type = "' . pSQL($type) . '"')
-            ->where('lang_iso = "' . pSQL((string) $langIso) . '"')
-            ->where('id_shop = ' . $this->shopId);
+        $this->generateMinimalQuery(self::TYPE_SYNC_TABLE_NAME, 'ts');
 
-        return $this->db->getRow($query);
+        $this->query
+            ->where('ts.type = "' . pSQL($type) . '"')
+            ->where('ts.lang_iso = "' . pSQL((string) $langIso) . '"')
+            ->where('ts.id_shop = ' . parent::getShopContext()->id)
+        ;
+    
+        $this->query->select('*');
+
+        return $this->db->getRow($this->query);
     }
 
     /**
@@ -142,14 +119,16 @@ class EventbusSyncRepository
      */
     public function isFullSyncDoneForThisTypeSync($type, $langIso = null)
     {
-        $query = new \DbQuery();
+        $this->generateMinimalQuery(self::TYPE_SYNC_TABLE_NAME, 'ts');
 
-        $query->select('full_sync_finished')
-            ->from(self::TYPE_SYNC_TABLE_NAME)
+        $this->query
             ->where('type = "' . pSQL($type) . '"')
             ->where('lang_iso = "' . pSQL((string) $langIso) . '"')
-            ->where('id_shop = ' . $this->shopId);
+            ->where('id_shop = ' . parent::getShopContext()->id)
+        ;
 
-        return (bool) $this->db->getValue($query);
+        $this->query->select('full_sync_finished');
+
+        return (bool) $this->db->getValue($this->query);
     }
 }
