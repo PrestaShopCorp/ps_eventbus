@@ -67,7 +67,7 @@ class TaxeRepository extends AbstractRepository
             ;
 
             $this->query
-                ->select('rate')
+                ->select('t.rate')
                 ->select('c.iso_code as country_iso_code')
                 ->select('GROUP_CONCAT(s.iso_code SEPARATOR ",") as state_iso_code')
             ;

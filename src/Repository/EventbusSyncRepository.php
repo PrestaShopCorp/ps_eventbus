@@ -45,7 +45,7 @@ class EventbusSyncRepository extends AbstractRepository
             [
                 'type' => pSQL((string) $type),
                 'offset' => (int) $offset,
-                'id_shop' => $this->shopId,
+                'id_shop' => parent::getShopContext()->id,
                 'lang_iso' => pSQL((string) $langIso),
                 'full_sync_finished' => (int) $fullSyncFinished,
                 'last_sync_date' => pSQL($date),
@@ -82,10 +82,10 @@ class EventbusSyncRepository extends AbstractRepository
      */
     public function findJobById($jobId)
     {
-        $this->generateMinimalQuery(self::JOB_TABLE_NAME, 'j');
+        $this->generateMinimalQuery(self::JOB_TABLE_NAME, 'ej');
     
-        $this->query->where('j.job_id = "' . pSQL($jobId) . '"');
-        $this->query->select('*');
+        $this->query->where('ej.job_id = "' . pSQL($jobId) . '"');
+        $this->query->select('ej.*');
             
         return $this->db->getRow($this->query);
     }
@@ -98,15 +98,15 @@ class EventbusSyncRepository extends AbstractRepository
      */
     public function findTypeSync($type, $langIso = null)
     {
-        $this->generateMinimalQuery(self::TYPE_SYNC_TABLE_NAME, 'ts');
+        $this->generateMinimalQuery(self::TYPE_SYNC_TABLE_NAME, 'ets');
 
         $this->query
-            ->where('ts.type = "' . pSQL($type) . '"')
-            ->where('ts.lang_iso = "' . pSQL((string) $langIso) . '"')
-            ->where('ts.id_shop = ' . parent::getShopContext()->id)
+            ->where('ets.type = "' . pSQL($type) . '"')
+            ->where('ets.lang_iso = "' . pSQL((string) $langIso) . '"')
+            ->where('ets.id_shop = ' . parent::getShopContext()->id)
         ;
     
-        $this->query->select('*');
+        $this->query->select('ets.*');
 
         return $this->db->getRow($this->query);
     }
@@ -119,15 +119,15 @@ class EventbusSyncRepository extends AbstractRepository
      */
     public function isFullSyncDoneForThisTypeSync($type, $langIso = null)
     {
-        $this->generateMinimalQuery(self::TYPE_SYNC_TABLE_NAME, 'ts');
+        $this->generateMinimalQuery(self::TYPE_SYNC_TABLE_NAME, 'ets');
 
         $this->query
-            ->where('type = "' . pSQL($type) . '"')
-            ->where('lang_iso = "' . pSQL((string) $langIso) . '"')
-            ->where('id_shop = ' . parent::getShopContext()->id)
+            ->where('ets.type = "' . pSQL($type) . '"')
+            ->where('ets.lang_iso = "' . pSQL((string) $langIso) . '"')
+            ->where('ets.id_shop = ' . parent::getShopContext()->id)
         ;
 
-        $this->query->select('full_sync_finished');
+        $this->query->select('ets.full_sync_finished');
 
         return (bool) $this->db->getValue($this->query);
     }
