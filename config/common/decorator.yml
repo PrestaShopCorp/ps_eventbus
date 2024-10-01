@@ -2,8 +2,6 @@ services:
   PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator
     public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository'
 
   PrestaShop\Module\PsEventbus\Decorator\StoreDecorator:
     class: PrestaShop\Module\PsEventbus\Decorator\StoreDecorator

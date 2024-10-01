@@ -20,8 +20,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Decorator;
 
-use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
-
 // use hardcoded format to avoid problems with interface change in PHP 7.2
 const ISO8601 = 'Y-m-d\TH:i:sO';
 const DATE_FIELDS = [
@@ -42,18 +40,13 @@ if (!defined('_PS_VERSION_')) {
 class PayloadDecorator
 {
     /**
-     * @var ConfigurationRepository
-     */
-    private $configurationRepository;
-    /**
      * @var string
      */
     private $timezone;
 
-    public function __construct(ConfigurationRepository $configurationRepository)
+    public function __construct()
     {
-        $this->configurationRepository = $configurationRepository;
-        $this->timezone = (string) $this->configurationRepository->get('PS_TIMEZONE');
+        $this->timezone = (string) \Configuration::get('PS_TIMEZONE');
     }
 
     /**

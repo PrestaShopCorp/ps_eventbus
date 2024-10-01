@@ -1,8 +1,4 @@
 services:
-  PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository
-    public: true
-
   PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository:
     class: PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository
     public: true
@@ -38,4 +34,129 @@ services:
   
   PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository:
     class: PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository
+    public: true
+
+############################################################################################################
+###################################### SHOP CONTENT REPOSITORIES ###########################################
+############################################################################################################
+
+services:
+  PrestaShop\Module\PsEventbus\Repository\OrderRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\OrderRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository
+    public: true
+  
+  PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\OrderDetailRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\OrderDetailRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\CarrierRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CarrierRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\CartRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CartRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\CartProductRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CartProductRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\CartRuleRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CartRuleRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\ProductRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ProductRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\ProductBundleRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ProductBundleRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\ProductSupplierRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ProductSupplierRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\CategoryRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CategoryRepository
+    public: true
+  
+  PrestaShop\Module\PsEventbus\Repository\CustomerRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CustomerRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\CurrencyRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CurrencyRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\EmployeeRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\EmployeeRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\ImageRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ImageRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\ImageTypeRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ImageTypeRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\ModuleRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ModuleRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\WishlistRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\WishlistRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\LanguageRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\LanguageRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\ManufacturerRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ManufacturerRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\TranslationRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\TranslationRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\StockRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\StockRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\StockMvtRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\StockMvtRepository
+    public: true
+    
+  PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\TaxonomyRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\TaxonomyRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\SupplierRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\SupplierRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\StoreRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\StoreRepository
     public: true

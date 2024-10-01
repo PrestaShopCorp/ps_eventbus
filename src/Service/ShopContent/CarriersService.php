@@ -21,8 +21,7 @@
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
-use PrestaShop\Module\PsEventbus\Repository\NewRepository\CarrierRepository;
+use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -33,15 +32,9 @@ class CarriersService implements ShopContentServiceInterface
     /** @var CarrierRepository */
     private $carrierRepository;
 
-    /** @var ConfigurationRepository */
-    private $configurationRepository;
 
-    public function __construct(
-        CarrierRepository $carrierRepository,
-        ConfigurationRepository $configurationRepository
-    ) {
+    public function __construct(CarrierRepository $carrierRepository,) {
         $this->carrierRepository = $carrierRepository;
-        $this->configurationRepository = $configurationRepository;
     }
 
     /**
@@ -123,12 +116,12 @@ class CarriersService implements ShopContentServiceInterface
             throw new \PrestaShopException('Context is null');
         }
 
-        $currency = new \Currency((int) $this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
-        $freeShippingStartsAtPrice = (float) $this->configurationRepository->get('PS_SHIPPING_FREE_PRICE');
-        $freeShippingStartsAtWeight = (float) $this->configurationRepository->get('PS_SHIPPING_FREE_WEIGHT');
+        $currency = new \Currency((int) \Configuration::get('PS_CURRENCY_DEFAULT'));
+        $freeShippingStartsAtPrice = (float) \Configuration::get('PS_SHIPPING_FREE_PRICE');
+        $freeShippingStartsAtWeight = (float) \Configuration::get('PS_SHIPPING_FREE_WEIGHT');
 
         /** @var string $psWeightUnit */
-        $psWeightUnit = $this->configurationRepository->get('PS_WEIGHT_UNIT');
+        $psWeightUnit = \Configuration::get('PS_WEIGHT_UNIT');
 
         foreach ($carriers as &$carrier) {
             $carrierTaxesRatesGroupId = \Carrier::getIdTaxRulesGroupByIdCarrier((int) $carrier['id_carrier'], \Context::getContext());
@@ -136,7 +129,7 @@ class CarriersService implements ShopContentServiceInterface
             $shippingHandling = 0.0;
 
             if ($carrier['shipping_handling']) {
-                $shippingHandling = (float) $this->configurationRepository->get('PS_SHIPPING_HANDLING');
+                $shippingHandling = (float) \Configuration::get('PS_SHIPPING_HANDLING');
             }
 
             $carrier['id_carrier'] = (string) $carrier['id_carrier'];

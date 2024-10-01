@@ -22,7 +22,6 @@ namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator;
-use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
@@ -121,10 +120,7 @@ class SynchronizationService
         /** @var ShopContentServiceInterface $shopContentApiService */
         $shopContentApiService = $module->getService($serviceId);
 
-        /** @var ConfigurationRepository $configurationRepository */
-        $configurationRepository = $module->getService('PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository');
-
-        $timezone = (string) $configurationRepository->get('PS_TIMEZONE');
+        $timezone = (string) \Configuration::get('PS_TIMEZONE');
         $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(Config::MYSQL_DATE_FORMAT);
 
         $data = $shopContentApiService->getContentsForFull($offset, $limit, $langIso, $debug);
