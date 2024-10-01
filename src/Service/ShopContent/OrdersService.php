@@ -119,7 +119,6 @@ class OrdersService implements ShopContentServiceInterface
     /**
      * @param array<mixed> $orders
      * @param string $langIso
-     * @param bool $debug
      *
      * @return void
      */
