@@ -41,7 +41,7 @@ class SupplierRepository extends AbstractRepository implements RepositoryInterfa
         $this->generateMinimalQuery(self::TABLE_NAME, 'su');
 
         $langId = (int) \Language::getIdByIso($langIso);
-        
+
         $this->query
             ->innerJoin('supplier_lang', 'sul', 'su.id_supplier = sul.id_supplier AND sul.id_lang = ' . (int) $langId)
             ->innerJoin('supplier_shop', 'sus', 'su.id_supplier = sus.id_supplier AND sus.id_shop = ' . parent::getShopContext()->id)

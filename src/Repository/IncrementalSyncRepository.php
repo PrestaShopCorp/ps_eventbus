@@ -35,11 +35,11 @@ class IncrementalSyncRepository extends AbstractRepository
      */
     private $errorHandler;
 
-    public function __construct(\Context $context, ErrorHandlerInterface $errorHandler)
+    public function __construct(ErrorHandlerInterface $errorHandler)
     {
         $this->errorHandler = $errorHandler;
 
-        parent::__construct($context);
+        parent::__construct();
     }
 
     /**
@@ -196,7 +196,7 @@ class IncrementalSyncRepository extends AbstractRepository
 
         $this->query->where('eis.type = "' . psql($type) . '"');
         $this->query->select('COUNT(eis.type) as count');
-            
+
         return (int) $this->db->getValue($this->query);
     }
 

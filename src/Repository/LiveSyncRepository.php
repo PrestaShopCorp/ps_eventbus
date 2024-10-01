@@ -27,7 +27,7 @@ if (!defined('_PS_VERSION_')) {
 class LiveSyncRepository
 {
     const TABLE_NAME = 'eventbus_live_sync';
-    
+
     /**
      * @var \Db
      */

@@ -35,7 +35,7 @@ class ShopRepository extends AbstractRepository
 
         $this->query->where('s.active = 1 and s.deleted = 0');
         $this->query->select('COUNT(s.id_shop)');
-            
+
         return (int) $this->db->getValue($this->query);
     }
 
@@ -63,7 +63,7 @@ class ShopRepository extends AbstractRepository
 
         $this->query->where('c.active = 1');
         $this->query->select('c.iso_code');
-    
+
         return (string) $this->db->getValue($this->query);
     }
 }

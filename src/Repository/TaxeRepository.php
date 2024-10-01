@@ -48,7 +48,7 @@ class TaxeRepository extends AbstractRepository
 
         if (!isset($this->countryIsoCodeCache[$cacheKey])) {
             $this->generateMinimalQuery(self::TABLE_NAME, 't');
-            
+
             $this->query
                 ->innerJoin('tax_rule', 'tr', 'tr.id_tax = t.id_tax')
                 ->innerJoin('tax_rules_group', 'trg', 'trg.id_tax_rules_group = tr.id_tax_rules_group')
@@ -63,7 +63,7 @@ class TaxeRepository extends AbstractRepository
                 ->where('c.id_zone = ' . (int) $zoneId . ' OR s.id_zone = ' . (int) $zoneId)
                 ->where('c.iso_code IS NOT NULL')
                 ->where('trgs.id_shop = ' . parent::getShopContext()->id)
-                ->where('tl.id_lang = ' . (int) parent::getContext()->language->id)
+                ->where('tl.id_lang = ' . (int) parent::getLanguageContext()->id)
             ;
 
             $this->query
@@ -71,7 +71,7 @@ class TaxeRepository extends AbstractRepository
                 ->select('c.iso_code as country_iso_code')
                 ->select('GROUP_CONCAT(s.iso_code SEPARATOR ",") as state_iso_code')
             ;
-            
+
             $this->countryIsoCodeCache[$cacheKey] = $this->runQuery(false);
         }
 

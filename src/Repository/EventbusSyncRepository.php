@@ -83,10 +83,10 @@ class EventbusSyncRepository extends AbstractRepository
     public function findJobById($jobId)
     {
         $this->generateMinimalQuery(self::JOB_TABLE_NAME, 'ej');
-    
+
         $this->query->where('ej.job_id = "' . pSQL($jobId) . '"');
         $this->query->select('ej.*');
-            
+
         return $this->db->getRow($this->query);
     }
 
@@ -105,7 +105,7 @@ class EventbusSyncRepository extends AbstractRepository
             ->where('ets.lang_iso = "' . pSQL((string) $langIso) . '"')
             ->where('ets.id_shop = ' . parent::getShopContext()->id)
         ;
-    
+
         $this->query->select('ets.*');
 
         return $this->db->getRow($this->query);

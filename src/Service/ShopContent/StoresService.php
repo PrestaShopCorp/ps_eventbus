@@ -53,7 +53,7 @@ class StoresService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castStores($result, $langIso);
+        $this->castStores($result);
 
         return array_map(function ($item) {
             return [
@@ -80,7 +80,7 @@ class StoresService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castStores($result, $langIso);
+        $this->castStores($result);
 
         return array_map(function ($item) {
             return [
@@ -117,7 +117,7 @@ class StoresService implements ShopContentServiceInterface
             $store['active'] = (bool) $store['active'];
             $store['created_at'] = (string) $store['created_at'];
             $store['updated_at'] = (string) $store['updated_at'];
-                
+
             // https://github.com/PrestaShop/PrestaShop/commit/7dda2be62d8bd606edc269fa051c36ea68f81682#diff-e98d435095567c145b49744715fd575eaab7050328c211b33aa9a37158421ff4R2004
             if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
                 $store['id_lang'] = (int) $store['id_lang'];

@@ -48,19 +48,18 @@ class CountryRepository extends AbstractRepository
 
         if (!isset($this->countryIsoCodeCache[$cacheKey])) {
             $this->generateMinimalQuery(self::TABLE_NAME, 'c');
-        
+
             $this->query
                 ->innerJoin('country_shop', 'cs', 'cs.id_country = c.id_country')
                 ->innerJoin('country_lang', 'cl', 'cl.id_country = c.id_country')
                 ->where('cs.id_shop = ' . (int) parent::getShopContext()->id)
-                ->where('cl.id_lang = ' . (int) parent::getContext()->language->id)
+                ->where('cl.id_lang = ' . (int) parent::getLanguageContext()->id)
                 ->where('id_zone = ' . (int) $zoneId)
                 ->where('active = ' . (bool) $active)
             ;
 
             $this->query->select('iso_code');
 
-            
             $result = $this->runQuery(false);
 
             foreach ($result as $country) {
