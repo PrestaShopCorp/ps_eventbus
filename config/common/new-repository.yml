@@ -106,3 +106,7 @@ services:
   PrestaShop\Module\PsEventbus\Repository\NewRepository\SpecificPriceRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\SpecificPriceRepository
     public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\TaxonomyRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\TaxonomyRepository
+    public: true

@@ -53,7 +53,7 @@ class TranslationsService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castTranslations($result, $langIso);
+        $this->castTranslations($result);
 
         return array_map(function ($item) {
             return [
@@ -80,7 +80,7 @@ class TranslationsService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castTranslations($result, $langIso);
+        $this->castTranslations($result);
 
         return array_map(function ($item) {
             return [
@@ -105,11 +105,10 @@ class TranslationsService implements ShopContentServiceInterface
 
     /**
      * @param array<mixed> $translations
-     * @param string $langIso
      *
      * @return void
      */
-    private function castTranslations(&$translations, $langIso)
+    private function castTranslations(&$translations)
     {
         foreach ($translations as &$translation) {
             $translation['id_translation'] = (int) $translation['id_translation'];

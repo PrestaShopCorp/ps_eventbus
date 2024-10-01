@@ -66,7 +66,7 @@ class OrdersService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castOrders($result, $langIso, $debug);
+        $this->castOrders($result, $langIso);
 
         return array_map(function ($item) {
             return [
@@ -93,7 +93,7 @@ class OrdersService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castOrders($result, $langIso, $debug);
+        $this->castOrders($result, $langIso);
 
         return array_map(function ($item) {
             return [
@@ -119,11 +119,10 @@ class OrdersService implements ShopContentServiceInterface
     /**
      * @param array<mixed> $orders
      * @param string $langIso
-     * @param bool $debug
      *
      * @return void
      */
-    private function castOrders(&$orders, $langIso, $debug)
+    private function castOrders(&$orders, $langIso)
     {
         foreach ($orders as &$order) {
             $order['id_order'] = (int) $order['id_order'];
@@ -135,7 +134,7 @@ class OrdersService implements ShopContentServiceInterface
             $order['refund'] = (float) $order['refund'];
             $order['refund_tax_excl'] = (float) $order['refund_tax_excl'];
             $order['new_customer'] = $order['new_customer'] == 1;
-            $order['is_paid'] = $this->castIsPaidValue($orders, $order, $langIso, $debug);
+            $order['is_paid'] = $this->castIsPaidValue($orders, $order, $langIso, false);
             $order['shipping_cost'] = (float) $order['shipping_cost'];
             $order['total_paid_tax'] = $order['total_paid_tax_incl'] - $order['total_paid_tax_excl'];
             $order['id_carrier'] = (int) $order['id_carrier'];

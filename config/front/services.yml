@@ -248,3 +248,9 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\SpecificPriceRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\ProductRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\TaxonomiesService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\TaxonomiesService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\TaxonomyRepository'

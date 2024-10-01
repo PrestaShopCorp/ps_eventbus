@@ -9,10 +9,6 @@ services:
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
 
-  PrestaShop\Module\PsEventbus\Repository\GoogleTaxonomyRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\GoogleTaxonomyRepository
-    public: true
-
   PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository:
     class: PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository
     public: true

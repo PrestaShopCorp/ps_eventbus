@@ -24,9 +24,9 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class WishlistProductRepository extends AbstractRepository implements RepositoryInterface
+class TaxonomyRepository extends AbstractRepository implements RepositoryInterface
 {
-    const TABLE_NAME = 'wishlist_product';
+    const TABLE_NAME = 'fb_category_match';
 
     /**
      * @param string $langIso
@@ -38,16 +38,14 @@ class WishlistProductRepository extends AbstractRepository implements Repository
      */
     public function generateFullQuery($langIso, $withSelecParameters)
     {
-        $this->generateMinimalQuery(self::TABLE_NAME, 'wp');
+        $this->generateMinimalQuery(self::TABLE_NAME, 'fbcm');
+
+        $this->query->where('fbcm.id_shop = ' . (int) parent::getShopContext()->id);
 
         if ($withSelecParameters) {
             $this->query
-                ->select('wp.id_wishlist_product')
-                ->select('wp.id_wishlist')
-                ->select('wp.id_product')
-                ->select('wp.id_product_attribute')
-                ->select('wp.quantity')
-                ->select('wp.priority')
+                ->select('fbcm.id_category')
+                ->select('fbcm.google_category_id')
             ;
         }
     }
@@ -65,8 +63,8 @@ class WishlistProductRepository extends AbstractRepository implements Repository
      */
     public function retrieveContentsForFull($offset, $limit, $langIso, $debug)
     {
-        // need this module for this table : https://addons.prestashop.com/en/undownloadable/9131-wishlist-block.html
-        if (empty($this->checkIfPsWishlistIsInstalled())) {
+        // need this module for this table : https://addons.prestashop.com/en/products-on-facebook-social-networks/50291-prestashop-social-with-facebook-instagram.html
+        if (empty($this->checkIfPsFacebookIsInstalled())) {
             return [];
         }
 
@@ -93,7 +91,7 @@ class WishlistProductRepository extends AbstractRepository implements Repository
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('wp.id_wishlist IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('fbcm.id_category IN(' . implode(',', array_map('intval', $contentIds)) . ')')
             ->limit($limit)
         ;
 
@@ -112,8 +110,8 @@ class WishlistProductRepository extends AbstractRepository implements Repository
      */
     public function countFullSyncContentLeft($offset, $limit, $langIso)
     {
-        // need this module for this table : https://addons.prestashop.com/en/undownloadable/9131-wishlist-block.html
-        if (empty($this->checkIfPsWishlistIsInstalled())) {
+        // need this module for this table : https://addons.prestashop.com/en/products-on-facebook-social-networks/50291-prestashop-social-with-facebook-instagram.html
+        if (empty($this->checkIfPsFacebookIsInstalled())) {
             return 0;
         }
 
@@ -132,9 +130,9 @@ class WishlistProductRepository extends AbstractRepository implements Repository
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    private function checkIfPsWishlistIsInstalled()
+    private function checkIfPsFacebookIsInstalled()
     {
-        $moduleisInstalledQuery = 'SELECT * FROM information_schema.tables WHERE table_name LIKE \'%wishlist\' LIMIT 1;';
+        $moduleisInstalledQuery = 'SELECT * FROM information_schema.tables WHERE table_name LIKE \'%fb_category_match\' LIMIT 1;';
 
         return $this->db->executeS($moduleisInstalledQuery);
     }

@@ -53,7 +53,7 @@ class ProductSuppliersService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castProductsSuppliers($result, $langIso);
+        $this->castProductsSuppliers($result);
 
         return array_map(function ($item) {
             return [
@@ -80,7 +80,7 @@ class ProductSuppliersService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castProductsSuppliers($result, $langIso);
+        $this->castProductsSuppliers($result);
 
         return array_map(function ($item) {
             return [
@@ -105,11 +105,10 @@ class ProductSuppliersService implements ShopContentServiceInterface
 
     /**
      * @param array<mixed> $productSuppliers
-     * @param string $langIso
      *
      * @return void
      */
-    private function castProductsSuppliers(&$productSuppliers, $langIso)
+    private function castProductsSuppliers(&$productSuppliers)
     {
         foreach ($productSuppliers as &$productSupplier) {
             $productSupplier['id_product_supplier'] = (int) $productSupplier['id_product_supplier'];
