@@ -21,20 +21,20 @@
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Repository\NewRepository\SupplierRepository;
+use PrestaShop\Module\PsEventbus\Repository\NewRepository\StoreRepository;
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class SuppliersService implements ShopContentServiceInterface
+class StoresService implements ShopContentServiceInterface
 {
-    /** @var SupplierRepository */
-    private $supplierRepository;
+    /** @var StoreRepository */
+    private $storeRepository;
 
-    public function __construct(SupplierRepository $supplierRepository)
+    public function __construct(StoreRepository $storeRepository)
     {
-        $this->supplierRepository = $supplierRepository;
+        $this->storeRepository = $storeRepository;
     }
 
     /**
@@ -47,18 +47,18 @@ class SuppliersService implements ShopContentServiceInterface
      */
     public function getContentsForFull($offset, $limit, $langIso, $debug)
     {
-        $result = $this->supplierRepository->retrieveContentsForFull($offset, $limit, $langIso, $debug);
+        $result = $this->storeRepository->retrieveContentsForFull($offset, $limit, $langIso, $debug);
 
         if (empty($result)) {
             return [];
         }
 
-        $this->castSuppliers($result);
+        $this->castStores($result, $langIso);
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_supplier'],
-                'collection' => Config::COLLECTION_SUPPLIERS,
+                'id' => $item['id_store'],
+                'collection' => Config::COLLECTION_STORES,
                 'properties' => $item,
             ];
         }, $result);
@@ -74,18 +74,18 @@ class SuppliersService implements ShopContentServiceInterface
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
     {
-        $result = $this->supplierRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug);
+        $result = $this->storeRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug);
 
         if (empty($result)) {
             return [];
         }
 
-        $this->castSuppliers($result);
+        $this->castStores($result, $langIso);
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_supplier'],
-                'collection' => Config::COLLECTION_SUPPLIERS,
+                'id' => $item['id_store'],
+                'collection' => Config::COLLECTION_STORES,
                 'properties' => $item,
             ];
         }, $result);
@@ -100,23 +100,29 @@ class SuppliersService implements ShopContentServiceInterface
      */
     public function getFullSyncContentLeft($offset, $limit, $langIso)
     {
-        return $this->supplierRepository->countFullSyncContentLeft($offset, $limit, $langIso);
+        return $this->storeRepository->countFullSyncContentLeft($offset, $limit, $langIso);
     }
 
     /**
-     * @param array<mixed> $suppliers
+     * @param array<mixed> $stores
      *
      * @return void
      */
-    private function castSuppliers(&$suppliers)
+    private function castStores(&$stores)
     {
-        foreach ($suppliers as &$supplier) {
-            $supplier['id_supplier'] = (int) $supplier['id_supplier'];
-            $supplier['active'] = (bool) $supplier['active'];
-            $supplier['id_lang'] = (int) $supplier['id_lang'];
-            $supplier['id_shop'] = (int) $supplier['id_shop'];
-            $supplier['created_at'] = (string) $supplier['created_at'];
-            $supplier['updated_at'] = (string) $supplier['updated_at'];
+        foreach ($stores as &$store) {
+            $store['id_store'] = (int) $store['id_store'];
+            $store['id_country'] = (int) $store['id_country'];
+            $store['id_state'] = (int) $store['id_state'];
+            $store['active'] = (bool) $store['active'];
+            $store['created_at'] = (string) $store['created_at'];
+            $store['updated_at'] = (string) $store['updated_at'];
+                
+            // https://github.com/PrestaShop/PrestaShop/commit/7dda2be62d8bd606edc269fa051c36ea68f81682#diff-e98d435095567c145b49744715fd575eaab7050328c211b33aa9a37158421ff4R2004
+            if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
+                $store['id_lang'] = (int) $store['id_lang'];
+                $store['id_shop'] = (int) $store['id_shop'];
+            }
         }
     }
 }

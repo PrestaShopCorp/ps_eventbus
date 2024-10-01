@@ -260,3 +260,9 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\SupplierRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\StoresService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\StoresService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\StoreRepository'

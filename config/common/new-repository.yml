@@ -114,3 +114,7 @@ services:
   PrestaShop\Module\PsEventbus\Repository\NewRepository\SupplierRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\SupplierRepository
     public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\StoreRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\StoreRepository
+    public: true

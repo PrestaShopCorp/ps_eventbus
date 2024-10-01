@@ -35,12 +35,6 @@ services:
     public: true
     arguments:
       - '@=service("prestashop.adapter.legacy.context").getContext()'
-
-  PrestaShop\Module\PsEventbus\Repository\StoreRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\StoreRepository
-    public: true
-    arguments:
-      - '@=service("prestashop.adapter.legacy.context").getContext()'
   
   PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository:
     class: PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository
