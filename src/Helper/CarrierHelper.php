@@ -29,6 +29,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+// TODO: reorganise this code to services
 class CarrierHelper
 {
     /**
