@@ -3,9 +3,7 @@ import R from "ramda";
 // TEMPORARY DISABLED, WAIT ADD ALL SHOP CONTENT
 // AFTER UNCOMMENT THIS, CHANGE ALL "as ShopContent"CAST IN FULLSYNC TEST
 /* export const shopContentMapping = {
-  'taxonomies': 'taxonomies',
   'stores': 'stores',
-  'suppliers': 'suppliers',
 } as const; */
 
 export const shopContentMapping = {
@@ -36,11 +34,12 @@ export const shopContentMapping = {
   specific_prices: "specific-prices",
   stocks: "stocks",
   stock_mvts: "stock-mvts",
+  suppliers: "suppliers",
+  taxonomies: "taxonomies",
   themes: "themes",
   translations: "translations",
   wishlists: "wishlists",
   wishlist_products: "wishlist-products",
-  taxonomies: "taxonomies",
 } as const;
 
 type ShopContentMapping = typeof shopContentMapping;

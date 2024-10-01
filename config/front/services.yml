@@ -254,3 +254,9 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\TaxonomyRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\SuppliersService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\SuppliersService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\NewRepository\SupplierRepository'

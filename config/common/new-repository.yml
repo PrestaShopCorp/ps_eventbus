@@ -110,3 +110,7 @@ services:
   PrestaShop\Module\PsEventbus\Repository\NewRepository\TaxonomyRepository:
     class: PrestaShop\Module\PsEventbus\Repository\NewRepository\TaxonomyRepository
     public: true
+
+  PrestaShop\Module\PsEventbus\Repository\NewRepository\SupplierRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\NewRepository\SupplierRepository
+    public: true
