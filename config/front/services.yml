@@ -3,7 +3,6 @@ imports:
   - { resource: ../common/common.yml }
   - { resource: ../common/decorator.yml }
   - { resource: ../common/repository.yml }
-  - { resource: ../common/new-repository.yml }
 
 services:
   PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService:

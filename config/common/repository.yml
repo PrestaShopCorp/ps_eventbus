@@ -9,7 +9,6 @@ services:
     class: PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository
     public: true
     arguments:
-      - '@=service("prestashop.adapter.legacy.context").getContext()'
       - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
 
   PrestaShop\Module\PsEventbus\Repository\ShopRepository:
@@ -40,7 +39,6 @@ services:
 ###################################### SHOP CONTENT REPOSITORIES ###########################################
 ############################################################################################################
 
-services:
   PrestaShop\Module\PsEventbus\Repository\OrderRepository:
     class: PrestaShop\Module\PsEventbus\Repository\OrderRepository
     public: true
