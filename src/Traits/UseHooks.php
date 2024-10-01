@@ -21,6 +21,8 @@
 namespace PrestaShop\Module\PsEventbus\Traits;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository;
+use PrestaShop\Module\PsEventbus\Repository\StockRepository;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
 use Product;
 
@@ -460,27 +462,40 @@ trait UseHooks
      */
     public function hookActionObjectProductAddAfter($parameters)
     {
-        /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
-
         /** @var \Product $product */
         $product = $parameters['object'];
 
-        if (isset($product->id)) {
-            $synchronizationService->sendLiveSync('products', $product->id, 'upsert');
-            $synchronizationService->sendLiveSync('custom-product-carriers', $product->id, 'upsert');
-            $synchronizationService->sendLiveSync('stocks', $product->id, 'upsert');
-
-            // TODO: Need to insertContentIntoIncremental custom-product-carriers and stocks
-
-            $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_PRODUCTS => $product->id],
-                Config::INCREMENTAL_TYPE_ADD,
-                date(DATE_ATOM),
-                $this->shopId,
-                true
-            );
+        if (!isset($product->id)) {
+            return;
         }
+
+        /** @var SynchronizationService $synchronizationService * */
+        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+
+        /** @var ProductCarrierRepository $productCarrierRepository */
+        $productCarrierRepository = $this->getService('PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository');
+        $productCarriers = $productCarrierRepository->getProductCarrierIdsByCarrierId($product->id);
+        $productCarrierIds = array_column($productCarriers, 'id_carrier_reference');
+
+        /** @var StockRepository $stockRepository */
+        $stockRepository = $this->getService('PrestaShop\Module\PsEventbus\Repository\StockRepository');
+        $stockId = $stockRepository->getStockIdByProductId($product->id);
+
+        $synchronizationService->sendLiveSync('products', $product->id, 'upsert');
+        $synchronizationService->sendLiveSync('custom-product-carriers', $productCarrierIds, 'upsert');
+        $synchronizationService->sendLiveSync('stocks', $stockId, 'upsert');
+
+        $synchronizationService->insertContentIntoIncremental(
+            [
+                Config::COLLECTION_PRODUCTS => $product->id,
+                Config::COLLECTION_PRODUCT_CARRIERS => array_column($productCarrierIds, 'id_carrier_reference'),
+                Config::COLLECTION_STOCKS => $stockId,
+            ],
+            Config::INCREMENTAL_TYPE_ADD,
+            date(DATE_ATOM),
+            $this->shopId,
+            true
+        );
     }
 
     /**
@@ -490,27 +505,40 @@ trait UseHooks
      */
     public function hookActionObjectProductUpdateAfter($parameters)
     {
-        /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
-
         /** @var \Product $product */
         $product = $parameters['object'];
 
-        if (isset($product->id)) {
-            $synchronizationService->sendLiveSync('products', $product->id, 'upsert');
-            $synchronizationService->sendLiveSync('custom-product-carriers', $product->id, 'upsert');
-            $synchronizationService->sendLiveSync('stocks', $product->id, 'upsert');
-
-            // TODO: Need to insertContentIntoIncremental custom-product-carriers and stocks
-
-            $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_PRODUCTS => $product->id],
-                Config::INCREMENTAL_TYPE_UPDATE,
-                date(DATE_ATOM),
-                $this->shopId,
-                true
-            );
+        if (!isset($product->id)) {
+            return;
         }
+
+        /** @var SynchronizationService $synchronizationService * */
+        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+
+        /** @var ProductCarrierRepository $productCarrierRepository */
+        $productCarrierRepository = $this->getService('PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository');
+        $productCarriers = $productCarrierRepository->getProductCarrierIdsByCarrierId($product->id);
+        $productCarrierIds = array_column($productCarriers, 'id_carrier_reference');
+
+        /** @var StockRepository $stockRepository */
+        $stockRepository = $this->getService('PrestaShop\Module\PsEventbus\Repository\StockRepository');
+        $stockId = $stockRepository->getStockIdByProductId($product->id);
+
+        $synchronizationService->sendLiveSync('products', $product->id, 'upsert');
+        $synchronizationService->sendLiveSync('custom-product-carriers', $productCarrierIds, 'upsert');
+        $synchronizationService->sendLiveSync('stocks', $stockId, 'upsert');
+
+        $synchronizationService->insertContentIntoIncremental(
+            [
+                Config::COLLECTION_PRODUCTS => $product->id,
+                Config::COLLECTION_PRODUCT_CARRIERS => array_column($productCarrierIds, 'id_carrier_reference'),
+                Config::COLLECTION_STOCKS => $stockId,
+            ],
+            Config::INCREMENTAL_TYPE_UPDATE,
+            date(DATE_ATOM),
+            $this->shopId,
+            true
+        );
     }
 
     /**
@@ -1143,16 +1171,20 @@ trait UseHooks
 
         if (isset($carrier->id)) {
             $synchronizationService->sendLiveSync('carriers', $carrier->id, 'upsert');
+            $synchronizationService->sendLiveSync('carrier-details', $carrier->id, 'upsert');
+            $synchronizationService->sendLiveSync('carrier-taxes', $carrier->id, 'upsert');
+            
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_CARRIERS => $carrier->id],
+                [
+                    Config::COLLECTION_CARRIERS => $carrier->id,
+                    Config::COLLECTION_CARRIER_DETAILS => $carrier->id,
+                    Config::COLLECTION_CARRIER_TAXES => $carrier->id,
+                ],
                 Config::INCREMENTAL_TYPE_ADD,
                 date(DATE_ATOM),
                 $this->shopId,
                 false
             );
-
-            // TODO INSERT INCREMENTAL SYNC AND LIVE SYNC OF CARRIER DETAILS
-            // TODO INSERT INCREMENTAL SYNC AND LIVE SYNC OF CARRIER TAXES
         }
     }
 
@@ -1171,16 +1203,20 @@ trait UseHooks
 
         if (isset($carrier->id)) {
             $synchronizationService->sendLiveSync('carriers', $carrier->id, 'upsert');
+            $synchronizationService->sendLiveSync('carrier-details', $carrier->id, 'upsert');
+            $synchronizationService->sendLiveSync('carrier-taxes', $carrier->id, 'upsert');
+            
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_CARRIERS => $carrier->id],
+                [
+                    Config::COLLECTION_CARRIERS => $carrier->id,
+                    Config::COLLECTION_CARRIER_DETAILS => $carrier->id,
+                    Config::COLLECTION_CARRIER_TAXES => $carrier->id,
+                ],
                 Config::INCREMENTAL_TYPE_UPDATE,
                 date(DATE_ATOM),
                 $this->shopId,
                 false
             );
-
-            // TODO INSERT INCREMENTAL SYNC AND LIVE SYNC OF CARRIER DETAILS
-            // TODO INSERT INCREMENTAL SYNC AND LIVE SYNC OF CARRIER TAXES
         }
     }
 
@@ -1198,16 +1234,20 @@ trait UseHooks
 
         if (isset($carrier->id)) {
             $synchronizationService->sendLiveSync('carriers', $carrier->id, 'delete');
+            $synchronizationService->sendLiveSync('carrier-details', $carrier->id, 'delete');
+            $synchronizationService->sendLiveSync('carrier-taxes', $carrier->id, 'delete');
+            
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_CARRIERS => $carrier->id],
+                [
+                    Config::COLLECTION_CARRIERS => $carrier->id,
+                    Config::COLLECTION_CARRIER_DETAILS => $carrier->id,
+                    Config::COLLECTION_CARRIER_TAXES => $carrier->id,
+                ],
                 Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
                 $this->shopId,
                 false
             );
-
-            // TODO INSERT INCREMENTAL SYNC AND LIVE SYNC OF CARRIER DETAILS
-            // TODO INSERT INCREMENTAL SYNC AND LIVE SYNC OF CARRIER TAXES
         }
     }
 

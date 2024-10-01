@@ -20,6 +20,9 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use PrestaShopException;
+use PrestaShopDatabaseException;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -109,5 +112,24 @@ class ProductCarrierRepository extends AbstractRepository implements RepositoryI
         $result = $this->runQuery(false);
 
         return $result[0]['count'];
+    }
+
+    /**
+     * @param int $idProduct
+     * @return array<mixed>
+     *
+     * @throws PrestaShopException 
+     * @throws PrestaShopDatabaseException 
+     */
+    public function getProductCarrierIdsByCarrierId($idProduct)
+    {
+        $this->generateMinimalQuery(self::TABLE_NAME, 'pc');
+
+        $this->query
+            ->where('pc.id_product = ' . (int) $idProduct)
+            ->where('pc.id_shop = ' . parent::getShopContext()->id)
+        ;
+
+        return $this->runQuery(false);
     }
 }

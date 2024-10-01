@@ -229,10 +229,6 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
         }
 
         return $resultArray;
-
-        /* return array_reduce($attributes, function ($key, $attribute) {
-            return $attribute[$attribute['id_product_attribute']][$attribute['name']] = $attribute['value'];
-        }); */
     }
 
     /**
@@ -270,10 +266,6 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
         }
 
         return $resultArray;
-
-        /* return array_reduce($features, function ($key, $feature) {
-            return $feature[$feature['id_product']][$feature['name']] = $feature['value'];
-        }); */
     }
 
     /**

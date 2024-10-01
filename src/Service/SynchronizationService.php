@@ -215,12 +215,12 @@ class SynchronizationService
      * disables liveSync
      *
      * @param string $shopContent
-     * @param int $shopContentId
+     * @param int $shopContentIds
      * @param string $action
      *
      * @return void
      */
-    public function sendLiveSync($shopContent, $shopContentId, $action)
+    public function sendLiveSync($shopContent, $shopContentIds, $action)
     {
         if ($this->isFullSyncDone($shopContent, '')) {
             // $this->debounceLiveSync($shopContent);

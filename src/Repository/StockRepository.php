@@ -20,6 +20,9 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use PrestaShopException;
+use PrestaShopDatabaseException;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -131,5 +134,27 @@ class StockRepository extends AbstractRepository implements RepositoryInterface
         $result = $this->runQuery(false);
 
         return $result[0]['count'];
+    }
+
+    /**
+     * @param int $productId
+     *
+     * @return mixed 
+     * @throws PrestaShopException 
+     * @throws PrestaShopDatabaseException 
+     */
+    public function getStockIdByProductId($productId)
+    {
+        $this->generateMinimalQuery(self::TABLE_NAME, 'sa');
+
+        $this->query
+            ->select('sa.id_stock_available')
+            ->where('sa.id_product = ' . (int) $productId)
+            ->where('sa.id_shop = ' . (int) parent::getShopContext()->id)
+        ;
+
+        $result = $this->runQuery(false);
+
+        return $result[0]['id_stock_available'];
     }
 }
