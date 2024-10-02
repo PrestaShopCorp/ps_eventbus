@@ -21,6 +21,7 @@
 namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient;
 use PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
@@ -212,7 +213,7 @@ class SynchronizationService
     }
 
     /**
-     * disables liveSync
+     * liveSync
      *
      * @param string $shopContent
      * @param int $shopContentIds
@@ -222,8 +223,17 @@ class SynchronizationService
      */
     public function sendLiveSync($shopContent, $shopContentIds, $action)
     {
-        if ($this->isFullSyncDone($shopContent, '')) {
-            // $this->debounceLiveSync($shopContent);
+        $defaultIsoCode = $this->languageRepository->getDefaultLanguageIsoCode();
+
+        if ($this->isFullSyncDone($shopContent, $defaultIsoCode) && $this->debounceLiveSync($shopContent)) {
+            try {
+                /** @var LiveSyncApiClient $liveSyncApiClient */
+                $liveSyncApiClient = $this->module->getService('PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient');
+
+                $liveSyncApiClient->liveSync($shopContent, (int) $shopContentId, $action);
+            } catch (\Exception $e) {
+                // FIXME : report this error somehow
+            }
         }
     }
 
