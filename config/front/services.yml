@@ -16,6 +16,7 @@ services:
     class: PrestaShop\Module\PsEventbus\Service\SynchronizationService
     public: true
     arguments:
+      - '@PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient'
       - '@PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository'
