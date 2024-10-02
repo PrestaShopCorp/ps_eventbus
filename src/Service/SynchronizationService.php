@@ -37,6 +37,11 @@ if (!defined('_PS_VERSION_')) {
 class SynchronizationService
 {
     /**
+     * @var LiveSyncApiClient
+     */
+    private $liveSyncApiClient;
+
+    /**
      * @var EventbusSyncRepository
      */
     private $eventbusSyncRepository;
@@ -67,6 +72,7 @@ class SynchronizationService
     private $proxyService;
 
     public function __construct(
+        LiveSyncApiClient $liveSyncApiClient,
         EventbusSyncRepository $eventbusSyncRepository,
         IncrementalSyncRepository $incrementalSyncRepository,
         LiveSyncRepository $liveSyncRepository,
@@ -74,6 +80,7 @@ class SynchronizationService
         ProxyServiceInterface $proxyService,
         PayloadDecorator $payloadDecorator
     ) {
+        $this->liveSyncApiClient = $liveSyncApiClient;
         $this->eventbusSyncRepository = $eventbusSyncRepository;
         $this->incrementalSyncRepository = $incrementalSyncRepository;
         $this->liveSyncRepository = $liveSyncRepository;
@@ -223,14 +230,11 @@ class SynchronizationService
      */
     public function sendLiveSync($shopContent, $shopContentIds, $action)
     {
-        $defaultIsoCode = $this->languageRepository->getDefaultLanguageIsoCode();
+        $defaultIsoCode = $this->languagesService->getDefaultLanguageIsoCode();
 
         if ($this->isFullSyncDone($shopContent, $defaultIsoCode) && $this->debounceLiveSync($shopContent)) {
             try {
-                /** @var LiveSyncApiClient $liveSyncApiClient */
-                $liveSyncApiClient = $this->module->getService('PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient');
-
-                $liveSyncApiClient->liveSync($shopContent, (int) $shopContentId, $action);
+                $this->liveSyncApiClient->liveSync($shopContent, (int) $shopContentIds, $action);
             } catch (\Exception $e) {
                 // FIXME : report this error somehow
             }
