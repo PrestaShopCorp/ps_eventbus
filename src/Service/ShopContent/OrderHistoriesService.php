@@ -116,7 +116,6 @@ class OrderHistoriesService implements ShopContentServiceInterface
             $orderHistory['id_order_history'] = (int) $orderHistory['id_order_history'];
             $orderHistory['name'] = (string) $orderHistory['name'];
             $orderHistory['template'] = (string) $orderHistory['template'];
-            $orderHistory['date_add'] = $orderHistory['date_add'];
             $orderHistory['is_validated'] = (bool) $orderHistory['is_validated'];
             $orderHistory['is_delivered'] = (bool) $orderHistory['is_delivered'];
             $orderHistory['is_shipped'] = (bool) $orderHistory['is_shipped'];

@@ -128,9 +128,6 @@ class SynchronizationService
         /** @var ShopContentServiceInterface $shopContentApiService */
         $shopContentApiService = $module->getService($serviceId);
 
-        $timezone = (string) \Configuration::get('PS_TIMEZONE');
-        $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(Config::MYSQL_DATE_FORMAT);
-
         $data = $shopContentApiService->getContentsForFull($offset, $limit, $langIso, $debug);
 
         $this->payloadDecorator->convertDateFormat($data);
