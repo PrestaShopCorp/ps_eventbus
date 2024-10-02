@@ -104,7 +104,7 @@ class LiveSyncApiClient
                     'Authorization' => 'Bearer ' . $this->jwt,
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                     'Content-Type' => 'application/json',
-                ],
+                ], // TODO: @Vincent Probably need to transform snake_case to kebab-case
                 '{"shopContents": ["' . $shopContent . '"], "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}'
             )
         );

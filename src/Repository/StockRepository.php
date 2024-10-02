@@ -20,9 +20,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShopException;
-use PrestaShopDatabaseException;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -139,9 +136,10 @@ class StockRepository extends AbstractRepository implements RepositoryInterface
     /**
      * @param int $productId
      *
-     * @return mixed 
-     * @throws PrestaShopException 
-     * @throws PrestaShopDatabaseException 
+     * @return mixed
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
     public function getStockIdByProductId($productId)
     {

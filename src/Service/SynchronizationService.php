@@ -20,8 +20,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient;
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
@@ -222,27 +222,38 @@ class SynchronizationService
     /**
      * liveSync
      *
-     * @param string $shopContent
-     * @param int $shopContentIds
-     * @param string $action
+     * @param array<string, mixed> $contentTypesWithIds
+     * @param string $actionType
      *
      * @return void
      */
-    public function sendLiveSync($shopContent, $shopContentIds, $action)
+    public function sendLiveSync($contentTypesWithIds, $actionType)
     {
+        if (count($contentTypesWithIds) == 0) {
+            return;
+        }
+
         $defaultIsoCode = $this->languagesService->getDefaultLanguageIsoCode();
 
-        if ($this->isFullSyncDone($shopContent, $defaultIsoCode) && $this->debounceLiveSync($shopContent)) {
-            try {
-                $this->liveSyncApiClient->liveSync($shopContent, (int) $shopContentIds, $action);
-            } catch (\Exception $e) {
-                // FIXME : report this error somehow
+        foreach ($contentTypesWithIds as $contentType => $contentIds) {
+            if ($this->isFullSyncDone($contentType, $defaultIsoCode) && $this->debounceLiveSync($contentType)) {
+                if (!is_array($contentIds)) {
+                    $contentIds = [$contentIds];
+                }
+
+                foreach ($contentIds as $contentId) {
+                    try {
+                        $this->liveSyncApiClient->liveSync($contentType, $contentId, $actionType);
+                    } catch (\Exception $e) {
+                        // FIXME : report this error somehow
+                    }
+                }
             }
         }
     }
 
     /**
-     * @param array<string, int> $contentTypesWithIds
+     * @param array<string, mixed> $contentTypesWithIds
      * @param string $actionType
      * @param string $createdAt
      * @param int $shopId
@@ -289,9 +300,13 @@ class SynchronizationService
             $allIsoCodes = $this->languagesService->getLanguagesIsoCodes();
 
             foreach ($allIsoCodes as $langIso) {
-                foreach ($contentTypesWithIds as $contentType => $contentId) {
+                foreach ($contentTypesWithIds as $contentType => $contentIds) {
                     if ($this->isFullSyncDone($contentType, $langIso)) {
-                        array_push($contentToInsert,
+                        if (!is_array($contentIds)) {
+                            $contentIds = [$contentIds];
+                        }
+
+                        $finalContent = array_map(function ($contentId) use ($contentType, $shopId, $langIso, $actionType, $createdAt) {
                             [
                                 'type' => $contentType,
                                 'id_object' => $contentId,
@@ -299,17 +314,23 @@ class SynchronizationService
                                 'lang_iso' => $langIso,
                                 'action' => $actionType,
                                 'created_at' => $createdAt,
-                            ]
-                        );
+                            ];
+                        }, $contentIds);
+
+                        $contentToInsert = array_merge($contentToInsert, $finalContent);
                     }
                 }
             }
         } else {
             $defaultIsoCode = $this->languagesService->getDefaultLanguageIsoCode();
 
-            foreach ($contentTypesWithIds as $contentType => $contentId) {
+            foreach ($contentTypesWithIds as $contentType => $contentIds) {
                 if ($this->isFullSyncDone($contentType, $defaultIsoCode)) {
-                    array_push($contentToInsert,
+                    if (!is_array($contentIds)) {
+                        $contentIds = [$contentIds];
+                    }
+
+                    $finalContent = array_map(function ($contentId) use ($contentType, $shopId, $defaultIsoCode, $actionType, $createdAt) {
                         [
                             'type' => $contentType,
                             'id_object' => $contentId,
@@ -317,8 +338,10 @@ class SynchronizationService
                             'lang_iso' => $defaultIsoCode,
                             'action' => $actionType,
                             'created_at' => $createdAt,
-                        ]
-                    );
+                        ];
+                    }, $contentIds);
+
+                    $contentToInsert = array_merge($contentToInsert, $finalContent);
                 }
             }
         }

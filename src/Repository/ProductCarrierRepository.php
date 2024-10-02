@@ -20,9 +20,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShopException;
-use PrestaShopDatabaseException;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -116,10 +113,11 @@ class ProductCarrierRepository extends AbstractRepository implements RepositoryI
 
     /**
      * @param int $idProduct
+     *
      * @return array<mixed>
      *
-     * @throws PrestaShopException 
-     * @throws PrestaShopDatabaseException 
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
     public function getProductCarrierIdsByCarrierId($idProduct)
     {
