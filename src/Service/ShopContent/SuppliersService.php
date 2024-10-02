@@ -21,7 +21,7 @@
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Repository\NewRepository\SupplierRepository;
+use PrestaShop\Module\PsEventbus\Repository\SupplierRepository;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -53,7 +53,7 @@ class SuppliersService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castSuppliers($result, $langIso);
+        $this->castSuppliers($result);
 
         return array_map(function ($item) {
             return [
@@ -80,7 +80,7 @@ class SuppliersService implements ShopContentServiceInterface
             return [];
         }
 
-        $this->castSuppliers($result, $langIso);
+        $this->castSuppliers($result);
 
         return array_map(function ($item) {
             return [
@@ -105,11 +105,10 @@ class SuppliersService implements ShopContentServiceInterface
 
     /**
      * @param array<mixed> $suppliers
-     * @param string $langIso
      *
      * @return void
      */
-    private function castSuppliers(&$suppliers, $langIso)
+    private function castSuppliers(&$suppliers)
     {
         foreach ($suppliers as &$supplier) {
             $supplier['id_supplier'] = (int) $supplier['id_supplier'];

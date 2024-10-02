@@ -24,65 +24,21 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class TaxeRepository
+class TaxeRepository extends AbstractRepository
 {
-    /**
-     * @var \Db
-     */
-    private $db;
-
-    /**
-     * @var \Context
-     */
-    private $context;
+    const TABLE_NAME = 'tax';
 
     /**
      * @var array<mixed>
      */
     private $countryIsoCodeCache = [];
 
-    public function __construct(\Context $context)
-    {
-        $this->db = \Db::getInstance();
-        $this->context = $context;
-    }
-
-    /**
-     * @return \DbQuery
-     */
-    private function getBaseQuery()
-    {
-        if ($this->context->shop == null) {
-            throw new \PrestaShopException('No shop context');
-        }
-
-        $shopId = (int) $this->context->shop->id;
-
-        if ($this->context->language == null) {
-            throw new \PrestaShopException('No language context');
-        }
-
-        $language = (int) $this->context->language->id;
-
-        $query = new \DbQuery();
-
-        $query->from('tax', 't')
-            ->innerJoin('tax_rule', 'tr', 'tr.id_tax = t.id_tax')
-            ->innerJoin('tax_rules_group', 'trg', 'trg.id_tax_rules_group = tr.id_tax_rules_group')
-            ->innerJoin('tax_rules_group_shop', 'trgs', 'trgs.id_tax_rules_group = tr.id_tax_rules_group')
-            ->innerJoin('tax_lang', 'tl', 'tl.id_tax = t.id_tax')
-            ->where('trgs.id_shop = ' . $shopId)
-            ->where('tl.id_lang = ' . $language);
-
-        return $query;
-    }
-
     /**
      * @param int $zoneId
      * @param int $taxRulesGroupId
      * @param bool $active
      *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
@@ -91,19 +47,32 @@ class TaxeRepository
         $cacheKey = $zoneId . '-' . (int) $active;
 
         if (!isset($this->countryIsoCodeCache[$cacheKey])) {
-            $query = $this->getBaseQuery();
+            $this->generateMinimalQuery(self::TABLE_NAME, 't');
 
-            $query->select('rate, c.iso_code as country_iso_code, GROUP_CONCAT(s.iso_code SEPARATOR ",") as state_iso_code');
-            $query->leftJoin('country', 'c', 'c.id_country = tr.id_country');
-            $query->leftJoin('state', 's', 's.id_state = tr.id_state');
-            $query->where('tr.id_tax_rules_group = ' . (int) $taxRulesGroupId);
-            $query->where('c.active = ' . (bool) $active);
-            $query->where('s.active = ' . (bool) $active . ' OR s.active IS NULL');
-            $query->where('t.active = ' . (bool) $active);
-            $query->where('c.id_zone = ' . (int) $zoneId . ' OR s.id_zone = ' . (int) $zoneId);
-            $query->where('c.iso_code IS NOT NULL');
+            $this->query
+                ->innerJoin('tax_rule', 'tr', 'tr.id_tax = t.id_tax')
+                ->innerJoin('tax_rules_group', 'trg', 'trg.id_tax_rules_group = tr.id_tax_rules_group')
+                ->innerJoin('tax_rules_group_shop', 'trgs', 'trgs.id_tax_rules_group = tr.id_tax_rules_group')
+                ->innerJoin('tax_lang', 'tl', 'tl.id_tax = t.id_tax')
+                ->leftJoin('country', 'c', 'c.id_country = tr.id_country')
+                ->leftJoin('state', 's', 's.id_state = tr.id_state')
+                ->where('tr.id_tax_rules_group = ' . (int) $taxRulesGroupId)
+                ->where('c.active = ' . (bool) $active)
+                ->where('s.active = ' . (bool) $active . ' OR s.active IS NULL')
+                ->where('t.active = ' . (bool) $active)
+                ->where('c.id_zone = ' . (int) $zoneId . ' OR s.id_zone = ' . (int) $zoneId)
+                ->where('c.iso_code IS NOT NULL')
+                ->where('trgs.id_shop = ' . parent::getShopContext()->id)
+                ->where('tl.id_lang = ' . (int) parent::getLanguageContext()->id)
+            ;
 
-            $this->countryIsoCodeCache[$cacheKey] = $this->db->executeS($query);
+            $this->query
+                ->select('t.rate')
+                ->select('c.iso_code as country_iso_code')
+                ->select('GROUP_CONCAT(s.iso_code SEPARATOR ",") as state_iso_code')
+            ;
+
+            $this->countryIsoCodeCache[$cacheKey] = $this->runQuery(false);
         }
 
         return $this->countryIsoCodeCache[$cacheKey];

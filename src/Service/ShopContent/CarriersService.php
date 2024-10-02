@@ -21,8 +21,7 @@
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
-use PrestaShop\Module\PsEventbus\Repository\NewRepository\CarrierRepository;
+use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -33,15 +32,9 @@ class CarriersService implements ShopContentServiceInterface
     /** @var CarrierRepository */
     private $carrierRepository;
 
-    /** @var ConfigurationRepository */
-    private $configurationRepository;
-
-    public function __construct(
-        CarrierRepository $carrierRepository,
-        ConfigurationRepository $configurationRepository
-    ) {
+    public function __construct(CarrierRepository $carrierRepository)
+    {
         $this->carrierRepository = $carrierRepository;
-        $this->configurationRepository = $configurationRepository;
     }
 
     /**
@@ -111,6 +104,89 @@ class CarriersService implements ShopContentServiceInterface
     }
 
     /**
+     * @param array<mixed> $deliveryPriceByRange
+     *
+     * @return false|\RangeWeight|\RangePrice
+     *
+     * @throws \PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     */
+    public static function getCarrierRange($deliveryPriceByRange)
+    {
+        if (isset($deliveryPriceByRange['id_range_weight'])) {
+            return new \RangeWeight($deliveryPriceByRange['id_range_weight']);
+        }
+        if (isset($deliveryPriceByRange['id_range_price'])) {
+            return new \RangePrice($deliveryPriceByRange['id_range_price']);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param \Carrier $carrierObj
+     *
+     * @return array<mixed>|false
+     */
+    public static function getDeliveryPriceByRange(\Carrier $carrierObj)
+    {
+        $rangeTable = $carrierObj->getRangeTable();
+
+        switch ($rangeTable) {
+            case 'range_weight':
+                return CarriersService::getCarrierByWeightRange($carrierObj, 'range_weight');
+            case 'range_price':
+                return CarriersService::getCarrierByPriceRange($carrierObj, 'range_price');
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * @param \Carrier $carrierObj
+     * @param string $rangeTable
+     *
+     * @return array<mixed>
+     */
+    public static function getCarrierByWeightRange(\Carrier $carrierObj, $rangeTable)
+    {
+        $deliveryPriceByRange = \Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrierObj->id);
+
+        $filteredRanges = [];
+
+        foreach ($deliveryPriceByRange as $range) {
+            $filteredRanges[$range['id_range_weight']]['id_range_weight'] = $range['id_range_weight'];
+            $filteredRanges[$range['id_range_weight']]['id_carrier'] = $range['id_carrier'];
+            $filteredRanges[$range['id_range_weight']]['zones'][$range['id_zone']]['id_zone'] = $range['id_zone'];
+            $filteredRanges[$range['id_range_weight']]['zones'][$range['id_zone']]['price'] = $range['price'];
+        }
+
+        return $filteredRanges;
+    }
+
+    /**
+     * @param \Carrier $carrierObj
+     * @param string $rangeTable
+     *
+     * @return array<mixed>
+     */
+    public static function getCarrierByPriceRange(\Carrier $carrierObj, $rangeTable)
+    {
+        $deliveryPriceByRange = \Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrierObj->id);
+
+        $filteredRanges = [];
+
+        foreach ($deliveryPriceByRange as $range) {
+            $filteredRanges[$range['id_range_price']]['id_range_price'] = $range['id_range_price'];
+            $filteredRanges[$range['id_range_price']]['id_carrier'] = $range['id_carrier'];
+            $filteredRanges[$range['id_range_price']]['zones'][$range['id_zone']]['id_zone'] = $range['id_zone'];
+            $filteredRanges[$range['id_range_price']]['zones'][$range['id_zone']]['price'] = $range['price'];
+        }
+
+        return $filteredRanges;
+    }
+
+    /**
      * @param array<mixed> $carriers
      *
      * @return void
@@ -123,12 +199,12 @@ class CarriersService implements ShopContentServiceInterface
             throw new \PrestaShopException('Context is null');
         }
 
-        $currency = new \Currency((int) $this->configurationRepository->get('PS_CURRENCY_DEFAULT'));
-        $freeShippingStartsAtPrice = (float) $this->configurationRepository->get('PS_SHIPPING_FREE_PRICE');
-        $freeShippingStartsAtWeight = (float) $this->configurationRepository->get('PS_SHIPPING_FREE_WEIGHT');
+        $currency = new \Currency((int) \Configuration::get('PS_CURRENCY_DEFAULT'));
+        $freeShippingStartsAtPrice = (float) \Configuration::get('PS_SHIPPING_FREE_PRICE');
+        $freeShippingStartsAtWeight = (float) \Configuration::get('PS_SHIPPING_FREE_WEIGHT');
 
         /** @var string $psWeightUnit */
-        $psWeightUnit = $this->configurationRepository->get('PS_WEIGHT_UNIT');
+        $psWeightUnit = \Configuration::get('PS_WEIGHT_UNIT');
 
         foreach ($carriers as &$carrier) {
             $carrierTaxesRatesGroupId = \Carrier::getIdTaxRulesGroupByIdCarrier((int) $carrier['id_carrier'], \Context::getContext());
@@ -136,7 +212,7 @@ class CarriersService implements ShopContentServiceInterface
             $shippingHandling = 0.0;
 
             if ($carrier['shipping_handling']) {
-                $shippingHandling = (float) $this->configurationRepository->get('PS_SHIPPING_HANDLING');
+                $shippingHandling = (float) \Configuration::get('PS_SHIPPING_HANDLING');
             }
 
             $carrier['id_carrier'] = (string) $carrier['id_carrier'];

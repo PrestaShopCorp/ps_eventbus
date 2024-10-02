@@ -25,7 +25,6 @@ use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
 use PrestaShop\Module\PsEventbus\Exception\QueryParamsException;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
-use PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService;
@@ -111,12 +110,10 @@ class FrontApiService
                 CommonService::exitWithResponse($response);
             }
 
-            /** @var ConfigurationRepository $configurationRepository */
-            $configurationRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\ConfigurationRepository');
             /** @var LanguagesService $languagesService */
             $languagesService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService');
 
-            $timezone = (string) $configurationRepository->get('PS_TIMEZONE');
+            $timezone = (string) \Configuration::get('PS_TIMEZONE');
             $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(Config::MYSQL_DATE_FORMAT);
             $langIso = $langIso ? $langIso : $languagesService->getDefaultLanguageIsoCode();
 

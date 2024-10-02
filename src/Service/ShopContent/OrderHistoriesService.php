@@ -21,7 +21,7 @@
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Repository\NewRepository\OrderHistoryRepository;
+use PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository;
 
 if (!defined('_PS_VERSION_')) {
     exit;

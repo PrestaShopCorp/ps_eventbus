@@ -24,64 +24,45 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class StateRepository
+class StateRepository extends AbstractRepository
 {
-    /**
-     * @var \Db
-     */
-    private $db;
+    const TABLE_NAME = 'state';
 
     /**
      * @var array<mixed>
      */
     private $stateIsoCodeCache = [];
 
-    public function __construct()
-    {
-        $this->db = \Db::getInstance();
-    }
-
-    /**
-     * @return \DbQuery
-     */
-    private function getBaseQuery()
-    {
-        $query = new \DbQuery();
-
-        $query->from('state', 's');
-
-        return $query;
-    }
-
     /**
      * @param int $zoneId
      * @param bool $active
      *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
     public function getStateIsoCodesByZoneId($zoneId, $active)
     {
         $cacheKey = $zoneId . '-' . (int) $active;
+        $isoCodes = [];
 
         if (!isset($this->stateIsoCodeCache[$cacheKey])) {
-            $query = $this->getBaseQuery();
+            $this->generateMinimalQuery(self::TABLE_NAME, 's');
 
-            $query->select('s.iso_code');
-            $query->innerJoin('country', 'c', 'c.id_country = s.id_country');
-            $query->where('s.id_zone = ' . (int) $zoneId);
-            $query->where('s.active = ' . (bool) $active);
-            $query->where('c.active = ' . (bool) $active);
+            $this->query->innerJoin('country', 'c', 'c.id_country = s.id_country')
+                ->where('s.id_zone = ' . (int) $zoneId)
+                ->where('s.active = ' . (bool) $active)
+                ->where('c.active = ' . (bool) $active)
+            ;
 
-            $isoCodes = [];
+            $this->query->select('s.iso_code');
 
-            $result = $this->db->executeS($query);
-            if (is_array($result)) {
-                foreach ($result as $state) {
-                    $isoCodes[] = $state['iso_code'];
-                }
+            $result = $this->runQuery(false);
+
+            foreach ($result as $state) {
+                $isoCodes[] = $state['iso_code'];
             }
+
             $this->stateIsoCodeCache[$cacheKey] = $isoCodes;
         }
 

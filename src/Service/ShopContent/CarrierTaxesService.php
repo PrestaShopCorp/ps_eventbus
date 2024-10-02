@@ -21,8 +21,8 @@
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Helper\CarrierHelper;
-use PrestaShop\Module\PsEventbus\Repository\NewRepository\CarrierRepository;
+use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
+use PrestaShop\Module\PsEventbus\Repository\TaxeRepository;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -57,7 +57,7 @@ class CarrierTaxesService implements ShopContentServiceInterface
         $carrierTaxes = [];
 
         foreach ($result as $carrierData) {
-            $carrierTaxes = array_merge($carrierTaxes, CarrierHelper::buildCarrierTaxes($carrierData));
+            $carrierTaxes = array_merge($carrierTaxes, $this->buildCarrierTaxes($carrierData));
         }
 
         $this->castCarrierTaxes($carrierTaxes);
@@ -90,7 +90,7 @@ class CarrierTaxesService implements ShopContentServiceInterface
         $carrierTaxes = [];
 
         foreach ($result as $carrierData) {
-            $carrierTaxes = array_merge($carrierTaxes, CarrierHelper::buildCarrierDetails($carrierData));
+            $carrierTaxes = array_merge($carrierTaxes, $this->buildCarrierTaxes($carrierData));
         }
 
         $this->castCarrierTaxes($carrierTaxes);
@@ -134,5 +134,69 @@ class CarrierTaxesService implements ShopContentServiceInterface
             $carrierTaxe['state_ids'] = (string) $carrierTaxe['state_ids'];
             $carrierTaxe['tax_rate'] = (float) $carrierTaxe['tax_rate'];
         }
+    }
+
+    /**
+     * Build a CarrierTaxes from Carrier
+     *
+     * @param array<mixed> $carrierData
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     */
+    private function buildCarrierTaxes($carrierData)
+    {
+        /** @var \Ps_eventbus $module */
+        $module = \Module::getInstanceByName('ps_eventbus');
+
+        /** @var TaxeRepository $taxeRepository */
+        $taxeRepository = $module->getService('PrestaShop\Module\PsEventbus\Repository\TaxeRepository');
+
+        $carrier = new \Carrier($carrierData['id_reference']);
+
+        $deliveryPriceByRanges = CarriersService::getDeliveryPriceByRange($carrier);
+
+        if (!$deliveryPriceByRanges) {
+            return [];
+        }
+
+        $carrierTaxes = [];
+
+        foreach ($deliveryPriceByRanges as $deliveryPriceByRange) {
+            $range = CarriersService::getCarrierRange($deliveryPriceByRange);
+
+            if (!$range) {
+                continue;
+            }
+
+            foreach ($deliveryPriceByRange['zones'] as $zone) {
+                $taxRulesGroupId = (int) $carrier->getIdTaxRulesGroup();
+
+                /** @var array<mixed> $carrierTaxesByZone */
+                $carrierTaxesByZone = $taxeRepository->getCarrierTaxesByZone($zone['id_zone'], $taxRulesGroupId, true);
+
+                if (!$carrierTaxesByZone[0]['country_iso_code']) {
+                    continue;
+                }
+
+                $carrierTaxesByZone = $carrierTaxesByZone[0];
+
+                $carrierTaxe = [];
+
+                $carrierTaxe['id_reference'] = $carrier->id_reference;
+                $carrierTaxe['id_zone'] = $zone['id_zone'];
+                $carrierTaxe['id_range'] = $range->id;
+                $carrierTaxe['id_carrier_tax'] = $taxRulesGroupId;
+                $carrierTaxe['country_id'] = $carrierTaxesByZone['country_iso_code'];
+                $carrierTaxe['state_ids'] = $carrierTaxesByZone['state_iso_code'];
+                $carrierTaxe['tax_rate'] = $carrierTaxesByZone['rate'];
+
+                array_push($carrierTaxes, $carrierTaxe);
+            }
+        }
+
+        return $carrierTaxes;
     }
 }
