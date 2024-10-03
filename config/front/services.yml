@@ -43,7 +43,7 @@ services:
     arguments:
       - '@ps_eventbus'
       - '@PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService'
-      - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
+      - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler'
       - '%ps_eventbus.sync_api_url%'
       - '%ps_eventbus.live_sync_api_url%'
       - '%ps_eventbus.proxy_api_url%'

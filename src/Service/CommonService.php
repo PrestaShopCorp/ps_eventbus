@@ -104,14 +104,14 @@ class CommonService
     }
 
     /**
-    * @param array<mixed> $payload
-    *
-    * @return void
-    *
-    * @throws \Exception
-    */
-   public static function convertDateFormat(&$payload)
-   {
+     * @param array<mixed> $payload
+     *
+     * @return void
+     *
+     * @throws \Exception
+     */
+    public static function convertDateFormat(&$payload)
+    {
         // use hardcoded format to avoid problems with interface change in PHP 7.2
         $ISO8601 = 'Y-m-d\TH:i:sO';
         $dateFields = [
@@ -125,20 +125,20 @@ class CommonService
             'to',
         ];
 
-       $timezone = (string) \Configuration::get('PS_TIMEZONE');
+        $timezone = (string) \Configuration::get('PS_TIMEZONE');
 
-       foreach ($payload as &$payloadItem) {
-           foreach ($dateFields as $dateField) {
-               if (isset($payloadItem['properties'][$dateField])) {
-                   $date = &$payloadItem['properties'][$dateField];
-                   if (!empty($date) && $date !== '0000-00-00 00:00:00') {
-                       $dateTime = new \DateTime($date, new \DateTimeZone($timezone));
-                       $date = $dateTime->format($ISO8601);
-                   } else {
-                       $date = null;
-                   }
-               }
-           }
-       }
-   }
+        foreach ($payload as &$payloadItem) {
+            foreach ($dateFields as $dateField) {
+                if (isset($payloadItem['properties'][$dateField])) {
+                    $date = &$payloadItem['properties'][$dateField];
+                    if (!empty($date) && $date !== '0000-00-00 00:00:00') {
+                        $dateTime = new \DateTime($date, new \DateTimeZone($timezone));
+                        $date = $dateTime->format($ISO8601);
+                    } else {
+                        $date = null;
+                    }
+                }
+            }
+        }
+    }
 }

@@ -20,7 +20,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
+use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -31,11 +31,11 @@ class IncrementalSyncRepository extends AbstractRepository
     const TABLE_NAME = 'eventbus_incremental_sync';
 
     /**
-     * @var ErrorHandlerInterface
+     * @var ErrorHandler
      */
     private $errorHandler;
 
-    public function __construct(ErrorHandlerInterface $errorHandler)
+    public function __construct(ErrorHandler $errorHandler)
     {
         $this->errorHandler = $errorHandler;
 

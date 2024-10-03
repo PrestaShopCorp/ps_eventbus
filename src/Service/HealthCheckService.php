@@ -20,7 +20,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
+use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -40,7 +40,7 @@ class HealthCheckService
     /** @var array<mixed> */
     private $configuration;
 
-    /** @var ErrorHandlerInterface */
+    /** @var ErrorHandler */
     private $errorHandler;
 
     /**
@@ -55,7 +55,7 @@ class HealthCheckService
     /**
      * @param \Ps_eventbus $module
      * @param PsAccountsAdapterService $psAccountsAdapterService
-     * @param ErrorHandlerInterface $errorHandler
+     * @param ErrorHandler $errorHandler
      * @param string $eventbusSyncApiUrl
      * @param string $eventbusLiveSyncApiUrl
      * @param string $eventbusProxyApiUrl
@@ -65,7 +65,7 @@ class HealthCheckService
     public function __construct(
         \Ps_eventbus $module,
         PsAccountsAdapterService $psAccountsAdapterService,
-        ErrorHandlerInterface $errorHandler,
+        ErrorHandler $errorHandler,
         $eventbusSyncApiUrl,
         $eventbusLiveSyncApiUrl,
         $eventbusProxyApiUrl

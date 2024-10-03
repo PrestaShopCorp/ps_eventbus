@@ -9,7 +9,7 @@ services:
     class: PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository
     public: true
     arguments:
-      - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface'
+      - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler'
 
   PrestaShop\Module\PsEventbus\Repository\ShopRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ShopRepository

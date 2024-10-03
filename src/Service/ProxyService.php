@@ -25,7 +25,7 @@ use GuzzleHttp\Ring\Exception\ConnectException;
 use PrestaShop\Module\PsEventbus\Api\CollectorApiClient;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
-use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
+use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -42,11 +42,11 @@ class ProxyService implements ProxyServiceInterface
      */
     private $jsonFormatter;
     /**
-     * @var ErrorHandlerInterface
+     * @var ErrorHandler
      */
     private $errorHandler;
 
-    public function __construct(CollectorApiClient $eventBusProxyClient, JsonFormatter $jsonFormatter, ErrorHandlerInterface $errorHandler)
+    public function __construct(CollectorApiClient $eventBusProxyClient, JsonFormatter $jsonFormatter, ErrorHandler $errorHandler)
     {
         $this->eventBusProxyClient = $eventBusProxyClient;
         $this->jsonFormatter = $jsonFormatter;
