@@ -84,7 +84,7 @@ class WishlistProductsService implements ShopContentServiceInterface
 
         return array_map(function ($item) {
             return [
-                'id' => $item['COLLECTION_WISHLIST_PRODUCTS'],
+                'id' => $item['id_wishlist_product'],
                 'collection' => Config::COLLECTION_WISHLIST_PRODUCTS,
                 'properties' => $item,
             ];

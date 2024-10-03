@@ -88,13 +88,18 @@ class LiveSyncApiClient
 
     /**
      * @param string $shopContent
-     * @param int $shopContentId
      * @param string $action
      *
      * @return array<mixed>
      */
-    public function liveSync($shopContent, $shopContentId, $action)
+    public function liveSync($shopContent, $action)
     {
+        // shop content send to the API must be in kebab-case
+        $kebabCasedShopContent = str_replace('_', '-', $shopContent);
+
+        // This parameter is purely useless, but it is required by the API
+        $uselessParameter = 0;
+
         $response = $this->getClient(3)->sendRequest(
             new Request(
                 'POST',
@@ -104,8 +109,8 @@ class LiveSyncApiClient
                     'Authorization' => 'Bearer ' . $this->jwt,
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                     'Content-Type' => 'application/json',
-                ], // TODO: @Vincent Probably need to transform snake_case to kebab-case
-                '{"shopContents": ["' . $shopContent . '"], "shopContentId": ' . $shopContentId . ', "action": "' . $action . '"}'
+                ],
+                '{"shopContents": ["' . $kebabCasedShopContent . '"], "shopContentId": ' . $uselessParameter . ', "action": "' . $action . '"}'
             )
         );
 

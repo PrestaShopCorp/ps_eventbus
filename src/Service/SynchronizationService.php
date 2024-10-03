@@ -22,7 +22,6 @@ namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
@@ -62,11 +61,6 @@ class SynchronizationService
     private $languagesService;
 
     /**
-     * @var PayloadDecorator
-     */
-    private $payloadDecorator;
-
-    /**
      * @var ProxyServiceInterface
      */
     private $proxyService;
@@ -77,8 +71,7 @@ class SynchronizationService
         IncrementalSyncRepository $incrementalSyncRepository,
         LiveSyncRepository $liveSyncRepository,
         LanguagesService $languagesService,
-        ProxyServiceInterface $proxyService,
-        PayloadDecorator $payloadDecorator
+        ProxyServiceInterface $proxyService
     ) {
         $this->liveSyncApiClient = $liveSyncApiClient;
         $this->eventbusSyncRepository = $eventbusSyncRepository;
@@ -86,7 +79,6 @@ class SynchronizationService
         $this->liveSyncRepository = $liveSyncRepository;
         $this->languagesService = $languagesService;
         $this->proxyService = $proxyService;
-        $this->payloadDecorator = $payloadDecorator;
     }
 
     /**
@@ -130,7 +122,7 @@ class SynchronizationService
 
         $data = $shopContentApiService->getContentsForFull($offset, $limit, $langIso, $debug);
 
-        $this->payloadDecorator->convertDateFormat($data);
+        CommonService::convertDateFormat($data);
 
         if (!empty($data)) {
             $response = $this->proxyService->upload($jobId, $data, $startTime, true);
@@ -199,7 +191,7 @@ class SynchronizationService
 
         $data = $shopContentApiService->getContentsForIncremental($limit, $contentIds, $langIso, $debug);
 
-        $this->payloadDecorator->convertDateFormat($data);
+        CommonService::convertDateFormat($data);
 
         if (!empty($data)) {
             $response = $this->proxyService->upload($jobId, $data, $startTime, false);
@@ -219,31 +211,25 @@ class SynchronizationService
     /**
      * liveSync
      *
-     * @param array<string, mixed> $contentTypesWithIds
+     * @param array<string> $contents
      * @param string $actionType
      *
      * @return void
      */
-    public function sendLiveSync($contentTypesWithIds, $actionType)
+    public function sendLiveSync($contents, $actionType)
     {
-        if (count($contentTypesWithIds) == 0) {
+        if (count($contents) == 0) {
             return;
         }
 
         $defaultIsoCode = $this->languagesService->getDefaultLanguageIsoCode();
 
-        foreach ($contentTypesWithIds as $contentType => $contentIds) {
-            if ($this->isFullSyncDone($contentType, $defaultIsoCode) && $this->debounceLiveSync($contentType)) {
-                if (!is_array($contentIds)) {
-                    $contentIds = [$contentIds];
-                }
-
-                foreach ($contentIds as $contentId) {
-                    try {
-                        $this->liveSyncApiClient->liveSync($contentType, $contentId, $actionType);
-                    } catch (\Exception $e) {
-                        // FIXME : report this error somehow
-                    }
+        foreach ($contents as $content) {
+            if ($this->isFullSyncDone($content, $defaultIsoCode) && $this->debounceLiveSync($content)) {
+                try {
+                    $this->liveSyncApiClient->liveSync($content, $actionType);
+                } catch (\Exception $e) {
+                    // FIXME : report this error somehow
                 }
             }
         }
@@ -304,7 +290,7 @@ class SynchronizationService
                         }
 
                         $finalContent = array_map(function ($contentId) use ($contentType, $shopId, $langIso, $actionType, $createdAt) {
-                            [
+                            return [
                                 'type' => $contentType,
                                 'id_object' => $contentId,
                                 'id_shop' => $shopId,
@@ -328,7 +314,7 @@ class SynchronizationService
                     }
 
                     $finalContent = array_map(function ($contentId) use ($contentType, $shopId, $defaultIsoCode, $actionType, $createdAt) {
-                        [
+                        return [
                             'type' => $contentType,
                             'id_object' => $contentId,
                             'id_shop' => $shopId,
@@ -337,11 +323,11 @@ class SynchronizationService
                             'created_at' => $createdAt,
                         ];
                     }, $contentIds);
-
                     $contentToInsert = array_merge($contentToInsert, $finalContent);
                 }
             }
         }
+        dump($contentToInsert);
 
         if (empty($contentToInsert) == false) {
             $this->incrementalSyncRepository->insertIncrementalObject($contentToInsert);

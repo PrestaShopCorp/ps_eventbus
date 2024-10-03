@@ -1,7 +1,6 @@
 imports:
   - { resource: api.yml }
   - { resource: ../common/common.yml }
-  - { resource: ../common/decorator.yml }
   - { resource: ../common/repository.yml }
 
 services:
@@ -22,7 +21,6 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService'
       - '@PrestaShop\Module\PsEventbus\Service\ProxyService'
-      - '@PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator'
 
   PrestaShop\Module\PsEventbus\Service\PresenterService:
     class: PrestaShop\Module\PsEventbus\Service\PresenterService

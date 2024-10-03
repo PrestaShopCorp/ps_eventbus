@@ -59,7 +59,7 @@ class IncrementalSyncRepository extends AbstractRepository
             $elementsCount = count($arrayOfData);
             $index = 0;
 
-            $query = 'INSERT INTO `' . _DB_PREFIX_ . self::TABLE_NAME . '` (type, id_object, id_shop, lang_iso, created_at) VALUES ';
+            $query = 'INSERT INTO `' . _DB_PREFIX_ . self::TABLE_NAME . '` (type, id_object, id_shop, lang_iso, action, created_at) VALUES ';
 
             foreach ($arrayOfData as $currenData) {
                 $dateTime = new \DateTime($currenData['created_at']);
@@ -70,6 +70,7 @@ class IncrementalSyncRepository extends AbstractRepository
                     {$this->db->escape($currenData['id_object'])},
                     {$this->db->escape($currenData['id_shop'])},
                     '{$this->db->escape($currenData['lang_iso'])}',
+                    '{$this->db->escape($currenData['action'])}',
                     '{$this->db->escape($date)}'
                 )";
 
@@ -84,6 +85,7 @@ class IncrementalSyncRepository extends AbstractRepository
                 id_object = VALUES(id_object),
                 id_shop = VALUES(id_shop),
                 lang_iso = VALUES(lang_iso),
+                action = VALUES(action),
                 created_at = VALUES(created_at)
             ';
 

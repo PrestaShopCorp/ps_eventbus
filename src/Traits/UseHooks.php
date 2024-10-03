@@ -143,7 +143,7 @@ trait UseHooks
         $image = $parameters['object'];
 
         if ($image->id_product) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_PRODUCTS => $image->id_product], 'delete');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_PRODUCTS, 'delete');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_PRODUCTS => $image->id_product],
                 Config::INCREMENTAL_TYPE_DELETE,
@@ -168,7 +168,7 @@ trait UseHooks
         $image = $parameters['object'];
 
         if ($image->id_product) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_PRODUCTS => $image->id_product], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_PRODUCTS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_PRODUCTS => $image->id_product],
                 Config::INCREMENTAL_TYPE_ADD,
@@ -193,7 +193,7 @@ trait UseHooks
         $image = $parameters['object'];
 
         if ($image->id_product) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_PRODUCTS => $image->id_product], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_PRODUCTS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_PRODUCTS => $image->id_product],
                 Config::INCREMENTAL_TYPE_UPDATE,
@@ -218,7 +218,7 @@ trait UseHooks
         $language = $parameters['object'];
 
         if ($language->id) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_LANGUAGES => $language->id], 'delete');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_LANGUAGES, 'delete');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_LANGUAGES => $language->id],
                 Config::INCREMENTAL_TYPE_DELETE,
@@ -243,7 +243,7 @@ trait UseHooks
         $language = $parameters['object'];
 
         if ($language->id) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_LANGUAGES => $language->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_LANGUAGES, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_LANGUAGES => $language->id],
                 Config::INCREMENTAL_TYPE_ADD,
@@ -268,7 +268,7 @@ trait UseHooks
         $language = $parameters['object'];
 
         if ($language->id) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_LANGUAGES => $language->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_LANGUAGES, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_LANGUAGES => $language->id],
                 Config::INCREMENTAL_TYPE_UPDATE,
@@ -293,7 +293,7 @@ trait UseHooks
         $manufacturer = $parameters['object'];
 
         if (isset($manufacturer->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_MANUFACTURERS => $manufacturer->id], 'delete');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_MANUFACTURERS, 'delete');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_MANUFACTURERS => $manufacturer->id],
                 Config::INCREMENTAL_TYPE_DELETE,
@@ -318,7 +318,7 @@ trait UseHooks
         $manufacturer = $parameters['object'];
 
         if (isset($manufacturer->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_MANUFACTURERS => $manufacturer->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_MANUFACTURERS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_MANUFACTURERS => $manufacturer->id],
                 Config::INCREMENTAL_TYPE_ADD,
@@ -343,7 +343,7 @@ trait UseHooks
         $manufacturer = $parameters['object'];
 
         if (isset($manufacturer->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_MANUFACTURERS => $manufacturer->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_MANUFACTURERS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_MANUFACTURERS => $manufacturer->id],
                 Config::INCREMENTAL_TYPE_UPDATE,
@@ -368,7 +368,7 @@ trait UseHooks
         $supplier = $parameters['object'];
 
         if (isset($supplier->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_SUPPLIERS => $supplier->id], 'delete');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_SUPPLIERS, 'delete');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_SUPPLIERS => $supplier->id],
                 Config::INCREMENTAL_TYPE_DELETE,
@@ -393,7 +393,7 @@ trait UseHooks
         $supplier = $parameters['object'];
 
         if (isset($supplier->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_SUPPLIERS => $supplier->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_SUPPLIERS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_SUPPLIERS => $supplier->id],
                 Config::INCREMENTAL_TYPE_ADD,
@@ -418,7 +418,7 @@ trait UseHooks
         $supplier = $parameters['object'];
 
         if (isset($supplier->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_SUPPLIERS => $supplier->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_SUPPLIERS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_SUPPLIERS => $supplier->id],
                 Config::INCREMENTAL_TYPE_UPDATE,
@@ -443,7 +443,7 @@ trait UseHooks
         $product = $parameters['object'];
 
         if (isset($product->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_PRODUCTS => $product->id], 'delete');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_PRODUCTS, 'delete');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_PRODUCTS => $product->id],
                 Config::INCREMENTAL_TYPE_DELETE,
@@ -482,9 +482,9 @@ trait UseHooks
 
         $synchronizationService->sendLiveSync(
             [
-                Config::COLLECTION_PRODUCTS => $product->id,
-                Config::COLLECTION_PRODUCT_CARRIERS => $productCarrierIds,
-                Config::COLLECTION_STOCKS => $stockId,
+                Config::COLLECTION_PRODUCTS,
+                Config::COLLECTION_PRODUCT_CARRIERS,
+                Config::COLLECTION_STOCKS,
             ],
             'upsert'
         );
@@ -492,7 +492,7 @@ trait UseHooks
         $synchronizationService->insertContentIntoIncremental(
             [
                 Config::COLLECTION_PRODUCTS => $product->id,
-                Config::COLLECTION_PRODUCT_CARRIERS => array_column($productCarrierIds, 'id_carrier_reference'),
+                Config::COLLECTION_PRODUCT_CARRIERS => $productCarrierIds,
                 Config::COLLECTION_STOCKS => $stockId,
             ],
             Config::INCREMENTAL_TYPE_ADD,
@@ -530,9 +530,9 @@ trait UseHooks
 
         $synchronizationService->sendLiveSync(
             [
-                Config::COLLECTION_PRODUCTS => $product->id,
-                Config::COLLECTION_PRODUCT_CARRIERS => $productCarrierIds,
-                Config::COLLECTION_STOCKS => $stockId,
+                Config::COLLECTION_PRODUCTS,
+                Config::COLLECTION_PRODUCT_CARRIERS,
+                Config::COLLECTION_STOCKS,
             ],
             'upsert'
         );
@@ -540,7 +540,7 @@ trait UseHooks
         $synchronizationService->insertContentIntoIncremental(
             [
                 Config::COLLECTION_PRODUCTS => $product->id,
-                Config::COLLECTION_PRODUCT_CARRIERS => array_column($productCarrierIds, 'id_carrier_reference'),
+                Config::COLLECTION_PRODUCT_CARRIERS => $productCarrierIds,
                 Config::COLLECTION_STOCKS => $stockId,
             ],
             Config::INCREMENTAL_TYPE_UPDATE,
@@ -563,7 +563,7 @@ trait UseHooks
         $wishlist = $parameters['object'];
 
         if ($wishlist->id) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_WISHLISTS => $wishlist->id], 'delete');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_WISHLISTS, 'delete');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_WISHLISTS => $wishlist->id],
                 Config::INCREMENTAL_TYPE_DELETE,
@@ -587,7 +587,7 @@ trait UseHooks
         $wishlist = $parameters['object'];
 
         if ($wishlist->id) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_WISHLISTS => $wishlist->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_WISHLISTS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_WISHLISTS => $wishlist->id],
                 Config::INCREMENTAL_TYPE_ADD,
@@ -611,7 +611,7 @@ trait UseHooks
         $wishlist = $parameters['object'];
 
         if ($wishlist->id) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_WISHLISTS => $wishlist->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_WISHLISTS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_WISHLISTS => $wishlist->id],
                 Config::INCREMENTAL_TYPE_UPDATE,
@@ -636,7 +636,7 @@ trait UseHooks
         $stock = $parameters['object'];
 
         if (isset($stock->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_STOCKS => $stock->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_STOCKS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STOCKS => $stock->id],
                 Config::INCREMENTAL_TYPE_ADD,
@@ -661,7 +661,7 @@ trait UseHooks
         $stock = $parameters['object'];
 
         if (isset($stock->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_STOCKS => $stock->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_STOCKS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STOCKS => $stock->id],
                 Config::INCREMENTAL_TYPE_UPDATE,
@@ -686,7 +686,7 @@ trait UseHooks
         $store = $parameters['object'];
 
         if ($store->id) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_STORES => $store->id], 'delete');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_STORES, 'delete');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STORES => $store->id],
                 Config::INCREMENTAL_TYPE_DELETE,
@@ -711,7 +711,7 @@ trait UseHooks
         $store = $parameters['object'];
 
         if ($store->id) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_STORES => $store->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_STORES, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STORES => $store->id],
                 Config::INCREMENTAL_TYPE_ADD,
@@ -736,7 +736,7 @@ trait UseHooks
         $store = $parameters['object'];
 
         if ($store->id) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_STORES => $store->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_STORES, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STORES => $store->id],
                 Config::INCREMENTAL_TYPE_UPDATE,
@@ -761,7 +761,7 @@ trait UseHooks
         $combination = $parameters['object'];
 
         if (isset($combination->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_PRODUCTS => $combination->id], 'delete');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_PRODUCTS, 'delete');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_PRODUCT_ATTRIBUTES => $combination->id],
                 Config::INCREMENTAL_TYPE_DELETE,
@@ -786,7 +786,7 @@ trait UseHooks
         $category = $parameters['object'];
 
         if (isset($category->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_CATEGORIES => $category->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_CATEGORIES, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CATEGORIES => $category->id],
                 Config::INCREMENTAL_TYPE_ADD,
@@ -811,7 +811,7 @@ trait UseHooks
         $category = $parameters['object'];
 
         if (isset($category->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_CATEGORIES => $category->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_CATEGORIES, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CATEGORIES => $category->id],
                 Config::INCREMENTAL_TYPE_UPDATE,
@@ -836,7 +836,7 @@ trait UseHooks
         $category = $parameters['object'];
 
         if (isset($category->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_CATEGORIES => $category->id], 'delete');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_CATEGORIES, 'delete');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CATEGORIES => $category->id],
                 Config::INCREMENTAL_TYPE_DELETE,
@@ -861,7 +861,7 @@ trait UseHooks
         $customer = $parameters['object'];
 
         if ($customer->id) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_CUSTOMERS => $customer->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_CUSTOMERS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CUSTOMERS => $customer->id],
                 Config::INCREMENTAL_TYPE_ADD,
@@ -886,7 +886,7 @@ trait UseHooks
         $customer = $parameters['object'];
 
         if ($customer->id) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_CUSTOMERS => $customer->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_CUSTOMERS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CUSTOMERS => $customer->id],
                 Config::INCREMENTAL_TYPE_UPDATE,
@@ -911,7 +911,7 @@ trait UseHooks
         $customer = $parameters['object'];
 
         if ($customer->id) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_CUSTOMERS => $customer->id], 'delete');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_CUSTOMERS, 'delete');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CUSTOMERS => $customer->id],
                 Config::INCREMENTAL_TYPE_DELETE,
@@ -936,7 +936,7 @@ trait UseHooks
         $currency = $parameters['object'];
 
         if (isset($currency->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_CURRENCIES => $currency->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_CURRENCIES, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CURRENCIES => $currency->id],
                 Config::INCREMENTAL_TYPE_ADD,
@@ -961,7 +961,7 @@ trait UseHooks
         $currency = $parameters['object'];
 
         if (isset($currency->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_CURRENCIES => $currency->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_CURRENCIES, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CURRENCIES => $currency->id],
                 Config::INCREMENTAL_TYPE_UPDATE,
@@ -986,7 +986,7 @@ trait UseHooks
         $currency = $parameters['object'];
 
         if (isset($currency->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_CURRENCIES => $currency->id], 'delete');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_CURRENCIES, 'delete');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CURRENCIES => $currency->id],
                 Config::INCREMENTAL_TYPE_DELETE,
@@ -1010,7 +1010,7 @@ trait UseHooks
         $cart = $parameters['object'];
 
         if (isset($cart->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_CARTS => $cart->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_CARTS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CARTS => $cart->id],
                 Config::INCREMENTAL_TYPE_ADD,
@@ -1034,7 +1034,7 @@ trait UseHooks
         $cart = $parameters['object'];
 
         if (isset($cart->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_CARTS => $cart->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_CARTS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CARTS => $cart->id],
                 Config::INCREMENTAL_TYPE_UPDATE,
@@ -1058,7 +1058,7 @@ trait UseHooks
         $cartRule = $parameters['object'];
 
         if (isset($cartRule->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_CART_RULES => $cartRule->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_CART_RULES, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CART_RULES => $cartRule->id],
                 Config::INCREMENTAL_TYPE_ADD,
@@ -1082,7 +1082,7 @@ trait UseHooks
         $cartRule = $parameters['object'];
 
         if (isset($cartRule->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_CART_RULES => $cartRule->id], 'delete');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_CART_RULES, 'delete');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CART_RULES => $cartRule->id],
                 Config::INCREMENTAL_TYPE_DELETE,
@@ -1106,7 +1106,7 @@ trait UseHooks
         $cartRule = $parameters['object'];
 
         if (isset($cartRule->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_CART_RULES => $cartRule->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_CART_RULES, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CART_RULES => $cartRule->id],
                 Config::INCREMENTAL_TYPE_UPDATE,
@@ -1130,7 +1130,7 @@ trait UseHooks
         $order = $parameters['object'];
 
         if (isset($order->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_ORDERS => $order->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_ORDERS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_ORDERS => $order->id],
                 Config::INCREMENTAL_TYPE_ADD,
@@ -1154,7 +1154,7 @@ trait UseHooks
         $order = $parameters['object'];
 
         if (isset($order->id)) {
-            $synchronizationService->sendLiveSync([Config::COLLECTION_ORDERS => $order->id], 'upsert');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_ORDERS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_ORDERS => $order->id],
                 Config::INCREMENTAL_TYPE_UPDATE,
@@ -1218,9 +1218,9 @@ trait UseHooks
         if (isset($carrier->id)) {
             $synchronizationService->sendLiveSync(
                 [
-                    Config::COLLECTION_CARRIERS => $carrier->id,
-                    Config::COLLECTION_CARRIER_DETAILS => $carrier->id,
-                    Config::COLLECTION_CARRIER_TAXES => $carrier->id,
+                    Config::COLLECTION_CARRIERS,
+                    Config::COLLECTION_CARRIER_DETAILS,
+                    Config::COLLECTION_CARRIER_TAXES,
                 ],
                 'upsert'
             );
@@ -1254,9 +1254,9 @@ trait UseHooks
         if (isset($carrier->id)) {
             $synchronizationService->sendLiveSync(
                 [
-                    Config::COLLECTION_CARRIERS => $carrier->id,
-                    Config::COLLECTION_CARRIER_DETAILS => $carrier->id,
-                    Config::COLLECTION_CARRIER_TAXES => $carrier->id,
+                    Config::COLLECTION_CARRIERS,
+                    Config::COLLECTION_CARRIER_DETAILS,
+                    Config::COLLECTION_CARRIER_TAXES,
                 ],
                 'delete'
             );
@@ -1658,7 +1658,7 @@ trait UseHooks
 
         if ($specificPrice instanceof \SpecificPrice) {
             if (isset($specificPrice->id)) {
-                $synchronizationService->sendLiveSync([Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id], 'upsert');
+                $synchronizationService->sendLiveSync(Config::COLLECTION_SPECIFIC_PRICES, 'upsert');
                 $synchronizationService->insertContentIntoIncremental(
                     [Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id],
                     Config::INCREMENTAL_TYPE_ADD,
@@ -1685,7 +1685,7 @@ trait UseHooks
 
         if ($specificPrice instanceof \SpecificPrice) {
             if (isset($specificPrice->id)) {
-                $synchronizationService->sendLiveSync([Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id], 'upsert');
+                $synchronizationService->sendLiveSync(Config::COLLECTION_SPECIFIC_PRICES, 'upsert');
                 $synchronizationService->insertContentIntoIncremental(
                     [Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id],
                     Config::INCREMENTAL_TYPE_UPDATE,
@@ -1712,7 +1712,7 @@ trait UseHooks
 
         if ($specificPrice instanceof \SpecificPrice) {
             if (isset($specificPrice->id)) {
-                $synchronizationService->sendLiveSync([Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id], 'delete');
+                $synchronizationService->sendLiveSync(Config::COLLECTION_SPECIFIC_PRICES, 'delete');
                 $synchronizationService->insertContentIntoIncremental(
                     [Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id],
                     Config::INCREMENTAL_TYPE_DELETE,
