@@ -139,7 +139,7 @@ class EmployeesService implements ShopContentServiceInterface
                 $employee['has_enabled_gravatar'] = (bool) $employee['has_enabled_gravatar'];
             }
 
-            // FIXME : use a random salt generated during module install
+            // FIXME: use a random salt generated during module install
             $employee['email_hash'] = hash('sha256', $employee['email'] . 'dUj4GMBD6689pL9pyr');
             unset($employee['email']);
         }

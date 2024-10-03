@@ -55,8 +55,7 @@ jobs:
     timeout-minutes: 15
     strategy:
       matrix:
-        # @TODO: "1.6.1.24" is temporarily disabled here
-        ps_version: ["1.7.8.10", "8.1.6"]
+        ps_version: ["1.6.1.11", "1.7.8.10", "8.1.6"]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -90,8 +89,7 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
     strategy:
       matrix:
-        # @TODO: "1.6.1.24" is temporarily disabled here
-        ps_version: ["1.7.8.10", "8.1.4", "nightly"]
+        ps_version: ["1.6.1.11", "1.7.8.10", "8.1.4", "nightly"]
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
