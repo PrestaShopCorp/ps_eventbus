@@ -73,25 +73,18 @@ class ErrorHandler
 
     /**
      * @param \Exception $error
-     * @param mixed $code
-     * @param bool|null $throw
-     * @param array<mixed>|null $data
      *
      * @return void
      *
      * @@throws Exception
      */
-    public function handle($error, $code = null, $throw = null, $data = null)
+    public function handle($error)
     {
-        if ($throw == null) {
-            $throw = true;
-        }
-
         if (!$this->client) {
             return;
         }
 
-        $this->client->captureException($error, $data);
+        $this->client->captureException($error);
 
         \PrestaShopLogger::addLog(
             $error->getMessage() . ' : ' . $error->getFile() . ':' . $error->getLine() . ' | ' . $error->getTraceAsString(),
@@ -101,11 +94,6 @@ class ErrorHandler
             \Module::getModuleIdByName('ps_eventbus'),
             true
         );
-
-        if (is_int($code) && true === $throw) {
-            http_response_code($code);
-            throw $error;
-        }
     }
 
     /**
