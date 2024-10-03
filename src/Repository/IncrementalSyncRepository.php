@@ -90,9 +90,9 @@ class IncrementalSyncRepository extends AbstractRepository
             ';
 
             return (bool) $this->db->query($query);
-        } catch (\PrestaShopDatabaseException $e) {
+        } catch (\PrestaShopDatabaseException $exception) {
             $this->errorHandler->handle(
-                new \PrestaShopDatabaseException('Failed to insert incremental object', $e->getCode(), $e)
+                new \PrestaShopDatabaseException('Failed to insert incremental object', $exception->getCode(), $exception)
             );
 
             return false;

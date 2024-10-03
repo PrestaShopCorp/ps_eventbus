@@ -107,8 +107,8 @@ class HealthCheckService
                     $tokenValid = true;
                 }
             }
-        } catch (\Exception $e) {
-            $this->errorHandler->handle($e);
+        } catch (\Exception $exception) {
+            $this->errorHandler->handle($exception);
             $tokenIsSet = false;
         }
 

@@ -30,7 +30,7 @@ if (!defined('_PS_VERSION_')) {
 /**
  * Handle Error.
  */
-class ErrorHandler implements ErrorHandlerInterface
+class ErrorHandler
 {
     /**
      * @var ?\Raven_Client

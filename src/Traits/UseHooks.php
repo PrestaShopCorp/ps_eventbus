@@ -479,7 +479,7 @@ trait UseHooks
         /** @var StockRepository $stockRepository */
         $stockRepository = $this->getService('PrestaShop\Module\PsEventbus\Repository\StockRepository');
         $stockId = $stockRepository->getStockIdByProductId($product->id);
-
+        
         $synchronizationService->sendLiveSync(
             [
                 Config::COLLECTION_PRODUCTS,

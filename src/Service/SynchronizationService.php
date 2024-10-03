@@ -22,6 +22,7 @@ namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
@@ -65,13 +66,19 @@ class SynchronizationService
      */
     private $proxyService;
 
+    /**
+     * @var ErrorHandler
+     */
+    private $errorHandler;
+
     public function __construct(
         LiveSyncApiClient $liveSyncApiClient,
         EventbusSyncRepository $eventbusSyncRepository,
         IncrementalSyncRepository $incrementalSyncRepository,
         LiveSyncRepository $liveSyncRepository,
         LanguagesService $languagesService,
-        ProxyServiceInterface $proxyService
+        ProxyServiceInterface $proxyService,
+        ErrorHandler $errorHandler
     ) {
         $this->liveSyncApiClient = $liveSyncApiClient;
         $this->eventbusSyncRepository = $eventbusSyncRepository;
@@ -79,6 +86,7 @@ class SynchronizationService
         $this->liveSyncRepository = $liveSyncRepository;
         $this->languagesService = $languagesService;
         $this->proxyService = $proxyService;
+        $this->errorHandler = $errorHandler;
     }
 
     /**
@@ -211,15 +219,15 @@ class SynchronizationService
     /**
      * liveSync
      *
-     * @param array<string> $contents
+     * @param mixed $contents
      * @param string $actionType
      *
      * @return void
      */
     public function sendLiveSync($contents, $actionType)
     {
-        if (count($contents) == 0) {
-            return;
+        if (!is_array($contents)) {
+            $contents = [$contents];
         }
 
         $defaultIsoCode = $this->languagesService->getDefaultLanguageIsoCode();
@@ -228,8 +236,8 @@ class SynchronizationService
             if ($this->isFullSyncDone($content, $defaultIsoCode) && $this->debounceLiveSync($content)) {
                 try {
                     $this->liveSyncApiClient->liveSync($content, $actionType);
-                } catch (\Exception $e) {
-                    // FIXME : report this error somehow
+                } catch (\Exception $exception) {
+                    $this->errorHandler->handle($exception);
                 }
             }
         }
@@ -327,7 +335,6 @@ class SynchronizationService
                 }
             }
         }
-        dump($contentToInsert);
 
         if (empty($contentToInsert) == false) {
             $this->incrementalSyncRepository->insertIncrementalObject($contentToInsert);
