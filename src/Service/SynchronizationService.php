@@ -97,7 +97,7 @@ class SynchronizationService
      * @param int $limit
      * @param int $startTime
      * @param string $dateNow
-     * @param bool $debug
+     * @param bool $explainSql
      *
      * @return array<mixed>
      *
@@ -111,7 +111,7 @@ class SynchronizationService
         int $limit,
         int $startTime,
         string $dateNow,
-        bool $debug
+        bool $explainSql
     ) {
         $response = [];
 
@@ -128,7 +128,7 @@ class SynchronizationService
         /** @var ShopContentServiceInterface $shopContentApiService */
         $shopContentApiService = $module->getService($serviceId);
 
-        $data = $shopContentApiService->getContentsForFull($offset, $limit, $langIso, $debug);
+        $data = $shopContentApiService->getContentsForFull($offset, $limit, $langIso, $explainSql);
 
         CommonService::convertDateFormat($data);
 
@@ -158,7 +158,7 @@ class SynchronizationService
      * @param string $langIso
      * @param int $limit
      * @param int $startTime
-     * @param bool $debug
+     * @param bool $explainSql
      *
      * @return array<mixed>
      *
@@ -170,7 +170,7 @@ class SynchronizationService
         string $langIso,
         int $limit,
         int $startTime,
-        bool $debug
+        bool $explainSql
     ) {
         $response = [];
 
@@ -197,7 +197,7 @@ class SynchronizationService
             ];
         }
 
-        $data = $shopContentApiService->getContentsForIncremental($limit, $contentIds, $langIso, $debug);
+        $data = $shopContentApiService->getContentsForIncremental($limit, $contentIds, $langIso, $explainSql);
 
         CommonService::convertDateFormat($data);
 

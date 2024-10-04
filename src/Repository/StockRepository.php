@@ -73,34 +73,34 @@ class StockRepository extends AbstractRepository implements RepositoryInterface
      * @param int $offset
      * @param int $limit
      * @param string $langIso
-     * @param bool $debug
+     * @param bool $explainSql
      *
      * @return array<mixed>
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso, $debug)
+    public function retrieveContentsForFull($offset, $limit, $langIso, $explainSql)
     {
         $this->generateFullQuery($langIso, true);
 
         $this->query->limit((int) $limit, (int) $offset);
 
-        return $this->runQuery($debug);
+        return $this->runQuery($explainSql);
     }
 
     /**
      * @param int $limit
      * @param array<mixed> $contentIds
      * @param string $langIso
-     * @param bool $debug
+     * @param bool $explainSql
      *
      * @return array<mixed>
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug)
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso, $explainSql)
     {
         $this->generateFullQuery($langIso, true);
 
@@ -109,7 +109,7 @@ class StockRepository extends AbstractRepository implements RepositoryInterface
             ->limit($limit)
         ;
 
-        return $this->runQuery($debug);
+        return $this->runQuery($explainSql);
     }
 
     /**

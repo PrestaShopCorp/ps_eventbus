@@ -54,14 +54,14 @@ class TaxonomyRepository extends AbstractRepository implements RepositoryInterfa
      * @param int $offset
      * @param int $limit
      * @param string $langIso
-     * @param bool $debug
+     * @param bool $explainSql
      *
      * @return array<mixed>
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso, $debug)
+    public function retrieveContentsForFull($offset, $limit, $langIso, $explainSql)
     {
         // need this module for this table : https://addons.prestashop.com/en/products-on-facebook-social-networks/50291-prestashop-social-with-facebook-instagram.html
         if (empty($this->checkIfPsFacebookIsInstalled())) {
@@ -72,21 +72,21 @@ class TaxonomyRepository extends AbstractRepository implements RepositoryInterfa
 
         $this->query->limit((int) $limit, (int) $offset);
 
-        return $this->runQuery($debug);
+        return $this->runQuery($explainSql);
     }
 
     /**
      * @param int $limit
      * @param array<mixed> $contentIds
      * @param string $langIso
-     * @param bool $debug
+     * @param bool $explainSql
      *
      * @return array<mixed>
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug)
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso, $explainSql)
     {
         $this->generateFullQuery($langIso, true);
 
@@ -95,7 +95,7 @@ class TaxonomyRepository extends AbstractRepository implements RepositoryInterfa
             ->limit($limit)
         ;
 
-        return $this->runQuery($debug);
+        return $this->runQuery($explainSql);
     }
 
     /**

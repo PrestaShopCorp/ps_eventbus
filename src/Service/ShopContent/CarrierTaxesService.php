@@ -42,13 +42,13 @@ class CarrierTaxesService implements ShopContentServiceInterface
      * @param int $offset
      * @param int $limit
      * @param string $langIso
-     * @param bool $debug
+     * @param bool $explainSql
      *
      * @return array<mixed>
      */
-    public function getContentsForFull($offset, $limit, $langIso, $debug)
+    public function getContentsForFull($offset, $limit, $langIso, $explainSql)
     {
-        $result = $this->carrierRepository->retrieveContentsForFull($offset, $limit, $langIso, $debug);
+        $result = $this->carrierRepository->retrieveContentsForFull($offset, $limit, $langIso, $explainSql);
 
         if (empty($result)) {
             return [];
@@ -75,13 +75,13 @@ class CarrierTaxesService implements ShopContentServiceInterface
      * @param int $limit
      * @param array<string, int> $contentIds
      * @param string $langIso
-     * @param bool $debug
+     * @param bool $explainSql
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
+    public function getContentsForIncremental($limit, $contentIds, $langIso, $explainSql)
     {
-        $result = $this->carrierRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug);
+        $result = $this->carrierRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso, $explainSql);
 
         if (empty($result)) {
             return [];

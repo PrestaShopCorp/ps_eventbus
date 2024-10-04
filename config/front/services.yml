@@ -21,6 +21,7 @@ services:
       - '@PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService'
       - '@PrestaShop\Module\PsEventbus\Service\ProxyService'
+      - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler'
 
   PrestaShop\Module\PsEventbus\Service\PresenterService:
     class: PrestaShop\Module\PsEventbus\Service\PresenterService

@@ -48,11 +48,14 @@ class ps_EventbusApiFrontModuleFrontController extends ModuleFrontController
         /** @var bool $fullSyncRequested */
         $fullSyncRequested = Tools::getValue('full', 0) == 1;
 
-        /** @var bool $debug */
-        $debug = Tools::getValue('debug') == 1;
+        /** @var bool $explainSql */
+        $explainSql = Tools::getValue('explain_sql', 0) == 1;
 
-        /** @var bool $ise2e */
-        $ise2e = Tools::getValue('is_e2e') == 1;
+        /** @var bool $verbose */
+        $verbose = Tools::getValue('verbose', 0) == 1;
+
+        /** @var bool $psLogsEnabled */
+        $psLogsEnabled = Tools::getValue('ps_logs_enabled', 0) == 1;
 
         /** @var Ps_eventbus $module */
         $module = Module::getInstanceByName('ps_eventbus');
@@ -63,6 +66,6 @@ class ps_EventbusApiFrontModuleFrontController extends ModuleFrontController
         // edit shopContent for matching Config.php const
         $shopContentEdited = str_replace('-', '_', $shopContent);
 
-        $frontApiService->handleDataSync($shopContentEdited, $jobId, $langIso, $limit, $fullSyncRequested, $debug, $ise2e);
+        $frontApiService->handleDataSync($shopContentEdited, $jobId, $langIso, $limit, $fullSyncRequested, $explainSql, $verbose, $psLogsEnabled);
     }
 }

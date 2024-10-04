@@ -54,13 +54,13 @@ class OrdersService implements ShopContentServiceInterface
      * @param int $offset
      * @param int $limit
      * @param string $langIso
-     * @param bool $debug
+     * @param bool $explainSql
      *
      * @return array<mixed>
      */
-    public function getContentsForFull($offset, $limit, $langIso, $debug)
+    public function getContentsForFull($offset, $limit, $langIso, $explainSql)
     {
-        $result = $this->orderRepository->retrieveContentsForFull($offset, $limit, $langIso, $debug);
+        $result = $this->orderRepository->retrieveContentsForFull($offset, $limit, $langIso, $explainSql);
 
         if (empty($result)) {
             return [];
@@ -81,13 +81,13 @@ class OrdersService implements ShopContentServiceInterface
      * @param int $limit
      * @param array<string, int> $contentIds
      * @param string $langIso
-     * @param bool $debug
+     * @param bool $explainSql
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso, $debug)
+    public function getContentsForIncremental($limit, $contentIds, $langIso, $explainSql)
     {
-        $result = $this->orderRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug);
+        $result = $this->orderRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso, $explainSql);
 
         if (empty($result)) {
             return [];
@@ -175,18 +175,18 @@ class OrdersService implements ShopContentServiceInterface
      * @param array<mixed> $orders
      * @param array<mixed> $order
      * @param string $langIso
-     * @param bool $debug
+     * @param bool $explainSql
      *
      * @return bool
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function castIsPaidValue($orders, $order, $langIso, $debug)
+    private function castIsPaidValue($orders, $order, $langIso, $explainSql)
     {
         $isPaid = $dateAdd = 0;
         $orderIds = $this->arrayFormatter->formatValueArray($orders, 'id_order');
         /** @var array<mixed> $orderHistoryStatuss */
-        $orderHistoryStatuss = $this->orderHistoryRepository->getOrderHistoryIdsByOrderIds($orderIds, $langIso, $debug);
+        $orderHistoryStatuss = $this->orderHistoryRepository->getOrderHistoryIdsByOrderIds($orderIds, $langIso, $explainSql);
 
         foreach ($orderHistoryStatuss as &$orderHistoryStatus) {
             if ($order['id_order'] == $orderHistoryStatus['id_order'] && $dateAdd < $orderHistoryStatus['date_add']) {

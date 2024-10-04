@@ -105,16 +105,16 @@ abstract class AbstractRepository
     }
 
     /**
-     * @param bool $debug
+     * @param bool $explainSql
      *
      * @return array<mixed>
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    protected function runQuery($debug)
+    protected function runQuery($explainSql)
     {
-        if ($debug != null && $debug === true) {
+        if ($explainSql != null && $explainSql === true) {
             $this->debugQuery();
         }
 

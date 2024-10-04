@@ -21,6 +21,7 @@
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
 use Exception;
+use PrestaShop\Module\PsEventbus\Service\CommonService;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 
 if (!defined('_PS_VERSION_')) {
@@ -72,28 +73,38 @@ class ErrorHandler
     }
 
     /**
-     * @param \Exception $error
+     * @param mixed $exception
+     * @param bool $verbose
+     * @param bool $psLogsEnabled
      *
      * @return void
      *
      * @@throws Exception
      */
-    public function handle($error)
+    public function handle($exception, $verbose, $psLogsEnabled)
     {
         if (!$this->client) {
             return;
         }
 
-        $this->client->captureException($error);
+        if ($psLogsEnabled) {
+            \PrestaShopLogger::addLog(
+                $exception->getMessage() . ' : ' . $exception->getFile() . ':' . $exception->getLine() . ' | ' . $exception->getTraceAsString(),
+                3,
+                $exception->getCode() > 0 ? $exception->getCode() : 500,
+                'Module',
+                \Module::getModuleIdByName('ps_eventbus'),
+                true
+            );
+        }
 
-        \PrestaShopLogger::addLog(
-            $error->getMessage() . ' : ' . $error->getFile() . ':' . $error->getLine() . ' | ' . $error->getTraceAsString(),
-            3,
-            $error->getCode() > 0 ? $error->getCode() : 500,
-            'Module',
-            \Module::getModuleIdByName('ps_eventbus'),
-            true
-        );
+        // if debug mode enabled, print error
+        if (_PS_MODE_DEV_ == true && $verbose == true) {
+            throw $exception;
+        } else {
+            $this->client->captureException($exception);
+            CommonService::exitWithExceptionMessage($exception);
+        }
     }
 
     /**

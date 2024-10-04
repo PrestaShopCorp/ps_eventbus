@@ -76,14 +76,13 @@ class Config
     const COLLECTION_ORDER_DETAILS = 'order_details';
     const COLLECTION_ORDER_HISTORIES = 'order_histories';
     const COLLECTION_PRODUCTS = 'products';
-    const COLLECTION_PRODUCT_ATTRIBUTES = 'attributes';
     const COLLECTION_PRODUCT_BUNDLES = 'product_bundles';
-    const COLLECTION_PRODUCT_CARRIERS = 'product_carriers';
+    const COLLECTION_PRODUCT_CARRIERS = 'product_carriers'; // TODO: rename to #custom-product-carriers
     const COLLECTION_PRODUCT_SUPPLIERS = 'product_suppliers';
-    const COLLECTION_SHOP_DETAILS = 'shop_details';
+    const COLLECTION_SHOP_DETAILS = 'shop_details'; // TODO: rename to #infos
     const COLLECTION_SPECIFIC_PRICES = 'specific_prices';
     const COLLECTION_STOCKS = 'stocks';
-    const COLLECTION_STOCK_MVTS = 'stock_mvts';
+    const COLLECTION_STOCK_MVTS = 'stock_mvts'; // TODO: rename to #stock-movements
     const COLLECTION_STORES = 'stores';
     const COLLECTION_SUPPLIERS = 'suppliers';
     const COLLECTION_TAXONOMIES = 'taxonomies';
@@ -114,7 +113,6 @@ class Config
         self::COLLECTION_ORDER_DETAILS,
         self::COLLECTION_ORDER_HISTORIES,
         self::COLLECTION_PRODUCTS,
-        self::COLLECTION_PRODUCT_ATTRIBUTES,
         self::COLLECTION_PRODUCT_BUNDLES,
         self::COLLECTION_PRODUCT_CARRIERS,
         self::COLLECTION_PRODUCT_SUPPLIERS,

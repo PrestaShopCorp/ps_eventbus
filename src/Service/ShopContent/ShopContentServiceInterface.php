@@ -30,21 +30,21 @@ interface ShopContentServiceInterface
      * @param int $offset
      * @param int $limit
      * @param string $langIso
-     * @param bool $debug
+     * @param bool $explainSql
      *
      * @return array<mixed>
      */
-    public function getContentsForFull($offset, $limit, $langIso, $debug);
+    public function getContentsForFull($offset, $limit, $langIso, $explainSql);
 
     /**
      * @param int $limit
      * @param mixed $contentIds
      * @param string $langIso
-     * @param bool $debug
+     * @param bool $explainSql
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso, $debug);
+    public function getContentsForIncremental($limit, $contentIds, $langIso, $explainSql);
 
     /**
      * @param int $offset

@@ -68,34 +68,34 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
      * @param int $offset
      * @param int $limit
      * @param string $langIso
-     * @param bool $debug
+     * @param bool $explainSql
      *
      * @return array<mixed>
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso, $debug)
+    public function retrieveContentsForFull($offset, $limit, $langIso, $explainSql)
     {
         $this->generateFullQuery($langIso, true);
 
         $this->query->limit((int) $limit, (int) $offset);
 
-        return $this->runQuery($debug);
+        return $this->runQuery($explainSql);
     }
 
     /**
      * @param int $limit
      * @param array<mixed> $contentIds
      * @param string $langIso
-     * @param bool $debug
+     * @param bool $explainSql
      *
      * @return array<mixed>
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForIncremental($limit, $contentIds, $langIso, $debug)
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso, $explainSql)
     {
         $this->generateFullQuery($langIso, true);
 
@@ -104,7 +104,7 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
             ->limit($limit)
         ;
 
-        return $this->runQuery($debug);
+        return $this->runQuery($explainSql);
     }
 
     /**
@@ -131,13 +131,13 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
     /**
      * @param array<mixed> $orderIds
      * @param string $langIso
-     * @param bool $debug
+     * @param bool $explainSql
      *
      * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getOrderHistoryIdsByOrderIds($orderIds, $langIso, $debug)
+    public function getOrderHistoryIdsByOrderIds($orderIds, $langIso, $explainSql)
     {
         if (!$orderIds) {
             return [];
@@ -147,6 +147,6 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
 
         $this->query->where('oh.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')');
 
-        return $this->runQuery($debug);
+        return $this->runQuery($explainSql);
     }
 }

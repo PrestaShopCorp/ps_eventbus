@@ -81,14 +81,17 @@ class FrontApiService
      * @param string $langIso
      * @param int $limit
      * @param bool $fullSyncRequested
-     * @param bool $debug
-     * @param bool $ise2e
-     *
+     * @param bool $explainSql
+     * @param bool $verbose
+     * @param bool $psLogEnabled
+     * 
      * @return void
      */
-    public function handleDataSync($shopContent, $jobId, $langIso, $limit, $fullSyncRequested, $debug, $ise2e)
+    public function handleDataSync($shopContent, $jobId, $langIso, $limit, $fullSyncRequested, $explainSql, $verbose, $psLogEnabled)
     {
         try {
+            throw new \Exception('This method is not implemented');
+            
             if (!in_array($shopContent, array_merge(Config::SHOP_CONTENTS, [Config::COLLECTION_HEALTHCHECK]), true)) {
                 CommonService::exitWithExceptionMessage(new QueryParamsException('404 - ShopContent not found', Config::INVALID_URL_QUERY));
             }
@@ -159,7 +162,7 @@ class FrontApiService
                     $limit,
                     $this->startTime,
                     $dateNow,
-                    $debug
+                    $explainSql
                 );
             } else {
                 $response = $this->synchronizationService->sendIncrementalSync(
@@ -168,7 +171,7 @@ class FrontApiService
                     $langIso,
                     $limit,
                     $this->startTime,
-                    $debug
+                    $explainSql
                 );
             }
 
@@ -183,39 +186,16 @@ class FrontApiService
                 )
             );
         } catch (\PrestaShopDatabaseException $exception) {
-            $this->errorHandler->handle($exception);
-            CommonService::exitWithExceptionMessage($exception);
+            $this->errorHandler->handle($exception, $verbose, $psLogEnabled);
         } catch (EnvVarException $exception) {
-            $this->errorHandler->handle($exception);
-            CommonService::exitWithExceptionMessage($exception);
+            $this->errorHandler->handle($exception, $verbose, $psLogEnabled);
         } catch (FirebaseException $exception) {
-            $this->errorHandler->handle($exception);
-            CommonService::exitWithExceptionMessage($exception);
+            $this->errorHandler->handle($exception, $verbose, $psLogEnabled);
         } catch (ServiceNotFoundException $exception) {
-            $this->catchGenericException($exception, $ise2e);
+            $this->errorHandler->handle($exception, $verbose, $psLogEnabled);
         } catch (\Exception $exception) {
-            $this->catchGenericException($exception, $ise2e);
+            $this->errorHandler->handle($exception, $verbose, $psLogEnabled);
         }
-    }
-
-    /**
-     * @param mixed $exception
-     * @param mixed $ise2e
-     *
-     * @return void
-     *
-     * @throws \Exception
-     */
-    private function catchGenericException($exception, $ise2e)
-    {
-        $this->errorHandler->handle($exception);
-
-        // if debug mode enabled, print error
-        if (_PS_MODE_DEV_ == true && $ise2e == false) {
-            throw $exception;
-        }
-
-        CommonService::dieWithResponse(['message' => 'An error occured. Please check shop logs for more information'], 500);
     }
 
     /**
@@ -255,14 +235,11 @@ class FrontApiService
             }
 
             if ($exception instanceof \PrestaShopDatabaseException) {
-                $this->errorHandler->handle($exception);
-                CommonService::exitWithExceptionMessage($exception);
+                $this->errorHandler->handle($exception, false, false);
             } elseif ($exception instanceof EnvVarException) {
-                $this->errorHandler->handle($exception);
-                CommonService::exitWithExceptionMessage($exception);
+                $this->errorHandler->handle($exception, false, false);
             } elseif ($exception instanceof FirebaseException) {
-                $this->errorHandler->handle($exception);
-                CommonService::exitWithExceptionMessage($exception);
+                $this->errorHandler->handle($exception, false, false);
             }
 
             return false;
