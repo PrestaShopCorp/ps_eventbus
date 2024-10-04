@@ -109,7 +109,7 @@ class LiveSyncApiClient
                     'Authorization' => 'Bearer ' . $this->jwt,
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                     'Content-Type' => 'application/json',
-                ],
+                ], // FIXME: Pass real array of shop contents. at the moment, only one shop content is sent for match CS rate limiter
                 '{"shopContents": ["' . $kebabCasedShopContent . '"], "shopContentId": ' . $uselessParameter . ', "action": "' . $action . '"}'
             )
         );
