@@ -81,8 +81,16 @@ class ErrorHandler
      *
      * @@throws Exception
      */
-    public function handle($exception, $verbose, $psLogsEnabled)
+    public function handle($exception, $verbose = null, $psLogsEnabled = null)
     {
+        if ($verbose === null) {
+            $verbose = false;
+        }
+
+        if ($psLogsEnabled === null) {
+            $psLogsEnabled = false;
+        }
+
         if (!$this->client) {
             return;
         }
@@ -98,7 +106,7 @@ class ErrorHandler
             );
         }
 
-        // if debug mode enabled, print error
+        // if debug mode enabled and verbose set to true, print error in front office
         if (_PS_MODE_DEV_ == true && $verbose == true) {
             throw $exception;
         } else {
