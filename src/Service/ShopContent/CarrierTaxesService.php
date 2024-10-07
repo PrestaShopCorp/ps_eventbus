@@ -111,7 +111,7 @@ class CarrierTaxesService implements ShopContentServiceInterface
      */
     public function getFullSyncContentLeft($offset, $limit, $langIso)
     {
-        $data = $this->getContentsForFull($offset, 50, $langIso, false);
+        $data = $this->getContentsForFull($offset, 50, $langIso);
 
         return count($data);
     }

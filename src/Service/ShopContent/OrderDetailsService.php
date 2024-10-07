@@ -70,9 +70,9 @@ class OrderDetailsService implements ShopContentServiceInterface
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $orderDetailIds, $langIso, $explainSql)
+    public function getContentsForIncremental($limit, $orderDetailIds, $langIso)
     {
-        $result = $this->orderDetailRepository->retrieveContentsForIncremental($limit, $orderDetailIds, $langIso, $explainSql);
+        $result = $this->orderDetailRepository->retrieveContentsForIncremental($limit, $orderDetailIds, $langIso);
 
         if (empty($result)) {
             return [];

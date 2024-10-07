@@ -85,7 +85,7 @@ class ErrorHandler
             return;
         }
 
-        if (PS_EVENTBUS_LOGS_ENABLED) {
+        if (defined(PS_EVENTBUS_LOGS_ENABLED) && PS_EVENTBUS_LOGS_ENABLED == true) {
             \PrestaShopLogger::addLog(
                 $exception->getMessage() . ' : ' . $exception->getFile() . ':' . $exception->getLine() . ' | ' . $exception->getTraceAsString(),
                 3,
@@ -97,7 +97,7 @@ class ErrorHandler
         }
 
         // if debug mode enabled and verbose set to true, print error in front office
-        if (_PS_MODE_DEV_ == true && PS_EVENTBUS_VERBOSE_ENABLED == true) {
+        if (_PS_MODE_DEV_ == true && (defined(PS_EVENTBUS_VERBOSE_ENABLED) && PS_EVENTBUS_VERBOSE_ENABLED == true)) {
             throw $exception;
         } else {
             $this->client->captureException($exception);

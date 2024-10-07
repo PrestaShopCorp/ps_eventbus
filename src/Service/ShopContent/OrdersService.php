@@ -132,7 +132,7 @@ class OrdersService implements ShopContentServiceInterface
             $order['refund'] = (float) $order['refund'];
             $order['refund_tax_excl'] = (float) $order['refund_tax_excl'];
             $order['new_customer'] = $order['new_customer'] == 1;
-            $order['is_paid'] = $this->castIsPaidValue($orders, $order, $langIso, false);
+            $order['is_paid'] = $this->castIsPaidValue($orders, $order, $langIso);
             $order['shipping_cost'] = (float) $order['shipping_cost'];
             $order['total_paid_tax'] = $order['total_paid_tax_incl'] - $order['total_paid_tax_excl'];
             $order['id_carrier'] = (int) $order['id_carrier'];
@@ -178,12 +178,12 @@ class OrdersService implements ShopContentServiceInterface
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function castIsPaidValue($orders, $order, $langIso, $explainSql)
+    private function castIsPaidValue($orders, $order, $langIso)
     {
         $isPaid = $dateAdd = 0;
         $orderIds = $this->arrayFormatter->formatValueArray($orders, 'id_order');
         /** @var array<mixed> $orderHistoryStatuss */
-        $orderHistoryStatuss = $this->orderHistoryRepository->getOrderHistoryIdsByOrderIds($orderIds, $langIso, $explainSql);
+        $orderHistoryStatuss = $this->orderHistoryRepository->getOrderHistoryIdsByOrderIds($orderIds, $langIso);
 
         foreach ($orderHistoryStatuss as &$orderHistoryStatus) {
             if ($order['id_order'] == $orderHistoryStatus['id_order'] && $dateAdd < $orderHistoryStatus['date_add']) {

@@ -134,7 +134,7 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getOrderHistoryIdsByOrderIds($orderIds, $langIso, $explainSql)
+    public function getOrderHistoryIdsByOrderIds($orderIds, $langIso)
     {
         if (!$orderIds) {
             return [];

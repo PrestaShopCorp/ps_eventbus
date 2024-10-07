@@ -105,16 +105,20 @@ abstract class AbstractRepository
     }
 
     /**
-
+     * @param bool $enableCurrentExplain
      * 
      * @return array<mixed>
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    protected function runQuery()
+    protected function runQuery($enableCurrentExplain = null)
     {
-        if (PS_EVENTBUS_EXPLAIN_SQL_ENABLED === true) {
+        if ($enableCurrentExplain === null) {
+            $enableCurrentExplain = true;
+        }
+
+        if ((defined(PS_EVENTBUS_EXPLAIN_SQL_ENABLED) && PS_EVENTBUS_EXPLAIN_SQL_ENABLED == true) && $enableCurrentExplain) {
             $this->debugQuery();
         }
 
