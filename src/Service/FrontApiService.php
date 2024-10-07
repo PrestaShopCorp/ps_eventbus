@@ -90,8 +90,6 @@ class FrontApiService
     public function handleDataSync($shopContent, $jobId, $langIso, $limit, $fullSyncRequested, $explainSql, $verbose, $psLogEnabled)
     {
         try {
-            throw new \Exception('This method is not implemented');
-            
             if (!in_array($shopContent, array_merge(Config::SHOP_CONTENTS, [Config::COLLECTION_HEALTHCHECK]), true)) {
                 CommonService::exitWithExceptionMessage(new QueryParamsException('404 - ShopContent not found', Config::INVALID_URL_QUERY));
             }

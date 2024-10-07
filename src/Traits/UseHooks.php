@@ -471,9 +471,9 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
-        /** @var ProductCarrierRepository $productCarrierRepository */
-        $productCarrierRepository = $this->getService('PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository');
-        $productCarriers = $productCarrierRepository->getProductCarrierIdsByCarrierId($product->id);
+        /** @var CustomProductCarrierRepository $customProductCarrierRepository */
+        $customProductCarrierRepository = $this->getService('PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository');
+        $productCarriers = $customProductCarrierRepository->getCustomProductCarrierIdsByCarrierId($product->id);
         $productCarrierIds = array_column($productCarriers, 'id_carrier_reference');
 
         /** @var StockRepository $stockRepository */
@@ -483,7 +483,7 @@ trait UseHooks
         $synchronizationService->sendLiveSync(
             [
                 Config::COLLECTION_PRODUCTS,
-                Config::COLLECTION_PRODUCT_CARRIERS,
+                Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
                 Config::COLLECTION_STOCKS,
             ],
             'upsert'
@@ -492,7 +492,7 @@ trait UseHooks
         $synchronizationService->insertContentIntoIncremental(
             [
                 Config::COLLECTION_PRODUCTS => $product->id,
-                Config::COLLECTION_PRODUCT_CARRIERS => $productCarrierIds,
+                Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $productCarrierIds,
                 Config::COLLECTION_STOCKS => $stockId,
             ],
             Config::INCREMENTAL_TYPE_ADD,
@@ -519,9 +519,9 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
 
-        /** @var ProductCarrierRepository $productCarrierRepository */
-        $productCarrierRepository = $this->getService('PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository');
-        $productCarriers = $productCarrierRepository->getProductCarrierIdsByCarrierId($product->id);
+        /** @var CustomProductCarrierRepository $customProductCarrierRepository */
+        $customProductCarrierRepository = $this->getService('PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository');
+        $productCarriers = $customProductCarrierRepository->getCustomProductCarrierIdsByCarrierId($product->id);
         $productCarrierIds = array_column($productCarriers, 'id_carrier_reference');
 
         /** @var StockRepository $stockRepository */
@@ -531,7 +531,7 @@ trait UseHooks
         $synchronizationService->sendLiveSync(
             [
                 Config::COLLECTION_PRODUCTS,
-                Config::COLLECTION_PRODUCT_CARRIERS,
+                Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
                 Config::COLLECTION_STOCKS,
             ],
             'upsert'
@@ -540,7 +540,7 @@ trait UseHooks
         $synchronizationService->insertContentIntoIncremental(
             [
                 Config::COLLECTION_PRODUCTS => $product->id,
-                Config::COLLECTION_PRODUCT_CARRIERS => $productCarrierIds,
+                Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $productCarrierIds,
                 Config::COLLECTION_STOCKS => $stockId,
             ],
             Config::INCREMENTAL_TYPE_UPDATE,

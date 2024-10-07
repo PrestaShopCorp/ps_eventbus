@@ -53,33 +53,7 @@ services:
 ############################################################################################################
 ###################################### SHOP CONTENT SERVICES ###############################################
 ############################################################################################################
-
-  PrestaShop\Module\PsEventbus\Service\ShopContent\OrdersService:
-    class: PrestaShop\Module\PsEventbus\Service\ShopContent\OrdersService
-    public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\OrderRepository'
-      - '@PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository'
-      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
   
-  PrestaShop\Module\PsEventbus\Service\ShopContent\OrderCartRulesService:
-    class: PrestaShop\Module\PsEventbus\Service\ShopContent\OrderCartRulesService
-    public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository'
-  
-  PrestaShop\Module\PsEventbus\Service\ShopContent\OrderHistoriesService:
-    class: PrestaShop\Module\PsEventbus\Service\ShopContent\OrderHistoriesService
-    public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository'
-  
-  PrestaShop\Module\PsEventbus\Service\ShopContent\OrderDetailsService:
-    class: PrestaShop\Module\PsEventbus\Service\ShopContent\OrderDetailsService
-    public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\OrderDetailRepository'
-
   PrestaShop\Module\PsEventbus\Service\ShopContent\CarriersService:
     class: PrestaShop\Module\PsEventbus\Service\ShopContent\CarriersService
     public: true
@@ -116,44 +90,23 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\CartRuleRepository'
 
-  PrestaShop\Module\PsEventbus\Service\ShopContent\ProductsService:
-    class: PrestaShop\Module\PsEventbus\Service\ShopContent\ProductsService
+  PrestaShop\Module\PsEventbus\Service\ShopContent\CustomProductCarriersService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\CustomProductCarriersService
     public: true
     arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\ProductRepository' 
-      - '@PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService'
-      - '@PrestaShop\Module\PsEventbus\Service\ShopContent\CategoriesService'
-      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
-
-  PrestaShop\Module\PsEventbus\Service\ShopContent\ProductBundlesService:
-    class: PrestaShop\Module\PsEventbus\Service\ShopContent\ProductBundlesService
-    public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\ProductBundleRepository'
-
-  PrestaShop\Module\PsEventbus\Service\ShopContent\ProductSuppliersService:
-    class: PrestaShop\Module\PsEventbus\Service\ShopContent\ProductSuppliersService
-    public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\ProductSupplierRepository'
-
-  PrestaShop\Module\PsEventbus\Service\ShopContent\ProductCarriersService:
-    class: PrestaShop\Module\PsEventbus\Service\ShopContent\ProductCarriersService
-    public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository'
-
-  PrestaShop\Module\PsEventbus\Service\ShopContent\CategoriesService:
-    class: PrestaShop\Module\PsEventbus\Service\ShopContent\CategoriesService
-    public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\CategoryRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\CustomProductCarrierRepository'
   
   PrestaShop\Module\PsEventbus\Service\ShopContent\CustomersService:
     class: PrestaShop\Module\PsEventbus\Service\ShopContent\CustomersService
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\CustomerRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\CategoriesService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\CategoriesService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\CategoryRepository'
 
   PrestaShop\Module\PsEventbus\Service\ShopContent\CurrenciesService:
     class: PrestaShop\Module\PsEventbus\Service\ShopContent\CurrenciesService
@@ -179,39 +132,6 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\ImageTypeRepository'
 
-  PrestaShop\Module\PsEventbus\Service\ShopContent\ShopDetailsService:
-    class: PrestaShop\Module\PsEventbus\Service\ShopContent\ShopDetailsService
-    public: true
-    arguments:
-      - '@=service("prestashop.adapter.legacy.context").getContext()'
-      - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
-      - '@PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService'
-      - '@PrestaShop\Module\PsEventbus\Service\ShopContent\CurrenciesService'
-
-  PrestaShop\Module\PsEventbus\Service\ShopContent\ModulesService:
-    class: PrestaShop\Module\PsEventbus\Service\ShopContent\ModulesService
-    public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\ModuleRepository'
-      - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
-
-  PrestaShop\Module\PsEventbus\Service\ShopContent\ThemesService:
-    class: PrestaShop\Module\PsEventbus\Service\ShopContent\ThemesService
-    public: true
-    arguments:
-      - '@=service("prestashop.adapter.legacy.context").getContext()'
-
-  PrestaShop\Module\PsEventbus\Service\ShopContent\WishlistsService:
-    class: PrestaShop\Module\PsEventbus\Service\ShopContent\WishlistsService
-    public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\WishlistRepository'
-  
-  PrestaShop\Module\PsEventbus\Service\ShopContent\WishlistProductsService:
-    class: PrestaShop\Module\PsEventbus\Service\ShopContent\WishlistProductsService
-    public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository'
 
   PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService:
     class: PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService
@@ -225,11 +145,75 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\ManufacturerRepository'
 
-  PrestaShop\Module\PsEventbus\Service\ShopContent\TranslationsService:
-    class: PrestaShop\Module\PsEventbus\Service\ShopContent\TranslationsService
+  PrestaShop\Module\PsEventbus\Service\ShopContent\ModulesService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\ModulesService
     public: true
     arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\TranslationRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\ModuleRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\OrdersService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\OrdersService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\OrderRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository'
+      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\OrderCartRulesService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\OrderCartRulesService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository'
+  
+  PrestaShop\Module\PsEventbus\Service\ShopContent\OrderDetailsService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\OrderDetailsService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\OrderDetailRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\OrderHistoriesService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\OrderHistoriesService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\ProductsService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\ProductsService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\ProductRepository' 
+      - '@PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService'
+      - '@PrestaShop\Module\PsEventbus\Service\ShopContent\CategoriesService'
+      - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\ProductBundlesService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\ProductBundlesService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\ProductBundleRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\ProductSuppliersService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\ProductSuppliersService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\ProductSupplierRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\ShopDetailsService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\ShopDetailsService
+    public: true
+    arguments:
+      - '@=service("prestashop.adapter.legacy.context").getContext()'
+      - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
+      - '@PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService'
+      - '@PrestaShop\Module\PsEventbus\Service\ShopContent\CurrenciesService'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\SpecificPricesService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\SpecificPricesService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\ProductRepository'
 
   PrestaShop\Module\PsEventbus\Service\ShopContent\StocksService:
     class: PrestaShop\Module\PsEventbus\Service\ShopContent\StocksService
@@ -243,18 +227,11 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\StockMvtRepository'
 
-  PrestaShop\Module\PsEventbus\Service\ShopContent\SpecificPricesService:
-    class: PrestaShop\Module\PsEventbus\Service\ShopContent\SpecificPricesService
+  PrestaShop\Module\PsEventbus\Service\ShopContent\StoresService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\StoresService
     public: true
     arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository'
-      - '@PrestaShop\Module\PsEventbus\Repository\ProductRepository'
-
-  PrestaShop\Module\PsEventbus\Service\ShopContent\TaxonomiesService:
-    class: PrestaShop\Module\PsEventbus\Service\ShopContent\TaxonomiesService
-    public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\TaxonomyRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\StoreRepository'
 
   PrestaShop\Module\PsEventbus\Service\ShopContent\SuppliersService:
     class: PrestaShop\Module\PsEventbus\Service\ShopContent\SuppliersService
@@ -262,8 +239,32 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\SupplierRepository'
 
-  PrestaShop\Module\PsEventbus\Service\ShopContent\StoresService:
-    class: PrestaShop\Module\PsEventbus\Service\ShopContent\StoresService
+  PrestaShop\Module\PsEventbus\Service\ShopContent\TaxonomiesService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\TaxonomiesService
     public: true
     arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\StoreRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\TaxonomyRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\ThemesService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\ThemesService
+    public: true
+    arguments:
+      - '@=service("prestashop.adapter.legacy.context").getContext()'
+  
+  PrestaShop\Module\PsEventbus\Service\ShopContent\TranslationsService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\TranslationsService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\TranslationRepository'
+
+  PrestaShop\Module\PsEventbus\Service\ShopContent\WishlistsService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\WishlistsService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\WishlistRepository'
+  
+  PrestaShop\Module\PsEventbus\Service\ShopContent\WishlistProductsService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\WishlistProductsService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository'

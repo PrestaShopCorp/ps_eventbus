@@ -21,20 +21,20 @@
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository;
+use PrestaShop\Module\PsEventbus\Repository\CustomProductCarrierRepository;
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class ProductCarriersService implements ShopContentServiceInterface
+class CustomProductCarriersService implements ShopContentServiceInterface
 {
-    /** @var ProductCarrierRepository */
-    private $productCarrierRepository;
+    /** @var CustomProductCarrierRepository */
+    private $customProductCarrierRepository;
 
-    public function __construct(ProductCarrierRepository $productCarrierRepository)
+    public function __construct(CustomProductCarrierRepository $customProductCarrierRepository)
     {
-        $this->productCarrierRepository = $productCarrierRepository;
+        $this->customProductCarrierRepository = $customProductCarrierRepository;
     }
 
     /**
@@ -47,7 +47,7 @@ class ProductCarriersService implements ShopContentServiceInterface
      */
     public function getContentsForFull($offset, $limit, $langIso, $explainSql)
     {
-        $result = $this->productCarrierRepository->retrieveContentsForFull($offset, $limit, $langIso, $explainSql);
+        $result = $this->customProductCarrierRepository->retrieveContentsForFull($offset, $limit, $langIso, $explainSql);
 
         if (empty($result)) {
             return [];
@@ -56,7 +56,7 @@ class ProductCarriersService implements ShopContentServiceInterface
         return array_map(function ($item) {
             return [
                 'id' => $item['id_product'] . '-' . $item['id_carrier_reference'],
-                'collection' => Config::COLLECTION_PRODUCT_CARRIERS,
+                'collection' => Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
                 'properties' => $item,
             ];
         }, $result);
@@ -72,7 +72,7 @@ class ProductCarriersService implements ShopContentServiceInterface
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso, $explainSql)
     {
-        $result = $this->productCarrierRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso, $explainSql);
+        $result = $this->customProductCarrierRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso, $explainSql);
 
         if (empty($result)) {
             return [];
@@ -81,7 +81,7 @@ class ProductCarriersService implements ShopContentServiceInterface
         return array_map(function ($item) {
             return [
                 'id' => $item['id_product'] . '-' . $item['id_carrier_reference'],
-                'collection' => Config::COLLECTION_PRODUCT_CARRIERS,
+                'collection' => Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
                 'properties' => $item,
             ];
         }, $result);
@@ -96,6 +96,6 @@ class ProductCarriersService implements ShopContentServiceInterface
      */
     public function getFullSyncContentLeft($offset, $limit, $langIso)
     {
-        return $this->productCarrierRepository->countFullSyncContentLeft($offset, $limit, $langIso);
+        return $this->customProductCarrierRepository->countFullSyncContentLeft($offset, $limit, $langIso);
     }
 }

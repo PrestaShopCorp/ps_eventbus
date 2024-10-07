@@ -56,7 +56,8 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
             ->leftJoin('product_attribute_shop', 'pas', 'pas.id_product = p.id_product AND pas.id_shop = ps.id_shop')
             ->leftJoin('product_attribute', 'pa', 'pas.id_product_attribute = pa.id_product_attribute')
             ->leftJoin('category_lang', 'cl', 'ps.id_category_default = cl.id_category AND ps.id_shop = cl.id_shop AND cl.id_lang = ' . $langId)
-            ->leftJoin('manufacturer', 'm', 'p.id_manufacturer = m.id_manufacturer');
+            ->leftJoin('manufacturer', 'm', 'p.id_manufacturer = m.id_manufacturer')
+        ;
 
         if (parent::getShopContext()->getGroup()->share_stock) {
             $this->query->leftJoin(

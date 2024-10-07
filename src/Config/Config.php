@@ -63,6 +63,7 @@ class Config
     const COLLECTION_CATEGORIES = 'categories';
     const COLLECTION_CURRENCIES = 'currencies';
     const COLLECTION_CUSTOMERS = 'customers';
+    const COLLECTION_CUSTOM_PRODUCT_CARRIERS = 'custom_product_carriers';
     const COLLECTION_DELETED = 'deleted';
     const COLLECTION_EMPLOYEES = 'employees';
     const COLLECTION_HEALTHCHECK = 'healthcheck';
@@ -77,7 +78,6 @@ class Config
     const COLLECTION_ORDER_HISTORIES = 'order_histories';
     const COLLECTION_PRODUCTS = 'products';
     const COLLECTION_PRODUCT_BUNDLES = 'product_bundles';
-    const COLLECTION_PRODUCT_CARRIERS = 'product_carriers'; // TODO: rename to #custom-product-carriers
     const COLLECTION_PRODUCT_SUPPLIERS = 'product_suppliers';
     const COLLECTION_SHOP_DETAILS = 'shop_details'; // TODO: rename to #infos
     const COLLECTION_SPECIFIC_PRICES = 'specific_prices';

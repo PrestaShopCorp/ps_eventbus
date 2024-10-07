@@ -24,7 +24,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class ProductCarrierRepository extends AbstractRepository implements RepositoryInterface
+class CustomProductCarrierRepository extends AbstractRepository implements RepositoryInterface
 {
     const TABLE_NAME = 'product_carrier';
 
@@ -119,7 +119,7 @@ class ProductCarrierRepository extends AbstractRepository implements RepositoryI
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getProductCarrierIdsByCarrierId($idProduct)
+    public function getCustomProductCarrierIdsByCarrierId($idProduct)
     {
         $this->generateMinimalQuery(self::TABLE_NAME, 'pc');
 

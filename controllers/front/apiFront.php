@@ -66,6 +66,15 @@ class ps_EventbusApiFrontModuleFrontController extends ModuleFrontController
         // edit shopContent for matching Config.php const
         $shopContentEdited = str_replace('-', '_', $shopContent);
 
-        $frontApiService->handleDataSync($shopContentEdited, $jobId, $langIso, $limit, $fullSyncRequested, $explainSql, $verbose, $psLogsEnabled);
+        $frontApiService->handleDataSync(
+            $shopContentEdited,
+            $jobId,
+            $langIso,
+            $limit,
+            $fullSyncRequested,
+            $explainSql,
+            $verbose,
+            $psLogsEnabled
+        );
     }
 }
