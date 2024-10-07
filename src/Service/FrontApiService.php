@@ -81,7 +81,7 @@ class FrontApiService
      * @param string $langIso
      * @param int $limit
      * @param bool $fullSyncRequested
-     * 
+     *
      * @return void
      */
     public function handleDataSync($shopContent, $jobId, $langIso, $limit, $fullSyncRequested)

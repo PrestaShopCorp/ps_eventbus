@@ -50,7 +50,7 @@ class ps_EventbusApiFrontModuleFrontController extends ModuleFrontController
 
         /** @var bool $explainSql */
         $explainSql = Tools::getValue('explain_sql', 0) == 1;
-        
+
         /** @var bool $verbose */
         $verbose = Tools::getValue('verbose', 0) == 1;
 

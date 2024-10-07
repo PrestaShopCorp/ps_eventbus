@@ -106,7 +106,7 @@ abstract class AbstractRepository
 
     /**
      * @param bool $enableCurrentExplain
-     * 
+     *
      * @return array<mixed>
      *
      * @throws \PrestaShopException
