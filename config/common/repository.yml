@@ -56,7 +56,7 @@ services:
     public: true
 
   PrestaShop\Module\PsEventbus\Repository\CustomProductCarrierRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\ProductCarrierRepository
+    class: PrestaShop\Module\PsEventbus\Repository\CustomProductCarrierRepository
     public: true
 
   PrestaShop\Module\PsEventbus\Repository\CategoryRepository:
@@ -127,8 +127,8 @@ services:
     class: PrestaShop\Module\PsEventbus\Repository\StockRepository
     public: true
 
-  PrestaShop\Module\PsEventbus\Repository\StockMvtRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\StockMvtRepository
+  PrestaShop\Module\PsEventbus\Repository\StockMovementRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\StockMovementRepository
     public: true
     
   PrestaShop\Module\PsEventbus\Repository\SpecificPriceRepository:

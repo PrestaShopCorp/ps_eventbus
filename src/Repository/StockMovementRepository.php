@@ -24,7 +24,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class StockMvtRepository extends AbstractRepository implements RepositoryInterface
+class StockMovementRepository extends AbstractRepository implements RepositoryInterface
 {
     const TABLE_NAME = 'stock_mvt';
 

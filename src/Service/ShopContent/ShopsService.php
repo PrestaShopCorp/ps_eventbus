@@ -27,7 +27,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class ShopDetailsService implements ShopContentServiceInterface
+class ShopsService implements ShopContentServiceInterface
 {
     /** @var CurrenciesService */
     private $currenciesService;
@@ -89,7 +89,7 @@ class ShopDetailsService implements ShopContentServiceInterface
         return [
             [
                 'id' => '1',
-                'collection' => Config::COLLECTION_SHOP_DETAILS,
+                'collection' => Config::COLLECTION_SHOPS,
                 'properties' => [
                     'created_at' => $this->shopRepository->getCreatedAt(),
                     'folder_created_at' => $folderCreatedAt,
