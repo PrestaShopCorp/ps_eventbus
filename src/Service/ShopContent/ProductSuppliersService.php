@@ -41,13 +41,12 @@ class ProductSuppliersService implements ShopContentServiceInterface
      * @param int $offset
      * @param int $limit
      * @param string $langIso
-     * @param bool $explainSql
      *
      * @return array<mixed>
      */
-    public function getContentsForFull($offset, $limit, $langIso, $explainSql)
+    public function getContentsForFull($offset, $limit, $langIso)
     {
-        $result = $this->productSupplierRepository->retrieveContentsForFull($offset, $limit, $langIso, $explainSql);
+        $result = $this->productSupplierRepository->retrieveContentsForFull($offset, $limit, $langIso);
 
         if (empty($result)) {
             return [];
@@ -68,13 +67,12 @@ class ProductSuppliersService implements ShopContentServiceInterface
      * @param int $limit
      * @param array<string, int> $contentIds
      * @param string $langIso
-     * @param bool $explainSql
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso, $explainSql)
+    public function getContentsForIncremental($limit, $contentIds, $langIso)
     {
-        $result = $this->productSupplierRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso, $explainSql);
+        $result = $this->productSupplierRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso);
 
         if (empty($result)) {
             return [];

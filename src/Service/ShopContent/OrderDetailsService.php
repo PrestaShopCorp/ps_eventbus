@@ -41,13 +41,12 @@ class OrderDetailsService implements ShopContentServiceInterface
      * @param int $offset
      * @param int $limit
      * @param string $langIso
-     * @param bool $explainSql
      *
      * @return array<mixed>
      */
-    public function getContentsForFull($offset, $limit, $langIso, $explainSql)
+    public function getContentsForFull($offset, $limit, $langIso)
     {
-        $result = $this->orderDetailRepository->retrieveContentsForFull($offset, $limit, $langIso, $explainSql);
+        $result = $this->orderDetailRepository->retrieveContentsForFull($offset, $limit, $langIso);
 
         if (empty($result)) {
             return [];
@@ -68,7 +67,6 @@ class OrderDetailsService implements ShopContentServiceInterface
      * @param int $limit
      * @param array<string, int> $orderDetailIds
      * @param string $langIso
-     * @param bool $explainSql
      *
      * @return array<mixed>
      */

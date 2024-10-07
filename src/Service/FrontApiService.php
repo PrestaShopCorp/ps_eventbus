@@ -81,13 +81,10 @@ class FrontApiService
      * @param string $langIso
      * @param int $limit
      * @param bool $fullSyncRequested
-     * @param bool $explainSql
-     * @param bool $verbose
-     * @param bool $psLogEnabled
      * 
      * @return void
      */
-    public function handleDataSync($shopContent, $jobId, $langIso, $limit, $fullSyncRequested, $explainSql, $verbose, $psLogEnabled)
+    public function handleDataSync($shopContent, $jobId, $langIso, $limit, $fullSyncRequested)
     {
         try {
             if (!in_array($shopContent, array_merge(Config::SHOP_CONTENTS, [Config::COLLECTION_HEALTHCHECK]), true)) {
@@ -159,8 +156,7 @@ class FrontApiService
                     $offset,
                     $limit,
                     $this->startTime,
-                    $dateNow,
-                    $explainSql
+                    $dateNow
                 );
             } else {
                 $response = $this->synchronizationService->sendIncrementalSync(
@@ -168,8 +164,7 @@ class FrontApiService
                     $jobId,
                     $langIso,
                     $limit,
-                    $this->startTime,
-                    $explainSql
+                    $this->startTime
                 );
             }
 
@@ -184,15 +179,15 @@ class FrontApiService
                 )
             );
         } catch (\PrestaShopDatabaseException $exception) {
-            $this->errorHandler->handle($exception, $verbose, $psLogEnabled);
+            $this->errorHandler->handle($exception);
         } catch (EnvVarException $exception) {
-            $this->errorHandler->handle($exception, $verbose, $psLogEnabled);
+            $this->errorHandler->handle($exception);
         } catch (FirebaseException $exception) {
-            $this->errorHandler->handle($exception, $verbose, $psLogEnabled);
+            $this->errorHandler->handle($exception);
         } catch (ServiceNotFoundException $exception) {
-            $this->errorHandler->handle($exception, $verbose, $psLogEnabled);
+            $this->errorHandler->handle($exception);
         } catch (\Exception $exception) {
-            $this->errorHandler->handle($exception, $verbose, $psLogEnabled);
+            $this->errorHandler->handle($exception);
         }
     }
 
@@ -233,11 +228,11 @@ class FrontApiService
             }
 
             if ($exception instanceof \PrestaShopDatabaseException) {
-                $this->errorHandler->handle($exception, false, false);
+                $this->errorHandler->handle($exception);
             } elseif ($exception instanceof EnvVarException) {
-                $this->errorHandler->handle($exception, false, false);
+                $this->errorHandler->handle($exception);
             } elseif ($exception instanceof FirebaseException) {
-                $this->errorHandler->handle($exception, false, false);
+                $this->errorHandler->handle($exception);
             }
 
             return false;

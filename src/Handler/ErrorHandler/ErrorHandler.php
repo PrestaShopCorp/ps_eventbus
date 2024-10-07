@@ -74,28 +74,18 @@ class ErrorHandler
 
     /**
      * @param mixed $exception
-     * @param bool $verbose
-     * @param bool $psLogsEnabled
      *
      * @return void
      *
      * @@throws Exception
      */
-    public function handle($exception, $verbose = null, $psLogsEnabled = null)
+    public function handle($exception)
     {
-        if ($verbose === null) {
-            $verbose = false;
-        }
-
-        if ($psLogsEnabled === null) {
-            $psLogsEnabled = false;
-        }
-
         if (!$this->client) {
             return;
         }
 
-        if ($psLogsEnabled) {
+        if (PS_EVENTBUS_LOGS_ENABLED) {
             \PrestaShopLogger::addLog(
                 $exception->getMessage() . ' : ' . $exception->getFile() . ':' . $exception->getLine() . ' | ' . $exception->getTraceAsString(),
                 3,
@@ -107,7 +97,7 @@ class ErrorHandler
         }
 
         // if debug mode enabled and verbose set to true, print error in front office
-        if (_PS_MODE_DEV_ == true && $verbose == true) {
+        if (_PS_MODE_DEV_ == true && PS_EVENTBUS_VERBOSE_ENABLED == true) {
             throw $exception;
         } else {
             $this->client->captureException($exception);

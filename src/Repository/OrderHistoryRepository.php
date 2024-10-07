@@ -68,34 +68,32 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
      * @param int $offset
      * @param int $limit
      * @param string $langIso
-     * @param bool $explainSql
      *
      * @return array<mixed>
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso, $explainSql)
+    public function retrieveContentsForFull($offset, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
 
         $this->query->limit((int) $limit, (int) $offset);
 
-        return $this->runQuery($explainSql);
+        return $this->runQuery();
     }
 
     /**
      * @param int $limit
      * @param array<mixed> $contentIds
      * @param string $langIso
-     * @param bool $explainSql
      *
      * @return array<mixed>
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForIncremental($limit, $contentIds, $langIso, $explainSql)
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
         $this->generateFullQuery($langIso, true);
 
@@ -104,7 +102,7 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
             ->limit($limit)
         ;
 
-        return $this->runQuery($explainSql);
+        return $this->runQuery();
     }
 
     /**
@@ -131,7 +129,6 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
     /**
      * @param array<mixed> $orderIds
      * @param string $langIso
-     * @param bool $explainSql
      *
      * @return array<mixed>
      *
@@ -147,6 +144,6 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
 
         $this->query->where('oh.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')');
 
-        return $this->runQuery($explainSql);
+        return $this->runQuery();
     }
 }

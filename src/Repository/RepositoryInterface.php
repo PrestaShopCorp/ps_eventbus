@@ -41,21 +41,19 @@ interface RepositoryInterface
      * @param int $offset
      * @param int $limit
      * @param string $langIso
-     * @param bool $explainSql
      *
      * @return array<mixed>
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso, $explainSql);
+    public function retrieveContentsForFull($offset, $limit, $langIso);
 
     /**
      * @param int $limit
      * @param array<mixed> $contentIds
      * @param string $langIso
-     * @param bool $explainSql
      *
      * @return array<mixed>
      */
-    public function retrieveContentsForIncremental($limit, $contentIds, $langIso, $explainSql);
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso);
 
     /**
      * @param int $offset

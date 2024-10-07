@@ -74,7 +74,7 @@ class ProxyService implements ProxyServiceInterface
 
             return ['error' => $exception->getMessage()];
         } catch (ConnectException $exception) {
-            $this->errorHandler->handle(new \Exception($exception));
+            $this->errorHandler->handle($exception);
 
             return ['error' => $exception->getMessage()];
         }

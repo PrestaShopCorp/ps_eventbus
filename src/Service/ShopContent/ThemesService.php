@@ -41,11 +41,10 @@ class ThemesService implements ShopContentServiceInterface
      * @param int $offset
      * @param int $limit
      * @param string $langIso
-     * @param bool $explainSql
      *
      * @return array<mixed>
      */
-    public function getContentsForFull($offset, $limit, $langIso, $explainSql)
+    public function getContentsForFull($offset, $limit, $langIso)
     {
         $result = $this->getAllThemes();
 
@@ -68,11 +67,10 @@ class ThemesService implements ShopContentServiceInterface
      * @param int $limit
      * @param array<string, int> $contentIds
      * @param string $langIso
-     * @param bool $explainSql
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso, $explainSql)
+    public function getContentsForIncremental($limit, $contentIds, $langIso)
     {
         $result = $this->getAllThemes();
 

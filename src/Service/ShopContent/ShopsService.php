@@ -65,11 +65,10 @@ class ShopsService implements ShopContentServiceInterface
      * @param int $offset
      * @param int $limit
      * @param string $langIso
-     * @param bool $explainSql
      *
      * @return array<mixed>
      */
-    public function getContentsForFull($offset, $limit, $langIso, $explainSql)
+    public function getContentsForFull($offset, $limit, $langIso)
     {
         $langId = !empty($langIso) ? (int) \Language::getIdByIso($langIso) : null;
 
@@ -122,11 +121,10 @@ class ShopsService implements ShopContentServiceInterface
      * @param int $limit
      * @param array<string, int> $contentIds
      * @param string $langIso
-     * @param bool $explainSql
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso, $explainSql)
+    public function getContentsForIncremental($limit, $contentIds, $langIso)
     {
         return [];
     }

@@ -56,14 +56,13 @@ class WishlistProductRepository extends AbstractRepository implements Repository
      * @param int $offset
      * @param int $limit
      * @param string $langIso
-     * @param bool $explainSql
      *
      * @return array<mixed>
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso, $explainSql)
+    public function retrieveContentsForFull($offset, $limit, $langIso)
     {
         // need this module for this table : https://addons.prestashop.com/en/undownloadable/9131-wishlist-block.html
         if (empty($this->checkIfPsWishlistIsInstalled())) {
@@ -74,21 +73,20 @@ class WishlistProductRepository extends AbstractRepository implements Repository
 
         $this->query->limit((int) $limit, (int) $offset);
 
-        return $this->runQuery($explainSql);
+        return $this->runQuery();
     }
 
     /**
      * @param int $limit
      * @param array<mixed> $contentIds
      * @param string $langIso
-     * @param bool $explainSql
      *
      * @return array<mixed>
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForIncremental($limit, $contentIds, $langIso, $explainSql)
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
         $this->generateFullQuery($langIso, true);
 
@@ -97,7 +95,7 @@ class WishlistProductRepository extends AbstractRepository implements Repository
             ->limit($limit)
         ;
 
-        return $this->runQuery($explainSql);
+        return $this->runQuery();
     }
 
     /**

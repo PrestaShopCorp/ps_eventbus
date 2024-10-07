@@ -105,16 +105,16 @@ abstract class AbstractRepository
     }
 
     /**
-     * @param bool $explainSql
-     *
+
+     * 
      * @return array<mixed>
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    protected function runQuery($explainSql)
+    protected function runQuery()
     {
-        if ($explainSql != null && $explainSql === true) {
+        if (PS_EVENTBUS_EXPLAIN_SQL_ENABLED === true) {
             $this->debugQuery();
         }
 

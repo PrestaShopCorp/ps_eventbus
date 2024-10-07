@@ -61,34 +61,32 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
      * @param int $offset
      * @param int $limit
      * @param string $langIso
-     * @param bool $explainSql
      *
      * @return array<mixed>
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso, $explainSql)
+    public function retrieveContentsForFull($offset, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
 
         $this->query->limit((int) $limit, (int) $offset);
 
-        return $this->runQuery($explainSql);
+        return $this->runQuery();
     }
 
     /**
      * @param int $limit
      * @param array<mixed> $contentIds
      * @param string $langIso
-     * @param bool $explainSql
      *
      * @return array<mixed>
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForIncremental($limit, $contentIds, $langIso, $explainSql)
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
         $this->generateFullQuery($langIso, true);
 
@@ -96,7 +94,7 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
             ->where('ocr.id_order_cart_rule IN(' . implode(',', array_map('intval', $contentIds)) . ')')
             ->limit($limit);
 
-        return $this->runQuery($explainSql);
+        return $this->runQuery();
     }
 
     /**

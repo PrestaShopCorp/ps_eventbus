@@ -50,7 +50,7 @@ class ps_EventbusApiFrontModuleFrontController extends ModuleFrontController
 
         /** @var bool $explainSql */
         $explainSql = Tools::getValue('explain_sql', 0) == 1;
-
+        
         /** @var bool $verbose */
         $verbose = Tools::getValue('verbose', 0) == 1;
 
@@ -63,6 +63,11 @@ class ps_EventbusApiFrontModuleFrontController extends ModuleFrontController
         /** @var FrontApiService $frontApiService */
         $frontApiService = $module->getService('PrestaShop\Module\PsEventbus\Service\FrontApiService');
 
+        // Define our 3 constants here to be retrieved later in the application (errorHandler, repositories)
+        define('PS_EVENTBUS_EXPLAIN_SQL_ENABLED', $explainSql);
+        define('PS_EVENTBUS_VERBOSE_ENABLED', $verbose);
+        define('PS_EVENTBUS_LOGS_ENABLED', $psLogsEnabled);
+
         // edit shopContent for matching Config.php const
         $shopContentEdited = str_replace('-', '_', $shopContent);
 
@@ -71,10 +76,7 @@ class ps_EventbusApiFrontModuleFrontController extends ModuleFrontController
             $jobId,
             $langIso,
             $limit,
-            $fullSyncRequested,
-            $explainSql,
-            $verbose,
-            $psLogsEnabled
+            $fullSyncRequested
         );
     }
 }
