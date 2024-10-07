@@ -109,7 +109,7 @@ class SynchronizationService
         int $offset,
         int $limit,
         int $startTime,
-        string $dateNow,
+        string $dateNow
     ) {
         $response = [];
 
@@ -166,7 +166,7 @@ class SynchronizationService
         string $jobId,
         string $langIso,
         int $limit,
-        int $startTime,
+        int $startTime
     ) {
         $response = [];
 
