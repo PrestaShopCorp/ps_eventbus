@@ -104,7 +104,52 @@ Dev requirements:
 
 Or an up-to-date [Docker engine](https://docs.docker.com/engine/install).
 
-## List of missing data in a database and why is missing
+### How to add new shop content
+Let's take the example of adding a shopContent named "plane".
+
+Add the shop content in the [Config.php](src/Config/Config.php) file (create a constant, and add it to the SHOP_CONTENTS array).
+```PHP
+const COLLECTION_PLANES = 'planes';
+
+const SHOP_CONTENTS = [
+  ...
+  self::COLLECTION_PLANES
+  ...
+];
+```
+
+Create a service "planesService.php" (in plural) in the [shop content services folder](src/Service/ShopContent/) that implements the [ShopContentServiceInterface.php](src/Service/ShopContent/ShopContentServiceInterface.php) interface. For the method structure, use the existing base on all other shop content services to maintain consistency.
+```PHP
+class PlanesService implements ShopContentServiceInterface
+{
+  ...  
+}
+```
+
+Then create a repository PlaneRepository.php (in singular) in the [Repository](src/Repository/) folder that extends the [AbstractRepository.php](src/Repository/AbstractRepository.php) class and implements the [RepositoryInterface.php](src/Repository/RepositoryInterface.php) interface. Similarly, maintain consistency with other shop content repositories.
+```PHP
+class PlaneRepository extends AbstractRepository implements RepositoryInterface
+{
+  ...  
+}
+```
+
+Add your shop content in the [e2e config file](e2e/src/helpers/shop-contents.ts).
+```javascript
+export const shopContentMapping = {
+  ...
+  planes: 'planes'
+  ...
+}
+```
+
+Run the tests once to generate the necessary dumps (they will be present in the [dump](e2e/dumps/) folder). Once the test is performed (and failed), copy the planes.json file, and paste it into the fixture folder for your given version. Do the same for each version (if the versions return different results).
+
+You can run the tests again and ensure everything is green.
+
+In case your shopContent cannot return results (absence of data in the tables), please add a planes.json file in the folders of each version containing an empty array.
+
+### List of missing data in a database and why is missing
 
 |           Object content           |        Reason        | Added in PS version |                                                                              Link with more info                                                                              |
 |:----------------------------------:|:--------------------:|:-------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
@@ -125,24 +170,7 @@ Or an up-to-date [Docker engine](https://docs.docker.com/engine/install).
 ¹ Feature enabled only with PsWishlist module</br>
 ² Feature enabled only with PsFacebook module
 
-## How to add new shop content
-Prenons pour exemple l'ajout d'un shopContent nommé "plane".
-
-- Ajoutez le shop content dans le fichier [Config.php](src/Config/Config.php) (créez une constante, et ajoutez là au tableau SHOP_CONTENTS).
-```PHP
-const COLLECTION_PLANES = 'planes';
-
-const SHOP_CONTENTS = [
-  ...
-  self::COLLECTION_PLANES
-  ...
-];
-```
-- Créez un service "monShopContentsService.php" dans le [dossier des service shop content](src/Service/ShopContent/) qui implémente l'interface [ShopContentServiceInterface.php](src/Service/ShopContent/ShopContentServiceInterface.php). Pour la structure des méthodes, reprenez la base existante sur tout les autres service de shop content pour garder une cohérence.
-- Créez un repository pour votre shop content (ex: monShopContentRepository.php) dans le dossier [Repository](src/Repository/) qui etends la classe [AbstractRepository.php](src/Repository/AbstractRepository.php) et implemente l'interface [RepositoryInterface.php](src/Repository/RepositoryInterface.php). De la même manière, gardez une cohérence avec les autres repository de shop content.
-- Ajoutez dans le fichier de [config e2e](e2e/src/helpers/shop-contents.ts) votre shop content, puis lancez les tests une fois pour générer les dumps nécessaire (seront présent dans le dossier [dump](e2e/dumps/)). Une fois le test réalisé (et échoué), copier le fichier json correspondant à votre shop content, et collez le dans le dossier fixture, pour votre version donné. Faites la même chose pour chaque version (si les versions retournent des résultats différent). 
-
-## Debugging
+### Debugging
 There are 3 variables that are passed "magically" from the apiFront file to the end of the chain (repositories and errorHandler):
 - PS_EVENTBUS_EXPLAIN_SQL_ENABLED
 - PS_EVENTBUS_VERBOSE_ENABLED
