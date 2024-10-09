@@ -263,7 +263,7 @@ class SynchronizationService
             foreach ($contentTypesWithIds as $contentType => $contentIds) {
                 $count = $this->incrementalSyncRepository->getIncrementalSyncObjectCountByType($contentType);
 
-                if ($count > Config::INCREMENTAL_SYNC_MAX_ITEMS_PER_SHOP_CONTENT) {
+                if ($count > Config::INCREMENTAL_SYNC_MAX_PAGE_SIZE) {
                     $hasDeleted = $this->incrementalSyncRepository->removeIncrementaSyncObjectByType($contentType);
 
                     if ($hasDeleted) {

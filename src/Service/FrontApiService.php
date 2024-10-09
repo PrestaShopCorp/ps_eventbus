@@ -227,12 +227,12 @@ class FrontApiService
                 return false;
             }
 
-            if ($exception instanceof \PrestaShopDatabaseException) {
-                $this->errorHandler->handle($exception);
-            } elseif ($exception instanceof EnvVarException) {
-                $this->errorHandler->handle($exception);
-            } elseif ($exception instanceof FirebaseException) {
-                $this->errorHandler->handle($exception);
+            switch ($exception) {
+                case $exception instanceof \PrestaShopDatabaseException:
+                case $exception instanceof EnvVarException:
+                case $exception instanceof FirebaseException:
+                    $this->errorHandler->handle($exception);
+                    break;
             }
 
             return false;

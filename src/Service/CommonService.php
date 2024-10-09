@@ -56,14 +56,19 @@ class CommonService
     {
         $code = $exception->getCode() == 0 ? 500 : $exception->getCode();
 
-        if ($exception instanceof \PrestaShopDatabaseException) {
-            $code = Config::DATABASE_QUERY_ERROR_CODE;
-        } elseif ($exception instanceof EnvVarException) {
-            $code = Config::ENV_MISCONFIGURED_ERROR_CODE;
-        } elseif ($exception instanceof FirebaseException) {
-            $code = Config::REFRESH_TOKEN_ERROR_CODE;
-        } elseif ($exception instanceof QueryParamsException) {
-            $code = Config::INVALID_URL_QUERY;
+        switch ($exception) {
+            case $exception instanceof \PrestaShopDatabaseException:
+                $code = Config::DATABASE_QUERY_ERROR_CODE;
+                break;
+            case $exception instanceof EnvVarException:
+                $code = Config::ENV_MISCONFIGURED_ERROR_CODE;
+                break;
+            case $exception instanceof FirebaseException:
+                $code = Config::REFRESH_TOKEN_ERROR_CODE;
+                break;
+            case $exception instanceof QueryParamsException:
+                $code = Config::INVALID_URL_QUERY;
+                break;
         }
 
         $response = [

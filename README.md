@@ -12,6 +12,11 @@
 | 1.7.3-1.7.8         | 7.1+ | From 2.x    |
 | 1.6.1.11 - 1.7.2.5  | 7.1  | From 3.1    |
 
+## BREAKING CHANGES
+
+### Front controllers and API endpoints
+Depuis la version 4.0, tout les endpoints API sont regroupé sous un seul controller "apiFront.php". La route a appeller est donc maintenant unique, et le shopContent n'est plus un endpoint en particulier, mais un paramètre query de la requête (ex: "http://localhost:8000/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=healtcheck")
+
 PS Accounts compatibility matrix [can be viewed here](https://github.com/PrestaShopCorp/ps_accounts#compatibility-matrix).
 
 ### Product Images Issue in PHP 8.1
@@ -51,7 +56,7 @@ To check the module healthiness (authenticated route):
 
 ```sh
 BASE_URL="http://localhost:8000"
-curl -s -L "$BASE_URL/index.php?fc=module&module=ps_eventbus&controller=apiFront&is_e2e=1&shop_content=healthcheck&job_id=valid-job-stuff" | jq .
+curl -s -L "$BASE_URL/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=healthcheck&job_id=valid-job-stuff" | jq .
 {
   "prestashop_version": "1.6.1.24",
   "ps_eventbus_version": "0.0.0",
@@ -72,7 +77,7 @@ To check the fallback route (unauthenticated):
 
 ```sh
 BASE_URL="http://localhost:8000"
-curl -s -L "$BASE_URL/index.php?fc=module&module=ps_eventbus&controller=apiFront&is_e2e=1&shop_content=healthcheck" | jq .
+curl -s -L "$BASE_URL/index.php?fc=module&module=ps_eventbus&controller=apiFront=1&shop_content=healthcheck" | jq .
 {
   "ps_account": true,
   "is_valid_jwt": true,
@@ -119,3 +124,28 @@ Or an up-to-date [Docker engine](https://docs.docker.com/engine/install).
 
 ¹ Feature enabled only with PsWishlist module</br>
 ² Feature enabled only with PsFacebook module
+
+## How to add new shop content
+Prenons pour exemple l'ajout d'un shopContent nommé "plane".
+
+- Ajoutez le shop content dans le fichier [Config.php](src/Config/Config.php) (créez une constante, et ajoutez là au tableau SHOP_CONTENTS).
+```PHP
+const COLLECTION_PLANES = 'planes';
+
+const SHOP_CONTENTS = [
+  ...
+  self::COLLECTION_PLANES
+  ...
+];
+```
+- Créez un service "monShopContentsService.php" dans le [dossier des service shop content](src/Service/ShopContent/) qui implémente l'interface [ShopContentServiceInterface.php](src/Service/ShopContent/ShopContentServiceInterface.php). Pour la structure des méthodes, reprenez la base existante sur tout les autres service de shop content pour garder une cohérence.
+- Créez un repository pour votre shop content (ex: monShopContentRepository.php) dans le dossier [Repository](src/Repository/) qui etends la classe [AbstractRepository.php](src/Repository/AbstractRepository.php) et implemente l'interface [RepositoryInterface.php](src/Repository/RepositoryInterface.php). De la même manière, gardez une cohérence avec les autres repository de shop content.
+- Ajoutez dans le fichier de [config e2e](e2e/src/helpers/shop-contents.ts) votre shop content, puis lancez les tests une fois pour générer les dumps nécessaire (seront présent dans le dossier [dump](e2e/dumps/)). Une fois le test réalisé (et échoué), copier le fichier json correspondant à votre shop content, et collez le dans le dossier fixture, pour votre version donné. Faites la même chose pour chaque version (si les versions retournent des résultats différent). 
+
+## Debugging
+There are 3 variables that are passed "magically" from the apiFront file to the end of the chain (repositories and errorHandler):
+- PS_EVENTBUS_EXPLAIN_SQL_ENABLED
+- PS_EVENTBUS_VERBOSE_ENABLED
+- PS_EVENTBUS_LOGS_ENABLED
+
+These variables are defined via the PHP function define() and reused in the files mentioned above. The reason for this usage is to avoid having to pass these variables through the entire execution chain to retrieve them at the end of the chain (e.g., apiFront => frontService => shopContentService => shopContentRepository).
