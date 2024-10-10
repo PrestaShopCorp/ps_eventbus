@@ -72,7 +72,6 @@ class Config
     const COLLECTION_CUSTOM_PRODUCT_CARRIERS = 'custom_product_carriers';
     const COLLECTION_DELETED = 'deleted';
     const COLLECTION_EMPLOYEES = 'employees';
-    const COLLECTION_HEALTHCHECK = 'healthcheck';
     const COLLECTION_IMAGES = 'images';
     const COLLECTION_IMAGE_TYPES = 'image_types';
     const COLLECTION_LANGUAGES = 'languages';

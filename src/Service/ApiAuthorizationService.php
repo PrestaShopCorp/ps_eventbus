@@ -75,7 +75,7 @@ class ApiAuthorizationService
         try {
             $authorizationResponse = $this->authorizeCall($jobId);
 
-            if (is_array($authorizationResponse)) {
+            if ($authorizationResponse) {
                 CommonService::exitWithResponse($authorizationResponse);
             } elseif (!$authorizationResponse) {
                 throw new \PrestaShopDatabaseException('Failed saving job id to database');
@@ -115,7 +115,7 @@ class ApiAuthorizationService
      *
      * @param string $jobId
      *
-     * @return array<mixed>|bool
+     * @return bool
      */
     private function authorizeCall($jobId)
     {
@@ -129,7 +129,7 @@ class ApiAuthorizationService
         // Check the jobId validity to avoid Denial Of Service
         $jobValidationResponse = $this->syncApiClient->validateJobId($jobId);
 
-        if (!is_array($jobValidationResponse) || (int) $jobValidationResponse['httpCode'] !== 201) {
+        if ((int) $jobValidationResponse['httpCode'] !== 201) {
             return false;
         }
 

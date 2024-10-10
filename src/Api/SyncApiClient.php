@@ -87,7 +87,7 @@ class SyncApiClient
     /**
      * @param string $jobId
      *
-     * @return array<mixed>|bool
+     * @return array<mixed>
      */
     public function validateJobId($jobId)
     {

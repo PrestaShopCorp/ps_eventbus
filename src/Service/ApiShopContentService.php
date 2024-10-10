@@ -88,7 +88,7 @@ class ApiShopContentService
     public function handleDataSync($shopContent, $jobId, $langIso, $limit, $fullSyncRequested)
     {
         try {
-            if (!in_array($shopContent, array_merge(Config::SHOP_CONTENTS, [Config::COLLECTION_HEALTHCHECK]), true)) {
+            if (!in_array($shopContent, Config::SHOP_CONTENTS, true)) {
                 CommonService::exitWithExceptionMessage(new QueryParamsException('404 - ShopContent not found', Config::INVALID_URL_QUERY));
             }
 

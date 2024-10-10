@@ -54,7 +54,7 @@ Simple!
 Is the module healthy?
 
 ```sh
-curl -s "http://localhost:8000/index.php?fc=module&module=ps_eventbus&controller=apiShopContent&shop_content=healthcheck&job_id=valid-job-1" | jq .
+curl -s "http://localhost:8000/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck&job_id=valid-job-1" | jq .
 ```
 
 Capture orders:

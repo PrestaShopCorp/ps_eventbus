@@ -24,8 +24,8 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-use PrestaShop\Module\PsEventbus\Service\CommonService;
 use PrestaShop\Module\PsEventbus\Service\ApiHealthCheckService;
+use PrestaShop\Module\PsEventbus\Service\CommonService;
 
 if (!defined('_PS_VERSION_')) {
     exit;
