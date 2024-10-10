@@ -26,7 +26,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
-use Context;
 use Exception;
 use PrestaShop\Module\PsEventbus\Service\CommonService;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
@@ -90,7 +89,7 @@ class ErrorHandler
     {
         $logsEnabled = false;
         $verboseEnabled = false;
-    
+
         if (!$this->client) {
             return;
         }
@@ -102,7 +101,6 @@ class ErrorHandler
         if (defined('PS_EVENTBUS_VERBOSE_ENABLED')) {
             $verboseEnabled = PS_EVENTBUS_VERBOSE_ENABLED;
         }
-
 
         if ($logsEnabled == true) {
             \PrestaShopLogger::addLog(
