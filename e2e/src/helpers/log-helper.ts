@@ -7,7 +7,12 @@ import { getShopHealthCheck } from "./data-helper";
 
 export function logAxiosError(err: Error) {
   if (err instanceof AxiosError) {
-    console.log(R.pick(["status", "statusText", "data"], err.response));
+    const data = {
+      ...R.pick(["url"], err.response.config),
+      ...R.pick(["status", "statusText", "data"], err.response),
+    };
+
+    console.log(data);
   }
 }
 
@@ -17,6 +22,7 @@ export async function dumpUploadData(
 ) {
   const shopVersion = (await getShopHealthCheck()).prestashop_version;
   const dir = `./dumps/${testConfig.testRunTime}/${shopVersion}/${filename}`;
+
   await fs.promises.mkdir(dir, { recursive: true });
   const groupedData = R.groupBy((el) => el.collection, data);
   const files = Object.keys(groupedData).map((collection) => {
