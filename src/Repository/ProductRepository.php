@@ -192,7 +192,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
 
         $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
 
-        $result = $this->runQuery(false);
+        $result = $this->runQuery(true);
 
         return $result[0]['count'];
     }
@@ -225,7 +225,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
             ->select('al.name as value')
         ;
 
-        $attributes = $this->runQuery(false);
+        $attributes = $this->runQuery(true);
 
         $resultArray = [];
 
@@ -262,7 +262,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
             ->select('fvl.value')
         ;
 
-        $features = $this->runQuery(false);
+        $features = $this->runQuery(true);
 
         $resultArray = [];
 
@@ -293,7 +293,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
             ->select('IFNULL(imgs.cover, 0) as cover')
         ;
 
-        return $this->runQuery(false);
+        return $this->runQuery(true);
     }
 
     /**
@@ -316,7 +316,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
             ->select('id_image')
         ;
 
-        return $this->runQuery(false);
+        return $this->runQuery(true);
     }
 
     /**
@@ -354,6 +354,6 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
             $this->query->select('0 as id_product_attribute');
         }
 
-        return $this->runQuery(false);
+        return $this->runQuery(true);
     }
 }

@@ -66,7 +66,7 @@ class CountryRepository extends AbstractRepository
 
             $this->query->select('iso_code');
 
-            $result = $this->runQuery(false);
+            $result = $this->runQuery(true);
 
             foreach ($result as $country) {
                 $isoCodes[] = $country['iso_code'];

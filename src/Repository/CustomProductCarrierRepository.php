@@ -110,7 +110,7 @@ class CustomProductCarrierRepository extends AbstractRepository implements Repos
 
         $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
 
-        $result = $this->runQuery(false);
+        $result = $this->runQuery(true);
 
         return $result[0]['count'];
     }
@@ -132,6 +132,6 @@ class CustomProductCarrierRepository extends AbstractRepository implements Repos
             ->where('pc.id_shop = ' . parent::getShopContext()->id)
         ;
 
-        return $this->runQuery(false);
+        return $this->runQuery(true);
     }
 }

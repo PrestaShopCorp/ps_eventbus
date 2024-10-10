@@ -132,7 +132,7 @@ class StockRepository extends AbstractRepository implements RepositoryInterface
 
         $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
 
-        $result = $this->runQuery(false);
+        $result = $this->runQuery(true);
 
         return $result[0]['count'];
     }
@@ -155,7 +155,7 @@ class StockRepository extends AbstractRepository implements RepositoryInterface
             ->where('sa.id_shop = ' . (int) parent::getShopContext()->id)
         ;
 
-        $result = $this->runQuery(false);
+        $result = $this->runQuery(true);
 
         return $result[0]['id_stock_available'];
     }

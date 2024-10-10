@@ -130,7 +130,7 @@ class CategoryRepository extends AbstractRepository implements RepositoryInterfa
 
         $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
 
-        $result = $this->runQuery(false);
+        $result = $this->runQuery(true);
 
         return $result[0]['count'];
     }
@@ -159,6 +159,6 @@ class CategoryRepository extends AbstractRepository implements RepositoryInterfa
             ->select('c.id_parent')
         ;
 
-        return $this->runQuery(false);
+        return $this->runQuery(true);
     }
 }

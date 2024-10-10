@@ -78,7 +78,7 @@ class TaxeRepository extends AbstractRepository
                 ->select('GROUP_CONCAT(s.iso_code SEPARATOR ",") as state_iso_code')
             ;
 
-            $this->countryIsoCodeCache[$cacheKey] = $this->runQuery(false);
+            $this->countryIsoCodeCache[$cacheKey] = $this->runQuery(true);
         }
 
         return $this->countryIsoCodeCache[$cacheKey];

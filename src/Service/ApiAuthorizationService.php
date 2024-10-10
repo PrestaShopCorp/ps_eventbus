@@ -75,9 +75,7 @@ class ApiAuthorizationService
         try {
             $authorizationResponse = $this->authorizeCall($jobId);
 
-            if ($authorizationResponse) {
-                CommonService::exitWithResponse($authorizationResponse);
-            } elseif (!$authorizationResponse) {
+            if (!$authorizationResponse) {
                 throw new \PrestaShopDatabaseException('Failed saving job id to database');
             }
 
@@ -121,11 +119,11 @@ class ApiAuthorizationService
     {
         // Check if the job already exists
         $job = $this->eventbusSyncRepository->findJobById($jobId);
-
+        
         if ($job) {
             return true;
         }
-
+        
         // Check the jobId validity to avoid Denial Of Service
         $jobValidationResponse = $this->syncApiClient->validateJobId($jobId);
 

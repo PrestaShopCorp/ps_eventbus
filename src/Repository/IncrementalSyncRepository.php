@@ -145,7 +145,7 @@ class IncrementalSyncRepository extends AbstractRepository
 
         $this->query->select('eis.id_object');
 
-        $result = $this->runQuery(false);
+        $result = $this->runQuery(true);
 
         if (!empty($result)) {
             return array_map(function ($object) {

@@ -125,7 +125,7 @@ class WishlistProductRepository extends AbstractRepository implements Repository
 
         $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
 
-        $result = $this->runQuery(false);
+        $result = $this->runQuery(true);
 
         return $result[0]['count'];
     }

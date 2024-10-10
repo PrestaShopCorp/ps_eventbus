@@ -63,7 +63,7 @@ class StateRepository extends AbstractRepository
 
             $this->query->select('s.iso_code');
 
-            $result = $this->runQuery(false);
+            $result = $this->runQuery(true);
 
             foreach ($result as $state) {
                 $isoCodes[] = $state['iso_code'];

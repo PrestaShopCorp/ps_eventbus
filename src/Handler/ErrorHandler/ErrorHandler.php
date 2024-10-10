@@ -26,6 +26,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
+use Context;
 use Exception;
 use PrestaShop\Module\PsEventbus\Service\CommonService;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
@@ -87,11 +88,23 @@ class ErrorHandler
      */
     public function handle($exception)
     {
+        $logsEnabled = false;
+        $verboseEnabled = false;
+    
         if (!$this->client) {
             return;
         }
 
-        if (defined(PS_EVENTBUS_LOGS_ENABLED) && PS_EVENTBUS_LOGS_ENABLED == true) {
+        if (defined('PS_EVENTBUS_VERBOSE_ENABLED')) {
+            $logsEnabled = PS_EVENTBUS_VERBOSE_ENABLED;
+        }
+
+        if (defined('PS_EVENTBUS_VERBOSE_ENABLED')) {
+            $verboseEnabled = PS_EVENTBUS_VERBOSE_ENABLED;
+        }
+
+
+        if ($logsEnabled == true) {
             \PrestaShopLogger::addLog(
                 $exception->getMessage() . ' : ' . $exception->getFile() . ':' . $exception->getLine() . ' | ' . $exception->getTraceAsString(),
                 3,
@@ -103,7 +116,7 @@ class ErrorHandler
         }
 
         // if debug mode enabled and verbose set to true, print error in front office
-        if (_PS_MODE_DEV_ == true && (defined(PS_EVENTBUS_VERBOSE_ENABLED) && PS_EVENTBUS_VERBOSE_ENABLED == true)) {
+        if (_PS_MODE_DEV_ == true && $verboseEnabled == true) {
             throw $exception;
         } else {
             $this->client->captureException($exception);

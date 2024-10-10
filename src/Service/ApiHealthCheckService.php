@@ -105,7 +105,7 @@ class ApiHealthCheckService
         $tokenIsSet = false;
         $allTablesInstalled = false;
 
-        $isAuthentified = $this->apiAuthorizationService->authorize($jobId, false);
+        $isAuthentified = $this->apiAuthorizationService->authorize($jobId, true);
 
         try {
             $token = $this->psAccountsAdapterService->getOrRefreshToken();

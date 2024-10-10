@@ -111,20 +111,22 @@ abstract class AbstractRepository
     }
 
     /**
-     * @param bool $enableCurrentExplain
+     * @param bool $disableCurrentExplain
      *
      * @return array<mixed>
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    protected function runQuery($enableCurrentExplain = null)
+    protected function runQuery($disableCurrentExplain = null)
     {
-        if ($enableCurrentExplain === null) {
-            $enableCurrentExplain = true;
+        $explainSql = false;
+
+        if (defined('PS_EVENTBUS_EXPLAIN_SQL_ENABLED')) {
+            $explainSql = PS_EVENTBUS_EXPLAIN_SQL_ENABLED;
         }
 
-        if ((defined(PS_EVENTBUS_EXPLAIN_SQL_ENABLED) && PS_EVENTBUS_EXPLAIN_SQL_ENABLED == true) && $enableCurrentExplain) {
+        if ($explainSql && $disableCurrentExplain == false) {
             $this->debugQuery();
         }
 
