@@ -23,7 +23,7 @@ You can follow the progress and find more details about the resolution [here](ht
 ### BREAKING CHANGES
 
 Since version 4.0, all API endpoints are grouped under a single controller "apiShopContent.php" (except for the healthcheck). The route to call is now unique, and the shopContent is no longer a specific endpoint but a query parameter of the request:
-```"http://localhost:8000/index.php?fc=module&module=ps_eventbus&controller=apiShopContent&shop_content=products"```
+```http://localhost:8000/index.php?fc=module&module=ps_eventbus&controller=apiShopContent&shop_content=products```
 
 ## Use
 
