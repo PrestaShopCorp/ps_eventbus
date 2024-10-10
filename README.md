@@ -7,23 +7,23 @@
 ## Compatibility matrix
 
 | PrestaShop platform | PHP  | PS EventBus |
-| ------------------- | ---- | ----------- |
-| 8.0                 | 7.1+ | From 2.x    |
-| 1.7.3-1.7.8         | 7.1+ | From 2.x    |
-| 1.6.1.11 - 1.7.2.5  | 7.1  | From 3.1    |
-
-## BREAKING CHANGES
-
-### Front controllers and API endpoints
-Depuis la version 4.0, tout les endpoints API sont regroupé sous un seul controller "apiFront.php". La route a appeller est donc maintenant unique, et le shopContent n'est plus un endpoint en particulier, mais un paramètre query de la requête (ex: "http://localhost:8000/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=healtcheck")
+| ------------------- | ---- | ----------------------- |
+| 8.0                 | 7.1+ | From 2.x - to latest    |
+| 1.7.3-1.7.8         | 7.1+ | From 2.x - to latest    |
+| 1.6.1.11 - 1.7.2.5  | 7.1  | From 3.1 - to latest    |
 
 PS Accounts compatibility matrix [can be viewed here](https://github.com/PrestaShopCorp/ps_accounts#compatibility-matrix).
 
-### Product Images Issue in PHP 8.1
+#### Product Images Issue in PHP 8.1
 
 Please note that starting from PHP 8.1, product images may be missing due to a known issue.
 This is a recognized problem and is being tracked in the PrestaShop repository.
 You can follow the progress and find more details about the resolution [here](https://github.com/PrestaShop/PrestaShop/issues/36836).
+
+### BREAKING CHANGES
+
+Since version 4.0, all API endpoints are grouped under a single controller "apiShopContent.php" (except for the healthcheck). The route to call is now unique, and the shopContent is no longer a specific endpoint but a query parameter of the request:
+```"http://localhost:8000/index.php?fc=module&module=ps_eventbus&controller=apiShopContent&shop_content=products"```
 
 ## Use
 
@@ -56,7 +56,7 @@ To check the module healthiness (authenticated route):
 
 ```sh
 BASE_URL="http://localhost:8000"
-curl -s -L "$BASE_URL/index.php?fc=module&module=ps_eventbus&controller=apiFront&shop_content=healthcheck&job_id=valid-job-stuff" | jq .
+curl -s -L "$BASE_URL/index.php?fc=module&module=ps_eventbus&controller=apiShopContent&shop_content=healthcheck&job_id=valid-job-stuff" | jq .
 {
   "prestashop_version": "1.6.1.24",
   "ps_eventbus_version": "0.0.0",
@@ -77,7 +77,7 @@ To check the fallback route (unauthenticated):
 
 ```sh
 BASE_URL="http://localhost:8000"
-curl -s -L "$BASE_URL/index.php?fc=module&module=ps_eventbus&controller=apiFront=1&shop_content=healthcheck" | jq .
+curl -s -L "$BASE_URL/index.php?fc=module&module=ps_eventbus&controller=apiShopContent&shop_content=healthcheck" | jq .
 {
   "ps_account": true,
   "is_valid_jwt": true,
@@ -147,7 +147,7 @@ Run the tests once to generate the necessary dumps (they will be present in the 
 
 You can run the tests again and ensure everything is green.
 
-In case your shopContent cannot return results (absence of data in the tables), please add a planes.json file in the folders of each version containing an empty array.
+In case your shopContent cannot return results (missing data in the tables), please add a planes.json file in the folders of each version containing an empty array.
 
 ### List of missing data in a database and why is missing
 
@@ -171,9 +171,9 @@ In case your shopContent cannot return results (absence of data in the tables), 
 ² Feature enabled only with PsFacebook module
 
 ### Debugging
-There are 3 variables that are passed "magically" from the apiFront file to the end of the chain (repositories and errorHandler):
+There are 3 variables that are passed globally from the apiShopContent file to the end of the chain (repositories and errorHandler):
 - PS_EVENTBUS_EXPLAIN_SQL_ENABLED
 - PS_EVENTBUS_VERBOSE_ENABLED
 - PS_EVENTBUS_LOGS_ENABLED
 
-These variables are defined via the PHP function define() and reused in the files mentioned above. The reason for this usage is to avoid having to pass these variables through the entire execution chain to retrieve them at the end of the chain (e.g., apiFront => frontService => shopContentService => shopContentRepository).
+These variables are defined via the PHP function define() and reused in the files mentioned above. The reason for this usage is to avoid having to pass these variables through the entire execution chain to retrieve them at the end of the chain (e.g., apiShopContent => frontService => shopContentService => shopContentRepository).

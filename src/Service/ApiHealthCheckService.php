@@ -32,7 +32,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class HealthCheckService
+class ApiHealthCheckService
 {
     /** @var \Ps_eventbus */
     private $module;
@@ -42,6 +42,9 @@ class HealthCheckService
 
     /** @var PsAccountsAdapterService */
     private $psAccountsAdapterService;
+
+    /** @var ApiAuthorizationService */
+    private $apiAuthorizationService;
 
     /** @var array<mixed> */
     private $configuration;
@@ -71,6 +74,7 @@ class HealthCheckService
     public function __construct(
         \Ps_eventbus $module,
         PsAccountsAdapterService $psAccountsAdapterService,
+        ApiAuthorizationService $apiAuthorizationService,
         ErrorHandler $errorHandler,
         $eventbusSyncApiUrl,
         $eventbusLiveSyncApiUrl,
@@ -78,6 +82,7 @@ class HealthCheckService
     ) {
         $this->module = $module;
         $this->db = \Db::getInstance();
+        $this->apiAuthorizationService = $apiAuthorizationService;
         $this->psAccountsAdapterService = $psAccountsAdapterService;
         $this->configuration = [
             'EVENT_BUS_SYNC_API_URL' => $eventbusSyncApiUrl,
@@ -88,17 +93,19 @@ class HealthCheckService
     }
 
     /**
-     * @param bool $isAuthentified
+     * @param string $jobId
      *
      * @return array<mixed>
      *
      * @throws \PrestaShopException
      */
-    public function getHealthCheck($isAuthentified)
+    public function getHealthCheck($jobId)
     {
         $tokenValid = false;
         $tokenIsSet = false;
         $allTablesInstalled = false;
+
+        $isAuthentified = $this->apiAuthorizationService->authorize($jobId, false);
 
         try {
             $token = $this->psAccountsAdapterService->getOrRefreshToken();

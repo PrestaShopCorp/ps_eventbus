@@ -24,13 +24,13 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-use PrestaShop\Module\PsEventbus\Service\FrontApiService;
+use PrestaShop\Module\PsEventbus\Service\ApiShopContentService;
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class ps_EventbusApiFrontModuleFrontController extends ModuleFrontController
+class ps_EventbusApiShopContentModuleFrontController extends ModuleFrontController
 {
     /**
      * @return void
@@ -66,18 +66,26 @@ class ps_EventbusApiFrontModuleFrontController extends ModuleFrontController
         /** @var Ps_eventbus $module */
         $module = Module::getInstanceByName('ps_eventbus');
 
-        /** @var FrontApiService $frontApiService */
-        $frontApiService = $module->getService('PrestaShop\Module\PsEventbus\Service\FrontApiService');
+        /** @var ApiShopContentService $apiShopContentService */
+        $apiShopContentService = $module->getService('PrestaShop\Module\PsEventbus\Service\ApiShopContentService');
 
         // Define our 3 constants here to be retrieved later in the application (errorHandler, repositories)
-        define('PS_EVENTBUS_EXPLAIN_SQL_ENABLED', $explainSql);
-        define('PS_EVENTBUS_VERBOSE_ENABLED', $verbose);
-        define('PS_EVENTBUS_LOGS_ENABLED', $psLogsEnabled);
+        if (!defined('PS_EVENTBUS_EXPLAIN_SQL_ENABLED')) {
+            define('PS_EVENTBUS_EXPLAIN_SQL_ENABLED', $explainSql);
+        }
+
+        if (!defined('PS_EVENTBUS_VERBOSE_ENABLED')) {
+            define('PS_EVENTBUS_VERBOSE_ENABLED', $verbose);
+        }
+
+        if (!defined('PS_EVENTBUS_LOGS_ENABLED')) {
+            define('PS_EVENTBUS_LOGS_ENABLED', $psLogsEnabled);
+        }
 
         // edit shopContent for matching Config.php const
         $shopContentEdited = str_replace('-', '_', $shopContent);
 
-        $frontApiService->handleDataSync(
+        $apiShopContentService->handleDataSync(
             $shopContentEdited,
             $jobId,
             $langIso,

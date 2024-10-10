@@ -40,7 +40,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class FrontApiService
+class ApiShopContentService
 {
     /** @var int */
     public $startTime;
@@ -50,9 +50,6 @@ class FrontApiService
 
     /** @var EventbusSyncRepository */
     private $eventbusSyncRepository;
-
-    /** @var PsAccountsAdapterService */
-    private $psAccountsAdapterService;
 
     /** @var SynchronizationService */
     private $synchronizationService;
@@ -66,7 +63,6 @@ class FrontApiService
     public function __construct(
         \Ps_eventbus $module,
         ErrorHandler $errorHandler,
-        PsAccountsAdapterService $psAccountsAdapterService,
         ApiAuthorizationService $apiAuthorizationService,
         SynchronizationService $synchronizationService,
         EventbusSyncRepository $eventbusSyncRepository
@@ -75,7 +71,6 @@ class FrontApiService
 
         $this->module = $module;
         $this->errorHandler = $errorHandler;
-        $this->psAccountsAdapterService = $psAccountsAdapterService;
         $this->apiAuthorizationService = $apiAuthorizationService;
         $this->synchronizationService = $synchronizationService;
         $this->eventbusSyncRepository = $eventbusSyncRepository;
@@ -101,18 +96,9 @@ class FrontApiService
                 CommonService::exitWithExceptionMessage(new QueryParamsException('Invalid URL Parameters', Config::INVALID_URL_QUERY));
             }
 
-            $isHealthCheck = $shopContent == Config::COLLECTION_HEALTHCHECK;
-            $isAuthentified = $this->authorize($jobId, $isHealthCheck);
+            $this->apiAuthorizationService->authorize($jobId, false);
+
             $response = [];
-
-            // If is healthcheck, return healthcheck response
-            if ($isHealthCheck) {
-                /** @var HealthCheckService $healthCheckService */
-                $healthCheckService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\HealthCheckService');
-                $response = $healthCheckService->getHealthCheck($isAuthentified);
-
-                CommonService::exitWithResponse($response);
-            }
 
             /** @var LanguagesService $languagesService */
             $languagesService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService');
@@ -194,54 +180,6 @@ class FrontApiService
             $this->errorHandler->handle($exception);
         } catch (\Exception $exception) {
             $this->errorHandler->handle($exception);
-        }
-    }
-
-    /**
-     * @param string $jobId
-     * @param bool $isHealthCheck
-     *
-     * @return bool
-     *
-     * @throws \PrestaShopDatabaseException|EnvVarException|FirebaseException
-     */
-    private function authorize($jobId, $isHealthCheck)
-    {
-        try {
-            $authorizationResponse = $this->apiAuthorizationService->authorizeCall($jobId);
-
-            if (is_array($authorizationResponse)) {
-                CommonService::exitWithResponse($authorizationResponse);
-            } elseif (!$authorizationResponse) {
-                throw new \PrestaShopDatabaseException('Failed saving job id to database');
-            }
-
-            try {
-                $token = $this->psAccountsAdapterService->getOrRefreshToken();
-            } catch (\Exception $exception) {
-                throw new FirebaseException($exception->getMessage());
-            }
-
-            if (!$token) {
-                throw new FirebaseException('Invalid token');
-            }
-
-            return true;
-        } catch (\Exception $exception) {
-            // For ApiHealthCheck, handle the error, and return false
-            if ($isHealthCheck) {
-                return false;
-            }
-
-            switch ($exception) {
-                case $exception instanceof \PrestaShopDatabaseException:
-                case $exception instanceof EnvVarException:
-                case $exception instanceof FirebaseException:
-                    $this->errorHandler->handle($exception);
-                    break;
-            }
-
-            return false;
         }
     }
 }

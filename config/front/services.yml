@@ -10,6 +10,8 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Api\SyncApiClient'
+      - '@PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService'
+      - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler'
 
   PrestaShop\Module\PsEventbus\Service\SynchronizationService:
     class: PrestaShop\Module\PsEventbus\Service\SynchronizationService
@@ -27,24 +29,24 @@ services:
     class: PrestaShop\Module\PsEventbus\Service\PresenterService
     public: true
 
-  PrestaShop\Module\PsEventbus\Service\FrontApiService:
-    class: PrestaShop\Module\PsEventbus\Service\FrontApiService
+  PrestaShop\Module\PsEventbus\Service\ApiShopContentService:
+    class: PrestaShop\Module\PsEventbus\Service\ApiShopContentService
     public: true
     arguments:
       - '@ps_eventbus'
       - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler'
-      - '@PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService'
       - '@PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService'
       - '@PrestaShop\Module\PsEventbus\Service\SynchronizationService'
       - '@PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler'
 
-  PrestaShop\Module\PsEventbus\Service\HealthCheckService:
-    class: PrestaShop\Module\PsEventbus\Service\HealthCheckService
+  PrestaShop\Module\PsEventbus\Service\ApiHealthCheckService:
+    class: PrestaShop\Module\PsEventbus\Service\ApiHealthCheckService
     public: true
     arguments:
       - '@ps_eventbus'
       - '@PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService'
+      - '@PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService'
       - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler'
       - '%ps_eventbus.sync_api_url%'
       - '%ps_eventbus.live_sync_api_url%'

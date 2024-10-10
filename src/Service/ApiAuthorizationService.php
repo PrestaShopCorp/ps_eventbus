@@ -27,6 +27,9 @@
 namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Api\SyncApiClient;
+use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
+use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
+use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 
 if (!defined('_PS_VERSION_')) {
@@ -35,22 +38,76 @@ if (!defined('_PS_VERSION_')) {
 
 class ApiAuthorizationService
 {
-    /**
-     * @var EventbusSyncRepository
-     */
+    /** @var EventbusSyncRepository */
     private $eventbusSyncRepository;
 
-    /**
-     * @var SyncApiClient
-     */
+    /** @var SyncApiClient */
     private $syncApiClient;
+
+    /** @var PsAccountsAdapterService */
+    private $psAccountsAdapterService;
+
+    /** @var ErrorHandler */
+    private $errorHandler;
 
     public function __construct(
         EventbusSyncRepository $eventbusSyncRepository,
-        SyncApiClient $syncApiClient
+        SyncApiClient $syncApiClient,
+        PsAccountsAdapterService $psAccountsAdapterService,
+        ErrorHandler $errorHandler
     ) {
         $this->eventbusSyncRepository = $eventbusSyncRepository;
         $this->syncApiClient = $syncApiClient;
+        $this->psAccountsAdapterService = $psAccountsAdapterService;
+        $this->errorHandler = $errorHandler;
+    }
+
+    /**
+     * @param string $jobId
+     * @param bool $isHealthCheck
+     *
+     * @return bool
+     *
+     * @throws \PrestaShopDatabaseException|EnvVarException|FirebaseException
+     */
+    public function authorize($jobId, $isHealthCheck)
+    {
+        try {
+            $authorizationResponse = $this->authorizeCall($jobId);
+
+            if (is_array($authorizationResponse)) {
+                CommonService::exitWithResponse($authorizationResponse);
+            } elseif (!$authorizationResponse) {
+                throw new \PrestaShopDatabaseException('Failed saving job id to database');
+            }
+
+            try {
+                $token = $this->psAccountsAdapterService->getOrRefreshToken();
+            } catch (\Exception $exception) {
+                throw new FirebaseException($exception->getMessage());
+            }
+
+            if (!$token) {
+                throw new FirebaseException('Invalid token');
+            }
+
+            return true;
+        } catch (\Exception $exception) {
+            // For ApiHealthCheck, handle the error, and return false
+            if ($isHealthCheck) {
+                return false;
+            }
+
+            switch ($exception) {
+                case $exception instanceof \PrestaShopDatabaseException:
+                case $exception instanceof EnvVarException:
+                case $exception instanceof FirebaseException:
+                    $this->errorHandler->handle($exception);
+                    break;
+            }
+
+            return false;
+        }
     }
 
     /**
@@ -60,7 +117,7 @@ class ApiAuthorizationService
      *
      * @return array<mixed>|bool
      */
-    public function authorizeCall($jobId)
+    private function authorizeCall($jobId)
     {
         // Check if the job already exists
         $job = $this->eventbusSyncRepository->findJobById($jobId);

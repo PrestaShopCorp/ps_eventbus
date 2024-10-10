@@ -51,7 +51,7 @@ describe("Full Sync", () => {
   describe.each(shopContentList)("%s", (shopContent) => {
     it(`${shopContent} should accept full sync`, async () => {
       // arrange
-      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront=0&shop_content=${shopContent}&limit=5&full=1&job_id=${jobId}`;
+      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiShopContent=0&shop_content=${shopContent}&limit=5&full=1&job_id=${jobId}`;
 
       const callId = { call_id: Math.random().toString(36).substring(2, 11) };
 

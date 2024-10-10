@@ -22,7 +22,7 @@ describe("Reject invalid job-id", () => {
     async (shopContent) => {
       expect.assertions(6);
       // arrange
-      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiFront=0&shop_content=${shopContent}&limit=5&job_id=${jobId}`;
+      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiShopContent=0&shop_content=${shopContent}&limit=5&job_id=${jobId}`;
       const message$ = probe({ params: { id: jobId } });
 
       //act

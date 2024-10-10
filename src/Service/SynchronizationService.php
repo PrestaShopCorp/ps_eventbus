@@ -265,11 +265,11 @@ class SynchronizationService
          * When random number == 10, we count number of entry exist in database for this specific shop content
          * If count > 100 000, we removed all entry corresponding to this shop content, and we enable full sync for this
          */
-        if (mt_rand() % Config::RANDOM_SYNC_CHECK_MAX == 0) {
+        if (mt_rand() % Config::INCREMENTAL_SYNC_TABLE_SIZE_CHECK_MOD == 0) {
             foreach ($contentTypesWithIds as $contentType => $contentIds) {
                 $count = $this->incrementalSyncRepository->getIncrementalSyncObjectCountByType($contentType);
 
-                if ($count > Config::INCREMENTAL_SYNC_MAX_PAGE_SIZE) {
+                if ($count > Config::INCREMENTAL_SYNC_MAX_TABLE_SIZE) {
                     $hasDeleted = $this->incrementalSyncRepository->removeIncrementaSyncObjectByType($contentType);
 
                     if ($hasDeleted) {
