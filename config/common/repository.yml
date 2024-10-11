@@ -3,7 +3,7 @@ services:
     class: PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository
     public: true
     arguments:
-      - '@=service("prestashop.adapter.legacy.context").getContext()'
+      - '@=service("ps_eventbus").getContext()'
 
   PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository:
     class: PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository
@@ -19,7 +19,7 @@ services:
     class: PrestaShop\Module\PsEventbus\Repository\CountryRepository
     public: true
     arguments:
-      - '@=service("prestashop.adapter.legacy.context").getContext()'
+      - '@=service("ps_eventbus").getContext()'
 
   PrestaShop\Module\PsEventbus\Repository\StateRepository:
     class: PrestaShop\Module\PsEventbus\Repository\StateRepository
@@ -29,7 +29,7 @@ services:
     class: PrestaShop\Module\PsEventbus\Repository\TaxeRepository
     public: true
     arguments:
-      - '@=service("prestashop.adapter.legacy.context").getContext()'
+      - '@=service("ps_eventbus").getContext()'
   
   PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository:
     class: PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository
