@@ -21,6 +21,8 @@ const isString = (val) =>
   val ? expect(val).toBeString() : expect(val).toBeNull();
 const isNumber = (val) =>
   val ? expect(val).toBeNumber() : expect(val).toBeNull();
+const isBoolean = (val) =>
+  val ? expect(val).toBeBoolean() : expect(val).toBeNull();
 const specialFieldAssert: { [index: string]: (val) => void } = {
   created_at: isDateString,
   updated_at: isDateString,
@@ -36,6 +38,11 @@ const specialFieldAssert: { [index: string]: (val) => void } = {
   theme_version: isString,
   php_version: isString,
   http_server: isString,
+  cover: isString,
+  link: isString,
+  url: isString,
+  images: isString,
+  ssl: isBoolean
 };
 
 describe("Full Sync", () => {

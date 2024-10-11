@@ -186,8 +186,8 @@ class SpecificPricesService implements ShopContentServiceInterface
             $customPrice['id_currency'] = (int) $customPrice['id_currency'];
             $customPrice['id_country'] = (int) $customPrice['id_country'];
             $customPrice['id_customer'] = (int) $customPrice['id_customer'];
-            $customPrice['currency'] = $customPrice['currency'] ?: 'ALL';
-            $customPrice['country'] = $customPrice['country'] ?: 'ALL';
+            $customPrice['currency'] = isset($customPrice['currency']) ? $customPrice['currency'] : 'ALL';
+            $customPrice['country'] = isset($customPrice['country']) ? $customPrice['country'] : 'ALL';
             $customPrice['price_tax_included'] = (float) $customPrice['price_tax_included'];
             $customPrice['price_tax_excluded'] = (float) $customPrice['price_tax_excluded'];
             $customPrice['sale_price_tax_incl'] = (float) $customPrice['sale_price_tax_incl'];

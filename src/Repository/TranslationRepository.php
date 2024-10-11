@@ -70,6 +70,11 @@ class TranslationRepository extends AbstractRepository implements RepositoryInte
      */
     public function retrieveContentsForFull($offset, $limit, $langIso)
     {
+        // this table doesn't exist in the database before 1.7
+        if (empty(parent::checkIfTableExist('%translation'))) {
+            return [];
+        }
+
         $this->generateFullQuery($langIso, true);
 
         $this->query->limit((int) $limit, (int) $offset);
@@ -111,6 +116,11 @@ class TranslationRepository extends AbstractRepository implements RepositoryInte
      */
     public function countFullSyncContentLeft($offset, $limit, $langIso)
     {
+        // this table doesn't exist in the database before 1.7
+        if (empty(parent::checkIfTableExist('%translation'))) {
+            return [];
+        }
+
         $this->generateFullQuery($langIso, false);
 
         $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');

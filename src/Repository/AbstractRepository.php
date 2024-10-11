@@ -67,7 +67,7 @@ abstract class AbstractRepository
      *
      * @return void
      */
-    public function generateMinimalQuery($tableName, $alias)
+    protected function generateMinimalQuery($tableName, $alias)
     {
         $this->query = new \DbQuery();
 
@@ -77,7 +77,7 @@ abstract class AbstractRepository
     /**
      * @return \Context
      */
-    public function getContext()
+    protected function getContext()
     {
         return $this->context;
     }
@@ -87,7 +87,7 @@ abstract class AbstractRepository
      *
      * @throws \PrestaShopException
      */
-    public function getLanguageContext()
+    protected function getLanguageContext()
     {
         if ($this->context->language === null) {
             throw new \PrestaShopException('No language context');
@@ -101,7 +101,7 @@ abstract class AbstractRepository
      *
      * @throws \PrestaShopException
      */
-    public function getShopContext()
+    protected function getShopContext()
     {
         if ($this->context->shop === null) {
             throw new \PrestaShopException('No shop context');
@@ -109,6 +109,19 @@ abstract class AbstractRepository
 
         return $this->context->shop;
     }
+
+    /**
+    * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
+    *
+    * @throws \PrestaShopException
+    * @throws \PrestaShopDatabaseException
+    */
+    protected function checkIfTableExist($query)
+   {
+       $request = 'SELECT * FROM information_schema.tables WHERE table_name LIKE \''. $query . '\' LIMIT 1;';
+
+       return $this->db->executeS($request);
+   }
 
     /**
      * @param bool $disableCurrentExplain

@@ -126,8 +126,8 @@ class ModulesService implements ShopContentServiceInterface
         foreach ($modules as &$module) {
             $module['module_id'] = (string) $module['module_id'];
             $module['active'] = $module['active'] == '1';
-            $module['created_at'] = $module['created_at'] ?: $shopCreatedAt;
-            $module['updated_at'] = $module['updated_at'] ?: $shopCreatedAt;
+            $module['created_at'] = isset($module['created_at']) ? $module['created_at'] : $shopCreatedAt;
+            $module['updated_at'] = isset($module['updated_at']) ? $module['updated_at'] : $shopCreatedAt;
         }
     }
 }

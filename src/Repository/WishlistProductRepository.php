@@ -71,7 +71,7 @@ class WishlistProductRepository extends AbstractRepository implements Repository
     public function retrieveContentsForFull($offset, $limit, $langIso)
     {
         // need this module for this table : https://addons.prestashop.com/en/undownloadable/9131-wishlist-block.html
-        if (empty($this->checkIfPsWishlistIsInstalled())) {
+        if (empty(parent::checkIfTableExist('%wishlist'))) {
             return [];
         }
 
@@ -117,7 +117,7 @@ class WishlistProductRepository extends AbstractRepository implements Repository
     public function countFullSyncContentLeft($offset, $limit, $langIso)
     {
         // need this module for this table : https://addons.prestashop.com/en/undownloadable/9131-wishlist-block.html
-        if (empty($this->checkIfPsWishlistIsInstalled())) {
+        if (empty(parent::checkIfTableExist('%wishlist'))) {
             return 0;
         }
 
@@ -128,18 +128,5 @@ class WishlistProductRepository extends AbstractRepository implements Repository
         $result = $this->runQuery(true);
 
         return $result[0]['count'];
-    }
-
-    /**
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
-     * @throws \PrestaShopException
-     * @throws \PrestaShopDatabaseException
-     */
-    private function checkIfPsWishlistIsInstalled()
-    {
-        $moduleisInstalledQuery = 'SELECT * FROM information_schema.tables WHERE table_name LIKE \'%wishlist\' LIMIT 1;';
-
-        return $this->db->executeS($moduleisInstalledQuery);
     }
 }
