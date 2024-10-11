@@ -27,6 +27,7 @@
 namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
+use PrestaShop\Module\PsAccounts\Api\Client\AccountsClient;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -110,7 +111,10 @@ class ApiHealthCheckService
         try {
             $token = $this->psAccountsAdapterService->getOrRefreshToken();
             if ($token) {
-                $accountsClient = $this->module->getService('PrestaShop\Module\PsAccounts\Api\Client\AccountsClient');
+                $psAccount = \Module::getInstanceByName('ps_accounts');
+                
+                /* @phpstan-ignore-next-line */
+                $accountsClient = $psAccount->getService(AccountsClient::class);
 
                 $tokenIsSet = true;
 
