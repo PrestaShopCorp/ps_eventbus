@@ -26,8 +26,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsAccounts\Api\Client\AccountsClient;
+use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -35,9 +35,6 @@ if (!defined('_PS_VERSION_')) {
 
 class ApiHealthCheckService
 {
-    /** @var \Ps_eventbus */
-    private $module;
-
     /** @var \Db */
     private $db;
 
@@ -63,7 +60,6 @@ class ApiHealthCheckService
     ];
 
     /**
-     * @param \Ps_eventbus $module
      * @param PsAccountsAdapterService $psAccountsAdapterService
      * @param ErrorHandler $errorHandler
      * @param string $eventbusSyncApiUrl
@@ -73,7 +69,6 @@ class ApiHealthCheckService
      * @return void
      */
     public function __construct(
-        \Ps_eventbus $module,
         PsAccountsAdapterService $psAccountsAdapterService,
         ApiAuthorizationService $apiAuthorizationService,
         ErrorHandler $errorHandler,
@@ -81,7 +76,6 @@ class ApiHealthCheckService
         $eventbusLiveSyncApiUrl,
         $eventbusProxyApiUrl
     ) {
-        $this->module = $module;
         $this->db = \Db::getInstance();
         $this->apiAuthorizationService = $apiAuthorizationService;
         $this->psAccountsAdapterService = $psAccountsAdapterService;
@@ -112,7 +106,7 @@ class ApiHealthCheckService
             $token = $this->psAccountsAdapterService->getOrRefreshToken();
             if ($token) {
                 $psAccount = \Module::getInstanceByName('ps_accounts');
-                
+
                 /* @phpstan-ignore-next-line */
                 $accountsClient = $psAccount->getService(AccountsClient::class);
 

@@ -44,7 +44,6 @@ services:
     class: PrestaShop\Module\PsEventbus\Service\ApiHealthCheckService
     public: true
     arguments:
-      - '@ps_eventbus'
       - '@PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService'
       - '@PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService'
       - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler'
