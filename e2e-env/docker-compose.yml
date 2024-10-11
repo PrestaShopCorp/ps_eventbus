@@ -1,9 +1,12 @@
+version: "3"
 services:
   prestashop:
     image: ${DOCKER_IMAGE_PRESTASHOP:?See e2e-env/.env.dist}
     depends_on:
       mysql:
         condition: service_healthy
+      cloudflared:
+        condition: service_started
     healthcheck:
       test:
         [
@@ -22,15 +25,14 @@ services:
       # - /var/www/html/modules/ps_eventbus/vendor
       # - /var/www/html/modules/ps_eventbus/tools/vendor
     environment:
-      - PS_DOMAIN=localhost:8000
       - ON_INIT_SCRIPT_FAILURE=fail
       - DEBUG_MODE=true
       - INIT_SCRIPTS_USER=root
+      - PS_DOMAIN=${TUNNEL_NAME}
+      - PS_PROTOCOL=https
     ports:
       - ${HOST_PORT_BIND_PRESTASHOP:?See e2e-env/.env.dist}:80
-    networks:
-      - prestashop
-
+  
   mysql:
     image: mariadb:${DOCKER_VERSION_MARIADB:?See e2e-env/.env.dist}
     healthcheck:
@@ -44,8 +46,6 @@ services:
       - MYSQL_DATABASE=prestashop
     ports:
       - ${HOST_PORT_BIND_MYSQL:?See e2e-env/.env.dist}:3306
-    networks:
-      - prestashop
 
   phpmyadmin:
     image: phpmyadmin:latest
@@ -60,8 +60,6 @@ services:
       - PMA_USER=prestashop
       - PMA_PASSWORD=prestashop
       - MYSQL_ROOT_PASSWORD=prestashop
-    networks:
-      - prestashop
 
   cloudsync-mock:
     build:
@@ -78,8 +76,6 @@ services:
       - ${COLLECTOR_API_PORT:?See e2e-env/.env.dist}:3333
       - ${LIVE_SYNC_API_PORT:?See e2e-env/.env.dist}:3434
       - ${WS_PORT:?See e2e-env/.env.dist}:8080
-    networks:
-      - prestashop
 
   reverse-proxy:
     image: nginx:stable-alpine
@@ -88,11 +84,15 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro,cached
     command: [nginx-debug, "-g", "daemon off;"]
-    networks:
-      - prestashop
     ports:
       - ${HOST_PORT_BIND_CLOUDSYNC_REVERSE_PROXY:?See e2e-env/.env.dist}:80
 
-networks:
-  prestashop:
-    driver: bridge
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel run $${TUNNEL_NAME}
+    environment:
+      - TUNNEL_CRED_FILE=/credentials.json
+      - TUNNEL_URL=http://prestashop:80
+      - TUNNEL_HTTP_HOST_HEADER=${TUNNEL_NAME}
+    volumes:
+      - ./credentials.json:/credentials.json
