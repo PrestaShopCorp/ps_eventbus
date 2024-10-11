@@ -125,6 +125,7 @@ class PlanesService implements ShopContentServiceInterface
   ...  
 }
 ```
+_Don't missing to declare this new service to [service.yml](config/front/services.yml) file._
 
 Then create a repository PlaneRepository.php (in singular) in the [Repository](src/Repository/) folder that extends the [AbstractRepository.php](src/Repository/AbstractRepository.php) class and implements the [RepositoryInterface.php](src/Repository/RepositoryInterface.php) interface. Similarly, maintain consistency with other shop content repositories.
 ```PHP
@@ -133,6 +134,7 @@ class PlaneRepository extends AbstractRepository implements RepositoryInterface
   ...  
 }
 ```
+_Don't missing to declare this new repository to [repository.yml](config/common/repository.yml) file._
 
 Add your shop content in the [e2e config file](e2e/src/helpers/shop-contents.ts).
 ```javascript
