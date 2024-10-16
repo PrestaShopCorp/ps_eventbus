@@ -42,7 +42,7 @@ const specialFieldAssert: { [index: string]: (val) => void } = {
   link: isString,
   url: isString,
   images: isString,
-  ssl: isBoolean
+  ssl: isBoolean,
 };
 
 describe("Full Sync", () => {
@@ -89,7 +89,7 @@ describe("Full Sync", () => {
       // arrange
       const response$ = doFullSync(jobId, shopContent, { timeout: 30000 });
       const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 30000 });
-      
+
       // this combines each response from ps_eventbus to the last request captured by the probe.
       // it works because ps_eventbus sends a response after calling our mock collector server
       // if ps_eventbus doesn't need to call the collector, the probe completes without value after its timeout
