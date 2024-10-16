@@ -5,8 +5,6 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-      cloudflared:
-        condition: service_started
     healthcheck:
       test:
         [
@@ -32,6 +30,7 @@ services:
       - PS_PROTOCOL=https
     ports:
       - ${HOST_PORT_BIND_PRESTASHOP:?See e2e-env/.env.dist}:80
+    profiles: [cicd, development]
   
   mysql:
     image: mariadb:${DOCKER_VERSION_MARIADB:?See e2e-env/.env.dist}
@@ -46,6 +45,7 @@ services:
       - MYSQL_DATABASE=prestashop
     ports:
       - ${HOST_PORT_BIND_MYSQL:?See e2e-env/.env.dist}:3306
+    profiles: [cicd, development]
 
   phpmyadmin:
     image: phpmyadmin:latest
@@ -60,6 +60,7 @@ services:
       - PMA_USER=prestashop
       - PMA_PASSWORD=prestashop
       - MYSQL_ROOT_PASSWORD=prestashop
+    profiles: [development]
 
   cloudsync-mock:
     build:
@@ -76,6 +77,7 @@ services:
       - ${COLLECTOR_API_PORT:?See e2e-env/.env.dist}:3333
       - ${LIVE_SYNC_API_PORT:?See e2e-env/.env.dist}:3434
       - ${WS_PORT:?See e2e-env/.env.dist}:8080
+    profiles: [cicd, development]
 
   reverse-proxy:
     image: nginx:stable-alpine
@@ -86,6 +88,7 @@ services:
     command: [nginx-debug, "-g", "daemon off;"]
     ports:
       - ${HOST_PORT_BIND_CLOUDSYNC_REVERSE_PROXY:?See e2e-env/.env.dist}:80
+    profiles: [cicd, development]
 
   cloudflared:
     image: cloudflare/cloudflared:latest
@@ -96,3 +99,4 @@ services:
       - TUNNEL_HTTP_HOST_HEADER=${TUNNEL_NAME}
     volumes:
       - ./credentials.json:/credentials.json
+    profiles: [development]

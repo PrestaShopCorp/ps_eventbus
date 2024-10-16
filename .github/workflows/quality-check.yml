@@ -123,7 +123,7 @@ jobs:
         run: |
           cp .env.dist .env
           docker compose build
-          docker compose up --detach --wait
+          docker compose --profile cicd up --detach --wait
         env:
           DOCKER_IMAGE_PRESTASHOP: prestashop/prestashop-flashlight:${{matrix.ps_version}}
         working-directory: e2e-env
@@ -136,7 +136,7 @@ jobs:
         if: failure()
         run: |
           docker compose logs cloudsync-mock prestashop
-          docker compose down -v
+          docker compose --profile cicd down -v
         working-directory: e2e-env
 
   e2e-lint:
