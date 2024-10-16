@@ -56,7 +56,7 @@ describe("Full Sync", () => {
   });
 
   describe.each(shopContentList)("%s", (shopContent) => {
-    it.skip(`${shopContent} should accept full sync`, async () => {
+    it(`${shopContent} should accept full sync`, async () => {
       // arrange
       const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiShopContent&shop_content=${shopContent}&limit=5&full=1&job_id=${jobId}`;
 
@@ -140,6 +140,6 @@ describe("Full Sync", () => {
           }
         }
       }
-    }, 30000); // Timeout set to 30s because full sync can take a long time
+    }); // Timeout set to 30s because full sync can take a long time
   });
 });
