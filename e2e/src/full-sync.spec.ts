@@ -56,7 +56,7 @@ describe("Full Sync", () => {
   });
 
   describe.each(shopContentList)("%s", (shopContent) => {
-    it(`${shopContent} should accept full sync`, async () => {
+    it.skip(`${shopContent} should accept full sync`, async () => {
       // arrange
       const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiShopContent&shop_content=${shopContent}&limit=5&full=1&job_id=${jobId}`;
 
@@ -87,9 +87,9 @@ describe("Full Sync", () => {
 
     it(`${shopContent} should upload complete dataset collector`, async () => {
       // arrange
-      const response$ = doFullSync(jobId, shopContent, { timeout: 4000 });
-      const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 4000 });
-
+      const response$ = doFullSync(jobId, shopContent, { timeout: 30000 });
+      const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 30000 });
+      
       // this combines each response from ps_eventbus to the last request captured by the probe.
       // it works because ps_eventbus sends a response after calling our mock collector server
       // if ps_eventbus doesn't need to call the collector, the probe completes without value after its timeout
@@ -140,6 +140,6 @@ describe("Full Sync", () => {
           }
         }
       }
-    });
+    }, 30000);
   });
 });

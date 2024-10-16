@@ -111,17 +111,17 @@ abstract class AbstractRepository
     }
 
     /**
-    * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-    *
-    * @throws \PrestaShopException
-    * @throws \PrestaShopDatabaseException
-    */
+     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
     protected function checkIfTableExist($query)
-   {
-       $request = 'SELECT * FROM information_schema.tables WHERE table_name LIKE \''. $query . '\' LIMIT 1;';
+    {
+        $request = 'SELECT * FROM information_schema.tables WHERE table_name LIKE \'' . $query . '\' LIMIT 1;';
 
-       return $this->db->executeS($request);
-   }
+        return $this->db->executeS($request);
+    }
 
     /**
      * @param bool $disableCurrentExplain
