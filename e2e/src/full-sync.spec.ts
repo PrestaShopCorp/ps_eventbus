@@ -140,6 +140,6 @@ describe("Full Sync", () => {
           }
         }
       }
-    }, 30000);
+    }, 30000); // Timeout set to 30s because full sync can take a long time
   });
 });
