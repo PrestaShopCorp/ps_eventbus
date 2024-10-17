@@ -24,14 +24,4 @@ ps_accounts_mock_install() {
   php -d memory_limit=-1 bin/console prestashop:module --no-interaction install "ps_accounts"
 }
 
-ps_eventbus_install() {
-  # Notice: you might enable this if your uid is not 1000, or encounter permission issues
-  # composer install -n -d ./modules/ps_eventbus
-  echo "* [ps_eventbus] installing the module..."
-  cd "$PS_FOLDER"
-  php -d memory_limit=-1 bin/console prestashop:module --no-interaction install "ps_eventbus"
-}
-
 ps_accounts_mock_install
-ps_eventbus_install
-

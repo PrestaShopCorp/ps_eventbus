@@ -87,8 +87,8 @@ describe("Full Sync", () => {
 
     it(`${shopContent} should upload complete dataset collector`, async () => {
       // arrange
-      const response$ = doFullSync(jobId, shopContent, { timeout: 30000 });
-      const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 30000 });
+      const response$ = doFullSync(jobId, shopContent, { timeout: 5000 });
+      const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 4000 });
 
       // this combines each response from ps_eventbus to the last request captured by the probe.
       // it works because ps_eventbus sends a response after calling our mock collector server
