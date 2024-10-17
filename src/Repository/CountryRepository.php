@@ -1,84 +1,77 @@
 <?php
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to https://devdocs.prestashop.com/ for more information.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-class CountryRepository
-{
-    /**
-     * @var \Db
-     */
-    private $db;
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
-    /**
-     * @var \Context
-     */
-    private $context;
+class CountryRepository extends AbstractRepository
+{
+    const TABLE_NAME = 'country';
 
     /**
      * @var array<mixed>
      */
     private $countryIsoCodeCache = [];
 
-    public function __construct(\Context $context)
-    {
-        $this->db = \Db::getInstance();
-        $this->context = $context;
-    }
-
-    /**
-     * @return \DbQuery
-     */
-    private function getBaseQuery()
-    {
-        if ($this->context->shop == null) {
-            throw new \PrestaShopException('No shop context');
-        }
-
-        if ($this->context->language == null) {
-            throw new \PrestaShopException('No language context');
-        }
-
-        $query = new \DbQuery();
-
-        $query->from('country', 'c')
-            ->innerJoin('country_shop', 'cs', 'cs.id_country = c.id_country')
-            ->innerJoin('country_lang', 'cl', 'cl.id_country = c.id_country')
-            ->where('cs.id_shop = ' . (int) $this->context->shop->id)
-            ->where('cl.id_lang = ' . (int) $this->context->language->id);
-
-        return $query;
-    }
-
     /**
      * @param int $zoneId
      * @param bool $active
      *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getCountyIsoCodesByZoneId($zoneId, $active = null)
+    public function getCountyIsoCodesByZoneId($zoneId, $active)
     {
-        if ($active == null) {
-            $active = true;
-        }
-
         $cacheKey = $zoneId . '-' . (int) $active;
+        $isoCodes = [];
 
         if (!isset($this->countryIsoCodeCache[$cacheKey])) {
-            $query = $this->getBaseQuery();
+            $this->generateMinimalQuery(self::TABLE_NAME, 'c');
 
-            $query->select('iso_code');
-            $query->where('id_zone = ' . (int) $zoneId);
-            $query->where('active = ' . (bool) $active);
+            $this->query
+                ->innerJoin('country_shop', 'cs', 'cs.id_country = c.id_country')
+                ->innerJoin('country_lang', 'cl', 'cl.id_country = c.id_country')
+                ->where('cs.id_shop = ' . (int) parent::getShopContext()->id)
+                ->where('cl.id_lang = ' . (int) parent::getLanguageContext()->id)
+                ->where('id_zone = ' . (int) $zoneId)
+                ->where('active = ' . (bool) $active)
+            ;
 
-            $isoCodes = [];
-            $result = $this->db->executeS($query);
-            if (is_array($result)) {
-                foreach ($result as $country) {
-                    $isoCodes[] = $country['iso_code'];
-                }
+            $this->query->select('iso_code');
+
+            $result = $this->runQuery(true);
+
+            foreach ($result as $country) {
+                $isoCodes[] = $country['iso_code'];
             }
+
             $this->countryIsoCodeCache[$cacheKey] = $isoCodes;
         }
 

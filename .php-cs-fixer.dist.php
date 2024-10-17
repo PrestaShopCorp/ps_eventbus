@@ -9,6 +9,7 @@ $finder = (new PhpCsFixer\Finder())
     ->exclude('vendor');
 
 $config = (new PrestaShop\CodingStandards\CsFixer\Config())
+    ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
     ->setUsingCache(false)
     ->setFinder($finder);
 

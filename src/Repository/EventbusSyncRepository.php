@@ -1,68 +1,65 @@
 <?php
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to https://devdocs.prestashop.com/ for more information.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShop\Module\PsEventbus\Config\Config;
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
-class EventbusSyncRepository
+class EventbusSyncRepository extends AbstractRepository
 {
     const TYPE_SYNC_TABLE_NAME = 'eventbus_type_sync';
     const JOB_TABLE_NAME = 'eventbus_job';
 
     /**
-     * @var \Db
-     */
-    private $db;
-    /**
-     * @var \Context
-     */
-    private $context;
-
-    /**
-     * @var int
-     */
-    private $shopId;
-
-    public function __construct(\Context $context)
-    {
-        $this->db = \Db::getInstance();
-        $this->context = $context;
-
-        if ($this->context->shop === null) {
-            throw new \PrestaShopException('No shop context');
-        }
-
-        $this->shopId = (int) $this->context->shop->id;
-    }
-
-    /**
      * @param string $type
      * @param int $offset
-     * @param string $lastSyncDate
+     * @param string $date
+     * @param bool $fullSyncFinished
      * @param string $langIso
      *
      * @return bool
-     *
-     * @throws \PrestaShopDatabaseException
      */
-    public function insertTypeSync($type, $offset, $lastSyncDate, $langIso = null)
+    public function upsertTypeSync($type, $offset, $date, $fullSyncFinished, $langIso = null)
     {
-        $result = $this->db->insert(
+        return $this->db->insert(
             self::TYPE_SYNC_TABLE_NAME,
             [
-                'id_shop' => $this->shopId,
                 'type' => pSQL((string) $type),
                 'offset' => (int) $offset,
-                'last_sync_date' => pSQL((string) $lastSyncDate),
+                'id_shop' => parent::getShopContext()->id,
                 'lang_iso' => pSQL((string) $langIso),
-            ]
+                'full_sync_finished' => (int) $fullSyncFinished,
+                'last_sync_date' => pSQL($date),
+            ],
+            false,
+            true,
+            \Db::ON_DUPLICATE_KEY
         );
-
-        if (!$result) {
-            throw new \PrestaShopDatabaseException('Failed to insert type sync', Config::DATABASE_INSERT_ERROR_CODE);
-        }
-
-        return $result;
     }
 
     /**
@@ -91,12 +88,12 @@ class EventbusSyncRepository
      */
     public function findJobById($jobId)
     {
-        $query = new \DbQuery();
-        $query->select('*')
-            ->from(self::JOB_TABLE_NAME)
-            ->where('job_id = "' . pSQL($jobId) . '"');
+        $this->generateMinimalQuery(self::JOB_TABLE_NAME, 'ej');
 
-        return $this->db->getRow($query);
+        $this->query->where('ej.job_id = "' . pSQL($jobId) . '"');
+        $this->query->select('ej.*');
+
+        return $this->db->getRow($this->query);
     }
 
     /**
@@ -107,38 +104,17 @@ class EventbusSyncRepository
      */
     public function findTypeSync($type, $langIso = null)
     {
-        $query = new \DbQuery();
-        $query->select('*')
-            ->from(self::TYPE_SYNC_TABLE_NAME)
-            ->where('type = "' . pSQL($type) . '"')
-            ->where('lang_iso = "' . pSQL((string) $langIso) . '"')
-            ->where('id_shop = ' . $this->shopId);
+        $this->generateMinimalQuery(self::TYPE_SYNC_TABLE_NAME, 'ets');
 
-        return $this->db->getRow($query);
-    }
+        $this->query
+            ->where('ets.type = "' . pSQL($type) . '"')
+            ->where('ets.lang_iso = "' . pSQL((string) $langIso) . '"')
+            ->where('ets.id_shop = ' . parent::getShopContext()->id)
+        ;
 
-    /**
-     * @param string $type
-     * @param int $offset
-     * @param string $date
-     * @param bool $fullSyncFinished
-     * @param string $langIso
-     *
-     * @return bool
-     */
-    public function updateTypeSync($type, $offset, $date, $fullSyncFinished, $langIso = null)
-    {
-        return $this->db->update(
-            self::TYPE_SYNC_TABLE_NAME,
-            [
-                'offset' => (int) $offset,
-                'full_sync_finished' => (int) $fullSyncFinished,
-                'last_sync_date' => pSQL($date),
-            ],
-            'type = "' . pSQL($type) . '"
-            AND lang_iso = "' . pSQL((string) $langIso) . '"
-            AND id_shop = ' . $this->shopId
-        );
+        $this->query->select('ets.*');
+
+        return $this->db->getRow($this->query);
     }
 
     /**
@@ -149,14 +125,16 @@ class EventbusSyncRepository
      */
     public function isFullSyncDoneForThisTypeSync($type, $langIso = null)
     {
-        $query = new \DbQuery();
+        $this->generateMinimalQuery(self::TYPE_SYNC_TABLE_NAME, 'ets');
 
-        $query->select('full_sync_finished')
-            ->from(self::TYPE_SYNC_TABLE_NAME)
-            ->where('type = "' . pSQL($type) . '"')
-            ->where('lang_iso = "' . pSQL((string) $langIso) . '"')
-            ->where('id_shop = ' . $this->shopId);
+        $this->query
+            ->where('ets.type = "' . pSQL($type) . '"')
+            ->where('ets.lang_iso = "' . pSQL((string) $langIso) . '"')
+            ->where('ets.id_shop = ' . parent::getShopContext()->id)
+        ;
 
-        return (bool) $this->db->getValue($query);
+        $this->query->select('ets.full_sync_finished');
+
+        return (bool) $this->db->getValue($this->query);
     }
 }

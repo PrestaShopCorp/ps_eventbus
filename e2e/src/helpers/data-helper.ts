@@ -1,7 +1,7 @@
 import R from "ramda";
 import { PsEventbusSyncUpload } from "./mock-probe";
 import fs from "fs";
-import { Content, contentControllerMapping, Controller } from "./controllers";
+import { Content, shopContentMapping, ShopContent } from "./shop-contents";
 import axios from "axios";
 import testConfig from "./test.config";
 import { HealthCheck } from "../type/health-check";
@@ -42,9 +42,9 @@ export function omitProperties(
   }));
 }
 
-export function getControllerContent(controller: Controller): Content[] {
-  return Object.entries(contentControllerMapping)
-    .filter((it) => it[1] === controller)
+export function getControllerContent(shopContent: ShopContent): Content[] {
+  return Object.entries(shopContentMapping)
+    .filter((it) => it[1] === shopContent)
     .map((it) => it[0]) as Content[];
 }
 
@@ -70,9 +70,9 @@ export async function getShopHealthCheck(options?: {
 const FIXTURE_DIR = "./src/fixtures";
 
 export async function loadFixture(
-  controller: Controller,
+  shopContent: ShopContent,
 ): Promise<PsEventbusSyncUpload[]> {
-  const contents = getControllerContent(controller);
+  const contents = getControllerContent(shopContent);
   const shopVersion = (await getShopHealthCheck()).prestashop_version;
   const shopSemver = semver.coerce(shopVersion);
   const fixture = [];
@@ -100,7 +100,7 @@ export async function loadFixture(
 
   const files = contents.map((content) =>
     fs.promises.readFile(
-      `${FIXTURE_DIR}/${useFixture}/${controller}/${content}.json`,
+      `${FIXTURE_DIR}/${useFixture}/${content}.json`,
       "utf-8",
     ),
   );

@@ -1,80 +1,155 @@
 <?php
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to https://devdocs.prestashop.com/ for more information.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-class OrderHistoryRepository
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
+class OrderHistoryRepository extends AbstractRepository implements RepositoryInterface
 {
     const TABLE_NAME = 'order_history';
 
     /**
-     * @var \Db
-     */
-    private $db;
-
-    public function __construct()
-    {
-        $this->db = \Db::getInstance();
-    }
-
-    /**
-     * @return \DbQuery
-     */
-    public function getBaseQuery()
-    {
-        $query = new \DbQuery();
-
-        $query->from(self::TABLE_NAME, 'oh');
-
-        return $query;
-    }
-
-    /**
-     * @param array<mixed> $orderIds
-     * @param int $langId
+     * @param string $langIso
+     * @param bool $withSelecParameters
      *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return mixed
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws \PrestaShopException
      */
-    public function getOrderHistoryStatuses($orderIds, $langId)
+    public function generateFullQuery($langIso, $withSelecParameters)
     {
-        if (!$orderIds) {
-            return [];
-        }
+        $langId = (int) \Language::getIdByIso($langIso);
 
-        $query = $this->getBaseQuery();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'oh');
 
-        $query->select('oh.id_order_state, osl.name, osl.template, oh.date_add, oh.id_order, oh.id_order_history')
-            ->select('os.logable, os.delivery,  os.shipped, os.paid, os.deleted')
+        $this->query
             ->innerJoin('order_state', 'os', 'os.id_order_state = oh.id_order_State')
             ->innerJoin('order_state_lang', 'osl', 'osl.id_order_state = os.id_order_State AND osl.id_lang = ' . (int) $langId)
-            ->where('oh.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')')
         ;
 
-        return $this->db->executeS($query);
+        if ($withSelecParameters) {
+            $this->query
+                ->select('oh.id_order_state')
+                ->select('osl.name')
+                ->select('osl.template')
+                ->select('oh.date_add')
+                ->select('oh.id_order')
+                ->select('oh.id_order_history')
+                ->select('os.logable AS is_validated')
+                ->select('os.delivery AS is_delivered')
+                ->select('os.shipped AS is_shipped')
+                ->select('os.paid AS is_paid')
+                ->select('os.deleted AS is_deleted')
+            ;
+        }
+    }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function retrieveContentsForFull($offset, $limit, $langIso)
+    {
+        $this->generateFullQuery($langIso, true);
+
+        $this->query->limit((int) $limit, (int) $offset);
+
+        return $this->runQuery();
+    }
+
+    /**
+     * @param int $limit
+     * @param array<mixed> $contentIds
+     * @param string $langIso
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
+    {
+        $this->generateFullQuery($langIso, true);
+
+        $this->query
+            ->where('oh.id_order_state IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->limit($limit)
+        ;
+
+        return $this->runQuery();
+    }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return int
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    {
+        $this->generateFullQuery($langIso, false);
+
+        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+
+        $result = $this->runQuery(true);
+
+        return $result[0]['count'];
     }
 
     /**
      * @param array<mixed> $orderIds
+     * @param string $langIso
      *
      * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getOrderHistoryStatuseIdsByOrderIds($orderIds)
+    public function getOrderHistoryIdsByOrderIds($orderIds, $langIso)
     {
         if (!$orderIds) {
             return [];
         }
 
-        $query = $this->getBaseQuery();
+        $this->generateFullQuery($langIso, true);
 
-        $query->select('oh.id_order_state as id')
-            ->where('oh.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')')
-        ;
+        $this->query->where('oh.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')');
 
-        $result = $this->db->executeS($query);
-
-        return is_array($result) ? $result : [];
+        return $this->runQuery();
     }
 }
