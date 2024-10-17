@@ -1176,7 +1176,7 @@ class Ps_eventbus extends Module
 
         if (isset($cartRule->id)) {
             $synchronizationService->sendLiveSync('cart_rules', $cartRule->id, 'delete');
-            $synchronizationService->insertIncrementalSyncObject(
+            $synchronizationService->insertDeletedObject(
                 $cartRule->id,
                 Config::COLLECTION_CART_RULES,
                 date(DATE_ATOM),
