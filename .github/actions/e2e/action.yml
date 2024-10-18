@@ -1,0 +1,84 @@
+---
+name: 'e2e tests'
+
+description: ''
+inputs:
+  ps-version:
+    description: Prestashop version
+    required: true
+  php-version:
+    description: Php version
+    required: true
+  node-builder-version:
+    description: Node builder version
+    required: true
+  docker-compose-version:
+    description: Docker compose version
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.ref }}
+
+    - uses: pnpm/action-setup@v3
+      with:
+        version: latest
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-builder-version }}
+        cache: "pnpm"
+        cache-dependency-path: e2e/pnpm-lock.yaml
+
+    - name: Cache vendor folder
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: php-${{ hashFiles('composer.lock') }}
+
+    - name: Install docker compose
+      shell: bash
+      run: |
+        DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+        mkdir -p $DOCKER_CONFIG/cli-plugins
+        rm -f $DOCKER_CONFIG/cli-plugins/docker-compose
+        curl -SL https://github.com/docker/compose/releases/download/${{ inputs.docker-compose-version }}/docker-compose-linux-x86_64 \
+        -o $DOCKER_CONFIG/cli-plugins/docker-compose
+        chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+
+    - name: Install dependencies and setup e2e
+      shell: bash
+      run: pnpm install --no-optional --force
+      working-directory: e2e
+
+    - name: Setup e2e-env with Prestashop ${{ inputs.ps-version }} & Php ${{ inputs.php-version }}
+      shell: bash
+      run: |
+        FLASHLIGHT_BASE_IMAGE="prestashop/prestashop-flashlight"
+        if [[ "${{ inputs.ps-version }}" != "latest" ]]; then
+          sed -i 's+${FLASHLIGHT_BASE_IMAGE}:latest/${FLASHLIGHT_BASE_IMAGE}:${{inputs.ps-version}}-${{inputs.php-version}}/g' .env.dist
+        fi;
+        cp .env.dist .env
+        docker compose build
+        docker compose up --detach --wait
+      working-directory: e2e-env
+
+    - name: Run e2e:tests with Prestashop ${{ inputs.ps-version }} & Php ${{ inputs.php-version }}
+      shell: bash
+      run: pnpm test:e2e
+      working-directory: e2e
+
+    - name: More logs on failure
+      shell: bash
+      if: failure()
+      run: |
+        echo "========= Shop healthcheck =============="
+        curl -s -L 'http://localhost:8000/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck' | jq .
+        echo "========= Containers logs =========="
+        docker compose logs cloudsync-mock prestashop
+        docker compose down -v
+      working-directory: e2e-env
