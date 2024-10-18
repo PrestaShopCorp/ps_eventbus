@@ -3,7 +3,7 @@ import * as matchers from "jest-extended";
 import { dumpUploadData, logAxiosError } from "./helpers/log-helper";
 import axios, { AxiosError } from "axios";
 import { doFullSync, probe, PsEventbusSyncUpload } from "./helpers/mock-probe";
-import { concatMap, from, lastValueFrom, map, toArray, zip } from "rxjs";
+import { from, lastValueFrom, toArray, withLatestFrom } from "rxjs";
 import {
   generatePredictableModuleId,
   loadFixture,
@@ -33,28 +33,28 @@ const isString = (val) =>
 const isNumber = (val) =>
   val ? expect(val).toBeNumber() : expect(val).toBeNull();
 const specialFieldAssert: { [index: string]: (val) => void } = {
-  'created_at': isDateString,
-  'updated_at': isDateString,
-  'last_connection_date': isDateString,
-  'folder_created_at': isDateString,
-  'date_add': isDateString,
-  'from': isDateString,
-  'to': isDateString,
-  'conversion_rate': isNumber,
-  'cms_version': isString,
-  'module_id': isString,
-  'module_version': isString,
-  'theme_version': isString,
-  'php_version': isString,
-  'http_server' : isString,
-}
+  created_at: isDateString,
+  updated_at: isDateString,
+  last_connection_date: isDateString,
+  folder_created_at: isDateString,
+  date_add: isDateString,
+  from: isDateString,
+  to: isDateString,
+  conversion_rate: isNumber,
+  cms_version: isString,
+  module_id: isString,
+  module_version: isString,
+  theme_version: isString,
+  php_version: isString,
+  http_server: isString,
+};
 
-describe('Full Sync', () => {
+describe("Full Sync", () => {
   let testIndex = 0;
 
   // gérer les cas ou un shopContent n'existe pas (pas de fixture du coup)
   const controllers: Controller[] = controllerList.filter(
-    (it) => !EXCLUDED_API.includes(it)
+    (it) => !EXCLUDED_API.includes(it),
   );
 
   let jobId: string;
@@ -76,14 +76,14 @@ describe('Full Sync', () => {
       // arrange
       const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
 
-      const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
+      const callId = { call_id: Math.random().toString(36).substring(2, 11) };
 
       // act
       const response = await axios
         .post(url, callId, {
-          headers: { 
+          headers: {
             Host: testConfig.prestaShopHostHeader,
-            'Content-Type': 'application/x-www-form-urlencoded' // for compat PHP 5.6
+            "Content-Type": "application/x-www-form-urlencoded", // for compat PHP 5.6
           },
         })
         .catch((err) => {
@@ -103,14 +103,14 @@ describe('Full Sync', () => {
       // arrange
       const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
 
-      const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
+      const callId = { call_id: Math.random().toString(36).substring(2, 11) };
 
       // act
       const response = await axios
         .post(url, callId, {
           headers: {
             Host: testConfig.prestaShopHostHeader,
-            'Content-Type': 'application/x-www-form-urlencoded' // for compat PHP 5.6
+            "Content-Type": "application/x-www-form-urlencoded", // for compat PHP 5.6
           },
         })
         .catch((err) => {
@@ -136,67 +136,60 @@ describe('Full Sync', () => {
         const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
         const message$ = probe({ url: `/upload/${jobId}` });
 
-        const callId = { 'call_id': Math.random().toString(36).substring(2, 11) };
+        const callId = { call_id: Math.random().toString(36).substring(2, 11) };
 
         // act
         const request$ = from(
           axios.post(url, callId, {
             headers: {
               Host: testConfig.prestaShopHostHeader,
-              'Content-Type': 'application/x-www-form-urlencoded' // for compat PHP 5.6
+              "Content-Type": "application/x-www-form-urlencoded", // for compat PHP 5.6
             },
-          })
+          }),
         );
 
-        const results = await lastValueFrom(
-          zip(message$, request$).pipe(
-            map((result) => ({
-              probeMessage: result[0],
-              psEventbusReq: result[1],
-            })),
-            toArray()
-          )
+        const probeMessage = await lastValueFrom(
+          request$.pipe(withLatestFrom(message$, (_, message) => message)),
         );
 
         // assert
-        expect(results.length).toEqual(1);
-        expect(results[0].probeMessage.method).toBe("POST");
-        expect(results[0].probeMessage.headers).toMatchObject({
+        expect(probeMessage).toBeTruthy();
+        expect(probeMessage.method).toBe("POST");
+        expect(probeMessage.headers).toMatchObject({
           "full-sync-requested": "1",
         });
       });
     }
-    
 
     if (MISSING_TEST_DATA.includes(controller)) {
       it.skip(`${controller} should upload complete dataset to collector`, () => {});
     } else {
       it(`${controller} should upload complete dataset collector`, async () => {
-        
         // arrange
-        const fullSync$ = doFullSync(jobId, controller, { timeout: 4000 });
+        const response$ = doFullSync(jobId, controller, { timeout: 4000 });
         const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 4000 });
 
-        // act
-        const syncedData: PsEventbusSyncUpload[] = await lastValueFrom(
-          zip(fullSync$, message$).pipe(
-            map((msg) => msg[1].body.file),
-            concatMap((syncedPage) => {
-              return from(syncedPage);
-            }),
-            toArray()
-          )
+        // this combines each response from ps_eventbus to the last request captured by the probe.
+        // it works because ps_eventbus sends a response after calling our mock collector server
+        // if ps_eventbus doesn't need to call the collector, the probe completes without value after its timeout
+        const messages = await lastValueFrom(
+          response$.pipe(
+            withLatestFrom(message$, (_, message) => message.body.file),
+            toArray(),
+          ),
         );
 
+        const syncedData: PsEventbusSyncUpload[] = messages.flat();
+
         // dump data for easier debugging or updating fixtures
+        let processedData = syncedData as PsEventbusSyncUpload[];
         if (testConfig.dumpFullSyncData) {
-          await dumpUploadData(syncedData, controller);
+          await dumpUploadData(processedData, controller);
         }
 
         const fixture = await loadFixture(controller);
 
         // we need to process fixtures and data returned from ps_eventbus to make them easier to compare
-        let processedData = syncedData;
         let processedFixture = fixture;
         if (controller === "apiModules") {
           processedData = generatePredictableModuleId(processedData);
@@ -204,12 +197,12 @@ describe('Full Sync', () => {
         }
         processedData = omitProperties(
           processedData,
-          Object.keys(specialFieldAssert)
+          Object.keys(specialFieldAssert),
         );
         processedData = sortUploadData(processedData);
         processedFixture = omitProperties(
           processedFixture,
-          Object.keys(specialFieldAssert)
+          Object.keys(specialFieldAssert),
         );
         processedFixture = sortUploadData(processedFixture);
 
@@ -217,11 +210,11 @@ describe('Full Sync', () => {
         expect(processedData).toMatchObject(processedFixture);
 
         // assert special field using custom matcher
-        for (const data of syncedData) {
+        for (const data of processedData) {
           for (const specialFieldName of Object.keys(specialFieldAssert)) {
             if (data.properties[specialFieldName] !== undefined) {
               specialFieldAssert[specialFieldName](
-                data.properties[specialFieldName]
+                data.properties[specialFieldName],
               );
             }
           }

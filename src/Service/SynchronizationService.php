@@ -2,6 +2,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
+use PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient;
 use PrestaShop\Module\PsEventbus\Decorator\PayloadDecorator;
 use PrestaShop\Module\PsEventbus\Provider\PaginatedApiDataProviderInterface;
 use PrestaShop\Module\PsEventbus\Repository\DeletedObjectsRepository;
@@ -187,7 +188,7 @@ class SynchronizationService
     }
 
     /**
-     * disables liveSync
+     * liveSync
      *
      * @param string $shopContent
      * @param int $shopContentId
@@ -197,8 +198,17 @@ class SynchronizationService
      */
     public function sendLiveSync($shopContent, $shopContentId, $action)
     {
-        if ($this->isFullSyncDone($shopContent)) {
-            // $this->debounceLiveSync($shopContent);
+        $defaultIsoCode = $this->languageRepository->getDefaultLanguageIsoCode();
+
+        if ($this->isFullSyncDone($shopContent, $defaultIsoCode) && $this->debounceLiveSync($shopContent)) {
+            try {
+                /** @var LiveSyncApiClient $liveSyncApiClient */
+                $liveSyncApiClient = $this->module->getService('PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient');
+
+                $liveSyncApiClient->liveSync($shopContent, (int) $shopContentId, $action);
+            } catch (\Exception $e) {
+                // FIXME : report this error somehow
+            }
         }
     }
 
