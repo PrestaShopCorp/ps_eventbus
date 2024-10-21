@@ -28,8 +28,8 @@ namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
-use PrestaShop\Module\PsEventbus\Repository\OrderStatusHistoryRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderRepository;
+use PrestaShop\Module\PsEventbus\Repository\OrderStatusHistoryRepository;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -188,7 +188,7 @@ class OrdersService implements ShopContentServiceInterface
     {
         $isPaid = $dateAdd = 0;
         $orderIds = $this->arrayFormatter->formatValueArray($orders, 'id_order');
-        /** @var array<mixed> $orderStatusHistoryIds */
+        /** @var array<mixed> $orderStatusHistories */
         $orderStatusHistories = $this->orderStatusHistoryRepository->getOrderStatusHistoriesByOrderIds($orderIds, $langIso);
 
         foreach ($orderStatusHistories as &$orderStatusHistory) {
