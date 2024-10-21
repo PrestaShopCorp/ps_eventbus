@@ -28,7 +28,7 @@ namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
-use PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository;
+use PrestaShop\Module\PsEventbus\Repository\OrderStatusHistoryRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderRepository;
 
 if (!defined('_PS_VERSION_')) {
@@ -40,19 +40,19 @@ class OrdersService implements ShopContentServiceInterface
     /** @var OrderRepository */
     private $orderRepository;
 
-    /** @var OrderHistoryRepository */
-    private $orderHistoryRepository;
+    /** @var OrderStatusHistoryRepository */
+    private $orderStatusHistoryRepository;
 
     /** @var ArrayFormatter */
     private $arrayFormatter;
 
     public function __construct(
         OrderRepository $orderRepository,
-        OrderHistoryRepository $orderHistoryRepository,
+        OrderStatusHistoryRepository $orderStatusHistoryRepository,
         ArrayFormatter $arrayFormatter
     ) {
         $this->orderRepository = $orderRepository;
-        $this->orderHistoryRepository = $orderHistoryRepository;
+        $this->orderStatusHistoryRepository = $orderStatusHistoryRepository;
         $this->arrayFormatter = $arrayFormatter;
     }
 
@@ -188,13 +188,13 @@ class OrdersService implements ShopContentServiceInterface
     {
         $isPaid = $dateAdd = 0;
         $orderIds = $this->arrayFormatter->formatValueArray($orders, 'id_order');
-        /** @var array<mixed> $orderHistoryStatuss */
-        $orderHistoryStatuss = $this->orderHistoryRepository->getOrderHistoryIdsByOrderIds($orderIds, $langIso);
+        /** @var array<mixed> $orderStatusHistoryIds */
+        $orderStatusHistories = $this->orderStatusHistoryRepository->getOrderStatusHistoriesByOrderIds($orderIds, $langIso);
 
-        foreach ($orderHistoryStatuss as &$orderHistoryStatus) {
-            if ($order['id_order'] == $orderHistoryStatus['id_order'] && $dateAdd < $orderHistoryStatus['date_add']) {
-                $isPaid = (bool) $orderHistoryStatus['is_paid'];
-                $dateAdd = $orderHistoryStatus['date_add'];
+        foreach ($orderStatusHistories as &$orderStatusHistory) {
+            if ($order['id_order'] == $orderStatusHistory['id_order'] && $dateAdd < $orderStatusHistory['date_add']) {
+                $isPaid = (bool) $orderStatusHistory['is_paid'];
+                $dateAdd = $orderStatusHistory['date_add'];
             }
         }
 

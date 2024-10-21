@@ -80,9 +80,9 @@ class Config
     const COLLECTION_ORDERS = 'orders';
     const COLLECTION_ORDER_CART_RULES = 'order_cart_rules';
     const COLLECTION_ORDER_DETAILS = 'order_details';
-    const COLLECTION_ORDER_HISTORIES = 'order_histories';
+    const COLLECTION_ORDER_STATUS_HISTORY = 'order_status_history';
     const COLLECTION_PRODUCTS = 'products';
-    const COLLECTION_PRODUCT_BUNDLES = 'product_bundles';
+    const COLLECTION_PRODUCT_BUNDLES = 'product_bundles'; // TODO rename to bundles
     const COLLECTION_PRODUCT_SUPPLIERS = 'product_suppliers';
     const COLLECTION_SHOPS = 'shops';
     const COLLECTION_SPECIFIC_PRICES = 'specific_prices';
@@ -116,7 +116,7 @@ class Config
         self::COLLECTION_ORDERS,
         self::COLLECTION_ORDER_CART_RULES,
         self::COLLECTION_ORDER_DETAILS,
-        self::COLLECTION_ORDER_HISTORIES,
+        self::COLLECTION_ORDER_STATUS_HISTORY,
         self::COLLECTION_PRODUCTS,
         self::COLLECTION_PRODUCT_BUNDLES,
         self::COLLECTION_CUSTOM_PRODUCT_CARRIERS,

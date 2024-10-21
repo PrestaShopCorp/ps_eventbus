@@ -30,7 +30,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class OrderHistoryRepository extends AbstractRepository implements RepositoryInterface
+class OrderStatusHistoryRepository extends AbstractRepository implements RepositoryInterface
 {
     const TABLE_NAME = 'order_history';
 
@@ -140,7 +140,7 @@ class OrderHistoryRepository extends AbstractRepository implements RepositoryInt
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getOrderHistoryIdsByOrderIds($orderIds, $langIso)
+    public function getOrderStatusHistoriesByOrderIds($orderIds, $langIso)
     {
         if (!$orderIds) {
             return [];
