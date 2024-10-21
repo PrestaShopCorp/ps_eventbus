@@ -60,6 +60,7 @@ class Config
         self::PS_ACCOUNTS_NOT_INSTALLED => 'PsAccounts not installed',
     ];
 
+    const COLLECTION_BUNDLES = 'bundles';
     const COLLECTION_CARRIERS = 'carriers';
     const COLLECTION_CARRIER_DETAILS = 'carrier_details';
     const COLLECTION_CARRIER_TAXES = 'carrier_taxes';
@@ -82,7 +83,6 @@ class Config
     const COLLECTION_ORDER_DETAILS = 'order_details';
     const COLLECTION_ORDER_STATUS_HISTORY = 'order_status_history';
     const COLLECTION_PRODUCTS = 'products';
-    const COLLECTION_PRODUCT_BUNDLES = 'product_bundles'; // TODO rename to bundles
     const COLLECTION_PRODUCT_SUPPLIERS = 'product_suppliers';
     const COLLECTION_SHOPS = 'shops';
     const COLLECTION_SPECIFIC_PRICES = 'specific_prices';
@@ -97,6 +97,7 @@ class Config
     const COLLECTION_WISHLIST_PRODUCTS = 'wishlist_products';
 
     const SHOP_CONTENTS = [
+        self::COLLECTION_BUNDLES,
         self::COLLECTION_CARRIERS,
         self::COLLECTION_CARRIER_DETAILS,
         self::COLLECTION_CARRIER_TAXES,
@@ -118,7 +119,6 @@ class Config
         self::COLLECTION_ORDER_DETAILS,
         self::COLLECTION_ORDER_STATUS_HISTORY,
         self::COLLECTION_PRODUCTS,
-        self::COLLECTION_PRODUCT_BUNDLES,
         self::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
         self::COLLECTION_PRODUCT_SUPPLIERS,
         self::COLLECTION_SHOPS,

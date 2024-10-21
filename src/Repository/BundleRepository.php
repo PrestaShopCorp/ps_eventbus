@@ -30,7 +30,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class ProductBundleRepository extends AbstractRepository implements RepositoryInterface
+class BundleRepository extends AbstractRepository implements RepositoryInterface
 {
     const TABLE_NAME = 'pack';
 

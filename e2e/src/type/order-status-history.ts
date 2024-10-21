@@ -1,10 +1,10 @@
-import fixture from "../fixtures/latest/order_histories.json";
+import fixture from "../fixtures/latest/order_status_histories.json";
 
 // test type
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const t: OrderHistories[] = fixture;
+const t: OrderStatusHistory[] = fixture;
 
-export type OrderHistories = {
+export type OrderStatusHistory = {
   id: number;
   collection: string;
   properties: {
