@@ -107,8 +107,8 @@ services:
     class: PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository
     public: true
   
-  PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository
+  PrestaShop\Module\PsEventbus\Repository\OrderstatusHistoryRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\OrderStatusHistoryRepository
     public: true
 
   PrestaShop\Module\PsEventbus\Repository\OrderDetailRepository:
