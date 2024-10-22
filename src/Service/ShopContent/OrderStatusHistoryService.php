@@ -115,7 +115,7 @@ class OrderStatusHistoryService implements ShopContentServiceInterface
     private function castOrderStatusHistories(&$orderStatusHistories)
     {
         foreach ($orderStatusHistories as &$orderStatusHistory) {
-            $orderHistory['id_order_state'] = (int) $orderStatusHistory['id_order_state'];
+            $orderStatusHistory['id_order_state'] = (int) $orderStatusHistory['id_order_state'];
             $orderStatusHistory['id_order'] = (int) $orderStatusHistory['id_order'];
             $orderStatusHistory['id_order_history'] = (int) $orderStatusHistory['id_order_history'];
             $orderStatusHistory['name'] = (string) $orderStatusHistory['name'];
