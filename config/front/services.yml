@@ -54,7 +54,12 @@ services:
 ############################################################################################################
 ###################################### SHOP CONTENT SERVICES ###############################################
 ############################################################################################################
-  
+  PrestaShop\Module\PsEventbus\Service\ShopContent\BundlesService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\BundlesService
+    public: true
+    arguments:
+      - '@PrestaShop\Module\PsEventbus\Repository\BundleRepository'
+
   PrestaShop\Module\PsEventbus\Service\ShopContent\CarriersService:
     class: PrestaShop\Module\PsEventbus\Service\ShopContent\CarriersService
     public: true
@@ -158,7 +163,7 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\OrderRepository'
-      - '@PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\OrderstatusHistoryRepository'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
 
   PrestaShop\Module\PsEventbus\Service\ShopContent\OrderCartRulesService:
@@ -173,11 +178,11 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\OrderDetailRepository'
 
-  PrestaShop\Module\PsEventbus\Service\ShopContent\OrderHistoriesService:
-    class: PrestaShop\Module\PsEventbus\Service\ShopContent\OrderHistoriesService
+  PrestaShop\Module\PsEventbus\Service\ShopContent\OrderStatusHistoryService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\OrderStatusHistoryService
     public: true
     arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\OrderstatusHistoryRepository'
 
   PrestaShop\Module\PsEventbus\Service\ShopContent\ProductsService:
     class: PrestaShop\Module\PsEventbus\Service\ShopContent\ProductsService
@@ -187,12 +192,6 @@ services:
       - '@PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService'
       - '@PrestaShop\Module\PsEventbus\Service\ShopContent\CategoriesService'
       - '@PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter'
-
-  PrestaShop\Module\PsEventbus\Service\ShopContent\ProductBundlesService:
-    class: PrestaShop\Module\PsEventbus\Service\ShopContent\ProductBundlesService
-    public: true
-    arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\ProductBundleRepository'
 
   PrestaShop\Module\PsEventbus\Service\ShopContent\ProductSuppliersService:
     class: PrestaShop\Module\PsEventbus\Service\ShopContent\ProductSuppliersService

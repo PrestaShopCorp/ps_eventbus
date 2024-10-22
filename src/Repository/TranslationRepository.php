@@ -118,7 +118,7 @@ class TranslationRepository extends AbstractRepository implements RepositoryInte
     {
         // this table doesn't exist in the database before 1.7
         if (empty(parent::checkIfTableExist('%translation'))) {
-            return [];
+            return 0;
         }
 
         $this->generateFullQuery($langIso, false);

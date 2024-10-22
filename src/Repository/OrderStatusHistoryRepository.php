@@ -30,9 +30,9 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class ProductBundleRepository extends AbstractRepository implements RepositoryInterface
+class OrderStatusHistoryRepository extends AbstractRepository implements RepositoryInterface
 {
-    const TABLE_NAME = 'pack';
+    const TABLE_NAME = 'order_history';
 
     /**
      * @param string $langIso
@@ -44,25 +44,28 @@ class ProductBundleRepository extends AbstractRepository implements RepositoryIn
      */
     public function generateFullQuery($langIso, $withSelecParameters)
     {
-        $this->generateMinimalQuery(self::TABLE_NAME, 'pac');
+        $langId = (int) \Language::getIdByIso($langIso);
+
+        $this->generateMinimalQuery(self::TABLE_NAME, 'oh');
 
         $this->query
-            ->innerJoin('product', 'p', 'p.id_product = pac.id_product_pack')
-            ->innerJoin('product_shop', 'ps', 'ps.id_product = p.id_product AND ps.id_shop = ' . parent::getShopContext()->id)
-            ->leftJoin('product_attribute_shop', 'pas', 'pas.id_product = p.id_product AND pas.id_shop = ps.id_shop')
-            ->leftJoin('product_attribute', 'pa', 'pas.id_product_attribute = pa.id_product_attribute')
-            ->where('p.cache_is_pack=1')
+            ->innerJoin('order_state', 'os', 'os.id_order_state = oh.id_order_State')
+            ->innerJoin('order_state_lang', 'osl', 'osl.id_order_state = os.id_order_State AND osl.id_lang = ' . (int) $langId)
         ;
 
         if ($withSelecParameters) {
             $this->query
-                ->select('p.id_product')
-                ->select('pac.id_product_item')
-                ->select('IFNULL(pas.id_product_attribute, 0) as product_id_attribute')
-                ->select('pac.id_product_pack as id_bundle')
-                ->select('pac.id_product_attribute_item as id_product_attribute')
-                ->select('p.id_product')
-                ->select('pac.quantity')
+                ->select('oh.id_order_state')
+                ->select('osl.name')
+                ->select('osl.template')
+                ->select('oh.date_add')
+                ->select('oh.id_order')
+                ->select('oh.id_order_history')
+                ->select('os.logable AS is_validated')
+                ->select('os.delivery AS is_delivered')
+                ->select('os.shipped AS is_shipped')
+                ->select('os.paid AS is_paid')
+                ->select('os.deleted AS is_deleted')
             ;
         }
     }
@@ -101,7 +104,7 @@ class ProductBundleRepository extends AbstractRepository implements RepositoryIn
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('pac.id_bundle IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('oh.id_order_state IN(' . implode(',', array_map('intval', $contentIds)) . ')')
             ->limit($limit)
         ;
 
@@ -127,5 +130,26 @@ class ProductBundleRepository extends AbstractRepository implements RepositoryIn
         $result = $this->runQuery(true);
 
         return $result[0]['count'];
+    }
+
+    /**
+     * @param array<mixed> $orderIds
+     * @param string $langIso
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopDatabaseException
+     */
+    public function getOrderStatusHistoriesByOrderIds($orderIds, $langIso)
+    {
+        if (!$orderIds) {
+            return [];
+        }
+
+        $this->generateFullQuery($langIso, true);
+
+        $this->query->where('oh.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')');
+
+        return $this->runQuery();
     }
 }

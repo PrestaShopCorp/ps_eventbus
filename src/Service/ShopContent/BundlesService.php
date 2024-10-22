@@ -27,20 +27,20 @@
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Repository\ProductBundleRepository;
+use PrestaShop\Module\PsEventbus\Repository\BundleRepository;
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class ProductBundlesService implements ShopContentServiceInterface
+class BundlesService implements ShopContentServiceInterface
 {
-    /** @var ProductBundleRepository */
-    private $productBundleRepository;
+    /** @var BundleRepository */
+    private $bundleRepository;
 
-    public function __construct(ProductBundleRepository $productBundleRepository)
+    public function __construct(BundleRepository $bundleRepository)
     {
-        $this->productBundleRepository = $productBundleRepository;
+        $this->bundleRepository = $bundleRepository;
     }
 
     /**
@@ -52,18 +52,18 @@ class ProductBundlesService implements ShopContentServiceInterface
      */
     public function getContentsForFull($offset, $limit, $langIso)
     {
-        $result = $this->productBundleRepository->retrieveContentsForFull($offset, $limit, $langIso);
+        $result = $this->bundleRepository->retrieveContentsForFull($offset, $limit, $langIso);
 
         if (empty($result)) {
             return [];
         }
 
-        $this->castProductsBundles($result, $langIso);
+        $this->castBundles($result, $langIso);
 
         return array_map(function ($item) {
             return [
                 'id' => $item['id_bundle'],
-                'collection' => Config::COLLECTION_PRODUCT_BUNDLES,
+                'collection' => Config::COLLECTION_BUNDLES,
                 'properties' => $item,
             ];
         }, $result);
@@ -78,18 +78,18 @@ class ProductBundlesService implements ShopContentServiceInterface
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso)
     {
-        $result = $this->productBundleRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso);
+        $result = $this->bundleRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso);
 
         if (empty($result)) {
             return [];
         }
 
-        $this->castProductsBundles($result, $langIso);
+        $this->castBundles($result, $langIso);
 
         return array_map(function ($item) {
             return [
                 'id' => $item['id_bundle'],
-                'collection' => Config::COLLECTION_PRODUCT_BUNDLES,
+                'collection' => Config::COLLECTION_BUNDLES,
                 'properties' => $item,
             ];
         }, $result);
@@ -104,24 +104,24 @@ class ProductBundlesService implements ShopContentServiceInterface
      */
     public function getFullSyncContentLeft($offset, $limit, $langIso)
     {
-        return $this->productBundleRepository->countFullSyncContentLeft($offset, $limit, $langIso);
+        return $this->bundleRepository->countFullSyncContentLeft($offset, $limit, $langIso);
     }
 
     /**
-     * @param array<mixed> $productBundles
+     * @param array<mixed> $bundles
      * @param string $langIso
      *
      * @return void
      */
-    private function castProductsBundles(&$productBundles, $langIso)
+    private function castBundles(&$bundles, $langIso)
     {
-        foreach ($productBundles as &$productBundle) {
-            $productBundle['id_product'] = $productBundle['id_product_item'];
-            $productBundle['unique_product_id'] = "{$productBundle['id_bundle']}-{$productBundle['product_id_attribute']}-{$langIso}";
+        foreach ($bundles as &$bundle) {
+            $bundle['id_product'] = $bundle['id_product_item'];
+            $bundle['unique_product_id'] = "{$bundle['id_bundle']}-{$bundle['product_id_attribute']}-{$langIso}";
 
-            unset($productBundle['product_id_attribute']);
-            unset($productBundle['id_product_item']);
-            unset($productBundle['id_product_attribute_item']);
+            unset($bundle['product_id_attribute']);
+            unset($bundle['id_product_item']);
+            unset($bundle['id_product_attribute_item']);
         }
     }
 }

@@ -39,6 +39,10 @@ services:
 ###################################### SHOP CONTENT REPOSITORIES ###########################################
 ############################################################################################################
 
+  PrestaShop\Module\PsEventbus\Repository\BundleRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\BundleRepository
+    public: true
+
   PrestaShop\Module\PsEventbus\Repository\CarrierRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CarrierRepository
     public: true
@@ -103,8 +107,8 @@ services:
     class: PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository
     public: true
   
-  PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository
+  PrestaShop\Module\PsEventbus\Repository\OrderstatusHistoryRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\OrderStatusHistoryRepository
     public: true
 
   PrestaShop\Module\PsEventbus\Repository\OrderDetailRepository:
@@ -113,10 +117,6 @@ services:
 
   PrestaShop\Module\PsEventbus\Repository\ProductRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ProductRepository
-    public: true
-
-  PrestaShop\Module\PsEventbus\Repository\ProductBundleRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\ProductBundleRepository
     public: true
 
   PrestaShop\Module\PsEventbus\Repository\ProductSupplierRepository:

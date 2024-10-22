@@ -27,20 +27,20 @@
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Repository\OrderHistoryRepository;
+use PrestaShop\Module\PsEventbus\Repository\OrderStatusHistoryRepository;
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class OrderHistoriesService implements ShopContentServiceInterface
+class OrderStatusHistoryService implements ShopContentServiceInterface
 {
-    /** @var OrderHistoryRepository */
-    private $orderHistoryRepository;
+    /** @var OrderStatusHistoryRepository */
+    private $orderStatusHistoryRepository;
 
-    public function __construct(OrderHistoryRepository $orderHistoryRepository)
+    public function __construct(OrderStatusHistoryRepository $orderStatusHistoryRepository)
     {
-        $this->orderHistoryRepository = $orderHistoryRepository;
+        $this->orderStatusHistoryRepository = $orderStatusHistoryRepository;
     }
 
     /**
@@ -52,18 +52,18 @@ class OrderHistoriesService implements ShopContentServiceInterface
      */
     public function getContentsForFull($offset, $limit, $langIso)
     {
-        $result = $this->orderHistoryRepository->retrieveContentsForFull($offset, $limit, $langIso);
+        $result = $this->orderStatusHistoryRepository->retrieveContentsForFull($offset, $limit, $langIso);
 
         if (empty($result)) {
             return [];
         }
 
-        $this->castOrderHistories($result);
+        $this->castOrderStatusHistories($result);
 
         return array_map(function ($item) {
             return [
                 'id' => $item['id_order_history'],
-                'collection' => Config::COLLECTION_ORDER_HISTORIES,
+                'collection' => Config::COLLECTION_ORDER_STATUS_HISTORY,
                 'properties' => $item,
             ];
         }, $result);
@@ -78,18 +78,18 @@ class OrderHistoriesService implements ShopContentServiceInterface
      */
     public function getContentsForIncremental($limit, $contentIds, $langIso)
     {
-        $result = $this->orderHistoryRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso);
+        $result = $this->orderStatusHistoryRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso);
 
         if (empty($result)) {
             return [];
         }
 
-        $this->castOrderHistories($result);
+        $this->castOrderStatusHistories($result);
 
         return array_map(function ($item) {
             return [
                 'id' => $item['id_order_history'],
-                'collection' => Config::COLLECTION_ORDER_HISTORIES,
+                'collection' => Config::COLLECTION_ORDER_STATUS_HISTORY,
                 'properties' => $item,
             ];
         }, $result);
@@ -104,29 +104,29 @@ class OrderHistoriesService implements ShopContentServiceInterface
      */
     public function getFullSyncContentLeft($offset, $limit, $langIso)
     {
-        return $this->orderHistoryRepository->countFullSyncContentLeft($offset, $limit, $langIso);
+        return $this->orderStatusHistoryRepository->countFullSyncContentLeft($offset, $limit, $langIso);
     }
 
     /**
-     * @param array<mixed> $orderHistories
+     * @param array<mixed> $orderStatusHistories
      *
      * @return void
      */
-    private function castOrderHistories(&$orderHistories)
+    private function castOrderStatusHistories(&$orderStatusHistories)
     {
-        foreach ($orderHistories as &$orderHistory) {
-            $orderHistory['id_order_state'] = (int) $orderHistory['id_order_state'];
-            $orderHistory['id_order'] = (int) $orderHistory['id_order'];
-            $orderHistory['id_order_history'] = (int) $orderHistory['id_order_history'];
-            $orderHistory['name'] = (string) $orderHistory['name'];
-            $orderHistory['template'] = (string) $orderHistory['template'];
-            $orderHistory['is_validated'] = (bool) $orderHistory['is_validated'];
-            $orderHistory['is_delivered'] = (bool) $orderHistory['is_delivered'];
-            $orderHistory['is_shipped'] = (bool) $orderHistory['is_shipped'];
-            $orderHistory['is_paid'] = (bool) $orderHistory['is_paid'];
-            $orderHistory['is_deleted'] = (bool) $orderHistory['is_deleted'];
-            $orderHistory['created_at'] = $orderHistory['date_add'];
-            $orderHistory['updated_at'] = $orderHistory['date_add'];
+        foreach ($orderStatusHistories as &$orderStatusHistory) {
+            $orderStatusHistory['id_order_state'] = (int) $orderStatusHistory['id_order_state'];
+            $orderStatusHistory['id_order'] = (int) $orderStatusHistory['id_order'];
+            $orderStatusHistory['id_order_history'] = (int) $orderStatusHistory['id_order_history'];
+            $orderStatusHistory['name'] = (string) $orderStatusHistory['name'];
+            $orderStatusHistory['template'] = (string) $orderStatusHistory['template'];
+            $orderStatusHistory['is_validated'] = (bool) $orderStatusHistory['is_validated'];
+            $orderStatusHistory['is_delivered'] = (bool) $orderStatusHistory['is_delivered'];
+            $orderStatusHistory['is_shipped'] = (bool) $orderStatusHistory['is_shipped'];
+            $orderStatusHistory['is_paid'] = (bool) $orderStatusHistory['is_paid'];
+            $orderStatusHistory['is_deleted'] = (bool) $orderStatusHistory['is_deleted'];
+            $orderStatusHistory['created_at'] = $orderStatusHistory['date_add'];
+            $orderStatusHistory['updated_at'] = $orderStatusHistory['date_add'];
         }
     }
 }

@@ -1,6 +1,7 @@
 import R from "ramda";
 
 export const shopContentMapping = {
+  bundles: "bundles",
   carriers: "carriers",
   carrier_details: "carrier-details",
   carrier_taxes: "carrier-taxes",
@@ -20,9 +21,8 @@ export const shopContentMapping = {
   orders: "orders",
   order_cart_rules: "order-cart-rules",
   order_details: "order-details",
-  order_histories: "order-histories",
+  order_status_history: "order-status-history",
   products: "products",
-  product_bundles: "product-bundles",
   product_suppliers: "product-suppliers",
   shops: "shops",
   specific_prices: "specific-prices",
