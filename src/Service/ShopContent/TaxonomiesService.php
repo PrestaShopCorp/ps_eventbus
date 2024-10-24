@@ -62,7 +62,6 @@ class TaxonomiesService extends ShopContentAbstractService implements ShopConten
 
         return array_map(function ($item) {
             return [
-                'id' => $item['taxonomy_id'],
                 'collection' => Config::COLLECTION_TAXONOMIES,
                 'properties' => $item,
             ];
@@ -84,7 +83,7 @@ class TaxonomiesService extends ShopContentAbstractService implements ShopConten
         if (!empty($result)) {
             $this->castTaxonomies($result);
         }
-        
+
         return parent::formatIncrementalSyncResponse(Config::COLLECTION_TAXONOMIES, 'id_category', $result, $upsertedContents, $deletedContents);
     }
 

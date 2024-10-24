@@ -37,8 +37,8 @@ abstract class ShopContentAbstractService
         $data = [];
 
         // We need to bind the upserted data with list of upserted content from incremental table to get the action
-        foreach($upsertedContents as $upsertedContent) {
-            foreach($upsertedList as $item) {
+        foreach ($upsertedContents as $upsertedContent) {
+            foreach ($upsertedList as $item) {
                 if ($upsertedContent[$idKeyForBinding] == $item['id']) {
                     $data[] = [
                         'collection' => $collection,
@@ -54,7 +54,6 @@ abstract class ShopContentAbstractService
             $data[] = [
                 'collection' => $collection,
                 'properties' => [
-                    'id' => $item['id'],
                 ],
                 'action' => $item['action'],
             ];

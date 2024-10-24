@@ -62,7 +62,6 @@ class SuppliersService extends ShopContentAbstractService implements ShopContent
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_supplier'],
                 'collection' => Config::COLLECTION_SUPPLIERS,
                 'properties' => $item,
             ];
@@ -84,7 +83,7 @@ class SuppliersService extends ShopContentAbstractService implements ShopContent
         if (!empty($result)) {
             $this->castSuppliers($result);
         }
-        
+
         return parent::formatIncrementalSyncResponse(Config::COLLECTION_SUPPLIERS, 'id_supplier', $result, $upsertedContents, $deletedContents);
     }
 

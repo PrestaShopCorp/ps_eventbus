@@ -95,7 +95,7 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
             foreach ($result as $carrierData) {
                 $carrierDetails = array_merge($carrierDetails, $this->buildCarrierDetails($carrierData));
             }
-    
+
             $this->castCarrierDetails($carrierDetails);
         }
 

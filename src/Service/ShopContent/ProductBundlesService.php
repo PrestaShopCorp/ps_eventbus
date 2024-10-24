@@ -62,7 +62,6 @@ class ProductBundlesService extends ShopContentAbstractService implements ShopCo
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_bundle'],
                 'collection' => Config::COLLECTION_PRODUCT_BUNDLES,
                 'properties' => $item,
             ];

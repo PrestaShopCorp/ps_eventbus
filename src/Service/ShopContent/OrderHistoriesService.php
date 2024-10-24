@@ -62,7 +62,6 @@ class OrderHistoriesService extends ShopContentAbstractService implements ShopCo
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_order_history'],
                 'collection' => Config::COLLECTION_ORDER_HISTORIES,
                 'properties' => $item,
             ];
@@ -84,7 +83,7 @@ class OrderHistoriesService extends ShopContentAbstractService implements ShopCo
         if (!empty($result)) {
             $this->castOrderHistories($result);
         }
-        
+
         return parent::formatIncrementalSyncResponse(Config::COLLECTION_ORDER_HISTORIES, 'id_order_state', $result, $upsertedContents, $deletedContents);
     }
 

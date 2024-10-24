@@ -62,7 +62,6 @@ class ThemesService extends ShopContentAbstractService implements ShopContentSer
 
         return array_map(function ($item) {
             return [
-                'id' => $item['theme_id'],
                 'collection' => Config::COLLECTION_THEMES,
                 'properties' => $item,
             ];
@@ -86,7 +85,7 @@ class ThemesService extends ShopContentAbstractService implements ShopContentSer
         if (!empty($result)) {
             $themes = $this->formatThemes($result);
         }
-        
+
         return parent::formatIncrementalSyncResponse(Config::COLLECTION_THEMES, 'theme_id', $themes, $upsertedContents, $deletedContents);
     }
 

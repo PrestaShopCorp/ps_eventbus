@@ -69,7 +69,6 @@ class SpecificPricesService extends ShopContentAbstractService implements ShopCo
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_specific_price'],
                 'collection' => Config::COLLECTION_SPECIFIC_PRICES,
                 'properties' => $item,
             ];
@@ -91,7 +90,7 @@ class SpecificPricesService extends ShopContentAbstractService implements ShopCo
         if (!empty($result)) {
             $this->castCustomPrices($result);
         }
-        
+
         return parent::formatIncrementalSyncResponse(Config::COLLECTION_SPECIFIC_PRICES, 'id_specific_price', $result, $upsertedContents, $deletedContents);
     }
 

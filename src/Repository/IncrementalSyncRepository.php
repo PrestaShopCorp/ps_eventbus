@@ -26,7 +26,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 
 if (!defined('_PS_VERSION_')) {
@@ -146,7 +145,7 @@ class IncrementalSyncRepository extends AbstractRepository
 
         $this->query->select(
             'eis.type',
-            'eis.id_object as id', 
+            'eis.id_object as id',
             'eis.action'
         );
 

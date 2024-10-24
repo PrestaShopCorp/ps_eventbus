@@ -62,7 +62,6 @@ class StocksService extends ShopContentAbstractService implements ShopContentSer
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_stock_available'],
                 'collection' => Config::COLLECTION_STOCKS,
                 'properties' => $item,
             ];

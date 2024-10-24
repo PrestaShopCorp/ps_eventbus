@@ -62,7 +62,6 @@ class StoresService extends ShopContentAbstractService implements ShopContentSer
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_store'],
                 'collection' => Config::COLLECTION_STORES,
                 'properties' => $item,
             ];

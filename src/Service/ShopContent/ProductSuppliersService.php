@@ -62,7 +62,6 @@ class ProductSuppliersService extends ShopContentAbstractService implements Shop
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_product_supplier'],
                 'collection' => Config::COLLECTION_PRODUCT_SUPPLIERS,
                 'properties' => $item,
             ];

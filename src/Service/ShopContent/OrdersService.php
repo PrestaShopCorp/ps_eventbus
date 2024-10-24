@@ -75,7 +75,6 @@ class OrdersService extends ShopContentAbstractService implements ShopContentSer
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_order'],
                 'collection' => Config::COLLECTION_ORDERS,
                 'properties' => $item,
             ];
@@ -97,7 +96,7 @@ class OrdersService extends ShopContentAbstractService implements ShopContentSer
         if (!empty($result)) {
             $this->castOrders($result, $langIso);
         }
-        
+
         return parent::formatIncrementalSyncResponse(Config::COLLECTION_ORDERS, 'id_order', $result, $upsertedContents, $deletedContents);
     }
 
