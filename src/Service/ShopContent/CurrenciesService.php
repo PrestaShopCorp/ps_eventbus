@@ -62,7 +62,6 @@ class CurrenciesService extends ShopContentAbstractService implements ShopConten
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_currency'],
                 'collection' => Config::COLLECTION_CURRENCIES,
                 'properties' => $item,
             ];

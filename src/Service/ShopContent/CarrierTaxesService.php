@@ -97,7 +97,7 @@ class CarrierTaxesService extends ShopContentAbstractService implements ShopCont
 
             $this->castCarrierTaxes($carrierTaxes);
         }
-        
+
         return parent::formatIncrementalSyncResponse(Config::COLLECTION_CARRIER_TAXES, 'id_carrier', $result, $upsertedContents, $deletedContents);
     }
 

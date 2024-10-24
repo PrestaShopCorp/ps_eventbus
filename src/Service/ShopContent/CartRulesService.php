@@ -62,7 +62,6 @@ class CartRulesService extends ShopContentAbstractService implements ShopContent
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_cart_rule'],
                 'collection' => Config::COLLECTION_CART_RULES,
                 'properties' => $item,
             ];

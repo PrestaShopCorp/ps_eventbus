@@ -62,7 +62,6 @@ class WishlistProductsService extends ShopContentAbstractService implements Shop
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_wishlist_product'],
                 'collection' => Config::COLLECTION_WISHLIST_PRODUCTS,
                 'properties' => $item,
             ];
@@ -84,7 +83,7 @@ class WishlistProductsService extends ShopContentAbstractService implements Shop
         if (!empty($result)) {
             $this->castWishlistProducts($result);
         }
-        
+
         return parent::formatIncrementalSyncResponse(Config::COLLECTION_WISHLIST_PRODUCTS, 'id_wishlist', $result, $upsertedContents, $deletedContents);
     }
 

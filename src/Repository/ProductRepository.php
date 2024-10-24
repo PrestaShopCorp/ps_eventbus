@@ -26,8 +26,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShop\Module\PsEventbus\Config\Config;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }

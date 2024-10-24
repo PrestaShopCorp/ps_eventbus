@@ -84,7 +84,7 @@ class ImageTypesService extends ShopContentAbstractService implements ShopConten
         if (!empty($result)) {
             $this->castImageTypes($result);
         }
-        
+
         return parent::formatIncrementalSyncResponse(Config::COLLECTION_IMAGE_TYPES, 'id_image_type', $result, $upsertedContents, $deletedContents);
     }
 

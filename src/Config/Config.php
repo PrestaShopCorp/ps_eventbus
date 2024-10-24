@@ -34,7 +34,7 @@ class Config
 {
     const MYSQL_DATE_FORMAT = 'Y-m-d H:i:s';
 
-    CONST INCREMENTAL_SYNC_TABLE_NAME = 'eventbus_incremental_sync';
+    const INCREMENTAL_SYNC_TABLE_NAME = 'eventbus_incremental_sync';
     const INCREMENTAL_SYNC_TABLE_SIZE_CHECK_MOD = 20;
     const INCREMENTAL_SYNC_MAX_TABLE_SIZE = 100000;
 

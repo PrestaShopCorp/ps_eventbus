@@ -62,7 +62,6 @@ class WishlistsService extends ShopContentAbstractService implements ShopContent
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_wishlist'],
                 'collection' => Config::COLLECTION_WISHLISTS,
                 'properties' => $item,
             ];

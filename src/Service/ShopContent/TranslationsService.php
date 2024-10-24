@@ -62,7 +62,6 @@ class TranslationsService extends ShopContentAbstractService implements ShopCont
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_lang'],
                 'collection' => Config::COLLECTION_TRANSLATIONS,
                 'properties' => $item,
             ];
@@ -84,7 +83,7 @@ class TranslationsService extends ShopContentAbstractService implements ShopCont
         if (!empty($result)) {
             $this->castTranslations($result);
         }
-        
+
         return parent::formatIncrementalSyncResponse(Config::COLLECTION_TRANSLATIONS, 'id_translation', $result, $upsertedContents, $deletedContents);
     }
 

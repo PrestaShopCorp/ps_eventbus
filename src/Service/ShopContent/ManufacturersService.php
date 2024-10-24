@@ -62,7 +62,6 @@ class ManufacturersService extends ShopContentAbstractService implements ShopCon
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_manufacturer'],
                 'collection' => Config::COLLECTION_MANUFACTURERS,
                 'properties' => $item,
             ];

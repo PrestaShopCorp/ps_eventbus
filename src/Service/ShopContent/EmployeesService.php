@@ -84,7 +84,7 @@ class EmployeesService extends ShopContentAbstractService implements ShopContent
         if (!empty($result)) {
             $this->castEmployees($result);
         }
-        
+
         return parent::formatIncrementalSyncResponse(Config::COLLECTION_EMPLOYEES, 'id_employee', $result, $upsertedContents, $deletedContents);
     }
 

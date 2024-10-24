@@ -62,7 +62,6 @@ class StockMovementsService extends ShopContentAbstractService implements ShopCo
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_stock_mvt'],
                 'collection' => Config::COLLECTION_STOCK_MOVEMENTS,
                 'properties' => $item,
             ];

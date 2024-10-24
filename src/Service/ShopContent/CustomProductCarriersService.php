@@ -78,7 +78,7 @@ class CustomProductCarriersService extends ShopContentAbstractService implements
     public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
         $result = $this->customProductCarrierRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
-    
+
         return parent::formatIncrementalSyncResponse(Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS, 'id_carrier_reference', $result, $upsertedContents, $deletedContents);
     }
 
