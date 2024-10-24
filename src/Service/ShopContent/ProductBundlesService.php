@@ -33,7 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class ProductBundlesService implements ShopContentServiceInterface
+class ProductBundlesService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
     /** @var ProductBundleRepository */
     private $productBundleRepository;
@@ -71,28 +71,21 @@ class ProductBundlesService implements ShopContentServiceInterface
 
     /**
      * @param int $limit
-     * @param array<string, int> $contentIds
+     * @param array<mixed> $upsertedContents
+     * @param array<mixed> $deletedContents
      * @param string $langIso
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso)
+    public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
-        $result = $this->productBundleRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso);
+        $result = $this->productBundleRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
-        if (empty($result)) {
-            return [];
+        if (!empty($result)) {
+            $this->castProductsBundles($result, $langIso);
         }
 
-        $this->castProductsBundles($result, $langIso);
-
-        return array_map(function ($item) {
-            return [
-                'id' => $item['id_bundle'],
-                'collection' => Config::COLLECTION_PRODUCT_BUNDLES,
-                'properties' => $item,
-            ];
-        }, $result);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_PRODUCT_BUNDLES, 'id_bundle', $result, $upsertedContents, $deletedContents);
     }
 
     /**

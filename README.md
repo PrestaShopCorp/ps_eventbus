@@ -120,7 +120,7 @@ const SHOP_CONTENTS = [
 
 Create a service "planesService.php" (in plural) in the [shop content services folder](src/Service/ShopContent/) that implements the [ShopContentServiceInterface.php](src/Service/ShopContent/ShopContentServiceInterface.php) interface. For the method structure, use the existing base on all other shop content services to maintain consistency.
 ```PHP
-class PlanesService implements ShopContentServiceInterface
+class PlanesService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
   ...  
 }

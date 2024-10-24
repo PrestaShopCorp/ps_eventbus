@@ -34,7 +34,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class SpecificPricesService implements ShopContentServiceInterface
+class SpecificPricesService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
     /** @var SpecificPriceRepository */
     private $specificPriceRepository;
@@ -78,28 +78,21 @@ class SpecificPricesService implements ShopContentServiceInterface
 
     /**
      * @param int $limit
-     * @param array<string, int> $contentIds
+     * @param array<mixed> $upsertedContents
+     * @param array<mixed> $deletedContents
      * @param string $langIso
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso)
+    public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
-        $result = $this->specificPriceRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso);
+        $result = $this->specificPriceRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
-        if (empty($result)) {
-            return [];
+        if (!empty($result)) {
+            $this->castCustomPrices($result);
         }
-
-        $this->castCustomPrices($result);
-
-        return array_map(function ($item) {
-            return [
-                'id' => $item['id_specific_price'],
-                'collection' => Config::COLLECTION_SPECIFIC_PRICES,
-                'properties' => $item,
-            ];
-        }, $result);
+        
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_SPECIFIC_PRICES, 'id_specific_price', $result, $upsertedContents, $deletedContents);
     }
 
     /**

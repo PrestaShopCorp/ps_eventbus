@@ -33,7 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class TaxonomiesService implements ShopContentServiceInterface
+class TaxonomiesService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
     /** @var TaxonomyRepository */
     private $taxonomyRepository;
@@ -71,28 +71,21 @@ class TaxonomiesService implements ShopContentServiceInterface
 
     /**
      * @param int $limit
-     * @param array<string, int> $contentIds
+     * @param array<mixed> $upsertedContents
+     * @param array<mixed> $deletedContents
      * @param string $langIso
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso)
+    public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
-        $result = $this->taxonomyRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso);
+        $result = $this->taxonomyRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
-        if (empty($result)) {
-            return [];
+        if (!empty($result)) {
+            $this->castTaxonomies($result);
         }
-
-        $this->castTaxonomies($result);
-
-        return array_map(function ($item) {
-            return [
-                'id' => $item['taxonomy_id'],
-                'collection' => Config::COLLECTION_TAXONOMIES,
-                'properties' => $item,
-            ];
-        }, $result);
+        
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_TAXONOMIES, 'id_category', $result, $upsertedContents, $deletedContents);
     }
 
     /**

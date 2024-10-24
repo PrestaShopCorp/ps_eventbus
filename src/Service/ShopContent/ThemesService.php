@@ -33,7 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class ThemesService implements ShopContentServiceInterface
+class ThemesService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
     /** @var \Context */
     private $context;
@@ -71,28 +71,23 @@ class ThemesService implements ShopContentServiceInterface
 
     /**
      * @param int $limit
-     * @param array<string, int> $contentIds
+     * @param array<mixed> $upsertedContents
+     * @param array<mixed> $deletedContents
      * @param string $langIso
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso)
+    public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
         $result = $this->getAllThemes();
 
-        if (empty($result)) {
-            return [];
+        $themes = [];
+
+        if (!empty($result)) {
+            $themes = $this->formatThemes($result);
         }
-
-        $themes = $this->formatThemes($result);
-
-        return array_map(function ($item) {
-            return [
-                'id' => $item['theme_id'],
-                'collection' => Config::COLLECTION_THEMES,
-                'properties' => $item,
-            ];
-        }, $themes);
+        
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_THEMES, 'theme_id', $themes, $upsertedContents, $deletedContents);
     }
 
     /**

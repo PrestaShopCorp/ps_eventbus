@@ -33,7 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class ProductSuppliersService implements ShopContentServiceInterface
+class ProductSuppliersService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
     /** @var ProductSupplierRepository */
     private $productSupplierRepository;
@@ -71,28 +71,21 @@ class ProductSuppliersService implements ShopContentServiceInterface
 
     /**
      * @param int $limit
-     * @param array<string, int> $contentIds
+     * @param array<mixed> $upsertedContents
+     * @param array<mixed> $deletedContents
      * @param string $langIso
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso)
+    public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
-        $result = $this->productSupplierRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso);
+        $result = $this->productSupplierRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
-        if (empty($result)) {
-            return [];
+        if (!empty($result)) {
+            $this->castProductsSuppliers($result);
         }
 
-        $this->castProductsSuppliers($result);
-
-        return array_map(function ($item) {
-            return [
-                'id' => $item['id_product_supplier'],
-                'collection' => Config::COLLECTION_PRODUCT_SUPPLIERS,
-                'properties' => $item,
-            ];
-        }, $result);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_PRODUCT_SUPPLIERS, 'id_product_supplier', $result, $upsertedContents, $deletedContents);
     }
 
     /**

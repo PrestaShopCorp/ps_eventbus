@@ -33,7 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class CustomProductCarriersService implements ShopContentServiceInterface
+class CustomProductCarriersService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
     /** @var CustomProductCarrierRepository */
     private $customProductCarrierRepository;
@@ -69,26 +69,17 @@ class CustomProductCarriersService implements ShopContentServiceInterface
 
     /**
      * @param int $limit
-     * @param array<string, int> $contentIds
+     * @param array<mixed> $upsertedContents
+     * @param array<mixed> $deletedContents
      * @param string $langIso
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso)
+    public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
-        $result = $this->customProductCarrierRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso);
-
-        if (empty($result)) {
-            return [];
-        }
-
-        return array_map(function ($item) {
-            return [
-                'id' => $item['id_product'] . '-' . $item['id_carrier_reference'],
-                'collection' => Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
-                'properties' => $item,
-            ];
-        }, $result);
+        $result = $this->customProductCarrierRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
+    
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS, 'id_carrier_reference', $result, $upsertedContents, $deletedContents);
     }
 
     /**

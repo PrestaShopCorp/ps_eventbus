@@ -33,7 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class OrderDetailsService implements ShopContentServiceInterface
+class OrderDetailsService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
     /** @var OrderDetailRepository */
     private $orderDetailRepository;
@@ -71,28 +71,21 @@ class OrderDetailsService implements ShopContentServiceInterface
 
     /**
      * @param int $limit
-     * @param array<string, int> $orderDetailIds
+     * @param array<mixed> $upsertedContents
+     * @param array<mixed> $deletedContents
      * @param string $langIso
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $orderDetailIds, $langIso)
+    public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
-        $result = $this->orderDetailRepository->retrieveContentsForIncremental($limit, $orderDetailIds, $langIso);
+        $result = $this->orderDetailRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
-        if (empty($result)) {
-            return [];
+        if (!empty($result)) {
+            $this->castOrderDetails($result);
         }
-
-        $this->castOrderDetails($result);
-
-        return array_map(function ($item) {
-            return [
-                'id' => $item['id_order_detail'],
-                'collection' => Config::COLLECTION_ORDER_DETAILS,
-                'properties' => $item,
-            ];
-        }, $result);
+        
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_ORDER_DETAILS, 'id_order_detail', $result, $upsertedContents, $deletedContents);
     }
 
     /**

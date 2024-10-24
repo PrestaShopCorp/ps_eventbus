@@ -33,7 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class OrderCartRulesService implements ShopContentServiceInterface
+class OrderCartRulesService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
     /** @var OrderCartRuleRepository */
     private $orderCartRuleRepository;
@@ -71,28 +71,21 @@ class OrderCartRulesService implements ShopContentServiceInterface
 
     /**
      * @param int $limit
-     * @param array<string, int> $contentIds
+     * @param array<mixed> $upsertedContents
+     * @param array<mixed> $deletedContents
      * @param string $langIso
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso)
+    public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
-        $result = $this->orderCartRuleRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso);
+        $result = $this->orderCartRuleRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
-        if (empty($result)) {
-            return [];
+        if (!empty($result)) {
+            $this->castOrderCartRules($result);
         }
 
-        $this->castOrderCartRules($result);
-
-        return array_map(function ($item) {
-            return [
-                'id' => $item['id_order_cart_rule'],
-                'collection' => Config::COLLECTION_ORDER_CART_RULES,
-                'properties' => $item,
-            ];
-        }, $result);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_ORDER_CART_RULES, 'id_order_cart_rule', $result, $upsertedContents, $deletedContents);
     }
 
     /**
