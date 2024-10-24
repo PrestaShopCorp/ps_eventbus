@@ -1152,7 +1152,7 @@ class Ps_eventbus extends Module
         $cartRule = $parameters['object'];
 
         if (isset($cartRule->id)) {
-            $synchronizationService->sendLiveSync('cart_rules', $cartRule->id, 'upsert');
+            $synchronizationService->sendLiveSync('cart-rules', $cartRule->id, 'upsert');
             $synchronizationService->insertIncrementalSyncObject(
                 $cartRule->id,
                 Config::COLLECTION_CART_RULES,
@@ -1175,7 +1175,7 @@ class Ps_eventbus extends Module
         $cartRule = $parameters['object'];
 
         if (isset($cartRule->id)) {
-            $synchronizationService->sendLiveSync('cart_rules', $cartRule->id, 'delete');
+            $synchronizationService->sendLiveSync('cart-rules', $cartRule->id, 'delete');
             $synchronizationService->insertDeletedObject(
                 $cartRule->id,
                 Config::COLLECTION_CART_RULES,
@@ -1198,7 +1198,7 @@ class Ps_eventbus extends Module
         $cartRule = $parameters['object'];
 
         if (isset($cartRule->id)) {
-            $synchronizationService->sendLiveSync('cart_rules', $cartRule->id, 'upsert');
+            $synchronizationService->sendLiveSync('cart-rules', $cartRule->id, 'upsert');
             $synchronizationService->insertIncrementalSyncObject(
                 $cartRule->id,
                 Config::COLLECTION_CART_RULES,
