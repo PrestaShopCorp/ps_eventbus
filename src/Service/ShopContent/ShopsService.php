@@ -33,7 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class ShopsService implements ShopContentServiceInterface
+class ShopsService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
     /** @var CurrenciesService */
     private $currenciesService;
@@ -125,12 +125,13 @@ class ShopsService implements ShopContentServiceInterface
 
     /**
      * @param int $limit
-     * @param array<string, int> $contentIds
+     * @param array<mixed> $upsertedContents
+     * @param array<mixed> $deletedContents
      * @param string $langIso
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso)
+    public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
         return [];
     }

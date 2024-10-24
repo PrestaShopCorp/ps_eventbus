@@ -33,7 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class CartsService implements ShopContentServiceInterface
+class CartsService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
     /** @var CartRepository */
     private $cartRepository;
@@ -71,28 +71,21 @@ class CartsService implements ShopContentServiceInterface
 
     /**
      * @param int $limit
-     * @param array<string, int> $contentIds
+     * @param array<mixed> $upsertedContents
+     * @param array<mixed> $deletedContents
      * @param string $langIso
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso)
+    public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
-        $result = $this->cartRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso);
+        $result = $this->cartRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
-        if (empty($result)) {
-            return [];
+        if (!empty($result)) {
+            $this->castCarts($result);
         }
 
-        $this->castCarts($result);
-
-        return array_map(function ($item) {
-            return [
-                'id' => (string) $item['id_cart'],
-                'collection' => Config::COLLECTION_CARTS,
-                'properties' => $item,
-            ];
-        }, $result);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_CARTS, 'id_cart', $result, $upsertedContents, $deletedContents);
     }
 
     /**

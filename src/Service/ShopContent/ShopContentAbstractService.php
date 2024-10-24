@@ -30,33 +30,36 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-interface ShopContentServiceInterface
+abstract class ShopContentAbstractService
 {
-    /**
-     * @param int $offset
-     * @param int $limit
-     * @param string $langIso
-     *
-     * @return array<mixed>
-     */
-    public function getContentsForFull($offset, $limit, $langIso);
+    protected function formatIncrementalSyncResponse($collection, $idKeyForBinding, $upsertedContents, $upsertedList, $deletedList)
+    {
+        $data = [];
 
-    /**
-     * @param int $limit
-     * @param array<mixed> $upsertedContents
-     * @param array<mixed> $deletedContents
-     * @param string $langIso
-     *
-     * @return array<mixed>
-     */
-    public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso);
+        // We need to bind the upserted data with list of upserted content from incremental table to get the action
+        foreach($upsertedContents as $upsertedContent) {
+            foreach($upsertedList as $item) {
+                if ($upsertedContent[$idKeyForBinding] == $item['id']) {
+                    $data[] = [
+                        'collection' => $collection,
+                        'properties' => $upsertedContent,
+                        'action' => $item['action'],
+                    ];
+                }
+            }
+        }
 
-    /**
-     * @param int $offset
-     * @param int $limit
-     * @param string $langIso
-     *
-     * @return int
-     */
-    public function getFullSyncContentLeft($offset, $limit, $langIso);
+        // We need to format the deleted data to match the format of the upserted data
+        foreach ($deletedList as $item) {
+            $data[] = [
+                'collection' => $collection,
+                'properties' => [
+                    'id' => $item['id'],
+                ],
+                'action' => $item['action'],
+            ];
+        }
+
+        return $data;
+    }
 }
