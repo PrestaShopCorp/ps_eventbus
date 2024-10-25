@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "action": "add",
     "collection": "currencies",
     "properties": {
       "id_currency": 1,
@@ -13,7 +13,7 @@
     }
   },
   {
-    "id": 2,
+    "action": "add",
     "collection": "currencies",
     "properties": {
       "id_currency": 2,

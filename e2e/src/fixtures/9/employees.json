@@ -1,6 +1,6 @@
 [
   {
-    "id": "1",
+    "action": "add",
     "collection": "employees",
     "properties": {
       "id_employee": 1,

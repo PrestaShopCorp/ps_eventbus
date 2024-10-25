@@ -1,7 +1,7 @@
 [
   {
+    "action": "add",
     "collection": "carriers",
-    "id": "1",
     "properties": {
       "id_carrier": "1",
       "id_reference": "1",
@@ -30,8 +30,8 @@
     }
   },
   {
+    "action": "add",
     "collection": "carriers",
-    "id": "2",
     "properties": {
       "id_carrier": "2",
       "id_reference": "2",

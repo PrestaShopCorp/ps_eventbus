@@ -1,6 +1,6 @@
 [
   {
-    "id": "2-1-range_weight-1",
+    "action": "add",
     "collection": "carrier_details",
     "properties": {
       "id_reference": "2",
@@ -16,7 +16,7 @@
     }
   },
   {
-    "id": "2-2-range_weight-1",
+    "action": "add",
     "collection": "carrier_details",
     "properties": {
       "id_reference": "2",
@@ -32,7 +32,7 @@
     }
   },
   {
-    "id": "3-2-range_price-2",
+    "action": "add",
     "collection": "carrier_details",
     "properties": {
       "id_reference": "3",
@@ -48,7 +48,7 @@
     }
   },
   {
-    "id": "3-1-range_price-2",
+    "action": "add",
     "collection": "carrier_details",
     "properties": {
       "id_reference": "3",
@@ -64,7 +64,7 @@
     }
   },
   {
-    "id": "3-2-range_price-3",
+    "action": "add",
     "collection": "carrier_details",
     "properties": {
       "id_reference": "3",
@@ -80,7 +80,7 @@
     }
   },
   {
-    "id": "3-1-range_price-3",
+    "action": "add",
     "collection": "carrier_details",
     "properties": {
       "id_reference": "3",
@@ -96,7 +96,7 @@
     }
   },
   {
-    "id": "3-2-range_price-4",
+    "action": "add",
     "collection": "carrier_details",
     "properties": {
       "id_reference": "3",
@@ -112,7 +112,7 @@
     }
   },
   {
-    "id": "3-1-range_price-4",
+    "action": "add",
     "collection": "carrier_details",
     "properties": {
       "id_reference": "3",
@@ -128,7 +128,7 @@
     }
   },
   {
-    "id": "4-2-range_weight-2",
+    "action": "add",
     "collection": "carrier_details",
     "properties": {
       "id_reference": "4",
@@ -144,7 +144,7 @@
     }
   },
   {
-    "id": "4-1-range_weight-2",
+    "action": "add",
     "collection": "carrier_details",
     "properties": {
       "id_reference": "4",
@@ -160,7 +160,7 @@
     }
   },
   {
-    "id": "4-2-range_weight-3",
+    "action": "add",
     "collection": "carrier_details",
     "properties": {
       "id_reference": "4",
@@ -176,7 +176,7 @@
     }
   },
   {
-    "id": "4-1-range_weight-3",
+    "action": "add",
     "collection": "carrier_details",
     "properties": {
       "id_reference": "4",
@@ -192,7 +192,7 @@
     }
   },
   {
-    "id": "4-2-range_weight-4",
+    "action": "add",
     "collection": "carrier_details",
     "properties": {
       "id_reference": "4",
@@ -208,7 +208,7 @@
     }
   },
   {
-    "id": "4-1-range_weight-4",
+    "action": "add",
     "collection": "carrier_details",
     "properties": {
       "id_reference": "4",

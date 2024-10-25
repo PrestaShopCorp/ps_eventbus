@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "action": "add",
     "collection": "order_status_history",
     "properties": {
       "id_order_state": 1,
@@ -19,7 +19,7 @@
     }
   },
   {
-    "id": 2,
+    "action": "add",
     "collection": "order_status_history",
     "properties": {
       "id_order_state": 1,
@@ -38,7 +38,7 @@
     }
   },
   {
-    "id": 3,
+    "action": "add",
     "collection": "order_status_history",
     "properties": {
       "id_order_state": 1,
@@ -57,7 +57,7 @@
     }
   },
   {
-    "id": 4,
+    "action": "add",
     "collection": "order_status_history",
     "properties": {
       "id_order_state": 1,
@@ -76,7 +76,7 @@
     }
   },
   {
-    "id": 5,
+    "action": "add",
     "collection": "order_status_history",
     "properties": {
       "id_order_state": 10,
@@ -95,7 +95,7 @@
     }
   },
   {
-    "id": 6,
+    "action": "add",
     "collection": "order_status_history",
     "properties": {
       "id_order_state": 6,
@@ -114,7 +114,7 @@
     }
   },
   {
-    "id": 7,
+    "action": "add",
     "collection": "order_status_history",
     "properties": {
       "id_order_state": 8,

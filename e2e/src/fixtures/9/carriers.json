@@ -1,7 +1,8 @@
 [
   {
+    "action": "add",
     "collection": "carriers",
-    "id": "3",
+
     "properties": {
       "id_carrier": "3",
       "id_reference": "3",
@@ -30,8 +31,9 @@
     }
   },
   {
+    "action": "add",
     "collection": "carriers",
-    "id": "4",
+
     "properties": {
       "id_carrier": "4",
       "id_reference": "4",
@@ -60,8 +62,9 @@
     }
   },
   {
+    "action": "add",
     "collection": "carriers",
-    "id": "1",
+
     "properties": {
       "id_carrier": "1",
       "id_reference": "1",
@@ -90,8 +93,9 @@
     }
   },
   {
+    "action": "add",
     "collection": "carriers",
-    "id": "2",
+
     "properties": {
       "id_carrier": "2",
       "id_reference": "2",

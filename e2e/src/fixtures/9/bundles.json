@@ -1,6 +1,6 @@
 [
   {
-    "id": 15,
+    "action": "add",
     "collection": "bundles",
     "properties": {
       "id_bundle": 15,
@@ -11,7 +11,7 @@
     }
   },
   {
-    "id": 15,
+    "action": "add",
     "collection": "bundles",
     "properties": {
       "id_bundle": 15,

@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 1,
@@ -14,7 +14,7 @@
     }
   },
   {
-    "id": 2,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 2,
@@ -28,7 +28,7 @@
     }
   },
   {
-    "id": 3,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 3,
@@ -42,7 +42,7 @@
     }
   },
   {
-    "id": 4,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 4,
@@ -56,7 +56,7 @@
     }
   },
   {
-    "id": 5,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 5,
@@ -70,7 +70,7 @@
     }
   },
   {
-    "id": 6,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 6,
@@ -84,7 +84,7 @@
     }
   },
   {
-    "id": 7,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 7,
@@ -98,7 +98,7 @@
     }
   },
   {
-    "id": 8,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 8,
@@ -112,7 +112,7 @@
     }
   },
   {
-    "id": 9,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 9,
@@ -126,7 +126,7 @@
     }
   },
   {
-    "id": 10,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 10,
@@ -140,7 +140,7 @@
     }
   },
   {
-    "id": 11,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 11,
@@ -154,7 +154,7 @@
     }
   },
   {
-    "id": 12,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 12,
@@ -168,7 +168,7 @@
     }
   },
   {
-    "id": 13,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 13,
@@ -182,7 +182,7 @@
     }
   },
   {
-    "id": 14,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 14,
@@ -196,7 +196,7 @@
     }
   },
   {
-    "id": 15,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 15,
@@ -210,7 +210,7 @@
     }
   },
   {
-    "id": 16,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 16,
@@ -224,7 +224,7 @@
     }
   },
   {
-    "id": 17,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 17,
@@ -238,7 +238,7 @@
     }
   },
   {
-    "id": 18,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 18,
@@ -252,7 +252,7 @@
     }
   },
   {
-    "id": 19,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 19,
@@ -266,7 +266,7 @@
     }
   },
   {
-    "id": 20,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 20,
@@ -280,7 +280,7 @@
     }
   },
   {
-    "id": 21,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 21,
@@ -294,7 +294,7 @@
     }
   },
   {
-    "id": 22,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 22,
@@ -308,7 +308,7 @@
     }
   },
   {
-    "id": 23,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 23,
@@ -322,7 +322,7 @@
     }
   },
   {
-    "id": 24,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 24,
@@ -336,7 +336,7 @@
     }
   },
   {
-    "id": 25,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 25,
@@ -350,7 +350,7 @@
     }
   },
   {
-    "id": 26,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 26,
@@ -364,7 +364,7 @@
     }
   },
   {
-    "id": 27,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 27,
@@ -378,7 +378,7 @@
     }
   },
   {
-    "id": 28,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 28,
@@ -392,7 +392,7 @@
     }
   },
   {
-    "id": 29,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 29,
@@ -406,7 +406,7 @@
     }
   },
   {
-    "id": 30,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 30,
@@ -420,7 +420,7 @@
     }
   },
   {
-    "id": 31,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 31,
@@ -434,7 +434,7 @@
     }
   },
   {
-    "id": 32,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 32,
@@ -448,7 +448,7 @@
     }
   },
   {
-    "id": 33,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 33,
@@ -462,7 +462,7 @@
     }
   },
   {
-    "id": 34,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 34,
@@ -476,7 +476,7 @@
     }
   },
   {
-    "id": 35,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 35,
@@ -490,7 +490,7 @@
     }
   },
   {
-    "id": 36,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 36,
@@ -504,7 +504,7 @@
     }
   },
   {
-    "id": 37,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 37,
@@ -518,7 +518,7 @@
     }
   },
   {
-    "id": 38,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 38,
@@ -532,7 +532,7 @@
     }
   },
   {
-    "id": 39,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 39,
@@ -546,7 +546,7 @@
     }
   },
   {
-    "id": 40,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 40,
@@ -560,7 +560,7 @@
     }
   },
   {
-    "id": 41,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 41,
@@ -574,7 +574,7 @@
     }
   },
   {
-    "id": 42,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 42,
@@ -588,7 +588,7 @@
     }
   },
   {
-    "id": 43,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 43,
@@ -602,7 +602,7 @@
     }
   },
   {
-    "id": 44,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 44,
@@ -616,7 +616,7 @@
     }
   },
   {
-    "id": 45,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 45,
@@ -630,7 +630,7 @@
     }
   },
   {
-    "id": 46,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 46,
@@ -644,7 +644,7 @@
     }
   },
   {
-    "id": 47,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 47,
@@ -658,7 +658,7 @@
     }
   },
   {
-    "id": 48,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 48,
@@ -672,7 +672,7 @@
     }
   },
   {
-    "id": 49,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 49,
@@ -686,7 +686,7 @@
     }
   },
   {
-    "id": 50,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 50,
@@ -700,7 +700,7 @@
     }
   },
   {
-    "id": 51,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 51,
@@ -714,7 +714,7 @@
     }
   },
   {
-    "id": 52,
+    "action": "add",
     "collection": "stocks",
     "properties": {
       "id_stock_available": 52,

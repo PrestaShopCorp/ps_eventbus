@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "action": "add",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 1,
@@ -13,7 +13,7 @@
     }
   },
   {
-    "id": 2,
+    "action": "add",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 2,
@@ -26,7 +26,7 @@
     }
   },
   {
-    "id": 3,
+    "action": "add",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 3,
@@ -39,7 +39,7 @@
     }
   },
   {
-    "id": 4,
+    "action": "add",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 4,
@@ -52,7 +52,7 @@
     }
   },
   {
-    "id": 5,
+    "action": "add",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 5,
@@ -65,7 +65,7 @@
     }
   },
   {
-    "id": 6,
+    "action": "add",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 6,
@@ -78,7 +78,7 @@
     }
   },
   {
-    "id": 7,
+    "action": "add",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 7,

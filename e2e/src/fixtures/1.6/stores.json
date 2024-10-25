@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "action": "add",
     "collection": "stores",
     "properties": {
       "id_store": 1,
@@ -18,7 +18,7 @@
     }
   },
   {
-    "id": 2,
+    "action": "add",
     "collection": "stores",
     "properties": {
       "id_store": 2,
@@ -36,7 +36,7 @@
     }
   },
   {
-    "id": 3,
+    "action": "add",
     "collection": "stores",
     "properties": {
       "id_store": 3,
@@ -54,7 +54,7 @@
     }
   },
   {
-    "id": 4,
+    "action": "add",
     "collection": "stores",
     "properties": {
       "id_store": 4,
@@ -72,7 +72,7 @@
     }
   },
   {
-    "id": 5,
+    "action": "add",
     "collection": "stores",
     "properties": {
       "id_store": 5,

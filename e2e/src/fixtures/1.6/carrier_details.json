@@ -1,6 +1,6 @@
 [
   {
-    "id": "2-1-range_weight-1",
+    "action": "add",
     "collection": "carrier_details",
     "properties": {
       "id_reference": "2",
@@ -16,7 +16,7 @@
     }
   },
   {
-    "id": "2-2-range_weight-1",
+    "action": "add",
     "collection": "carrier_details",
     "properties": {
       "id_reference": "2",

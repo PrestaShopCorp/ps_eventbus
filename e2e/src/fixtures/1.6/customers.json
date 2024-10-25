@@ -1,6 +1,6 @@
 [
   {
-    "id": "1",
+    "action": "add",
     "collection": "customers",
     "properties": {
       "id_customer": 1,
