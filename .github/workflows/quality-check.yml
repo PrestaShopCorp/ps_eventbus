@@ -54,6 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     strategy:
+      fail-fast: false
       matrix:
         # @TODO: "1.6.1.24" is temporarily disabled here
         ps_version: ["1.6.1.11", "1.7.8.10", "8.1.6"]
@@ -89,6 +90,7 @@ jobs:
     timeout-minutes: 30
     if: ${{ github.event_name == 'pull_request' }}
     strategy:
+      fail-fast: false
       matrix:
         ps_version: ["1.6.1.11", "1.7.8.10", "8.1.4", "nightly"]
     steps:
