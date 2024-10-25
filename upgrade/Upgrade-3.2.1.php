@@ -15,8 +15,7 @@ function upgrade_module_3_2_1()
         'eventbus_type_sync',
         [
             'offset' => 0,
-            'full_sync_finished' => 0
-
+            'full_sync_finished' => 0,
         ],
         '`type` = "cart_rules"'
     );
