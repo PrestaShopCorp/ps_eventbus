@@ -62,9 +62,9 @@ class ImagesService extends ShopContentAbstractService implements ShopContentSer
 
         return array_map(function ($item) {
             return [
+                'action' => Config::INCREMENTAL_TYPE_ADD,
                 'collection' => Config::COLLECTION_IMAGES,
                 'properties' => $item,
-                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

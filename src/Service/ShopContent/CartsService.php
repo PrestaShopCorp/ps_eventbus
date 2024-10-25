@@ -62,9 +62,9 @@ class CartsService extends ShopContentAbstractService implements ShopContentServ
 
         return array_map(function ($item) {
             return [
+                'action' => Config::INCREMENTAL_TYPE_ADD,
                 'collection' => Config::COLLECTION_CARTS,
                 'properties' => $item,
-                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

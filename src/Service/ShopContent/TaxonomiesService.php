@@ -62,9 +62,9 @@ class TaxonomiesService extends ShopContentAbstractService implements ShopConten
 
         return array_map(function ($item) {
             return [
+                'action' => Config::INCREMENTAL_TYPE_ADD,
                 'collection' => Config::COLLECTION_TAXONOMIES,
                 'properties' => $item,
-                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

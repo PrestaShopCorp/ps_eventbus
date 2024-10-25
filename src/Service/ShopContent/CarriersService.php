@@ -62,9 +62,9 @@ class CarriersService extends ShopContentAbstractService implements ShopContentS
 
         return array_map(function ($item) {
             return [
+                'action' => Config::INCREMENTAL_TYPE_ADD,
                 'collection' => Config::COLLECTION_CARRIERS,
                 'properties' => $item,
-                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

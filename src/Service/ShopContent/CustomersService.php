@@ -62,9 +62,9 @@ class CustomersService extends ShopContentAbstractService implements ShopContent
 
         return array_map(function ($item) {
             return [
+                'action' => Config::INCREMENTAL_TYPE_ADD,
                 'collection' => Config::COLLECTION_CUSTOMERS,
                 'properties' => $item,
-                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

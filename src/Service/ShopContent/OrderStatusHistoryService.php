@@ -62,9 +62,9 @@ class OrderStatusHistoryService extends ShopContentAbstractService implements Sh
 
         return array_map(function ($item) {
             return [
+                'action' => Config::INCREMENTAL_TYPE_ADD,
                 'collection' => Config::COLLECTION_ORDER_STATUS_HISTORY,
                 'properties' => $item,
-                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

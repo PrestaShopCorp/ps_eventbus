@@ -93,6 +93,7 @@ class ShopsService extends ShopContentAbstractService implements ShopContentServ
 
         return [
             [
+                'action' => Config::INCREMENTAL_TYPE_ADD,
                 'collection' => Config::COLLECTION_SHOPS,
                 'properties' => [
                     'created_at' => $this->shopRepository->getCreatedAt(),

@@ -50,9 +50,9 @@ abstract class ShopContentAbstractService
             foreach ($upsertedList as $item) {
                 if ($upsertedContent[$idKeyForBinding] == $item['id']) {
                     $data[] = [
+                        'action' => $item['action'],
                         'collection' => $collection,
                         'properties' => $upsertedContent,
-                        'action' => $item['action'],
                     ];
                 }
             }
@@ -61,10 +61,11 @@ abstract class ShopContentAbstractService
         // We need to format the deleted data to match the format of the upserted data
         foreach ($deletedList as $item) {
             $data[] = [
+                'action' => $item['action'],
                 'collection' => $collection,
                 'properties' => [
+                    'id' => $item['id']
                 ],
-                'action' => $item['action'],
             ];
         }
 

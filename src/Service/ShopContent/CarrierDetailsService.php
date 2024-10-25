@@ -70,9 +70,9 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
 
         return array_map(function ($item) {
             return [
+                'action' => Config::INCREMENTAL_TYPE_ADD,
                 'collection' => Config::COLLECTION_CARRIER_DETAILS,
                 'properties' => $item,
-                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $carrierDetails);
     }
