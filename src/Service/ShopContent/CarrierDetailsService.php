@@ -70,7 +70,6 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
 
         return array_map(function ($item) {
             return [
-                'id' => (string) $item['id_reference'] . '-' . $item['id_zone'] . '-' . $item['shipping_method'] . '-' . $item['id_range'],
                 'collection' => Config::COLLECTION_CARRIER_DETAILS,
                 'properties' => $item,
             ];

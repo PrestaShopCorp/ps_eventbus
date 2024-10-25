@@ -62,7 +62,6 @@ class CustomersService extends ShopContentAbstractService implements ShopContent
 
         return array_map(function ($item) {
             return [
-                'id' => (string) $item['id_customer'],
                 'collection' => Config::COLLECTION_CUSTOMERS,
                 'properties' => $item,
             ];

@@ -62,7 +62,6 @@ class ImagesService extends ShopContentAbstractService implements ShopContentSer
 
         return array_map(function ($item) {
             return [
-                'id' => (string) $item['id_image'],
                 'collection' => Config::COLLECTION_IMAGES,
                 'properties' => $item,
             ];

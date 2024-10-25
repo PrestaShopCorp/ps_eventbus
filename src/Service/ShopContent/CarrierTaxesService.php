@@ -69,7 +69,6 @@ class CarrierTaxesService extends ShopContentAbstractService implements ShopCont
 
         return array_map(function ($item) {
             return [
-                'id' => (string) $item['id_reference'] . '-' . $item['id_zone'] . '-' . $item['id_range'],
                 'collection' => Config::COLLECTION_CARRIER_TAXES,
                 'properties' => $item,
             ];

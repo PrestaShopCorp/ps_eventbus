@@ -62,7 +62,6 @@ class CarriersService extends ShopContentAbstractService implements ShopContentS
 
         return array_map(function ($item) {
             return [
-                'id' => (string) $item['id_reference'],
                 'collection' => Config::COLLECTION_CARRIERS,
                 'properties' => $item,
             ];

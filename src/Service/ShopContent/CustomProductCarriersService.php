@@ -60,7 +60,6 @@ class CustomProductCarriersService extends ShopContentAbstractService implements
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_product'] . '-' . $item['id_carrier_reference'],
                 'collection' => Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
                 'properties' => $item,
             ];

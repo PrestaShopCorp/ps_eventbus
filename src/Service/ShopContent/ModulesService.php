@@ -69,7 +69,6 @@ class ModulesService extends ShopContentAbstractService implements ShopContentSe
 
         return array_map(function ($item) {
             return [
-                'id' => (string) $item['module_id'],
                 'collection' => Config::COLLECTION_MODULES,
                 'properties' => $item,
             ];

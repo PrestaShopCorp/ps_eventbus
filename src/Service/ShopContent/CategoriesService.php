@@ -62,7 +62,6 @@ class CategoriesService extends ShopContentAbstractService implements ShopConten
 
         return array_map(function ($item) {
             return [
-                'id' => "{$item['id_category']}-{$item['iso_code']}",
                 'collection' => Config::COLLECTION_CATEGORIES,
                 'properties' => $item,
             ];

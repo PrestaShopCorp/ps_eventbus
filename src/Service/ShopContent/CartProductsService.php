@@ -62,7 +62,6 @@ class CartProductsService extends ShopContentAbstractService implements ShopCont
 
         return array_map(function ($item) {
             return [
-                'id' => "{$item['id_cart']}-{$item['id_product']}-{$item['id_product_attribute']}",
                 'collection' => Config::COLLECTION_CART_PRODUCTS,
                 'properties' => $item,
             ];

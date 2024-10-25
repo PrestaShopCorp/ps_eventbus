@@ -62,7 +62,6 @@ class EmployeesService extends ShopContentAbstractService implements ShopContent
 
         return array_map(function ($item) {
             return [
-                'id' => (string) $item['id_employee'],
                 'collection' => Config::COLLECTION_EMPLOYEES,
                 'properties' => $item,
             ];

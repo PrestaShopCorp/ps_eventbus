@@ -62,7 +62,6 @@ class ImageTypesService extends ShopContentAbstractService implements ShopConten
 
         return array_map(function ($item) {
             return [
-                'id' => (string) $item['id_image_type'],
                 'collection' => Config::COLLECTION_IMAGE_TYPES,
                 'properties' => $item,
             ];
