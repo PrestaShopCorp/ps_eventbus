@@ -633,7 +633,7 @@ class Ps_eventbus extends Module
         $product = $parameters['object'];
         if (isset($product->id)) {
             $synchronizationService->sendLiveSync('products', $product->id, 'upsert');
-            $synchronizationService->sendLiveSync('custom-product-carriers', $product->id, 'upsert');
+            $synchronizationService->sendLiveSync('custom_product_carriers', $product->id, 'upsert');
             $synchronizationService->sendLiveSync('stocks', $product->id, 'upsert');
 
             $synchronizationService->insertIncrementalSyncObject(
@@ -661,7 +661,7 @@ class Ps_eventbus extends Module
 
         if (isset($product->id)) {
             $synchronizationService->sendLiveSync('products', $product->id, 'upsert');
-            $synchronizationService->sendLiveSync('custom-product-carriers', $product->id, 'upsert');
+            $synchronizationService->sendLiveSync('custom_product_carriers', $product->id, 'upsert');
             $synchronizationService->sendLiveSync('stocks', $product->id, 'upsert');
 
             $synchronizationService->insertIncrementalSyncObject(
@@ -1152,7 +1152,7 @@ class Ps_eventbus extends Module
         $cartRule = $parameters['object'];
 
         if (isset($cartRule->id)) {
-            $synchronizationService->sendLiveSync('cart-rules', $cartRule->id, 'upsert');
+            $synchronizationService->sendLiveSync('cart_rules', $cartRule->id, 'upsert');
             $synchronizationService->insertIncrementalSyncObject(
                 $cartRule->id,
                 Config::COLLECTION_CART_RULES,
@@ -1175,7 +1175,7 @@ class Ps_eventbus extends Module
         $cartRule = $parameters['object'];
 
         if (isset($cartRule->id)) {
-            $synchronizationService->sendLiveSync('cart-rules', $cartRule->id, 'delete');
+            $synchronizationService->sendLiveSync('cart_rules', $cartRule->id, 'delete');
             $synchronizationService->insertDeletedObject(
                 $cartRule->id,
                 Config::COLLECTION_CART_RULES,
@@ -1198,7 +1198,7 @@ class Ps_eventbus extends Module
         $cartRule = $parameters['object'];
 
         if (isset($cartRule->id)) {
-            $synchronizationService->sendLiveSync('cart-rules', $cartRule->id, 'upsert');
+            $synchronizationService->sendLiveSync('cart_rules', $cartRule->id, 'upsert');
             $synchronizationService->insertIncrementalSyncObject(
                 $cartRule->id,
                 Config::COLLECTION_CART_RULES,
@@ -1689,7 +1689,7 @@ class Ps_eventbus extends Module
 
         if ($specificPrice instanceof SpecificPrice) {
             if (isset($specificPrice->id)) {
-                $synchronizationService->sendLiveSync('specific-prices', $specificPrice->id, 'upsert');
+                $synchronizationService->sendLiveSync('specific_prices', $specificPrice->id, 'upsert');
                 $synchronizationService->insertIncrementalSyncObject(
                     $specificPrice->id,
                     Config::COLLECTION_SPECIFIC_PRICES,
@@ -1715,7 +1715,7 @@ class Ps_eventbus extends Module
 
         if ($specificPrice instanceof SpecificPrice) {
             if (isset($specificPrice->id)) {
-                $synchronizationService->sendLiveSync('specific-prices', $specificPrice->id, 'upsert');
+                $synchronizationService->sendLiveSync('specific_prices', $specificPrice->id, 'upsert');
                 $synchronizationService->insertIncrementalSyncObject(
                     $specificPrice->id,
                     Config::COLLECTION_SPECIFIC_PRICES,
@@ -1741,7 +1741,7 @@ class Ps_eventbus extends Module
 
         if ($specificPrice instanceof SpecificPrice) {
             if (isset($specificPrice->id)) {
-                $synchronizationService->sendLiveSync('specific-prices', $specificPrice->id, 'delete');
+                $synchronizationService->sendLiveSync('specific_prices', $specificPrice->id, 'delete');
                 $synchronizationService->insertDeletedObject(
                     $specificPrice->id,
                     Config::COLLECTION_SPECIFIC_PRICES,
