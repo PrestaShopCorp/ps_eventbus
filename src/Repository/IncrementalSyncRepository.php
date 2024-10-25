@@ -143,11 +143,11 @@ class IncrementalSyncRepository extends AbstractRepository
             ->limit($limit)
         ;
 
-        $this->query->select(
-            'eis.type',
-            'eis.id_object as id',
-            'eis.action'
-        );
+        $this->query
+            ->select('eis.type')
+            ->select('eis.id_object as id')
+            ->select('eis.action')
+        ;
 
         return $this->runQuery(true);
     }
