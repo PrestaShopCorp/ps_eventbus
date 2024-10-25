@@ -64,6 +64,7 @@ class CarriersService extends ShopContentAbstractService implements ShopContentS
             return [
                 'collection' => Config::COLLECTION_CARRIERS,
                 'properties' => $item,
+                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

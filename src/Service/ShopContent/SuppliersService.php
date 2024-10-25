@@ -64,6 +64,7 @@ class SuppliersService extends ShopContentAbstractService implements ShopContent
             return [
                 'collection' => Config::COLLECTION_SUPPLIERS,
                 'properties' => $item,
+                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

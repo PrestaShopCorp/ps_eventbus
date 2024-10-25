@@ -64,6 +64,7 @@ class ThemesService extends ShopContentAbstractService implements ShopContentSer
             return [
                 'collection' => Config::COLLECTION_THEMES,
                 'properties' => $item,
+                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $themes);
     }

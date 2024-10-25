@@ -64,6 +64,7 @@ class StockMovementsService extends ShopContentAbstractService implements ShopCo
             return [
                 'collection' => Config::COLLECTION_STOCK_MOVEMENTS,
                 'properties' => $item,
+                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

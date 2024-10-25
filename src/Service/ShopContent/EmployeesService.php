@@ -64,6 +64,7 @@ class EmployeesService extends ShopContentAbstractService implements ShopContent
             return [
                 'collection' => Config::COLLECTION_EMPLOYEES,
                 'properties' => $item,
+                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

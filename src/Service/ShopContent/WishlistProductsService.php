@@ -64,6 +64,7 @@ class WishlistProductsService extends ShopContentAbstractService implements Shop
             return [
                 'collection' => Config::COLLECTION_WISHLIST_PRODUCTS,
                 'properties' => $item,
+                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

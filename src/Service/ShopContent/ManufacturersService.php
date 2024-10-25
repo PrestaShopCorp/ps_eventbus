@@ -64,6 +64,7 @@ class ManufacturersService extends ShopContentAbstractService implements ShopCon
             return [
                 'collection' => Config::COLLECTION_MANUFACTURERS,
                 'properties' => $item,
+                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

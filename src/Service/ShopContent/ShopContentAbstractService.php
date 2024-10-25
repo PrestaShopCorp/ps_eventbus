@@ -33,12 +33,12 @@ if (!defined('_PS_VERSION_')) {
 abstract class ShopContentAbstractService
 {
     /**
-     * @param string $collection 
-     * @param string $idKeyForBinding 
-     * @param array<mixed> $upsertedContents 
-     * @param array<mixed> $upsertedList 
+     * @param string $collection
+     * @param string $idKeyForBinding
+     * @param array<mixed> $upsertedContents
+     * @param array<mixed> $upsertedList
      * @param array<mixed> $deletedList
-     *  
+     *
      * @return array<mixed>
      */
     protected function formatIncrementalSyncResponse($collection, $idKeyForBinding, $upsertedContents, $upsertedList, $deletedList)

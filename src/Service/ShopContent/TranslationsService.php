@@ -64,6 +64,7 @@ class TranslationsService extends ShopContentAbstractService implements ShopCont
             return [
                 'collection' => Config::COLLECTION_TRANSLATIONS,
                 'properties' => $item,
+                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

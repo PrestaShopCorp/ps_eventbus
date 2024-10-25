@@ -64,6 +64,7 @@ class CategoriesService extends ShopContentAbstractService implements ShopConten
             return [
                 'collection' => Config::COLLECTION_CATEGORIES,
                 'properties' => $item,
+                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

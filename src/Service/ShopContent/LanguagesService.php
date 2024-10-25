@@ -64,6 +64,7 @@ class LanguagesService extends ShopContentAbstractService implements ShopContent
             return [
                 'collection' => Config::COLLECTION_LANGUAGES,
                 'properties' => $item,
+                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

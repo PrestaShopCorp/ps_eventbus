@@ -64,6 +64,7 @@ class CustomersService extends ShopContentAbstractService implements ShopContent
             return [
                 'collection' => Config::COLLECTION_CUSTOMERS,
                 'properties' => $item,
+                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

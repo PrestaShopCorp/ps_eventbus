@@ -64,6 +64,7 @@ class CurrenciesService extends ShopContentAbstractService implements ShopConten
             return [
                 'collection' => Config::COLLECTION_CURRENCIES,
                 'properties' => $item,
+                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

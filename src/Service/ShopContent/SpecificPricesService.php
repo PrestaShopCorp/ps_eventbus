@@ -71,6 +71,7 @@ class SpecificPricesService extends ShopContentAbstractService implements ShopCo
             return [
                 'collection' => Config::COLLECTION_SPECIFIC_PRICES,
                 'properties' => $item,
+                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

@@ -33,7 +33,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-
 class OrderStatusHistoryService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
     /** @var OrderStatusHistoryRepository */
@@ -65,6 +64,7 @@ class OrderStatusHistoryService extends ShopContentAbstractService implements Sh
             return [
                 'collection' => Config::COLLECTION_ORDER_STATUS_HISTORY,
                 'properties' => $item,
+                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

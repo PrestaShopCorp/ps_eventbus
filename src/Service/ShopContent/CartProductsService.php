@@ -64,6 +64,7 @@ class CartProductsService extends ShopContentAbstractService implements ShopCont
             return [
                 'collection' => Config::COLLECTION_CART_PRODUCTS,
                 'properties' => $item,
+                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

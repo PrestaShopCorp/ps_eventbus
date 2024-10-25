@@ -64,6 +64,7 @@ class TaxonomiesService extends ShopContentAbstractService implements ShopConten
             return [
                 'collection' => Config::COLLECTION_TAXONOMIES,
                 'properties' => $item,
+                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

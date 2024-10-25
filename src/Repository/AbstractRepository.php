@@ -112,7 +112,7 @@ abstract class AbstractRepository
 
     /**
      * @param string $tableName
-     * 
+     *
      * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopException

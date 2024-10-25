@@ -64,6 +64,7 @@ class StoresService extends ShopContentAbstractService implements ShopContentSer
             return [
                 'collection' => Config::COLLECTION_STORES,
                 'properties' => $item,
+                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

@@ -64,6 +64,7 @@ class BundlesService extends ShopContentAbstractService implements ShopContentSe
             return [
                 'collection' => Config::COLLECTION_BUNDLES,
                 'properties' => $item,
+                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

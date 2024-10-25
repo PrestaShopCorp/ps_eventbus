@@ -64,6 +64,7 @@ class OrderCartRulesService extends ShopContentAbstractService implements ShopCo
             return [
                 'collection' => Config::COLLECTION_ORDER_CART_RULES,
                 'properties' => $item,
+                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $result);
     }

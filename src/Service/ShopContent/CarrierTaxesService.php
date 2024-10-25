@@ -71,6 +71,7 @@ class CarrierTaxesService extends ShopContentAbstractService implements ShopCont
             return [
                 'collection' => Config::COLLECTION_CARRIER_TAXES,
                 'properties' => $item,
+                'action' => Config::INCREMENTAL_TYPE_ADD,
             ];
         }, $carrierTaxes);
     }
