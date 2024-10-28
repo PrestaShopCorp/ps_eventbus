@@ -62,7 +62,7 @@ class OrderStatusHistoryService extends ShopContentAbstractService implements Sh
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_ORDER_STATUS_HISTORY,
                 'properties' => $item,
             ];
@@ -85,7 +85,7 @@ class OrderStatusHistoryService extends ShopContentAbstractService implements Sh
             $this->castOrderStatusHistories($result);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_ORDER_STATUS_HISTORY, 'id_order_state', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_ORDER_STATUS_HISTORY, $result, $deletedContents);
     }
 
     /**

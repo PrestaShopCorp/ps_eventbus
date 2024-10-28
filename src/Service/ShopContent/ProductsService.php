@@ -100,7 +100,7 @@ class ProductsService extends ShopContentAbstractService implements ShopContentS
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_PRODUCTS,
                 'properties' => $item,
             ];
@@ -124,7 +124,7 @@ class ProductsService extends ShopContentAbstractService implements ShopContentS
             $this->castProducts($result);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_PRODUCTS, 'id_product', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_PRODUCTS, $result, $deletedContents);
     }
 
     /**

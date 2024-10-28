@@ -62,7 +62,7 @@ class ImageTypesService extends ShopContentAbstractService implements ShopConten
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_IMAGE_TYPES,
                 'properties' => $item,
             ];
@@ -85,7 +85,7 @@ class ImageTypesService extends ShopContentAbstractService implements ShopConten
             $this->castImageTypes($result);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_IMAGE_TYPES, 'id_image_type', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_IMAGE_TYPES, $result, $deletedContents);
     }
 
     /**

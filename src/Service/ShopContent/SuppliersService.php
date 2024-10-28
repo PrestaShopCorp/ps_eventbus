@@ -62,7 +62,7 @@ class SuppliersService extends ShopContentAbstractService implements ShopContent
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_SUPPLIERS,
                 'properties' => $item,
             ];
@@ -85,7 +85,7 @@ class SuppliersService extends ShopContentAbstractService implements ShopContent
             $this->castSuppliers($result);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_SUPPLIERS, 'id_supplier', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_SUPPLIERS, $result, $deletedContents);
     }
 
     /**

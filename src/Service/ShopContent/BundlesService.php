@@ -62,7 +62,7 @@ class BundlesService extends ShopContentAbstractService implements ShopContentSe
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_BUNDLES,
                 'properties' => $item,
             ];
@@ -85,7 +85,7 @@ class BundlesService extends ShopContentAbstractService implements ShopContentSe
             $this->castBundles($result, $langIso);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_BUNDLES, 'id_bundle', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_BUNDLES, $result, $deletedContents);
     }
 
     /**

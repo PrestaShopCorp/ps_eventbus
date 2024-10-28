@@ -62,7 +62,7 @@ class StoresService extends ShopContentAbstractService implements ShopContentSer
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_STORES,
                 'properties' => $item,
             ];
@@ -85,7 +85,7 @@ class StoresService extends ShopContentAbstractService implements ShopContentSer
             $this->castStores($result);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_STORES, 'id_store', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_STORES, $result, $deletedContents);
     }
 
     /**

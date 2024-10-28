@@ -70,7 +70,7 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_CARRIER_DETAILS,
                 'properties' => $item,
             ];
@@ -99,7 +99,7 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
             $this->castCarrierDetails($carrierDetails);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_CARRIER_DETAILS, 'id_carrier', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_CARRIER_DETAILS, $result, $deletedContents);
     }
 
     /**

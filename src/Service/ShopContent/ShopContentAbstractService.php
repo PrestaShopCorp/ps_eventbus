@@ -26,6 +26,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
+use PrestaShop\Module\PsEventbus\Config\Config;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -41,27 +43,21 @@ abstract class ShopContentAbstractService
      *
      * @return array<mixed>
      */
-    protected function formatIncrementalSyncResponse($collection, $idKeyForBinding, $upsertedContents, $upsertedList, $deletedList)
+    protected function formatIncrementalSyncResponse($collection, $upsertedContents, $deletedList)
     {
         $data = [];
 
-        // We need to bind the upserted data with list of upserted content from incremental table to get the action
-        foreach ($upsertedContents as $upsertedContent) {
-            foreach ($upsertedList as $item) {
-                if ($upsertedContent[$idKeyForBinding] == $item['id']) {
-                    $data[] = [
-                        'action' => $item['action'],
-                        'collection' => $collection,
-                        'properties' => $upsertedContent,
-                    ];
-                }
-            }
+        foreach($upsertedContents as $upsertedContent) {
+            $data[] = [
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
+                'collection' => $collection,
+                'properties' => $upsertedContent,
+            ];
         }
 
-        // We need to format the deleted data to match the format of the upserted data
         foreach ($deletedList as $item) {
             $data[] = [
-                'action' => $item['action'],
+                'action' => Config::INCREMENTAL_TYPE_DELETE,
                 'collection' => $collection,
                 'properties' => [
                     'id' => $item['id']

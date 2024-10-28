@@ -62,7 +62,7 @@ class TaxonomiesService extends ShopContentAbstractService implements ShopConten
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_TAXONOMIES,
                 'properties' => $item,
             ];
@@ -85,7 +85,7 @@ class TaxonomiesService extends ShopContentAbstractService implements ShopConten
             $this->castTaxonomies($result);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_TAXONOMIES, 'id_category', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_TAXONOMIES, $result, $deletedContents);
     }
 
     /**

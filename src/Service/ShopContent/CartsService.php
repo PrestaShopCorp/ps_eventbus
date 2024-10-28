@@ -62,7 +62,7 @@ class CartsService extends ShopContentAbstractService implements ShopContentServ
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_CARTS,
                 'properties' => $item,
             ];
@@ -85,7 +85,7 @@ class CartsService extends ShopContentAbstractService implements ShopContentServ
             $this->castCarts($result);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_CARTS, 'id_cart', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_CARTS, $result, $deletedContents);
     }
 
     /**

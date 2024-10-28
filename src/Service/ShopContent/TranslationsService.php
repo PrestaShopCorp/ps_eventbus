@@ -62,7 +62,7 @@ class TranslationsService extends ShopContentAbstractService implements ShopCont
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_TRANSLATIONS,
                 'properties' => $item,
             ];
@@ -85,7 +85,7 @@ class TranslationsService extends ShopContentAbstractService implements ShopCont
             $this->castTranslations($result);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_TRANSLATIONS, 'id_translation', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_TRANSLATIONS, $result, $deletedContents);
     }
 
     /**

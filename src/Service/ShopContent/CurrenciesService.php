@@ -62,7 +62,7 @@ class CurrenciesService extends ShopContentAbstractService implements ShopConten
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_CURRENCIES,
                 'properties' => $item,
             ];
@@ -85,7 +85,7 @@ class CurrenciesService extends ShopContentAbstractService implements ShopConten
             $this->castCurrencies($result);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_CURRENCIES, 'id_currency', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_CURRENCIES, $result, $deletedContents);
     }
 
     /**

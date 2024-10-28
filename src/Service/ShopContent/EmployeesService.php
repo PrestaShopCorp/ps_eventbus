@@ -62,7 +62,7 @@ class EmployeesService extends ShopContentAbstractService implements ShopContent
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_EMPLOYEES,
                 'properties' => $item,
             ];
@@ -85,7 +85,7 @@ class EmployeesService extends ShopContentAbstractService implements ShopContent
             $this->castEmployees($result);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_EMPLOYEES, 'id_employee', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_EMPLOYEES, $result, $deletedContents);
     }
 
     /**

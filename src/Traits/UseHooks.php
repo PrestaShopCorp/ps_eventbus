@@ -177,7 +177,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_PRODUCTS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_PRODUCTS => $image->id_product],
-                Config::INCREMENTAL_TYPE_ADD,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
@@ -202,7 +202,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_PRODUCTS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_PRODUCTS => $image->id_product],
-                Config::INCREMENTAL_TYPE_UPDATE,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
@@ -252,7 +252,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_LANGUAGES, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_LANGUAGES => $language->id],
-                Config::INCREMENTAL_TYPE_ADD,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
@@ -277,7 +277,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_LANGUAGES, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_LANGUAGES => $language->id],
-                Config::INCREMENTAL_TYPE_UPDATE,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
@@ -327,7 +327,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_MANUFACTURERS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_MANUFACTURERS => $manufacturer->id],
-                Config::INCREMENTAL_TYPE_ADD,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
@@ -352,7 +352,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_MANUFACTURERS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_MANUFACTURERS => $manufacturer->id],
-                Config::INCREMENTAL_TYPE_UPDATE,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
@@ -402,7 +402,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_SUPPLIERS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_SUPPLIERS => $supplier->id],
-                Config::INCREMENTAL_TYPE_ADD,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
@@ -427,7 +427,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_SUPPLIERS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_SUPPLIERS => $supplier->id],
-                Config::INCREMENTAL_TYPE_UPDATE,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
@@ -501,7 +501,7 @@ trait UseHooks
                 Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds,
                 Config::COLLECTION_STOCKS => $stockId,
             ],
-            Config::INCREMENTAL_TYPE_ADD,
+            Config::INCREMENTAL_TYPE_UPSERT,
             date(DATE_ATOM),
             $this->shopId,
             true
@@ -549,7 +549,7 @@ trait UseHooks
                 Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds,
                 Config::COLLECTION_STOCKS => $stockId,
             ],
-            Config::INCREMENTAL_TYPE_UPDATE,
+            Config::INCREMENTAL_TYPE_UPSERT,
             date(DATE_ATOM),
             $this->shopId,
             true
@@ -596,7 +596,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_WISHLISTS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_WISHLISTS => $wishlist->id],
-                Config::INCREMENTAL_TYPE_ADD,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
@@ -620,7 +620,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_WISHLISTS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_WISHLISTS => $wishlist->id],
-                Config::INCREMENTAL_TYPE_UPDATE,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
@@ -645,7 +645,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_STOCKS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STOCKS => $stock->id],
-                Config::INCREMENTAL_TYPE_ADD,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
@@ -670,7 +670,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_STOCKS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STOCKS => $stock->id],
-                Config::INCREMENTAL_TYPE_UPDATE,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
@@ -720,7 +720,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_STORES, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STORES => $store->id],
-                Config::INCREMENTAL_TYPE_ADD,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
@@ -745,7 +745,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_STORES, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STORES => $store->id],
-                Config::INCREMENTAL_TYPE_UPDATE,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
@@ -795,7 +795,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_CATEGORIES, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CATEGORIES => $category->id],
-                Config::INCREMENTAL_TYPE_ADD,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
@@ -820,7 +820,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_CATEGORIES, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CATEGORIES => $category->id],
-                Config::INCREMENTAL_TYPE_UPDATE,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
@@ -870,7 +870,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_CUSTOMERS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CUSTOMERS => $customer->id],
-                Config::INCREMENTAL_TYPE_ADD,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
@@ -895,7 +895,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_CUSTOMERS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CUSTOMERS => $customer->id],
-                Config::INCREMENTAL_TYPE_UPDATE,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
@@ -945,7 +945,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_CURRENCIES, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CURRENCIES => $currency->id],
-                Config::INCREMENTAL_TYPE_ADD,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
@@ -970,7 +970,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_CURRENCIES, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CURRENCIES => $currency->id],
-                Config::INCREMENTAL_TYPE_UPDATE,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
@@ -1019,7 +1019,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_CARTS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CARTS => $cart->id],
-                Config::INCREMENTAL_TYPE_ADD,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 false
@@ -1043,7 +1043,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_CARTS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CARTS => $cart->id],
-                Config::INCREMENTAL_TYPE_UPDATE,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 false
@@ -1067,7 +1067,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_CART_RULES, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CART_RULES => $cartRule->id],
-                Config::INCREMENTAL_TYPE_ADD,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 false
@@ -1115,7 +1115,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_CART_RULES, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CART_RULES => $cartRule->id],
-                Config::INCREMENTAL_TYPE_UPDATE,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 false
@@ -1139,7 +1139,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_ORDERS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_ORDERS => $order->id],
-                Config::INCREMENTAL_TYPE_ADD,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 false
@@ -1163,7 +1163,7 @@ trait UseHooks
             $synchronizationService->sendLiveSync(Config::COLLECTION_ORDERS, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_ORDERS => $order->id],
-                Config::INCREMENTAL_TYPE_UPDATE,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 false
@@ -1200,7 +1200,7 @@ trait UseHooks
                     Config::COLLECTION_CARRIER_DETAILS => $carrier->id,
                     Config::COLLECTION_CARRIER_TAXES => $carrier->id,
                 ],
-                Config::INCREMENTAL_TYPE_ADD,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 false
@@ -1237,7 +1237,7 @@ trait UseHooks
                     Config::COLLECTION_CARRIER_DETAILS => $carrier->id,
                     Config::COLLECTION_CARRIER_TAXES => $carrier->id,
                 ],
-                Config::INCREMENTAL_TYPE_UPDATE,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 false
@@ -1291,7 +1291,7 @@ trait UseHooks
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
-            Config::INCREMENTAL_TYPE_ADD,
+            Config::INCREMENTAL_TYPE_UPSERT,
             date(DATE_ATOM),
             $this->shopId,
             false
@@ -1308,7 +1308,7 @@ trait UseHooks
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
-            Config::INCREMENTAL_TYPE_UPDATE,
+            Config::INCREMENTAL_TYPE_UPSERT,
             date(DATE_ATOM),
             $this->shopId,
             false
@@ -1342,7 +1342,7 @@ trait UseHooks
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
-            Config::INCREMENTAL_TYPE_ADD,
+            Config::INCREMENTAL_TYPE_UPSERT,
             date(DATE_ATOM),
             $this->shopId,
             false
@@ -1359,7 +1359,7 @@ trait UseHooks
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
-            Config::INCREMENTAL_TYPE_UPDATE,
+            Config::INCREMENTAL_TYPE_UPSERT,
             date(DATE_ATOM),
             $this->shopId,
             false
@@ -1393,7 +1393,7 @@ trait UseHooks
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
-            Config::INCREMENTAL_TYPE_ADD,
+            Config::INCREMENTAL_TYPE_UPSERT,
             date(DATE_ATOM),
             $this->shopId,
             false
@@ -1410,7 +1410,7 @@ trait UseHooks
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
-            Config::INCREMENTAL_TYPE_UPDATE,
+            Config::INCREMENTAL_TYPE_UPSERT,
             date(DATE_ATOM),
             $this->shopId,
             false
@@ -1444,7 +1444,7 @@ trait UseHooks
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
-            Config::INCREMENTAL_TYPE_ADD,
+            Config::INCREMENTAL_TYPE_UPSERT,
             date(DATE_ATOM),
             $this->shopId,
             false
@@ -1461,7 +1461,7 @@ trait UseHooks
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
-            Config::INCREMENTAL_TYPE_UPDATE,
+            Config::INCREMENTAL_TYPE_UPSERT,
             date(DATE_ATOM),
             $this->shopId,
             false
@@ -1495,7 +1495,7 @@ trait UseHooks
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
-            Config::INCREMENTAL_TYPE_ADD,
+            Config::INCREMENTAL_TYPE_UPSERT,
             date(DATE_ATOM),
             $this->shopId,
             false
@@ -1512,7 +1512,7 @@ trait UseHooks
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
-            Config::INCREMENTAL_TYPE_UPDATE,
+            Config::INCREMENTAL_TYPE_UPSERT,
             date(DATE_ATOM),
             $this->shopId,
             false
@@ -1563,7 +1563,7 @@ trait UseHooks
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_EMPLOYEES => 0],
-            Config::INCREMENTAL_TYPE_ADD,
+            Config::INCREMENTAL_TYPE_UPSERT,
             date(DATE_ATOM),
             $this->shopId,
             false
@@ -1596,7 +1596,7 @@ trait UseHooks
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_EMPLOYEES => 0],
-            Config::INCREMENTAL_TYPE_UPDATE,
+            Config::INCREMENTAL_TYPE_UPSERT,
             date(DATE_ATOM),
             $this->shopId,
             false
@@ -1637,7 +1637,7 @@ trait UseHooks
                 if ($route == 'api_translation_value_edit' || $route == 'api_translation_value_reset') {
                     $synchronizationService->insertContentIntoIncremental(
                         [Config::COLLECTION_TRANSLATIONS => 0],
-                        Config::INCREMENTAL_TYPE_UPDATE,
+                        Config::INCREMENTAL_TYPE_UPSERT,
                         date(DATE_ATOM),
                         $this->shopId,
                         false
@@ -1667,7 +1667,7 @@ trait UseHooks
                 $synchronizationService->sendLiveSync(Config::COLLECTION_SPECIFIC_PRICES, 'upsert');
                 $synchronizationService->insertContentIntoIncremental(
                     [Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id],
-                    Config::INCREMENTAL_TYPE_ADD,
+                    Config::INCREMENTAL_TYPE_UPSERT,
                     date(DATE_ATOM),
                     $this->shopId,
                     false
@@ -1694,7 +1694,7 @@ trait UseHooks
                 $synchronizationService->sendLiveSync(Config::COLLECTION_SPECIFIC_PRICES, 'upsert');
                 $synchronizationService->insertContentIntoIncremental(
                     [Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id],
-                    Config::INCREMENTAL_TYPE_UPDATE,
+                    Config::INCREMENTAL_TYPE_UPSERT,
                     date(DATE_ATOM),
                     $this->shopId,
                     false

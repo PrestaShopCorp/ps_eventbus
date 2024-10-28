@@ -69,7 +69,7 @@ class CarrierTaxesService extends ShopContentAbstractService implements ShopCont
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_CARRIER_TAXES,
                 'properties' => $item,
             ];
@@ -98,7 +98,7 @@ class CarrierTaxesService extends ShopContentAbstractService implements ShopCont
             $this->castCarrierTaxes($carrierTaxes);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_CARRIER_TAXES, 'id_carrier', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_CARRIER_TAXES, $result, $deletedContents);
     }
 
     /**

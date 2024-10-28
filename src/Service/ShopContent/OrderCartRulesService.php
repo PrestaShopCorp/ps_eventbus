@@ -62,7 +62,7 @@ class OrderCartRulesService extends ShopContentAbstractService implements ShopCo
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_ORDER_CART_RULES,
                 'properties' => $item,
             ];
@@ -85,7 +85,7 @@ class OrderCartRulesService extends ShopContentAbstractService implements ShopCo
             $this->castOrderCartRules($result);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_ORDER_CART_RULES, 'id_order_cart_rule', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_ORDER_CART_RULES, $result, $deletedContents);
     }
 
     /**

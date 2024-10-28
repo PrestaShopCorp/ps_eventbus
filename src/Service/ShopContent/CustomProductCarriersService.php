@@ -60,7 +60,7 @@ class CustomProductCarriersService extends ShopContentAbstractService implements
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
                 'properties' => $item,
             ];
@@ -79,7 +79,7 @@ class CustomProductCarriersService extends ShopContentAbstractService implements
     {
         $result = $this->customProductCarrierRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS, 'id_carrier_reference', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS, $result, $deletedContents);
     }
 
     /**

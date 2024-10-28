@@ -69,7 +69,7 @@ class ModulesService extends ShopContentAbstractService implements ShopContentSe
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_MODULES,
                 'properties' => $item,
             ];
@@ -92,7 +92,7 @@ class ModulesService extends ShopContentAbstractService implements ShopContentSe
             $this->castModules($result);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_MODULES, 'id_module', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_MODULES, $result, $deletedContents);
     }
 
     /**

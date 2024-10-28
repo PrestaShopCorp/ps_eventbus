@@ -69,7 +69,7 @@ class SpecificPricesService extends ShopContentAbstractService implements ShopCo
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_SPECIFIC_PRICES,
                 'properties' => $item,
             ];
@@ -92,7 +92,7 @@ class SpecificPricesService extends ShopContentAbstractService implements ShopCo
             $this->castCustomPrices($result);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_SPECIFIC_PRICES, 'id_specific_price', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_SPECIFIC_PRICES, $result, $deletedContents);
     }
 
     /**

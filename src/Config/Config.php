@@ -135,8 +135,7 @@ class Config
         self::COLLECTION_WISHLIST_PRODUCTS,
     ];
 
-    const INCREMENTAL_TYPE_ADD = 'add';
-    const INCREMENTAL_TYPE_UPDATE = 'update';
+    const INCREMENTAL_TYPE_UPSERT = 'upsert';
     const INCREMENTAL_TYPE_DELETE = 'delete';
 
     /**

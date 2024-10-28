@@ -62,7 +62,7 @@ class ManufacturersService extends ShopContentAbstractService implements ShopCon
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_MANUFACTURERS,
                 'properties' => $item,
             ];
@@ -85,7 +85,7 @@ class ManufacturersService extends ShopContentAbstractService implements ShopCon
             $this->castManufacturers($result);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_MANUFACTURERS, 'id_manufacturer', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_MANUFACTURERS, $result, $deletedContents);
     }
 
     /**

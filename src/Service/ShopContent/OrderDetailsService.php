@@ -62,7 +62,7 @@ class OrderDetailsService extends ShopContentAbstractService implements ShopCont
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_ORDER_DETAILS,
                 'properties' => $item,
             ];
@@ -85,7 +85,7 @@ class OrderDetailsService extends ShopContentAbstractService implements ShopCont
             $this->castOrderDetails($result);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_ORDER_DETAILS, 'id_order_detail', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_ORDER_DETAILS, $result, $deletedContents);
     }
 
     /**

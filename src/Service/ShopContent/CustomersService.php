@@ -62,7 +62,7 @@ class CustomersService extends ShopContentAbstractService implements ShopContent
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_CUSTOMERS,
                 'properties' => $item,
             ];
@@ -85,7 +85,7 @@ class CustomersService extends ShopContentAbstractService implements ShopContent
             $this->castCustomers($result);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_CUSTOMERS, 'id_customer', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_CUSTOMERS, $result, $deletedContents);
     }
 
     /**

@@ -62,7 +62,7 @@ class StockMovementsService extends ShopContentAbstractService implements ShopCo
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_STOCK_MOVEMENTS,
                 'properties' => $item,
             ];
@@ -85,7 +85,7 @@ class StockMovementsService extends ShopContentAbstractService implements ShopCo
             $this->castStockMovements($result);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_STOCK_MOVEMENTS, 'id_stock_mvt', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_STOCK_MOVEMENTS, $result, $deletedContents);
     }
 
     /**

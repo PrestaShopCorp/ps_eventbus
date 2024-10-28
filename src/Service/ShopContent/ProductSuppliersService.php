@@ -62,7 +62,7 @@ class ProductSuppliersService extends ShopContentAbstractService implements Shop
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_PRODUCT_SUPPLIERS,
                 'properties' => $item,
             ];
@@ -85,7 +85,7 @@ class ProductSuppliersService extends ShopContentAbstractService implements Shop
             $this->castProductsSuppliers($result);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_PRODUCT_SUPPLIERS, 'id_product_supplier', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_PRODUCT_SUPPLIERS, $result, $deletedContents);
     }
 
     /**

@@ -200,11 +200,11 @@ class SynchronizationService
         }
 
         $upsertedContents = array_filter($contentsToSync, function ($content) {
-            return $content['action'] != Config::INCREMENTAL_TYPE_ADD || $content['action'] != Config::INCREMENTAL_TYPE_UPDATE;
+            return $content['action'] == Config::INCREMENTAL_TYPE_UPSERT;
         });
 
         $deletedContents = array_filter($contentsToSync, function ($content) {
-            return $content['action'] != Config::INCREMENTAL_TYPE_DELETE;
+            return $content['action'] == Config::INCREMENTAL_TYPE_DELETE;
         });
 
         $data = $shopContentApiService->getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso);

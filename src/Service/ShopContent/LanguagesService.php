@@ -62,7 +62,7 @@ class LanguagesService extends ShopContentAbstractService implements ShopContent
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_LANGUAGES,
                 'properties' => $item,
             ];
@@ -85,7 +85,7 @@ class LanguagesService extends ShopContentAbstractService implements ShopContent
             $this->castLanguages($result);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_LANGUAGES, 'id_lang', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_LANGUAGES, $result, $deletedContents);
     }
 
     /**

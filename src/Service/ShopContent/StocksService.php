@@ -62,7 +62,7 @@ class StocksService extends ShopContentAbstractService implements ShopContentSer
 
         return array_map(function ($item) {
             return [
-                'action' => Config::INCREMENTAL_TYPE_ADD,
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_STOCKS,
                 'properties' => $item,
             ];
@@ -85,7 +85,7 @@ class StocksService extends ShopContentAbstractService implements ShopContentSer
             $this->castStocks($result, $langIso);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_STOCKS, 'id_stock_available', $result, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_STOCKS, $result, $deletedContents);
     }
 
     /**
