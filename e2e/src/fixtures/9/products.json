@@ -1,6 +1,6 @@
 [
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 1,
@@ -63,7 +63,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 1,
@@ -126,7 +126,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 1,
@@ -189,7 +189,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 1,
@@ -252,7 +252,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 1,
@@ -315,7 +315,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 1,
@@ -378,7 +378,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 1,
@@ -441,7 +441,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 1,
@@ -504,7 +504,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 2,
@@ -566,7 +566,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 2,
@@ -628,7 +628,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 2,
@@ -690,7 +690,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 2,
@@ -752,7 +752,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 3,
@@ -813,7 +813,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 3,
@@ -874,7 +874,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 3,
@@ -935,7 +935,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 4,
@@ -996,7 +996,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 4,
@@ -1057,7 +1057,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 4,
@@ -1118,7 +1118,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 5,
@@ -1179,7 +1179,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 5,
@@ -1240,7 +1240,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 5,
@@ -1301,7 +1301,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 6,
@@ -1360,7 +1360,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 7,
@@ -1419,7 +1419,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 8,
@@ -1478,7 +1478,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 9,
@@ -1540,7 +1540,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 9,
@@ -1602,7 +1602,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 10,
@@ -1664,7 +1664,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 10,
@@ -1726,7 +1726,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 11,
@@ -1788,7 +1788,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 11,
@@ -1850,7 +1850,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 12,
@@ -1907,7 +1907,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 13,
@@ -1964,7 +1964,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 14,
@@ -2021,7 +2021,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 15,
@@ -2078,7 +2078,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 16,
@@ -2140,7 +2140,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 16,
@@ -2202,7 +2202,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 16,
@@ -2264,7 +2264,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 16,
@@ -2326,7 +2326,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 17,
@@ -2388,7 +2388,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 17,
@@ -2450,7 +2450,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 17,
@@ -2512,7 +2512,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 17,
@@ -2574,7 +2574,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 18,
@@ -2636,7 +2636,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 18,
@@ -2698,7 +2698,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 18,
@@ -2760,7 +2760,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 18,
@@ -2822,7 +2822,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "products",
     "properties": {
       "id_product": 19,

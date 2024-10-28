@@ -1,6 +1,6 @@
 [
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "carriers",
 
     "properties": {
@@ -31,7 +31,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "carriers",
 
     "properties": {
@@ -62,7 +62,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "carriers",
 
     "properties": {
@@ -93,7 +93,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "carriers",
 
     "properties": {

@@ -1,6 +1,6 @@
 [
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "carts",
     "properties": {
       "id_cart": "1",
@@ -9,7 +9,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "carts",
     "properties": {
       "id_cart": "2",
@@ -18,7 +18,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "carts",
     "properties": {
       "id_cart": "3",
@@ -27,7 +27,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "carts",
     "properties": {
       "id_cart": "4",
@@ -36,7 +36,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "carts",
     "properties": {
       "id_cart": "5",

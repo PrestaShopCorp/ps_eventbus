@@ -1,6 +1,6 @@
 [
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "manufacturers",
     "properties": {
       "id_manufacturer": 1,

@@ -1,6 +1,6 @@
 [
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "themes",
     "properties": {
       "theme_id": "28d58425ad1994a889cc596050bc52db",
@@ -10,7 +10,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "themes",
     "properties": {
       "theme_id": "f3d64714d1f6e7f71558d4252e84ab58",

@@ -1,6 +1,6 @@
 [
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "carriers",
     "properties": {
       "id_carrier": "1",
@@ -31,10 +31,10 @@
       "currency": "EUR",
       "weight_unit": "kg"
     },
-    "action": "add"
+    "action": "upsert"
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "carriers",
     "properties": {
       "id_carrier": "2",
@@ -65,10 +65,10 @@
       "currency": "EUR",
       "weight_unit": "kg"
     },
-    "action": "add"
+    "action": "upsert"
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "carriers",
     "properties": {
       "id_carrier": "3",
@@ -99,10 +99,10 @@
       "currency": "EUR",
       "weight_unit": "kg"
     },
-    "action": "add"
+    "action": "upsert"
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "carriers",
     "properties": {
       "id_carrier": "4",
@@ -133,6 +133,6 @@
       "currency": "EUR",
       "weight_unit": "kg"
     },
-    "action": "add"
+    "action": "upsert"
   }
 ]

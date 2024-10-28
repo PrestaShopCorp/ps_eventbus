@@ -1,6 +1,6 @@
 [
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 1,
@@ -13,7 +13,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 2,
@@ -26,7 +26,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 3,
@@ -39,7 +39,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 4,
@@ -52,7 +52,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 5,
@@ -65,7 +65,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 6,
@@ -78,7 +78,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 7,
@@ -91,7 +91,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 8,
@@ -104,7 +104,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 9,
@@ -117,7 +117,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 10,
@@ -130,7 +130,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 11,
@@ -143,7 +143,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 12,
@@ -156,7 +156,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 13,
@@ -169,7 +169,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 14,
@@ -182,7 +182,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 15,
@@ -195,7 +195,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 16,
@@ -208,7 +208,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 17,
@@ -221,7 +221,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 18,
@@ -234,7 +234,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 19,
@@ -247,7 +247,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 20,
@@ -260,7 +260,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 21,
@@ -273,7 +273,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 22,
@@ -286,7 +286,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "images",
     "properties": {
       "id_image": 23,

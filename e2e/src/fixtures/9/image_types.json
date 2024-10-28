@@ -1,6 +1,6 @@
 [
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "image_types",
     "properties": {
       "id_image_type": 1,
@@ -15,7 +15,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "image_types",
     "properties": {
       "id_image_type": 2,
@@ -30,7 +30,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "image_types",
     "properties": {
       "id_image_type": 3,
@@ -45,7 +45,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "image_types",
     "properties": {
       "id_image_type": 4,
@@ -60,7 +60,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "image_types",
     "properties": {
       "id_image_type": 5,
@@ -75,7 +75,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "image_types",
     "properties": {
       "id_image_type": 6,
@@ -90,7 +90,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "image_types",
     "properties": {
       "id_image_type": 7,

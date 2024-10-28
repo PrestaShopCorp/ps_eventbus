@@ -1,6 +1,6 @@
 [
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "order_details",
     "properties": {
       "id_order_detail": 1,
@@ -20,7 +20,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "order_details",
     "properties": {
       "id_order_detail": 2,
@@ -40,7 +40,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "order_details",
     "properties": {
       "id_order_detail": 3,
@@ -60,7 +60,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "order_details",
     "properties": {
       "id_order_detail": 4,
@@ -80,7 +80,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "order_details",
     "properties": {
       "id_order_detail": 5,
@@ -100,7 +100,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "order_details",
     "properties": {
       "id_order_detail": 6,
@@ -120,7 +120,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "order_details",
     "properties": {
       "id_order_detail": 7,
@@ -140,7 +140,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "order_details",
     "properties": {
       "id_order_detail": 8,
@@ -160,7 +160,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "order_details",
     "properties": {
       "id_order_detail": 9,
@@ -180,7 +180,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "order_details",
     "properties": {
       "id_order_detail": 10,
@@ -200,7 +200,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "order_details",
     "properties": {
       "id_order_detail": 11,
@@ -220,7 +220,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "order_details",
     "properties": {
       "id_order_detail": 12,
@@ -240,7 +240,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "order_details",
     "properties": {
       "id_order_detail": 13,
@@ -260,7 +260,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "order_details",
     "properties": {
       "id_order_detail": 14,
@@ -280,7 +280,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "order_details",
     "properties": {
       "id_order_detail": 15,

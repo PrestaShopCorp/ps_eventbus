@@ -1,6 +1,6 @@
 [
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "suppliers",
     "properties": {
       "id_supplier": 1,
@@ -17,7 +17,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "suppliers",
     "properties": {
       "id_supplier": 2,

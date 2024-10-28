@@ -1,6 +1,6 @@
 [
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "carriers",
     "properties": {
       "id_carrier": "3",
@@ -30,7 +30,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "carriers",
     "properties": {
       "id_carrier": "4",
@@ -60,7 +60,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "carriers",
     "properties": {
       "id_carrier": "1",
@@ -90,7 +90,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "carriers",
     "properties": {
       "id_carrier": "2",

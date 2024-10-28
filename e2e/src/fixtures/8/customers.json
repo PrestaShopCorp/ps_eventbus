@@ -1,6 +1,6 @@
 [
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "customers",
     "properties": {
       "id_customer": 1,
@@ -17,7 +17,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "customers",
     "properties": {
       "id_customer": 2,

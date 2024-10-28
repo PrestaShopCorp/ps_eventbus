@@ -1,6 +1,6 @@
 [
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "shops",
     "properties": {
       "created_at": "2024-07-16 15:33:52",

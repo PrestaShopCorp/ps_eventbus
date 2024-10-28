@@ -1,6 +1,6 @@
 [
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "languages",
     "properties": {
       "id_lang": 1,

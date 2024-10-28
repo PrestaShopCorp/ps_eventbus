@@ -1,6 +1,6 @@
 [
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 1,
@@ -13,7 +13,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 2,
@@ -26,7 +26,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 3,
@@ -39,7 +39,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 4,
@@ -52,7 +52,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 5,
@@ -65,7 +65,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 6,
@@ -78,7 +78,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 7,
@@ -91,7 +91,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 8,
@@ -104,7 +104,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 9,
@@ -117,7 +117,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 10,
@@ -130,7 +130,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 11,
@@ -143,7 +143,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 12,
@@ -156,7 +156,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 13,
@@ -169,7 +169,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 14,
@@ -182,7 +182,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 15,
@@ -195,7 +195,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 16,
@@ -208,7 +208,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 17,
@@ -221,7 +221,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 18,
@@ -234,7 +234,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 19,
@@ -247,7 +247,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 20,
@@ -260,7 +260,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 21,
@@ -273,7 +273,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 22,
@@ -286,7 +286,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 23,
@@ -299,7 +299,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 24,
@@ -312,7 +312,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 25,
@@ -325,7 +325,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 26,
@@ -338,7 +338,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 27,
@@ -351,7 +351,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 28,
@@ -364,7 +364,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 29,
@@ -377,7 +377,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 30,
@@ -390,7 +390,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 31,
@@ -403,7 +403,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 32,
@@ -416,7 +416,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 33,
@@ -429,7 +429,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 34,
@@ -442,7 +442,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 35,
@@ -455,7 +455,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 36,
@@ -468,7 +468,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 37,
@@ -481,7 +481,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 38,
@@ -494,7 +494,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 39,
@@ -507,7 +507,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 40,
@@ -520,7 +520,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 41,
@@ -533,7 +533,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 42,
@@ -546,7 +546,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 43,
@@ -559,7 +559,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 44,
@@ -572,7 +572,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 45,
@@ -585,7 +585,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 46,
@@ -598,7 +598,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 47,
@@ -611,7 +611,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 48,
@@ -624,7 +624,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 49,
@@ -637,7 +637,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 50,
@@ -650,7 +650,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 51,
@@ -663,7 +663,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 52,
@@ -676,7 +676,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 53,
@@ -689,7 +689,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 54,
@@ -702,7 +702,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 55,
@@ -715,7 +715,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 56,
@@ -728,7 +728,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 57,
@@ -741,7 +741,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 58,
@@ -754,7 +754,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 59,
@@ -767,7 +767,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 60,
@@ -780,7 +780,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 61,
@@ -793,7 +793,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 62,
@@ -806,7 +806,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 63,
@@ -819,7 +819,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 64,
@@ -832,7 +832,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 65,
@@ -845,7 +845,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 66,
@@ -858,7 +858,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 67,
@@ -871,7 +871,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 68,
@@ -884,7 +884,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 69,
@@ -897,7 +897,7 @@
     }
   },
   {
-    "action": "add",
+    "action": "upsert",
     "collection": "product_suppliers",
     "properties": {
       "id_product_supplier": 70,
