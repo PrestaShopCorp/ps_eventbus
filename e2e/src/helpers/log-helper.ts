@@ -21,7 +21,7 @@ export async function dumpUploadData(
   filename: string,
 ) {
   const shopVersion = (await getShopHealthCheck()).prestashop_version;
-  const dir = `./dumps/${testConfig.testRunTime}/${shopVersion}/${filename}`;
+  const dir = `./dumps/${testConfig.testRunTime}/${shopVersion}`;
 
   await fs.promises.mkdir(dir, { recursive: true });
   const groupedData = R.groupBy((el) => el.collection, data);

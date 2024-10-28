@@ -42,7 +42,7 @@ class CountryRepository extends AbstractRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getCountyIsoCodesByZoneId($zoneId, $active)
+    public function getCountryIsoCodesByZoneId($zoneId, $active)
     {
         $isoCodes = [];
 

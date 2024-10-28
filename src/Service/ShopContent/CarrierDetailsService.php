@@ -88,7 +88,7 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
     public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
         $result = $this->carrierRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
-
+        
         if (!empty($result)) {
             $carrierDetails = [];
 
@@ -175,11 +175,11 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
 
             foreach ($deliveryPriceByRange['zones'] as $zone) {
                 /** @var array<mixed> $countryIsoCodes */
-                $countryIsoCodes = $countryRepository->getCountyIsoCodesByZoneId($zone['id_zone'], true);
+                $countryIsoCodes = $countryRepository->getCountryIsoCodesByZoneId($zone['id_zone'], true);
 
                 /** @var array<mixed> $stateIsoCodes */
                 $stateIsoCodes = $stateRepository->getStateIsoCodesByZoneId($zone['id_zone'], true);
-
+                
                 $carrierDetail = [];
                 $carrierDetail['id_reference'] = $carrier->id_reference;
                 $carrierDetail['id_zone'] = $zone['id_zone'];
@@ -193,7 +193,7 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
                 $carrierDetail['price'] = $zone['price'];
 
                 array_push($carrierDetails, $carrierDetail);
-            }
+            } 
         }
 
         return $carrierDetails;
