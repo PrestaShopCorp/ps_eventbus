@@ -36,22 +36,6 @@
     "collection": "carrier_details",
     "properties": {
       "id_reference": "3",
-      "id_zone": "2",
-      "id_range": "2",
-      "id_carrier_detail": "2",
-      "shipping_method": "range_price",
-      "delimiter1": 0,
-      "delimiter2": 50,
-      "country_ids": "US",
-      "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
-      "price": 4
-    }
-  },
-  {
-    "action": "add",
-    "collection": "carrier_details",
-    "properties": {
-      "id_reference": "3",
       "id_zone": "1",
       "id_range": "2",
       "id_carrier_detail": "2",
@@ -69,14 +53,14 @@
     "properties": {
       "id_reference": "3",
       "id_zone": "2",
-      "id_range": "3",
-      "id_carrier_detail": "3",
+      "id_range": "2",
+      "id_carrier_detail": "2",
       "shipping_method": "range_price",
-      "delimiter1": 50,
-      "delimiter2": 100,
+      "delimiter1": 0,
+      "delimiter2": 50,
       "country_ids": "US",
       "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
-      "price": 2
+      "price": 4
     }
   },
   {
@@ -100,6 +84,22 @@
     "collection": "carrier_details",
     "properties": {
       "id_reference": "3",
+      "id_zone": "2",
+      "id_range": "3",
+      "id_carrier_detail": "3",
+      "shipping_method": "range_price",
+      "delimiter1": 50,
+      "delimiter2": 100,
+      "country_ids": "US",
+      "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
+      "price": 2
+    }
+  },
+  {
+    "action": "add",
+    "collection": "carrier_details",
+    "properties": {
+      "id_reference": "3",
       "id_zone": "1",
       "id_range": "4",
       "id_carrier_detail": "4",
@@ -132,22 +132,6 @@
     "collection": "carrier_details",
     "properties": {
       "id_reference": "4",
-      "id_zone": "2",
-      "id_range": "2",
-      "id_carrier_detail": "2",
-      "shipping_method": "range_weight",
-      "delimiter1": 0,
-      "delimiter2": 1,
-      "country_ids": "US",
-      "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
-      "price": 0
-    }
-  },
-  {
-    "action": "add",
-    "collection": "carrier_details",
-    "properties": {
-      "id_reference": "4",
       "id_zone": "1",
       "id_range": "2",
       "id_carrier_detail": "2",
@@ -165,14 +149,14 @@
     "properties": {
       "id_reference": "4",
       "id_zone": "2",
-      "id_range": "3",
-      "id_carrier_detail": "3",
+      "id_range": "2",
+      "id_carrier_detail": "2",
       "shipping_method": "range_weight",
-      "delimiter1": 1,
-      "delimiter2": 3,
+      "delimiter1": 0,
+      "delimiter2": 1,
       "country_ids": "US",
       "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
-      "price": 3
+      "price": 0
     }
   },
   {
@@ -189,6 +173,22 @@
       "country_ids": "FR",
       "state_ids": "",
       "price": 2
+    }
+  },
+  {
+    "action": "add",
+    "collection": "carrier_details",
+    "properties": {
+      "id_reference": "4",
+      "id_zone": "2",
+      "id_range": "3",
+      "id_carrier_detail": "3",
+      "shipping_method": "range_weight",
+      "delimiter1": 1,
+      "delimiter2": 3,
+      "country_ids": "US",
+      "state_ids": "AA,AE,AP,AL,AK,AZ,AR,CA,CO,CT,DE,FL,GA,HI,ID,IL,IN,IA,KS,KY,LA,ME,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VT,VA,WA,WV,WI,WY,PR,VI,DC",
+      "price": 3
     }
   },
   {
