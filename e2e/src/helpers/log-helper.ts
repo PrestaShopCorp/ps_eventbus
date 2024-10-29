@@ -16,10 +16,7 @@ export function logAxiosError(err: Error) {
   }
 }
 
-export async function dumpUploadData(
-  data: PsEventbusSyncUpload[],
-  filename: string,
-) {
+export async function dumpUploadData(data: PsEventbusSyncUpload[]) {
   const shopVersion = (await getShopHealthCheck()).prestashop_version;
   const dir = `./dumps/${testConfig.testRunTime}/${shopVersion}`;
 
