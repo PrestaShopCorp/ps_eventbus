@@ -96,6 +96,10 @@ class CustomerRepository extends AbstractRepository implements RepositoryInterfa
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
+        if ($contentIds == []) {
+            return [];
+        }
+
         $this->generateFullQuery($langIso, true);
 
         $this->query

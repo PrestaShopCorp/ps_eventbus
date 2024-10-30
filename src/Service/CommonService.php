@@ -60,6 +60,7 @@ class CommonService
      */
     public static function exitWithExceptionMessage(\Exception $exception)
     {
+
         $code = $exception->getCode() == 0 ? 500 : $exception->getCode();
 
         switch ($exception) {
@@ -75,13 +76,15 @@ class CommonService
             case $exception instanceof QueryParamsException:
                 $code = Config::INVALID_URL_QUERY;
                 break;
+            default:
+                $code = 500;
         }
 
         $response = [
             'object_type' => \Tools::getValue('shopContent'),
             'status' => false,
             'httpCode' => $code,
-            'message' => $exception->getMessage(),
+            'message' => $code == 500 ? 'Server error' : $exception->getMessage()
         ];
 
         self::dieWithResponse($response, (int) $code);

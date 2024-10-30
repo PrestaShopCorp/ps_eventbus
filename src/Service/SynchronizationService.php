@@ -174,6 +174,7 @@ class SynchronizationService
         int $limit,
         int $startTime
     ) {
+
         $response = [];
 
         $serviceName = str_replace('_', '', ucwords($shopContent, '_'));
@@ -413,6 +414,8 @@ class SynchronizationService
      */
     private function getPayloadMd5($payload)
     {
+        return 'test';
+
         return md5(
             implode(' ', array_map(function ($payloadItem) {
                 return $payloadItem['id'];

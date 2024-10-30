@@ -106,6 +106,10 @@ class StockRepository extends AbstractRepository implements RepositoryInterface
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
+        if ($contentIds == []) {
+            return [];
+        }
+
         $this->generateFullQuery($langIso, true);
 
         $this->query

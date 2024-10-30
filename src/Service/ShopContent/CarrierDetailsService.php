@@ -55,7 +55,7 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
     public function getContentsForFull($offset, $limit, $langIso)
     {
         $result = $this->carrierRepository->retrieveContentsForFull($offset, $limit, $langIso);
-
+        
         if (empty($result)) {
             return [];
         }
