@@ -67,7 +67,7 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
     {
         $result = $this->deliveryRepository->retrieveContentsForFull($offset, $limit, $langIso);
 
-        if (!empty($result)) {
+        if (empty($result)) {
             return [];
         }
 
@@ -149,8 +149,8 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
         return [
             'id_reference' => $carrier->id_reference,
             'id_zone' => $delivery['id_zone'],
-            'id_range' => $delivery['id_range'],
-            'id_carrier_detail' => $delivery['id_delivery'],
+            'id_range' => $range->id,
+            'id_carrier_detail' => $range->id,
             'shipping_method' => $carrier->getRangeTable(),
             'delimiter1' => $range->delimiter1,
             'delimiter2' => $range->delimiter2,
