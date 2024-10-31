@@ -403,23 +403,7 @@ class SynchronizationService
             'total_objects' => count($data),
             'has_remaining_objects' => $remainingObjects > 0,
             'remaining_objects' => $remainingObjects,
-            'md5' => $this->getPayloadMd5($data),
+            'md5' => md5(serialize($data)),
         ], $syncResponse);
-    }
-
-    /**
-     * @param array<mixed> $payload
-     *
-     * @return string
-     */
-    private function getPayloadMd5($payload)
-    {
-        return 'test';
-
-        return md5(
-            implode(' ', array_map(function ($payloadItem) {
-                return $payloadItem['id'];
-            }, $payload))
-        );
     }
 }
