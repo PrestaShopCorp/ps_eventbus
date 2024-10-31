@@ -87,7 +87,7 @@ class ThemesService extends ShopContentAbstractService implements ShopContentSer
             $themes = $this->formatThemes($result);
         }
 
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_THEMES, 'theme_id', $themes, $upsertedContents, $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_THEMES, $themes, $deletedContents);
     }
 
     /**

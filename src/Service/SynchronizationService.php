@@ -174,7 +174,6 @@ class SynchronizationService
         int $limit,
         int $startTime
     ) {
-
         $response = [];
 
         $serviceName = str_replace('_', '', ucwords($shopContent, '_'));

@@ -139,7 +139,7 @@ class ApiShopContentService
                 $fullSyncIsFinished = $typeSync['full_sync_finished'];
                 $offset = (int) $typeSync['offset'];
             }
-            
+
             if ($isFullSync) {
                 $response = $this->synchronizationService->sendFullSync(
                     $shopContent,

@@ -147,8 +147,8 @@ abstract class AbstractRepository
             $this->debugQuery();
         }
 
-        $result = $this->db->executeS($this->query);
-        
+        $result = (array) $this->db->executeS($this->query);
+
         return $result;
     }
 

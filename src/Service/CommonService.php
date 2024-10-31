@@ -60,7 +60,6 @@ class CommonService
      */
     public static function exitWithExceptionMessage(\Exception $exception)
     {
-
         $code = $exception->getCode() == 0 ? 500 : $exception->getCode();
 
         switch ($exception) {
@@ -84,7 +83,7 @@ class CommonService
             'object_type' => \Tools::getValue('shopContent'),
             'status' => false,
             'httpCode' => $code,
-            'message' => $code == 500 ? 'Server error' : $exception->getMessage()
+            'message' => $code == 500 ? 'Server error' : $exception->getMessage(),
         ];
 
         self::dieWithResponse($response, (int) $code);

@@ -36,9 +36,7 @@ abstract class ShopContentAbstractService
 {
     /**
      * @param string $collection
-     * @param string $idKeyForBinding
      * @param array<mixed> $upsertedContents
-     * @param array<mixed> $upsertedList
      * @param array<mixed> $deletedList
      *
      * @return array<mixed>
@@ -47,7 +45,7 @@ abstract class ShopContentAbstractService
     {
         $data = [];
 
-        foreach($upsertedContents as $upsertedContent) {
+        foreach ($upsertedContents as $upsertedContent) {
             $data[] = [
                 'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => $collection,
@@ -60,7 +58,7 @@ abstract class ShopContentAbstractService
                 'action' => Config::INCREMENTAL_TYPE_DELETE,
                 'collection' => $collection,
                 'properties' => [
-                    'id' => $item['id']
+                    'id' => $item['id'],
                 ],
             ];
         }

@@ -55,7 +55,7 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
     public function getContentsForFull($offset, $limit, $langIso)
     {
         $result = $this->carrierRepository->retrieveContentsForFull($offset, $limit, $langIso);
-        
+
         if (empty($result)) {
             return [];
         }
@@ -88,7 +88,7 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
     public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
         $result = $this->carrierRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
-        
+
         if (!empty($result)) {
             $carrierDetails = [];
 
@@ -179,7 +179,7 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
 
                 /** @var array<mixed> $stateIsoCodes */
                 $stateIsoCodes = $stateRepository->getStateIsoCodesByZoneId($zone['id_zone'], true);
-                
+
                 $carrierDetail = [];
                 $carrierDetail['id_reference'] = $carrier->id_reference;
                 $carrierDetail['id_zone'] = $zone['id_zone'];
@@ -193,7 +193,7 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
                 $carrierDetail['price'] = $zone['price'];
 
                 array_push($carrierDetails, $carrierDetail);
-            } 
+            }
         }
 
         return $carrierDetails;
