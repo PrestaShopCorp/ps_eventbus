@@ -27,7 +27,7 @@
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
+use PrestaShop\Module\PsEventbus\Repository\DeliveryRepository;
 use PrestaShop\Module\PsEventbus\Repository\CountryRepository;
 use PrestaShop\Module\PsEventbus\Repository\StateRepository;
 
@@ -37,12 +37,23 @@ if (!defined('_PS_VERSION_')) {
 
 class CarrierDetailsService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
-    /** @var CarrierRepository */
-    private $carrierRepository;
+    /** @var DeliveryRepository */
+    private $deliveryRepository;
 
-    public function __construct(CarrierRepository $carrierRepository)
-    {
-        $this->carrierRepository = $carrierRepository;
+    /** @var CountryRepository */
+    private $countryRepository;
+
+    /** @var StateRepository */
+    private $stateRepository;
+
+    public function __construct(
+        DeliveryRepository $deliveryRepository,
+        CountryRepository $countryRepository,
+        StateRepository $stateRepository
+    ) {
+        $this->deliveryRepository = $deliveryRepository;
+        $this->countryRepository = $countryRepository;
+        $this->stateRepository = $stateRepository;
     }
 
     /**
@@ -54,16 +65,16 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
      */
     public function getContentsForFull($offset, $limit, $langIso)
     {
-        $result = $this->carrierRepository->retrieveContentsForFull($offset, $limit, $langIso);
+        $result = $this->deliveryRepository->retrieveContentsForFull($offset, $limit, $langIso);
 
-        if (empty($result)) {
+        if (!empty($result)) {
             return [];
         }
 
         $carrierDetails = [];
 
-        foreach ($result as $carrierData) {
-            $carrierDetails = array_merge($carrierDetails, $this->buildCarrierDetails($carrierData));
+        foreach ($result as $delivery) {
+            $carrierDetails[] = $this->buildCarrierDetail($delivery);
         }
 
         $this->castCarrierDetails($carrierDetails);
@@ -87,13 +98,13 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
      */
     public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
-        $result = $this->carrierRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
+        $result = $this->deliveryRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
         if (!empty($result)) {
             $carrierDetails = [];
 
-            foreach ($result as $carrierData) {
-                $carrierDetails = array_merge($carrierDetails, $this->buildCarrierDetails($carrierData));
+            foreach ($result as $delivery) {
+                $carrierDetails[] = $this->buildCarrierDetail($delivery);
             }
 
             $this->castCarrierDetails($carrierDetails);
@@ -111,7 +122,42 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
      */
     public function getFullSyncContentLeft($offset, $limit, $langIso)
     {
-        return $this->carrierRepository->countFullSyncContentLeft($offset, $limit, $langIso);
+        return $this->deliveryRepository->countFullSyncContentLeft($offset, $limit, $langIso);
+    }
+
+    /**
+     * Build a CarrierDetail from delvery data
+     *
+     * @param array<mixed> $delivery
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     */
+    private function buildCarrierDetail($delivery)
+    {
+        $carrier = new \Carrier($delivery['id_carrier']);
+        $range = CarriersService::generateRange($carrier, $delivery);
+
+        /** @var array<mixed> $countryIsoCodes */
+        $countryIsoCodes = $this->countryRepository->getCountryIsoCodesByZoneId($delivery['id_zone'], true);
+
+        /** @var array<mixed> $stateIsoCodes */
+        $stateIsoCodes = $this->stateRepository->getStateIsoCodesByZoneId($delivery['id_zone'], true);
+
+        return [
+            'id_reference' => $carrier->id_reference,
+            'id_zone' => $delivery['id_zone'],
+            'id_range' => $delivery['id_range'],
+            'id_carrier_detail' => $delivery['id_delivery'],
+            'shipping_method' => $carrier->getRangeTable(),
+            'delimiter1' => $range->delimiter1,
+            'delimiter2' => $range->delimiter2,
+            'country_ids' => implode(',', $countryIsoCodes),
+            'state_ids' => implode(',', $stateIsoCodes),
+            'price' => $delivery['price'],
+        ];
     }
 
     /**
@@ -133,69 +179,5 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
             $carrierDetail['state_ids'] = (string) $carrierDetail['state_ids'];
             $carrierDetail['price'] = (float) $carrierDetail['price'];
         }
-    }
-
-    /**
-     * Build a CarrierDetail from Carrier data
-     *
-     * @param array<mixed> $carrierData
-     *
-     * @return array<mixed>
-     *
-     * @throws \PrestaShopDatabaseException
-     * @throws \PrestaShopException
-     */
-    private function buildCarrierDetails($carrierData)
-    {
-        /** @var \Ps_eventbus $module */
-        $module = \Module::getInstanceByName('ps_eventbus');
-
-        /** @var CountryRepository $countryRepository */
-        $countryRepository = $module->getService('PrestaShop\Module\PsEventbus\Repository\CountryRepository');
-
-        /** @var StateRepository $stateRepository */
-        $stateRepository = $module->getService('PrestaShop\Module\PsEventbus\Repository\StateRepository');
-
-        $carrier = new \Carrier($carrierData['id_reference']);
-
-        $deliveryPriceByRanges = CarriersService::getDeliveryPriceByRange($carrier);
-
-        if (!$deliveryPriceByRanges) {
-            return [];
-        }
-
-        $carrierDetails = [];
-
-        foreach ($deliveryPriceByRanges as $deliveryPriceByRange) {
-            $range = CarriersService::getCarrierRange($deliveryPriceByRange);
-
-            if (!$range) {
-                continue;
-            }
-
-            foreach ($deliveryPriceByRange['zones'] as $zone) {
-                /** @var array<mixed> $countryIsoCodes */
-                $countryIsoCodes = $countryRepository->getCountryIsoCodesByZoneId($zone['id_zone'], true);
-
-                /** @var array<mixed> $stateIsoCodes */
-                $stateIsoCodes = $stateRepository->getStateIsoCodesByZoneId($zone['id_zone'], true);
-
-                $carrierDetail = [];
-                $carrierDetail['id_reference'] = $carrier->id_reference;
-                $carrierDetail['id_zone'] = $zone['id_zone'];
-                $carrierDetail['id_range'] = $range->id;
-                $carrierDetail['id_carrier_detail'] = $range->id;
-                $carrierDetail['shipping_method'] = $carrier->getRangeTable();
-                $carrierDetail['delimiter1'] = $range->delimiter1;
-                $carrierDetail['delimiter2'] = $range->delimiter2;
-                $carrierDetail['country_ids'] = implode(',', $countryIsoCodes);
-                $carrierDetail['state_ids'] = implode(',', $stateIsoCodes);
-                $carrierDetail['price'] = $zone['price'];
-
-                array_push($carrierDetails, $carrierDetail);
-            }
-        }
-
-        return $carrierDetails;
     }
 }

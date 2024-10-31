@@ -101,86 +101,27 @@ class CarriersService extends ShopContentAbstractService implements ShopContentS
     }
 
     /**
-     * @param array<mixed> $deliveryPriceByRange
+     * @param \Carrier $carrier
+     * @param array<mixed> $delivery
      *
      * @return false|\RangeWeight|\RangePrice
      *
      * @throws \PrestaShopDatabaseException
      * @throws \PrestaShopException
      */
-    public static function getCarrierRange($deliveryPriceByRange)
+    public static function generateRange($carrier, $delivery)
     {
-        if (isset($deliveryPriceByRange['id_range_weight'])) {
-            return new \RangeWeight($deliveryPriceByRange['id_range_weight']);
+        $rangeTable = $carrier->getRangeTable();
+
+        if ($rangeTable === 'range_weight') {
+            return new \RangeWeight($delivery['id_range_weight']);
         }
-        if (isset($deliveryPriceByRange['id_range_price'])) {
-            return new \RangePrice($deliveryPriceByRange['id_range_price']);
+
+        if ($rangeTable === 'range_price') {
+            return new \RangePrice($delivery['id_range_price']);
         }
 
         return false;
-    }
-
-    /**
-     * @param \Carrier $carrierObj
-     *
-     * @return array<mixed>|false
-     */
-    public static function getDeliveryPriceByRange(\Carrier $carrierObj)
-    {
-        $rangeTable = $carrierObj->getRangeTable();
-
-        switch ($rangeTable) {
-            case 'range_weight':
-                return CarriersService::getCarrierByWeightRange($carrierObj, 'range_weight');
-            case 'range_price':
-                return CarriersService::getCarrierByPriceRange($carrierObj, 'range_price');
-            default:
-                return false;
-        }
-    }
-
-    /**
-     * @param \Carrier $carrierObj
-     * @param string $rangeTable
-     *
-     * @return array<mixed>
-     */
-    public static function getCarrierByWeightRange(\Carrier $carrierObj, $rangeTable)
-    {
-        $deliveryPriceByRange = \Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrierObj->id);
-
-        $filteredRanges = [];
-
-        foreach ($deliveryPriceByRange as $range) {
-            $filteredRanges[$range['id_range_weight']]['id_range_weight'] = $range['id_range_weight'];
-            $filteredRanges[$range['id_range_weight']]['id_carrier'] = $range['id_carrier'];
-            $filteredRanges[$range['id_range_weight']]['zones'][$range['id_zone']]['id_zone'] = $range['id_zone'];
-            $filteredRanges[$range['id_range_weight']]['zones'][$range['id_zone']]['price'] = $range['price'];
-        }
-
-        return $filteredRanges;
-    }
-
-    /**
-     * @param \Carrier $carrierObj
-     * @param string $rangeTable
-     *
-     * @return array<mixed>
-     */
-    public static function getCarrierByPriceRange(\Carrier $carrierObj, $rangeTable)
-    {
-        $deliveryPriceByRange = \Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrierObj->id);
-
-        $filteredRanges = [];
-
-        foreach ($deliveryPriceByRange as $range) {
-            $filteredRanges[$range['id_range_price']]['id_range_price'] = $range['id_range_price'];
-            $filteredRanges[$range['id_range_price']]['id_carrier'] = $range['id_carrier'];
-            $filteredRanges[$range['id_range_price']]['zones'][$range['id_zone']]['id_zone'] = $range['id_zone'];
-            $filteredRanges[$range['id_range_price']]['zones'][$range['id_zone']]['price'] = $range['price'];
-        }
-
-        return $filteredRanges;
     }
 
     /**
