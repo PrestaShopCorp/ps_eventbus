@@ -34,6 +34,7 @@ class Config
 {
     const MYSQL_DATE_FORMAT = 'Y-m-d H:i:s';
 
+    const INCREMENTAL_SYNC_TABLE_NAME = 'eventbus_incremental_sync';
     const INCREMENTAL_SYNC_TABLE_SIZE_CHECK_MOD = 20;
     const INCREMENTAL_SYNC_MAX_TABLE_SIZE = 100000;
 
@@ -134,8 +135,7 @@ class Config
         self::COLLECTION_WISHLIST_PRODUCTS,
     ];
 
-    const INCREMENTAL_TYPE_ADD = 'add';
-    const INCREMENTAL_TYPE_UPDATE = 'update';
+    const INCREMENTAL_TYPE_UPSERT = 'upsert';
     const INCREMENTAL_TYPE_DELETE = 'delete';
 
     /**

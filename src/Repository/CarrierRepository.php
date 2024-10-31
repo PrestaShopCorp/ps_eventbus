@@ -95,6 +95,10 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
+        if ($contentIds == []) {
+            return [];
+        }
+
         $this->generateFullQuery($langIso, true);
 
         $this->query

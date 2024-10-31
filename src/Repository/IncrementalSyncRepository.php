@@ -124,7 +124,7 @@ class IncrementalSyncRepository extends AbstractRepository
     }
 
     /**
-     * @param string $type
+     * @param string $shopContent
      * @param string $langIso
      * @param int $limit
      *
@@ -132,28 +132,24 @@ class IncrementalSyncRepository extends AbstractRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getIncrementalSyncObjectIds($type, $langIso, $limit)
+    public function getIncrementalSyncObjects($shopContent, $langIso, $limit)
     {
         $this->generateMinimalQuery(self::TABLE_NAME, 'eis');
 
         $this->query
             ->where('eis.lang_iso = "' . pSQL($langIso) . '"')
             ->where('eis.id_shop = "' . parent::getShopContext()->id . '"')
-            ->where('eis.type = "' . pSQL($type) . '"')
+            ->where('eis.type = "' . pSQL($shopContent) . '"')
             ->limit($limit)
         ;
 
-        $this->query->select('eis.id_object');
+        $this->query
+            ->select('eis.type')
+            ->select('eis.id_object as id')
+            ->select('eis.action')
+        ;
 
-        $result = $this->runQuery(true);
-
-        if (!empty($result)) {
-            return array_map(function ($object) {
-                return $object['id_object'];
-            }, $result);
-        }
-
-        return [];
+        return $this->runQuery(true);
     }
 
     /**

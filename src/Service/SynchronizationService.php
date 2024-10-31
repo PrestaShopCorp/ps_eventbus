@@ -189,9 +189,9 @@ class SynchronizationService
         /** @var ShopContentServiceInterface $shopContentApiService */
         $shopContentApiService = $module->getService($serviceId);
 
-        $contentIds = $this->incrementalSyncRepository->getIncrementalSyncObjectIds($shopContent, $langIso, $limit);
+        $contentsToSync = $this->incrementalSyncRepository->getIncrementalSyncObjects($shopContent, $langIso, $limit);
 
-        if (empty($contentIds)) {
+        if (empty($contentsToSync)) {
             return [
                 'total_objects' => 0,
                 'has_remaining_objects' => false,
@@ -199,7 +199,15 @@ class SynchronizationService
             ];
         }
 
-        $data = $shopContentApiService->getContentsForIncremental($limit, $contentIds, $langIso);
+        $upsertedContents = array_filter($contentsToSync, function ($content) {
+            return $content['action'] == Config::INCREMENTAL_TYPE_UPSERT;
+        });
+
+        $deletedContents = array_filter($contentsToSync, function ($content) {
+            return $content['action'] == Config::INCREMENTAL_TYPE_DELETE;
+        });
+
+        $data = $shopContentApiService->getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso);
 
         CommonService::convertDateFormat($data);
 
@@ -207,10 +215,10 @@ class SynchronizationService
             $response = $this->proxyService->upload($jobId, $data, $startTime, false);
 
             if ($response['httpCode'] == 201) {
-                $this->incrementalSyncRepository->removeIncrementalSyncObjects($shopContent, $contentIds, $langIso);
+                $this->incrementalSyncRepository->removeIncrementalSyncObjects($shopContent, array_column($contentsToSync, 'id'), $langIso);
             }
         } else {
-            $this->incrementalSyncRepository->removeIncrementalSyncObjects($shopContent, $contentIds, $langIso);
+            $this->incrementalSyncRepository->removeIncrementalSyncObjects($shopContent, array_column($contentsToSync, 'id'), $langIso);
         }
 
         $remainingObjects = $this->incrementalSyncRepository->getRemainingIncrementalObjects($shopContent, $langIso);
@@ -394,21 +402,7 @@ class SynchronizationService
             'total_objects' => count($data),
             'has_remaining_objects' => $remainingObjects > 0,
             'remaining_objects' => $remainingObjects,
-            'md5' => $this->getPayloadMd5($data),
+            'md5' => md5(serialize($data)),
         ], $syncResponse);
-    }
-
-    /**
-     * @param array<mixed> $payload
-     *
-     * @return string
-     */
-    private function getPayloadMd5($payload)
-    {
-        return md5(
-            implode(' ', array_map(function ($payloadItem) {
-                return $payloadItem['id'];
-            }, $payload))
-        );
     }
 }

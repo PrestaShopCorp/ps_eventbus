@@ -33,7 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class CarriersService implements ShopContentServiceInterface
+class CarriersService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
     /** @var CarrierRepository */
     private $carrierRepository;
@@ -62,7 +62,7 @@ class CarriersService implements ShopContentServiceInterface
 
         return array_map(function ($item) {
             return [
-                'id' => (string) $item['id_reference'],
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_CARRIERS,
                 'properties' => $item,
             ];
@@ -71,28 +71,21 @@ class CarriersService implements ShopContentServiceInterface
 
     /**
      * @param int $limit
-     * @param array<string, int> $contentIds
+     * @param array<mixed> $upsertedContents
+     * @param array<mixed> $deletedContents
      * @param string $langIso
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso)
+    public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
-        $result = $this->carrierRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso);
+        $result = $this->carrierRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
-        if (empty($result)) {
-            return [];
+        if (!empty($result)) {
+            $this->castCarriers($result);
         }
 
-        $this->castCarriers($result);
-
-        return array_map(function ($item) {
-            return [
-                'id' => (string) $item['id_reference'],
-                'collection' => Config::COLLECTION_CARRIERS,
-                'properties' => $item,
-            ];
-        }, $result);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_CARRIERS, $result, $deletedContents);
     }
 
     /**

@@ -6,30 +6,21 @@ import axios from "axios";
 import testConfig from "./test.config";
 import { HealthCheck } from "../type/health-check";
 import semver from "semver";
-
+import hash from "object-hash";
 /**
- * sort upload data by collection and id to allow easier comparison
+ * sort upload data by collection and hash to allow easier comparison
+ * The hash is calculated from the data object
+ *
  * @param data ps_eventbus upload data
  */
-export const sortUploadData: (
-  data: PsEventbusSyncUpload[],
-) => PsEventbusSyncUpload[] = R.pipe(
-  R.sortBy(R.prop("collection")),
-  R.sortBy(R.prop("id")),
-);
-
-/**
- * modules returned by ps_eventbus use their database it as their collection id, which makes it random.
- * this function provides a way to generate a predictable replacement id.
- * @param data
- */
-export function generatePredictableModuleId(
+export function sortUploadData(
   data: PsEventbusSyncUpload[],
 ): PsEventbusSyncUpload[] {
-  return data.map((it) => ({
-    ...it,
-    id: `${(it.properties as { name: string }).name}`,
-  }));
+  data.forEach((item) => {
+    item["hash"] = hash(item);
+  });
+
+  return R.pipe(R.sortBy(R.prop("collection")), R.sortBy(R.prop("hash")))(data);
 }
 
 export function omitProperties(

@@ -111,16 +111,16 @@ abstract class AbstractRepository
     }
 
     /**
-     * @param string $query
+     * @param string $tableName
      *
      * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    protected function checkIfTableExist($query)
+    protected function checkIfTableExist($tableName)
     {
-        $request = 'SELECT * FROM information_schema.tables WHERE table_name LIKE \'' . $query . '\' LIMIT 1;';
+        $request = 'SELECT * FROM information_schema.tables WHERE table_name LIKE \'' . $tableName . '\' LIMIT 1;';
 
         return $this->db->executeS($request);
     }
@@ -135,6 +135,8 @@ abstract class AbstractRepository
      */
     protected function runQuery($disableCurrentExplain = null)
     {
+        $result = [];
+
         $explainSql = false;
 
         if (defined('PS_EVENTBUS_EXPLAIN_SQL_ENABLED')) {
@@ -145,9 +147,9 @@ abstract class AbstractRepository
             $this->debugQuery();
         }
 
-        $result = $this->db->executeS($this->query);
+        $result = (array) $this->db->executeS($this->query);
 
-        return is_array($result) ? $result : [];
+        return $result;
     }
 
     /**

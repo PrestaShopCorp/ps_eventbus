@@ -33,7 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class ImagesService implements ShopContentServiceInterface
+class ImagesService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
     /** @var ImageRepository */
     private $imageRepository;
@@ -62,7 +62,7 @@ class ImagesService implements ShopContentServiceInterface
 
         return array_map(function ($item) {
             return [
-                'id' => (string) $item['id_image'],
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_IMAGES,
                 'properties' => $item,
             ];
@@ -71,28 +71,21 @@ class ImagesService implements ShopContentServiceInterface
 
     /**
      * @param int $limit
-     * @param array<string, int> $contentIds
+     * @param array<mixed> $upsertedContents
+     * @param array<mixed> $deletedContents
      * @param string $langIso
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso)
+    public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
-        $result = $this->imageRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso);
+        $result = $this->imageRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
-        if (empty($result)) {
-            return [];
+        if (!empty($result)) {
+            $this->castImages($result);
         }
 
-        $this->castImages($result);
-
-        return array_map(function ($item) {
-            return [
-                'id' => (string) $item['id_image'],
-                'collection' => Config::COLLECTION_IMAGES,
-                'properties' => $item,
-            ];
-        }, $result);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_IMAGES, $result, $deletedContents);
     }
 
     /**

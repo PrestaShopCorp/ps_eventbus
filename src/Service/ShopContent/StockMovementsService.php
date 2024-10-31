@@ -33,7 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class StockMovementsService implements ShopContentServiceInterface
+class StockMovementsService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
     /** @var StockMovementRepository */
     private $stockMovementRepository;
@@ -62,7 +62,7 @@ class StockMovementsService implements ShopContentServiceInterface
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_stock_mvt'],
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_STOCK_MOVEMENTS,
                 'properties' => $item,
             ];
@@ -71,28 +71,21 @@ class StockMovementsService implements ShopContentServiceInterface
 
     /**
      * @param int $limit
-     * @param array<string, int> $contentIds
+     * @param array<mixed> $upsertedContents
+     * @param array<mixed> $deletedContents
      * @param string $langIso
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso)
+    public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
-        $result = $this->stockMovementRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso);
+        $result = $this->stockMovementRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
-        if (empty($result)) {
-            return [];
+        if (!empty($result)) {
+            $this->castStockMovements($result);
         }
 
-        $this->castStockMovements($result);
-
-        return array_map(function ($item) {
-            return [
-                'id' => $item['id_stock_mvt'],
-                'collection' => Config::COLLECTION_STOCK_MOVEMENTS,
-                'properties' => $item,
-            ];
-        }, $result);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_STOCK_MOVEMENTS, $result, $deletedContents);
     }
 
     /**

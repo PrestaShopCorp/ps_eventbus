@@ -94,6 +94,10 @@ class WishlistProductRepository extends AbstractRepository implements Repository
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
+        if ($contentIds == []) {
+            return [];
+        }
+
         $this->generateFullQuery($langIso, true);
 
         $this->query

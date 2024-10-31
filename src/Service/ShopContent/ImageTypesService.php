@@ -33,7 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class ImageTypesService implements ShopContentServiceInterface
+class ImageTypesService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
     /** @var ImageTypeRepository */
     private $imageTypeRepository;
@@ -62,7 +62,7 @@ class ImageTypesService implements ShopContentServiceInterface
 
         return array_map(function ($item) {
             return [
-                'id' => (string) $item['id_image_type'],
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_IMAGE_TYPES,
                 'properties' => $item,
             ];
@@ -71,28 +71,21 @@ class ImageTypesService implements ShopContentServiceInterface
 
     /**
      * @param int $limit
-     * @param array<string, int> $contentIds
+     * @param array<mixed> $upsertedContents
+     * @param array<mixed> $deletedContents
      * @param string $langIso
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso)
+    public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
-        $result = $this->imageTypeRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso);
+        $result = $this->imageTypeRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
-        if (empty($result)) {
-            return [];
+        if (!empty($result)) {
+            $this->castImageTypes($result);
         }
 
-        $this->castImageTypes($result);
-
-        return array_map(function ($item) {
-            return [
-                'id' => (string) $item['id_image_type'],
-                'collection' => Config::COLLECTION_IMAGE_TYPES,
-                'properties' => $item,
-            ];
-        }, $result);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_IMAGE_TYPES, $result, $deletedContents);
     }
 
     /**

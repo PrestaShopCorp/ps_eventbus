@@ -33,7 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class CurrenciesService implements ShopContentServiceInterface
+class CurrenciesService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
     /** @var CurrencyRepository */
     private $currencyRepository;
@@ -62,7 +62,7 @@ class CurrenciesService implements ShopContentServiceInterface
 
         return array_map(function ($item) {
             return [
-                'id' => $item['id_currency'],
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_CURRENCIES,
                 'properties' => $item,
             ];
@@ -71,28 +71,21 @@ class CurrenciesService implements ShopContentServiceInterface
 
     /**
      * @param int $limit
-     * @param array<string, int> $contentIds
+     * @param array<mixed> $upsertedContents
+     * @param array<mixed> $deletedContents
      * @param string $langIso
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso)
+    public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
-        $result = $this->currencyRepository->retrieveContentsForIncremental($limit, $contentIds, $langIso);
+        $result = $this->currencyRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
-        if (empty($result)) {
-            return [];
+        if (!empty($result)) {
+            $this->castCurrencies($result);
         }
 
-        $this->castCurrencies($result);
-
-        return array_map(function ($item) {
-            return [
-                'id' => $item['id_currency'],
-                'collection' => Config::COLLECTION_CURRENCIES,
-                'properties' => $item,
-            ];
-        }, $result);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_CURRENCIES, $result, $deletedContents);
     }
 
     /**

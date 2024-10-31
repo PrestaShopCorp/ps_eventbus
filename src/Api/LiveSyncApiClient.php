@@ -103,9 +103,6 @@ class LiveSyncApiClient
         // shop content send to the API must be in kebab-case
         $kebabCasedShopContent = str_replace('_', '-', $shopContent);
 
-        // This parameter is purely useless, but it is required by the API
-        $uselessParameter = 0;
-
         $response = $this->getClient(3)->sendRequest(
             new Request(
                 'POST',
@@ -115,7 +112,7 @@ class LiveSyncApiClient
                     'Authorization' => 'Bearer ' . $this->jwt,
                     'User-Agent' => 'ps-eventbus/' . $this->module->version,
                     'Content-Type' => 'application/json',
-                ], // FIXME: Pass real array of shop contents. at the moment, only one shop content is sent to match CS rate limiter
+                ],
                 '{"shopContents": ["' . $kebabCasedShopContent . '"], "action": "' . $action . '"}'
             )
         );

@@ -75,13 +75,15 @@ class CommonService
             case $exception instanceof QueryParamsException:
                 $code = Config::INVALID_URL_QUERY;
                 break;
+            default:
+                $code = 500;
         }
 
         $response = [
             'object_type' => \Tools::getValue('shopContent'),
             'status' => false,
             'httpCode' => $code,
-            'message' => $exception->getMessage(),
+            'message' => $code == 500 ? 'Server error' : $exception->getMessage(),
         ];
 
         self::dieWithResponse($response, (int) $code);

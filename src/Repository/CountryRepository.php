@@ -35,11 +35,6 @@ class CountryRepository extends AbstractRepository
     const TABLE_NAME = 'country';
 
     /**
-     * @var array<mixed>
-     */
-    private $countryIsoCodeCache = [];
-
-    /**
      * @param int $zoneId
      * @param bool $active
      *
@@ -47,34 +42,29 @@ class CountryRepository extends AbstractRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getCountyIsoCodesByZoneId($zoneId, $active)
+    public function getCountryIsoCodesByZoneId($zoneId, $active)
     {
-        $cacheKey = $zoneId . '-' . (int) $active;
         $isoCodes = [];
 
-        if (!isset($this->countryIsoCodeCache[$cacheKey])) {
-            $this->generateMinimalQuery(self::TABLE_NAME, 'c');
+        $this->generateMinimalQuery(self::TABLE_NAME, 'c');
 
-            $this->query
-                ->innerJoin('country_shop', 'cs', 'cs.id_country = c.id_country')
-                ->innerJoin('country_lang', 'cl', 'cl.id_country = c.id_country')
-                ->where('cs.id_shop = ' . (int) parent::getShopContext()->id)
-                ->where('cl.id_lang = ' . (int) parent::getLanguageContext()->id)
-                ->where('id_zone = ' . (int) $zoneId)
-                ->where('active = ' . (bool) $active)
-            ;
+        $this->query
+            ->innerJoin('country_shop', 'cs', 'cs.id_country = c.id_country')
+            ->innerJoin('country_lang', 'cl', 'cl.id_country = c.id_country')
+            ->where('cs.id_shop = ' . (int) parent::getShopContext()->id)
+            ->where('cl.id_lang = ' . (int) parent::getLanguageContext()->id)
+            ->where('id_zone = ' . (int) $zoneId)
+            ->where('active = ' . (bool) $active)
+        ;
 
-            $this->query->select('iso_code');
+        $this->query->select('iso_code');
 
-            $result = $this->runQuery(true);
+        $result = $this->runQuery(true);
 
-            foreach ($result as $country) {
-                $isoCodes[] = $country['iso_code'];
-            }
-
-            $this->countryIsoCodeCache[$cacheKey] = $isoCodes;
+        foreach ($result as $country) {
+            $isoCodes[] = $country['iso_code'];
         }
 
-        return $this->countryIsoCodeCache[$cacheKey];
+        return $isoCodes;
     }
 }

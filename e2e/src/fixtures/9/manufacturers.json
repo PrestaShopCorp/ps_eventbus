@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "action": "upsert",
     "collection": "manufacturers",
     "properties": {
       "id_manufacturer": 1,
@@ -18,7 +18,7 @@
     }
   },
   {
-    "id": 2,
+    "action": "upsert",
     "collection": "manufacturers",
     "properties": {
       "id_manufacturer": 2,

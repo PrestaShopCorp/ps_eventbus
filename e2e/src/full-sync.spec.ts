@@ -5,12 +5,11 @@ import axios from "axios";
 import { doFullSync, probe, PsEventbusSyncUpload } from "./helpers/mock-probe";
 import { lastValueFrom, toArray, withLatestFrom } from "rxjs";
 import {
-  generatePredictableModuleId,
   loadFixture,
   omitProperties,
   sortUploadData,
 } from "./helpers/data-helper";
-import { ShopContent, shopContentList } from "./helpers/shop-contents";
+import { shopContentList } from "./helpers/shop-contents";
 
 expect.extend(matchers);
 
@@ -26,6 +25,8 @@ const isBoolean = (val) =>
 const specialFieldAssert: { [index: string]: (val) => void } = {
   created_at: isDateString,
   updated_at: isDateString,
+  delivery_date: isDateString,
+  invoice_date: isDateString,
   last_connection_date: isDateString,
   folder_created_at: isDateString,
   date_add: isDateString,
@@ -100,38 +101,28 @@ describe("Full Sync", () => {
         ),
       );
 
-      const syncedData: PsEventbusSyncUpload[] = messages.flat();
+      let dataFromModule: PsEventbusSyncUpload[] = messages.flat();
+      let fixtures = await loadFixture(shopContent);
 
-      // dump data for easier debugging or updating fixtures
-      let processedData = syncedData as PsEventbusSyncUpload[];
       if (testConfig.dumpFullSyncData) {
-        await dumpUploadData(syncedData, shopContent);
+        await dumpUploadData(dataFromModule);
       }
 
-      const fixture = await loadFixture(shopContent);
+      dataFromModule = omitProperties(
+        dataFromModule,
+        Object.keys(specialFieldAssert),
+      );
 
-      // we need to process fixtures and data returned from ps_eventbus to make them easier to compare
-      let processedFixture = fixture;
-      if (shopContent === ("modules" as ShopContent)) {
-        processedData = generatePredictableModuleId(processedData);
-        processedFixture = generatePredictableModuleId(processedFixture);
-      }
-      processedData = omitProperties(
-        processedData,
-        Object.keys(specialFieldAssert),
-      );
-      processedData = sortUploadData(processedData);
-      processedFixture = omitProperties(
-        processedFixture,
-        Object.keys(specialFieldAssert),
-      );
-      processedFixture = sortUploadData(processedFixture);
+      fixtures = omitProperties(fixtures, Object.keys(specialFieldAssert));
+
+      dataFromModule = sortUploadData(dataFromModule);
+      fixtures = sortUploadData(fixtures);
 
       // assert
-      expect(processedData).toMatchObject(processedFixture);
+      expect(dataFromModule).toEqual(fixtures);
 
       // assert special field using custom matcher
-      for (const data of processedData) {
+      for (const data of dataFromModule) {
         for (const specialFieldName of Object.keys(specialFieldAssert)) {
           if (data.properties[specialFieldName] !== undefined) {
             specialFieldAssert[specialFieldName](

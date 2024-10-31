@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "action": "upsert",
     "collection": "suppliers",
     "properties": {
       "id_supplier": 1,

@@ -1,6 +1,6 @@
 [
   {
-    "id": "1-en",
+    "action": "upsert",
     "collection": "categories",
     "properties": {
       "unique_category_id": "1-en",
@@ -18,7 +18,7 @@
     }
   },
   {
-    "id": "2-en",
+    "action": "upsert",
     "collection": "categories",
     "properties": {
       "unique_category_id": "2-en",
@@ -36,7 +36,7 @@
     }
   },
   {
-    "id": "3-en",
+    "action": "upsert",
     "collection": "categories",
     "properties": {
       "unique_category_id": "3-en",
@@ -54,7 +54,7 @@
     }
   },
   {
-    "id": "4-en",
+    "action": "upsert",
     "collection": "categories",
     "properties": {
       "unique_category_id": "4-en",
@@ -72,7 +72,7 @@
     }
   },
   {
-    "id": "5-en",
+    "action": "upsert",
     "collection": "categories",
     "properties": {
       "unique_category_id": "5-en",
@@ -90,7 +90,7 @@
     }
   },
   {
-    "id": "6-en",
+    "action": "upsert",
     "collection": "categories",
     "properties": {
       "unique_category_id": "6-en",
@@ -108,7 +108,7 @@
     }
   },
   {
-    "id": "7-en",
+    "action": "upsert",
     "collection": "categories",
     "properties": {
       "unique_category_id": "7-en",
@@ -126,7 +126,7 @@
     }
   },
   {
-    "id": "8-en",
+    "action": "upsert",
     "collection": "categories",
     "properties": {
       "unique_category_id": "8-en",
@@ -144,7 +144,7 @@
     }
   },
   {
-    "id": "9-en",
+    "action": "upsert",
     "collection": "categories",
     "properties": {
       "unique_category_id": "9-en",
@@ -162,7 +162,7 @@
     }
   },
   {
-    "id": "10-en",
+    "action": "upsert",
     "collection": "categories",
     "properties": {
       "unique_category_id": "10-en",
@@ -180,7 +180,7 @@
     }
   },
   {
-    "id": "11-en",
+    "action": "upsert",
     "collection": "categories",
     "properties": {
       "unique_category_id": "11-en",

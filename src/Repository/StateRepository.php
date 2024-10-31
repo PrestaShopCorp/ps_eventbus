@@ -35,11 +35,6 @@ class StateRepository extends AbstractRepository
     const TABLE_NAME = 'state';
 
     /**
-     * @var array<mixed>
-     */
-    private $stateIsoCodeCache = [];
-
-    /**
      * @param int $zoneId
      * @param bool $active
      *
@@ -49,29 +44,24 @@ class StateRepository extends AbstractRepository
      */
     public function getStateIsoCodesByZoneId($zoneId, $active)
     {
-        $cacheKey = $zoneId . '-' . (int) $active;
         $isoCodes = [];
 
-        if (!isset($this->stateIsoCodeCache[$cacheKey])) {
-            $this->generateMinimalQuery(self::TABLE_NAME, 's');
+        $this->generateMinimalQuery(self::TABLE_NAME, 's');
 
-            $this->query->innerJoin('country', 'c', 'c.id_country = s.id_country')
-                ->where('s.id_zone = ' . (int) $zoneId)
-                ->where('s.active = ' . (bool) $active)
-                ->where('c.active = ' . (bool) $active)
-            ;
+        $this->query->innerJoin('country', 'c', 'c.id_country = s.id_country')
+            ->where('s.id_zone = ' . (int) $zoneId)
+            ->where('s.active = ' . (bool) $active)
+            ->where('c.active = ' . (bool) $active)
+        ;
 
-            $this->query->select('s.iso_code');
+        $this->query->select('s.iso_code');
 
-            $result = $this->runQuery(true);
+        $result = $this->runQuery(true);
 
-            foreach ($result as $state) {
-                $isoCodes[] = $state['iso_code'];
-            }
-
-            $this->stateIsoCodeCache[$cacheKey] = $isoCodes;
+        foreach ($result as $state) {
+            $isoCodes[] = $state['iso_code'];
         }
 
-        return $this->stateIsoCodeCache[$cacheKey];
+        return $isoCodes;
     }
 }

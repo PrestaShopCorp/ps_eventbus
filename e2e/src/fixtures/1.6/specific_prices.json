@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "action": "upsert",
     "collection": "specific_prices",
     "properties": {
       "id_specific_price": 1,
@@ -31,7 +31,7 @@
     }
   },
   {
-    "id": 2,
+    "action": "upsert",
     "collection": "specific_prices",
     "properties": {
       "id_specific_price": 2,

@@ -33,7 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class ShopsService implements ShopContentServiceInterface
+class ShopsService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
     /** @var CurrenciesService */
     private $currenciesService;
@@ -93,7 +93,7 @@ class ShopsService implements ShopContentServiceInterface
 
         return [
             [
-                'id' => '1',
+                'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_SHOPS,
                 'properties' => [
                     'created_at' => $this->shopRepository->getCreatedAt(),
@@ -125,12 +125,13 @@ class ShopsService implements ShopContentServiceInterface
 
     /**
      * @param int $limit
-     * @param array<string, int> $contentIds
+     * @param array<mixed> $upsertedContents
+     * @param array<mixed> $deletedContents
      * @param string $langIso
      *
      * @return array<mixed>
      */
-    public function getContentsForIncremental($limit, $contentIds, $langIso)
+    public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
         return [];
     }

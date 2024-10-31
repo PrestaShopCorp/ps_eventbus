@@ -108,6 +108,10 @@ class SpecificPriceRepository extends AbstractRepository implements RepositoryIn
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
+        if ($contentIds == []) {
+            return [];
+        }
+
         $this->generateFullQuery($langIso, true);
 
         $this->query
