@@ -21,7 +21,7 @@ export class CollectorApiServer extends Server {
           .toString()
           .split("\n")
           .map((line) => JSON.parse(line.trim()));
-        res.send({ status: "success" }).status(201).end();
+        res.status(201).end();
       } else {
         res.status(500).end();
       }
