@@ -27,7 +27,7 @@
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Repository\DeliveryRepository;
+use PrestaShop\Module\PsEventbus\Repository\CarrierDetailRepository;
 use PrestaShop\Module\PsEventbus\Repository\CountryRepository;
 use PrestaShop\Module\PsEventbus\Repository\StateRepository;
 
@@ -37,8 +37,8 @@ if (!defined('_PS_VERSION_')) {
 
 class CarrierDetailsService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
-    /** @var DeliveryRepository */
-    private $deliveryRepository;
+    /** @var CarrierDetailRepository */
+    private $carrierDetailRepository;
 
     /** @var CountryRepository */
     private $countryRepository;
@@ -47,11 +47,11 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
     private $stateRepository;
 
     public function __construct(
-        DeliveryRepository $deliveryRepository,
+        CarrierDetailRepository $carrierDetailRepository,
         CountryRepository $countryRepository,
         StateRepository $stateRepository
     ) {
-        $this->deliveryRepository = $deliveryRepository;
+        $this->carrierDetailRepository = $carrierDetailRepository;
         $this->countryRepository = $countryRepository;
         $this->stateRepository = $stateRepository;
     }
@@ -65,7 +65,7 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
      */
     public function getContentsForFull($offset, $limit, $langIso)
     {
-        $result = $this->deliveryRepository->retrieveContentsForFull($offset, $limit, $langIso);
+        $result = $this->carrierDetailRepository->retrieveContentsForFull($offset, $limit, $langIso);
 
         if (empty($result)) {
             return [];
@@ -98,7 +98,7 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
      */
     public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
-        $result = $this->deliveryRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
+        $result = $this->carrierDetailRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
         if (!empty($result)) {
             $carrierDetails = [];
@@ -122,7 +122,7 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
      */
     public function getFullSyncContentLeft($offset, $limit, $langIso)
     {
-        return $this->deliveryRepository->countFullSyncContentLeft($offset, $limit, $langIso);
+        return $this->carrierDetailRepository->countFullSyncContentLeft($offset, $limit, $langIso);
     }
 
     /**

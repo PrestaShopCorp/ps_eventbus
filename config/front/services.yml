@@ -70,7 +70,7 @@ services:
     class: PrestaShop\Module\PsEventbus\Service\ShopContent\CarrierDetailsService
     public: true
     arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\DeliveryRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\CarrierDetailRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\CountryRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\StateRepository'
 
@@ -78,7 +78,7 @@ services:
     class: PrestaShop\Module\PsEventbus\Service\ShopContent\CarrierTaxesService
     public: true
     arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\CarrierRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\CarrierTaxeRepository'
   
   PrestaShop\Module\PsEventbus\Service\ShopContent\CartsService:
     class: PrestaShop\Module\PsEventbus\Service\ShopContent\CartsService

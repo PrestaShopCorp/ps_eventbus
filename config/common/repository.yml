@@ -25,12 +25,6 @@ services:
     class: PrestaShop\Module\PsEventbus\Repository\StateRepository
     public: true
 
-  PrestaShop\Module\PsEventbus\Repository\TaxeRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\TaxeRepository
-    public: true
-    arguments:
-      - '@=service("ps_eventbus").getContext()'
-  
   PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository:
     class: PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository
     public: true
@@ -45,6 +39,14 @@ services:
 
   PrestaShop\Module\PsEventbus\Repository\CarrierRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CarrierRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\CarrierDetailRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CarrierDetailRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\CarrierTaxeRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CarrierTaxeRepository
     public: true
 
   PrestaShop\Module\PsEventbus\Repository\CartRepository:
@@ -73,10 +75,6 @@ services:
 
   PrestaShop\Module\PsEventbus\Repository\CurrencyRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CurrencyRepository
-    public: true
-
-  PrestaShop\Module\PsEventbus\Repository\DeliveryRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\DeliveryRepository
     public: true
 
   PrestaShop\Module\PsEventbus\Repository\EmployeeRepository:

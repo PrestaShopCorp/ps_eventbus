@@ -27,8 +27,7 @@
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
-use PrestaShop\Module\PsEventbus\Repository\TaxeRepository;
+use PrestaShop\Module\PsEventbus\Repository\CarrierTaxeRepository;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -36,12 +35,11 @@ if (!defined('_PS_VERSION_')) {
 
 class CarrierTaxesService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
-    /** @var CarrierRepository */
-    private $carrierRepository;
+    /** @var CarrierTaxeRepository */
+    private $carrierTaxeRepository;
 
-    public function __construct(CarrierRepository $carrierRepository)
-    {
-        $this->carrierRepository = $carrierRepository;
+    public function __construct(CarrierTaxeRepository $carrierTaxeRepository) {
+        $this->carrierTaxeRepository = $carrierTaxeRepository;
     }
 
     /**
@@ -53,7 +51,7 @@ class CarrierTaxesService extends ShopContentAbstractService implements ShopCont
      */
     public function getContentsForFull($offset, $limit, $langIso)
     {
-        $result = $this->carrierRepository->retrieveContentsForFull($offset, $limit, $langIso);
+        $result = $this->carrierTaxeRepository->retrieveContentsForFull($offset, $limit, $langIso);
 
         if (empty($result)) {
             return [];
@@ -61,8 +59,8 @@ class CarrierTaxesService extends ShopContentAbstractService implements ShopCont
 
         $carrierTaxes = [];
 
-        foreach ($result as $carrierData) {
-            $carrierTaxes = array_merge($carrierTaxes, $this->buildCarrierTaxes($carrierData));
+        foreach ($result as $delivery) {
+            $carrierTaxes[] = $this->buildCarrierTaxe($delivery);
         }
 
         $this->castCarrierTaxes($carrierTaxes);
@@ -86,13 +84,13 @@ class CarrierTaxesService extends ShopContentAbstractService implements ShopCont
      */
     public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
-        $result = $this->carrierRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
+        $result = $this->carrierTaxeRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
         if (!empty($result)) {
             $carrierTaxes = [];
 
-            foreach ($result as $carrierData) {
-                $carrierTaxes = array_merge($carrierTaxes, $this->buildCarrierTaxes($carrierData));
+            foreach ($result as $delivery) {
+                $carrierTaxes[] = $this->buildCarrierTaxe($delivery);
             }
 
             $this->castCarrierTaxes($carrierTaxes);
@@ -110,9 +108,36 @@ class CarrierTaxesService extends ShopContentAbstractService implements ShopCont
      */
     public function getFullSyncContentLeft($offset, $limit, $langIso)
     {
-        $data = $this->getContentsForFull($offset, 50, $langIso);
+        return $this->carrierTaxeRepository->countFullSyncContentLeft($offset, $limit, $langIso);
+    }
 
-        return count($data);
+    /**
+     * Build a CarrierDetail from delvery data
+     *
+     * @param array<mixed> $delivery
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopDatabaseException
+     * @throws \PrestaShopException
+     */
+    private function buildCarrierTaxe($delivery)
+    {
+        $carrier = new \Carrier($delivery['id_carrier']);
+        $range = CarriersService::generateRange($carrier, $delivery);
+        $taxRulesGroupId = (int) $carrier->getIdTaxRulesGroup();
+
+        $this->carrierTaxeRepository->getCarrierTaxesByZone($delivery['id_zone'], $taxRulesGroupId, true);
+
+        return [
+            'id_reference' => $carrier->id_reference,
+            'id_zone' => $delivery['id_zone'],
+            'id_range' => $range->id,
+            'id_carrier_tax' => $range->id,
+            'country_ids' => $delivery['country_iso_code'],
+            'state_ids' => $delivery['state_iso_code'],
+            'tax_rate' => $delivery['rate'],
+        ];
     }
 
     /**
@@ -120,80 +145,24 @@ class CarrierTaxesService extends ShopContentAbstractService implements ShopCont
      *
      * @return void
      */
-    private function castCarrierTaxes(&$carrierTaxes)
+    private function castCarrierTaxes($carrierTaxes)
     {
-        foreach ($carrierTaxes as &$carrierTaxe) {
-            $carrierTaxe['id_reference'] = (string) $carrierTaxe['id_reference'];
-            $carrierTaxe['id_zone'] = (string) $carrierTaxe['id_zone'];
-            $carrierTaxe['id_range'] = (string) $carrierTaxe['id_range'];
-            $carrierTaxe['id_carrier_tax'] = (string) $carrierTaxe['id_carrier_tax'];
-            $carrierTaxe['country_ids'] = (string) $carrierTaxe['country_ids'];
-            $carrierTaxe['state_ids'] = (string) $carrierTaxe['state_ids'];
-            $carrierTaxe['tax_rate'] = (float) $carrierTaxe['tax_rate'];
-        }
-    }
+        $result = [];
 
-    /**
-     * Build a CarrierTaxes from Carrier
-     *
-     * @param array<mixed> $carrierData
-     *
-     * @return array<mixed>
-     *
-     * @throws \PrestaShopDatabaseException
-     * @throws \PrestaShopException
-     */
-    private function buildCarrierTaxes($carrierData)
-    {
-        /** @var \Ps_eventbus $module */
-        $module = \Module::getInstanceByName('ps_eventbus');
-
-        /** @var TaxeRepository $taxeRepository */
-        $taxeRepository = $module->getService('PrestaShop\Module\PsEventbus\Repository\TaxeRepository');
-
-        $carrier = new \Carrier($carrierData['id_reference']);
-
-        $deliveryPriceByRanges = CarriersService::getDeliveryPriceByRange($carrier);
-
-        if (!$deliveryPriceByRanges) {
-            return [];
-        }
-
-        $carrierTaxes = [];
-
-        foreach ($deliveryPriceByRanges as $deliveryPriceByRange) {
-            $range = CarriersService::getCarrierRange($deliveryPriceByRange);
-
-            if (!$range) {
+        foreach ($carrierTaxes as $key => $carrierTaxe) {
+            if ($carrierTaxes[$key] === null) {
                 continue;
             }
 
-            foreach ($deliveryPriceByRange['zones'] as $zone) {
-                $taxRulesGroupId = (int) $carrier->getIdTaxRulesGroup();
-
-                /** @var array<mixed> $carrierTaxesByZone */
-                $carrierTaxesByZone = $taxeRepository->getCarrierTaxesByZone($zone['id_zone'], $taxRulesGroupId, true);
-
-                if (!$carrierTaxesByZone[0]['country_iso_code']) {
-                    continue;
-                }
-
-                $carrierTaxesByZone = $carrierTaxesByZone[0];
-
-                $carrierTaxe = [];
-
-                $carrierTaxe['id_reference'] = $carrier->id_reference;
-                $carrierTaxe['id_zone'] = $zone['id_zone'];
-                $carrierTaxe['id_range'] = $range->id;
-                $carrierTaxe['id_carrier_tax'] = $taxRulesGroupId;
-                $carrierTaxe['country_id'] = $carrierTaxesByZone['country_iso_code'];
-                $carrierTaxe['state_ids'] = $carrierTaxesByZone['state_iso_code'];
-                $carrierTaxe['tax_rate'] = $carrierTaxesByZone['rate'];
-
-                array_push($carrierTaxes, $carrierTaxe);
-            }
+            $result['id_reference'] = (string) $carrierTaxe['id_reference'];
+            $result['id_zone'] = (string) $carrierTaxe['id_zone'];
+            $result['id_range'] = (string) $carrierTaxe['id_range'];
+            $result['id_carrier_tax'] = (string) $carrierTaxe['id_carrier_tax'];
+            $result['country_ids'] = (string) $carrierTaxe['country_ids'];
+            $result['state_ids'] = (string) $carrierTaxe['state_ids'];
+            $result['tax_rate'] = (float) $carrierTaxe['tax_rate'];
         }
 
-        return $carrierTaxes;
+        return $result;
     }
 }
