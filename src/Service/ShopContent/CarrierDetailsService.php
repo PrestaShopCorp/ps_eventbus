@@ -126,7 +126,7 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
     }
 
     /**
-     * Build a CarrierDetail from delvery data
+     * Build a CarrierDetail from delivery data
      *
      * @param array<mixed> $delivery
      *

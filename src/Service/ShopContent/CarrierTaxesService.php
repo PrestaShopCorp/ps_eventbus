@@ -59,11 +59,11 @@ class CarrierTaxesService extends ShopContentAbstractService implements ShopCont
 
         $carrierTaxes = [];
 
-        foreach ($result as $delivery) {
-            $carrierTaxes[] = $this->buildCarrierTaxe($delivery);
+        foreach ($result as $taxe) {
+            $carrierTaxes[] = $this->buildCarrierTaxe($taxe);
         }
 
-        $this->castCarrierTaxes($carrierTaxes);
+        $this->castCarrierTaxes($result);
 
         return array_map(function ($item) {
             return [
@@ -87,13 +87,11 @@ class CarrierTaxesService extends ShopContentAbstractService implements ShopCont
         $result = $this->carrierTaxeRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
         if (!empty($result)) {
-            $carrierTaxes = [];
-
-            foreach ($result as $delivery) {
-                $carrierTaxes[] = $this->buildCarrierTaxe($delivery);
+            foreach ($result as $taxe) {
+                $carrierTaxes[] = $this->buildCarrierTaxe($taxe);
             }
 
-            $this->castCarrierTaxes($carrierTaxes);
+            $this->castCarrierTaxes($result);
         }
 
         return parent::formatIncrementalSyncResponse(Config::COLLECTION_CARRIER_TAXES, $result, $deletedContents);
@@ -112,31 +110,28 @@ class CarrierTaxesService extends ShopContentAbstractService implements ShopCont
     }
 
     /**
-     * Build a CarrierDetail from delvery data
+     * Build a CarrierTaxes from tax data
      *
-     * @param array<mixed> $delivery
+     * @param array<mixed> $taxe
      *
      * @return array<mixed>
      *
      * @throws \PrestaShopDatabaseException
      * @throws \PrestaShopException
      */
-    private function buildCarrierTaxe($delivery)
+    private function buildCarrierTaxe($taxe)
     {
-        $carrier = new \Carrier($delivery['id_carrier']);
-        $range = CarriersService::generateRange($carrier, $delivery);
-        $taxRulesGroupId = (int) $carrier->getIdTaxRulesGroup();
-
-        $this->carrierTaxeRepository->getCarrierTaxesByZone($delivery['id_zone'], $taxRulesGroupId, true);
+        $carrier = new \Carrier($taxe['id_carrier']);
+        $range = CarriersService::generateRange($carrier, $taxe);
 
         return [
             'id_reference' => $carrier->id_reference,
-            'id_zone' => $delivery['id_zone'],
+            'id_zone' => $taxe['id_zone'],
             'id_range' => $range->id,
             'id_carrier_tax' => $range->id,
-            'country_ids' => $delivery['country_iso_code'],
-            'state_ids' => $delivery['state_iso_code'],
-            'tax_rate' => $delivery['rate'],
+            'country_id' => $taxe['country_iso_code'],
+            'state_ids' => $taxe['state_iso_code'],
+            'tax_rate' => $taxe['rate'],
         ];
     }
 
