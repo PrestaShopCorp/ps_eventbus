@@ -73,11 +73,8 @@ class CarrierTaxeRepository extends AbstractRepository implements RepositoryInte
                 ->select('co.iso_code as country_id')
                 ->select('
                     GROUP_CONCAT(
-                        DISTINCT IF(
-                            s.iso_code IS NOT NULL,
-                            s.iso_code,
-                            NULL
-                        ) 
+                        DISTINCT 
+                        s.iso_code
                         ORDER BY s.iso_code ASC
                         SEPARATOR \',\'
                     ) AS state_ids

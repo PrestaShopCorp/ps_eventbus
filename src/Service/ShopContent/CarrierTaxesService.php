@@ -107,13 +107,13 @@ class CarrierTaxesService extends ShopContentAbstractService implements ShopCont
     private function castCarrierTaxes(&$carrierTaxes)
     {
         foreach ($carrierTaxes as &$carrierTaxe) {
-            $result['id_reference'] = (string) $carrierTaxe['id_reference'];
-            $result['id_zone'] = (string) $carrierTaxe['id_zone'];
-            $result['id_range'] = (string) $carrierTaxe['id_range'];
-            $result['id_carrier_tax'] = (string) $carrierTaxe['id_carrier_tax'];
-            $result['country_id'] = (string) $carrierTaxe['country_id'];
-            $result['state_ids'] = (string) $carrierTaxe['state_ids'];
-            $result['tax_rate'] = (float) $carrierTaxe['tax_rate'];
+            $carrierTaxe['id_reference'] = (string) $carrierTaxe['id_reference'];
+            $carrierTaxe['id_zone'] = (string) $carrierTaxe['id_zone'];
+            $carrierTaxe['id_range'] = (string) $carrierTaxe['id_range'];
+            $carrierTaxe['id_carrier_tax'] = (string) $carrierTaxe['id_carrier_tax'];
+            $carrierTaxe['country_id'] = (string) $carrierTaxe['country_id'];
+            $carrierTaxe['state_ids'] = (string) $carrierTaxe['state_ids'];
+            $carrierTaxe['tax_rate'] = (float) $carrierTaxe['tax_rate'];
         }
     }
 }
