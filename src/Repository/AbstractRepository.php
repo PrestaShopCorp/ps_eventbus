@@ -63,11 +63,11 @@ abstract class AbstractRepository
 
     /**
      * @param string $tableName
-     * @param string $alias
+     * @param string|null $alias
      *
      * @return void
      */
-    protected function generateMinimalQuery($tableName, $alias)
+    protected function generateMinimalQuery($tableName, $alias = null)
     {
         $this->query = new \DbQuery();
 

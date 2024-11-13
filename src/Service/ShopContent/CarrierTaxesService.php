@@ -57,12 +57,6 @@ class CarrierTaxesService extends ShopContentAbstractService implements ShopCont
             return [];
         }
 
-        $carrierTaxes = [];
-
-        foreach ($result as $taxe) {
-            $carrierTaxes[] = $this->buildCarrierTaxe($taxe);
-        }
-
         $this->castCarrierTaxes($result);
 
         return array_map(function ($item) {
@@ -71,7 +65,7 @@ class CarrierTaxesService extends ShopContentAbstractService implements ShopCont
                 'collection' => Config::COLLECTION_CARRIER_TAXES,
                 'properties' => $item,
             ];
-        }, $carrierTaxes);
+        }, $result);
     }
 
     /**
@@ -87,10 +81,6 @@ class CarrierTaxesService extends ShopContentAbstractService implements ShopCont
         $result = $this->carrierTaxeRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
         if (!empty($result)) {
-            foreach ($result as $taxe) {
-                $carrierTaxes[] = $this->buildCarrierTaxe($taxe);
-            }
-
             $this->castCarrierTaxes($result);
         }
 
@@ -110,54 +100,20 @@ class CarrierTaxesService extends ShopContentAbstractService implements ShopCont
     }
 
     /**
-     * Build a CarrierTaxes from tax data
-     *
-     * @param array<mixed> $taxe
-     *
-     * @return array<mixed>
-     *
-     * @throws \PrestaShopDatabaseException
-     * @throws \PrestaShopException
-     */
-    private function buildCarrierTaxe($taxe)
-    {
-        $carrier = new \Carrier($taxe['id_carrier']);
-        $range = CarriersService::generateRange($carrier, $taxe);
-
-        return [
-            'id_reference' => $carrier->id_reference,
-            'id_zone' => $taxe['id_zone'],
-            'id_range' => $range->id,
-            'id_carrier_tax' => $range->id,
-            'country_id' => $taxe['country_iso_code'],
-            'state_ids' => $taxe['state_iso_code'],
-            'tax_rate' => $taxe['rate'],
-        ];
-    }
-
-    /**
      * @param array<mixed> $carrierTaxes
      *
      * @return void
      */
-    private function castCarrierTaxes($carrierTaxes)
+    private function castCarrierTaxes(&$carrierTaxes)
     {
-        $result = [];
-
-        foreach ($carrierTaxes as $key => $carrierTaxe) {
-            if ($carrierTaxes[$key] === null) {
-                continue;
-            }
-
+        foreach ($carrierTaxes as &$carrierTaxe) {
             $result['id_reference'] = (string) $carrierTaxe['id_reference'];
             $result['id_zone'] = (string) $carrierTaxe['id_zone'];
             $result['id_range'] = (string) $carrierTaxe['id_range'];
             $result['id_carrier_tax'] = (string) $carrierTaxe['id_carrier_tax'];
-            $result['country_ids'] = (string) $carrierTaxe['country_ids'];
+            $result['country_id'] = (string) $carrierTaxe['country_id'];
             $result['state_ids'] = (string) $carrierTaxe['state_ids'];
             $result['tax_rate'] = (float) $carrierTaxe['tax_rate'];
         }
-
-        return $result;
     }
 }

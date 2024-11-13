@@ -45,33 +45,48 @@ class CarrierTaxeRepository extends AbstractRepository implements RepositoryInte
     public function generateFullQuery($langIso, $withSelecParameters)
     {
         $this->generateMinimalQuery(SELF::TABLE_NAME, 'ca');
-
+        
         $this->query
-            ->leftJoin('ps_carrier_tax_rules_group_shop', 'ctrgs', 'ca.id_carrier = ctrgs.id_carrier')
-            ->leftJoin('ps_tax_rule', 'tr', 'tr.id_tax_rules_group = ctrgs.id_tax_rules_group')
-            ->leftJoin('ps_tax', 't', 't.id_tax = tr.id_tax')
-            ->leftJoin('ps_tax_lang', 'tl', 'tl.id_tax = t.id_tax')
-            ->leftJoin('ps_country', 'co', 'co.id_country = tr.id_country')
-            ->leftJoin('ps_delivery', 'd', 'd.id_carrier = ca.id_carrier')
-            ->leftJoin('ps_state', 's', 's.id_state = tr.id_state')
+            ->innerJoin('carrier_tax_rules_group_shop', 'ctrgs', 'ca.id_carrier = ctrgs.id_carrier')
+            ->innerJoin('tax_rule', 'tr', 'ctrgs.id_tax_rules_group = tr.id_tax_rules_group')
+            ->innerJoin('country', 'co', 'tr.id_country = co.id_country AND co.iso_code IS NOT NULL AND co.active = 1')
+            ->innerJoin('delivery', 'd', 'ca.id_carrier = d.id_carrier AND d.id_zone IS NOT NULL')
+            ->innerJoin('tax', 't', 'tr.id_tax = t.id_tax AND t.active = 1')
+            ->leftJoin('state', 's', 'tr.id_state = s.id_state AND s.active = 1')
         ;
 
         $this->query
-            ->where('co.iso_code IS NOT NULL')
-            ->where('d.id_delivery IS NOT NULL')
-            ->where('co.active = 1')
-            ->where('tl.id_lang = ' . (int) parent::getLanguageContext()->id)
+            ->where('(co.id_zone = d.id_zone OR s.id_zone = d.id_zone)')
         ;
 
-        $this->query->groupBy('co.iso_code');
+        if ($withSelecParameters) {
+            $this->query
+                ->select('ca.id_reference')
+                ->select('co.id_zone')
+                ->select('
+                    CASE 
+                        WHEN d.id_range_weight IS NOT NULL AND d.id_range_weight != 0 THEN d.id_range_weight
+                        WHEN d.id_range_price IS NOT NULL AND d.id_range_price != 0 THEN d.id_range_price
+                    END AS id_range
+                ')
+                ->select('ctrgs.id_tax_rules_group AS id_carrier_tax')
+                ->select('co.iso_code as country_id')
+                ->select('
+                    GROUP_CONCAT(
+                        DISTINCT IF(
+                            s.iso_code IS NOT NULL,
+                            s.iso_code,
+                            NULL
+                        ) 
+                        ORDER BY s.iso_code ASC
+                        SEPARATOR \',\'
+                    ) AS state_ids
+                ')
+                ->select('t.rate AS tax_rate')
+            ;
+        }
 
-        $this->query
-            ->select('ca.id_reference')
-            ->select('d.id_zone')
-            ->select('co.iso_code AS country_id')
-            ->select('GROUP_CONCAT(s.iso_code SEPARATOR ",") as state_iso_code')
-            ->select('t.rate AS tax_rate')
-        ;
+        $this->query->groupBy('ca.id_reference, co.id_zone, id_range, country_id');
     }
 
     /**
@@ -130,11 +145,12 @@ class CarrierTaxeRepository extends AbstractRepository implements RepositoryInte
      */
     public function countFullSyncContentLeft($offset, $limit, $langIso)
     {
-        $this->generateFullQuery($langIso, false);
+        $this->generateFullQuery($langIso, true);
 
-        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
-
-        $result = $this->runQuery(true);
+        $result = $this->db->executeS('
+            SELECT (COUNT(*) - ' . (int) $offset . ') AS count
+                FROM (' . $this->query->build() . ') as subquery;
+        ');
 
         return $result[0]['count'];
     }
