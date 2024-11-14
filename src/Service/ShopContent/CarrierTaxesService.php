@@ -38,7 +38,8 @@ class CarrierTaxesService extends ShopContentAbstractService implements ShopCont
     /** @var CarrierTaxeRepository */
     private $carrierTaxeRepository;
 
-    public function __construct(CarrierTaxeRepository $carrierTaxeRepository) {
+    public function __construct(CarrierTaxeRepository $carrierTaxeRepository)
+    {
         $this->carrierTaxeRepository = $carrierTaxeRepository;
     }
 

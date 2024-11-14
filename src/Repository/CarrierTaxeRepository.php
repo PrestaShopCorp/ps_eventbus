@@ -44,8 +44,8 @@ class CarrierTaxeRepository extends AbstractRepository implements RepositoryInte
      */
     public function generateFullQuery($langIso, $withSelecParameters)
     {
-        $this->generateMinimalQuery(SELF::TABLE_NAME, 'ca');
-        
+        $this->generateMinimalQuery(self::TABLE_NAME, 'ca');
+
         $this->query
             ->innerJoin('carrier_tax_rules_group_shop', 'ctrgs', 'ca.id_carrier = ctrgs.id_carrier')
             ->innerJoin('tax_rule', 'tr', 'ctrgs.id_tax_rules_group = tr.id_tax_rules_group')
@@ -149,6 +149,6 @@ class CarrierTaxeRepository extends AbstractRepository implements RepositoryInte
                 FROM (' . $this->query->build() . ') as subquery;
         ');
 
-        return $result[0]['count'];
+        return is_array($result) ? $result[0]['count'] : [];
     }
 }
