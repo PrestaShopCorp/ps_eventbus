@@ -81,9 +81,9 @@ class CarrierTaxeRepository extends AbstractRepository implements RepositoryInte
                 ')
                 ->select('t.rate AS tax_rate')
             ;
-        }
 
-        $this->query->groupBy('ca.id_reference, co.id_zone, id_range, country_id');
+            $this->query->groupBy('ca.id_reference, co.id_zone, id_range, country_id');
+        }
     }
 
     /**
