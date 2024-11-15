@@ -28,8 +28,6 @@ namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Repository\CarrierDetailRepository;
-use PrestaShop\Module\PsEventbus\Repository\CountryRepository;
-use PrestaShop\Module\PsEventbus\Repository\StateRepository;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -40,20 +38,8 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
     /** @var CarrierDetailRepository */
     private $carrierDetailRepository;
 
-    /** @var CountryRepository */
-    private $countryRepository;
-
-    /** @var StateRepository */
-    private $stateRepository;
-
-    public function __construct(
-        CarrierDetailRepository $carrierDetailRepository,
-        CountryRepository $countryRepository,
-        StateRepository $stateRepository
-    ) {
+    public function __construct(CarrierDetailRepository $carrierDetailRepository) {
         $this->carrierDetailRepository = $carrierDetailRepository;
-        $this->countryRepository = $countryRepository;
-        $this->stateRepository = $stateRepository;
     }
 
     /**

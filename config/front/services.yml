@@ -71,8 +71,6 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\CarrierDetailRepository'
-      - '@PrestaShop\Module\PsEventbus\Repository\CountryRepository'
-      - '@PrestaShop\Module\PsEventbus\Repository\StateRepository'
 
   PrestaShop\Module\PsEventbus\Service\ShopContent\CarrierTaxesService:
     class: PrestaShop\Module\PsEventbus\Service\ShopContent\CarrierTaxesService

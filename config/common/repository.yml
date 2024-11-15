@@ -15,16 +15,6 @@ services:
     class: PrestaShop\Module\PsEventbus\Repository\ShopRepository
     public: true
 
-  PrestaShop\Module\PsEventbus\Repository\CountryRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\CountryRepository
-    public: true
-    arguments:
-      - '@=service("ps_eventbus").getContext()'
-
-  PrestaShop\Module\PsEventbus\Repository\StateRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\StateRepository
-    public: true
-
   PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository:
     class: PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository
     public: true
