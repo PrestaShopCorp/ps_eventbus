@@ -32,7 +32,7 @@ if (!defined('_PS_VERSION_')) {
 
 class CarrierDetailRepository extends AbstractRepository implements RepositoryInterface
 {
-    const TABLE_NAME = 'delivery';
+    const TABLE_NAME = 'carrier';
 
     /**
      * @param string $langIso
@@ -44,17 +44,61 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
      */
     public function generateFullQuery($langIso, $withSelecParameters)
     {
-        $this->generateMinimalQuery(self::TABLE_NAME, 'd');
+        $this->generateMinimalQuery(self::TABLE_NAME, 'ca');
+
+        $this->query
+            ->innerJoin('delivery', 'd', 'ca.id_carrier = d.id_carrier AND d.id_zone IS NOT NULL')
+            ->leftJoin('range_weight', 'rw', 'ca.id_carrier = rw.id_carrier AND d.id_range_weight = rw.id_range_weight')
+            ->leftJoin('range_price', 'rp', 'ca.id_carrier = rp.id_carrier AND d.id_range_price = rp.id_range_price')
+            ->leftJoin('country', 'co', 'd.id_zone = co.id_zone AND co.iso_code IS NOT NULL AND co.active = 1')
+            ->leftJoin('state', 's', 'co.id_zone = s.id_zone AND co.id_country = s.id_country AND s.active = 1')
+            ->leftJoin('configuration', 'conf', 'conf.name = "PS_SHIPPING_METHOD"')
+        ;
 
         if ($withSelecParameters) {
             $this->query
-                ->select('d.id_delivery')
-                ->select('d.id_carrier')
-                ->select('d.id_range_price')
-                ->select('d.id_range_weight')
+                ->select('ca.id_reference')
                 ->select('d.id_zone')
+                ->select('
+                    CASE 
+                        WHEN d.id_range_weight IS NOT NULL AND d.id_range_weight != 0 THEN d.id_range_weight
+                        WHEN d.id_range_price IS NOT NULL AND d.id_range_price != 0 THEN d.id_range_price
+                    END AS id_range
+                ')
+                ->select('
+                    CASE
+                        WHEN ca.is_free = 1 THEN "free_shipping"
+                        WHEN ca.shipping_method = 0 AND conf.value IS NULL THEN "range_price"
+                        WHEN ca.shipping_method = 0 AND conf.value IS NOT NULL THEN "range_weight"
+                        WHEN ca.shipping_method = 1 THEN "range_weight"
+                        WHEN ca.shipping_method = 2 THEN "range_price"
+                    END AS shipping_method
+                ')
+                ->select('
+                    CASE
+                        WHEN rw.delimiter1 IS NOT NULL THEN rw.delimiter1
+                        WHEN rp.delimiter1 IS NOT NULL THEN rp.delimiter1
+                    END AS delimiter1
+                ')
+                ->select('
+                    CASE
+                        WHEN rw.delimiter2 IS NOT NULL THEN rw.delimiter2
+                        WHEN rp.delimiter2 IS NOT NULL THEN rp.delimiter2
+                    END AS delimiter2
+                ')
+                ->select('co.iso_code AS country_ids')
+                ->select('
+                    GROUP_CONCAT(
+                        DISTINCT 
+                        s.iso_code
+                        ORDER BY s.iso_code ASC
+                        SEPARATOR \',\'
+                    ) AS state_ids
+                ')
                 ->select('d.price')
             ;
+
+            $this->query->groupBy('ca.id_reference, co.id_zone, id_range, country_ids');
         }
     }
 
@@ -96,7 +140,7 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('d.id_carrier IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('ca.id_carrier IN(' . implode(',', array_map('intval', $contentIds)) . ')')
             ->limit($limit);
 
         return $this->runQuery();
@@ -114,12 +158,13 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
      */
     public function countFullSyncContentLeft($offset, $limit, $langIso)
     {
-        $this->generateFullQuery($langIso, false);
+        $this->generateFullQuery($langIso, true);
 
-        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+        $result = $this->db->executeS('
+            SELECT (COUNT(*) - ' . (int) $offset . ') AS count
+                FROM (' . $this->query->build() . ') as subquery;
+        ');
 
-        $result = $this->runQuery(true);
-
-        return $result[0]['count'];
+        return is_array($result) ? $result[0]['count'] : [];
     }
 }

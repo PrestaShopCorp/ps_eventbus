@@ -71,13 +71,7 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
             return [];
         }
 
-        $carrierDetails = [];
-
-        foreach ($result as $delivery) {
-            $carrierDetails[] = $this->buildCarrierDetail($delivery);
-        }
-
-        $this->castCarrierDetails($carrierDetails);
+        $this->castCarrierDetails($result);
 
         return array_map(function ($item) {
             return [
@@ -85,7 +79,7 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
                 'collection' => Config::COLLECTION_CARRIER_DETAILS,
                 'properties' => $item,
             ];
-        }, $carrierDetails);
+        }, $result);
     }
 
     /**
@@ -101,13 +95,7 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
         $result = $this->carrierDetailRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
         if (!empty($result)) {
-            $carrierDetails = [];
-
-            foreach ($result as $delivery) {
-                $carrierDetails[] = $this->buildCarrierDetail($delivery);
-            }
-
-            $this->castCarrierDetails($carrierDetails);
+            $this->castCarrierDetails($result);
         }
 
         return parent::formatIncrementalSyncResponse(Config::COLLECTION_CARRIER_DETAILS, $result, $deletedContents);
@@ -126,41 +114,6 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
     }
 
     /**
-     * Build a CarrierDetail from delivery data
-     *
-     * @param array<mixed> $delivery
-     *
-     * @return array<mixed>
-     *
-     * @throws \PrestaShopDatabaseException
-     * @throws \PrestaShopException
-     */
-    private function buildCarrierDetail($delivery)
-    {
-        $carrier = new \Carrier($delivery['id_carrier']);
-        $range = CarriersService::generateRange($carrier, $delivery);
-
-        /** @var array<mixed> $countryIsoCodes */
-        $countryIsoCodes = $this->countryRepository->getCountryIsoCodesByZoneId($delivery['id_zone'], true);
-
-        /** @var array<mixed> $stateIsoCodes */
-        $stateIsoCodes = $this->stateRepository->getStateIsoCodesByZoneId($delivery['id_zone'], true);
-
-        return [
-            'id_reference' => $carrier->id_reference,
-            'id_zone' => $delivery['id_zone'],
-            'id_range' => $range ? $range->id : null,
-            'id_carrier_detail' => $range ? $range->id : null,
-            'shipping_method' => $carrier->getRangeTable(),
-            'delimiter1' => $range ? $range->delimiter1 : null,
-            'delimiter2' => $range ? $range->delimiter2 : null,
-            'country_ids' => implode(',', $countryIsoCodes),
-            'state_ids' => implode(',', $stateIsoCodes),
-            'price' => $delivery['price'],
-        ];
-    }
-
-    /**
      * @param array<mixed> $carrierDetails
      *
      * @return void
@@ -171,7 +124,7 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
             $carrierDetail['id_reference'] = (string) $carrierDetail['id_reference'];
             $carrierDetail['id_zone'] = (string) $carrierDetail['id_zone'];
             $carrierDetail['id_range'] = (string) $carrierDetail['id_range'];
-            $carrierDetail['id_carrier_detail'] = (string) $carrierDetail['id_carrier_detail'];
+            $carrierDetail['id_carrier_detail'] = (string) $carrierDetail['id_range']; // same value as id_range
             $carrierDetail['shipping_method'] = (string) $carrierDetail['shipping_method'];
             $carrierDetail['delimiter1'] = (float) $carrierDetail['delimiter1'];
             $carrierDetail['delimiter2'] = (float) $carrierDetail['delimiter2'];
