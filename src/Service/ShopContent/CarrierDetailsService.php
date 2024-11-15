@@ -38,7 +38,8 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
     /** @var CarrierDetailRepository */
     private $carrierDetailRepository;
 
-    public function __construct(CarrierDetailRepository $carrierDetailRepository) {
+    public function __construct(CarrierDetailRepository $carrierDetailRepository)
+    {
         $this->carrierDetailRepository = $carrierDetailRepository;
     }
 

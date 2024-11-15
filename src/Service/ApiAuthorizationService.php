@@ -30,7 +30,7 @@ use PrestaShop\Module\PsEventbus\Api\SyncApiClient;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
-use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
+use PrestaShop\Module\PsEventbus\Repository\SyncRepository;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -38,8 +38,8 @@ if (!defined('_PS_VERSION_')) {
 
 class ApiAuthorizationService
 {
-    /** @var EventbusSyncRepository */
-    private $eventbusSyncRepository;
+    /** @var SyncRepository */
+    private $syncRepository;
 
     /** @var SyncApiClient */
     private $syncApiClient;
@@ -51,12 +51,12 @@ class ApiAuthorizationService
     private $errorHandler;
 
     public function __construct(
-        EventbusSyncRepository $eventbusSyncRepository,
+        SyncRepository $syncRepository,
         SyncApiClient $syncApiClient,
         PsAccountsAdapterService $psAccountsAdapterService,
         ErrorHandler $errorHandler
     ) {
-        $this->eventbusSyncRepository = $eventbusSyncRepository;
+        $this->syncRepository = $syncRepository;
         $this->syncApiClient = $syncApiClient;
         $this->psAccountsAdapterService = $psAccountsAdapterService;
         $this->errorHandler = $errorHandler;
@@ -118,7 +118,7 @@ class ApiAuthorizationService
     private function authorizeCall($jobId)
     {
         // Check if the job already exists
-        $job = $this->eventbusSyncRepository->findJobById($jobId);
+        $job = $this->syncRepository->findJobById($jobId);
 
         if ($job) {
             return true;
@@ -132,6 +132,6 @@ class ApiAuthorizationService
         }
 
         // Cache the valid jobId
-        return $this->eventbusSyncRepository->insertJob($jobId, date(DATE_ATOM));
+        return $this->syncRepository->insertJob($jobId, date(DATE_ATOM));
     }
 }

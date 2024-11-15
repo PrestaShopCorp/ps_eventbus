@@ -1,6 +1,6 @@
 services:
-  PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository
+  PrestaShop\Module\PsEventbus\Repository\SyncRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\SyncRepository
     public: true
     arguments:
       - '@=service("ps_eventbus").getContext()'
@@ -10,10 +10,6 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler'
-
-  PrestaShop\Module\PsEventbus\Repository\ShopRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\ShopRepository
-    public: true
 
   PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository:
     class: PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository
@@ -113,6 +109,10 @@ services:
 
   PrestaShop\Module\PsEventbus\Repository\ProductSupplierRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ProductSupplierRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\ShopRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ShopRepository
     public: true
 
   PrestaShop\Module\PsEventbus\Repository\StockRepository:

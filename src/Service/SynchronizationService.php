@@ -29,9 +29,9 @@ namespace PrestaShop\Module\PsEventbus\Service;
 use PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
-use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
+use PrestaShop\Module\PsEventbus\Repository\SyncRepository;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\ShopContentServiceInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
@@ -48,9 +48,9 @@ class SynchronizationService
     private $liveSyncApiClient;
 
     /**
-     * @var EventbusSyncRepository
+     * @var SyncRepository
      */
-    private $eventbusSyncRepository;
+    private $syncRepository;
 
     /**
      * @var IncrementalSyncRepository
@@ -79,7 +79,7 @@ class SynchronizationService
 
     public function __construct(
         LiveSyncApiClient $liveSyncApiClient,
-        EventbusSyncRepository $eventbusSyncRepository,
+        SyncRepository $syncRepository,
         IncrementalSyncRepository $incrementalSyncRepository,
         LiveSyncRepository $liveSyncRepository,
         LanguagesService $languagesService,
@@ -87,7 +87,7 @@ class SynchronizationService
         ErrorHandler $errorHandler
     ) {
         $this->liveSyncApiClient = $liveSyncApiClient;
-        $this->eventbusSyncRepository = $eventbusSyncRepository;
+        $this->syncRepository = $syncRepository;
         $this->incrementalSyncRepository = $incrementalSyncRepository;
         $this->liveSyncRepository = $liveSyncRepository;
         $this->languagesService = $languagesService;
@@ -151,7 +151,7 @@ class SynchronizationService
             $offset = 0;
         }
 
-        $this->eventbusSyncRepository->upsertTypeSync($shopContent, $offset, $dateNow, $remainingObjects === 0, $langIso);
+        $this->syncRepository->upsertTypeSync($shopContent, $offset, $dateNow, $remainingObjects === 0, $langIso);
 
         return $this->returnSyncResponse($data, $response, $remainingObjects);
     }
@@ -281,7 +281,7 @@ class SynchronizationService
                     $hasDeleted = $this->incrementalSyncRepository->removeIncrementaSyncObjectByType($contentType);
 
                     if ($hasDeleted) {
-                        $this->eventbusSyncRepository->upsertTypeSync(
+                        $this->syncRepository->upsertTypeSync(
                             $contentType,
                             0,
                             $createdAt,
@@ -386,7 +386,7 @@ class SynchronizationService
      */
     private function isFullSyncDone($shopContent, $langIso)
     {
-        return $this->eventbusSyncRepository->isFullSyncDoneForThisTypeSync($shopContent, $langIso);
+        return $this->syncRepository->isFullSyncDoneForThisTypeSync($shopContent, $langIso);
     }
 
     /**
