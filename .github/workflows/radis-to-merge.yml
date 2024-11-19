@@ -26,12 +26,12 @@ jobs:
     name: Is ready 🥕
     runs-on: ubuntu-latest
     steps:
-      - uses: mheap/github-action-required-labels@v3
+      - uses: mheap/github-action-required-labels@v5
         with:
           mode: minimum
           count: 1
           labels: "🥕 Radis to review"
-      - uses: mheap/github-action-required-labels@v3
+      - uses: mheap/github-action-required-labels@v5
         with:
           mode: exactly
           count: 0
