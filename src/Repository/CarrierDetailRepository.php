@@ -86,7 +86,13 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
                         WHEN rp.delimiter2 IS NOT NULL THEN rp.delimiter2
                     END AS delimiter2
                 ')
-                ->select('co.iso_code AS country_ids')
+                ->select('
+                    GROUP_CONCAT(
+                        DISTINCT co.iso_code
+                        ORDER BY co.iso_code ASC
+                        SEPARATOR \',\'
+                    ) AS country_ids
+                ')
                 ->select('
                     GROUP_CONCAT(
                         DISTINCT 
@@ -98,7 +104,7 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
                 ->select('d.price')
             ;
 
-            $this->query->groupBy('ca.id_reference, co.id_zone, id_range, country_ids');
+            $this->query->groupBy('ca.id_reference, co.id_zone, id_range');
         }
     }
 
