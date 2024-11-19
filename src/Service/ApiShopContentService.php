@@ -31,8 +31,8 @@ use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
 use PrestaShop\Module\PsEventbus\Exception\QueryParamsException;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
-use PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
+use PrestaShop\Module\PsEventbus\Repository\SyncRepository;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
@@ -48,8 +48,8 @@ class ApiShopContentService
     /** @var ApiAuthorizationService */
     private $apiAuthorizationService;
 
-    /** @var EventbusSyncRepository */
-    private $eventbusSyncRepository;
+    /** @var SyncRepository */
+    private $syncRepository;
 
     /** @var SynchronizationService */
     private $synchronizationService;
@@ -65,7 +65,7 @@ class ApiShopContentService
         ErrorHandler $errorHandler,
         ApiAuthorizationService $apiAuthorizationService,
         SynchronizationService $synchronizationService,
-        EventbusSyncRepository $eventbusSyncRepository
+        SyncRepository $syncRepository
     ) {
         $this->startTime = time();
 
@@ -73,7 +73,7 @@ class ApiShopContentService
         $this->errorHandler = $errorHandler;
         $this->apiAuthorizationService = $apiAuthorizationService;
         $this->synchronizationService = $synchronizationService;
-        $this->eventbusSyncRepository = $eventbusSyncRepository;
+        $this->syncRepository = $syncRepository;
     }
 
     /**
@@ -107,7 +107,7 @@ class ApiShopContentService
             $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(Config::MYSQL_DATE_FORMAT);
             $langIso = $langIso ? $langIso : $languagesService->getDefaultLanguageIsoCode();
 
-            $typeSync = $this->eventbusSyncRepository->findTypeSync($shopContent, $langIso);
+            $typeSync = $this->syncRepository->findTypeSync($shopContent, $langIso);
 
             // If no typesync exist, or if fullsync is requested by user
             if (!is_array($typeSync) || $fullSyncRequested) {
@@ -121,7 +121,7 @@ class ApiShopContentService
                     $incrementalSyncRepository->removeIncrementaSyncObjectByType($shopContent);
                 }
 
-                $this->eventbusSyncRepository->upsertTypeSync(
+                $this->syncRepository->upsertTypeSync(
                     $shopContent,
                     $offset,
                     $dateNow,

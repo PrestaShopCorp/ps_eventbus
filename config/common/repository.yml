@@ -1,6 +1,6 @@
 services:
-  PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository
+  PrestaShop\Module\PsEventbus\Repository\SyncRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\SyncRepository
     public: true
     arguments:
       - '@=service("ps_eventbus").getContext()'
@@ -11,26 +11,6 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler'
 
-  PrestaShop\Module\PsEventbus\Repository\ShopRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\ShopRepository
-    public: true
-
-  PrestaShop\Module\PsEventbus\Repository\CountryRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\CountryRepository
-    public: true
-    arguments:
-      - '@=service("ps_eventbus").getContext()'
-
-  PrestaShop\Module\PsEventbus\Repository\StateRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\StateRepository
-    public: true
-
-  PrestaShop\Module\PsEventbus\Repository\TaxeRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\TaxeRepository
-    public: true
-    arguments:
-      - '@=service("ps_eventbus").getContext()'
-  
   PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository:
     class: PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository
     public: true
@@ -45,6 +25,14 @@ services:
 
   PrestaShop\Module\PsEventbus\Repository\CarrierRepository:
     class: PrestaShop\Module\PsEventbus\Repository\CarrierRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\CarrierDetailRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CarrierDetailRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\CarrierTaxeRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\CarrierTaxeRepository
     public: true
 
   PrestaShop\Module\PsEventbus\Repository\CartRepository:
@@ -121,6 +109,10 @@ services:
 
   PrestaShop\Module\PsEventbus\Repository\ProductSupplierRepository:
     class: PrestaShop\Module\PsEventbus\Repository\ProductSupplierRepository
+    public: true
+
+  PrestaShop\Module\PsEventbus\Repository\ShopRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\ShopRepository
     public: true
 
   PrestaShop\Module\PsEventbus\Repository\StockRepository:

@@ -8,7 +8,7 @@ services:
     class: PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService
     public: true
     arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\SyncRepository'
       - '@PrestaShop\Module\PsEventbus\Api\SyncApiClient'
       - '@PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService'
       - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler'
@@ -18,7 +18,7 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient'
-      - '@PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\SyncRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository'
       - '@PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService'
@@ -37,7 +37,7 @@ services:
       - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler'
       - '@PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService'
       - '@PrestaShop\Module\PsEventbus\Service\SynchronizationService'
-      - '@PrestaShop\Module\PsEventbus\Repository\EventbusSyncRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\SyncRepository'
       - '@PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler'
 
   PrestaShop\Module\PsEventbus\Service\ApiHealthCheckService:
@@ -70,13 +70,13 @@ services:
     class: PrestaShop\Module\PsEventbus\Service\ShopContent\CarrierDetailsService
     public: true
     arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\CarrierRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\CarrierDetailRepository'
 
   PrestaShop\Module\PsEventbus\Service\ShopContent\CarrierTaxesService:
     class: PrestaShop\Module\PsEventbus\Service\ShopContent\CarrierTaxesService
     public: true
     arguments:
-      - '@PrestaShop\Module\PsEventbus\Repository\CarrierRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\CarrierTaxeRepository'
   
   PrestaShop\Module\PsEventbus\Service\ShopContent\CartsService:
     class: PrestaShop\Module\PsEventbus\Service\ShopContent\CartsService
