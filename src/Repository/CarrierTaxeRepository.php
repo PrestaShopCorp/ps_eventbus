@@ -124,7 +124,7 @@ class CarrierTaxeRepository extends AbstractRepository implements RepositoryInte
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('d.id_carrier IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('ca.id_carrier IN(' . implode(',', array_map('intval', $contentIds)) . ')')
             ->limit($limit);
 
         return $this->runQuery();
