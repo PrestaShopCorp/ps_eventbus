@@ -59,7 +59,7 @@ class PsAccountsAdapterService
      */
     public function getModule()
     {
-        if ($this->moduleHelper->isInstalledAndActive('ps_accounts') == false) {
+        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts')) {
             return false;
         }
 
@@ -75,7 +75,7 @@ class PsAccountsAdapterService
      */
     public function getService()
     {
-        if ($this->moduleHelper->isInstalledAndActive('ps_accounts') == false) {
+        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts')) {
             return false;
         }
 
@@ -91,7 +91,7 @@ class PsAccountsAdapterService
      */
     public function getPresenter()
     {
-        if ($this->moduleHelper->isInstalledAndActive('ps_accounts') == false) {
+        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts')) {
             return false;
         }
 
@@ -107,7 +107,7 @@ class PsAccountsAdapterService
      */
     public function getShopUuid()
     {
-        if ($this->moduleHelper->isInstalledAndActive('ps_accounts') == false) {
+        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts')) {
             return '';
         }
 
@@ -123,7 +123,7 @@ class PsAccountsAdapterService
      */
     public function getOrRefreshToken()
     {
-        if ($this->moduleHelper->isInstalledAndActive('ps_accounts') == false) {
+        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts')) {
             return '';
         }
 

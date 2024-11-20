@@ -58,7 +58,7 @@ class StocksService extends ShopContentAbstractService implements ShopContentSer
             return [];
         }
 
-        $this->castStocks($result, $langIso);
+        $this->castStocks($result);
 
         return array_map(function ($item) {
             return [
@@ -82,7 +82,7 @@ class StocksService extends ShopContentAbstractService implements ShopContentSer
         $result = $this->stockRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
         if (!empty($result)) {
-            $this->castStocks($result, $langIso);
+            $this->castStocks($result);
         }
 
         return parent::formatIncrementalSyncResponse(Config::COLLECTION_STOCKS, $result, $deletedContents);
@@ -102,11 +102,10 @@ class StocksService extends ShopContentAbstractService implements ShopContentSer
 
     /**
      * @param array<mixed> $stocks
-     * @param string $langIso
      *
      * @return void
      */
-    private function castStocks(&$stocks, $langIso)
+    private function castStocks(&$stocks)
     {
         foreach ($stocks as &$stock) {
             $stock['id_stock_available'] = (int) $stock['id_stock_available'];

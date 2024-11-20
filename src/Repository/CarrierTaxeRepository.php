@@ -64,7 +64,7 @@ class CarrierTaxeRepository extends AbstractRepository implements RepositoryInte
                 ->select('ca.id_reference')
                 ->select('co.id_zone')
                 ->select('
-                    CASE 
+                    CASE
                         WHEN d.id_range_weight IS NOT NULL AND d.id_range_weight != 0 THEN d.id_range_weight
                         WHEN d.id_range_price IS NOT NULL AND d.id_range_price != 0 THEN d.id_range_price
                     END AS id_range
@@ -73,7 +73,7 @@ class CarrierTaxeRepository extends AbstractRepository implements RepositoryInte
                 ->select('co.iso_code as country_id')
                 ->select('
                     GROUP_CONCAT(
-                        DISTINCT 
+                        DISTINCT
                         s.iso_code
                         ORDER BY s.iso_code ASC
                         SEPARATOR \',\'

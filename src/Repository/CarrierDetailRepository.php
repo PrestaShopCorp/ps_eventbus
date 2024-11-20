@@ -60,7 +60,7 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
                 ->select('ca.id_reference')
                 ->select('d.id_zone')
                 ->select('
-                    CASE 
+                    CASE
                         WHEN d.id_range_weight IS NOT NULL AND d.id_range_weight != 0 THEN d.id_range_weight
                         WHEN d.id_range_price IS NOT NULL AND d.id_range_price != 0 THEN d.id_range_price
                     END AS id_range
@@ -95,7 +95,7 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
                 ')
                 ->select('
                     GROUP_CONCAT(
-                        DISTINCT 
+                        DISTINCT
                         s.iso_code
                         ORDER BY s.iso_code ASC
                         SEPARATOR \',\'

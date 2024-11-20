@@ -205,14 +205,6 @@ class SpecificPricesService extends ShopContentAbstractService implements ShopCo
      * @param bool $usetax
      * @param bool $usereduc
      * @param \Context|null $context
-     * @param int $decimals
-     * @param null $divisor
-     * @param bool $onlyReduc
-     * @param null $idCustomer
-     * @param null $idCart
-     * @param null $idAddress
-     * @param null $specificPriceOutput
-     * @param bool $useGroupReduction
      *
      * @return float|int|void
      *
@@ -224,15 +216,7 @@ class SpecificPricesService extends ShopContentAbstractService implements ShopCo
         $specificPriceId,
         $usetax = true,
         $usereduc = true,
-        $context = null,
-        $decimals = 6,
-        $divisor = null,
-        $onlyReduc = false,
-        $idCustomer = null,
-        $idCart = null,
-        $idAddress = null,
-        &$specificPriceOutput = null,
-        $useGroupReduction = true
+        $context = null
     ) {
         if (!$context) {
             /** @var \Context $context */
@@ -253,6 +237,8 @@ class SpecificPricesService extends ShopContentAbstractService implements ShopCo
         $idCurrency = \Validate::isLoadedObject($currency) ? (int) $currency->id : (int) \Configuration::get('PS_CURRENCY_DEFAULT');
 
         $currentCart = $context->cart;
+        $idAddress = null;
+
         if ($currentCart != null && \Validate::isLoadedObject($currentCart)) {
             $idAddress = $currentCart->{\Configuration::get('PS_TAX_ADDRESS_TYPE')};
         }
@@ -268,7 +254,7 @@ class SpecificPricesService extends ShopContentAbstractService implements ShopCo
         }
 
         if (
-            $usetax != false
+            $usetax
             && !empty($address->vat_number)
             && $address->id_country != \Configuration::get('VATNUMBER_COUNTRY')
             && \Configuration::get('VATNUMBER_MANAGEMENT')
@@ -293,11 +279,11 @@ class SpecificPricesService extends ShopContentAbstractService implements ShopCo
             $idCurrency,
             $idGroup,
             $usetax,
-            $decimals,
-            $onlyReduc,
+            6,
+            false,
             $usereduc,
             $specificPriceOutput,
-            $useGroupReduction
+            true
         );
     }
 
@@ -419,17 +405,14 @@ class SpecificPricesService extends ShopContentAbstractService implements ShopCo
         if (is_array($result) && (!$specificPrice || !$specificPrice['id_product_attribute'] || $specificPrice['price'] < 0)) {
             $attributePrice = \Tools::convertPrice($result['attribute_price'] !== null ? (float) $result['attribute_price'] : 0, $idCurrency);
             // If you want the default combination, please use NULL value instead
-            if ($idProductAttribute !== false) {
+            if ($idProductAttribute) {
                 $price += $attributePrice;
             }
         }
 
-        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.0.0', '>=')) {
-            // Customization price
-            if ((int) $idCustomization) {
-                /* @phpstan-ignore-next-line */
-                $price += \Tools::convertPrice(\Customization::getCustomizationPrice($idCustomization), $idCurrency);
-            }
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.0.0', '>=') && (int) $idCustomization) {
+            /* @phpstan-ignore-next-line */
+            $price += \Tools::convertPrice(\Customization::getCustomizationPrice($idCustomization), $idCurrency);
         }
 
         // Tax
@@ -504,7 +487,7 @@ class SpecificPricesService extends ShopContentAbstractService implements ShopCo
         // Group reduction
         if ($useGroupReduction) {
             $reductionFromCategory = \GroupReduction::getValueForProduct($idProduct, $idGroup);
-            if ($reductionFromCategory !== false) {
+            if ($reductionFromCategory) {
                 $groupReduction = $price * (float) $reductionFromCategory;
             } else { // apply group reduction if there is no group reduction for this category
                 $groupReduction = (($reduc = \Group::getReductionByIdGroup($idGroup)) != 0) ? ($price * $reduc / 100) : 0;
