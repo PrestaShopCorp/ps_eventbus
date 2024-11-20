@@ -49,7 +49,9 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
 
         // WTF IS THAT ?
         if (!parent::getContext()->employee instanceof \Employee) {
-            if (($employees = \Employee::getEmployees()) !== false) {
+            $employees = \Employee::getEmployees();
+
+            if ($employees) {
                 parent::getContext()->employee = new \Employee($employees[0]['id_employee']);
             }
         }

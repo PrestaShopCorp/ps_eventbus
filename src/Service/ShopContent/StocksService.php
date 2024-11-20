@@ -106,7 +106,7 @@ class StocksService extends ShopContentAbstractService implements ShopContentSer
      *
      * @return void
      */
-    private function castStocks(&$stocks, $langIso)
+    private function castStocks(&$stocks)
     {
         foreach ($stocks as &$stock) {
             $stock['id_stock_available'] = (int) $stock['id_stock_available'];

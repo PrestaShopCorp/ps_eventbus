@@ -60,8 +60,6 @@ class CommonService
      */
     public static function exitWithExceptionMessage(\Exception $exception)
     {
-        $code = $exception->getCode() == 0 ? 500 : $exception->getCode();
-
         switch ($exception) {
             case $exception instanceof \PrestaShopDatabaseException:
                 $code = Config::DATABASE_QUERY_ERROR_CODE;

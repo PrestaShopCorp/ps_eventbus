@@ -76,8 +76,8 @@ function upgrade_module_4_0_0()
         }
     }
 
-    $updateIncrementalTable .= ' 
-        ON DUPLICATE KEY UPDATE 
+    $updateIncrementalTable .= '
+        ON DUPLICATE KEY UPDATE
         type = VALUES(type),
         id_object = VALUES(id_object),
         id_shop = VALUES(id_shop),
@@ -94,7 +94,6 @@ function upgrade_module_4_0_0()
 
     // Drop eventbus_deleted_objects table
     $dropDeletedTable = 'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'eventbus_deleted_objects`';
-    $dropDeletedTableResult = (bool) $db->query($dropDeletedTable);
 
-    return $dropDeletedTableResult;
+    return (bool) $db->query($dropDeletedTable);
 }

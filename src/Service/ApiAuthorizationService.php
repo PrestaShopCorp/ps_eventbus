@@ -102,6 +102,8 @@ class ApiAuthorizationService
                 case $exception instanceof FirebaseException:
                     $this->errorHandler->handle($exception);
                     break;
+                default:
+                    break;
             }
 
             return false;

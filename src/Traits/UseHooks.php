@@ -143,7 +143,7 @@ trait UseHooks
     public function hookActionObjectImageDeleteAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Image $image */
         $image = $parameters['object'];
@@ -168,7 +168,7 @@ trait UseHooks
     public function hookActionObjectImageAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Image $image */
         $image = $parameters['object'];
@@ -193,7 +193,7 @@ trait UseHooks
     public function hookActionObjectImageUpdateAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Image $image */
         $image = $parameters['object'];
@@ -218,7 +218,7 @@ trait UseHooks
     public function hookActionObjectLanguageDeleteAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Language $language */
         $language = $parameters['object'];
@@ -243,7 +243,7 @@ trait UseHooks
     public function hookActionObjectLanguageAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Language $language */
         $language = $parameters['object'];
@@ -268,7 +268,7 @@ trait UseHooks
     public function hookActionObjectLanguageUpdateAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Language $language */
         $language = $parameters['object'];
@@ -293,7 +293,7 @@ trait UseHooks
     public function hookActionObjectManufacturerDeleteAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Manufacturer $manufacturer */
         $manufacturer = $parameters['object'];
@@ -318,7 +318,7 @@ trait UseHooks
     public function hookActionObjectManufacturerAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Manufacturer $manufacturer */
         $manufacturer = $parameters['object'];
@@ -343,7 +343,7 @@ trait UseHooks
     public function hookActionObjectManufacturerUpdateAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Manufacturer $manufacturer */
         $manufacturer = $parameters['object'];
@@ -368,7 +368,7 @@ trait UseHooks
     public function hookActionObjectSupplierDeleteAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Supplier $supplier */
         $supplier = $parameters['object'];
@@ -393,7 +393,7 @@ trait UseHooks
     public function hookActionObjectSupplierAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Supplier $supplier */
         $supplier = $parameters['object'];
@@ -418,7 +418,7 @@ trait UseHooks
     public function hookActionObjectSupplierUpdateAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Supplier $supplier */
         $supplier = $parameters['object'];
@@ -443,7 +443,7 @@ trait UseHooks
     public function hookActionObjectProductDeleteAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Product $product */
         $product = $parameters['object'];
@@ -475,7 +475,7 @@ trait UseHooks
         }
 
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var CustomProductCarrierRepository $customProductCarrierRepository */
         $customProductCarrierRepository = $this->getService('PrestaShop\Module\PsEventbus\Repository\CustomProductCarrierRepository');
@@ -523,7 +523,7 @@ trait UseHooks
         }
 
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var CustomProductCarrierRepository $customProductCarrierRepository */
         $customProductCarrierRepository = $this->getService('PrestaShop\Module\PsEventbus\Repository\CustomProductCarrierRepository');
@@ -564,7 +564,7 @@ trait UseHooks
     public function hookActionObjectWishlistDeleteAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $wishlist = $parameters['object'];
 
@@ -588,7 +588,7 @@ trait UseHooks
     public function hookActionObjectWishlistAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $wishlist = $parameters['object'];
 
@@ -612,7 +612,7 @@ trait UseHooks
     public function hookActionObjectWishlistUpdateAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $wishlist = $parameters['object'];
 
@@ -636,7 +636,7 @@ trait UseHooks
     public function hookActionObjectStockAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Stock $stock */
         $stock = $parameters['object'];
@@ -661,7 +661,7 @@ trait UseHooks
     public function hookActionObjectStockUpdateAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Stock $stock */
         $stock = $parameters['object'];
@@ -686,7 +686,7 @@ trait UseHooks
     public function hookActionObjectStoreDeleteAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Store $store */
         $store = $parameters['object'];
@@ -711,7 +711,7 @@ trait UseHooks
     public function hookActionObjectStoreAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Store $store */
         $store = $parameters['object'];
@@ -736,7 +736,7 @@ trait UseHooks
     public function hookActionObjectStoreUpdateAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Store $store */
         $store = $parameters['object'];
@@ -761,7 +761,7 @@ trait UseHooks
     public function hookActionObjectCombinationDeleteAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Combination $combination */
         $combination = $parameters['object'];
@@ -786,7 +786,7 @@ trait UseHooks
     public function hookActionObjectCategoryAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Category $category * */
         $category = $parameters['object'];
@@ -811,7 +811,7 @@ trait UseHooks
     public function hookActionObjectCategoryUpdateAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Category $category * */
         $category = $parameters['object'];
@@ -836,7 +836,7 @@ trait UseHooks
     public function hookActionObjectCategoryDeleteAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Category $category * */
         $category = $parameters['object'];
@@ -861,7 +861,7 @@ trait UseHooks
     public function hookActionObjectCustomerAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Customer $customer * */
         $customer = $parameters['object'];
@@ -886,7 +886,7 @@ trait UseHooks
     public function hookActionObjectCustomerUpdateAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Customer $customer * */
         $customer = $parameters['object'];
@@ -911,7 +911,7 @@ trait UseHooks
     public function hookActionObjectCustomerDeleteAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Customer $customer * */
         $customer = $parameters['object'];
@@ -936,7 +936,7 @@ trait UseHooks
     public function hookActionObjectCurrencyAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Currency $currency * */
         $currency = $parameters['object'];
@@ -961,7 +961,7 @@ trait UseHooks
     public function hookActionObjectCurrencyUpdateAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Currency $currency * */
         $currency = $parameters['object'];
@@ -986,7 +986,7 @@ trait UseHooks
     public function hookActionObjectCurrencyDeleteAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Currency $currency * */
         $currency = $parameters['object'];
@@ -1011,7 +1011,7 @@ trait UseHooks
     public function hookActionObjectCartAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $cart = $parameters['object'];
 
@@ -1035,7 +1035,7 @@ trait UseHooks
     public function hookActionObjectCartUpdateAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $cart = $parameters['object'];
 
@@ -1059,7 +1059,7 @@ trait UseHooks
     public function hookActionObjectCartRuleAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $cartRule = $parameters['object'];
 
@@ -1083,7 +1083,7 @@ trait UseHooks
     public function hookActionObjectCartRuleDeleteAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $cartRule = $parameters['object'];
 
@@ -1107,7 +1107,7 @@ trait UseHooks
     public function hookActionObjectCartRuleUpdateAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $cartRule = $parameters['object'];
 
@@ -1131,7 +1131,7 @@ trait UseHooks
     public function hookActionObjectOrderAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $order = $parameters['object'];
 
@@ -1155,7 +1155,7 @@ trait UseHooks
     public function hookActionObjectOrderUpdateAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $order = $parameters['object'];
 
@@ -1179,7 +1179,7 @@ trait UseHooks
     public function hookActionObjectCarrierAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Carrier $carrier */
         $carrier = $parameters['object'];
@@ -1216,7 +1216,7 @@ trait UseHooks
     public function hookActionObjectCarrierUpdateAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \Carrier $carrier */
         $carrier = $parameters['object'];
@@ -1253,7 +1253,7 @@ trait UseHooks
     public function hookActionObjectCarrierDeleteAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
         /** @var \Carrier $carrier */
         $carrier = $parameters['object'];
 
@@ -1287,7 +1287,7 @@ trait UseHooks
     public function hookActionObjectCountryAddAfter()
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
@@ -1304,7 +1304,7 @@ trait UseHooks
     public function hookActionObjectCountryUpdateAfter()
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
@@ -1321,7 +1321,7 @@ trait UseHooks
     public function hookActionObjectCountryDeleteAfter()
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
@@ -1338,7 +1338,7 @@ trait UseHooks
     public function hookActionObjectStateAddAfter()
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
@@ -1355,7 +1355,7 @@ trait UseHooks
     public function hookActionObjectStateUpdateAfter()
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
@@ -1372,7 +1372,7 @@ trait UseHooks
     public function hookActionObjectStateDeleteAfter()
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
@@ -1389,7 +1389,7 @@ trait UseHooks
     public function hookActionObjectZoneAddAfter()
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
@@ -1406,7 +1406,7 @@ trait UseHooks
     public function hookActionObjectZoneUpdateAfter()
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
@@ -1423,7 +1423,7 @@ trait UseHooks
     public function hookActionObjectZoneDeleteAfter()
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
@@ -1440,7 +1440,7 @@ trait UseHooks
     public function hookActionObjectTaxAddAfter()
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
@@ -1457,7 +1457,7 @@ trait UseHooks
     public function hookActionObjectTaxUpdateAfter()
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
@@ -1474,7 +1474,7 @@ trait UseHooks
     public function hookActionObjectTaxDeleteAfter()
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
@@ -1491,7 +1491,7 @@ trait UseHooks
     public function hookActionObjectTaxRulesGroupAddAfter()
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
@@ -1508,7 +1508,7 @@ trait UseHooks
     public function hookActionObjectTaxRulesGroupUpdateAfter()
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
@@ -1525,7 +1525,7 @@ trait UseHooks
     public function hookActionObjectTaxRulesGroupDeleteAfter()
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
@@ -1542,7 +1542,7 @@ trait UseHooks
     public function hookActionShippingPreferencesPageSave()
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_CARRIERS => 0],
@@ -1559,7 +1559,7 @@ trait UseHooks
     public function hookActionObjectEmployeeAddAfter()
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_EMPLOYEES => 0],
@@ -1576,7 +1576,7 @@ trait UseHooks
     public function hookActionObjectEmployeeDeleteAfter()
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_EMPLOYEES => 0],
             Config::INCREMENTAL_TYPE_DELETE,
@@ -1592,7 +1592,7 @@ trait UseHooks
     public function hookActionObjectEmployeeUpdateAfter()
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_EMPLOYEES => 0],
@@ -1619,7 +1619,7 @@ trait UseHooks
     public function hookActionDispatcherBefore($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         try {
             /*
@@ -1657,22 +1657,20 @@ trait UseHooks
     public function hookActionObjectSpecificPriceAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \SpecificPrice $specificPrice */
         $specificPrice = $parameters['object'];
 
-        if ($specificPrice instanceof \SpecificPrice) {
-            if (isset($specificPrice->id)) {
-                $synchronizationService->sendLiveSync(Config::COLLECTION_SPECIFIC_PRICES, 'upsert');
-                $synchronizationService->insertContentIntoIncremental(
-                    [Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id],
-                    Config::INCREMENTAL_TYPE_UPSERT,
-                    date(DATE_ATOM),
-                    $this->shopId,
-                    false
-                );
-            }
+        if ($specificPrice instanceof \SpecificPrice && isset($specificPrice->id)) {
+            $synchronizationService->sendLiveSync(Config::COLLECTION_SPECIFIC_PRICES, 'upsert');
+            $synchronizationService->insertContentIntoIncremental(
+                [Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id],
+                Config::INCREMENTAL_TYPE_UPSERT,
+                date(DATE_ATOM),
+                $this->shopId,
+                false
+            );
         }
     }
 
@@ -1684,22 +1682,20 @@ trait UseHooks
     public function hookActionObjectSpecificPriceUpdateAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \SpecificPrice $specificPrice */
         $specificPrice = $parameters['object'];
 
-        if ($specificPrice instanceof \SpecificPrice) {
-            if (isset($specificPrice->id)) {
-                $synchronizationService->sendLiveSync(Config::COLLECTION_SPECIFIC_PRICES, 'upsert');
-                $synchronizationService->insertContentIntoIncremental(
-                    [Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id],
-                    Config::INCREMENTAL_TYPE_UPSERT,
-                    date(DATE_ATOM),
-                    $this->shopId,
-                    false
-                );
-            }
+        if ($specificPrice instanceof \SpecificPrice && isset($specificPrice->id)) {
+            $synchronizationService->sendLiveSync(Config::COLLECTION_SPECIFIC_PRICES, 'upsert');
+            $synchronizationService->insertContentIntoIncremental(
+                [Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id],
+                Config::INCREMENTAL_TYPE_UPSERT,
+                date(DATE_ATOM),
+                $this->shopId,
+                false
+            );
         }
     }
 
@@ -1711,22 +1707,20 @@ trait UseHooks
     public function hookActionObjectSpecificPriceDeleteAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var \SpecificPrice $specificPrice */
         $specificPrice = $parameters['object'];
 
-        if ($specificPrice instanceof \SpecificPrice) {
-            if (isset($specificPrice->id)) {
-                $synchronizationService->sendLiveSync(Config::COLLECTION_SPECIFIC_PRICES, 'delete');
-                $synchronizationService->insertContentIntoIncremental(
-                    [Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id],
-                    Config::INCREMENTAL_TYPE_DELETE,
-                    date(DATE_ATOM),
-                    $this->shopId,
-                    false
-                );
-            }
+        if ($specificPrice instanceof \SpecificPrice && isset($specificPrice->id)) {
+            $synchronizationService->sendLiveSync(Config::COLLECTION_SPECIFIC_PRICES, 'delete');
+            $synchronizationService->insertContentIntoIncremental(
+                [Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id],
+                Config::INCREMENTAL_TYPE_DELETE,
+                date(DATE_ATOM),
+                $this->shopId,
+                false
+            );
         }
     }
 }

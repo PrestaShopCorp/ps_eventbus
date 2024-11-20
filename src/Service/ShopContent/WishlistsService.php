@@ -102,11 +102,10 @@ class WishlistsService extends ShopContentAbstractService implements ShopContent
 
     /**
      * @param array<mixed> $wishlists
-     * @param string $langIso
      *
      * @return void
      */
-    private function castWishlists(&$wishlists, $langIso)
+    private function castWishlists(&$wishlists)
     {
         foreach ($wishlists as &$wishlist) {
             $wishlist['id_wishlist'] = (int) $wishlist['id_wishlist'];

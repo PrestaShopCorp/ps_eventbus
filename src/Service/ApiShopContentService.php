@@ -27,14 +27,11 @@
 namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
-use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
 use PrestaShop\Module\PsEventbus\Exception\QueryParamsException;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\SyncRepository;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService;
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -170,14 +167,6 @@ class ApiShopContentService
                     $response
                 )
             );
-        } catch (\PrestaShopDatabaseException $exception) {
-            $this->errorHandler->handle($exception);
-        } catch (EnvVarException $exception) {
-            $this->errorHandler->handle($exception);
-        } catch (FirebaseException $exception) {
-            $this->errorHandler->handle($exception);
-        } catch (ServiceNotFoundException $exception) {
-            $this->errorHandler->handle($exception);
         } catch (\Exception $exception) {
             $this->errorHandler->handle($exception);
         }
