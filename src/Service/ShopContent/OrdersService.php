@@ -123,6 +123,7 @@ class OrdersService extends ShopContentAbstractService implements ShopContentSer
     {
         foreach ($orders as &$order) {
             $order['id_order'] = (int) $order['id_order'];
+            $order['id_cart'] = (string) $order['id_cart'];
             $order['id_customer'] = (int) $order['id_customer'];
             $order['current_state'] = (int) $order['current_state'];
             $order['conversion_rate'] = (float) $order['conversion_rate'];
@@ -160,6 +161,9 @@ class OrdersService extends ShopContentAbstractService implements ShopContentSer
             $order['invoice_number'] = (int) $order['invoice_number'];
             $order['delivery_number'] = (int) $order['delivery_number'];
             $order['valid'] = (bool) $order['valid'];
+
+            $order['is_shipped'] = (string) $order['is_shipped'];
+            $order['is_validated'] = (string) $order['is_validated'];
 
             $this->castAddressIsoCodes($order);
 
