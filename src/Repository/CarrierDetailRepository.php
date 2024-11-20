@@ -101,7 +101,15 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
                         SEPARATOR \',\'
                     ) AS state_ids
                 ')
-                ->select('d.price')
+                ->select('
+                    (
+                        SELECT d2.price
+                        FROM ps_delivery d2
+                        WHERE d2.id_carrier = d.id_carrier
+                        ORDER BY d2.id_delivery DESC
+                        LIMIT 1
+                    ) AS price
+                ')
             ;
 
             $this->query->groupBy('ca.id_reference, co.id_zone, id_range');
