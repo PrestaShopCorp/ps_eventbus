@@ -102,7 +102,7 @@ class ErrorHandler
             $verboseEnabled = PS_EVENTBUS_VERBOSE_ENABLED;
         }
 
-        if ($logsEnabled == true) {
+        if ($logsEnabled) {
             \PrestaShopLogger::addLog(
                 $exception->getMessage() . ' : ' . $exception->getFile() . ':' . $exception->getLine() . ' | ' . $exception->getTraceAsString(),
                 3,
@@ -114,7 +114,7 @@ class ErrorHandler
         }
 
         // if debug mode enabled and verbose set to true, print error in front office
-        if (_PS_MODE_DEV_ == true && $verboseEnabled == true) {
+        if (_PS_MODE_DEV_ && $verboseEnabled) {
             throw $exception;
         } else {
             $this->client->captureException($exception);

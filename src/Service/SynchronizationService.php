@@ -346,7 +346,7 @@ class SynchronizationService
             }
         }
 
-        if (empty($contentToInsert) == false) {
+        if (!empty($contentToInsert)) {
             $this->incrementalSyncRepository->insertIncrementalObject($contentToInsert);
         }
     }

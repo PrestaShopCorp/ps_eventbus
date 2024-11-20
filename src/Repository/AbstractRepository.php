@@ -143,7 +143,7 @@ abstract class AbstractRepository
             $explainSql = PS_EVENTBUS_EXPLAIN_SQL_ENABLED;
         }
 
-        if ($explainSql && $disableCurrentExplain == false) {
+        if ($explainSql && !$disableCurrentExplain) {
             $this->debugQuery();
         }
 

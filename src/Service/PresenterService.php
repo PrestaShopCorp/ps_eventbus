@@ -93,7 +93,7 @@ class PresenterService
      */
     private function convertObjectToArray($object)
     {
-        if ($object == false) {
+        if (!$object) {
             return [];
         }
         $array = [];
