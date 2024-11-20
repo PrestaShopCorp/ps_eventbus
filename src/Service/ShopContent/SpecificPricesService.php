@@ -205,14 +205,6 @@ class SpecificPricesService extends ShopContentAbstractService implements ShopCo
      * @param bool $usetax
      * @param bool $usereduc
      * @param \Context|null $context
-     * @param int $decimals
-     * @param null $divisor
-     * @param bool $onlyReduc
-     * @param null $idCustomer
-     * @param null $idCart
-     * @param null $idAddress
-     * @param null $specificPriceOutput
-     * @param bool $useGroupReduction
      *
      * @return float|int|void
      *
@@ -245,6 +237,8 @@ class SpecificPricesService extends ShopContentAbstractService implements ShopCo
         $idCurrency = \Validate::isLoadedObject($currency) ? (int) $currency->id : (int) \Configuration::get('PS_CURRENCY_DEFAULT');
 
         $currentCart = $context->cart;
+        $idAddress = null;
+
         if ($currentCart != null && \Validate::isLoadedObject($currentCart)) {
             $idAddress = $currentCart->{\Configuration::get('PS_TAX_ADDRESS_TYPE')};
         }

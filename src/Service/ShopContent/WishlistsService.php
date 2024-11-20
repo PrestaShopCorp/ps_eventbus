@@ -58,7 +58,7 @@ class WishlistsService extends ShopContentAbstractService implements ShopContent
             return [];
         }
 
-        $this->castWishlists($result, $langIso);
+        $this->castWishlists($result);
 
         return array_map(function ($item) {
             return [
@@ -82,7 +82,7 @@ class WishlistsService extends ShopContentAbstractService implements ShopContent
         $result = $this->wishlistRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
         if (!empty($result)) {
-            $this->castWishlists($result, $langIso);
+            $this->castWishlists($result);
         }
 
         return parent::formatIncrementalSyncResponse(Config::COLLECTION_WISHLISTS, $result, $deletedContents);
