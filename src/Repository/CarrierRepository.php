@@ -59,8 +59,26 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
         ;
 
         if ($withSelecParameters) {
-            $this->query->select('c.*')
-                ->select('cl.delay AS delay');
+            $this->query
+                ->select('c.id_carrier')
+                ->select('c.id_reference')
+                ->select('c.name')
+                ->select('c.url')
+                ->select('c.active')
+                ->select('c.deleted')
+                ->select('c.range_behavior AS disable_carrier_when_out_of_range')
+                ->select('c.is_module')
+                ->select('c.is_free')
+                ->select('c.shipping_external')
+                ->select('c.need_range')
+                ->select('c.external_module_name')
+                ->select('c.max_width')
+                ->select('c.max_height')
+                ->select('c.max_depth')
+                ->select('c.max_weight')
+                ->select('c.grade')
+                ->select('cl.delay AS delay')
+            ;
         }
     }
 

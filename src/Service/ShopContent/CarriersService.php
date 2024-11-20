@@ -163,7 +163,7 @@ class CarriersService extends ShopContentAbstractService implements ShopContentS
             $carrier['shipping_handling'] = (float) $shippingHandling;
             $carrier['free_shipping_starts_at_price'] = (float) $freeShippingStartsAtPrice;
             $carrier['free_shipping_starts_at_weight'] = (float) $freeShippingStartsAtWeight;
-            $carrier['disable_carrier_when_out_of_range'] = (bool) $carrier['range_behavior'];
+            $carrier['disable_carrier_when_out_of_range'] = (bool) $carrier['disable_carrier_when_out_of_range'];
             $carrier['is_module'] = (bool) $carrier['is_module'];
             $carrier['is_free'] = (bool) $carrier['is_free'];
             $carrier['shipping_external'] = (bool) $carrier['shipping_external'];
