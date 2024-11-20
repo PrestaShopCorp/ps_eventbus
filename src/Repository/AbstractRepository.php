@@ -135,8 +135,6 @@ abstract class AbstractRepository
      */
     protected function runQuery($disableCurrentExplain = null)
     {
-        $result = [];
-
         $explainSql = false;
 
         if (defined('PS_EVENTBUS_EXPLAIN_SQL_ENABLED')) {
