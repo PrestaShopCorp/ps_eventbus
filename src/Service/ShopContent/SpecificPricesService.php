@@ -301,7 +301,7 @@ class SpecificPricesService extends ShopContentAbstractService implements ShopCo
      * @param int $decimals
      * @param bool $onlyReduc
      * @param bool $useReduc
-     * @param null $specificPrice
+     * @param array<mixed> $specificPrice
      * @param bool $useGroupReduction
      * @param int $idCustomization
      *
@@ -348,7 +348,7 @@ class SpecificPricesService extends ShopContentAbstractService implements ShopCo
             }
         }
 
-        if ($idShop !== null && $context->shop->id != (int) $idShop) {
+        if ($idShop && $context->shop->id != (int) $idShop) {
             $context->shop = new \Shop((int) $idShop);
         }
 
@@ -356,8 +356,6 @@ class SpecificPricesService extends ShopContentAbstractService implements ShopCo
             $idProductAttribute = \Product::getDefaultAttribute($idProduct);
         }
 
-        // reference parameter is filled before any returns
-        /** @var array<mixed> $specificPrice */
         $specificPrice = $this->getSpecificPrice($specificPriceId);
 
         // fetch price & attribute price
@@ -365,7 +363,7 @@ class SpecificPricesService extends ShopContentAbstractService implements ShopCo
         if (!isset($pricesLevel2[$cacheId2])) {
             $result = $this->productRepository->getProductPriceAndDeclinations($idProduct);
 
-            if (is_array($result) && count($result)) {
+            if ($result) {
                 foreach ($result as $row) {
                     $array_tmp = [
                         'price' => $row['price'],

@@ -1659,7 +1659,6 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
-        /** @var \SpecificPrice $specificPrice */
         $specificPrice = $parameters['object'];
 
         if ($specificPrice instanceof \SpecificPrice && isset($specificPrice->id)) {
@@ -1687,7 +1686,7 @@ trait UseHooks
         /** @var \SpecificPrice $specificPrice */
         $specificPrice = $parameters['object'];
 
-        if ($specificPrice instanceof \SpecificPrice && isset($specificPrice->id)) {
+        if ($specificPrice->id) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_SPECIFIC_PRICES, 'upsert');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id],
@@ -1712,7 +1711,7 @@ trait UseHooks
         /** @var \SpecificPrice $specificPrice */
         $specificPrice = $parameters['object'];
 
-        if ($specificPrice instanceof \SpecificPrice && isset($specificPrice->id)) {
+        if ($specificPrice->id) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_SPECIFIC_PRICES, 'delete');
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id],
