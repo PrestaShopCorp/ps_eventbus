@@ -27,7 +27,7 @@
       "delimiter2": 50,
       "country_ids": "",
       "state_ids": "",
-      "price": 4,
+      "price": 0,
       "id_carrier_detail": "2"
     }
   },
@@ -43,7 +43,7 @@
       "delimiter2": 100,
       "country_ids": "",
       "state_ids": "",
-      "price": 2,
+      "price": 0,
       "id_carrier_detail": "3"
     }
   },
@@ -75,7 +75,7 @@
       "delimiter2": 1,
       "country_ids": "",
       "state_ids": "",
-      "price": 0,
+      "price": 6,
       "id_carrier_detail": "2"
     }
   },
@@ -84,14 +84,14 @@
     "collection": "carrier_details",
     "properties": {
       "id_reference": "4",
-      "id_zone": "2",
+      "id_zone": "1",
       "id_range": "3",
       "shipping_method": "range_weight",
       "delimiter1": 1,
       "delimiter2": 3,
       "country_ids": "",
       "state_ids": "",
-      "price": 3,
+      "price": 6,
       "id_carrier_detail": "3"
     }
   },
