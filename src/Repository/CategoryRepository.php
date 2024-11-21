@@ -64,12 +64,16 @@ class CategoryRepository extends AbstractRepository implements RepositoryInterfa
                 ->select('cl.description')
                 ->select('cl.link_rewrite')
                 ->select('cl.meta_title')
-                ->select('cl.meta_keywords')
                 ->select('cl.meta_description')
                 ->select('l.iso_code')
                 ->select('c.date_add as created_at')
                 ->select('c.date_upd as updated_at')
             ;
+
+            // REMOVED HERE: https://github.com/PrestaShop/PrestaShop/commit/f37a8f61017654bae160b528a1a2eaf49edbdac0
+            if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '9.0', '<')) {
+                $this->query->select('cl.meta_keywords');
+            }
         }
     }
 

@@ -61,10 +61,14 @@ class ManufacturerRepository extends AbstractRepository implements RepositoryInt
                 ->select('mal.description')
                 ->select('mal.short_description')
                 ->select('mal.meta_title')
-                ->select('mal.meta_keywords')
                 ->select('mal.meta_description')
                 ->select('mas.id_shop')
             ;
+
+            // REMOVED HERE: https://github.com/PrestaShop/PrestaShop/commit/f37a8f61017654bae160b528a1a2eaf49edbdac0
+            if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '9.0', '<')) {
+                $this->query->select('mal.meta_keywords');
+            }
         }
     }
 

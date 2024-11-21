@@ -63,10 +63,14 @@ class SupplierRepository extends AbstractRepository implements RepositoryInterfa
                 ->select('sul.id_lang')
                 ->select('sul.description')
                 ->select('sul.meta_title')
-                ->select('sul.meta_keywords')
                 ->select('sul.meta_description')
                 ->select('sus.id_shop')
             ;
+
+            // REMOVED HERE: https://github.com/PrestaShop/PrestaShop/commit/f37a8f61017654bae160b528a1a2eaf49edbdac0
+            if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '9.0', '<')) {
+                $this->query->select('sul.meta_keywords');
+            }
         }
     }
 
