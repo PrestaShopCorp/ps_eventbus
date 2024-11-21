@@ -34,13 +34,16 @@ class Config
 {
     const MYSQL_DATE_FORMAT = 'Y-m-d H:i:s';
 
-    const INCREMENTAL_SYNC_TABLE_NAME = 'eventbus_incremental_sync';
     const INCREMENTAL_SYNC_TABLE_SIZE_CHECK_MOD = 20;
     const INCREMENTAL_SYNC_MAX_TABLE_SIZE = 100000;
+    const INCREMENTAL_TYPE_UPSERT = 'upsert';
+    const INCREMENTAL_TYPE_DELETE = 'delete';
 
     const SYNC_API_MAX_TIMEOUT = 5;
-    const COLLECTOR_MAX_TIMEOUT = 30;
+    const SYNC_SERVICE_NAME = 'PrestaShop\Module\PsEventbus\Service\SynchronizationService';
+    
     const COLLECTOR_MULTIPART_BOUNDARY = 'ps_eventbus_boundary';
+
     const REFRESH_TOKEN_ERROR_CODE = 452;
     const ENV_MISCONFIGURED_ERROR_CODE = 453;
     const DATABASE_QUERY_ERROR_CODE = 454;
@@ -134,19 +137,4 @@ class Config
         self::COLLECTION_WISHLISTS,
         self::COLLECTION_WISHLIST_PRODUCTS,
     ];
-
-    const INCREMENTAL_TYPE_UPSERT = 'upsert';
-    const INCREMENTAL_TYPE_DELETE = 'delete';
-
-    const SYNC_SERVICE_NAME = 'PrestaShop\Module\PsEventbus\Service\SynchronizationService';
-
-    /**
-     * @param mixed $message
-     *
-     * @return void
-     */
-    public static function dev_log($message)
-    {
-        file_put_contents('/var/www/html/php.log', $message . PHP_EOL, FILE_APPEND);
-    }
 }
