@@ -64,6 +64,7 @@ class Config
         self::PS_ACCOUNTS_NOT_INSTALLED => 'PsAccounts not installed',
     ];
 
+    const COLLECTION_ATTRIBUTES = 'attributes';
     const COLLECTION_BUNDLES = 'bundles';
     const COLLECTION_CARRIERS = 'carriers';
     const COLLECTION_CARRIER_DETAILS = 'carrier_details';
@@ -101,6 +102,7 @@ class Config
     const COLLECTION_WISHLIST_PRODUCTS = 'wishlist_products';
 
     const SHOP_CONTENTS = [
+        self::COLLECTION_ATTRIBUTES,
         self::COLLECTION_BUNDLES,
         self::COLLECTION_CARRIERS,
         self::COLLECTION_CARRIER_DETAILS,
