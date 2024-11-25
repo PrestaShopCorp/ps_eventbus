@@ -141,7 +141,7 @@ class ServiceProvider implements IServiceProvider
                 $container->get(ApiAuthorizationService::class),
                 $container->get(SynchronizationService::class),
                 $container->get(SyncRepository::class),
-                $container->get(ErrorHandler::class)   
+                $container->get(ErrorHandler::class)
             );
         });
         $container->registerProvider(ApiHealthCheckService::class, static function () use ($container) {
@@ -244,7 +244,7 @@ class ServiceProvider implements IServiceProvider
         $container->registerProvider(OrdersService::class, static function () use ($container) {
             return new OrdersService(
                 $container->get(OrderRepository::class),
-                $container->get(OrderstatusHistoryRepository::class),
+                $container->get(OrderStatusHistoryRepository::class),
                 $container->get(ArrayFormatter::class)
             );
         });
@@ -286,7 +286,7 @@ class ServiceProvider implements IServiceProvider
         });
         $container->registerProvider(SpecificPricesService::class, static function () use ($container) {
             return new SpecificPricesService(
-                $container->get(SpecificPriceRepository::class), 
+                $container->get(SpecificPriceRepository::class),
                 $container->get(ProductRepository::class)
             );
         });

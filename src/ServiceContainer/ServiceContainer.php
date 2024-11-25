@@ -36,12 +36,12 @@ class ServiceContainer
     protected $configPath;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected $config = [];
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected $services = [];
 
@@ -54,8 +54,10 @@ class ServiceContainer
      * @var string[]
      */
     protected $provides = [
-        Provider\DefaultProvider::class,
+        Provider\ApiProvider::class,
+        Provider\CommonProvider::class,
         Provider\RepositoryProvider::class,
+        Provider\ServiceProvider::class,
     ];
 
     /**
@@ -120,7 +122,7 @@ class ServiceContainer
      */
     public function get($name)
     {
-        if ($this->has($name)) {
+        if ($this->hasService($name)) {
             return $this->services[$name];
         }
 
@@ -156,6 +158,16 @@ class ServiceContainer
     }
 
     /**
+     * @param mixed $name
+     *
+     * @return bool
+     */
+    public function hasService($name)
+    {
+        return array_key_exists($name, $this->services);
+    }
+
+    /**
      * @param string $name
      * @param mixed $value
      *
@@ -164,16 +176,6 @@ class ServiceContainer
     public function set($name, $value)
     {
         $this->services[$name] = $value;
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
-    public function has($name)
-    {
-        return array_key_exists($name, $this->services);
     }
 
     /**

@@ -22,7 +22,6 @@ namespace PrestaShop\Module\PsEventbus\Log;
 
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger as MonologLogger;
-use Ps_eventbus;
 
 class Logger
 {
@@ -117,7 +116,7 @@ class Logger
      */
     public static function getInstance()
     {
-        /** @var Ps_eventbus $psEventbus */
+        /** @var \Ps_eventbus $psEventbus */
         $psEventbus = \Module::getInstanceByName('ps_eventbus');
 
         return $psEventbus->getLogger();
@@ -147,6 +146,7 @@ class Logger
     protected static function getMonologLevel($level, $default = self::DEFAULT_MONOLOG_LEVEL)
     {
         $logLevel = MonologLogger::toMonologLevel($level);
+
         /* @phpstan-ignore-next-line */
         return is_int($logLevel) ? $logLevel : $default;
     }

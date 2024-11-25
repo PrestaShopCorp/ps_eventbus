@@ -28,19 +28,16 @@ use PrestaShop\Module\PsEventbus\Repository\CarrierTaxeRepository;
 use PrestaShop\Module\PsEventbus\Repository\CartProductRepository;
 use PrestaShop\Module\PsEventbus\Repository\CartRepository;
 use PrestaShop\Module\PsEventbus\Repository\CartRuleRepository;
+use PrestaShop\Module\PsEventbus\Repository\CategoryRepository;
 use PrestaShop\Module\PsEventbus\Repository\CurrencyRepository;
 use PrestaShop\Module\PsEventbus\Repository\CustomerRepository;
 use PrestaShop\Module\PsEventbus\Repository\CustomProductCarrierRepository;
-use PrestaShop\Module\PsEventbus\Repository\ImageRepository;
-use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
-use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
-use PrestaShop\Module\PsEventbus\Repository\SyncRepository;
-use PrestaShop\Module\PsEventbus\ServiceContainer\Contract\IServiceProvider;
-use PrestaShop\Module\PsEventbus\ServiceContainer\ServiceContainer;
-use PrestaShop\Module\PsEventbus\Repository\CategoryRepository;
 use PrestaShop\Module\PsEventbus\Repository\EmployeeRepository;
+use PrestaShop\Module\PsEventbus\Repository\ImageRepository;
 use PrestaShop\Module\PsEventbus\Repository\ImageTypeRepository;
+use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
+use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\ManufacturerRepository;
 use PrestaShop\Module\PsEventbus\Repository\ModuleRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository;
@@ -55,10 +52,13 @@ use PrestaShop\Module\PsEventbus\Repository\StockMovementRepository;
 use PrestaShop\Module\PsEventbus\Repository\StockRepository;
 use PrestaShop\Module\PsEventbus\Repository\StoreRepository;
 use PrestaShop\Module\PsEventbus\Repository\SupplierRepository;
+use PrestaShop\Module\PsEventbus\Repository\SyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\TaxonomyRepository;
 use PrestaShop\Module\PsEventbus\Repository\TranslationRepository;
 use PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository;
 use PrestaShop\Module\PsEventbus\Repository\WishlistRepository;
+use PrestaShop\Module\PsEventbus\ServiceContainer\Contract\IServiceProvider;
+use PrestaShop\Module\PsEventbus\ServiceContainer\ServiceContainer;
 
 class RepositoryProvider implements IServiceProvider
 {
@@ -69,15 +69,13 @@ class RepositoryProvider implements IServiceProvider
      */
     public function provide(ServiceContainer $container)
     {
-        $container->registerProvider(SyncRepository::class, static function () use ($container) {
-            return new SyncRepository(
-                $container->get('ps_eventbus.context')
-            );
-        });
         $container->registerProvider(IncrementalSyncRepository::class, static function () use ($container) {
             return new IncrementalSyncRepository(
                 $container->get(ErrorHandler::class)
             );
+        });
+        $container->registerProvider(SyncRepository::class, static function () {
+            return new SyncRepository();
         });
         $container->registerProvider(LiveSyncRepository::class, static function () {
             return new LiveSyncRepository();

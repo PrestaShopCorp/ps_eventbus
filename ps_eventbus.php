@@ -199,7 +199,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @return \Monolog\Logger
+     * @return Monolog\Logger
      */
     public function getLogger()
     {
