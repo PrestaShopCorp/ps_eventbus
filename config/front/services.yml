@@ -1,6 +1,3 @@
-imports:
-  - { resource: ../parameters.yml }
-
 services:
   PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService:
     class: PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService

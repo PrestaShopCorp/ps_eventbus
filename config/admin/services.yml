@@ -1,6 +1,1 @@
-imports:
-  - { resource: ../parameters.yml }
-
 services:
-
-

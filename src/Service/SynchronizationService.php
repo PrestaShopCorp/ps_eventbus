@@ -93,6 +93,8 @@ class SynchronizationService
         $this->languagesService = $languagesService;
         $this->proxyService = $proxyService;
         $this->errorHandler = $errorHandler;
+
+
     }
 
     /**
@@ -125,9 +127,9 @@ class SynchronizationService
         /** @var \Ps_eventbus */
         $module = \Module::getInstanceByName('ps_eventbus');
 
-        if (!$module->hasService($serviceId)) {
+        /* if (!$module->hasService($serviceId)) {
             throw new ServiceNotFoundException($serviceId);
-        }
+        } */
 
         /** @var ShopContentServiceInterface $shopContentApiService */
         $shopContentApiService = $module->getService($serviceId);
