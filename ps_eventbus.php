@@ -24,10 +24,9 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-use PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer;
 use PrestaShop\Module\PsEventbus\Module\Install;
 use PrestaShop\Module\PsEventbus\Module\Uninstall;
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use PrestaShop\Module\PsEventbus\ServiceContainer\ServiceContainer;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -60,7 +59,7 @@ class Ps_eventbus extends Module
     /**
      * @var ServiceContainer
      */
-    private $serviceContainer;
+    private $container;
 
     /**
      * @var int the unique shop identifier (uuid v4)
@@ -171,40 +170,19 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @return string
-     */
-    public function getModuleEnvVar()
-    {
-        return strtoupper((string) $this->name) . '_ENV';
-    }
-
-    /**
-     * @param string $default
-     *
-     * @return string
-     */
-    public function getModuleEnv($default = null)
-    {
-        return getenv($this->getModuleEnvVar()) ?: $default ?: self::DEFAULT_ENV;
-    }
-
-    /**
      * @return ServiceContainer
      *
      * @throws Exception
      */
     public function getServiceContainer()
     {
-        if (null === $this->serviceContainer) {
-            // append version number to force cache generation (1.6 Core won't clear it)
-            $this->serviceContainer = new ServiceContainer(
-                $this->name . str_replace(['.', '-', '+'], '', $this->version),
-                $this->getLocalPath(),
-                $this->getModuleEnv()
+        if (null === $this->container) {
+            $this->container = ServiceContainer::createInstance(
+                __DIR__ . '/config.php'
             );
         }
 
-        return $this->serviceContainer;
+        return $this->container;
     }
 
     /**
@@ -217,15 +195,15 @@ class Ps_eventbus extends Module
      */
     public function getService($serviceName)
     {
-        try {
-            return $this->getServiceContainer()->getService($serviceName);
-        } catch (ServiceNotFoundException $exception) {
-            if (method_exists($this, 'get')) {
-                return $this->get($serviceName);
-            }
+        return $this->getServiceContainer()->getService($serviceName);
+    }
 
-            throw new ServiceNotFoundException($serviceName);
-        }
+    /**
+     * @return \Monolog\Logger
+     */
+    public function getLogger()
+    {
+        return $this->getService('ps_eventbus.logger');
     }
 
     /**

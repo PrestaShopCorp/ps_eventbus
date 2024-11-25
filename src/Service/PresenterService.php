@@ -39,8 +39,9 @@ class PresenterService
 
     public function __construct()
     {
+        /** @var Ps_Eventbus */
         $psEventbus = \Module::getInstanceByName('ps_eventbus');
-        $psAccountsAdapterService = $psEventbus->getService('PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService');
+        $psAccountsAdapterService = $psEventbus->getService(PsAccountsAdapterService::class);
 
         $this->psAccountsAdapterService = $psAccountsAdapterService;
     }

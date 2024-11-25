@@ -47,7 +47,7 @@ class ps_EventbusApiHealthCheckModuleFrontController extends ModuleFrontControll
         $module = Module::getInstanceByName('ps_eventbus');
 
         /** @var ApiHealthCheckService $apiHealthCheckService */
-        $apiHealthCheckService = $module->getService('PrestaShop\Module\PsEventbus\Service\ApiHealthCheckService');
+        $apiHealthCheckService = $module->getService(ApiHealthCheckService::class);
         $response = $apiHealthCheckService->getHealthCheck($jobId);
 
         CommonService::exitWithResponse($response);

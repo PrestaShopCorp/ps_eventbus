@@ -34,7 +34,7 @@ use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\SyncRepository;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\ShopContentServiceInterface;
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use PrestaShop\Module\PsEventbus\ServiceContainer\Exception\ServiceNotFoundException;
 
 if (!defined('_PS_VERSION_')) {
     exit;

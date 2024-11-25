@@ -67,7 +67,7 @@ class ps_EventbusApiShopContentModuleFrontController extends ModuleFrontControll
         $module = Module::getInstanceByName('ps_eventbus');
 
         /** @var ApiShopContentService $apiShopContentService */
-        $apiShopContentService = $module->getService('PrestaShop\Module\PsEventbus\Service\ApiShopContentService');
+        $apiShopContentService = $module->getService(ApiShopContentService::class);
 
         // Define our 3 constants here to be retrieved later in the application (errorHandler, repositories)
         if (!defined('PS_EVENTBUS_EXPLAIN_SQL_ENABLED')) {

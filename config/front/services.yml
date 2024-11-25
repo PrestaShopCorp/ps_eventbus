@@ -1,7 +1,5 @@
 imports:
-  - { resource: api.yml }
-  - { resource: ../common/common.yml }
-  - { resource: ../common/repository.yml }
+  - { resource: ../parameters.yml }
 
 services:
   PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService:
