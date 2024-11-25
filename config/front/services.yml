@@ -54,6 +54,10 @@ services:
 ############################################################################################################
 ###################################### SHOP CONTENT SERVICES ###############################################
 ############################################################################################################
+  PrestaShop\Module\PsEventbus\Service\ShopContent\AttributesService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\AttributesService
+    public: true
+
   PrestaShop\Module\PsEventbus\Service\ShopContent\BundlesService:
     class: PrestaShop\Module\PsEventbus\Service\ShopContent\BundlesService
     public: true
