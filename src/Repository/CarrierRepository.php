@@ -78,6 +78,7 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
                 ->select('c.max_weight')
                 ->select('c.grade')
                 ->select('cl.delay AS delay')
+                ->select('c.shipping_handling')
             ;
         }
     }
