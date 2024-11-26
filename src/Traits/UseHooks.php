@@ -767,9 +767,9 @@ trait UseHooks
         $combination = $parameters['object'];
 
         if (isset($combination->id)) {
-            $synchronizationService->sendLiveSync(Config::COLLECTION_PRODUCTS, 'delete');
+            $synchronizationService->sendLiveSync(Config::COLLECTION_ATTRIBUTES, 'delete');
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_PRODUCTS => $combination->id],
+                [Config::COLLECTION_ATTRIBUTES => $combination->id],
                 Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
                 $this->shopId,
