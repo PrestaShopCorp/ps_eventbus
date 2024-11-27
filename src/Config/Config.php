@@ -76,7 +76,6 @@ class Config
     const COLLECTION_CURRENCIES = 'currencies';
     const COLLECTION_CUSTOMERS = 'customers';
     const COLLECTION_CUSTOM_PRODUCT_CARRIERS = 'custom_product_carriers';
-    const COLLECTION_DELETED = 'deleted';
     const COLLECTION_EMPLOYEES = 'employees';
     const COLLECTION_IMAGES = 'images';
     const COLLECTION_IMAGE_TYPES = 'image_types';
@@ -113,7 +112,6 @@ class Config
         self::COLLECTION_CATEGORIES,
         self::COLLECTION_CURRENCIES,
         self::COLLECTION_CUSTOMERS,
-        self::COLLECTION_DELETED,
         self::COLLECTION_EMPLOYEES,
         self::COLLECTION_IMAGES,
         self::COLLECTION_IMAGE_TYPES,

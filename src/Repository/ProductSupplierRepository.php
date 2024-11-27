@@ -97,7 +97,7 @@ class ProductSupplierRepository extends AbstractRepository implements Repository
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('ps.id_product_supplier IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('ps.id_product IN(' . implode(',', array_map('intval', $contentIds)) . ')')
             ->limit($limit)
         ;
 
