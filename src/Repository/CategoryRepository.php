@@ -231,7 +231,12 @@ class CategoryRepository
     private function addSelectParameters(\DbQuery $query)
     {
         $query->select('CONCAT(cs.id_category, "-", l.iso_code) as unique_category_id, cs.id_category');
-        $query->select('c.id_parent, cl.name, cl.description, cl.link_rewrite, cl.meta_title, cl.meta_keywords, cl.meta_description');
+        $query->select('c.id_parent, cl.name, cl.description, cl.link_rewrite, cl.meta_title, cl.meta_description');
         $query->select('l.iso_code, c.date_add as created_at, c.date_upd as updated_at');
+
+        // REMOVED HERE: https://github.com/PrestaShop/PrestaShop/commit/f37a8f61017654bae160b528a1a2eaf49edbdac0
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '9.0', '<')) {
+            $query->select('cl.meta_keywords');
+        }
     }
 }

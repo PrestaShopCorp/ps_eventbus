@@ -131,6 +131,11 @@ class SupplierRepository
     private function addSelectParameters(\DbQuery $query)
     {
         $query->select('su.id_supplier, su.name, su.date_add as created_at, su.date_upd as updated_at, su.active, sul.id_lang');
-        $query->select('sul.description, sul.meta_title, sul.meta_keywords, sul.meta_description, sus.id_shop');
+        $query->select('sul.description, sul.meta_title, sul.meta_description, sus.id_shop');
+
+        // REMOVED HERE: https://github.com/PrestaShop/PrestaShop/commit/f37a8f61017654bae160b528a1a2eaf49edbdac0
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '9.0', '<')) {
+            $query->select('sul.meta_keywords');
+        }
     }
 }
