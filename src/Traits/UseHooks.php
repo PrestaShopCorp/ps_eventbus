@@ -150,7 +150,7 @@ trait UseHooks
 
         if ($image->id_product) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_IMAGES, Config::INCREMENTAL_TYPE_UPSERT);
-    
+
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_IMAGES => $image->id_image],
                 Config::INCREMENTAL_TYPE_UPSERT,
@@ -175,8 +175,8 @@ trait UseHooks
         $image = $parameters['object'];
 
         if ($image->id_product) {
-            $synchronizationService->sendLiveSync(Config::COLLECTION_IMAGES,Config::INCREMENTAL_TYPE_UPSERT);
-    
+            $synchronizationService->sendLiveSync(Config::COLLECTION_IMAGES, Config::INCREMENTAL_TYPE_UPSERT);
+
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_IMAGES => $image->id_image],
                 Config::INCREMENTAL_TYPE_UPSERT,
@@ -202,7 +202,7 @@ trait UseHooks
 
         if ($image->id_product) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_IMAGES, Config::INCREMENTAL_TYPE_UPSERT);
-    
+
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_IMAGES => $image->id_image],
                 Config::INCREMENTAL_TYPE_UPSERT,
@@ -228,7 +228,7 @@ trait UseHooks
 
         if ($imageType->id) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_IMAGE_TYPES, Config::INCREMENTAL_TYPE_DELETE);
-    
+
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_IMAGE_TYPES => $imageType->id],
                 Config::INCREMENTAL_TYPE_DELETE,
@@ -254,7 +254,7 @@ trait UseHooks
 
         if ($imageType->id) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_IMAGE_TYPES, Config::INCREMENTAL_TYPE_DELETE);
-    
+
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_IMAGE_TYPES => $imageType->id],
                 Config::INCREMENTAL_TYPE_DELETE,
@@ -280,7 +280,7 @@ trait UseHooks
 
         if ($imageType->id) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_IMAGE_TYPES, Config::INCREMENTAL_TYPE_DELETE);
-    
+
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_IMAGE_TYPES => $imageType->id],
                 Config::INCREMENTAL_TYPE_DELETE,
@@ -534,7 +534,7 @@ trait UseHooks
                 [
                     Config::COLLECTION_PRODUCTS,
                     Config::COLLECTION_BUNDLES,
-                    Config::COLLECTION_PRODUCT_SUPPLIERS
+                    Config::COLLECTION_PRODUCT_SUPPLIERS,
                 ],
                 Config::INCREMENTAL_TYPE_DELETE
             );
@@ -542,7 +542,7 @@ trait UseHooks
                 [
                     Config::COLLECTION_PRODUCTS => $product->id,
                     Config::COLLECTION_BUNDLES => $product->id,
-                    Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id
+                    Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id,
                 ],
                 Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
@@ -585,7 +585,7 @@ trait UseHooks
                 Config::COLLECTION_PRODUCT_SUPPLIERS,
                 Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
                 Config::COLLECTION_STOCKS,
-                CONFIG::COLLECTION_STOCK_MOVEMENTS
+                Config::COLLECTION_STOCK_MOVEMENTS,
             ],
             Config::INCREMENTAL_TYPE_UPSERT
         );
@@ -597,7 +597,7 @@ trait UseHooks
                 Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id,
                 Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds,
                 Config::COLLECTION_STOCKS => $stockId,
-                CONFIG::COLLECTION_STOCK_MOVEMENTS => $stockId
+                Config::COLLECTION_STOCK_MOVEMENTS => $stockId,
             ],
             Config::INCREMENTAL_TYPE_UPSERT,
             date(DATE_ATOM),
@@ -637,7 +637,7 @@ trait UseHooks
                 Config::COLLECTION_PRODUCTS,
                 Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
                 Config::COLLECTION_STOCKS,
-                CONFIG::COLLECTION_STOCK_MOVEMENTS
+                Config::COLLECTION_STOCK_MOVEMENTS,
             ],
             Config::INCREMENTAL_TYPE_UPSERT
         );
@@ -647,7 +647,7 @@ trait UseHooks
                 Config::COLLECTION_PRODUCTS => $product->id,
                 Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds,
                 Config::COLLECTION_STOCKS => $stockId,
-                CONFIG::COLLECTION_STOCK_MOVEMENTS => $stockId
+                Config::COLLECTION_STOCK_MOVEMENTS => $stockId,
             ],
             Config::INCREMENTAL_TYPE_UPSERT,
             date(DATE_ATOM),
@@ -672,14 +672,14 @@ trait UseHooks
             $synchronizationService->sendLiveSync(
                 [
                     Config::COLLECTION_WISHLISTS,
-                    Config::COLLECTION_WISHLIST_PRODUCTS
+                    Config::COLLECTION_WISHLIST_PRODUCTS,
                 ],
                 Config::INCREMENTAL_TYPE_DELETE
             );
             $synchronizationService->insertContentIntoIncremental(
                 [
                     Config::COLLECTION_WISHLISTS => $wishlist->id,
-                    Config::COLLECTION_WISHLIST_PRODUCTS => $wishlist->id
+                    Config::COLLECTION_WISHLIST_PRODUCTS => $wishlist->id,
                 ],
                 Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
@@ -705,14 +705,14 @@ trait UseHooks
             $synchronizationService->sendLiveSync(
                 [
                     Config::COLLECTION_WISHLISTS,
-                    Config::COLLECTION_WISHLIST_PRODUCTS
+                    Config::COLLECTION_WISHLIST_PRODUCTS,
                 ],
                 Config::INCREMENTAL_TYPE_UPSERT
             );
             $synchronizationService->insertContentIntoIncremental(
                 [
                     Config::COLLECTION_WISHLISTS => $wishlist->id,
-                    Config::COLLECTION_WISHLIST_PRODUCTS => $wishlist->id
+                    Config::COLLECTION_WISHLIST_PRODUCTS => $wishlist->id,
                 ],
                 Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
@@ -738,14 +738,14 @@ trait UseHooks
             $synchronizationService->sendLiveSync(
                 [
                     Config::COLLECTION_WISHLISTS,
-                    Config::COLLECTION_WISHLIST_PRODUCTS
+                    Config::COLLECTION_WISHLIST_PRODUCTS,
                 ],
                 Config::INCREMENTAL_TYPE_UPSERT
             );
             $synchronizationService->insertContentIntoIncremental(
                 [
                     Config::COLLECTION_WISHLISTS => $wishlist->id,
-                    Config::COLLECTION_WISHLIST_PRODUCTS => $wishlist->id
+                    Config::COLLECTION_WISHLIST_PRODUCTS => $wishlist->id,
                 ],
                 Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
@@ -772,14 +772,14 @@ trait UseHooks
             $synchronizationService->sendLiveSync(
                 [
                     Config::COLLECTION_STOCKS,
-                    Config::COLLECTION_STOCK_MOVEMENTS
-                ], 
+                    Config::COLLECTION_STOCK_MOVEMENTS,
+                ],
                 Config::INCREMENTAL_TYPE_UPSERT
             );
             $synchronizationService->insertContentIntoIncremental(
                 [
                     Config::COLLECTION_STOCKS => $stock->id,
-                    Config::COLLECTION_STOCK_MOVEMENTS => $stock->id
+                    Config::COLLECTION_STOCK_MOVEMENTS => $stock->id,
                 ],
                 Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
@@ -806,14 +806,14 @@ trait UseHooks
             $synchronizationService->sendLiveSync(
                 [
                     Config::COLLECTION_STOCKS,
-                    Config::COLLECTION_STOCK_MOVEMENTS
-                ], 
+                    Config::COLLECTION_STOCK_MOVEMENTS,
+                ],
                 Config::INCREMENTAL_TYPE_UPSERT
             );
             $synchronizationService->insertContentIntoIncremental(
                 [
                     Config::COLLECTION_STOCKS => $stock->id,
-                    Config::COLLECTION_STOCK_MOVEMENTS => $stock->id
+                    Config::COLLECTION_STOCK_MOVEMENTS => $stock->id,
                 ],
                 Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
@@ -1164,15 +1164,15 @@ trait UseHooks
             $synchronizationService->sendLiveSync(
                 [
                     Config::COLLECTION_CARTS,
-                    Config::COLLECTION_CART_PRODUCTS
+                    Config::COLLECTION_CART_PRODUCTS,
                 ],
                 Config::INCREMENTAL_TYPE_UPSERT
             );
-    
+
             $synchronizationService->insertContentIntoIncremental(
                 [
                     Config::COLLECTION_CARTS => $cart->id,
-                    Config::COLLECTION_CART_PRODUCTS => $cart->id
+                    Config::COLLECTION_CART_PRODUCTS => $cart->id,
                 ],
                 Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
@@ -1198,15 +1198,15 @@ trait UseHooks
             $synchronizationService->sendLiveSync(
                 [
                     Config::COLLECTION_CARTS,
-                    Config::COLLECTION_CART_PRODUCTS
+                    Config::COLLECTION_CART_PRODUCTS,
                 ],
                 Config::INCREMENTAL_TYPE_UPSERT
             );
-    
+
             $synchronizationService->insertContentIntoIncremental(
                 [
                     Config::COLLECTION_CARTS => $cart->id,
-                    Config::COLLECTION_CART_PRODUCTS => $cart->id
+                    Config::COLLECTION_CART_PRODUCTS => $cart->id,
                 ],
                 Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
