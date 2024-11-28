@@ -131,6 +131,11 @@ class ManufacturerRepository
     private function addSelectParameters(\DbQuery $query)
     {
         $query->select('ma.id_manufacturer, ma.name, ma.date_add as created_at, ma.date_upd as updated_at, ma.active, mal.id_lang');
-        $query->select('mal.description, mal.short_description, mal.meta_title, mal.meta_keywords, mal.meta_description, mas.id_shop');
+        $query->select('mal.description, mal.short_description, mal.meta_title, mal.meta_description, mas.id_shop');
+
+        // REMOVED HERE: https://github.com/PrestaShop/PrestaShop/commit/f37a8f61017654bae160b528a1a2eaf49edbdac0
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '9.0', '<')) {
+            $query->select('mal.meta_keywords');
+        }
     }
 }
