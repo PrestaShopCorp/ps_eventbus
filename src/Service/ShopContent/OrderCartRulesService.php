@@ -135,6 +135,10 @@ class OrderCartRulesService extends ShopContentAbstractService implements ShopCo
             $orderCartRule['gift_product_attribute'] = (int) $orderCartRule['gift_product_attribute'];
             $orderCartRule['highlight'] = (bool) $orderCartRule['highlight'];
             $orderCartRule['active'] = (bool) $orderCartRule['active'];
+
+            $orderCartRule['value'] = (int) $orderCartRule['value'];
+            $orderCartRule['value_tax_excl'] = (int) $orderCartRule['value_tax_excl'];
+            $orderCartRule['deleted'] = (bool) $orderCartRule['deleted'];
         }
     }
 }
