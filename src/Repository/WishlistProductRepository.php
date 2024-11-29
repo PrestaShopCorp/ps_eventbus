@@ -102,7 +102,7 @@ class WishlistProductRepository extends AbstractRepository implements Repository
 
         $this->query
             ->where('wp.id_wishlist IN(' . implode(',', array_map('intval', $contentIds)) . ')')
-            ->limit($limit)
+            // ->limit($limit) Sub shop content depend from another, temporary disabled
         ;
 
         return $this->runQuery();

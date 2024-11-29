@@ -98,7 +98,7 @@ class ProductSupplierRepository extends AbstractRepository implements Repository
 
         $this->query
             ->where('ps.id_product IN(' . implode(',', array_map('intval', $contentIds)) . ')')
-            ->limit($limit)
+            // ->limit($limit) Sub shop content depend from another, temporary disabled
         ;
 
         return $this->runQuery();

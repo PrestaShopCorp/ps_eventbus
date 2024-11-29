@@ -98,7 +98,7 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
 
         $this->query
             ->where('cp.id_cart IN(' . implode(',', array_map('intval', $contentIds)) . ')')
-            ->limit($limit)
+            // ->limit($limit) Sub shop content depend from another, temporary disabled
         ;
 
         return $this->runQuery();

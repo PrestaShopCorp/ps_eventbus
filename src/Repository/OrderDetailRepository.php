@@ -74,8 +74,8 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
                 ->select('od.product_quantity')
                 ->select('od.unit_price_tax_incl')
                 ->select('od.unit_price_tax_excl')
-                ->select('SUM(osd.total_price_tax_incl) as refund')
-                ->select('SUM(osd.total_price_tax_excl) as refund_tax_excl')
+                ->select('osd.total_price_tax_incl as refund')
+                ->select('osd.total_price_tax_excl as refund_tax_excl')
                 ->select('c.iso_code as currency')
                 ->select('ps.id_category_default as category')
                 ->select('l.iso_code')
@@ -125,7 +125,7 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
 
         $this->query
             ->where('od.id_order IN(' . implode(',', array_map('intval', $contentIds)) . ')')
-            ->limit($limit)
+            // ->limit($limit) Sub shop content depend from another, temporary disabled
         ;
 
         return $this->runQuery();

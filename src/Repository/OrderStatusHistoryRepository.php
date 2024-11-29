@@ -109,7 +109,7 @@ class OrderStatusHistoryRepository extends AbstractRepository implements Reposit
 
         $this->query
             ->where('oh.id_order IN(' . implode(',', array_map('intval', $contentIds)) . ')')
-            ->limit($limit)
+            // ->limit($limit) Sub shop content depend from another, temporary disabled
         ;
 
         return $this->runQuery();

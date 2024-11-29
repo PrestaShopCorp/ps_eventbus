@@ -102,7 +102,7 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
 
         $this->query
             ->where('ocr.id_order IN(' . implode(',', array_map('intval', $contentIds)) . ')')
-            ->limit($limit);
+            // ->limit($limit) Sub shop content depend from another, temporary disabled
 
         return $this->runQuery();
     }

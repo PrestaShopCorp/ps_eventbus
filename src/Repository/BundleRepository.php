@@ -106,7 +106,7 @@ class BundleRepository extends AbstractRepository implements RepositoryInterface
 
         $this->query
             ->where('pac.id_product IN(' . implode(',', array_map('intval', $contentIds)) . ')')
-            ->limit($limit)
+            // ->limit($limit) Sub shop content depend from another, temporary disabled
         ;
 
         return $this->runQuery();
