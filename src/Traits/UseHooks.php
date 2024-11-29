@@ -569,23 +569,11 @@ trait UseHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
-        /** @var CustomProductCarrierRepository $customProductCarrierRepository */
-        $customProductCarrierRepository = $this->getService('PrestaShop\Module\PsEventbus\Repository\CustomProductCarrierRepository');
-        $customProductCarriers = $customProductCarrierRepository->getCustomProductCarrierIdsByCarrierId($product->id);
-        $customProductCarrierIds = array_column($customProductCarriers, 'id_carrier_reference');
-
-        /** @var StockRepository $stockRepository */
-        $stockRepository = $this->getService('PrestaShop\Module\PsEventbus\Repository\StockRepository');
-        $stockId = $stockRepository->getStockIdByProductId($product->id);
-
         $synchronizationService->sendLiveSync(
             [
                 Config::COLLECTION_PRODUCTS,
                 Config::COLLECTION_BUNDLES,
-                Config::COLLECTION_PRODUCT_SUPPLIERS,
-                Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
-                Config::COLLECTION_STOCKS,
-                Config::COLLECTION_STOCK_MOVEMENTS,
+                Config::COLLECTION_PRODUCT_SUPPLIERS
             ],
             Config::INCREMENTAL_TYPE_UPSERT
         );
@@ -594,10 +582,7 @@ trait UseHooks
             [
                 Config::COLLECTION_PRODUCTS => $product->id,
                 Config::COLLECTION_BUNDLES => $product->id,
-                Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id,
-                Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds,
-                Config::COLLECTION_STOCKS => $stockId,
-                Config::COLLECTION_STOCK_MOVEMENTS => $stockId,
+                Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id
             ],
             Config::INCREMENTAL_TYPE_UPSERT,
             date(DATE_ATOM),
@@ -635,6 +620,8 @@ trait UseHooks
         $synchronizationService->sendLiveSync(
             [
                 Config::COLLECTION_PRODUCTS,
+                Config::COLLECTION_BUNDLES,
+                Config::COLLECTION_PRODUCT_SUPPLIERS,
                 Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
                 Config::COLLECTION_STOCKS,
                 Config::COLLECTION_STOCK_MOVEMENTS,
@@ -645,6 +632,8 @@ trait UseHooks
         $synchronizationService->insertContentIntoIncremental(
             [
                 Config::COLLECTION_PRODUCTS => $product->id,
+                Config::COLLECTION_BUNDLES => $product->id,
+                Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id,
                 Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds,
                 Config::COLLECTION_STOCKS => $stockId,
                 Config::COLLECTION_STOCK_MOVEMENTS => $stockId,
