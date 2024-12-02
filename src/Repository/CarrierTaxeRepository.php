@@ -126,6 +126,7 @@ class CarrierTaxeRepository extends AbstractRepository implements RepositoryInte
         $this->query
             ->where('ca.id_carrier IN(' . implode(',', array_map('intval', $contentIds)) . ')')
             // ->limit($limit) Sub shop content depend from another, temporary disabled
+        ;
 
         return $this->runQuery();
     }
