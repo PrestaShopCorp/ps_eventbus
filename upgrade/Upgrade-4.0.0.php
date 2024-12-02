@@ -32,25 +32,37 @@ if (!defined('_PS_VERSION_')) {
  */
 function upgrade_module_4_0_0()
 {
+    return 
+        addPrimaryKeyToTypeSyncTable() &&
+        addActionToIncrementalSyncTable() &&
+        migrateDeleteTableToIncremantalTable()
+    ;
+}
+
+
+function addPrimaryKeyToTypeSyncTable()
+{
     $db = Db::getInstance();
 
     // Add primary key to eventbus_type_sync
     $editTypeSyncTable = 'ALTER TABLE `' . _DB_PREFIX_ . 'eventbus_type_sync` ADD PRIMARY KEY (type, id_shop, lang_iso);';
-    $editTypeSyncTableResult = $db->query($editTypeSyncTable);
+    
+    return $db->query($editTypeSyncTable);
+}
 
-    // If ALTER is failed, stop update process
-    if (!$editTypeSyncTableResult) {
-        return false;
-    }
+function addActionToIncrementalSyncTable()
+{
+    $db = Db::getInstance();
 
     // Update eventbus_incremental_sync and add 'action' column
     $editIncrementalTable = 'ALTER TABLE `' . _DB_PREFIX_ . 'eventbus_incremental_sync` ADD action varchar(50) NOT NULL;';
-    $editIncrementalTableResult = $db->query($editIncrementalTable);
+    
+    return $db->query($editIncrementalTable);
+}
 
-    // If ALTER is failed, stop update process
-    if (!$editIncrementalTableResult) {
-        return false;
-    }
+function migrateDeleteTableToIncremantalTable()
+{
+    $db = Db::getInstance();
 
     // Backup data from eventbus_deleted_objects
     $backupDeletedTable = 'SELECT * FROM `' . _DB_PREFIX_ . 'eventbus_deleted_objects`';
@@ -95,5 +107,5 @@ function upgrade_module_4_0_0()
     // Drop eventbus_deleted_objects table
     $dropDeletedTable = 'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'eventbus_deleted_objects`';
 
-    return (bool) $db->query($dropDeletedTable);
+    return $db->query($dropDeletedTable);
 }
