@@ -10,7 +10,7 @@
 | ------------------- | ---- | ----------------------- |
 | 8.0                 | 7.1+ | From 2.x - to latest    |
 | 1.7.3-1.7.8         | 7.1+ | From 2.x - to latest    |
-| 1.6.1.11 - 1.7.2.5  | 7.1  | From 3.1 - to latest    |
+| 1.6.1.11 - 1.7.2.5  | 5.6+ | From 3.1 - to latest    |
 
 PS Accounts compatibility matrix [can be viewed here](https://github.com/PrestaShopCorp/ps_accounts#compatibility-matrix).
 

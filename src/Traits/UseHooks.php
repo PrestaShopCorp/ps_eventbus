@@ -573,7 +573,7 @@ trait UseHooks
             [
                 Config::COLLECTION_PRODUCTS,
                 Config::COLLECTION_BUNDLES,
-                Config::COLLECTION_PRODUCT_SUPPLIERS
+                Config::COLLECTION_PRODUCT_SUPPLIERS,
             ],
             Config::INCREMENTAL_TYPE_UPSERT
         );
@@ -582,7 +582,7 @@ trait UseHooks
             [
                 Config::COLLECTION_PRODUCTS => $product->id,
                 Config::COLLECTION_BUNDLES => $product->id,
-                Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id
+                Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id,
             ],
             Config::INCREMENTAL_TYPE_UPSERT,
             date(DATE_ATOM),
