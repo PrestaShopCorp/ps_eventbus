@@ -45,7 +45,7 @@ function addPrimaryKeyToTypeSyncTable()
     $db = Db::getInstance();
 
     // Add primary key to eventbus_type_sync
-    $editTypeSyncTable = 'ALTER TABLE `' . _DB_PREFIX_ . 'eventbus_type_sync` ADD PRIMARY KEY (type, id_shop, lang_iso);';
+    $editTypeSyncTable = "ALTER TABLE `" . _DB_PREFIX_ . "eventbus_type_sync` ADD PRIMARY KEY (type, id_shop, lang_iso);";
     
     return $db->query($editTypeSyncTable);
 }
@@ -55,7 +55,7 @@ function addActionToIncrementalSyncTable()
     $db = Db::getInstance();
 
     // Update eventbus_incremental_sync and add 'action' column
-    $editIncrementalTable = 'ALTER TABLE `' . _DB_PREFIX_ . 'eventbus_incremental_sync` ADD action varchar(50) NOT NULL;';
+    $editIncrementalTable = "ALTER TABLE `" . _DB_PREFIX_ . "eventbus_incremental_sync` ADD action varchar(50) NOT NULL DEFAULT 'upsert';";
     
     return $db->query($editIncrementalTable);
 }
@@ -65,22 +65,27 @@ function migrateDeleteTableToIncremantalTable()
     $db = Db::getInstance();
 
     // Backup data from eventbus_deleted_objects
-    $backupDeletedTable = 'SELECT * FROM `' . _DB_PREFIX_ . 'eventbus_deleted_objects`';
+    $backupDeletedTable = "SELECT * FROM `" . _DB_PREFIX_ . "eventbus_deleted_objects`";
     $backupDeletedTableResult = $db->executeS($backupDeletedTable);
 
     $elementsCount = count($backupDeletedTableResult);
     $index = 0;
 
     // Insert data from backup into incremental table
-    $updateIncrementalTable = 'INSERT INTO `' . _DB_PREFIX_ . 'eventbus_incremental_sync` (type, id_object, id_shop, lang_iso, created_at, action) VALUES ';
+    $updateIncrementalTable = "INSERT INTO `" . _DB_PREFIX_ . "eventbus_incremental_sync` (type, id_object, id_shop, lang_iso, created_at, action) VALUES ";
+
+    // Obtenir le code lang_iso par défaut
+    $defaultLangId = Configuration::get('PS_LANG_DEFAULT'); 
+    $defaultLangIso = Language::getIsoById($defaultLangId);
 
     foreach ($backupDeletedTableResult as $deletedContent) {
         $updateIncrementalTable .= "(
             '{$db->escape($deletedContent['type'])}',
-            {$db->escape($deletedContent['id_object'])},
-            {$db->escape($deletedContent['id_shop'])},
-            {$db->escape($deletedContent['created_at'])}',
-            deleted'
+            " . (int) $deletedContent['id_object'] . ",
+            " . (int) $deletedContent['id_shop'] . ",
+            '{$db->escape($defaultLangIso)}',
+            '{$db->escape($deletedContent['created_at'])}',
+            'delete'
         )";
 
         if (++$index < $elementsCount) {
@@ -88,14 +93,15 @@ function migrateDeleteTableToIncremantalTable()
         }
     }
 
-    $updateIncrementalTable .= '
+    $updateIncrementalTable .= "
         ON DUPLICATE KEY UPDATE
         type = VALUES(type),
         id_object = VALUES(id_object),
         id_shop = VALUES(id_shop),
-        created_at = VALUES(created_at)
-        action = deleted
-    ';
+        lang_iso = VALUES(lang_iso),
+        created_at = VALUES(created_at),
+        action = 'delete'
+    ";
 
     $updateIncrementalTableResult = (bool) $db->query($updateIncrementalTable);
 
@@ -105,7 +111,7 @@ function migrateDeleteTableToIncremantalTable()
     }
 
     // Drop eventbus_deleted_objects table
-    $dropDeletedTable = 'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'eventbus_deleted_objects`';
+    $dropDeletedTable = "DROP TABLE IF EXISTS `" . _DB_PREFIX_ . "eventbus_deleted_objects`";
 
     return $db->query($dropDeletedTable);
 }
