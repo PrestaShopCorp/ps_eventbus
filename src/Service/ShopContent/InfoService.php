@@ -94,7 +94,7 @@ class InfoService extends ShopContentAbstractService implements ShopContentServi
         return [
             [
                 'action' => Config::INCREMENTAL_TYPE_UPSERT,
-                'collection' => Config::COLLECTION_INFO,
+                'collection' => 'shops',
                 'properties' => [
                     'created_at' => $this->infoRepository->getCreatedAt(),
                     'folder_created_at' => $folderCreatedAt,
