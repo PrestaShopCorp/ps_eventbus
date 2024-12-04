@@ -56,7 +56,7 @@ class BundleRepository extends AbstractRepository implements RepositoryInterface
         if ($withSelecParameters) {
             $this->query
                 ->select('p.id_product')
-                ->select("CONCAT(p.id_product, '-', IFNULL(pas.id_product_attribute, 0), '-', '" . pSQL($langIso) ."') as unique_product_id")
+                ->select("CONCAT(p.id_product, '-', IFNULL(pas.id_product_attribute, 0), '-', '" . pSQL($langIso) . "') as unique_product_id")
                 ->select('pac.id_product_pack as id_bundle')
                 ->select('pac.id_product_attribute_item as id_product_attribute')
                 ->select('p.id_product')

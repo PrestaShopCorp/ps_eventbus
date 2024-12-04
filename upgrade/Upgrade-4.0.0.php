@@ -34,7 +34,7 @@ function upgrade_module_4_0_0()
 {
     // Ajouter la clé primaire
     if (!addPrimaryKeyToTypeSyncTable()) {
-        throw new Exception("Failed to add primary key to eventbus_type_sync.");
+        throw new Exception('Failed to add primary key to eventbus_type_sync.');
     }
 
     // Ajouter la colonne action
@@ -44,26 +44,26 @@ function upgrade_module_4_0_0()
 
     // Migrer les données
     if (!migrateDeleteTableToIncremantalTable()) {
-        throw new Exception("Failed to migrate data to eventbus_incremental_sync.");
+        throw new Exception('Failed to migrate data to eventbus_incremental_sync.');
     }
 
     return true;
 }
-
 
 function addPrimaryKeyToTypeSyncTable()
 {
     $db = Db::getInstance();
 
     // Check if the primary key exists by inspecting the indexes
-    $checkPrimaryKeyQuery = "SHOW INDEXES FROM `" . _DB_PREFIX_ . "eventbus_type_sync` WHERE Key_name = 'PRIMARY';";
+    $checkPrimaryKeyQuery = 'SHOW INDEXES FROM `' . _DB_PREFIX_ . "eventbus_type_sync` WHERE Key_name = 'PRIMARY';";
 
     // Exécuter la requête pour obtenir les index et vérifier s'il y a un index primaire
     $indexes = $db->executeS($checkPrimaryKeyQuery);
 
     // Add primary key if it does'nt exist
     if (empty($indexes)) {
-        $editTypeSyncTable = "ALTER TABLE `" . _DB_PREFIX_ . "eventbus_type_sync` ADD PRIMARY KEY (type, id_shop, lang_iso);";
+        $editTypeSyncTable = 'ALTER TABLE `' . _DB_PREFIX_ . 'eventbus_type_sync` ADD PRIMARY KEY (type, id_shop, lang_iso);';
+
         return (bool) $db->query($editTypeSyncTable);
     }
 
@@ -75,12 +75,13 @@ function addActionToIncrementalSyncTable()
     $db = Db::getInstance();
 
     // Check if the 'action' column exists in the table
-    $checkColumnQuery = "SHOW COLUMNS FROM `" . _DB_PREFIX_ . "eventbus_incremental_sync` LIKE 'action';";
+    $checkColumnQuery = 'SHOW COLUMNS FROM `' . _DB_PREFIX_ . "eventbus_incremental_sync` LIKE 'action';";
     $columns = $db->executeS($checkColumnQuery);
 
     // Add 'action' column if it does'nt exist
     if (empty($columns)) {
-        $editIncrementalTable = "ALTER TABLE `" . _DB_PREFIX_ . "eventbus_incremental_sync` ADD action varchar(50) NOT NULL DEFAULT 'upsert';";
+        $editIncrementalTable = 'ALTER TABLE `' . _DB_PREFIX_ . "eventbus_incremental_sync` ADD action varchar(50) NOT NULL DEFAULT 'upsert';";
+
         return (bool) $db->query($editIncrementalTable);
     }
 
@@ -90,9 +91,9 @@ function addActionToIncrementalSyncTable()
 function migrateDeleteTableToIncremantalTable()
 {
     $db = Db::getInstance();
-    
+
     // Get default lang_iso
-    $defaultLangId = Configuration::get('PS_LANG_DEFAULT'); 
+    $defaultLangId = Configuration::get('PS_LANG_DEFAULT');
     $defaultLangIso = Language::getIsoById($defaultLangId);
 
     // Prepare the query with dynamic lang_iso
@@ -120,7 +121,8 @@ function migrateDeleteTableToIncremantalTable()
 
     if ($migrationSucceded) {
         // Drop eventbus_deleted_objects table
-        $dropDeletedTable = "DROP TABLE IF EXISTS `" . _DB_PREFIX_ . "eventbus_deleted_objects`";
+        $dropDeletedTable = 'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'eventbus_deleted_objects`';
+
         return $db->query($dropDeletedTable);
     }
 }
