@@ -635,7 +635,7 @@ trait UseHooks
 
         if ($product->cache_is_pack) {
             $liveSyncItems[] = Config::COLLECTION_BUNDLES;
-            $incrementalSyncItems[] = Config::COLLECTION_BUNDLES => $product->id;
+            $incrementalSyncItems[Config::COLLECTION_BUNDLES] = $product->id;
         }
 
         $synchronizationService->sendLiveSync(
