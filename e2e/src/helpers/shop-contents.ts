@@ -25,7 +25,7 @@ export const shopContentMapping = {
   order_status_history: "order-status-history",
   products: "products",
   product_suppliers: "product-suppliers",
-  shops: "shops",
+  info: "info",
   specific_prices: "specific-prices",
   stocks: "stocks",
   stock_movements: "stock-movements",
