@@ -109,15 +109,10 @@ class BundlesService extends ShopContentAbstractService implements ShopContentSe
     private function castBundles(&$bundles, $langIso)
     {
         foreach ($bundles as &$bundle) {
-            $bundle['id_product'] = (string) $bundle['id_product_item'];
-            $bundle['unique_product_id'] = "{$bundle['id_bundle']}-{$bundle['product_id_attribute']}-{$langIso}";
+            $bundle['id_product'] = (string) $bundle['id_product'];
             $bundle['id_bundle'] = (string) $bundle['id_bundle'];
             $bundle['id_product_attribute'] = (string) $bundle['id_product_attribute'];
             $bundle['quantity'] = (string) $bundle['quantity'];
-
-            unset($bundle['product_id_attribute']);
-            unset($bundle['id_product_item']);
-            unset($bundle['id_product_attribute_item']);
         }
     }
 }

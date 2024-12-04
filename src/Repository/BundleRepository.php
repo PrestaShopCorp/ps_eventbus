@@ -50,15 +50,13 @@ class BundleRepository extends AbstractRepository implements RepositoryInterface
             ->innerJoin('product', 'p', 'p.id_product = pac.id_product_pack')
             ->innerJoin('product_shop', 'ps', 'ps.id_product = p.id_product AND ps.id_shop = ' . parent::getShopContext()->id)
             ->leftJoin('product_attribute_shop', 'pas', 'pas.id_product = p.id_product AND pas.id_shop = ps.id_shop')
-            ->leftJoin('product_attribute', 'pa', 'pas.id_product_attribute = pa.id_product_attribute')
             ->where('p.cache_is_pack=1')
         ;
 
         if ($withSelecParameters) {
             $this->query
                 ->select('p.id_product')
-                ->select('pac.id_product_item')
-                ->select('IFNULL(pas.id_product_attribute, 0) as product_id_attribute')
+                ->select("CONCAT(p.id_product, '-', IFNULL(pas.id_product_attribute, 0), '-', '" . pSQL($langIso) ."') as unique_product_id")
                 ->select('pac.id_product_pack as id_bundle')
                 ->select('pac.id_product_attribute_item as id_product_attribute')
                 ->select('p.id_product')

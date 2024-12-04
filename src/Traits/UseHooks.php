@@ -617,27 +617,34 @@ trait UseHooks
         $stockRepository = $this->getService('PrestaShop\Module\PsEventbus\Repository\StockRepository');
         $stockId = $stockRepository->getStockIdByProductId($product->id);
 
+        $liveSyncItems = [
+            Config::COLLECTION_PRODUCTS,
+            Config::COLLECTION_PRODUCT_SUPPLIERS,
+            Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
+            Config::COLLECTION_STOCKS,
+            Config::COLLECTION_STOCK_MOVEMENTS,
+        ];
+
+        $incrementalSyncItems = [
+            Config::COLLECTION_PRODUCTS => $product->id,
+            Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id,
+            Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds,
+            Config::COLLECTION_STOCKS => $stockId,
+            Config::COLLECTION_STOCK_MOVEMENTS => $stockId,
+        ];
+
+        if ($product->cache_is_pack) {
+            $liveSyncItems[] = Config::COLLECTION_BUNDLES;
+            $incrementalSyncItems[] = Config::COLLECTION_BUNDLES => $product->id;
+        }
+
         $synchronizationService->sendLiveSync(
-            [
-                Config::COLLECTION_PRODUCTS,
-                Config::COLLECTION_BUNDLES,
-                Config::COLLECTION_PRODUCT_SUPPLIERS,
-                Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
-                Config::COLLECTION_STOCKS,
-                Config::COLLECTION_STOCK_MOVEMENTS,
-            ],
+            $liveSyncItems,
             Config::INCREMENTAL_TYPE_UPSERT
         );
 
         $synchronizationService->insertContentIntoIncremental(
-            [
-                Config::COLLECTION_PRODUCTS => $product->id,
-                Config::COLLECTION_BUNDLES => $product->id,
-                Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id,
-                Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds,
-                Config::COLLECTION_STOCKS => $stockId,
-                Config::COLLECTION_STOCK_MOVEMENTS => $stockId,
-            ],
+            $incrementalSyncItems,
             Config::INCREMENTAL_TYPE_UPSERT,
             date(DATE_ATOM),
             $this->shopId,
