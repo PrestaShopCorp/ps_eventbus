@@ -111,8 +111,8 @@ services:
     class: PrestaShop\Module\PsEventbus\Repository\ProductSupplierRepository
     public: true
 
-  PrestaShop\Module\PsEventbus\Repository\ShopRepository:
-    class: PrestaShop\Module\PsEventbus\Repository\ShopRepository
+  PrestaShop\Module\PsEventbus\Repository\InfoRepository:
+    class: PrestaShop\Module\PsEventbus\Repository\InfoRepository
     public: true
 
   PrestaShop\Module\PsEventbus\Repository\StockRepository:

@@ -88,7 +88,7 @@ class Config
     const COLLECTION_ORDER_STATUS_HISTORY = 'order_status_history';
     const COLLECTION_PRODUCTS = 'products';
     const COLLECTION_PRODUCT_SUPPLIERS = 'product_suppliers';
-    const COLLECTION_SHOPS = 'shops'; // NO INCREMENTAL
+    const COLLECTION_INFO = 'info'; // NO INCREMENTAL
     const COLLECTION_SPECIFIC_PRICES = 'specific_prices';
     const COLLECTION_STOCKS = 'stocks';
     const COLLECTION_STOCK_MOVEMENTS = 'stock_movements';
@@ -125,7 +125,7 @@ class Config
         self::COLLECTION_PRODUCTS,
         self::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
         self::COLLECTION_PRODUCT_SUPPLIERS,
-        self::COLLECTION_SHOPS,
+        self::COLLECTION_INFO,
         self::COLLECTION_SPECIFIC_PRICES,
         self::COLLECTION_STOCKS,
         self::COLLECTION_STOCK_MOVEMENTS,

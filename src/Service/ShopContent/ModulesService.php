@@ -28,7 +28,7 @@ namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Repository\ModuleRepository;
-use PrestaShop\Module\PsEventbus\Repository\ShopRepository;
+use PrestaShop\Module\PsEventbus\Repository\InfoRepository;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -39,15 +39,15 @@ class ModulesService extends ShopContentAbstractService implements ShopContentSe
     /** @var ModuleRepository */
     private $moduleRepository;
 
-    /** @var ShopRepository */
-    private $shopRepository;
+    /** @var InfoRepository */
+    private $infoRepository;
 
     public function __construct(
         ModuleRepository $moduleRepository,
-        ShopRepository $shopRepository
+        InfoRepository $infoRepository
     ) {
         $this->moduleRepository = $moduleRepository;
-        $this->shopRepository = $shopRepository;
+        $this->infoRepository = $infoRepository;
     }
 
     /**
@@ -114,7 +114,7 @@ class ModulesService extends ShopContentAbstractService implements ShopContentSe
      */
     private function castModules(&$modules)
     {
-        $shopCreatedAt = $this->shopRepository->getCreatedAt();
+        $shopCreatedAt = $this->infoRepository->getCreatedAt();
 
         foreach ($modules as &$module) {
             $module['module_id'] = (string) $module['module_id'];

@@ -30,7 +30,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class ShopRepository extends AbstractRepository
+class InfoRepository extends AbstractRepository
 {
     /**
      * @return int

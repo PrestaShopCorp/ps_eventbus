@@ -27,13 +27,13 @@
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Repository\ShopRepository;
+use PrestaShop\Module\PsEventbus\Repository\InfoRepository;
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class ShopsService extends ShopContentAbstractService implements ShopContentServiceInterface
+class InfoService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
     /** @var CurrenciesService */
     private $currenciesService;
@@ -44,12 +44,12 @@ class ShopsService extends ShopContentAbstractService implements ShopContentServ
     /** @var \Context */
     private $context;
 
-    /** @var ShopRepository */
-    private $shopRepository;
+    /** @var InfoRepository */
+    private $infoRepository;
 
     /**
      * @param \Context $context
-     * @param ShopRepository $shopRepository
+     * @param InfoRepository $infoRepository
      * @param LanguagesService $languagesService
      * @param CurrenciesService $currenciesService
      *
@@ -57,13 +57,13 @@ class ShopsService extends ShopContentAbstractService implements ShopContentServ
      */
     public function __construct(
         \Context $context,
-        ShopRepository $shopRepository,
+        InfoRepository $infoRepository,
         LanguagesService $languagesService,
         CurrenciesService $currenciesService
     ) {
         $this->currenciesService = $currenciesService;
         $this->languagesService = $languagesService;
-        $this->shopRepository = $shopRepository;
+        $this->infoRepository = $infoRepository;
         $this->context = $context;
     }
 
@@ -94,9 +94,9 @@ class ShopsService extends ShopContentAbstractService implements ShopContentServ
         return [
             [
                 'action' => Config::INCREMENTAL_TYPE_UPSERT,
-                'collection' => Config::COLLECTION_SHOPS,
+                'collection' => Config::COLLECTION_INFO,
                 'properties' => [
-                    'created_at' => $this->shopRepository->getCreatedAt(),
+                    'created_at' => $this->infoRepository->getCreatedAt(),
                     'folder_created_at' => $folderCreatedAt,
                     'cms_version' => _PS_VERSION_,
                     'url_is_simplified' => \Configuration::get('PS_REWRITING_SETTINGS') == '1',
@@ -116,8 +116,8 @@ class ShopsService extends ShopContentAbstractService implements ShopContentServ
                     'http_server' => isset($_SERVER['SERVER_SOFTWARE']) ? $_SERVER['SERVER_SOFTWARE'] : '',
                     'url' => $this->context->link->getPageLink('index', null, $langId),
                     'ssl' => \Configuration::get('PS_SSL_ENABLED') == '1',
-                    'multi_shop_count' => $this->shopRepository->getMultiShopCount(),
-                    'country_code' => $this->shopRepository->getShopCountryCode(),
+                    'multi_shop_count' => $this->infoRepository->getMultiShopCount(),
+                    'country_code' => $this->infoRepository->getShopCountryCode(),
                 ],
             ],
         ];

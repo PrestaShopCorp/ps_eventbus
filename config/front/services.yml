@@ -160,7 +160,7 @@ services:
     public: true
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\ModuleRepository'
-      - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\InfoRepository'
 
   PrestaShop\Module\PsEventbus\Service\ShopContent\OrdersService:
     class: PrestaShop\Module\PsEventbus\Service\ShopContent\OrdersService
@@ -203,12 +203,12 @@ services:
     arguments:
       - '@PrestaShop\Module\PsEventbus\Repository\ProductSupplierRepository'
 
-  PrestaShop\Module\PsEventbus\Service\ShopContent\ShopsService:
-    class: PrestaShop\Module\PsEventbus\Service\ShopContent\ShopsService
+  PrestaShop\Module\PsEventbus\Service\ShopContent\InfoService:
+    class: PrestaShop\Module\PsEventbus\Service\ShopContent\InfoService
     public: true
     arguments:
       - '@=service("ps_eventbus").getContext()'
-      - '@PrestaShop\Module\PsEventbus\Repository\ShopRepository'
+      - '@PrestaShop\Module\PsEventbus\Repository\InfoRepository'
       - '@PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService'
       - '@PrestaShop\Module\PsEventbus\Service\ShopContent\CurrenciesService'
 
