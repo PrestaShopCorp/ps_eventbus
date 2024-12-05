@@ -24,9 +24,8 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-use PrestaShop\Module\PsEventbus\Module\Install;
-use PrestaShop\Module\PsEventbus\Module\Uninstall;
-use PrestaShop\Module\PsEventbus\ServiceContainer\ServiceContainer;
+// DONT'T USE "use" STATEMENT HERE, IT'S NOT COMPAT WITH 1.6
+// PREFER "use" IN CLASS DIRECTLY
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -57,7 +56,7 @@ class Ps_eventbus extends Module
     public $version;
 
     /**
-     * @var ServiceContainer
+     * @var PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer
      */
     private $container;
 
@@ -150,7 +149,7 @@ class Ps_eventbus extends Module
             return defined('PS_INSTALLATION_IN_PROGRESS');
         }
 
-        $installer = new Install($this, Db::getInstance());
+        $installer = new PrestaShop\Module\PsEventbus\Module\Install($this, Db::getInstance());
 
         return $installer->installDatabaseTables()
             && parent::install()
@@ -162,7 +161,7 @@ class Ps_eventbus extends Module
      */
     public function uninstall()
     {
-        $uninstaller = new Uninstall($this, Db::getInstance());
+        $uninstaller = new PrestaShop\Module\PsEventbus\Module\Uninstall($this, Db::getInstance());
 
         return $uninstaller->uninstallMenu()
             && $uninstaller->uninstallDatabaseTables()
@@ -217,7 +216,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * Set PHP compatibility to 7.1
+     * Set PHP compatibility to 5.6
      *
      * @return bool
      */
