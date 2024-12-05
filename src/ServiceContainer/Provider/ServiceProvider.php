@@ -66,6 +66,7 @@ use PrestaShop\Module\PsEventbus\Service\ApiShopContentService;
 use PrestaShop\Module\PsEventbus\Service\PresenterService;
 use PrestaShop\Module\PsEventbus\Service\ProxyService;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
+use PrestaShop\Module\PsEventbus\Service\ShopContent\AttributesService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\BundlesService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\CarrierDetailsService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\CarriersService;
@@ -121,20 +122,6 @@ class ServiceProvider implements IServiceProvider
                 $container->get(ErrorHandler::class)
             );
         });
-        $container->registerProvider(SynchronizationService::class, static function () use ($container) {
-            return new SynchronizationService(
-                $container->get(LiveSyncApiClient::class),
-                $container->get(SyncRepository::class),
-                $container->get(IncrementalSyncRepository::class),
-                $container->get(LiveSyncRepository::class),
-                $container->get(LanguagesService::class),
-                $container->get(ProxyService::class),
-                $container->get(ErrorHandler::class)
-            );
-        });
-        $container->registerProvider(PresenterService::class, static function () {
-            return new PresenterService();
-        });
         $container->registerProvider(ApiShopContentService::class, static function () use ($container) {
             return new ApiShopContentService(
                 $container->get('ps_eventbus.module'),
@@ -154,7 +141,9 @@ class ServiceProvider implements IServiceProvider
                 $container->getParameter('ps_eventbus.proxy_api_url')
             );
         });
-
+        $container->registerProvider(AttributesService::class, static function () use ($container) {
+            return new AttributesService();
+        });
         $container->registerProvider(BundlesService::class, static function () use ($container) {
             return new BundlesService(
                 $container->get(BundleRepository::class)
@@ -225,6 +214,14 @@ class ServiceProvider implements IServiceProvider
                 $container->get(ImageTypeRepository::class)
             );
         });
+        $container->registerProvider(InfoService::class, static function () use ($container) {
+            return new InfoService(
+                $container->get('ps_eventbus.context'),
+                $container->get(InfoRepository::class),
+                $container->get(LanguagesService::class),
+                $container->get(CurrenciesService::class)
+            );
+        });
         $container->registerProvider(LanguagesService::class, static function () use ($container) {
             return new LanguagesService(
                 $container->get(LanguageRepository::class)
@@ -263,6 +260,9 @@ class ServiceProvider implements IServiceProvider
                 $container->get(OrderStatusHistoryRepository::class)
             );
         });
+        $container->registerProvider(PresenterService::class, static function () {
+            return new PresenterService();
+        });
         $container->registerProvider(ProductsService::class, static function () use ($container) {
             return new ProductsService(
                 $container->get(ProductRepository::class),
@@ -276,12 +276,15 @@ class ServiceProvider implements IServiceProvider
                 $container->get(ProductSupplierRepository::class)
             );
         });
-        $container->registerProvider(InfoService::class, static function () use ($container) {
-            return new InfoService(
-                $container->get('ps_eventbus.module'),
-                $container->get(InfoRepository::class),
+        $container->registerProvider(SynchronizationService::class, static function () use ($container) {
+            return new SynchronizationService(
+                $container->get(LiveSyncApiClient::class),
+                $container->get(SyncRepository::class),
+                $container->get(IncrementalSyncRepository::class),
+                $container->get(LiveSyncRepository::class),
                 $container->get(LanguagesService::class),
-                $container->get(CurrenciesService::class)
+                $container->get(ProxyService::class),
+                $container->get(ErrorHandler::class)
             );
         });
         $container->registerProvider(SpecificPricesService::class, static function () use ($container) {
@@ -317,7 +320,7 @@ class ServiceProvider implements IServiceProvider
         });
         $container->registerProvider(ThemesService::class, static function () use ($container) {
             return new ThemesService(
-                $container->get('ps_eventrbus.context')
+                $container->get('ps_eventbus.context')
             );
         });
         $container->registerProvider(TranslationsService::class, static function () use ($container) {

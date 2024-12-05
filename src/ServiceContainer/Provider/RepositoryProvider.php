@@ -59,6 +59,7 @@ use PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository;
 use PrestaShop\Module\PsEventbus\Repository\WishlistRepository;
 use PrestaShop\Module\PsEventbus\ServiceContainer\Contract\IServiceProvider;
 use PrestaShop\Module\PsEventbus\ServiceContainer\ServiceContainer;
+use PrestaShop\Module\PsEventbus\Repository\AttributeRepository;
 
 class RepositoryProvider implements IServiceProvider
 {
@@ -69,17 +70,6 @@ class RepositoryProvider implements IServiceProvider
      */
     public function provide(ServiceContainer $container)
     {
-        $container->registerProvider(IncrementalSyncRepository::class, static function () use ($container) {
-            return new IncrementalSyncRepository(
-                $container->get(ErrorHandler::class)
-            );
-        });
-        $container->registerProvider(SyncRepository::class, static function () {
-            return new SyncRepository();
-        });
-        $container->registerProvider(LiveSyncRepository::class, static function () {
-            return new LiveSyncRepository();
-        });
         $container->registerProvider(BundleRepository::class, static function () {
             return new BundleRepository();
         });
@@ -122,11 +112,19 @@ class RepositoryProvider implements IServiceProvider
         $container->registerProvider(ImageTypeRepository::class, static function () {
             return new ImageTypeRepository();
         });
+        $container->registerProvider(IncrementalSyncRepository::class, static function () use ($container) {
+            return new IncrementalSyncRepository(
+                $container->get(ErrorHandler::class)
+            );
+        });
         $container->registerProvider(ModuleRepository::class, static function () {
             return new ModuleRepository();
         });
         $container->registerProvider(LanguageRepository::class, static function () {
             return new LanguageRepository();
+        });
+        $container->registerProvider(LiveSyncRepository::class, static function () {
+            return new LiveSyncRepository();
         });
         $container->registerProvider(ManufacturerRepository::class, static function () {
             return new ManufacturerRepository();
@@ -152,6 +150,7 @@ class RepositoryProvider implements IServiceProvider
         $container->registerProvider(InfoRepository::class, static function () {
             return new InfoRepository();
         });
+        
         $container->registerProvider(StockRepository::class, static function () {
             return new StockRepository();
         });
@@ -166,6 +165,9 @@ class RepositoryProvider implements IServiceProvider
         });
         $container->registerProvider(StoreRepository::class, static function () {
             return new StoreRepository();
+        });
+        $container->registerProvider(SyncRepository::class, static function () {
+            return new SyncRepository();
         });
         $container->registerProvider(TaxonomyRepository::class, static function () {
             return new TaxonomyRepository();
