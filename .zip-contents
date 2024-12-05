@@ -5,6 +5,7 @@ src
 upgrade
 vendor
 ps_eventbus.php
+config.php
 logo.png
 config.xml
 LICENSE
