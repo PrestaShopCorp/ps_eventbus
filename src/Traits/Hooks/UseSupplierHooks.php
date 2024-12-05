@@ -84,7 +84,7 @@ trait UseSupplierHooks
             );
         }
     }
-    
+
     /**
      * @param array<mixed> $parameters
      *

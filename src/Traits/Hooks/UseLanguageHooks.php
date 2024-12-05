@@ -109,5 +109,4 @@ trait UseLanguageHooks
             );
         }
     }
-
 }

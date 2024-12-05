@@ -70,7 +70,7 @@ trait UseEmployeeHooks
             false
         );
     }
-    
+
     /**
      * @return void
      */

@@ -47,8 +47,8 @@ use PrestaShop\Module\PsEventbus\Traits\Hooks\UseStateHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseStockHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseStoreHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseSupplierHooks;
-use PrestaShop\Module\PsEventbus\Traits\Hooks\UseTaxRuleGroupHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseTaxHooks;
+use PrestaShop\Module\PsEventbus\Traits\Hooks\UseTaxRuleGroupHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseWishlistHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseZoneHooks;
 
@@ -173,8 +173,8 @@ trait UseHooks
             'actionObjectTaxRulesGroupAddAfter',
             'actionObjectTaxRulesGroupUpdateAfter',
             'actionObjectTaxRulesGroupDeleteAfter',
-            
-            'actionObjectWishlistAddAfter',   
+
+            'actionObjectWishlistAddAfter',
             'actionObjectWishlistUpdateAfter',
             'actionObjectWishlistDeleteAfter',
 

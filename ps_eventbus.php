@@ -56,7 +56,7 @@ class Ps_eventbus extends Module
     public $version;
 
     /**
-     * @var PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer
+     * @var PrestaShop\Module\PsEventbus\ServiceContainer\ServiceContainer
      */
     private $container;
 
@@ -169,14 +169,14 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @return ServiceContainer
+     * @return PrestaShop\Module\PsEventbus\ServiceContainer\ServiceContainer
      *
      * @throws Exception
      */
     public function getServiceContainer()
     {
         if (null === $this->container) {
-            $this->container = ServiceContainer::createInstance(
+            $this->container = PrestaShop\Module\PsEventbus\ServiceContainer\ServiceContainer::createInstance(
                 __DIR__ . '/config.php'
             );
         }

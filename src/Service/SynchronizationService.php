@@ -93,8 +93,6 @@ class SynchronizationService
         $this->languagesService = $languagesService;
         $this->proxyService = $proxyService;
         $this->errorHandler = $errorHandler;
-
-
     }
 
     /**

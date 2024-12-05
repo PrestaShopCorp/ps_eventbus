@@ -178,7 +178,7 @@ class ProductsService extends ShopContentAbstractService implements ShopContentS
             $product['id_attribute'] = (int) $product['id_attribute'];
             $product['id_category_default'] = (int) $product['id_category_default'];
             $product['quantity'] = (int) $product['quantity'];
-            
+
             $product['weight'] = (float) $product['weight'];
             $product['active'] = $product['active'] == '1';
             $product['manufacturer'] = (string) $product['manufacturer'];
