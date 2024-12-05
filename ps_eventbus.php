@@ -24,6 +24,9 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
+// DONT'T USE "use" STATEMENT HERE, IT'S NOT COMPAT WITH 1.6
+// PREFER "use" IN CLASS DIRECTLY
+
 require_once __DIR__ . '/vendor/autoload.php';
 
 if (!defined('_PS_VERSION_')) {
@@ -240,7 +243,6 @@ class Ps_eventbus extends Module
      */
     private function isPhpVersionCompliant()
     {
-        var_dump(PHP_VERSION_ID);
         return PHP_VERSION_ID >= 50600;
     }
 }
