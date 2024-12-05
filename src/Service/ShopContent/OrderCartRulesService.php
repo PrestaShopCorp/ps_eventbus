@@ -108,37 +108,14 @@ class OrderCartRulesService extends ShopContentAbstractService implements ShopCo
     private function castOrderCartRules(&$orderCartRules)
     {
         foreach ($orderCartRules as &$orderCartRule) {
+            $orderCartRule['id_order_cart_rule'] = (int) $orderCartRule['id_order_cart_rule'];
+            $orderCartRule['id_order'] = (int) $orderCartRule['id_order'];
             $orderCartRule['id_cart_rule'] = (int) $orderCartRule['id_cart_rule'];
-            $orderCartRule['id_customer'] = (int) $orderCartRule['id_customer'];
-            $orderCartRule['quantity'] = (int) $orderCartRule['quantity'];
-            $orderCartRule['quantity_per_user'] = (int) $orderCartRule['quantity_per_user'];
-            $orderCartRule['priority'] = (int) $orderCartRule['priority'];
-            $orderCartRule['partial_use'] = (bool) $orderCartRule['partial_use'];
-            $orderCartRule['minimum_amount'] = (float) $orderCartRule['minimum_amount'];
-            $orderCartRule['minimum_amount_tax'] = (bool) $orderCartRule['minimum_amount_tax'];
-            $orderCartRule['minimum_amount_currency'] = (int) $orderCartRule['minimum_amount_currency'];
-            $orderCartRule['minimum_amount_shipping'] = (bool) $orderCartRule['minimum_amount_shipping'];
-            $orderCartRule['country_restriction'] = (bool) $orderCartRule['country_restriction'];
-            $orderCartRule['carrier_restriction'] = (bool) $orderCartRule['carrier_restriction'];
-            $orderCartRule['group_restriction'] = (bool) $orderCartRule['group_restriction'];
-            $orderCartRule['cart_rule_restriction'] = (bool) $orderCartRule['cart_rule_restriction'];
-            $orderCartRule['product_restriction'] = (bool) $orderCartRule['product_restriction'];
-            $orderCartRule['shop_restriction'] = (bool) $orderCartRule['shop_restriction'];
+            $orderCartRule['id_order_invoice'] = (int) $orderCartRule['id_order_invoice'];
+            $orderCartRule['value'] = (float) $orderCartRule['value'];
+            $orderCartRule['value_tax_excl'] = (float) $orderCartRule['value_tax_excl'];
             $orderCartRule['free_shipping'] = (bool) $orderCartRule['free_shipping'];
-            $orderCartRule['reduction_percent'] = (float) $orderCartRule['reduction_percent'];
-            $orderCartRule['reduction_amount'] = (float) $orderCartRule['reduction_amount'];
-            $orderCartRule['reduction_tax'] = (bool) $orderCartRule['reduction_tax'];
-            $orderCartRule['reduction_currency'] = (int) $orderCartRule['reduction_currency'];
-            $orderCartRule['reduction_product'] = (int) $orderCartRule['reduction_product'];
-            $orderCartRule['reduction_exclude_special'] = (bool) $orderCartRule['reduction_exclude_special'];
-            $orderCartRule['gift_product'] = (int) $orderCartRule['gift_product'];
-            $orderCartRule['gift_product_attribute'] = (int) $orderCartRule['gift_product_attribute'];
-            $orderCartRule['highlight'] = (bool) $orderCartRule['highlight'];
-            $orderCartRule['active'] = (bool) $orderCartRule['active'];
-
-            $orderCartRule['value'] = (int) $orderCartRule['value'];
-            $orderCartRule['value_tax_excl'] = (int) $orderCartRule['value_tax_excl'];
-            $orderCartRule['deleted'] = (bool) $orderCartRule['deleted'];
+            $orderCartRule['deleted'] = isset($orderCartRule['deleted']) ? (bool) $orderCartRule['deleted'] : false;
         }
     }
 }
