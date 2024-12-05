@@ -34,7 +34,7 @@ use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\SyncRepository;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\ShopContentServiceInterface;
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use PrestaShop\Module\PsEventbus\ServiceContainer\Exception\ServiceNotFoundException;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -93,6 +93,8 @@ class SynchronizationService
         $this->languagesService = $languagesService;
         $this->proxyService = $proxyService;
         $this->errorHandler = $errorHandler;
+
+
     }
 
     /**
@@ -125,9 +127,9 @@ class SynchronizationService
         /** @var \Ps_eventbus */
         $module = \Module::getInstanceByName('ps_eventbus');
 
-        if (!$module->hasService($serviceId)) {
+        /* if (!$module->hasService($serviceId)) {
             throw new ServiceNotFoundException($serviceId);
-        }
+        } */
 
         /** @var ShopContentServiceInterface $shopContentApiService */
         $shopContentApiService = $module->getService($serviceId);

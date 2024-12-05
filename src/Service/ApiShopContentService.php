@@ -59,10 +59,10 @@ class ApiShopContentService
 
     public function __construct(
         \Ps_eventbus $module,
-        ErrorHandler $errorHandler,
         ApiAuthorizationService $apiAuthorizationService,
         SynchronizationService $synchronizationService,
-        SyncRepository $syncRepository
+        SyncRepository $syncRepository,
+        ErrorHandler $errorHandler
     ) {
         $this->startTime = time();
 
@@ -98,7 +98,7 @@ class ApiShopContentService
             $response = [];
 
             /** @var LanguagesService $languagesService */
-            $languagesService = $this->module->getService('PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService');
+            $languagesService = $this->module->getService(LanguagesService::class);
 
             $timezone = (string) \Configuration::get('PS_TIMEZONE');
             $dateNow = (new \DateTime('now', new \DateTimeZone($timezone)))->format(Config::MYSQL_DATE_FORMAT);
@@ -114,7 +114,7 @@ class ApiShopContentService
 
                 if ($typeSync) {
                     /** @var IncrementalSyncRepository $incrementalSyncRepository */
-                    $incrementalSyncRepository = $this->module->getService('PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository');
+                    $incrementalSyncRepository = $this->module->getService(IncrementalSyncRepository::class);
                     $incrementalSyncRepository->removeIncrementaSyncObjectByType($shopContent);
                 }
 

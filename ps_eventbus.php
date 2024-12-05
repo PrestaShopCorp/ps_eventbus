@@ -58,7 +58,7 @@ class Ps_eventbus extends Module
     /**
      * @var PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer
      */
-    private $serviceContainer;
+    private $container;
 
     /**
      * @var int the unique shop identifier (uuid v4)
@@ -169,40 +169,19 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @return string
-     */
-    public function getModuleEnvVar()
-    {
-        return strtoupper((string) $this->name) . '_ENV';
-    }
-
-    /**
-     * @param string $default
-     *
-     * @return string
-     */
-    public function getModuleEnv($default = null)
-    {
-        return getenv($this->getModuleEnvVar()) ?: $default ?: self::DEFAULT_ENV;
-    }
-
-    /**
-     * @return PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer
+     * @return ServiceContainer
      *
      * @throws Exception
      */
     public function getServiceContainer()
     {
-        if (null === $this->serviceContainer) {
-            // append version number to force cache generation (1.6 Core won't clear it)
-            $this->serviceContainer = new PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer(
-                $this->name . str_replace(['.', '-', '+'], '', $this->version),
-                $this->getLocalPath(),
-                $this->getModuleEnv()
+        if (null === $this->container) {
+            $this->container = ServiceContainer::createInstance(
+                __DIR__ . '/config.php'
             );
         }
 
-        return $this->serviceContainer;
+        return $this->container;
     }
 
     /**
@@ -215,15 +194,15 @@ class Ps_eventbus extends Module
      */
     public function getService($serviceName)
     {
-        try {
-            return $this->getServiceContainer()->getService($serviceName);
-        } catch (Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException $exception) {
-            if (method_exists($this, 'get')) {
-                return $this->get($serviceName);
-            }
+        return $this->getServiceContainer()->getService($serviceName);
+    }
 
-            throw new Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException($serviceName);
-        }
+    /**
+     * @return Monolog\Logger
+     */
+    public function getLogger()
+    {
+        return $this->getService('ps_eventbus.logger');
     }
 
     /**
