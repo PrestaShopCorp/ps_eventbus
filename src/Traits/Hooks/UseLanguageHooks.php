@@ -40,31 +40,6 @@ trait UseLanguageHooks
      *
      * @return void
      */
-    public function hookActionObjectLanguageDeleteAfter($parameters)
-    {
-        /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
-
-        /** @var \Language $language */
-        $language = $parameters['object'];
-
-        if ($language->id) {
-            $synchronizationService->sendLiveSync(Config::COLLECTION_LANGUAGES, Config::INCREMENTAL_TYPE_DELETE);
-            $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_LANGUAGES => $language->id],
-                Config::INCREMENTAL_TYPE_DELETE,
-                date(DATE_ATOM),
-                $this->shopId,
-                false
-            );
-        }
-    }
-
-    /**
-     * @param array<mixed> $parameters
-     *
-     * @return void
-     */
     public function hookActionObjectLanguageAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
@@ -109,4 +84,30 @@ trait UseLanguageHooks
             );
         }
     }
+
+    /**
+     * @param array<mixed> $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectLanguageDeleteAfter($parameters)
+    {
+        /** @var SynchronizationService $synchronizationService * */
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
+
+        /** @var \Language $language */
+        $language = $parameters['object'];
+
+        if ($language->id) {
+            $synchronizationService->sendLiveSync(Config::COLLECTION_LANGUAGES, Config::INCREMENTAL_TYPE_DELETE);
+            $synchronizationService->insertContentIntoIncremental(
+                [Config::COLLECTION_LANGUAGES => $language->id],
+                Config::INCREMENTAL_TYPE_DELETE,
+                date(DATE_ATOM),
+                $this->shopId,
+                false
+            );
+        }
+    }
+
 }

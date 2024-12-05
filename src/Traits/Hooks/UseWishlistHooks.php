@@ -40,39 +40,6 @@ trait UseWishlistHooks
      *
      * @return void
      */
-    public function hookActionObjectWishlistDeleteAfter($parameters)
-    {
-        /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
-
-        $wishlist = $parameters['object'];
-
-        if ($wishlist->id) {
-            $synchronizationService->sendLiveSync(
-                [
-                    Config::COLLECTION_WISHLISTS,
-                    Config::COLLECTION_WISHLIST_PRODUCTS,
-                ],
-                Config::INCREMENTAL_TYPE_DELETE
-            );
-            $synchronizationService->insertContentIntoIncremental(
-                [
-                    Config::COLLECTION_WISHLISTS => $wishlist->id,
-                    Config::COLLECTION_WISHLIST_PRODUCTS => $wishlist->id,
-                ],
-                Config::INCREMENTAL_TYPE_DELETE,
-                date(DATE_ATOM),
-                $this->shopId,
-                false
-            );
-        }
-    }
-
-    /**
-     * @param array<mixed> $parameters
-     *
-     * @return void
-     */
     public function hookActionObjectWishlistAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
@@ -130,6 +97,39 @@ trait UseWishlistHooks
                 date(DATE_ATOM),
                 $this->shopId,
                 true
+            );
+        }
+    }
+
+    /**
+     * @param array<mixed> $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectWishlistDeleteAfter($parameters)
+    {
+        /** @var SynchronizationService $synchronizationService * */
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
+
+        $wishlist = $parameters['object'];
+
+        if ($wishlist->id) {
+            $synchronizationService->sendLiveSync(
+                [
+                    Config::COLLECTION_WISHLISTS,
+                    Config::COLLECTION_WISHLIST_PRODUCTS,
+                ],
+                Config::INCREMENTAL_TYPE_DELETE
+            );
+            $synchronizationService->insertContentIntoIncremental(
+                [
+                    Config::COLLECTION_WISHLISTS => $wishlist->id,
+                    Config::COLLECTION_WISHLIST_PRODUCTS => $wishlist->id,
+                ],
+                Config::INCREMENTAL_TYPE_DELETE,
+                date(DATE_ATOM),
+                $this->shopId,
+                false
             );
         }
     }

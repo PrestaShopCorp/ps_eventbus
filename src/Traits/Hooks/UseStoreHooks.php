@@ -40,31 +40,6 @@ trait UseStoreHooks
      *
      * @return void
      */
-    public function hookActionObjectStoreDeleteAfter($parameters)
-    {
-        /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
-
-        /** @var \Store $store */
-        $store = $parameters['object'];
-
-        if ($store->id) {
-            $synchronizationService->sendLiveSync(Config::COLLECTION_STORES, Config::INCREMENTAL_TYPE_DELETE);
-            $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_STORES => $store->id],
-                Config::INCREMENTAL_TYPE_DELETE,
-                date(DATE_ATOM),
-                $this->shopId,
-                false
-            );
-        }
-    }
-
-    /**
-     * @param array<mixed> $parameters
-     *
-     * @return void
-     */
     public function hookActionObjectStoreAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
@@ -106,6 +81,31 @@ trait UseStoreHooks
                 date(DATE_ATOM),
                 $this->shopId,
                 true
+            );
+        }
+    }
+
+    /**
+     * @param array<mixed> $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectStoreDeleteAfter($parameters)
+    {
+        /** @var SynchronizationService $synchronizationService * */
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
+
+        /** @var \Store $store */
+        $store = $parameters['object'];
+
+        if ($store->id) {
+            $synchronizationService->sendLiveSync(Config::COLLECTION_STORES, Config::INCREMENTAL_TYPE_DELETE);
+            $synchronizationService->insertContentIntoIncremental(
+                [Config::COLLECTION_STORES => $store->id],
+                Config::INCREMENTAL_TYPE_DELETE,
+                date(DATE_ATOM),
+                $this->shopId,
+                false
             );
         }
     }

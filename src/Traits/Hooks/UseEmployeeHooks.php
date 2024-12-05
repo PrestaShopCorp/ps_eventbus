@@ -56,24 +56,6 @@ trait UseEmployeeHooks
     /**
      * @return void
      */
-    public function hookActionObjectEmployeeDeleteAfter()
-    {
-        /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
-
-        $synchronizationService->sendLiveSync(Config::COLLECTION_EMPLOYEES, Config::INCREMENTAL_TYPE_DELETE);
-        $synchronizationService->insertContentIntoIncremental(
-            [Config::COLLECTION_EMPLOYEES => 0],
-            Config::INCREMENTAL_TYPE_DELETE,
-            date(DATE_ATOM),
-            $this->shopId,
-            false
-        );
-    }
-
-    /**
-     * @return void
-     */
     public function hookActionObjectEmployeeUpdateAfter()
     {
         /** @var SynchronizationService $synchronizationService * */
@@ -83,6 +65,24 @@ trait UseEmployeeHooks
         $synchronizationService->insertContentIntoIncremental(
             [Config::COLLECTION_EMPLOYEES => 0],
             Config::INCREMENTAL_TYPE_UPSERT,
+            date(DATE_ATOM),
+            $this->shopId,
+            false
+        );
+    }
+    
+    /**
+     * @return void
+     */
+    public function hookActionObjectEmployeeDeleteAfter()
+    {
+        /** @var SynchronizationService $synchronizationService * */
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
+
+        $synchronizationService->sendLiveSync(Config::COLLECTION_EMPLOYEES, Config::INCREMENTAL_TYPE_DELETE);
+        $synchronizationService->insertContentIntoIncremental(
+            [Config::COLLECTION_EMPLOYEES => 0],
+            Config::INCREMENTAL_TYPE_DELETE,
             date(DATE_ATOM),
             $this->shopId,
             false

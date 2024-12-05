@@ -40,31 +40,6 @@ trait UseSupplierHooks
      *
      * @return void
      */
-    public function hookActionObjectSupplierDeleteAfter($parameters)
-    {
-        /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
-
-        /** @var \Supplier $supplier */
-        $supplier = $parameters['object'];
-
-        if (isset($supplier->id)) {
-            $synchronizationService->sendLiveSync(Config::COLLECTION_SUPPLIERS, Config::INCREMENTAL_TYPE_DELETE);
-            $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_SUPPLIERS => $supplier->id],
-                Config::INCREMENTAL_TYPE_DELETE,
-                date(DATE_ATOM),
-                $this->shopId,
-                false
-            );
-        }
-    }
-
-    /**
-     * @param array<mixed> $parameters
-     *
-     * @return void
-     */
     public function hookActionObjectSupplierAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
@@ -106,6 +81,31 @@ trait UseSupplierHooks
                 date(DATE_ATOM),
                 $this->shopId,
                 true
+            );
+        }
+    }
+    
+    /**
+     * @param array<mixed> $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectSupplierDeleteAfter($parameters)
+    {
+        /** @var SynchronizationService $synchronizationService * */
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
+
+        /** @var \Supplier $supplier */
+        $supplier = $parameters['object'];
+
+        if (isset($supplier->id)) {
+            $synchronizationService->sendLiveSync(Config::COLLECTION_SUPPLIERS, Config::INCREMENTAL_TYPE_DELETE);
+            $synchronizationService->insertContentIntoIncremental(
+                [Config::COLLECTION_SUPPLIERS => $supplier->id],
+                Config::INCREMENTAL_TYPE_DELETE,
+                date(DATE_ATOM),
+                $this->shopId,
+                false
             );
         }
     }

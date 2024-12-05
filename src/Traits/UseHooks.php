@@ -37,18 +37,17 @@ use PrestaShop\Module\PsEventbus\Traits\Hooks\UseCurrencyHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseCustomerHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseEmployeeHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseImageHooks;
-use PrestaShop\Module\PsEventbus\Traits\Hooks\UseImageTypesHooks;
+use PrestaShop\Module\PsEventbus\Traits\Hooks\UseImageTypeHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseLanguageHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseManufacturerHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseOrderHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseProductHooks;
-use PrestaShop\Module\PsEventbus\Traits\Hooks\UseShippingPreferenceHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseSpecificPriceHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseStateHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseStockHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseStoreHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseSupplierHooks;
-use PrestaShop\Module\PsEventbus\Traits\Hooks\UseTaxeRuleGroupHooks;
+use PrestaShop\Module\PsEventbus\Traits\Hooks\UseTaxRuleGroupHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseTaxHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseWishlistHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseZoneHooks;
@@ -70,19 +69,18 @@ trait UseHooks
     use UseCustomerHooks;
     use UseEmployeeHooks;
     use UseImageHooks;
-    use UseImageTypesHooks;
+    use UseImageTypeHooks;
     use UseLanguageHooks;
     use UseManufacturerHooks;
     use UseOrderHooks;
     use UseProductHooks;
-    use UseShippingPreferenceHooks;
     use UseSpecificPriceHooks;
     use UseStateHooks;
     use UseStockHooks;
     use UseStoreHooks;
     use UseSupplierHooks;
     use UseTaxHooks;
-    use UseTaxeRuleGroupHooks;
+    use UseTaxRuleGroupHooks;
     use UseWishlistHooks;
     use UseZoneHooks;
 
@@ -94,92 +92,97 @@ trait UseHooks
         // Retourne la liste des hooks a register
         return [
             'actionObjectCarrierAddAfter',
-            'actionObjectCarrierDeleteAfter',
             'actionObjectCarrierUpdateAfter',
+            'actionObjectCarrierDeleteAfter',
 
             'actionObjectCartAddAfter',
             'actionObjectCartUpdateAfter',
 
             'actionObjectCartRuleAddAfter',
-            'actionObjectCartRuleDeleteAfter',
             'actionObjectCartRuleUpdateAfter',
+            'actionObjectCartRuleDeleteAfter',
 
             'actionObjectCategoryAddAfter',
-            'actionObjectCategoryDeleteAfter',
             'actionObjectCategoryUpdateAfter',
+            'actionObjectCategoryDeleteAfter',
 
             'actionObjectCombinationDeleteAfter',
 
             'actionObjectCountryAddAfter',
-            'actionObjectCountryDeleteAfter',
             'actionObjectCountryUpdateAfter',
+            'actionObjectCountryDeleteAfter',
 
             'actionObjectCurrencyAddAfter',
             'actionObjectCurrencyUpdateAfter',
+            'actionObjectCurrencyDeleteAfter',
 
             'actionObjectCustomerAddAfter',
-            'actionObjectCustomerDeleteAfter',
             'actionObjectCustomerUpdateAfter',
+            'actionObjectCustomerDeleteAfter',
+
+            'actionObjectEmployeeAddAfter',
+            'actionObjectEmployeeUpdateAfter',
+            'actionObjectEmployeeDeleteAfter',
 
             'actionObjectImageAddAfter',
-            'actionObjectImageDeleteAfter',
             'actionObjectImageUpdateAfter',
+            'actionObjectImageDeleteAfter',
+
+            'actionObjectImageTypeAddAfter',
+            'actionObjectImageTypeUpdateAfter',
+            'actionObjectImageTypeDeleteAfter',
 
             'actionObjectLanguageAddAfter',
-            'actionObjectLanguageDeleteAfter',
             'actionObjectLanguageUpdateAfter',
+            'actionObjectLanguageDeleteAfter',
 
             'actionObjectManufacturerAddAfter',
-            'actionObjectManufacturerDeleteAfter',
             'actionObjectManufacturerUpdateAfter',
+            'actionObjectManufacturerDeleteAfter',
 
             'actionObjectOrderAddAfter',
             'actionObjectOrderUpdateAfter',
 
             'actionObjectProductAddAfter',
-            'actionObjectProductDeleteAfter',
             'actionObjectProductUpdateAfter',
+            'actionObjectProductDeleteAfter',
 
             'actionObjectSpecificPriceAddAfter',
-            'actionObjectSpecificPriceDeleteAfter',
             'actionObjectSpecificPriceUpdateAfter',
+            'actionObjectSpecificPriceDeleteAfter',
 
             'actionObjectStateAddAfter',
-            'actionObjectStateDeleteAfter',
             'actionObjectStateUpdateAfter',
+            'actionObjectStateDeleteAfter',
 
             'actionObjectStockAddAfter',
             'actionObjectStockUpdateAfter',
 
             'actionObjectStoreAddAfter',
-            'actionObjectStoreDeleteAfter',
             'actionObjectStoreUpdateAfter',
+            'actionObjectStoreDeleteAfter',
 
             'actionObjectSupplierAddAfter',
-            'actionObjectSupplierDeleteAfter',
             'actionObjectSupplierUpdateAfter',
+            'actionObjectSupplierDeleteAfter',
 
             'actionObjectTaxAddAfter',
-            'actionObjectTaxDeleteAfter',
-            'actionObjectTaxRulesGroupAddAfter',
-            'actionObjectTaxRulesGroupDeleteAfter',
-            'actionObjectTaxRulesGroupUpdateAfter',
             'actionObjectTaxUpdateAfter',
+            'actionObjectTaxDeleteAfter',
 
-            'actionObjectWishlistAddAfter',
-            'actionObjectWishlistDeleteAfter',
+            'actionObjectTaxRulesGroupAddAfter',
+            'actionObjectTaxRulesGroupUpdateAfter',
+            'actionObjectTaxRulesGroupDeleteAfter',
+            
+            'actionObjectWishlistAddAfter',   
             'actionObjectWishlistUpdateAfter',
+            'actionObjectWishlistDeleteAfter',
 
             'actionObjectZoneAddAfter',
-            'actionObjectZoneDeleteAfter',
             'actionObjectZoneUpdateAfter',
+            'actionObjectZoneDeleteAfter',
 
             'actionShippingPreferencesPageSave',
-
-            'actionObjectEmployeeAddAfter',
-            'actionObjectEmployeeDeleteAfter',
-            'actionObjectEmployeeUpdateAfter',
-
             'actionDispatcherBefore',
         ];
     }

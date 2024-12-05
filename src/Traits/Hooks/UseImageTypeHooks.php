@@ -33,34 +33,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-trait UseImageTypesHooks
+trait UseImageTypeHooks
 {
-    /**
-     * @param array<mixed> $parameters
-     *
-     * @return void
-     */
-    public function hookActionObjectImageTypeDeleteAfter($parameters)
-    {
-        /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
-
-        /** @var \ImageType $imageType */
-        $imageType = $parameters['object'];
-
-        if ($imageType->id) {
-            $synchronizationService->sendLiveSync(Config::COLLECTION_IMAGE_TYPES, Config::INCREMENTAL_TYPE_DELETE);
-
-            $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_IMAGE_TYPES => $imageType->id],
-                Config::INCREMENTAL_TYPE_DELETE,
-                date(DATE_ATOM),
-                $this->shopId,
-                true
-            );
-        }
-    }
-
     /**
      * @param array<mixed> $parameters
      *
@@ -75,11 +49,11 @@ trait UseImageTypesHooks
         $imageType = $parameters['object'];
 
         if ($imageType->id) {
-            $synchronizationService->sendLiveSync(Config::COLLECTION_IMAGE_TYPES, Config::INCREMENTAL_TYPE_DELETE);
+            $synchronizationService->sendLiveSync(Config::COLLECTION_IMAGE_TYPES, Config::INCREMENTAL_TYPE_UPSERT);
 
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_IMAGE_TYPES => $imageType->id],
-                Config::INCREMENTAL_TYPE_DELETE,
+                Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
@@ -93,6 +67,32 @@ trait UseImageTypesHooks
      * @return void
      */
     public function hookActionObjectImageTypeUpdateAfter($parameters)
+    {
+        /** @var SynchronizationService $synchronizationService * */
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
+
+        /** @var \ImageType $imageType */
+        $imageType = $parameters['object'];
+
+        if ($imageType->id) {
+            $synchronizationService->sendLiveSync(Config::COLLECTION_IMAGE_TYPES, Config::INCREMENTAL_TYPE_UPSERT);
+
+            $synchronizationService->insertContentIntoIncremental(
+                [Config::COLLECTION_IMAGE_TYPES => $imageType->id],
+                Config::INCREMENTAL_TYPE_UPSERT,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
+    }
+
+    /**
+     * @param array<mixed> $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectImageTypeDeleteAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);

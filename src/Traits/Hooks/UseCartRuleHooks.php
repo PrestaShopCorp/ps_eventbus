@@ -64,30 +64,6 @@ trait UseCartRuleHooks
      *
      * @return void
      */
-    public function hookActionObjectCartRuleDeleteAfter($parameters)
-    {
-        /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
-
-        $cartRule = $parameters['object'];
-
-        if (isset($cartRule->id)) {
-            $synchronizationService->sendLiveSync(Config::COLLECTION_CART_RULES, Config::INCREMENTAL_TYPE_DELETE);
-            $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_CART_RULES => $cartRule->id],
-                Config::INCREMENTAL_TYPE_DELETE,
-                date(DATE_ATOM),
-                $this->shopId,
-                false
-            );
-        }
-    }
-
-    /**
-     * @param array<mixed> $parameters
-     *
-     * @return void
-     */
     public function hookActionObjectCartRuleUpdateAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
@@ -100,6 +76,30 @@ trait UseCartRuleHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CART_RULES => $cartRule->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
+                date(DATE_ATOM),
+                $this->shopId,
+                false
+            );
+        }
+    }
+
+    /**
+     * @param array<mixed> $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectCartRuleDeleteAfter($parameters)
+    {
+        /** @var SynchronizationService $synchronizationService * */
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
+
+        $cartRule = $parameters['object'];
+
+        if (isset($cartRule->id)) {
+            $synchronizationService->sendLiveSync(Config::COLLECTION_CART_RULES, Config::INCREMENTAL_TYPE_DELETE);
+            $synchronizationService->insertContentIntoIncremental(
+                [Config::COLLECTION_CART_RULES => $cartRule->id],
+                Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
                 $this->shopId,
                 false

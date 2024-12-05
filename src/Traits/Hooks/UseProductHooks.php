@@ -42,42 +42,6 @@ trait UseProductHooks
      *
      * @return void
      */
-    public function hookActionObjectProductDeleteAfter($parameters)
-    {
-        /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
-
-        /** @var \Product $product */
-        $product = $parameters['object'];
-
-        if (isset($product->id)) {
-            $synchronizationService->sendLiveSync(
-                [
-                    Config::COLLECTION_PRODUCTS,
-                    Config::COLLECTION_BUNDLES,
-                    Config::COLLECTION_PRODUCT_SUPPLIERS,
-                ],
-                Config::INCREMENTAL_TYPE_DELETE
-            );
-            $synchronizationService->insertContentIntoIncremental(
-                [
-                    Config::COLLECTION_PRODUCTS => $product->id,
-                    Config::COLLECTION_BUNDLES => $product->id,
-                    Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id,
-                ],
-                Config::INCREMENTAL_TYPE_DELETE,
-                date(DATE_ATOM),
-                $this->shopId,
-                false
-            );
-        }
-    }
-
-    /**
-     * @param array<mixed> $parameters
-     *
-     * @return void
-     */
     public function hookActionObjectProductAddAfter($parameters)
     {
         /** @var \Product $product */
@@ -171,5 +135,41 @@ trait UseProductHooks
             $this->shopId,
             true
         );
+    }
+
+    /**
+     * @param array<mixed> $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectProductDeleteAfter($parameters)
+    {
+        /** @var SynchronizationService $synchronizationService * */
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
+
+        /** @var \Product $product */
+        $product = $parameters['object'];
+
+        if (isset($product->id)) {
+            $synchronizationService->sendLiveSync(
+                [
+                    Config::COLLECTION_PRODUCTS,
+                    Config::COLLECTION_BUNDLES,
+                    Config::COLLECTION_PRODUCT_SUPPLIERS,
+                ],
+                Config::INCREMENTAL_TYPE_DELETE
+            );
+            $synchronizationService->insertContentIntoIncremental(
+                [
+                    Config::COLLECTION_PRODUCTS => $product->id,
+                    Config::COLLECTION_BUNDLES => $product->id,
+                    Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id,
+                ],
+                Config::INCREMENTAL_TYPE_DELETE,
+                date(DATE_ATOM),
+                $this->shopId,
+                false
+            );
+        }
     }
 }

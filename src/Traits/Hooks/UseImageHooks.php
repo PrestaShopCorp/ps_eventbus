@@ -40,32 +40,6 @@ trait UseImageHooks
      *
      * @return void
      */
-    public function hookActionObjectImageDeleteAfter($parameters)
-    {
-        /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
-
-        /** @var \Image $image */
-        $image = $parameters['object'];
-
-        if ($image->id_product) {
-            $synchronizationService->sendLiveSync(Config::COLLECTION_IMAGES, Config::INCREMENTAL_TYPE_UPSERT);
-
-            $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_IMAGES => $image->id_image],
-                Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
-                $this->shopId,
-                true
-            );
-        }
-    }
-
-    /**
-     * @param array<mixed> $parameters
-     *
-     * @return void
-     */
     public function hookActionObjectImageAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
@@ -93,6 +67,32 @@ trait UseImageHooks
      * @return void
      */
     public function hookActionObjectImageUpdateAfter($parameters)
+    {
+        /** @var SynchronizationService $synchronizationService * */
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
+
+        /** @var \Image $image */
+        $image = $parameters['object'];
+
+        if ($image->id_product) {
+            $synchronizationService->sendLiveSync(Config::COLLECTION_IMAGES, Config::INCREMENTAL_TYPE_UPSERT);
+
+            $synchronizationService->insertContentIntoIncremental(
+                [Config::COLLECTION_IMAGES => $image->id_image],
+                Config::INCREMENTAL_TYPE_UPSERT,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
+    }
+
+    /**
+     * @param array<mixed> $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectImageDeleteAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);

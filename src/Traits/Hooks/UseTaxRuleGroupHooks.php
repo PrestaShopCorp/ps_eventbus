@@ -33,7 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-trait UseTaxeRuleGroupHooks
+trait UseTaxRuleGroupHooks
 {
     /**
      * @return void

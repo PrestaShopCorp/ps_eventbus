@@ -80,4 +80,22 @@ trait UseCommonHooks
             return;
         }
     }
+
+    /**
+     * @return void
+     */
+    public function hookActionShippingPreferencesPageSave()
+    {
+        /** @var SynchronizationService $synchronizationService * */
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
+
+        $synchronizationService->sendLiveSync(Config::COLLECTION_CARRIERS, Config::INCREMENTAL_TYPE_UPSERT);
+        $synchronizationService->insertContentIntoIncremental(
+            [Config::COLLECTION_CARRIERS => 0],
+            Config::INCREMENTAL_TYPE_UPSERT,
+            date(DATE_ATOM),
+            $this->shopId,
+            false
+        );
+    }
 }

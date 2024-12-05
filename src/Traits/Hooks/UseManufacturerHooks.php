@@ -40,31 +40,6 @@ trait UseManufacturerHooks
      *
      * @return void
      */
-    public function hookActionObjectManufacturerDeleteAfter($parameters)
-    {
-        /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
-
-        /** @var \Manufacturer $manufacturer */
-        $manufacturer = $parameters['object'];
-
-        if (isset($manufacturer->id)) {
-            $synchronizationService->sendLiveSync(Config::COLLECTION_MANUFACTURERS, Config::INCREMENTAL_TYPE_DELETE);
-            $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_MANUFACTURERS => $manufacturer->id],
-                Config::INCREMENTAL_TYPE_DELETE,
-                date(DATE_ATOM),
-                $this->shopId,
-                false
-            );
-        }
-    }
-
-    /**
-     * @param array<mixed> $parameters
-     *
-     * @return void
-     */
     public function hookActionObjectManufacturerAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
@@ -106,6 +81,31 @@ trait UseManufacturerHooks
                 date(DATE_ATOM),
                 $this->shopId,
                 true
+            );
+        }
+    }
+
+    /**
+     * @param array<mixed> $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectManufacturerDeleteAfter($parameters)
+    {
+        /** @var SynchronizationService $synchronizationService * */
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
+
+        /** @var \Manufacturer $manufacturer */
+        $manufacturer = $parameters['object'];
+
+        if (isset($manufacturer->id)) {
+            $synchronizationService->sendLiveSync(Config::COLLECTION_MANUFACTURERS, Config::INCREMENTAL_TYPE_DELETE);
+            $synchronizationService->insertContentIntoIncremental(
+                [Config::COLLECTION_MANUFACTURERS => $manufacturer->id],
+                Config::INCREMENTAL_TYPE_DELETE,
+                date(DATE_ATOM),
+                $this->shopId,
+                false
             );
         }
     }
