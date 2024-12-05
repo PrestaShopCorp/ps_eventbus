@@ -178,13 +178,11 @@ class ProductsService extends ShopContentAbstractService implements ShopContentS
             $product['id_attribute'] = (int) $product['id_attribute'];
             $product['id_category_default'] = (int) $product['id_category_default'];
             $product['quantity'] = (int) $product['quantity'];
-            $product['additional_delivery_times'] = (string) $product['additional_delivery_times'];
+            
             $product['weight'] = (float) $product['weight'];
             $product['active'] = $product['active'] == '1';
             $product['manufacturer'] = (string) $product['manufacturer'];
             $product['default_category'] = (string) $product['default_category'];
-            $product['isbn'] = (string) $product['isbn'];
-            $product['mpn'] = (string) $product['mpn'];
             $product['ean'] = (string) $product['ean'];
             $product['upc'] = (string) $product['upc'];
             $product['is_default_attribute'] = $product['id_attribute'] === 0 ? true : $product['is_default_attribute'] == 1;
@@ -197,6 +195,20 @@ class ProductsService extends ShopContentAbstractService implements ShopContentS
 
             if ($product['unit_price_ratio'] != 0 && $product['price_tax_excl']) {
                 $product['price_per_unit'] = (float) ($product['price_tax_excl'] / $product['unit_price_ratio']);
+            }
+
+            if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>=')) {
+                $product['isbn'] = (string) $product['isbn'];
+            }
+
+            // https://github.com/PrestaShop/PrestaShop/commit/10268af8db4163dc2a02edb8da93d02f37f814d8#diff-e94a594ba740485c7a4882b333984d3932a2f99c0d6d0005620745087cce7a10R260
+            if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.3.0', '>=')) {
+                $product['additional_delivery_times'] = (string) $product['additional_delivery_times'];
+            }
+
+            // https://github.com/PrestaShop/PrestaShop/commit/75fcc335a85c4e3acb2444ef9584590a59fc2d62#diff-e98d435095567c145b49744715fd575eaab7050328c211b33aa9a37158421ff4R1615
+            if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.7.0', '>=')) {
+                $product['mpn'] = (string) $product['mpn'];
             }
         }
     }
