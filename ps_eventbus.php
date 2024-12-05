@@ -1644,34 +1644,34 @@ class Ps_eventbus extends Module
      */
     public function hookActionDispatcherBefore($parameters)
     {
-        /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
-
-        try {
-            /*
-             * Class "ActionDispatcherLegacyHooksSubscriber" as implement in 1.7.3.0:
-             * https://github.com/PrestaShop/PrestaShop/commit/a4ae4544cc62c818aba8b3d9254308f538b7acdc
-             */
-            if ($parameters['controller_type'] != 2) {
-                return;
-            }
-
-            if (array_key_exists('route', $parameters)) {
-                $route = $parameters['route'];
-
-                // when translation is edited or reset, add to incremental sync
-                if ($route == 'api_translation_value_edit' || $route == 'api_translation_value_reset') {
-                    $synchronizationService->insertIncrementalSyncObject(
-                        0,
-                        Config::COLLECTION_TRANSLATIONS,
-                        date(DATE_ATOM),
-                        $this->shopId
-                    );
-                }
-            }
-        } catch (Exception $e) {
-            return;
-        }
+        // /** @var SynchronizationService $synchronizationService * */
+        // $synchronizationService = $this->getService('PrestaShop\Module\PsEventbus\Service\SynchronizationService');
+        // 
+        // try {
+        //     /*
+        //      * Class "ActionDispatcherLegacyHooksSubscriber" as implement in 1.7.3.0:
+        //      * https://github.com/PrestaShop/PrestaShop/commit/a4ae4544cc62c818aba8b3d9254308f538b7acdc
+        //      */
+        //     if ($parameters['controller_type'] != 2) {
+        //         return;
+        //     }
+        // 
+        //    if (array_key_exists('route', $parameters)) {
+        //         $route = $parameters['route'];
+        // 
+        //        // when translation is edited or reset, add to incremental sync
+        //         if ($route == 'api_translation_value_edit' || $route == 'api_translation_value_reset') {
+        //             $synchronizationService->insertIncrementalSyncObject(
+        //                0,
+        //                Config::COLLECTION_TRANSLATIONS,
+        //                date(DATE_ATOM),
+        //                $this->shopId
+        //            );
+        //        }
+        //     }
+        // } catch (Exception $e) {
+        //     return;
+        // }
     }
 
     /**
