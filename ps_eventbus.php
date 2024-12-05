@@ -24,11 +24,6 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-use PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer;
-use PrestaShop\Module\PsEventbus\Module\Install;
-use PrestaShop\Module\PsEventbus\Module\Uninstall;
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
-
 require_once __DIR__ . '/vendor/autoload.php';
 
 if (!defined('_PS_VERSION_')) {
@@ -58,7 +53,7 @@ class Ps_eventbus extends Module
     public $version;
 
     /**
-     * @var ServiceContainer
+     * @var PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer
      */
     private $serviceContainer;
 
@@ -151,7 +146,7 @@ class Ps_eventbus extends Module
             return defined('PS_INSTALLATION_IN_PROGRESS');
         }
 
-        $installer = new Install($this, Db::getInstance());
+        $installer = new PrestaShop\Module\PsEventbus\Module\Install($this, Db::getInstance());
 
         return $installer->installDatabaseTables()
             && parent::install()
@@ -163,7 +158,7 @@ class Ps_eventbus extends Module
      */
     public function uninstall()
     {
-        $uninstaller = new Uninstall($this, Db::getInstance());
+        $uninstaller = new PrestaShop\Module\PsEventbus\Module\Uninstall($this, Db::getInstance());
 
         return $uninstaller->uninstallMenu()
             && $uninstaller->uninstallDatabaseTables()
@@ -189,7 +184,7 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @return ServiceContainer
+     * @return PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer
      *
      * @throws Exception
      */
@@ -197,7 +192,7 @@ class Ps_eventbus extends Module
     {
         if (null === $this->serviceContainer) {
             // append version number to force cache generation (1.6 Core won't clear it)
-            $this->serviceContainer = new ServiceContainer(
+            $this->serviceContainer = new PrestaShop\Module\PsEventbus\DependencyInjection\ServiceContainer(
                 $this->name . str_replace(['.', '-', '+'], '', $this->version),
                 $this->getLocalPath(),
                 $this->getModuleEnv()
@@ -219,12 +214,12 @@ class Ps_eventbus extends Module
     {
         try {
             return $this->getServiceContainer()->getService($serviceName);
-        } catch (ServiceNotFoundException $exception) {
+        } catch (Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException $exception) {
             if (method_exists($this, 'get')) {
                 return $this->get($serviceName);
             }
 
-            throw new ServiceNotFoundException($serviceName);
+            throw new Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException($serviceName);
         }
     }
 
@@ -239,12 +234,13 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * Set PHP compatibility to 7.1
+     * Set PHP compatibility to 5.6
      *
      * @return bool
      */
     private function isPhpVersionCompliant()
     {
+        var_dump(PHP_VERSION_ID);
         return PHP_VERSION_ID >= 50600;
     }
 }
