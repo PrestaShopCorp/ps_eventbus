@@ -112,8 +112,10 @@ class StockRepository extends AbstractRepository implements RepositoryInterface
 
         $this->generateFullQuery($langIso, true);
 
+        $this->query->innerJoin('stock', 's', 's.id_product = sa.id_product AND s.id_product_attribute = sa.id_product_attribute');
+
         $this->query
-            ->where('s.id_stock_available IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('s.id_stock IN(' . implode(',', array_map('intval', $contentIds)) . ')')
             ->limit($limit)
         ;
 

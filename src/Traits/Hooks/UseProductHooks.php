@@ -98,24 +98,16 @@ trait UseProductHooks
         $customProductCarriers = $customProductCarrierRepository->getCustomProductCarrierIdsByCarrierId($product->id);
         $customProductCarrierIds = array_column($customProductCarriers, 'id_carrier_reference');
 
-        /** @var StockRepository $stockRepository */
-        $stockRepository = $this->getService('PrestaShop\Module\PsEventbus\Repository\StockRepository');
-        $stockId = $stockRepository->getStockIdByProductId($product->id);
-
         $liveSyncItems = [
             Config::COLLECTION_PRODUCTS,
             Config::COLLECTION_PRODUCT_SUPPLIERS,
-            Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
-            Config::COLLECTION_STOCKS,
-            Config::COLLECTION_STOCK_MOVEMENTS,
+            Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS
         ];
 
         $incrementalSyncItems = [
             Config::COLLECTION_PRODUCTS => $product->id,
             Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id,
-            Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds,
-            Config::COLLECTION_STOCKS => $stockId,
-            Config::COLLECTION_STOCK_MOVEMENTS => $stockId,
+            Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds
         ];
 
         if ($product->cache_is_pack) {
