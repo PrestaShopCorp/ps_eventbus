@@ -38,14 +38,17 @@ trait UseEmployeeHooks
     /**
      * @return void
      */
-    public function hookActionObjectEmployeeAddAfter()
+    public function hookActionObjectEmployeeAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
+        /** @var \Employee $employee **/
+        $employee = $parameters['object'];
+
         $synchronizationService->sendLiveSync(Config::COLLECTION_EMPLOYEES, Config::INCREMENTAL_TYPE_UPSERT);
         $synchronizationService->insertContentIntoIncremental(
-            [Config::COLLECTION_EMPLOYEES => 0],
+            [Config::COLLECTION_EMPLOYEES => $employee->id],
             Config::INCREMENTAL_TYPE_UPSERT,
             date(DATE_ATOM),
             $this->shopId,
@@ -56,14 +59,17 @@ trait UseEmployeeHooks
     /**
      * @return void
      */
-    public function hookActionObjectEmployeeUpdateAfter()
+    public function hookActionObjectEmployeeUpdateAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
+        /** @var \Employee $employee **/
+        $employee = $parameters['object'];
+
         $synchronizationService->sendLiveSync(Config::COLLECTION_EMPLOYEES, Config::INCREMENTAL_TYPE_UPSERT);
         $synchronizationService->insertContentIntoIncremental(
-            [Config::COLLECTION_EMPLOYEES => 0],
+            [Config::COLLECTION_EMPLOYEES => $employee->id],
             Config::INCREMENTAL_TYPE_UPSERT,
             date(DATE_ATOM),
             $this->shopId,
@@ -74,14 +80,17 @@ trait UseEmployeeHooks
     /**
      * @return void
      */
-    public function hookActionObjectEmployeeDeleteAfter()
+    public function hookActionObjectEmployeeDeleteAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
+
+        /** @var \Employee $employee **/
+        $employee = $parameters['object'];
 
         $synchronizationService->sendLiveSync(Config::COLLECTION_EMPLOYEES, Config::INCREMENTAL_TYPE_DELETE);
         $synchronizationService->insertContentIntoIncremental(
-            [Config::COLLECTION_EMPLOYEES => 0],
+            [Config::COLLECTION_EMPLOYEES => $employee->id],
             Config::INCREMENTAL_TYPE_DELETE,
             date(DATE_ATOM),
             $this->shopId,
