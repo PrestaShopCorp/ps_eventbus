@@ -157,6 +157,7 @@ trait UseHooks
 
             'actionObjectStockAddAfter',
             'actionObjectStockUpdateAfter',
+            'actionUpdateQuantity',
 
             'actionObjectStoreAddAfter',
             'actionObjectStoreUpdateAfter',

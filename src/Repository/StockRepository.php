@@ -26,6 +26,9 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use PrestaShopException;
+use PrestaShopDatabaseException;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -112,10 +115,8 @@ class StockRepository extends AbstractRepository implements RepositoryInterface
 
         $this->generateFullQuery($langIso, true);
 
-        $this->query->innerJoin('stock', 's', 's.id_product = sa.id_product AND s.id_product_attribute = sa.id_product_attribute');
-
         $this->query
-            ->where('s.id_stock IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('s.id_stock_available IN(' . implode(',', array_map('intval', $contentIds)) . ')')
             ->limit($limit)
         ;
 
@@ -144,22 +145,19 @@ class StockRepository extends AbstractRepository implements RepositoryInterface
     }
 
     /**
-     * @param int $productId
-     *
-     * @return mixed
-     *
-     * @throws \PrestaShopException
-     * @throws \PrestaShopDatabaseException
+     * @param mixed $idProduct 
+     * @param mixed $idProductAttribute 
+     * @return mixed 
+     * @throws PrestaShopException 
+     * @throws PrestaShopDatabaseException 
      */
-    public function getStockIdByProductId($productId)
+    public function getStockIdAvailableFromDeclinationId($idProduct, $idProductAttribute)
     {
         $this->generateMinimalQuery(self::TABLE_NAME, 'sa');
 
-        $this->query
-            ->select('sa.id_stock_available')
-            ->where('sa.id_product = ' . (int) $productId)
-            ->where('sa.id_shop = ' . (int) parent::getShopContext()->id)
-        ;
+        $this->query->select('sa.stock_id_available');
+        $this->query->where('sa.id_product = ' . pSQL($idProduct));
+        $this->query->where('sa.id_product_attribute = ' . pSQL($idProductAttribute));
 
         $result = $this->runQuery(true);
 
