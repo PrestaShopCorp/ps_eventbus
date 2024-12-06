@@ -62,25 +62,25 @@ function removeDuplicateEntryFromTypeSyncTable()
 
     $db = Db::getInstance();
 
-    // Vérifie si la table temporaire existe déjà
+    // Check if old table exist (after error at install ?)
     $checkOldTableQuery = "SHOW TABLES LIKE '" . _DB_PREFIX_ . "eventbus_type_sync_old';";
     $oldTableExists = $db->executeS($checkOldTableQuery);
 
     if ($oldTableExists) {
-        // Si la table temporaire existe, la supprimer pour éviter les conflits
-        $dropOldTableQuery = "DROP TABLE `" . _DB_PREFIX_ . "eventbus_type_sync_old`;";
-        $db->query($dropOldTableQuery);
+        // If temp table exist (after error at install ?), rename to "eventbus_type_sync"
+        $renameOldTableQuery = "RENAME TABLE `" . _DB_PREFIX_ . "eventbus_type_sync_old` TO `" . _DB_PREFIX_ . "eventbus_type_sync`;";
+        $db->query($renameOldTableQuery);
     }
 
-    // Renommer la table actuelle
+    // Rename original table to old (for temporary edit)
     $renameTableQuery = "RENAME TABLE `" . _DB_PREFIX_ . "eventbus_type_sync` TO `" . _DB_PREFIX_ . "eventbus_type_sync_old`;";
     $db->query($renameTableQuery);
     
-    // Créer une nouvelle table à partir de l'ancienne structure
+    // Create new table, clone of original table (old here)
     $createNewTableQuery = "CREATE TABLE `" . _DB_PREFIX_ . "eventbus_type_sync` LIKE `" . _DB_PREFIX_ . "eventbus_type_sync_old`;";
     $db->query($createNewTableQuery);
 
-    // Migrer les données vers la nouvelle table
+    // Migrate data from old table to new table, and remove duplicate entries
     $migrateToNewTableQuery = "
         INSERT INTO `" . _DB_PREFIX_ . "eventbus_type_sync` (`type`, `offset`, `id_shop`, `lang_iso`, `full_sync_finished`, `last_sync_date`)
         SELECT 
@@ -104,7 +104,7 @@ function removeDuplicateEntryFromTypeSyncTable()
     ";
     $db->query($migrateToNewTableQuery);
 
-    // Supprimer la table temporaire une fois la migration réussie
+    // remove old table
     $dropOldTableQuery = "DROP TABLE `" . _DB_PREFIX_ . "eventbus_type_sync_old`;";
     $db->query($dropOldTableQuery);
 
