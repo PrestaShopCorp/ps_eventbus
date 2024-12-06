@@ -206,16 +206,6 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @param string $serviceName
-     *
-     * @return mixed
-     */
-    public function hasService($serviceName)
-    {
-        return $this->getServiceContainer()->hasService($serviceName);
-    }
-
-    /**
      * Set PHP compatibility to 5.6
      *
      * @return bool

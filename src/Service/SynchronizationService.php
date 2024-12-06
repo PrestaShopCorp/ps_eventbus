@@ -125,12 +125,12 @@ class SynchronizationService
         /** @var \Ps_eventbus */
         $module = \Module::getInstanceByName('ps_eventbus');
 
-        /* if (!$module->hasService($serviceId)) {
+        try {
+            /** @var ShopContentServiceInterface $shopContentApiService */
+            $shopContentApiService = $module->getService($serviceId);
+        } catch (ServiceNotFoundException $e) {
             throw new ServiceNotFoundException($serviceId);
-        } */
-
-        /** @var ShopContentServiceInterface $shopContentApiService */
-        $shopContentApiService = $module->getService($serviceId);
+        }
 
         $data = $shopContentApiService->getContentsForFull($offset, $limit, $langIso);
 
@@ -181,13 +181,13 @@ class SynchronizationService
 
         /** @var \Ps_eventbus */
         $module = \Module::getInstanceByName('ps_eventbus');
-
-        if (!$module->hasService($serviceId)) {
+        
+        try {
+            /** @var ShopContentServiceInterface $shopContentApiService */
+            $shopContentApiService = $module->getService($serviceId);
+        } catch (ServiceNotFoundException $e) {
             throw new ServiceNotFoundException($serviceId);
         }
-
-        /** @var ShopContentServiceInterface $shopContentApiService */
-        $shopContentApiService = $module->getService($serviceId);
 
         $contentsToSync = $this->incrementalSyncRepository->getIncrementalSyncObjects($shopContent, $langIso, $limit);
 
