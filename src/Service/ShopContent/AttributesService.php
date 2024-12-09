@@ -58,7 +58,7 @@ class AttributesService extends ShopContentAbstractService implements ShopConten
      */
     public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_BUNDLES, [], $deletedContents);
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_ATTRIBUTES, [], $deletedContents);
     }
 
     /**
