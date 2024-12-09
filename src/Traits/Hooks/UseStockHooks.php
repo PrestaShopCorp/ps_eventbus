@@ -27,7 +27,6 @@
 namespace PrestaShop\Module\PsEventbus\Traits\Hooks;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Repository\StockRepository;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
 
 if (!defined('_PS_VERSION_')) {
@@ -37,39 +36,20 @@ if (!defined('_PS_VERSION_')) {
 trait UseStockHooks
 {
     /**
-     * Only available for PrestaShop < 1.7
-     * @param array<mixed> $parameters
-     *
      * @return void
      */
-    public function hookActionObjectStockAddAfter($parameters)
+    public function hookActionObjectStockAvailableAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
-        /** @var StockRepository $stockRepository * */
-        $stockRepository = $this->getService(StockRepository::class);
+        /** @var \StockAvailable $stockAvailable */
+        $stockAvailable = $parameters['object'];
 
-        /** @var \Stock $stock */
-        $stock = $parameters['object'];
-
-        $idProduct = $stock->id_product;
-        $idProductAttribute = $stock->id_product_attribute;
-        $stockIdAvailable = $stockRepository->getStockIdAvailableFromDeclinationId($idProduct, $idProductAttribute);
-
-        if (isset($stockIdAvailable)) {
-            $synchronizationService->sendLiveSync(
-                [
-                    Config::COLLECTION_STOCKS,
-                    Config::COLLECTION_STOCK_MOVEMENTS,
-                ],
-                Config::INCREMENTAL_TYPE_UPSERT
-            );
+        if (isset($stockAvailable)) {
+            $synchronizationService->sendLiveSync(Config::COLLECTION_STOCKS, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
-                [
-                    Config::COLLECTION_STOCKS => $stockIdAvailable,
-                    Config::COLLECTION_STOCK_MOVEMENTS => $stockIdAvailable,
-                ],
+                [Config::COLLECTION_STOCKS => $stockAvailable->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
@@ -79,39 +59,20 @@ trait UseStockHooks
     }
 
     /**
-     * Only available for PrestaShop < 1.7
-     * @param array<mixed> $parameters
-     *
      * @return void
      */
-    public function hookActionObjectStockUpdateAfter($parameters)
+    public function hookActionObjectStockAvailableUpdateAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
-        /** @var StockRepository $stockRepository * */
-        $stockRepository = $this->getService(StockRepository::class);
+        /** @var \StockAvailable $stockAvailable */
+        $stockAvailable = $parameters['object'];
 
-        /** @var \Stock $stock */
-        $stock = $parameters['object'];
-
-        $idProduct = $stock->id_product;
-        $idProductAttribute = $stock->id_product_attribute;
-        $stockIdAvailable = $stockRepository->getStockIdAvailableFromDeclinationId($idProduct, $idProductAttribute);
-
-        if (isset($stockIdAvailable)) {
-            $synchronizationService->sendLiveSync(
-                [
-                    Config::COLLECTION_STOCKS,
-                    Config::COLLECTION_STOCK_MOVEMENTS,
-                ],
-                Config::INCREMENTAL_TYPE_UPSERT
-            );
+        if (isset($stockAvailable)) {
+            $synchronizationService->sendLiveSync(Config::COLLECTION_STOCKS, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
-                [
-                    Config::COLLECTION_STOCKS => $stockIdAvailable,
-                    Config::COLLECTION_STOCK_MOVEMENTS => $stockIdAvailable,
-                ],
+                [Config::COLLECTION_STOCKS => $stockAvailable->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
@@ -121,36 +82,21 @@ trait UseStockHooks
     }
 
     /**
-     * Only available for PrestaShop >= 1.7
-     * @param array<mixed> $parameters
-     *
+     * Work Only on 1.6
      * @return void
      */
-    public function hookActionUpdateQuantity($parameters)
+    public function hookActionObjectStockMvtAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
-        /** @var StockRepository $stockRepository * */
-        $stockRepository = $this->getService(StockRepository::class);
+        /** @var \StockMvt $stockMvt */
+        $stockMvt = $parameters['object'];
 
-        $idProduct = $parameters['id_product'];
-        $idProductAttribute = $parameters['id_product_attribute'];
-        $stockIdAvailable = $stockRepository->getStockIdAvailableFromDeclinationId($idProduct, $idProductAttribute);
-
-        if (isset($stockIdAvailable)) {
-            $synchronizationService->sendLiveSync(
-                [
-                    Config::COLLECTION_STOCKS,
-                    Config::COLLECTION_STOCK_MOVEMENTS,
-                ],
-                Config::INCREMENTAL_TYPE_UPSERT
-            );
+        if (isset($stockMvt)) {
+            $synchronizationService->sendLiveSync(Config::COLLECTION_STOCK_MOVEMENTS, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
-                [
-                    Config::COLLECTION_STOCKS => $stockIdAvailable,
-                    Config::COLLECTION_STOCK_MOVEMENTS => $stockIdAvailable,
-                ],
+                [Config::COLLECTION_STOCK_MOVEMENTS => $stockMvt->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,

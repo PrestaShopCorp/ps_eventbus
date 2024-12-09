@@ -111,10 +111,7 @@ class StockMovementRepository extends AbstractRepository implements RepositoryIn
 
         $this->generateFullQuery($langIso, true);
 
-        $this->query
-            ->where('sm.id_stock IN(' . implode(',', array_map('intval', $contentIds)) . ')')
-            // ->limit($limit) Sub shop content depend from another, temporary disabled
-        ;
+        $this->query->where('sm.id_stock_mvt IN(' . implode(',', array_map('intval', $contentIds)) . ')');
 
         return $this->runQuery();
     }

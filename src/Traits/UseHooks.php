@@ -155,9 +155,9 @@ trait UseHooks
             'actionObjectStateUpdateAfter',
             'actionObjectStateDeleteAfter',
 
-            'actionObjectStockAddAfter',
-            'actionObjectStockUpdateAfter',
-            'actionUpdateQuantity',
+            'actionObjectStockAvailableAddAfter',
+            'actionObjectStockAvailableUpdateAfter',
+            'actionObjectStockMvtAddAfter',
 
             'actionObjectStoreAddAfter',
             'actionObjectStoreUpdateAfter',

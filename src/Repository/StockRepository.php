@@ -143,24 +143,4 @@ class StockRepository extends AbstractRepository implements RepositoryInterface
 
         return $result[0]['count'];
     }
-
-    /**
-     * @param mixed $idProduct 
-     * @param mixed $idProductAttribute 
-     * @return mixed 
-     * @throws PrestaShopException 
-     * @throws PrestaShopDatabaseException 
-     */
-    public function getStockIdAvailableFromDeclinationId($idProduct, $idProductAttribute)
-    {
-        $this->generateMinimalQuery(self::TABLE_NAME, 'sa');
-
-        $this->query->select('sa.stock_id_available');
-        $this->query->where('sa.id_product = ' . pSQL($idProduct));
-        $this->query->where('sa.id_product_attribute = ' . pSQL($idProductAttribute));
-
-        $result = $this->runQuery(true);
-
-        return $result[0]['id_stock_available'];
-    }
 }
