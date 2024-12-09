@@ -130,11 +130,15 @@ class CartRulesService extends ShopContentAbstractService implements ShopContent
             $cartRule['reduction_tax'] = (bool) $cartRule['reduction_tax'];
             $cartRule['reduction_currency'] = (int) $cartRule['reduction_currency'];
             $cartRule['reduction_product'] = (int) $cartRule['reduction_product'];
-            $cartRule['reduction_exclude_special'] = (bool) $cartRule['reduction_exclude_special'];
+            
             $cartRule['gift_product'] = (int) $cartRule['gift_product'];
             $cartRule['gift_product_attribute'] = (int) $cartRule['gift_product_attribute'];
             $cartRule['highlight'] = (bool) $cartRule['highlight'];
             $cartRule['active'] = (bool) $cartRule['active'];
+
+            if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>=')) {
+                $cartRule['reduction_exclude_special'] = (bool) $cartRule['reduction_exclude_special'];
+            }
         }
     }
 }
