@@ -1,123 +1,136 @@
 <?php
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to https://devdocs.prestashop.com/ for more information.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-class TranslationRepository
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
+class TranslationRepository extends AbstractRepository implements RepositoryInterface
 {
-    /**
-     * @var \Db
-     */
-    private $db;
+    const TABLE_NAME = 'translation';
 
     /**
-     * @var \Context
+     * @param string $langIso
+     * @param bool $withSelecParameters
+     *
+     * @return mixed
+     *
+     * @throws \PrestaShopException
      */
-    private $context;
-
-    public function __construct(\Context $context)
+    public function generateFullQuery($langIso, $withSelecParameters)
     {
-        $this->db = \Db::getInstance();
-        $this->context = $context;
-    }
+        $this->generateMinimalQuery(self::TABLE_NAME, 't');
 
-    /**
-     * @return \DbQuery
-     */
-    public function getBaseQuery()
-    {
-        if ($this->context->shop === null) {
-            throw new \PrestaShopException('No shop context');
+        if ($withSelecParameters) {
+            $this->query
+                ->select('t.id_translation')
+                ->select('t.id_lang')
+                ->select('t.key')
+                ->select('t.translation')
+                ->select('t.domain')
+                ->select('t.theme')
+            ;
         }
-
-        $query = new \DbQuery();
-        $query->from('translation', 't');
-
-        return $query;
     }
 
     /**
      * @param int $offset
      * @param int $limit
-     *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getTranslations($offset, $limit)
-    {
-        $query = $this->getBaseQuery();
-
-        $this->addSelectParameters($query);
-
-        $query->limit($limit, $offset);
-
-        return $this->db->executeS($query);
-    }
-
-    /**
-     * @param int $offset
-     *
-     * @return int
-     */
-    public function getRemainingTranslationsCount($offset)
-    {
-        $query = $this->getBaseQuery()
-            ->select('(COUNT(t.id_translation) - ' . (int) $offset . ') as count');
-
-        return (int) $this->db->getValue($query);
-    }
-
-    /**
-     * @param int $limit
-     * @param array<mixed> $translationIds
-     *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getTranslationsIncremental($limit, $translationIds)
-    {
-        $query = $this->getBaseQuery();
-
-        $this->addSelectParameters($query);
-
-        $query->where('t.id_translation IN(' . implode(',', array_map('intval', $translationIds)) . ')')
-            ->limit($limit);
-
-        return $this->db->executeS($query);
-    }
-
-    /**
-     * @param int $offset
-     * @param int $limit
+     * @param string $langIso
      *
      * @return array<mixed>
      *
+     * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getQueryForDebug($offset, $limit)
+    public function retrieveContentsForFull($offset, $limit, $langIso)
     {
-        $query = $this->getBaseQuery();
+        // this table doesn't exist in the database before 1.7
+        if (empty(parent::checkIfTableExist('%translation'))) {
+            return [];
+        }
 
-        $this->addSelectParameters($query);
+        $this->generateFullQuery($langIso, true);
 
-        $query->limit($limit, $offset);
+        $this->query->limit((int) $limit, (int) $offset);
 
-        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
-
-        return array_merge(
-            (array) $query,
-            ['queryStringified' => $queryStringified]
-        );
+        return $this->runQuery();
     }
 
     /**
-     * @param \DbQuery $query
+     * @param int $limit
+     * @param array<mixed> $contentIds
+     * @param string $langIso
      *
-     * @return void
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
-    private function addSelectParameters(\DbQuery $query)
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        $query->select('t.id_translation, t.id_lang, t.key, t.translation, t.domain, t.theme');
+        if ($contentIds == []) {
+            return [];
+        }
+
+        $this->generateFullQuery($langIso, true);
+
+        $this->query
+            ->where('t.id_translation IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->limit($limit)
+        ;
+
+        return $this->runQuery();
+    }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return int
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    {
+        // this table doesn't exist in the database before 1.7
+        if (empty(parent::checkIfTableExist('%translation'))) {
+            return 0;
+        }
+
+        $this->generateFullQuery($langIso, false);
+
+        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+
+        $result = $this->runQuery(true);
+
+        return $result[0]['count'];
     }
 }

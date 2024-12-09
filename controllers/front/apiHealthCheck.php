@@ -1,44 +1,55 @@
 <?php
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to https://devdocs.prestashop.com/ for more information.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
 
-use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Controller\AbstractApiController;
-use PrestaShop\Module\PsEventbus\Exception\UnauthorizedException;
-use PrestaShop\Module\PsEventbus\Repository\ServerInformationRepository;
+use PrestaShop\Module\PsEventbus\Service\ApiHealthCheckService;
+use PrestaShop\Module\PsEventbus\Service\CommonService;
 
-class ps_EventbusApiHealthCheckModuleFrontController extends AbstractApiController
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
+class ps_EventbusApiHealthCheckModuleFrontController extends ModuleFrontController
 {
-    public $type = Config::COLLECTION_SHOPS;
-
-    /** @var bool */
-    private $isAuthentifiedCall = true;
-
-    /**
-     * Override default method from AbstractApiController
-     * Get another behavior for healthcheck
-     *
-     * @return void
-     */
-    public function init()
-    {
-        try {
-            parent::init();
-        } catch (UnauthorizedException $exception) {
-            $this->isAuthentifiedCall = false;
-        }
-    }
-
     /**
      * @return void
      *
-     * @throws PrestaShopException
+     * @throws\PrestaShopException
      */
     public function postProcess()
     {
-        /** @var ServerInformationRepository $serverInformationRepository */
-        $serverInformationRepository = $this->module->getService(ServerInformationRepository::class);
+        /** @var string $jobId */
+        $jobId = Tools::getValue('job_id');
 
-        $status = $serverInformationRepository->getHealthCheckData($this->isAuthentifiedCall);
+        /** @var Ps_eventbus $module */
+        $module = Module::getInstanceByName('ps_eventbus');
 
-        $this->exitWithResponse($status);
+        /** @var ApiHealthCheckService $apiHealthCheckService */
+        $apiHealthCheckService = $module->getService(ApiHealthCheckService::class);
+        $response = $apiHealthCheckService->getHealthCheck($jobId);
+
+        CommonService::exitWithResponse($response);
     }
 }
