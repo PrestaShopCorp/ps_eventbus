@@ -181,7 +181,7 @@ class SynchronizationService
 
         /** @var \Ps_eventbus */
         $module = \Module::getInstanceByName('ps_eventbus');
-        
+
         try {
             /** @var ShopContentServiceInterface $shopContentApiService */
             $shopContentApiService = $module->getService($serviceId);

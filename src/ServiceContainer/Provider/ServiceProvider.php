@@ -141,7 +141,7 @@ class ServiceProvider implements IServiceProvider
                 $container->getParameter('ps_eventbus.proxy_api_url')
             );
         });
-        $container->registerProvider(AttributesService::class, static function () use ($container) {
+        $container->registerProvider(AttributesService::class, static function () {
             return new AttributesService();
         });
         $container->registerProvider(BundlesService::class, static function () use ($container) {

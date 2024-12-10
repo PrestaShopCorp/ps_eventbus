@@ -28,7 +28,6 @@ namespace PrestaShop\Module\PsEventbus\Traits\Hooks;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Repository\CustomProductCarrierRepository;
-use PrestaShop\Module\PsEventbus\Repository\StockRepository;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
 
 if (!defined('_PS_VERSION_')) {
@@ -101,13 +100,13 @@ trait UseProductHooks
         $liveSyncItems = [
             Config::COLLECTION_PRODUCTS,
             Config::COLLECTION_PRODUCT_SUPPLIERS,
-            Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS
+            Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
         ];
 
         $incrementalSyncItems = [
             Config::COLLECTION_PRODUCTS => $product->id,
             Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id,
-            Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds
+            Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds,
         ];
 
         if ($product->cache_is_pack) {

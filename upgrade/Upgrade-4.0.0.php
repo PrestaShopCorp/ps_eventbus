@@ -68,21 +68,21 @@ function removeDuplicateEntryFromTypeSyncTable()
 
     if ($oldTableExists) {
         // If temp table exist (after error at install ?), rename to "eventbus_type_sync"
-        $renameOldTableQuery = "RENAME TABLE `" . _DB_PREFIX_ . "eventbus_type_sync_old` TO `" . _DB_PREFIX_ . "eventbus_type_sync`;";
+        $renameOldTableQuery = 'RENAME TABLE `' . _DB_PREFIX_ . 'eventbus_type_sync_old` TO `' . _DB_PREFIX_ . 'eventbus_type_sync`;';
         $db->query($renameOldTableQuery);
     }
 
     // Rename original table to old (for temporary edit)
-    $renameTableQuery = "RENAME TABLE `" . _DB_PREFIX_ . "eventbus_type_sync` TO `" . _DB_PREFIX_ . "eventbus_type_sync_old`;";
+    $renameTableQuery = 'RENAME TABLE `' . _DB_PREFIX_ . 'eventbus_type_sync` TO `' . _DB_PREFIX_ . 'eventbus_type_sync_old`;';
     $db->query($renameTableQuery);
-    
+
     // Create new table, clone of original table (old here)
-    $createNewTableQuery = "CREATE TABLE `" . _DB_PREFIX_ . "eventbus_type_sync` LIKE `" . _DB_PREFIX_ . "eventbus_type_sync_old`;";
+    $createNewTableQuery = 'CREATE TABLE `' . _DB_PREFIX_ . 'eventbus_type_sync` LIKE `' . _DB_PREFIX_ . 'eventbus_type_sync_old`;';
     $db->query($createNewTableQuery);
 
     // Migrate data from old table to new table, and remove duplicate entries
-    $migrateToNewTableQuery = "
-        INSERT INTO `" . _DB_PREFIX_ . "eventbus_type_sync` (`type`, `offset`, `id_shop`, `lang_iso`, `full_sync_finished`, `last_sync_date`)
+    $migrateToNewTableQuery = '
+        INSERT INTO `' . _DB_PREFIX_ . 'eventbus_type_sync` (`type`, `offset`, `id_shop`, `lang_iso`, `full_sync_finished`, `last_sync_date`)
         SELECT 
             `type`, 
             CASE 
@@ -99,18 +99,17 @@ function removeDuplicateEntryFromTypeSyncTable()
                 WHEN COUNT(*) > 1 THEN MAX(`last_sync_date`) -- Si plusieurs entrées similaires, garder la dernière date
                 ELSE MAX(`last_sync_date`) -- Sinon, on garde la date existante
             END AS `last_sync_date`
-        FROM `" . _DB_PREFIX_ . "eventbus_type_sync_old`
+        FROM `' . _DB_PREFIX_ . 'eventbus_type_sync_old`
         GROUP BY `type`, `id_shop`, `lang_iso`;
-    ";
+    ';
     $db->query($migrateToNewTableQuery);
 
     // remove old table
-    $dropOldTableQuery = "DROP TABLE `" . _DB_PREFIX_ . "eventbus_type_sync_old`;";
+    $dropOldTableQuery = 'DROP TABLE `' . _DB_PREFIX_ . 'eventbus_type_sync_old`;';
     $db->query($dropOldTableQuery);
 
     return true; // Succès
 }
-
 
 function addPrimaryKeyToTypeSyncTable()
 {
@@ -121,7 +120,7 @@ function addPrimaryKeyToTypeSyncTable()
     $db = Db::getInstance();
 
     // Add primary key
-    $editTypeSyncTable = "ALTER TABLE `" . _DB_PREFIX_ . "eventbus_type_sync` ADD PRIMARY KEY (type, id_shop, lang_iso);";
+    $editTypeSyncTable = 'ALTER TABLE `' . _DB_PREFIX_ . 'eventbus_type_sync` ADD PRIMARY KEY (type, id_shop, lang_iso);';
 
     return (bool) $db->query($editTypeSyncTable);
 }
@@ -131,12 +130,12 @@ function addActionToIncrementalSyncTable()
     $db = Db::getInstance();
 
     // Check if the 'action' column exists in the table
-    $checkColumnQuery = "SHOW COLUMNS FROM `" . _DB_PREFIX_ . "eventbus_incremental_sync` LIKE 'action';";
+    $checkColumnQuery = 'SHOW COLUMNS FROM `' . _DB_PREFIX_ . "eventbus_incremental_sync` LIKE 'action';";
     $columns = $db->executeS($checkColumnQuery);
 
     // Add 'action' column if it does'nt exist
     if (empty($columns)) {
-        $editIncrementalTable = "ALTER TABLE `" . _DB_PREFIX_ . "eventbus_incremental_sync` ADD action varchar(50) NOT NULL DEFAULT 'upsert';";
+        $editIncrementalTable = 'ALTER TABLE `' . _DB_PREFIX_ . "eventbus_incremental_sync` ADD action varchar(50) NOT NULL DEFAULT 'upsert';";
 
         return (bool) $db->query($editIncrementalTable);
     }
@@ -177,7 +176,7 @@ function migrateDeleteTableToIncremantalTable()
 
     if ($migrationSucceded) {
         // Drop eventbus_deleted_objects table
-        $dropDeletedTable = "DROP TABLE IF EXISTS `" . _DB_PREFIX_ . "eventbus_deleted_objects`";
+        $dropDeletedTable = 'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'eventbus_deleted_objects`';
 
         return $db->query($dropDeletedTable);
     }
@@ -188,7 +187,7 @@ function tableTypeSyncAlreadyMigrated()
     $db = Db::getInstance();
 
     // Check if the primary key exists by inspecting the indexes
-    $checkPrimaryKeyQuery = "SHOW INDEXES FROM `" . _DB_PREFIX_ . "eventbus_type_sync` WHERE Key_name = 'PRIMARY';";
+    $checkPrimaryKeyQuery = 'SHOW INDEXES FROM `' . _DB_PREFIX_ . "eventbus_type_sync` WHERE Key_name = 'PRIMARY';";
 
     // Exécuter la requête pour obtenir les index et vérifier s'il y a un index primaire
     return $db->executeS($checkPrimaryKeyQuery);

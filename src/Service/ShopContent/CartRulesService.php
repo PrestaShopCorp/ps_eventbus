@@ -130,7 +130,7 @@ class CartRulesService extends ShopContentAbstractService implements ShopContent
             $cartRule['reduction_tax'] = (bool) $cartRule['reduction_tax'];
             $cartRule['reduction_currency'] = (int) $cartRule['reduction_currency'];
             $cartRule['reduction_product'] = (int) $cartRule['reduction_product'];
-            
+
             $cartRule['gift_product'] = (int) $cartRule['gift_product'];
             $cartRule['gift_product_attribute'] = (int) $cartRule['gift_product_attribute'];
             $cartRule['highlight'] = (bool) $cartRule['highlight'];

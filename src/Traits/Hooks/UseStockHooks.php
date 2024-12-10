@@ -83,6 +83,7 @@ trait UseStockHooks
 
     /**
      * Work Only on 1.6
+     *
      * @return void
      */
     public function hookActionObjectStockMvtAddAfter($parameters)

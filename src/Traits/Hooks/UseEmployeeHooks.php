@@ -43,7 +43,7 @@ trait UseEmployeeHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
-        /** @var \Employee $employee **/
+        /** @var \Employee $employee * */
         $employee = $parameters['object'];
 
         $synchronizationService->sendLiveSync(Config::COLLECTION_EMPLOYEES, Config::INCREMENTAL_TYPE_UPSERT);
@@ -64,7 +64,7 @@ trait UseEmployeeHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
-        /** @var \Employee $employee **/
+        /** @var \Employee $employee * */
         $employee = $parameters['object'];
 
         $synchronizationService->sendLiveSync(Config::COLLECTION_EMPLOYEES, Config::INCREMENTAL_TYPE_UPSERT);
@@ -85,7 +85,7 @@ trait UseEmployeeHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
-        /** @var \Employee $employee **/
+        /** @var \Employee $employee * */
         $employee = $parameters['object'];
 
         $synchronizationService->sendLiveSync(Config::COLLECTION_EMPLOYEES, Config::INCREMENTAL_TYPE_DELETE);

@@ -59,7 +59,6 @@ use PrestaShop\Module\PsEventbus\Repository\WishlistProductRepository;
 use PrestaShop\Module\PsEventbus\Repository\WishlistRepository;
 use PrestaShop\Module\PsEventbus\ServiceContainer\Contract\IServiceProvider;
 use PrestaShop\Module\PsEventbus\ServiceContainer\ServiceContainer;
-use PrestaShop\Module\PsEventbus\Repository\AttributeRepository;
 
 class RepositoryProvider implements IServiceProvider
 {
@@ -150,7 +149,7 @@ class RepositoryProvider implements IServiceProvider
         $container->registerProvider(InfoRepository::class, static function () {
             return new InfoRepository();
         });
-        
+
         $container->registerProvider(StockRepository::class, static function () {
             return new StockRepository();
         });

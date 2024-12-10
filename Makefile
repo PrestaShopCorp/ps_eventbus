@@ -38,22 +38,22 @@ zip: zip-prod zip-inte zip-e2e
 # target: zip-e2e                                              - Bundle a local E2E integrable zip
 .PHONY: zip-e2e
 zip-e2e: vendor tools/vendor dist
-	@$(call zip_it,${PACKAGE}_e2e.zip)
+	@$(call zip_it,./config.php,${PACKAGE}_e2e.zip)
 
 # target: zip-inte                                             - Bundle an integration zip
 .PHONY: zip-inte
 zip-inte: vendor tools/vendor dist
-	@$(call zip_it,${PACKAGE}_integration.zip)
+	@$(call zip_it,.config.inte.php,${PACKAGE}_integration.zip)
 
 # target: zip-prod                                             - Bundle a production zip
 .PHONY: zip-prod
 zip-prod: vendor tools/vendor dist
-	@$(call zip_it,${PACKAGE}.zip)
+	@$(call zip_it,.config.prod.php,${PACKAGE}.zip)
 
 # target: zip-unzipped                                          - Bundle a production module, but without zip step (only to check sources)
 .PHONY: zip-unzipped
 zip-unzipped: vendor tools/vendor dist
-	@$(call no_zip_it)
+	@$(call no_zip_it,.config.prod.php)
 
 dist:
 	@mkdir -p ./dist
@@ -184,11 +184,12 @@ define create_module
 	$(call replace_version,${TMP_DIR}/${MODULE_NAME},${SEM_VERSION})
 	./tools/vendor/bin/autoindex prestashop:add:index ${TMP_DIR}
 	tools/vendor/bin/header-stamp --target=${TMP_DIR}/${MODULE_NAME} --license=tools/vendor/prestashop/header-stamp/assets/osl3.txt --exclude=vendor,e2e,e2e-env,tests,composer.json,scoper.inc.php
+	cp $1 ${TMP_DIR}/${MODULE_NAME}/config.php
 	cd ${TMP_DIR}/${MODULE_NAME} && composer dump-autoload
 endef
 
 define zip_it
-	TMP_DIR=$(call create_module)
+	TMP_DIR=$(call create_module,$1)
 	cd ${TMP_DIR} && zip -9 -r $1 ./${MODULE_NAME};
 	mv ${TMP_DIR}/$1 ./dist;
 	rm -rf ${TMP_DIR};
@@ -196,7 +197,7 @@ endef
 
 define no_zip_it
 	rm -rf ./dist/${MODULE_NAME}
-	TMP_DIR=$(call create_module)
+	TMP_DIR=$(call create_module,$1)
 	mv ${TMP_DIR}/${MODULE_NAME} ./dist;
 	rm -rf ${TMP_DIR:-/dev/null};
 endef
