@@ -135,7 +135,11 @@ function addActionToIncrementalSyncTable()
 
     // Add 'action' column if it does'nt exist
     if (empty($columns)) {
-        $editIncrementalTable = 'ALTER TABLE `' . _DB_PREFIX_ . "eventbus_incremental_sync` ADD action varchar(50) NOT NULL DEFAULT 'upsert';";
+        $editIncrementalTable = "
+            ALTER TABLE `" . _DB_PREFIX_ . "eventbus_incremental_sync`
+            ADD action varchar(50) NOT NULL DEFAULT 'upsert',
+            MODIFY COLUMN id_object VARCHAR(50);
+        ";
 
         return (bool) $db->query($editIncrementalTable);
     }
