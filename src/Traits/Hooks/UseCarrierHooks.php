@@ -122,21 +122,10 @@ trait UseCarrierHooks
         $carrier = $parameters['object'];
 
         if (isset($carrier->id)) {
-            $synchronizationService->sendLiveSync(
-                [
-                    Config::COLLECTION_CARRIERS,
-                    Config::COLLECTION_CARRIER_DETAILS,
-                    Config::COLLECTION_CARRIER_TAXES,
-                ],
-                Config::INCREMENTAL_TYPE_UPSERT
-            );
+            $synchronizationService->sendLiveSync(Config::COLLECTION_CARRIERS, Config::INCREMENTAL_TYPE_UPSERT);
 
             $synchronizationService->insertContentIntoIncremental(
-                [
-                    Config::COLLECTION_CARRIERS => $carrier->id,
-                    Config::COLLECTION_CARRIER_DETAILS => $carrier->id,
-                    Config::COLLECTION_CARRIER_TAXES => $carrier->id,
-                ],
+                [Config::COLLECTION_CARRIERS => $carrier->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,

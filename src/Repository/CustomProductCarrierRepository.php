@@ -127,7 +127,7 @@ class CustomProductCarrierRepository extends AbstractRepository implements Repos
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getCustomProductCarrierIdsByCarrierId($idProduct)
+    public function getCustomProductCarrierIdsByProductId($idProduct)
     {
         $this->generateMinimalQuery(self::TABLE_NAME, 'pc');
 

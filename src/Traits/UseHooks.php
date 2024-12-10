@@ -31,8 +31,6 @@ use PrestaShop\Module\PsEventbus\Traits\Hooks\UseCartHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseCartRuleHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseCategoryHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseCombinationHooks;
-use PrestaShop\Module\PsEventbus\Traits\Hooks\UseCommonHooks;
-use PrestaShop\Module\PsEventbus\Traits\Hooks\UseCountryHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseCurrencyHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseCustomerHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseEmployeeHooks;
@@ -43,14 +41,10 @@ use PrestaShop\Module\PsEventbus\Traits\Hooks\UseManufacturerHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseOrderHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseProductHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseSpecificPriceHooks;
-use PrestaShop\Module\PsEventbus\Traits\Hooks\UseStateHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseStockHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseStoreHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseSupplierHooks;
-use PrestaShop\Module\PsEventbus\Traits\Hooks\UseTaxHooks;
-use PrestaShop\Module\PsEventbus\Traits\Hooks\UseTaxRuleGroupHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseWishlistHooks;
-use PrestaShop\Module\PsEventbus\Traits\Hooks\UseZoneHooks;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -63,8 +57,6 @@ trait UseHooks
     use UseCartRuleHooks;
     use UseCategoryHooks;
     use UseCombinationHooks;
-    use UseCommonHooks;
-    use UseCountryHooks;
     use UseCurrencyHooks;
     use UseCustomerHooks;
     use UseEmployeeHooks;
@@ -75,14 +67,10 @@ trait UseHooks
     use UseOrderHooks;
     use UseProductHooks;
     use UseSpecificPriceHooks;
-    use UseStateHooks;
     use UseStockHooks;
     use UseStoreHooks;
     use UseSupplierHooks;
-    use UseTaxHooks;
-    use UseTaxRuleGroupHooks;
     use UseWishlistHooks;
-    use UseZoneHooks;
 
     /**
      * @return array<string>
@@ -107,10 +95,6 @@ trait UseHooks
             'actionObjectCategoryDeleteAfter',
 
             'actionObjectCombinationDeleteAfter',
-
-            'actionObjectCountryAddAfter',
-            'actionObjectCountryUpdateAfter',
-            'actionObjectCountryDeleteAfter',
 
             'actionObjectCurrencyAddAfter',
             'actionObjectCurrencyUpdateAfter',
@@ -151,10 +135,6 @@ trait UseHooks
             'actionObjectSpecificPriceUpdateAfter',
             'actionObjectSpecificPriceDeleteAfter',
 
-            'actionObjectStateAddAfter',
-            'actionObjectStateUpdateAfter',
-            'actionObjectStateDeleteAfter',
-
             'actionObjectStockAvailableAddAfter',
             'actionObjectStockAvailableUpdateAfter',
             'actionObjectStockMvtAddAfter',
@@ -167,24 +147,9 @@ trait UseHooks
             'actionObjectSupplierUpdateAfter',
             'actionObjectSupplierDeleteAfter',
 
-            'actionObjectTaxAddAfter',
-            'actionObjectTaxUpdateAfter',
-            'actionObjectTaxDeleteAfter',
-
-            'actionObjectTaxRulesGroupAddAfter',
-            'actionObjectTaxRulesGroupUpdateAfter',
-            'actionObjectTaxRulesGroupDeleteAfter',
-
             'actionObjectWishlistAddAfter',
             'actionObjectWishlistUpdateAfter',
-            'actionObjectWishlistDeleteAfter',
-
-            'actionObjectZoneAddAfter',
-            'actionObjectZoneUpdateAfter',
-            'actionObjectZoneDeleteAfter',
-
-            'actionShippingPreferencesPageSave',
-            'actionDispatcherBefore',
+            'actionObjectWishlistDeleteAfter'
         ];
     }
 }

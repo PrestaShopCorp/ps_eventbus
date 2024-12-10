@@ -114,18 +114,9 @@ trait UseWishlistHooks
         $wishlist = $parameters['object'];
 
         if ($wishlist->id) {
-            $synchronizationService->sendLiveSync(
-                [
-                    Config::COLLECTION_WISHLISTS,
-                    Config::COLLECTION_WISHLIST_PRODUCTS,
-                ],
-                Config::INCREMENTAL_TYPE_DELETE
-            );
+            $synchronizationService->sendLiveSync(Config::COLLECTION_WISHLISTS, Config::INCREMENTAL_TYPE_DELETE);
             $synchronizationService->insertContentIntoIncremental(
-                [
-                    Config::COLLECTION_WISHLISTS => $wishlist->id,
-                    Config::COLLECTION_WISHLIST_PRODUCTS => $wishlist->id,
-                ],
+                [Config::COLLECTION_WISHLISTS => $wishlist->id],
                 Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
                 $this->shopId,
