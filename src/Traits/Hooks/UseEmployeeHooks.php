@@ -36,6 +36,8 @@ if (!defined('_PS_VERSION_')) {
 trait UseEmployeeHooks
 {
     /**
+     * @param array<mixed> $parameters
+     * 
      * @return void
      */
     public function hookActionObjectEmployeeAddAfter($parameters)
@@ -57,6 +59,8 @@ trait UseEmployeeHooks
     }
 
     /**
+     * @param array<mixed> $parameters
+     * 
      * @return void
      */
     public function hookActionObjectEmployeeUpdateAfter($parameters)
@@ -78,6 +82,8 @@ trait UseEmployeeHooks
     }
 
     /**
+     * @param array<mixed> $parameters
+     * 
      * @return void
      */
     public function hookActionObjectEmployeeDeleteAfter($parameters)

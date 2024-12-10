@@ -36,6 +36,8 @@ if (!defined('_PS_VERSION_')) {
 trait UseStockHooks
 {
     /**
+     * @param array<mixed> $parameters
+     * 
      * @return void
      */
     public function hookActionObjectStockAvailableAddAfter($parameters)
@@ -46,7 +48,7 @@ trait UseStockHooks
         /** @var \StockAvailable $stockAvailable */
         $stockAvailable = $parameters['object'];
 
-        if (isset($stockAvailable)) {
+        if (isset($stockAvailable->id)) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_STOCKS, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STOCKS => $stockAvailable->id],
@@ -59,6 +61,8 @@ trait UseStockHooks
     }
 
     /**
+     * @param array<mixed> $parameters
+     * 
      * @return void
      */
     public function hookActionObjectStockAvailableUpdateAfter($parameters)
@@ -69,7 +73,7 @@ trait UseStockHooks
         /** @var \StockAvailable $stockAvailable */
         $stockAvailable = $parameters['object'];
 
-        if (isset($stockAvailable)) {
+        if (isset($stockAvailable->id)) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_STOCKS, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STOCKS => $stockAvailable->id],
@@ -84,6 +88,8 @@ trait UseStockHooks
     /**
      * Work Only on 1.6
      *
+     * @param array<mixed> $parameters
+     * 
      * @return void
      */
     public function hookActionObjectStockMvtAddAfter($parameters)
@@ -94,7 +100,7 @@ trait UseStockHooks
         /** @var \StockMvt $stockMvt */
         $stockMvt = $parameters['object'];
 
-        if (isset($stockMvt)) {
+        if (isset($stockMvt->id)) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_STOCK_MOVEMENTS, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STOCK_MOVEMENTS => $stockMvt->id],
