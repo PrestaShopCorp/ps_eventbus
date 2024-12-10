@@ -190,8 +190,8 @@ endef
 
 define zip_it
 	TMP_DIR=$(call create_module,$1)
-	cd ${TMP_DIR} && zip -9 -r $1 ./${MODULE_NAME};
-	mv ${TMP_DIR}/$1 ./dist;
+	cd ${TMP_DIR} && zip -9 -r $2 ./${MODULE_NAME};
+	mv ${TMP_DIR}/$2 ./dist;
 	rm -rf ${TMP_DIR};
 endef
 
