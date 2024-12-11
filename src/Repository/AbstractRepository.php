@@ -83,20 +83,6 @@ abstract class AbstractRepository
     }
 
     /**
-     * @return \Language|\PrestaShopBundle\Install\Language
-     *
-     * @throws \PrestaShopException
-     */
-    protected function getLanguageContext()
-    {
-        if ($this->context->language === null) {
-            throw new \PrestaShopException('No language context');
-        }
-
-        return $this->context->language;
-    }
-
-    /**
      * @return \Shop
      *
      * @throws \PrestaShopException

@@ -129,7 +129,7 @@ function addActionToIncrementalSyncTable()
 {
     $db = Db::getInstance();
 
-    // Check if the 'action' column exists in the table
+    // Check if the 'action' column exists in the table, if column not exist, this migration script aren't executed before
     $checkColumnQuery = 'SHOW COLUMNS FROM `' . _DB_PREFIX_ . "eventbus_incremental_sync` LIKE 'action';";
     $columns = $db->executeS($checkColumnQuery);
 

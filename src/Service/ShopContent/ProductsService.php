@@ -154,9 +154,6 @@ class ProductsService extends ShopContentAbstractService implements ShopContentS
         $this->addImages($products);
 
         foreach ($products as &$product) {
-            $this->addLanguageIsoCode($product, $langIso);
-            $this->addUniqueId($product);
-            $this->addAttributeId($product);
             $this->addLink($product);
             $this->addProductPrices($product);
             $this->formatDescriptions($product);
@@ -284,37 +281,6 @@ class ProductsService extends ShopContentAbstractService implements ShopContentS
 
         $product['category_path'] = $categoryPaths['category_path'];
         $product['category_id_path'] = $categoryPaths['category_id_path'];
-    }
-
-    /**
-     * @param array<mixed> $product
-     *
-     * @return void
-     */
-    private function addUniqueId(&$product)
-    {
-        $product['unique_product_id'] = "{$product['id_product']}-{$product['id_attribute']}-{$product['iso_code']}";
-    }
-
-    /**
-     * @param array<mixed> $product
-     *
-     * @return void
-     */
-    private function addAttributeId(&$product)
-    {
-        $product['id_product_attribute'] = "{$product['id_product']}-{$product['id_attribute']}";
-    }
-
-    /**
-     * @param array<mixed> $product
-     * @param string $langiso
-     *
-     * @return void
-     */
-    private function addLanguageIsoCode(&$product, $langiso)
-    {
-        $product['iso_code'] = $langiso;
     }
 
     /**

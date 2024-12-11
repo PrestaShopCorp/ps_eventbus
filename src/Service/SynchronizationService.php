@@ -330,7 +330,7 @@ class SynchronizationService
                     if (!is_array($contentIds)) {
                         $contentIds = [$contentIds];
                     }
-
+                    
                     $finalContent = array_map(function ($contentId) use ($contentType, $shopId, $defaultIsoCode, $actionType, $createdAt) {
                         return [
                             'type' => $contentType,

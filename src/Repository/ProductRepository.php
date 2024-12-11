@@ -115,7 +115,11 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
                 ->select('p.width')
                 ->select('p.height')
                 ->select('p.depth')
-                ->select('p.additional_shipping_cost');
+                ->select('p.additional_shipping_cost')
+                ->select("CONCAT(p.id_product, '-', IFNULL(pas.id_product_attribute, 0), '-', '" . pSQL($langIso) . "') AS unique_product_id")
+                ->select("CONCAT(p.id_product, '-', IFNULL(pas.id_product_attribute, 0)) AS id_product_attribute")
+                ->select("'" . pSQL($langIso) . "' as iso_code")
+            ;
 
             if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>=')) {
                 $this->query->select('IFNULL(NULLIF(pa.isbn, ""), p.isbn) as isbn');
@@ -175,7 +179,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('p.id_product IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where("CONCAT(p.id_product, '-', IFNULL(pas.id_product_attribute, 0)) IN('" . implode("','", $contentIds) . "')")
             ->limit($limit)
         ;
 
@@ -335,7 +339,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
      */
     public function getProductPriceAndDeclinations($productId)
     {
-        $this->generateMinimalQuery('product', 'p');
+        $this->generateMinimalQuery(SELF::TABLE_NAME, 'p');
 
         $this->query->where('p.`id_product` = ' . (int) $productId);
 
@@ -359,6 +363,29 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
         } else {
             $this->query->select('0 as id_product_attribute');
         }
+
+        return $this->runQuery(true);
+    }
+
+    /**
+     * 
+     * @param int $productId
+     * @param string $langIso
+     * 
+     * @return array<mixed> 
+     */
+    public function getUniqueProductIdsFromProductId($productId)
+    {
+        $this->generateMinimalQuery(SELF::TABLE_NAME, 'p');
+
+        $this->query
+            ->innerJoin('product_shop', 'ps', 'ps.id_product = p.id_product AND ps.id_shop = ' . parent::getShopContext()->id)
+            ->leftJoin('product_attribute_shop', 'pas', 'pas.id_product = p.id_product AND pas.id_shop = ps.id_shop')
+        ;
+
+        $this->query->select("CONCAT(p.id_product, '-', IFNULL(pas.id_product_attribute, 0)) AS id_product_attribute");
+
+        $this->query->where("p.id_product = '" . pSQL($productId) . "'");
 
         return $this->runQuery(true);
     }

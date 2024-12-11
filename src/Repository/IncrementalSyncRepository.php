@@ -73,7 +73,7 @@ class IncrementalSyncRepository extends AbstractRepository
 
                 $query .= "(
                     '{$this->db->escape($currenData['type'])}',
-                    {$this->db->escape($currenData['id_object'])},
+                    '{$this->db->escape($currenData['id_object'])}',
                     {$this->db->escape($currenData['id_shop'])},
                     '{$this->db->escape($currenData['lang_iso'])}',
                     '{$this->db->escape($currenData['action'])}',
@@ -107,19 +107,19 @@ class IncrementalSyncRepository extends AbstractRepository
 
     /**
      * @param string $type
-     * @param array<mixed> $objectIds
+     * @param array<mixed> $contentIds
      * @param string $langIso
      *
      * @return bool
      */
-    public function removeIncrementalSyncObjects($type, $objectIds, $langIso)
+    public function removeIncrementalSyncObjects($type, $contentIds, $langIso)
     {
         return $this->db->delete(
             self::TABLE_NAME,
-            'type = "' . pSQL($type) . '"
-            AND id_shop = ' . parent::getShopContext()->id . '
-            AND id_object IN(' . implode(',', array_map('intval', $objectIds)) . ')
-            AND lang_iso = "' . pSQL($langIso) . '"'
+            "type = '" . pSQL($type) . "'
+            AND id_shop = " . parent::getShopContext()->id . "
+            AND id_object IN('" . implode("','", $contentIds) . "')
+            AND lang_iso = '" . pSQL($langIso) . "'"
         );
     }
 

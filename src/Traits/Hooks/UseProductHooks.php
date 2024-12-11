@@ -28,6 +28,7 @@ namespace PrestaShop\Module\PsEventbus\Traits\Hooks;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Repository\CustomProductCarrierRepository;
+use PrestaShop\Module\PsEventbus\Repository\ProductRepository;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
 
 if (!defined('_PS_VERSION_')) {
@@ -54,9 +55,14 @@ trait UseProductHooks
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var CustomProductCarrierRepository $customProductCarrierRepository */
-        $customProductCarrierRepository = $this->getService('PrestaShop\Module\PsEventbus\Repository\CustomProductCarrierRepository');
+        $customProductCarrierRepository = $this->getService(CustomProductCarrierRepository::class);
         $customProductCarriers = $customProductCarrierRepository->getCustomProductCarrierIdsByProductId($product->id);
         $customProductCarrierIds = array_column($customProductCarriers, 'id_carrier_reference');
+
+        /** @var ProductRepository $productRepository */
+        $productRepository = $this->getService(ProductRepository::class);
+        $uniqueProductIdList = $productRepository->getUniqueProductIdsFromProductId($product->id);
+        $uniqueProductIds = array_column($uniqueProductIdList, 'id_product_attribute');
 
         $liveSyncItems = [
             Config::COLLECTION_PRODUCTS,
@@ -65,7 +71,7 @@ trait UseProductHooks
         ];
 
         $incrementalSyncItems = [
-            Config::COLLECTION_PRODUCTS => $product->id,
+            Config::COLLECTION_PRODUCTS => $uniqueProductIds,
             Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id,
             Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds,
         ];
@@ -107,9 +113,14 @@ trait UseProductHooks
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         /** @var CustomProductCarrierRepository $customProductCarrierRepository */
-        $customProductCarrierRepository = $this->getService('PrestaShop\Module\PsEventbus\Repository\CustomProductCarrierRepository');
+        $customProductCarrierRepository = $this->getService(CustomProductCarrierRepository::class);
         $customProductCarriers = $customProductCarrierRepository->getCustomProductCarrierIdsByProductId($product->id);
         $customProductCarrierIds = array_column($customProductCarriers, 'id_carrier_reference');
+
+        /** @var ProductRepository $productRepository */
+        $productRepository = $this->getService(ProductRepository::class);
+        $uniqueProductIdList = $productRepository->getUniqueProductIdsFromProductId($product->id);
+        $uniqueProductIds = array_column($uniqueProductIdList, 'id_product_attribute');
 
         $liveSyncItems = [
             Config::COLLECTION_PRODUCTS,
@@ -118,7 +129,7 @@ trait UseProductHooks
         ];
 
         $incrementalSyncItems = [
-            Config::COLLECTION_PRODUCTS => $product->id,
+            Config::COLLECTION_PRODUCTS => $uniqueProductIds,
             Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id,
             Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds,
         ];
@@ -151,9 +162,6 @@ trait UseProductHooks
     {
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
-
-        dump($parameters);
-        die;
 
         /** @var \Product $product */
         $product = $parameters['object'];
