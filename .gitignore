@@ -36,3 +36,6 @@ e2e/dumps
 sonar-project.properties
 
 *.cache
+
+### Mytuns
+credentials.json

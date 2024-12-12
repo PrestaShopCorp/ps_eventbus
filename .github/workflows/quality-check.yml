@@ -56,7 +56,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # @TODO: "1.6.1.24" is temporarily disabled here
         ps_version: ["1.6.1.11", "1.7.8.10", "8.1.6"]
     steps:
       - name: Checkout
@@ -115,6 +114,9 @@ jobs:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
 
+      - name: install php dependencies
+        run: composer install
+
       - name: Install dependencies and setup e2e
         run: pnpm install --no-optional --force
         working-directory: e2e
@@ -123,7 +125,7 @@ jobs:
         run: |
           cp .env.dist .env
           docker compose build
-          docker compose up --detach --wait
+          docker compose --profile cicd up --detach --wait
         env:
           DOCKER_IMAGE_PRESTASHOP: prestashop/prestashop-flashlight:${{matrix.ps_version}}
         working-directory: e2e-env
@@ -136,7 +138,7 @@ jobs:
         if: failure()
         run: |
           docker compose logs cloudsync-mock prestashop
-          docker compose down -v
+          docker compose --profile cicd down -v
         working-directory: e2e-env
 
   e2e-lint:

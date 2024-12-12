@@ -1,10 +1,20 @@
 import WebSocket from "ws";
 import { WebSocketSubject } from "rxjs/webSocket";
-import { EMPTY, expand, filter, from, map, Observable, timeout } from "rxjs";
+import {
+  EMPTY,
+  expand,
+  filter,
+  from,
+  map,
+  Observable,
+  takeUntil,
+  timeout,
+  timer,
+} from "rxjs";
 import R from "ramda";
 import testConfig from "./test.config";
 import axios from "axios";
-import { Controller } from "./controllers";
+import { ShopContent } from "./shop-contents";
 
 const DEFAULT_OPTIONS = {
   timeout: 500,
@@ -71,22 +81,22 @@ export function probe(
 
   return socket.pipe(
     filter((message) => (match ? R.whereEq(match, message) : true)),
-    timeout(options.timeout),
+    takeUntil(timer(options.timeout)),
   );
 }
 
 export function doFullSync(
   jobId: string,
-  controller: Controller,
+  shopContent: ShopContent,
   options?: MockClientOptions,
 ): Observable<PsEventbusSyncResponse> {
   options = R.mergeLeft(options, DEFAULT_OPTIONS);
 
   const callId = { call_id: Math.random().toString(36).substring(2, 11) };
 
-  const requestNext = (full: number) =>
-    axios.post<PsEventbusSyncResponse>(
-      `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=${full}&job_id=${jobId}`,
+  const requestNext = (full: number) => {
+    return axios.post<PsEventbusSyncResponse>(
+      `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiShopContent&shop_content=${shopContent}&limit=5&full=${full}&job_id=${jobId}`,
       callId,
       {
         headers: {
@@ -95,6 +105,7 @@ export function doFullSync(
         },
       },
     );
+  };
 
   return from(requestNext(1)).pipe(
     expand((response) => {

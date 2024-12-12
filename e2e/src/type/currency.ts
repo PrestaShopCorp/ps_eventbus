@@ -1,4 +1,4 @@
-import fixture from "../fixtures/latest/apiCurrencies/currencies.json";
+import fixture from "../fixtures/latest/currencies.json";
 
 // test type
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

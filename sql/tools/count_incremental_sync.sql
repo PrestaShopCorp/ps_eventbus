@@ -1,6 +1,6 @@
 -- Define the name of the database and the quantity desired for the clean
 SET @db_name = 'prestashop';
-set @quantity_needed = '100000';
+set @quantity_needed = '1000000';
 
 -- Retrieve the eventbus_incremental_sync table name with prefix
 SET @eventbus_incremental_sync_table = (SELECT table_name

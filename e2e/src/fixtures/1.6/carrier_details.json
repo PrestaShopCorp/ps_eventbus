@@ -1,0 +1,18 @@
+[
+  {
+    "action": "upsert",
+    "collection": "carrier_details",
+    "properties": {
+      "id_reference": "2",
+      "id_zone": "1",
+      "id_range": "1",
+      "shipping_method": "range_weight",
+      "delimiter1": 0,
+      "delimiter2": 10000,
+      "country_ids": "GB",
+      "state_ids": "",
+      "price": 5,
+      "id_carrier_detail": "1"
+    }
+  }
+]

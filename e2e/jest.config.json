@@ -10,5 +10,6 @@
   "testEnvironment": "node",
   "moduleNameMapper": {
     "^@/(.*)$": "<rootDir>/$1"
-  }
+  },
+  "verbose": true
 }

@@ -1,177 +1,131 @@
 <?php
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to https://devdocs.prestashop.com/ for more information.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-class ImageRepository
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
+class ImageRepository extends AbstractRepository implements RepositoryInterface
 {
-    /**
-     * @var \Db
-     */
-    private $db;
-
-    public function __construct()
-    {
-        $this->db = \Db::getInstance();
-    }
+    const TABLE_NAME = 'image';
 
     /**
-     * @return \DbQuery
+     * @param string $langIso
+     * @param bool $withSelecParameters
+     *
+     * @return mixed
+     *
+     * @throws \PrestaShopException
      */
-    private function getBaseQuery()
+    public function generateFullQuery($langIso, $withSelecParameters)
     {
-        $query = new \DbQuery();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'i');
 
-        $query->from('image', 'i')
+        $this->query
             ->leftJoin('image_lang', 'il', 'il.id_image = i.id_image')
             ->leftJoin('image_shop', 'is', 'is.id_image = i.id_image');
 
-        return $query;
-    }
-
-    /**
-     * @param int $offset
-     * @param int $limit
-     *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getImages($offset, $limit)
-    {
-        $query = $this->getBaseQuery();
-
-        $this->addSelectParameters($query);
-
-        $query->limit($limit, $offset);
-
-        return $this->db->executeS($query);
-    }
-
-    /**
-     * @param int $offset
-     *
-     * @return int
-     */
-    public function getRemainingImagesCount($offset)
-    {
-        $query = $this->getBaseQuery()
-            ->select('(COUNT(i.id_image) - ' . (int) $offset . ') as count');
-
-        return (int) $this->db->getValue($query);
-    }
-
-    /**
-     * @param int $limit
-     * @param array<mixed> $imageIds
-     *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getImagesIncremental($limit, $imageIds)
-    {
-        $query = $this->getBaseQuery();
-
-        $this->addSelectParameters($query);
-
-        $query->where('i.id_image IN(' . implode(',', array_map('intval', $imageIds)) . ')')
-            ->limit($limit);
-
-        return $this->db->executeS($query);
-    }
-
-    /**
-     * @param int $productId
-     * @param int $shopId
-     *
-     * @return false|string|null
-     */
-    public function getProductCoverImage($productId, $shopId)
-    {
-        $query = new \DbQuery();
-
-        $query->select('imgs.id_image')
-            ->from('image_shop', 'imgs')
-            ->where('imgs.cover = 1')
-            ->where('imgs.id_shop = ' . (int) $shopId)
-            ->where('imgs.id_product = ' . (int) $productId);
-
-        return $this->db->getValue($query);
-    }
-
-    /**
-     * @param int $productId
-     * @param int $attributeId
-     * @param int $shopId
-     * @param bool $includeCover
-     *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getProductImages($productId, $attributeId, $shopId, $includeCover = null)
-    {
-        $query = new \DbQuery();
-
-        $query->select('imgs.id_image')
-            ->from('image_shop', 'imgs')
-            ->leftJoin('image', 'img', 'imgs.id_image = img.id_image')
-            ->where('imgs.id_shop = ' . (int) $shopId)
-            ->where('imgs.id_product = ' . (int) $productId)
-            ->orderBy('img.position ASC');
-
-        if ((int) $attributeId !== 0) {
-            $query->innerJoin(
-                'product_attribute_image',
-                'pai',
-                'imgs.id_image = pai.id_image AND pai.id_product_attribute = ' . (int) $attributeId
-            );
+        if ($withSelecParameters) {
+            $this->query
+                ->select('i.id_image')
+                ->select('i.id_product')
+                ->select('i.position')
+                ->select('i.cover')
+                ->select('il.id_lang')
+                ->select('il.legend')
+                ->select('is.id_shop')
+            ;
         }
-
-        if (!$includeCover) {
-            $query->where('(imgs.cover IS NULL OR imgs.cover = 0)');
-        }
-
-        return $this->db->executeS($query);
     }
 
     /**
      * @param int $offset
      * @param int $limit
+     * @param string $langIso
      *
      * @return array<mixed>
      *
+     * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getQueryForDebug($offset, $limit)
+    public function retrieveContentsForFull($offset, $limit, $langIso)
     {
-        $query = $this->getBaseQuery();
+        $this->generateFullQuery($langIso, true);
 
-        $this->addSelectParameters($query);
+        $this->query->limit((int) $limit, (int) $offset);
 
-        $query->limit($limit, $offset);
-
-        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
-
-        return array_merge(
-            (array) $query,
-            ['queryStringified' => $queryStringified]
-        );
+        return $this->runQuery();
     }
 
     /**
-     * @param \DbQuery $query
+     * @param int $limit
+     * @param array<mixed> $contentIds
+     * @param string $langIso
      *
-     * @return void
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
-    private function addSelectParameters(\DbQuery $query)
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        $query->select('i.id_image');
-        $query->select('i.id_product');
-        $query->select('i.position');
-        $query->select('i.cover');
-        $query->select('il.id_lang');
-        $query->select('il.legend');
-        $query->select('is.id_shop');
+        if ($contentIds == []) {
+            return [];
+        }
+
+        $this->generateFullQuery($langIso, true);
+
+        $this->query
+            ->where('i.id_image IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->limit($limit)
+        ;
+
+        return $this->runQuery();
+    }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return int
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    {
+        $this->generateFullQuery($langIso, false);
+
+        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+
+        $result = $this->runQuery(true);
+
+        return $result[0]['count'];
     }
 }
