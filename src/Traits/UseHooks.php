@@ -94,6 +94,8 @@ trait UseHooks
             'actionObjectCategoryUpdateAfter',
             'actionObjectCategoryDeleteAfter',
 
+            'actionObjectCombinationAddAfter',
+            'actionObjectCombinationUpdateAfter',
             'actionObjectCombinationDeleteAfter',
 
             'actionObjectCurrencyAddAfter',

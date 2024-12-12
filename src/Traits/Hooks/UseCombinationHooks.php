@@ -27,7 +27,11 @@
 namespace PrestaShop\Module\PsEventbus\Traits\Hooks;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Repository\CustomProductCarrierRepository;
+use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
+use PrestaShop\Module\PsEventbus\Repository\ProductRepository;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
+use Product;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -40,23 +44,115 @@ trait UseCombinationHooks
      *
      * @return void
      */
+    public function hookActionObjectCombinationAddAfter($parameters)
+    {
+        $this->sendUpsertCombination($parameters);
+    }
+
+    /**
+     * @param array<mixed> $parameters
+     *
+     * @return void
+     */
+    public function hookActionObjectCombinationUpdateAfter($parameters)
+    {
+        $this->sendUpsertCombination($parameters);
+    }
+
+    /**
+     * @param array<mixed> $parameters
+     *
+     * @return void
+     */
     public function hookActionObjectCombinationDeleteAfter($parameters)
     {
+        /** @var \Combination $product */
+        $combination = $parameters['object'];
+
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
-        /** @var \Combination $combination */
-        $combination = $parameters['object'];
-
         if (isset($combination->id)) {
-            $synchronizationService->sendLiveSync(Config::COLLECTION_ATTRIBUTES, Config::INCREMENTAL_TYPE_DELETE);
+            $synchronizationService->sendLiveSync(Config::COLLECTION_PRODUCTS, Config::INCREMENTAL_TYPE_DELETE);
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_ATTRIBUTES => $combination->id],
+                [Config::COLLECTION_PRODUCTS => $combination->id_product],
                 Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
                 $this->shopId,
                 false
             );
         }
+    }
+
+    /**
+     * @param array<mixed> $parameters
+     *
+     * @return void
+     */
+    private function sendUpsertCombination($parameters)
+    {
+        /** @var \Combination $product */
+        $combination = $parameters['object'];
+
+        /** @var \Product $product */
+        $product = new Product($combination->id_product);
+
+        if (!isset($combination->id_product)) {
+            return;
+        }
+
+        /** @var SynchronizationService $synchronizationService * */
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
+
+        /** @var CustomProductCarrierRepository $customProductCarrierRepository */
+        $customProductCarrierRepository = $this->getService(CustomProductCarrierRepository::class);
+
+        /** @var ProductRepository $productRepository */
+        $productRepository = $this->getService(ProductRepository::class);
+        
+        $customProductCarrierList = $customProductCarrierRepository->getCustomProductCarrierIdsByProductId($combination->id_product);
+        $customProductCarrierIds = array_column($customProductCarrierList, 'id_carrier_reference');
+        
+        $uniqueProductIdList = $productRepository->getUniqueProductIdsFromProductId($combination->id_product);
+        $uniqueProductIds = array_column($uniqueProductIdList, 'id_product_attribute');
+
+        $liveSyncItems = [
+            Config::COLLECTION_PRODUCTS,
+            Config::COLLECTION_PRODUCT_SUPPLIERS,
+            Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
+        ];
+
+        $incrementalSyncItems = [
+            Config::COLLECTION_PRODUCTS => $uniqueProductIds,
+            Config::COLLECTION_PRODUCT_SUPPLIERS => $combination->id_product,
+            Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds,
+        ];
+
+        // is for bundle only
+        if ($product->cache_is_pack) {
+            $liveSyncItems[] = Config::COLLECTION_BUNDLES;
+            $incrementalSyncItems[Config::COLLECTION_BUNDLES] = $combination->id_product;
+        }
+
+        $synchronizationService->sendLiveSync(
+            $liveSyncItems,
+            Config::INCREMENTAL_TYPE_UPSERT
+        );
+
+        $synchronizationService->insertContentIntoIncremental(
+            $incrementalSyncItems,
+            Config::INCREMENTAL_TYPE_UPSERT,
+            date(DATE_ATOM),
+            $this->shopId,
+            true
+        );
+
+        $synchronizationService->insertContentIntoIncremental(
+            [Config::COLLECTION_PRODUCTS => $combination->id_product],
+            Config::INCREMENTAL_TYPE_DELETE,
+            date(DATE_ATOM),
+            $this->shopId,
+            true
+        );
     }
 }

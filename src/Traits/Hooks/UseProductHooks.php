@@ -44,55 +44,7 @@ trait UseProductHooks
      */
     public function hookActionObjectProductAddAfter($parameters)
     {
-        /** @var \Product $product */
-        $product = $parameters['object'];
-
-        if (!isset($product->id)) {
-            return;
-        }
-
-        /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
-
-        /** @var CustomProductCarrierRepository $customProductCarrierRepository */
-        $customProductCarrierRepository = $this->getService(CustomProductCarrierRepository::class);
-        $customProductCarriers = $customProductCarrierRepository->getCustomProductCarrierIdsByProductId($product->id);
-        $customProductCarrierIds = array_column($customProductCarriers, 'id_carrier_reference');
-
-        /** @var ProductRepository $productRepository */
-        $productRepository = $this->getService(ProductRepository::class);
-        $uniqueProductIdList = $productRepository->getUniqueProductIdsFromProductId($product->id);
-        $uniqueProductIds = array_column($uniqueProductIdList, 'id_product_attribute');
-
-        $liveSyncItems = [
-            Config::COLLECTION_PRODUCTS,
-            Config::COLLECTION_PRODUCT_SUPPLIERS,
-            Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
-        ];
-
-        $incrementalSyncItems = [
-            Config::COLLECTION_PRODUCTS => $uniqueProductIds,
-            Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id,
-            Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds,
-        ];
-
-        if ($product->cache_is_pack) {
-            $liveSyncItems[] = Config::COLLECTION_BUNDLES;
-            $incrementalSyncItems[Config::COLLECTION_BUNDLES] = $product->id;
-        }
-
-        $synchronizationService->sendLiveSync(
-            $liveSyncItems,
-            Config::INCREMENTAL_TYPE_UPSERT
-        );
-
-        $synchronizationService->insertContentIntoIncremental(
-            $incrementalSyncItems,
-            Config::INCREMENTAL_TYPE_UPSERT,
-            date(DATE_ATOM),
-            $this->shopId,
-            true
-        );
+        $this->sendUpsertProduct($parameters);
     }
 
     /**
@@ -102,55 +54,7 @@ trait UseProductHooks
      */
     public function hookActionObjectProductUpdateAfter($parameters)
     {
-        /** @var \Product $product */
-        $product = $parameters['object'];
-
-        if (!isset($product->id)) {
-            return;
-        }
-
-        /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
-
-        /** @var CustomProductCarrierRepository $customProductCarrierRepository */
-        $customProductCarrierRepository = $this->getService(CustomProductCarrierRepository::class);
-        $customProductCarriers = $customProductCarrierRepository->getCustomProductCarrierIdsByProductId($product->id);
-        $customProductCarrierIds = array_column($customProductCarriers, 'id_carrier_reference');
-
-        /** @var ProductRepository $productRepository */
-        $productRepository = $this->getService(ProductRepository::class);
-        $uniqueProductIdList = $productRepository->getUniqueProductIdsFromProductId($product->id);
-        $uniqueProductIds = array_column($uniqueProductIdList, 'id_product_attribute');
-
-        $liveSyncItems = [
-            Config::COLLECTION_PRODUCTS,
-            Config::COLLECTION_PRODUCT_SUPPLIERS,
-            Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
-        ];
-
-        $incrementalSyncItems = [
-            Config::COLLECTION_PRODUCTS => $uniqueProductIds,
-            Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id,
-            Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds,
-        ];
-
-        if ($product->cache_is_pack) {
-            $liveSyncItems[] = Config::COLLECTION_BUNDLES;
-            $incrementalSyncItems[Config::COLLECTION_BUNDLES] = $product->id;
-        }
-
-        $synchronizationService->sendLiveSync(
-            $liveSyncItems,
-            Config::INCREMENTAL_TYPE_UPSERT
-        );
-
-        $synchronizationService->insertContentIntoIncremental(
-            $incrementalSyncItems,
-            Config::INCREMENTAL_TYPE_UPSERT,
-            date(DATE_ATOM),
-            $this->shopId,
-            true
-        );
+        $this->sendUpsertProduct($parameters);
     }
 
     /**
@@ -176,5 +80,66 @@ trait UseProductHooks
                 false
             );
         }
+    }
+
+    /**
+     * @param array<mixed> $parameters
+     *
+     * @return void
+     */
+    private function sendUpsertProduct($parameters)
+    {
+        /** @var \Product $product */
+        $product = $parameters['object'];
+
+        if (!isset($product->id)) {
+            return;
+        }
+
+        /** @var SynchronizationService $synchronizationService * */
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
+
+        /** @var CustomProductCarrierRepository $customProductCarrierRepository */
+        $customProductCarrierRepository = $this->getService(CustomProductCarrierRepository::class);
+
+        /** @var ProductRepository $productRepository */
+        $productRepository = $this->getService(ProductRepository::class);
+        
+        $customProductCarrierList = $customProductCarrierRepository->getCustomProductCarrierIdsByProductId($product->id);
+        $customProductCarrierIds = array_column($customProductCarrierList, 'id_carrier_reference');
+        
+        $uniqueProductIdList = $productRepository->getUniqueProductIdsFromProductId($product->id);
+        $uniqueProductIds = array_column($uniqueProductIdList, 'id_product_attribute');
+
+        $liveSyncItems = [
+            Config::COLLECTION_PRODUCTS,
+            Config::COLLECTION_PRODUCT_SUPPLIERS,
+            Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
+        ];
+
+        $incrementalSyncItems = [
+            Config::COLLECTION_PRODUCTS => $uniqueProductIds,
+            Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id,
+            Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds,
+        ];
+
+        // is for bundle only
+        if ($product->cache_is_pack) {
+            $liveSyncItems[] = Config::COLLECTION_BUNDLES;
+            $incrementalSyncItems[Config::COLLECTION_BUNDLES] = $product->id;
+        }
+
+        $synchronizationService->sendLiveSync(
+            $liveSyncItems,
+            Config::INCREMENTAL_TYPE_UPSERT
+        );
+
+        $synchronizationService->insertContentIntoIncremental(
+            $incrementalSyncItems,
+            Config::INCREMENTAL_TYPE_UPSERT,
+            date(DATE_ATOM),
+            $this->shopId,
+            true
+        );
     }
 }

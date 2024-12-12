@@ -86,7 +86,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
                 ->select('p.id_product')
                 ->select('p.id_manufacturer')
                 ->select('p.id_supplier')
-                ->select('IFNULL(pas.id_product_attribute, 0) as id_attribute')
+                ->select('pas.id_product_attribute as id_attribute')
                 ->select('pas.default_on as is_default_attribute')
                 ->select('pl.name')
                 ->select('pl.description')
@@ -383,10 +383,11 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
             ->leftJoin('product_attribute_shop', 'pas', 'pas.id_product = p.id_product AND pas.id_shop = ps.id_shop')
         ;
 
-        $this->query->select("CONCAT(p.id_product, '-', IFNULL(pas.id_product_attribute, 0)) AS id_product_attribute");
+        $this->query->select("CONCAT(p.id_product, '-', COALESCE(pas.id_product_attribute, 0)) AS id_product_attribute
+        ");
 
         $this->query->where("p.id_product = '" . pSQL($productId) . "'");
-
+        
         return $this->runQuery(true);
     }
 }
