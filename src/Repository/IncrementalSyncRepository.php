@@ -107,16 +107,19 @@ class IncrementalSyncRepository extends AbstractRepository
 
     /**
      * @param string $type
-     * @param mixed $contentIds
-     * @param string|null $langIso
+     * @param array<mixed> $contentIds
+     * @param string $langIso
      *
      * @return bool
      */
-    public function removeIncrementalSyncObjects($type, $contentIds, $langIso = null)
+    public function removeIncrementalSyncObjects($type, $contentIds, $langIso)
     {
         return $this->db->delete(
             self::TABLE_NAME,
-            $whereClause
+            "type = '" . pSQL($type) . "'
+            AND id_shop = " . parent::getShopContext()->id . "
+            AND id_object IN('" . implode("','", $contentIds) . "')
+            AND lang_iso = '" . pSQL($langIso) . "'"
         );
     }
 
