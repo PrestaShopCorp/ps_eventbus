@@ -104,10 +104,10 @@ trait UseProductHooks
 
         /** @var ProductRepository $productRepository */
         $productRepository = $this->getService(ProductRepository::class);
-        
+
         $customProductCarrierList = $customProductCarrierRepository->getCustomProductCarrierIdsByProductId($product->id);
         $customProductCarrierIds = array_column($customProductCarrierList, 'id_carrier_reference');
-        
+
         $uniqueProductIdList = $productRepository->getUniqueProductIdsFromProductId($product->id);
         $uniqueProductIds = array_column($uniqueProductIdList, 'id_product_attribute');
 

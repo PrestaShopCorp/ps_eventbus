@@ -37,7 +37,7 @@ trait UseStockHooks
 {
     /**
      * @param array<mixed> $parameters
-     * 
+     *
      * @return void
      */
     public function hookActionObjectStockAvailableAddAfter($parameters)
@@ -62,7 +62,7 @@ trait UseStockHooks
 
     /**
      * @param array<mixed> $parameters
-     * 
+     *
      * @return void
      */
     public function hookActionObjectStockAvailableUpdateAfter($parameters)
@@ -89,7 +89,7 @@ trait UseStockHooks
      * Work Only on 1.6
      *
      * @param array<mixed> $parameters
-     * 
+     *
      * @return void
      */
     public function hookActionObjectStockMvtAddAfter($parameters)

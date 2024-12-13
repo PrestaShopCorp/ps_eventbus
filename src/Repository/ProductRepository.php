@@ -339,7 +339,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
      */
     public function getProductPriceAndDeclinations($productId)
     {
-        $this->generateMinimalQuery(SELF::TABLE_NAME, 'p');
+        $this->generateMinimalQuery(self::TABLE_NAME, 'p');
 
         $this->query->where('p.`id_product` = ' . (int) $productId);
 
@@ -368,26 +368,23 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
     }
 
     /**
-     * 
      * @param int $productId
-     * @param string $langIso
-     * 
-     * @return array<mixed> 
+     *
+     * @return array<mixed>
      */
     public function getUniqueProductIdsFromProductId($productId)
     {
-        $this->generateMinimalQuery(SELF::TABLE_NAME, 'p');
+        $this->generateMinimalQuery(self::TABLE_NAME, 'p');
 
         $this->query
             ->innerJoin('product_shop', 'ps', 'ps.id_product = p.id_product AND ps.id_shop = ' . parent::getShopContext()->id)
             ->leftJoin('product_attribute_shop', 'pas', 'pas.id_product = p.id_product AND pas.id_shop = ps.id_shop')
         ;
 
-        $this->query->select("CONCAT(p.id_product, '-', COALESCE(pas.id_product_attribute, 0)) AS id_product_attribute
-        ");
+        $this->query->select("CONCAT(p.id_product, '-', COALESCE(pas.id_product_attribute, 0)) AS id_product_attribute");
 
-        $this->query->where("p.id_product = '" . pSQL($productId) . "'");
-        
+        $this->query->where("p.id_product = '" . $productId . "'");
+
         return $this->runQuery(true);
     }
 }

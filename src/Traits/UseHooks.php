@@ -151,7 +151,7 @@ trait UseHooks
 
             'actionObjectWishlistAddAfter',
             'actionObjectWishlistUpdateAfter',
-            'actionObjectWishlistDeleteAfter'
+            'actionObjectWishlistDeleteAfter',
         ];
     }
 }

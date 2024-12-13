@@ -66,7 +66,6 @@ use PrestaShop\Module\PsEventbus\Service\ApiShopContentService;
 use PrestaShop\Module\PsEventbus\Service\PresenterService;
 use PrestaShop\Module\PsEventbus\Service\ProxyService;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
-use PrestaShop\Module\PsEventbus\Service\ShopContent\AttributesService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\BundlesService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\CarrierDetailsService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\CarriersService;
@@ -140,9 +139,6 @@ class ServiceProvider implements IServiceProvider
                 $container->getParameter('ps_eventbus.live_sync_api_url'),
                 $container->getParameter('ps_eventbus.proxy_api_url')
             );
-        });
-        $container->registerProvider(AttributesService::class, static function () {
-            return new AttributesService();
         });
         $container->registerProvider(BundlesService::class, static function () use ($container) {
             return new BundlesService(

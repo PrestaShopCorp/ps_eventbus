@@ -310,9 +310,9 @@ class SynchronizationService
                         $finalContent = array_map(function ($contentId) use ($contentType, $shopId, $langIso, $actionType, $createdAt) {
                             // transform id_product to unique_product_id
                             if ($contentType == Config::COLLECTION_PRODUCTS) {
-                                $contentId =  is_int($contentId) ? $contentId . "-0" : $contentId;
-                            }    
-                            
+                                $contentId = is_int($contentId) ? $contentId . '-0' : $contentId;
+                            }
+
                             return [
                                 'type' => $contentType,
                                 'id_object' => $contentId,
@@ -335,7 +335,7 @@ class SynchronizationService
                     if (!is_array($contentIds)) {
                         $contentIds = [$contentIds];
                     }
-                    
+
                     $finalContent = array_map(function ($contentId) use ($contentType, $shopId, $defaultIsoCode, $actionType, $createdAt) {
                         return [
                             'type' => $contentType,

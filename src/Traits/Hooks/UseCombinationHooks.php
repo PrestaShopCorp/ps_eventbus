@@ -28,10 +28,8 @@ namespace PrestaShop\Module\PsEventbus\Traits\Hooks;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Repository\CustomProductCarrierRepository;
-use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\ProductRepository;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
-use Product;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -66,7 +64,7 @@ trait UseCombinationHooks
      */
     public function hookActionObjectCombinationDeleteAfter($parameters)
     {
-        /** @var \Combination $product */
+        /** @var \Combination $combination */
         $combination = $parameters['object'];
 
         /** @var SynchronizationService $synchronizationService * */
@@ -91,15 +89,11 @@ trait UseCombinationHooks
      */
     private function sendUpsertCombination($parameters)
     {
-        /** @var \Combination $product */
+        /** @var \Combination $combination */
         $combination = $parameters['object'];
 
         /** @var \Product $product */
-        $product = new Product($combination->id_product);
-
-        if (!isset($combination->id_product)) {
-            return;
-        }
+        $product = new \Product($combination->id_product);
 
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
@@ -109,10 +103,10 @@ trait UseCombinationHooks
 
         /** @var ProductRepository $productRepository */
         $productRepository = $this->getService(ProductRepository::class);
-        
+
         $customProductCarrierList = $customProductCarrierRepository->getCustomProductCarrierIdsByProductId($combination->id_product);
         $customProductCarrierIds = array_column($customProductCarrierList, 'id_carrier_reference');
-        
+
         $uniqueProductIdList = $productRepository->getUniqueProductIdsFromProductId($combination->id_product);
         $uniqueProductIds = array_column($uniqueProductIdList, 'id_product_attribute');
 
