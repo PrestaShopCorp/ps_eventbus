@@ -1,7 +1,6 @@
 import R from "ramda";
 
 export const shopContentMapping = {
-  attributes: "attributes",
   bundles: "bundles",
   carriers: "carriers",
   carrier_details: "carrier-details",
