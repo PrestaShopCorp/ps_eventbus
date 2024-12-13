@@ -70,10 +70,12 @@ trait UseCombinationHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
+        $uniqueProductId = $combination->id . "-" . $combination->id_product;
+
         if (isset($combination->id)) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_PRODUCTS, Config::INCREMENTAL_TYPE_DELETE);
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_PRODUCTS => $combination->id_product],
+                [Config::COLLECTION_PRODUCTS => $uniqueProductId],
                 Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
                 $this->shopId,
