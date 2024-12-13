@@ -31,6 +31,7 @@ use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
 use Prestashop\ModuleLibGuzzleAdapter\Interfaces\HttpClientInterface;
+use Symfony\Component\HttpClient\HttpClient;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -68,40 +69,46 @@ class SyncApiClient
     }
 
     /**
-     * @see https://docs.guzzlephp.org/en/stable/quickstart.html-
-     *
-     * @param int $timeout
-     *
-     * @return HttpClientInterface
-     */
-    private function getClient($timeout = Config::SYNC_API_MAX_TIMEOUT)
-    {
-        return (new ClientFactory())->getClient([
-            'allow_redirects' => true,
-            'connect_timeout' => 10,
-            'http_errors' => false,
-            'timeout' => $timeout,
-        ]);
-    }
-
-    /**
      * @param string $jobId
      *
      * @return array<mixed>
      */
     public function validateJobId($jobId)
     {
-        $response = $this->getClient()->sendRequest(
-            new Request(
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '9', '>=')) {
+            $client = HttpClient::create();
+
+            $response = $client->request(
                 'GET',
                 $this->syncApiUrl . '/job/' . $jobId,
                 [
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->jwt,
-                    'User-Agent' => 'ps-eventbus/' . $this->module->version,
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Authorization' => 'Bearer ' . $this->jwt,
+                        'User-Agent' => 'ps-eventbus/' . $this->module->version,
+                    ]
                 ]
-            )
-        );
+            );
+        } else {
+            $client = (new ClientFactory())->getClient([
+                'allow_redirects' => true,
+                'connect_timeout' => 10,
+                'http_errors' => false,
+                'timeout' => Config::SYNC_API_MAX_TIMEOUT,
+            ]);
+
+            $response = $client->sendRequest(
+                new Request(
+                    'GET',
+                    $this->syncApiUrl . '/job/' . $jobId,
+                    [
+                        'Accept' => 'application/json',
+                        'Authorization' => 'Bearer ' . $this->jwt,
+                        'User-Agent' => 'ps-eventbus/' . $this->module->version,
+                    ]
+                )
+            );
+        }
 
         return [
             'status' => substr((string) $response->getStatusCode(), 0, 1) === '2',
