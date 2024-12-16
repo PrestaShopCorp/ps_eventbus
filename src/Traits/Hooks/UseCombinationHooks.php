@@ -70,7 +70,7 @@ trait UseCombinationHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
-        $uniqueProductId = $combination->id . '-' . $combination->id_product;
+        $uniqueProductId = $combination->id_product . '-' . $combination->id;
 
         if (isset($combination->id)) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_PRODUCTS, Config::INCREMENTAL_TYPE_DELETE);

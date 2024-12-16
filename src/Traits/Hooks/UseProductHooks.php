@@ -64,11 +64,11 @@ trait UseProductHooks
      */
     public function hookActionObjectProductDeleteAfter($parameters)
     {
-        /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
-
         /** @var \Product $product */
         $product = $parameters['object'];
+
+        /** @var SynchronizationService $synchronizationService * */
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
         if (isset($product->id)) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_PRODUCTS, Config::INCREMENTAL_TYPE_DELETE);
