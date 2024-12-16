@@ -33,22 +33,22 @@ if (!defined('_PS_VERSION_')) {
 function upgrade_module_4_0_0()
 {
     if (!removeDuplicateEntryFromTypeSyncTable()) {
-        throw new Exception('Failed to remove duplicate entry from eventbus_type_sync.');
+        throw new \PrestaShopException('Failed to remove duplicate entry from eventbus_type_sync.');
     }
 
     // Ajouter la clé primaire
     if (!addPrimaryKeyToTypeSyncTable()) {
-        throw new Exception('Failed to add primary key to eventbus_type_sync.');
+        throw new \PrestaShopException('Failed to add primary key to eventbus_type_sync.');
     }
 
     // Ajouter la colonne action
     if (!addActionToIncrementalSyncTable()) {
-        throw new Exception("Failed to add 'action' column to eventbus_incremental_sync.");
+        throw new \PrestaShopException("Failed to add 'action' column to eventbus_incremental_sync.");
     }
 
     // Migrer les données
     if (!migrateDeleteTableToIncremantalTable()) {
-        throw new Exception('Failed to migrate data to eventbus_incremental_sync.');
+        throw new \PrestaShopException('Failed to migrate data to eventbus_incremental_sync.');
     }
 
     return true;

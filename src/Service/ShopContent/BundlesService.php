@@ -102,11 +102,10 @@ class BundlesService extends ShopContentAbstractService implements ShopContentSe
 
     /**
      * @param array<mixed> $bundles
-     * @param string $langIso
      *
      * @return void
      */
-    private function castBundles(&$bundles, $langIso)
+    private function castBundles(&$bundles)
     {
         foreach ($bundles as &$bundle) {
             $bundle['id_product'] = (string) $bundle['id_product'];

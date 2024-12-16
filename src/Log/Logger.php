@@ -110,7 +110,6 @@ class Logger
     }
 
     /**
-     * FIXME: misnamed method
      *
      * @return MonologLogger
      */
