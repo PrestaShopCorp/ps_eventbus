@@ -151,6 +151,14 @@ function migrateDeleteTableToIncremantalTable()
 {
     $db = Db::getInstance();
 
+    // check if 'ps_eventbus_deleted_objects' exist
+    $checkDeletedTableExistsQuery = "SHOW TABLES LIKE '" . _DB_PREFIX_ . "eventbus_deleted_objects'";
+    $tableExists = $db->executeS($checkDeletedTableExistsQuery);
+
+    if (!$tableExists) {
+        return true;
+    }
+
     // Get default lang_iso
     $defaultLangId = Configuration::get('PS_LANG_DEFAULT');
     $defaultLangIso = Language::getIsoById($defaultLangId);
