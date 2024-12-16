@@ -4,8 +4,6 @@ namespace PrestaShop\Module\PsEventbus\Config;
 
 class Config
 {
-    const SYNC_API_MAX_TIMEOUT = 5;
-    const COLLECTOR_MAX_TIMEOUT = 30;
     const COLLECTOR_MULTIPART_BOUNDARY = 'ps_eventbus_boundary';
     const REFRESH_TOKEN_ERROR_CODE = 452;
     const ENV_MISCONFIGURED_ERROR_CODE = 453;

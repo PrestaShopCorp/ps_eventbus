@@ -7,8 +7,6 @@ use PrestaShop\Module\PsEventbus\Api\Post\MultipartBody;
 use PrestaShop\Module\PsEventbus\Api\Post\PostFileApi;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
-use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
-use Prestashop\ModuleLibGuzzleAdapter\Interfaces\HttpClientInterface;
 
 class CollectorApiClient
 {
@@ -51,25 +49,6 @@ class CollectorApiClient
     }
 
     /**
-     * @see https://docs.guzzlephp.org/en/stable/quickstart.html
-     * @see https://docs.guzzlephp.org/en/stable/request-options.html#read-timeout
-     *
-     * @param int $startTime @optional start time in seconds since epoch
-     *
-     * @return HttpClientInterface
-     */
-    private function getClient($startTime = null)
-    {
-        return (new ClientFactory())->getClient([
-            'allow_redirects' => true,
-            'connect_timeout' => 10,
-            'http_errors' => false,
-            'read_timeout' => 30,
-            'timeout' => $this->getRemainingTime($startTime),
-        ]);
-    }
-
-    /**
      * Push some ShopContents to CloudSync
      *
      * @param string $jobId
@@ -88,20 +67,20 @@ class CollectorApiClient
         $contentSize = $file->getContent()->getSize();
         $multipartBody = new MultipartBody([], [$file], Config::COLLECTOR_MULTIPART_BOUNDARY);
 
-        $response = $this->getClient($startTime)->sendRequest(
-            new Request(
-                'POST',
-                $url,
-                [
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->jwt,
-                    'Content-Length' => $contentSize ? (string) $contentSize : '0',
-                    'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
-                    'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
-                    'User-Agent' => 'ps-eventbus/' . $this->module->version,
-                ],
-                $multipartBody->getContents()
-            )
+        $client = new HttpClientFactory($this->getRemainingTime($startTime));
+
+        $response = $client->sendRequest(
+            'POST',
+            $url,
+            [
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer ' . $this->jwt,
+                'Content-Length' => $contentSize ? (string) $contentSize : '0',
+                'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
+                'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
+                'User-Agent' => 'ps-eventbus/' . $this->module->version,
+            ],
+            $multipartBody->getContents()
         );
 
         return [
@@ -129,19 +108,19 @@ class CollectorApiClient
         $contentSize = $file->getContent()->getSize();
         $multipartBody = new MultipartBody([], [$file], Config::COLLECTOR_MULTIPART_BOUNDARY);
 
-        $response = $this->getClient($startTime)->sendRequest(
-            new Request(
-                'POST',
-                $url,
-                [
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->jwt,
-                    'Content-Length' => $contentSize ? (string) $contentSize : '0',
-                    'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
-                    'User-Agent' => 'ps-eventbus/' . $this->module->version,
-                ],
-                $multipartBody->getContents()
-            )
+        $client = new HttpClientFactory($this->getRemainingTime($startTime));
+
+        $response = $client->sendRequest(
+            'POST',
+            $url,
+            [
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer ' . $this->jwt,
+                'Content-Length' => $contentSize ? (string) $contentSize : '0',
+                'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
+                'User-Agent' => 'ps-eventbus/' . $this->module->version,
+            ],
+            $multipartBody->getContents()
         );
 
         return [
