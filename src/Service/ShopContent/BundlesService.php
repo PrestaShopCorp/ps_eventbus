@@ -58,7 +58,7 @@ class BundlesService extends ShopContentAbstractService implements ShopContentSe
             return [];
         }
 
-        $this->castBundles($result, $langIso);
+        $this->castBundles($result);
 
         return array_map(function ($item) {
             return [
@@ -82,7 +82,7 @@ class BundlesService extends ShopContentAbstractService implements ShopContentSe
         $result = $this->bundleRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
         if (!empty($result)) {
-            $this->castBundles($result, $langIso);
+            $this->castBundles($result);
         }
 
         return parent::formatIncrementalSyncResponse(Config::COLLECTION_BUNDLES, $result, $deletedContents);
