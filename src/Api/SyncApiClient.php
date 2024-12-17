@@ -30,7 +30,6 @@ use GuzzleHttp\Psr7\Request;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
-use Prestashop\ModuleLibGuzzleAdapter\Interfaces\HttpClientInterface;
 use Symfony\Component\HttpClient\HttpClient;
 
 if (!defined('_PS_VERSION_')) {
@@ -86,7 +85,7 @@ class SyncApiClient
                         'Accept' => 'application/json',
                         'Authorization' => 'Bearer ' . $this->jwt,
                         'User-Agent' => 'ps-eventbus/' . $this->module->version,
-                    ]
+                    ],
                 ]
             );
         } else {

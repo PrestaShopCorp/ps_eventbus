@@ -110,7 +110,6 @@ class Logger
     }
 
     /**
-     *
      * @return MonologLogger
      */
     public static function getInstance()
