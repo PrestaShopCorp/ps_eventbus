@@ -68,7 +68,7 @@ class SynchronizationService
     private $languagesService;
 
     /**
-     * @var ProxyServiceInterface
+     * @var ProxyService
      */
     private $proxyService;
 
@@ -83,7 +83,7 @@ class SynchronizationService
         IncrementalSyncRepository $incrementalSyncRepository,
         LiveSyncRepository $liveSyncRepository,
         LanguagesService $languagesService,
-        ProxyServiceInterface $proxyService,
+        ProxyService $proxyService,
         ErrorHandler $errorHandler
     ) {
         $this->liveSyncApiClient = $liveSyncApiClient;

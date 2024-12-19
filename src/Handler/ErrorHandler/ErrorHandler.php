@@ -26,7 +26,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
-use Exception;
 use PrestaShop\Module\PsEventbus\Service\CommonService;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 

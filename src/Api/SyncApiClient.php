@@ -26,8 +26,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use GuzzleHttp\Psr7\Request;
-use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
 use Symfony\Component\HttpClient\HttpClient;
@@ -74,40 +72,17 @@ class SyncApiClient
      */
     public function validateJobId($jobId)
     {
-        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '9', '>=')) {
-            $client = HttpClient::create();
+        $client = new HttpClientFactory(3);
 
-            $response = $client->request(
-                'GET',
-                $this->syncApiUrl . '/job/' . $jobId,
-                [
-                    'headers' => [
-                        'Accept' => 'application/json',
-                        'Authorization' => 'Bearer ' . $this->jwt,
-                        'User-Agent' => 'ps-eventbus/' . $this->module->version,
-                    ],
-                ]
-            );
-        } else {
-            $client = (new ClientFactory())->getClient([
-                'allow_redirects' => true,
-                'connect_timeout' => 10,
-                'http_errors' => false,
-                'timeout' => Config::SYNC_API_MAX_TIMEOUT,
-            ]);
-
-            $response = $client->sendRequest(
-                new Request(
-                    'GET',
-                    $this->syncApiUrl . '/job/' . $jobId,
-                    [
-                        'Accept' => 'application/json',
-                        'Authorization' => 'Bearer ' . $this->jwt,
-                        'User-Agent' => 'ps-eventbus/' . $this->module->version,
-                    ]
-                )
-            );
-        }
+        $response = $client->sendRequest(
+            'GET',
+            $this->syncApiUrl . '/job/' . $jobId,
+            [
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer ' . $this->jwt,
+                'User-Agent' => 'ps-eventbus/' . $this->module->version,
+            ]
+        );
 
         return [
             'status' => substr((string) $response->getStatusCode(), 0, 1) === '2',

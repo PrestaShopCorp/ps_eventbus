@@ -37,7 +37,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class ProxyService implements ProxyServiceInterface
+class ProxyService
 {
     /**
      * @var CollectorApiClient
@@ -84,29 +84,5 @@ class ProxyService implements ProxyServiceInterface
 
             return ['error' => $exception->getMessage()];
         }
-    }
-
-    /**
-     * @param string $jobId
-     * @param array<mixed> $data
-     * @param int $scriptStartTime
-     *
-     * @return array<mixed>
-     *
-     * @throws EnvVarException
-     */
-    public function delete($jobId, $data, $scriptStartTime)
-    {
-        $dataJson = $this->jsonFormatter->formatNewlineJsonString($data);
-
-        try {
-            $response = $this->eventBusProxyClient->uploadDelete($jobId, $dataJson, $scriptStartTime);
-        } catch (ClientException $exception) {
-            $this->errorHandler->handle($exception);
-
-            return ['error' => $exception->getMessage()];
-        }
-
-        return $response;
     }
 }

@@ -39,7 +39,6 @@ class Config
     const INCREMENTAL_TYPE_UPSERT = 'upsert';
     const INCREMENTAL_TYPE_DELETE = 'delete';
 
-    const SYNC_API_MAX_TIMEOUT = 5;
     const SYNC_SERVICE_NAME = 'PrestaShop\Module\PsEventbus\Service\SynchronizationService';
 
     const COLLECTOR_MULTIPART_BOUNDARY = 'ps_eventbus_boundary';
