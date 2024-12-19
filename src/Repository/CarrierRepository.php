@@ -1,235 +1,150 @@
 <?php
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to https://devdocs.prestashop.com/ for more information.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-class CarrierRepository
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
+class CarrierRepository extends AbstractRepository implements RepositoryInterface
 {
-    /**
-     * @var \Db
-     */
-    private $db;
+    const TABLE_NAME = 'carrier';
 
     /**
-     * @var \Context
-     */
-    private $context;
-
-    /**
-     * @var int
-     */
-    private $shopId;
-
-    public function __construct(\Context $context)
-    {
-        $this->db = \Db::getInstance();
-        $this->context = $context;
-
-        if ($this->context->shop === null) {
-            throw new \PrestaShopException('No shop context');
-        }
-
-        $this->shopId = (int) $this->context->shop->id;
-    }
-
-    /**
-     * @param \Carrier $carrierObj
-     *
-     * @return array<mixed>|false
-     */
-    public function getDeliveryPriceByRange(\Carrier $carrierObj)
-    {
-        $rangeTable = $carrierObj->getRangeTable();
-        switch ($rangeTable) {
-            case 'range_weight':
-                return $this->getCarrierByWeightRange($carrierObj, 'range_weight');
-            case 'range_price':
-                return $this->getCarrierByPriceRange($carrierObj, 'range_price');
-            default:
-                return false;
-        }
-    }
-
-    /**
-     * @param \Carrier $carrierObj
-     * @param string $rangeTable
-     *
-     * @return array<mixed>
-     */
-    private function getCarrierByPriceRange(
-        \Carrier $carrierObj,
-        $rangeTable
-    ) {
-        $deliveryPriceByRange = \Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrierObj->id);
-
-        $filteredRanges = [];
-        foreach ($deliveryPriceByRange as $range) {
-            $filteredRanges[$range['id_range_price']]['id_range_price'] = $range['id_range_price'];
-            $filteredRanges[$range['id_range_price']]['id_carrier'] = $range['id_carrier'];
-            $filteredRanges[$range['id_range_price']]['zones'][$range['id_zone']]['id_zone'] = $range['id_zone'];
-            $filteredRanges[$range['id_range_price']]['zones'][$range['id_zone']]['price'] = $range['price'];
-        }
-
-        return $filteredRanges;
-    }
-
-    /**
-     * @param \Carrier $carrierObj
-     * @param string $rangeTable
-     *
-     * @return array<mixed>
-     */
-    private function getCarrierByWeightRange(
-        \Carrier $carrierObj,
-        $rangeTable
-    ) {
-        $deliveryPriceByRange = \Carrier::getDeliveryPriceByRanges($rangeTable, (int) $carrierObj->id);
-
-        $filteredRanges = [];
-        foreach ($deliveryPriceByRange as $range) {
-            $filteredRanges[$range['id_range_weight']]['id_range_weight'] = $range['id_range_weight'];
-            $filteredRanges[$range['id_range_weight']]['id_carrier'] = $range['id_carrier'];
-            $filteredRanges[$range['id_range_weight']]['zones'][$range['id_zone']]['id_zone'] = $range['id_zone'];
-            $filteredRanges[$range['id_range_weight']]['zones'][$range['id_zone']]['price'] = $range['price'];
-        }
-
-        return $filteredRanges;
-    }
-
-    /**
-     * @param int $offset
-     * @param int $limit
-     * @param int $langId
-     *
-     * @return \DbQuery
-     */
-    private function getAllCarriersQuery($offset, $limit, $langId)
-    {
-        $query = new \DbQuery();
-        $query->from('carrier', 'c');
-        $query->select('c.id_carrier');
-        $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
-        $query->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier');
-        $query->where('cs.id_shop = ' . $this->shopId);
-        $query->where('deleted=0');
-        $query->limit($limit, $offset);
-
-        return $query;
-    }
-
-    /**
-     * @param string $type
      * @param string $langIso
+     * @param bool $withSelecParameters
      *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return mixed
      *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getShippingIncremental($type, $langIso)
-    {
-        $query = new \DbQuery();
-        $query->from(IncrementalSyncRepository::INCREMENTAL_SYNC_TABLE, 'aic');
-        $query->leftJoin(EventbusSyncRepository::TYPE_SYNC_TABLE_NAME, 'ts', 'ts.type = aic.type');
-        $query->where('aic.type = "' . pSQL($type) . '"');
-        $query->where('ts.id_shop = ' . $this->shopId);
-        $query->where('ts.lang_iso = "' . pSQL($langIso) . '"');
-
-        return $this->db->executeS($query);
-    }
-
-    /**
-     * @param array<mixed> $deliveryPriceByRange
-     *
-     * @return false|\RangeWeight|\RangePrice
-     *
-     * @throws \PrestaShopDatabaseException
      * @throws \PrestaShopException
      */
-    public function getCarrierRange($deliveryPriceByRange)
+    public function generateFullQuery($langIso, $withSelecParameters)
     {
-        if (isset($deliveryPriceByRange['id_range_weight'])) {
-            return new \RangeWeight($deliveryPriceByRange['id_range_weight']);
-        }
-        if (isset($deliveryPriceByRange['id_range_price'])) {
-            return new \RangePrice($deliveryPriceByRange['id_range_price']);
-        }
+        $langId = (int) \Language::getIdByIso($langIso);
 
-        return false;
-    }
+        $this->generateMinimalQuery(self::TABLE_NAME, 'c');
 
-    /**
-     * @param int[] $carrierIds
-     * @param int $langId
-     *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getCarrierProperties($carrierIds, $langId)
-    {
-        if (!$carrierIds) {
-            return [];
+        $this->query
+            ->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . $langId)
+            ->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier')
+        ;
+
+        $this->query
+            ->where('cs.id_shop = ' . (int) parent::getShopContext()->id)
+            ->where('deleted=0')
+        ;
+
+        if ($withSelecParameters) {
+            $this->query
+                ->select('c.id_carrier')
+                ->select('c.id_reference')
+                ->select('c.name')
+                ->select('c.url')
+                ->select('c.active')
+                ->select('c.deleted')
+                ->select('c.range_behavior AS disable_carrier_when_out_of_range')
+                ->select('c.is_module')
+                ->select('c.is_free')
+                ->select('c.shipping_external')
+                ->select('c.need_range')
+                ->select('c.external_module_name')
+                ->select('c.max_width')
+                ->select('c.max_height')
+                ->select('c.max_depth')
+                ->select('c.max_weight')
+                ->select('c.grade')
+                ->select('cl.delay AS delay')
+                ->select('c.shipping_handling')
+            ;
         }
-        $query = new \DbQuery();
-        $query->from('carrier', 'c');
-        $query->select('c.*, cl.delay');
-        $query->leftJoin('carrier_lang', 'cl', 'cl.id_carrier = c.id_carrier AND cl.id_lang = ' . (int) $langId);
-        $query->leftJoin('carrier_shop', 'cs', 'cs.id_carrier = c.id_carrier');
-        $query->where('c.id_carrier IN (' . implode(',', array_map('intval', $carrierIds)) . ')');
-        $query->where('cs.id_shop = ' . $this->shopId);
-
-        return $this->db->executeS($query);
     }
 
     /**
      * @param int $offset
      * @param int $limit
-     * @param int $langId
+     * @param string $langIso
      *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>
      *
+     * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getAllCarrierProperties($offset, $limit, $langId)
+    public function retrieveContentsForFull($offset, $limit, $langIso)
     {
-        return $this->db->executeS($this->getAllCarriersQuery($offset, $limit, $langId));
+        $this->generateFullQuery($langIso, true);
+
+        $this->query->limit((int) $limit, (int) $offset);
+
+        return $this->runQuery();
+    }
+
+    /**
+     * @param int $limit
+     * @param array<mixed> $contentIds
+     * @param string $langIso
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
+    {
+        if ($contentIds == []) {
+            return [];
+        }
+
+        $this->generateFullQuery($langIso, true);
+
+        $this->query
+            ->where('c.id_carrier IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->limit($limit);
+
+        return $this->runQuery();
     }
 
     /**
      * @param int $offset
-     * @param int $langId
+     * @param int $limit
+     * @param string $langIso
      *
      * @return int
      *
+     * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getRemainingCarriersCount($offset, $langId)
+    public function countFullSyncContentLeft($offset, $limit, $langIso)
     {
-        $carriers = $this->getAllCarrierProperties($offset, 1, $langId);
+        $this->generateFullQuery($langIso, false);
 
-        if (!is_array($carriers) || empty($carriers)) {
-            return 0;
-        }
+        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
 
-        return count($carriers);
-    }
+        $result = $this->runQuery(true);
 
-    /**
-     * @param int $offset
-     * @param int $limit
-     * @param int $langId
-     *
-     * @return array<mixed>
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getQueryForDebug($offset, $limit, $langId)
-    {
-        $query = $this->getAllCarriersQuery($offset, $limit, $langId);
-        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
-
-        return array_merge(
-            (array) $query,
-            ['queryStringified' => $queryStringified]
-        );
+        return $result[0]['count'];
     }
 }
