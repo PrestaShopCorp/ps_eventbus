@@ -6,3 +6,4 @@ parameters:
     - '#Call to an undefined method Prestashop\\ModuleLibGuzzleAdapter\\Interfaces\\HttpClientInterface|Symfony\\Contracts\\HttpClient\\HttpClientInterface::sendRequest\(\).#'
     - '#Call to an undefined method Psr\\Http\\Message\\ResponseInterface|Symfony\\Contracts\\HttpClient\\ResponseInterface::getContent\(\).#'
     - '#Call to an undefined method Psr\\Http\\Message\\ResponseInterface|Symfony\\Contracts\\HttpClient\\ResponseInterface::getBody\(\).#'
+    - '#Property PrestaShop\\Module\\PsEventbus\\Api\\Post\\MultipartBody::\$stream is never read\, only written.#'
