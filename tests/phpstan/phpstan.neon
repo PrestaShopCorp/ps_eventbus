@@ -1,5 +1,6 @@
 includes:
   - %currentWorkingDirectory%/tests/phpstan/phpstan-1-6.neon
+  - %currentWorkingDirectory%/tests/phpstan/phpstan-9-0.neon
 parameters:
   paths:
     - ../../src

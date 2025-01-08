@@ -27,15 +27,12 @@
 namespace PrestaShop\Module\PsEventbus\Api;
 
 use GuzzleHttp\Psr7\Request;
-use PrestaShop\Module\PsEventbus\Api\Post\MultipartBody;
-use PrestaShop\Module\PsEventbus\Api\Post\PostFileApi;
 use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
 use Prestashop\ModuleLibGuzzleAdapter\Interfaces\HttpClientInterface;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\Exception\ServerException;
 use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Component\Mime\Part\DataPart;
-use Symfony\Component\Mime\Part\Multipart\FormDataPart;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -49,7 +46,6 @@ class HttpClientFactory
     private $client;
 
     /**
-     * 
      * @var \Symfony\Contracts\HttpClient\ResponseInterface|\Psr\Http\Message\ResponseInterface
      */
     private $response;
@@ -77,10 +73,10 @@ class HttpClientFactory
     /**
      * Send HTTP Request
      *
-     * @param string|\Psr\Http\Message\RequestInterface $method
+     * @param string $method
      * @param string $endpoint
      * @param array<mixed> $headers
-     * @param array<mixed> $body
+     * @param string $body
      *
      * @return self
      */
@@ -123,17 +119,17 @@ class HttpClientFactory
     }
 
     /**
-     * @return string 
+     * @return string
      */
-    public function getContent() 
+    public function getContent()
     {
         if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '9', '>=')) {
             try {
                 return $this->response->getContent();
-            /* } catch (ClientException $e) {
-                //return '404 - not found';
-            } catch(ServerException $e) {
-                //return '500 - Server error'; */
+                /* } catch (ClientException $e) {
+                    //return '404 - not found';
+                } catch(ServerException $e) {
+                    //return '500 - Server error'; */
             } catch (\Exception $e) {
                 return '';
             }
@@ -142,6 +138,11 @@ class HttpClientFactory
         }
     }
 
+    /**
+     * @return int
+     *
+     * @throws TransportExceptionInterface
+     */
     public function getStatusCode()
     {
         return $this->response->getStatusCode();

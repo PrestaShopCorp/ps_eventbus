@@ -1,0 +1,8 @@
+parameters:
+  ignoreErrors:
+    - '#Call to an undefined method PrestaShop\\Module\\PsEventbus\\Api\\Post\\MultipartBody|Symfony\\Component\\Mime\\Part\\Multipart\\FormDataPart::bodyToString\(\).#'
+    - '#Call to an undefined method PrestaShop\\Module\\PsEventbus\\Api\\Post\\MultipartBody|Symfony\\Component\\Mime\\Part\\Multipart\\FormDataPart::getContents\(\).#'
+    - '#Call to an undefined method Prestashop\\ModuleLibGuzzleAdapter\\Interfaces\\HttpClientInterface|Symfony\\Contracts\\HttpClient\\HttpClientInterface::request\(\).#'
+    - '#Call to an undefined method Prestashop\\ModuleLibGuzzleAdapter\\Interfaces\\HttpClientInterface|Symfony\\Contracts\\HttpClient\\HttpClientInterface::sendRequest\(\).#'
+    - '#Call to an undefined method Psr\\Http\\Message\\ResponseInterface|Symfony\\Contracts\\HttpClient\\ResponseInterface::getContent\(\).#'
+    - '#Call to an undefined method Psr\\Http\\Message\\ResponseInterface|Symfony\\Contracts\\HttpClient\\ResponseInterface::getBody\(\).#'

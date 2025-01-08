@@ -28,7 +28,6 @@ namespace PrestaShop\Module\PsEventbus\Api;
 
 use PrestaShop\Module\PsEventbus\Api\Post\MultipartBody;
 use PrestaShop\Module\PsEventbus\Api\Post\PostFileApi;
-use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
@@ -93,12 +92,11 @@ class CollectorApiClient
 
         $url = $this->collectorApiUrl . '/upload/' . $jobId;
 
-
         if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '9', '>=')) {
             $contentSize = strlen($data);
 
             $formData = new FormDataPart([
-                'file' => new DataPart($data, 'file', 'text/plain')
+                'file' => new DataPart($data, 'file', 'text/plain'),
             ]);
 
             $boundary = $formData->getPreparedHeaders()->getHeaderParameter('content-type', 'boundary');
@@ -138,7 +136,7 @@ class CollectorApiClient
      *
      * @param int $startTime @optional start time in seconds since epoch
      *
-     * @return float
+     * @return int
      */
     private function getRemainingTime($startTime = null)
     {
@@ -152,10 +150,10 @@ class CollectorApiClient
             return CollectorApiClient::$DEFAULT_MAX_EXECUTION_TIME;
         }
         /*
-         * An extra 1.5s to be arbitrary substracted
+         * An extra 2s to be arbitrary substracted
          * to keep time for the JSON parsing and state propagation in MySQL
          */
-        $extraOpsTime = 1.5;
+        $extraOpsTime = 2;
 
         /*
          * Default to maximum timeout

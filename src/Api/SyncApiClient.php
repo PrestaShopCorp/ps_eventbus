@@ -27,8 +27,6 @@
 namespace PrestaShop\Module\PsEventbus\Api;
 
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
-use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
-use Symfony\Component\HttpClient\HttpClient;
 
 if (!defined('_PS_VERSION_')) {
     exit;
