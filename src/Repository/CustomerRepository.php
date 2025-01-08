@@ -1,127 +1,133 @@
 <?php
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to https://devdocs.prestashop.com/ for more information.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-class CustomerRepository
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
+class CustomerRepository extends AbstractRepository implements RepositoryInterface
 {
-    /**
-     * @var \Db
-     */
-    private $db;
+    const TABLE_NAME = 'customer';
 
     /**
-     * @var \Context
+     * @param string $langIso
+     * @param bool $withSelecParameters
+     *
+     * @return mixed
+     *
+     * @throws \PrestaShopException
      */
-    private $context;
-
-    public function __construct(\Context $context)
+    public function generateFullQuery($langIso, $withSelecParameters)
     {
-        $this->db = \Db::getInstance();
-        $this->context = $context;
-    }
+        $this->generateMinimalQuery(self::TABLE_NAME, 'c');
 
-    /**
-     * @return \DbQuery
-     */
-    public function getBaseQuery()
-    {
-        if ($this->context->shop === null) {
-            throw new \PrestaShopException('No shop context');
+        $this->query->where('c.id_shop = ' . parent::getShopContext()->id);
+
+        if ($withSelecParameters) {
+            $this->query
+            ->select('c.id_customer')
+                ->select('c.id_lang')
+                ->select('c.email')
+                ->select('c.newsletter')
+                ->select('c.newsletter_date_add')
+                ->select('c.optin')
+                ->select('c.active')
+                ->select('c.is_guest')
+                ->select('c.deleted')
+                ->select('c.date_add as created_at')
+                ->select('c.date_upd as updated_at')
+            ;
         }
-
-        $shopId = (int) $this->context->shop->id;
-
-        $query = new \DbQuery();
-        $query->from('customer', 'c')
-            ->where('c.id_shop = ' . $shopId);
-
-        return $query;
     }
 
     /**
      * @param int $offset
      * @param int $limit
-     *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getCustomers($offset, $limit)
-    {
-        $query = $this->getBaseQuery();
-
-        $this->addSelectParameters($query);
-
-        $query->limit($limit, $offset);
-
-        return $this->db->executeS($query);
-    }
-
-    /**
-     * @param int $offset
-     *
-     * @return int
-     */
-    public function getRemainingCustomersCount($offset)
-    {
-        $query = $this->getBaseQuery()
-            ->select('(COUNT(c.id_customer) - ' . (int) $offset . ') as count');
-
-        return (int) $this->db->getValue($query);
-    }
-
-    /**
-     * @param int $limit
-     * @param array<mixed> $customerIds
-     *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getCustomersIncremental($limit, $customerIds)
-    {
-        $query = $this->getBaseQuery();
-
-        $this->addSelectParameters($query);
-
-        $query->where('c.id_customer IN(' . implode(',', array_map('intval', $customerIds)) . ')')
-            ->limit($limit);
-
-        return $this->db->executeS($query);
-    }
-
-    /**
-     * @param int $offset
-     * @param int $limit
+     * @param string $langIso
      *
      * @return array<mixed>
      *
+     * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getQueryForDebug($offset, $limit)
+    public function retrieveContentsForFull($offset, $limit, $langIso)
     {
-        $query = $this->getBaseQuery();
+        $this->generateFullQuery($langIso, true);
 
-        $this->addSelectParameters($query);
+        $this->query->limit((int) $limit, (int) $offset);
 
-        $query->limit($limit, $offset);
-
-        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
-
-        return array_merge(
-            (array) $query,
-            ['queryStringified' => $queryStringified]
-        );
+        return $this->runQuery();
     }
 
     /**
-     * @param \DbQuery $query
+     * @param int $limit
+     * @param array<mixed> $contentIds
+     * @param string $langIso
      *
-     * @return void
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
-    private function addSelectParameters(\DbQuery $query)
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        $query->select('c.id_customer, c.id_lang, c.email, c.newsletter, c.newsletter_date_add');
-        $query->select('c.optin, c.active, c.is_guest, c.deleted, c.date_add as created_at, c.date_upd as updated_at');
+        if ($contentIds == []) {
+            return [];
+        }
+
+        $this->generateFullQuery($langIso, true);
+
+        $this->query
+            ->where('c.id_customer IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->limit($limit)
+        ;
+
+        return $this->runQuery();
+    }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return int
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    {
+        $this->generateFullQuery($langIso, false);
+
+        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+
+        $result = $this->runQuery(true);
+
+        return $result[0]['count'];
     }
 }

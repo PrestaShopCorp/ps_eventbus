@@ -1,15 +1,4 @@
-imports:
-  - { resource: ../common.yml }
-  - { resource: ../front/repository.yml }
-  - { resource: ../front/services.yml }
-
 services:
-  ps_eventbus.service.presenter:
-    class: 'PrestaShop\Module\PsEventbus\Service\PresenterService'
-    public: true
-  
-  ps_eventbus.module.upgrade:
-    class: 'PrestaShop\Module\PsEventbus\Module\Upgrade'
-    arguments:
-      - "@ps_eventbus"
+  PrestaShop\Module\PsEventbus\Service\PresenterService:
+    class: PrestaShop\Module\PsEventbus\Service\PresenterService
     public: true

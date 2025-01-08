@@ -1,29 +1,17 @@
 import testConfig from "./helpers/test.config";
 import * as matchers from "jest-extended";
 import { dumpUploadData, logAxiosError } from "./helpers/log-helper";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { doFullSync, probe, PsEventbusSyncUpload } from "./helpers/mock-probe";
-import { from, lastValueFrom, toArray, withLatestFrom } from "rxjs";
+import { lastValueFrom, toArray, withLatestFrom } from "rxjs";
 import {
-  generatePredictableModuleId,
   loadFixture,
   omitProperties,
   sortUploadData,
 } from "./helpers/data-helper";
-import { Controller, controllerList } from "./helpers/controllers";
+import { shopContentList } from "./helpers/shop-contents";
 
 expect.extend(matchers);
-
-// these controllers will be excluded from the following test suite
-const EXCLUDED_API: Controller[] = ["apiGoogleTaxonomies"];
-
-// FIXME : these api can't send anything to the mock api because the database is empty from the factory
-const MISSING_TEST_DATA: Controller[] = [
-  "apiCartRules",
-  "apiCustomProductCarriers",
-  "apiTranslations",
-  "apiWishlists",
-];
 
 // these fields change from test run to test run, so we replace them with a matcher to only ensure the type and format are correct
 const isDateString = (val) =>
@@ -32,9 +20,13 @@ const isString = (val) =>
   val ? expect(val).toBeString() : expect(val).toBeNull();
 const isNumber = (val) =>
   val ? expect(val).toBeNumber() : expect(val).toBeNull();
+const isBoolean = (val) =>
+  val ? expect(val).toBeBoolean() : expect(val).toBeNull();
 const specialFieldAssert: { [index: string]: (val) => void } = {
   created_at: isDateString,
   updated_at: isDateString,
+  delivery_date: isDateString,
+  invoice_date: isDateString,
   last_connection_date: isDateString,
   folder_created_at: isDateString,
   date_add: isDateString,
@@ -47,61 +39,27 @@ const specialFieldAssert: { [index: string]: (val) => void } = {
   theme_version: isString,
   php_version: isString,
   http_server: isString,
+  cover: isString,
+  link: isString,
+  url: isString,
+  images: isString,
+  ssl: isBoolean,
 };
 
 describe("Full Sync", () => {
-  let testIndex = 0;
-
-  // gérer les cas ou un shopContent n'existe pas (pas de fixture du coup)
-  const controllers: Controller[] = controllerList.filter(
-    (it) => !EXCLUDED_API.includes(it),
-  );
+  let generatedNumber = 0;
 
   let jobId: string;
 
   beforeEach(() => {
-    jobId = `valid-job-full-${testIndex++}`;
+    generatedNumber = Date.now() + Math.trunc(Math.random() * 100000000000000);
+    jobId = `valid-job-full-${generatedNumber}`;
   });
 
-  // TODO : some versions of prestashop include ps_facebook out of the box, this test can't reliably be run for all versions
-  describe.skip("apiGoogleTaxonomies", () => {
-    const controller = "apiGoogleTaxonomies";
-
-    // TODO : apiGoogleTaxonomies requires an additional module to be present : devise a specific test setup for this endpoint
-    it.skip(`${controller} should accept full sync`, async () => {});
-
-    it.skip(`${controller} should upload to collector`, async () => {});
-
-    it(`${controller} should reject full sync when ps_facebook is not installed`, async () => {
+  describe.each(shopContentList)("%s", (shopContent) => {
+    it(`${shopContent} should accept full sync`, async () => {
       // arrange
-      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
-
-      const callId = { call_id: Math.random().toString(36).substring(2, 11) };
-
-      // act
-      const response = await axios
-        .post(url, callId, {
-          headers: {
-            Host: testConfig.prestaShopHostHeader,
-            "Content-Type": "application/x-www-form-urlencoded", // for compat PHP 5.6
-          },
-        })
-        .catch((err) => {
-          expect(err).toBeInstanceOf(AxiosError);
-          return err.response;
-        });
-
-      // assert
-      expect(response.status).toEqual(456);
-      // expect some explanation to be given to the user
-      expect(response.statusText).toMatch(/[Ff]acebook/);
-    });
-  });
-
-  describe.each(controllers)("%s", (controller) => {
-    it(`${controller} should accept full sync`, async () => {
-      // arrange
-      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
+      const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiShopContent&shop_content=${shopContent}&limit=5&full=1&job_id=${jobId}`;
 
       const callId = { call_id: Math.random().toString(36).substring(2, 11) };
 
@@ -128,98 +86,51 @@ describe("Full Sync", () => {
       });
     });
 
-    if (MISSING_TEST_DATA.includes(controller)) {
-      it.skip(`${controller} should upload to collector`, () => {});
-    } else {
-      it(`${controller} should upload to collector`, async () => {
-        // arrange
-        const url = `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=${controller}&limit=5&full=1&job_id=${jobId}`;
-        const message$ = probe({ url: `/upload/${jobId}` });
+    it(`${shopContent} should upload complete dataset collector`, async () => {
+      // arrange
+      const response$ = doFullSync(jobId, shopContent, { timeout: 5000 });
+      const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 4000 });
 
-        const callId = { call_id: Math.random().toString(36).substring(2, 11) };
+      // this combines each response from ps_eventbus to the last request captured by the probe.
+      // it works because ps_eventbus sends a response after calling our mock collector server
+      // if ps_eventbus doesn't need to call the collector, the probe completes without value after its timeout
+      const messages = await lastValueFrom(
+        response$.pipe(
+          withLatestFrom(message$, (_, message) => message.body.file),
+          toArray(),
+        ),
+      );
 
-        // act
-        const request$ = from(
-          axios.post(url, callId, {
-            headers: {
-              Host: testConfig.prestaShopHostHeader,
-              "Content-Type": "application/x-www-form-urlencoded", // for compat PHP 5.6
-            },
-          }),
-        );
+      let dataFromModule: PsEventbusSyncUpload[] = messages.flat();
+      let fixtures = await loadFixture(shopContent);
 
-        const probeMessage = await lastValueFrom(
-          request$.pipe(withLatestFrom(message$, (_, message) => message)),
-        );
+      if (testConfig.dumpFullSyncData) {
+        await dumpUploadData(dataFromModule);
+      }
 
-        // assert
-        expect(probeMessage).toBeTruthy();
-        expect(probeMessage.method).toBe("POST");
-        expect(probeMessage.headers).toMatchObject({
-          "full-sync-requested": "1",
-        });
-      });
-    }
+      dataFromModule = omitProperties(
+        dataFromModule,
+        Object.keys(specialFieldAssert),
+      );
 
-    if (MISSING_TEST_DATA.includes(controller)) {
-      it.skip(`${controller} should upload complete dataset to collector`, () => {});
-    } else {
-      it(`${controller} should upload complete dataset collector`, async () => {
-        // arrange
-        const response$ = doFullSync(jobId, controller, { timeout: 4000 });
-        const message$ = probe({ url: `/upload/${jobId}` }, { timeout: 4000 });
+      fixtures = omitProperties(fixtures, Object.keys(specialFieldAssert));
 
-        // this combines each response from ps_eventbus to the last request captured by the probe.
-        // it works because ps_eventbus sends a response after calling our mock collector server
-        // if ps_eventbus doesn't need to call the collector, the probe completes without value after its timeout
-        const messages = await lastValueFrom(
-          response$.pipe(
-            withLatestFrom(message$, (_, message) => message.body.file),
-            toArray(),
-          ),
-        );
+      dataFromModule = sortUploadData(dataFromModule);
+      fixtures = sortUploadData(fixtures);
 
-        const syncedData: PsEventbusSyncUpload[] = messages.flat();
+      // assert
+      expect(dataFromModule).toEqual(fixtures);
 
-        // dump data for easier debugging or updating fixtures
-        let processedData = syncedData as PsEventbusSyncUpload[];
-        if (testConfig.dumpFullSyncData) {
-          await dumpUploadData(processedData, controller);
-        }
-
-        const fixture = await loadFixture(controller);
-
-        // we need to process fixtures and data returned from ps_eventbus to make them easier to compare
-        let processedFixture = fixture;
-        if (controller === "apiModules") {
-          processedData = generatePredictableModuleId(processedData);
-          processedFixture = generatePredictableModuleId(processedFixture);
-        }
-        processedData = omitProperties(
-          processedData,
-          Object.keys(specialFieldAssert),
-        );
-        processedData = sortUploadData(processedData);
-        processedFixture = omitProperties(
-          processedFixture,
-          Object.keys(specialFieldAssert),
-        );
-        processedFixture = sortUploadData(processedFixture);
-
-        // assert
-        expect(processedData).toMatchObject(processedFixture);
-
-        // assert special field using custom matcher
-        for (const data of processedData) {
-          for (const specialFieldName of Object.keys(specialFieldAssert)) {
-            if (data.properties[specialFieldName] !== undefined) {
-              specialFieldAssert[specialFieldName](
-                data.properties[specialFieldName],
-              );
-            }
+      // assert special field using custom matcher
+      for (const data of dataFromModule) {
+        for (const specialFieldName of Object.keys(specialFieldAssert)) {
+          if (data.properties[specialFieldName] !== undefined) {
+            specialFieldAssert[specialFieldName](
+              data.properties[specialFieldName],
+            );
           }
         }
-      });
-    }
+      }
+    }); // Timeout set to 30s because full sync can take a long time
   });
 });

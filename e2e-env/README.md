@@ -60,7 +60,7 @@ curl -s "http://localhost:8000/index.php?fc=module&module=ps_eventbus&controller
 Capture orders:
 
 ```sh
-curl -s "http://localhost:8000/index.php?fc=module&module=ps_eventbus&controller=apiOrders&job_id=valid-job-1" | jq .
+curl -s "http://localhost:8000/index.php?fc=module&module=ps_eventbus&controller=apiShopContent&shop_content=orders&job_id=valid-job-1" | jq .
 ```
 
 ## Make changes to the mock

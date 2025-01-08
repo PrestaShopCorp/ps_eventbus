@@ -1,4 +1,4 @@
-import fixture from "../fixtures/latest/apiCustomers/customers.json";
+import fixture from "../fixtures/latest/customers.json";
 
 // test type
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

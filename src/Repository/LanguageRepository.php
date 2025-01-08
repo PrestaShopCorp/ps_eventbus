@@ -1,176 +1,136 @@
 <?php
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to https://devdocs.prestashop.com/ for more information.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-class LanguageRepository
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
+class LanguageRepository extends AbstractRepository implements RepositoryInterface
 {
-    /**
-     * @var \Db
-     */
-    private $db;
+    const TABLE_NAME = 'lang';
 
     /**
-     * @var \Context
+     * @param string $langIso
+     * @param bool $withSelecParameters
+     *
+     * @return mixed
+     *
+     * @throws \PrestaShopException
      */
-    private $context;
-
-    public function __construct(\Context $context)
+    public function generateFullQuery($langIso, $withSelecParameters)
     {
-        $this->db = \Db::getInstance();
-        $this->context = $context;
+        $this->generateMinimalQuery(self::TABLE_NAME, 'la');
+
+        $this->query->innerJoin('lang_shop', 'las', 'la.id_lang = las.id_lang AND las.id_shop = ' . parent::getShopContext()->id);
+
+        if ($withSelecParameters) {
+            $this->query
+                ->select('la.id_lang')
+                ->select('la.name')
+                ->select('la.active')
+                ->select('la.iso_code')
+                ->select('la.language_code')
+                ->select('la.date_format_lite')
+                ->select('la.date_format_full')
+                ->select('la.is_rtl')
+                ->select('las.id_shop')
+            ;
+
+            // https://github.com/PrestaShop/PrestaShop/commit/481111b8274ed005e1c4a8ce2cf2b3ebbeb9a270#diff-c123d3d30d9c9e012a826a21887fccce6600a2f2a848a58d5910e55f0f8f5093R41
+            if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.0.0', '>=')) {
+                $this->query->select('la.locale');
+            }
+        }
     }
 
     /**
      * @param int $offset
      * @param int $limit
+     * @param string $langIso
      *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return array<mixed>
      *
+     * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getLanguagesSync($offset, $limit)
+    public function retrieveContentsForFull($offset, $limit, $langIso)
     {
-        $query = $this->getBaseQuery();
+        $this->generateFullQuery($langIso, true);
 
-        $this->addSelectParameters($query);
+        $this->query->limit((int) $limit, (int) $offset);
 
-        $query->limit($limit, $offset);
+        return $this->runQuery();
+    }
 
-        return $this->db->executeS($query);
+    /**
+     * @param int $limit
+     * @param array<mixed> $contentIds
+     * @param string $langIso
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
+    {
+        if ($contentIds == []) {
+            return [];
+        }
+
+        $this->generateFullQuery($langIso, true);
+
+        $this->query
+            ->where('la.id_lang IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->limit($limit)
+        ;
+
+        return $this->runQuery();
     }
 
     /**
      * @param int $offset
+     * @param int $limit
+     * @param string $langIso
      *
      * @return int
-     */
-    public function getRemainingLanguagesCount($offset)
-    {
-        $query = $this->getBaseQuery()
-            ->select('(COUNT(la.id_lang) - ' . (int) $offset . ') as count');
-
-        return (int) $this->db->getValue($query);
-    }
-
-    /**
-     * @param int $limit
-     * @param array<mixed> $languageIds
      *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
+     * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getLanguagesIncremental($limit, $languageIds)
+    public function countFullSyncContentLeft($offset, $limit, $langIso)
     {
-        $query = $this->getBaseQuery();
+        $this->generateFullQuery($langIso, false);
 
-        $this->addSelectParameters($query);
+        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
 
-        $query->where('la.id_lang IN(' . implode(',', array_map('intval', $languageIds)) . ')')
-            ->limit($limit);
+        $result = $this->runQuery(true);
 
-        return $this->db->executeS($query);
-    }
-
-    /**
-     * @return \DbQuery
-     */
-    public function getBaseQuery()
-    {
-        if ($this->context->shop === null) {
-            throw new \PrestaShopException('No shop context');
-        }
-
-        $shopId = (int) $this->context->shop->id;
-        $query = new \DbQuery();
-        $query->from('lang', 'la')
-            ->innerJoin('lang_shop', 'las', 'la.id_lang = las.id_lang AND las.id_shop = ' . $shopId);
-
-        return $query;
-    }
-
-    /**
-     * @param \DbQuery $query
-     *
-     * @return void
-     */
-    private function addSelectParameters(\DbQuery $query)
-    {
-        // https://github.com/PrestaShop/PrestaShop/commit/481111b8274ed005e1c4a8ce2cf2b3ebbeb9a270#diff-c123d3d30d9c9e012a826a21887fccce6600a2f2a848a58d5910e55f0f8f5093R41
-        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.0.0', '>=')) {
-            $query->select('la.locale');
-        }
-
-        $query->select('la.id_lang, la.name, la.active, la.iso_code, la.language_code, la.date_format_lite');
-        $query->select('la.date_format_full, la.is_rtl, las.id_shop');
-    }
-
-    /**
-     * @return array<mixed>
-     */
-    public function getLanguagesIsoCodes()
-    {
-        /** @var array<mixed> $languages */
-        $languages = \Language::getLanguages();
-
-        return array_map(function ($language) {
-            return $language['iso_code'];
-        }, $languages);
-    }
-
-    /**
-     * @return string
-     */
-    public function getDefaultLanguageIsoCode()
-    {
-        $language = \Language::getLanguage((int) \Configuration::get('PS_LANG_DEFAULT'));
-
-        if (is_array($language)) {
-            return $language['iso_code'];
-        }
-
-        return '';
-    }
-
-    /**
-     * @param string $isoCode
-     *
-     * @return int
-     */
-    public function getLanguageIdByIsoCode($isoCode)
-    {
-        return (int) \Language::getIdByIso($isoCode);
-    }
-
-    /**
-     * @return array<mixed>
-     */
-    public function getLanguages()
-    {
-        return \Language::getLanguages();
-    }
-
-    /**
-     * @param int $offset
-     * @param int $limit
-     *
-     * @return array<mixed>
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getQueryForDebug($offset, $limit)
-    {
-        $query = $this->getBaseQuery();
-
-        $this->addSelectParameters($query);
-
-        $query->limit($limit, $offset);
-
-        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
-
-        return array_merge(
-            (array) $query,
-            ['queryStringified' => $queryStringified]
-        );
+        return $result[0]['count'];
     }
 }

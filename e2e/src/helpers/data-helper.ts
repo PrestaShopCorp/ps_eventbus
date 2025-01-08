@@ -1,35 +1,26 @@
 import R from "ramda";
 import { PsEventbusSyncUpload } from "./mock-probe";
 import fs from "fs";
-import { Content, contentControllerMapping, Controller } from "./controllers";
+import { Content, shopContentMapping, ShopContent } from "./shop-contents";
 import axios from "axios";
 import testConfig from "./test.config";
 import { HealthCheck } from "../type/health-check";
 import semver from "semver";
-
+import hash from "object-hash";
 /**
- * sort upload data by collection and id to allow easier comparison
+ * sort upload data by collection and hash to allow easier comparison
+ * The hash is calculated from the data object
+ *
  * @param data ps_eventbus upload data
  */
-export const sortUploadData: (
-  data: PsEventbusSyncUpload[],
-) => PsEventbusSyncUpload[] = R.pipe(
-  R.sortBy(R.prop("collection")),
-  R.sortBy(R.prop("id")),
-);
-
-/**
- * modules returned by ps_eventbus use their database it as their collection id, which makes it random.
- * this function provides a way to generate a predictable replacement id.
- * @param data
- */
-export function generatePredictableModuleId(
+export function sortUploadData(
   data: PsEventbusSyncUpload[],
 ): PsEventbusSyncUpload[] {
-  return data.map((it) => ({
-    ...it,
-    id: `${(it.properties as { name: string }).name}`,
-  }));
+  data.forEach((item) => {
+    item["hash"] = hash(item);
+  });
+
+  return R.pipe(R.sortBy(R.prop("collection")), R.sortBy(R.prop("hash")))(data);
 }
 
 export function omitProperties(
@@ -42,9 +33,9 @@ export function omitProperties(
   }));
 }
 
-export function getControllerContent(controller: Controller): Content[] {
-  return Object.entries(contentControllerMapping)
-    .filter((it) => it[1] === controller)
+export function getControllerContent(shopContent: ShopContent): Content[] {
+  return Object.entries(shopContentMapping)
+    .filter((it) => it[1] === shopContent)
     .map((it) => it[0]) as Content[];
 }
 
@@ -70,9 +61,9 @@ export async function getShopHealthCheck(options?: {
 const FIXTURE_DIR = "./src/fixtures";
 
 export async function loadFixture(
-  controller: Controller,
+  shopContent: ShopContent,
 ): Promise<PsEventbusSyncUpload[]> {
-  const contents = getControllerContent(controller);
+  const contents = getControllerContent(shopContent);
   const shopVersion = (await getShopHealthCheck()).prestashop_version;
   const shopSemver = semver.coerce(shopVersion);
   const fixture = [];
@@ -100,7 +91,7 @@ export async function loadFixture(
 
   const files = contents.map((content) =>
     fs.promises.readFile(
-      `${FIXTURE_DIR}/${useFixture}/${controller}/${content}.json`,
+      `${FIXTURE_DIR}/${useFixture}/${content}.json`,
       "utf-8",
     ),
   );

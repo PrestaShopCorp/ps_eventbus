@@ -1,111 +1,146 @@
 <?php
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to https://devdocs.prestashop.com/ for more information.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-class CategoryRepository
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
+class CategoryRepository extends AbstractRepository implements RepositoryInterface
 {
-    /**
-     * @var \Db
-     */
-    private $db;
-
-    /**
-     * @var array<mixed>
-     */
-    private $categoryLangCache;
-
-    /**
-     * @var \Context
-     */
-    private $context;
-
-    public function __construct(\Context $context)
-    {
-        $this->db = \Db::getInstance();
-        $this->context = $context;
-    }
+    const TABLE_NAME = 'category_shop';
 
     /**
      * @param string $langIso
+     * @param bool $withSelecParameters
      *
-     * @return \DbQuery
+     * @return mixed
+     *
+     * @throws \PrestaShopException
      */
-    private function getBaseQuery($langIso)
+    public function generateFullQuery($langIso, $withSelecParameters)
     {
-        if ($this->context->shop === null) {
-            throw new \PrestaShopException('No shop context');
-        }
+        $this->generateMinimalQuery(self::TABLE_NAME, 'cs');
 
-        $shopId = (int) $this->context->shop->id;
-
-        $query = new \DbQuery();
-        $query->from('category_shop', 'cs')
+        $this->query
             ->innerJoin('category', 'c', 'cs.id_category = c.id_category')
             ->leftJoin('category_lang', 'cl', 'cl.id_category = cs.id_category')
             ->leftJoin('lang', 'l', 'l.id_lang = cl.id_lang')
-            ->where('cs.id_shop = ' . $shopId)
+            ->where('cs.id_shop = ' . parent::getShopContext()->id)
             ->where('cl.id_shop = cs.id_shop')
-            ->where('l.iso_code = "' . pSQL($langIso) . '"');
+            ->where('l.iso_code = "' . pSQL($langIso) . '"')
+        ;
 
-        return $query;
-    }
+        if ($withSelecParameters) {
+            $this->query
+                ->select('CONCAT(cs.id_category, "-", l.iso_code) as unique_category_id')
+                ->select('cs.id_category')
+                ->select('c.id_parent')
+                ->select('cl.name')
+                ->select('cl.description')
+                ->select('cl.link_rewrite')
+                ->select('cl.meta_title')
+                ->select('cl.meta_description')
+                ->select('l.iso_code')
+                ->select('c.date_add as created_at')
+                ->select('c.date_upd as updated_at')
+            ;
 
-    /**
-     * @param int $topCategoryId
-     * @param int $langId
-     * @param int $shopId
-     *
-     * @return array<mixed>
-     */
-    public function getCategoryPaths($topCategoryId, $langId, $shopId)
-    {
-        if ((int) $topCategoryId === 0) {
-            return [
-                'category_path' => '',
-                'category_id_path' => '',
-            ];
-        }
-
-        $categories = [];
-
-        try {
-            $categoriesWithParentsInfo = $this->getCategoriesWithParentInfo($langId, $shopId);
-        } catch (\PrestaShopDatabaseException $e) {
-            return [
-                'category_path' => '',
-                'category_id_path' => '',
-            ];
-        }
-
-        $this->buildCategoryPaths($categoriesWithParentsInfo, $topCategoryId, $categories);
-
-        $categories = array_reverse($categories);
-
-        return [
-            'category_path' => implode(' > ', array_map(function ($category) {
-                return $category['name'];
-            }, $categories)),
-            'category_id_path' => implode(' > ', array_map(function ($category) {
-                return $category['id_category'];
-            }, $categories)),
-        ];
-    }
-
-    /**
-     * @param array<mixed> $categoriesWithParentsInfo
-     * @param int $currentCategoryId
-     * @param array<mixed> $categories
-     *
-     * @return void
-     */
-    private function buildCategoryPaths($categoriesWithParentsInfo, $currentCategoryId, &$categories)
-    {
-        foreach ($categoriesWithParentsInfo as $category) {
-            if ($category['id_category'] == $currentCategoryId) {
-                $categories[] = $category;
-                $this->buildCategoryPaths($categoriesWithParentsInfo, $category['id_parent'], $categories);
+            // REMOVED HERE: https://github.com/PrestaShop/PrestaShop/commit/f37a8f61017654bae160b528a1a2eaf49edbdac0
+            if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '9.0', '<')) {
+                $this->query->select('cl.meta_keywords');
             }
         }
+    }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function retrieveContentsForFull($offset, $limit, $langIso)
+    {
+        $this->generateFullQuery($langIso, true);
+
+        $this->query->limit((int) $limit, (int) $offset);
+
+        return $this->runQuery();
+    }
+
+    /**
+     * @param int $limit
+     * @param array<mixed> $contentIds
+     * @param string $langIso
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
+    {
+        if ($contentIds == []) {
+            return [];
+        }
+
+        $this->generateFullQuery($langIso, true);
+
+        $this->query
+            ->where('cs.id_category IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->limit($limit)
+        ;
+
+        return $this->runQuery();
+    }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return int
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    {
+        $this->generateFullQuery($langIso, false);
+
+        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+
+        $result = $this->runQuery(true);
+
+        return $result[0]['count'];
     }
 
     /**
@@ -118,125 +153,20 @@ class CategoryRepository
      */
     public function getCategoriesWithParentInfo($langId, $shopId)
     {
-        if (!isset($this->categoryLangCache[$langId])) {
-            $query = new \DbQuery();
+        $this->generateMinimalQuery('category', 'c');
 
-            $query->select('c.id_category, cl.name, c.id_parent')
-                ->from('category', 'c')
-                ->leftJoin(
-                    'category_lang',
-                    'cl',
-                    'cl.id_category = c.id_category AND cl.id_shop = ' . (int) $shopId
-                )
-                ->where('cl.id_lang = ' . (int) $langId)
-                ->orderBy('cl.id_category');
+        $this->query
+            ->leftJoin('category_lang', 'cl', 'cl.id_category = c.id_category AND cl.id_shop = ' . (int) $shopId)
+            ->where('cl.id_lang = ' . (int) $langId)
+            ->orderBy('cl.id_category')
+        ;
 
-            $result = $this->db->executeS($query);
+        $this->query
+            ->select('c.id_category')
+            ->select('cl.name')
+            ->select('c.id_parent')
+        ;
 
-            if (is_array($result)) {
-                $this->categoryLangCache[$langId] = $result;
-            } else {
-                throw new \PrestaShopDatabaseException('No categories found');
-            }
-        }
-
-        return $this->categoryLangCache[$langId];
-    }
-
-    /**
-     * @param int $offset
-     * @param int $limit
-     * @param string $langIso
-     *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getCategories($offset, $limit, $langIso)
-    {
-        $query = $this->getBaseQuery($langIso);
-
-        $this->addSelectParameters($query);
-
-        $query->limit($limit, $offset);
-
-        return $this->db->executeS($query);
-    }
-
-    /**
-     * @param int $offset
-     * @param string $langIso
-     *
-     * @return int
-     */
-    public function getRemainingCategoriesCount($offset, $langIso)
-    {
-        $query = $this->getBaseQuery($langIso)
-            ->select('(COUNT(cs.id_category) - ' . (int) $offset . ') as count');
-
-        return (int) $this->db->getValue($query);
-    }
-
-    /**
-     * @param int $limit
-     * @param string $langIso
-     * @param array<mixed> $categoryIds
-     *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getCategoriesIncremental($limit, $langIso, $categoryIds)
-    {
-        $query = $this->getBaseQuery($langIso);
-
-        $this->addSelectParameters($query);
-
-        $query->where('c.id_category IN(' . implode(',', array_map('intval', $categoryIds)) . ')')
-            ->limit($limit);
-
-        return $this->db->executeS($query);
-    }
-
-    /**
-     * @param int $offset
-     * @param int $limit
-     * @param string $langIso
-     *
-     * @return array<mixed>
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getQueryForDebug($offset, $limit, $langIso)
-    {
-        $query = $this->getBaseQuery($langIso);
-
-        $this->addSelectParameters($query);
-
-        $query->limit($limit, $offset);
-
-        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
-
-        return array_merge(
-            (array) $query,
-            ['queryStringified' => $queryStringified]
-        );
-    }
-
-    /**
-     * @param \DbQuery $query
-     *
-     * @return void
-     */
-    private function addSelectParameters(\DbQuery $query)
-    {
-        $query->select('CONCAT(cs.id_category, "-", l.iso_code) as unique_category_id, cs.id_category');
-        $query->select('c.id_parent, cl.name, cl.description, cl.link_rewrite, cl.meta_title, cl.meta_description');
-        $query->select('l.iso_code, c.date_add as created_at, c.date_upd as updated_at');
-
-        // REMOVED HERE: https://github.com/PrestaShop/PrestaShop/commit/f37a8f61017654bae160b528a1a2eaf49edbdac0
-        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '9.0', '<')) {
-            $query->select('cl.meta_keywords');
-        }
+        return $this->runQuery(true);
     }
 }
