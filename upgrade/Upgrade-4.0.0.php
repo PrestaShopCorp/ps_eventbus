@@ -165,7 +165,7 @@ function migrateDeleteTableToIncremantalTable($db)
 
     // Prepare the query with dynamic lang_iso
     $migrationRequest = sprintf(
-        "INSERT INTO `" . _DB_PREFIX_ . "eventbus_incremental_sync` (type, id_object, id_shop, lang_iso, created_at, action)
+        'INSERT INTO `' . _DB_PREFIX_ . "eventbus_incremental_sync` (type, id_object, id_shop, lang_iso, created_at, action)
         SELECT
             type,
             id_object,
@@ -173,14 +173,14 @@ function migrateDeleteTableToIncremantalTable($db)
             '%s', -- This is a dynamic value
             created_at,
             'deleted'
-        FROM `" . _DB_PREFIX_ . "eventbus_deleted_objects`
+        FROM `" . _DB_PREFIX_ . 'eventbus_deleted_objects`
         ON DUPLICATE KEY UPDATE
             type = VALUES(type),
             id_object = VALUES(id_object),
             id_shop = VALUES(id_shop),
             lang_iso = VALUES(lang_iso),
             created_at = VALUES(created_at),
-            action = VALUES(action);",
+            action = VALUES(action);',
         $defaultLangIso // This is where the dynamic value is injected
     );
 
