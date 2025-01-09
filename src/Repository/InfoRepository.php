@@ -70,6 +70,6 @@ class InfoRepository extends AbstractRepository
         $this->query->where('c.id_country = ' . \Configuration::get('PS_COUNTRY_DEFAULT'));
         $this->query->select('c.iso_code');
 
-        return $this->db->getValue($this->query);
+        return (string) $this->db->getValue($this->query);
     }
 }
