@@ -1,32 +1,42 @@
 <?php
-
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the Academic Free License version 3.0
+ * This source file is subject to the Open Software License (OSL 3.0)
  * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * https://opensource.org/licenses/AFL-3.0
+ * https://opensource.org/licenses/OSL-3.0
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@prestashop.com so we can send you a copy immediately.
  *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to https://devdocs.prestashop.com/ for more information.
+ *
  * @author    PrestaShop SA and Contributors <contact@prestashop.com>
  * @copyright Since 2007 PrestaShop SA and Contributors
- * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
+use PrestaShop\Module\PsEventbus\Service\CommonService;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 /**
  * Handle Error.
  */
-class ErrorHandler implements ErrorHandlerInterface
+class ErrorHandler
 {
     /**
      * @var ?\Raven_Client
@@ -68,28 +78,46 @@ class ErrorHandler implements ErrorHandlerInterface
     }
 
     /**
-     * @param \Exception $error
-     * @param mixed $code
-     * @param bool|null $throw
-     * @param array<mixed>|null $data
+     * @param mixed $exception
      *
      * @return void
      *
      * @@throws Exception
      */
-    public function handle($error, $code = null, $throw = null, $data = null)
+    public function handle($exception)
     {
-        if ($throw == null) {
-            $throw = true;
-        }
+        $logsEnabled = false;
+        $verboseEnabled = false;
 
         if (!$this->client) {
             return;
         }
-        $this->client->captureException($error, $data);
-        if (is_int($code) && true === $throw) {
-            http_response_code($code);
-            throw $error;
+
+        if (defined('PS_EVENTBUS_VERBOSE_ENABLED')) {
+            $logsEnabled = PS_EVENTBUS_VERBOSE_ENABLED;
+        }
+
+        if (defined('PS_EVENTBUS_VERBOSE_ENABLED')) {
+            $verboseEnabled = PS_EVENTBUS_VERBOSE_ENABLED;
+        }
+
+        if ($logsEnabled) {
+            \PrestaShopLogger::addLog(
+                $exception->getMessage() . ' : ' . $exception->getFile() . ':' . $exception->getLine() . ' | ' . $exception->getTraceAsString(),
+                3,
+                $exception->getCode() > 0 ? $exception->getCode() : 500,
+                'Module',
+                \Module::getModuleIdByName('ps_eventbus'),
+                true
+            );
+        }
+
+        // if debug mode enabled and verbose set to true, print error in front office
+        if (_PS_MODE_DEV_ && $verboseEnabled) {
+            throw $exception;
+        } else {
+            $this->client->captureException($exception);
+            CommonService::exitWithExceptionMessage($exception);
         }
     }
 

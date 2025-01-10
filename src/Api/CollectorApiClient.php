@@ -1,14 +1,40 @@
 <?php
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to https://devdocs.prestashop.com/ for more information.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use GuzzleHttp\Psr7\Request;
 use PrestaShop\Module\PsEventbus\Api\Post\MultipartBody;
 use PrestaShop\Module\PsEventbus\Api\Post\PostFileApi;
-use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
-use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
-use Prestashop\ModuleLibGuzzleAdapter\Interfaces\HttpClientInterface;
+use Symfony\Component\Mime\Part\DataPart;
+use Symfony\Component\Mime\Part\Multipart\FormDataPart;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 class CollectorApiClient
 {
@@ -51,25 +77,6 @@ class CollectorApiClient
     }
 
     /**
-     * @see https://docs.guzzlephp.org/en/stable/quickstart.html
-     * @see https://docs.guzzlephp.org/en/stable/request-options.html#read-timeout
-     *
-     * @param int $startTime @optional start time in seconds since epoch
-     *
-     * @return HttpClientInterface
-     */
-    private function getClient($startTime = null)
-    {
-        return (new ClientFactory())->getClient([
-            'allow_redirects' => true,
-            'connect_timeout' => 10,
-            'http_errors' => false,
-            'read_timeout' => 30,
-            'timeout' => $this->getRemainingTime($startTime),
-        ]);
-    }
-
-    /**
      * Push some ShopContents to CloudSync
      *
      * @param string $jobId
@@ -81,73 +88,44 @@ class CollectorApiClient
      */
     public function upload($jobId, $data, $startTime, $fullSyncRequested = null)
     {
+        $client = new HttpClientFactory($this->getRemainingTime($startTime));
+
         $url = $this->collectorApiUrl . '/upload/' . $jobId;
 
-        // Prepare request
-        $file = new PostFileApi('file', $data, 'file');
-        $contentSize = $file->getContent()->getSize();
-        $multipartBody = new MultipartBody([], [$file], Config::COLLECTOR_MULTIPART_BOUNDARY);
+        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '9', '>=')) {
+            $contentSize = strlen($data);
 
-        $response = $this->getClient($startTime)->sendRequest(
-            new Request(
-                'POST',
-                $url,
-                [
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->jwt,
-                    'Content-Length' => $contentSize ? (string) $contentSize : '0',
-                    'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
-                    'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
-                    'User-Agent' => 'ps-eventbus/' . $this->module->version,
-                ],
-                $multipartBody->getContents()
-            )
+            $formData = new FormDataPart([
+                'file' => new DataPart($data, 'file', 'text/plain'),
+            ]);
+
+            $boundary = $formData->getPreparedHeaders()->getHeaderParameter('content-type', 'boundary');
+        } else {
+            $file = new PostFileApi('file', $data, 'file');
+            $contentSize = $file->getContent()->getSize();
+
+            $boundary = 'ps_eventbus_boundary';
+            $formData = new MultipartBody([], [$file], $boundary);
+        }
+
+        $response = $client->sendRequest(
+            'POST',
+            $url,
+            [
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer ' . $this->jwt,
+                'Content-Length' => $contentSize ? (string) $contentSize : '0',
+                'Content-Type' => 'multipart/form-data; boundary=' . $boundary,
+                'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
+                'User-Agent' => 'ps-eventbus/' . $this->module->version,
+            ],
+            version_compare(_PS_VERSION_, '9', '>=') ? $formData->bodyToString() : $formData->getContents()
         );
 
         return [
             'status' => substr((string) $response->getStatusCode(), 0, 1) === '2',
             'httpCode' => $response->getStatusCode(),
-            'body' => json_decode($response->getBody()->getContents(), true),
-            'upload_url' => $url,
-        ];
-    }
-
-    /**
-     * Push information about removed ShopContents to CloudSync
-     *
-     * @param string $jobId
-     * @param string $data
-     * @param int $startTime in seconds since epoch
-     *
-     * @return array<mixed>
-     */
-    public function uploadDelete($jobId, $data, $startTime)
-    {
-        $url = $this->collectorApiUrl . '/delete/' . $jobId;
-        // Prepare request
-        $file = new PostFileApi('file', $data, 'file');
-        $contentSize = $file->getContent()->getSize();
-        $multipartBody = new MultipartBody([], [$file], Config::COLLECTOR_MULTIPART_BOUNDARY);
-
-        $response = $this->getClient($startTime)->sendRequest(
-            new Request(
-                'POST',
-                $url,
-                [
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->jwt,
-                    'Content-Length' => $contentSize ? (string) $contentSize : '0',
-                    'Content-Type' => 'multipart/form-data; boundary=' . Config::COLLECTOR_MULTIPART_BOUNDARY,
-                    'User-Agent' => 'ps-eventbus/' . $this->module->version,
-                ],
-                $multipartBody->getContents()
-            )
-        );
-
-        return [
-            'status' => substr((string) $response->getStatusCode(), 0, 1) === '2',
-            'httpCode' => $response->getStatusCode(),
-            'body' => json_decode($response->getBody()->getContents(), true),
+            'body' => json_decode($response->getContent(), true),
             'upload_url' => $url,
         ];
     }
@@ -158,7 +136,7 @@ class CollectorApiClient
      *
      * @param int $startTime @optional start time in seconds since epoch
      *
-     * @return float
+     * @return int
      */
     private function getRemainingTime($startTime = null)
     {
@@ -172,10 +150,10 @@ class CollectorApiClient
             return CollectorApiClient::$DEFAULT_MAX_EXECUTION_TIME;
         }
         /*
-         * An extra 1.5s to be arbitrary substracted
+         * An extra 2s to be arbitrary substracted
          * to keep time for the JSON parsing and state propagation in MySQL
          */
-        $extraOpsTime = 1.5;
+        $extraOpsTime = 2;
 
         /*
          * Default to maximum timeout

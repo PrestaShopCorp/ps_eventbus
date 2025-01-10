@@ -1,6 +1,6 @@
 parameters:
   ignoreErrors:
-    - '#Parameter \#1 \$hook_name of method ModuleCore::registerHook\(\) expects string, array given#'
+    - '#Parameter \#1 \$hook_name of method ModuleCore::registerHook\(\) expects string, array<string> given#'
     - '#Access to undefined constant Module::MULTISTORE_COMPATIBILITY_YES#'
     - '#Property ObjectModelCore::\$id \(int\) in isset\(\) is not nullable#'
     - '#Call to method buildRepository\(\) on an unknown class PrestaShop\\PrestaShop\\Core\\Addon\\Theme\\ThemeManagerBuilder.#'

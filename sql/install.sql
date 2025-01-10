@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS `PREFIX_eventbus_type_sync`
     `id_shop`            INT(10) UNSIGNED NOT NULL,
     `lang_iso`           VARCHAR(3),
     `full_sync_finished` TINYINT(1)       NOT NULL DEFAULT 0,
-    `last_sync_date`     DATETIME         NOT NULL
+    `last_sync_date`     DATETIME         NOT NULL,
+    PRIMARY KEY (`type`, `id_shop`, `lang_iso`)
 ) ENGINE = ENGINE_TYPE
   DEFAULT CHARSET = utf8;
 
@@ -16,20 +17,11 @@ CREATE TABLE IF NOT EXISTS `PREFIX_eventbus_job`
 ) ENGINE = ENGINE_TYPE
   DEFAULT CHARSET = utf8;
 
-CREATE TABLE IF NOT EXISTS `PREFIX_eventbus_deleted_objects`
-(
-    `type`       VARCHAR(50)      NOT NULL,
-    `id_object`  INT(10) UNSIGNED NOT NULL,
-    `id_shop`    INT(10) UNSIGNED NOT NULL,
-    `created_at` DATETIME         NOT NULL,
-    PRIMARY KEY (`type`, `id_object`, `id_shop`)
-) ENGINE = ENGINE_TYPE
-  DEFAULT CHARSET = utf8;
-
 CREATE TABLE IF NOT EXISTS `PREFIX_eventbus_incremental_sync`
 (
     `type`       VARCHAR(50)      NOT NULL,
-    `id_object`  INT(10) UNSIGNED NOT NULL,
+    `action`     VARCHAR(50)      NOT NULL DEFAULT 'upsert',
+    `id_object`  VARCHAR(50)      NOT NULL,
     `id_shop`    INT(10) UNSIGNED NOT NULL,
     `lang_iso`   VARCHAR(3),
     `created_at` DATETIME         NOT NULL,

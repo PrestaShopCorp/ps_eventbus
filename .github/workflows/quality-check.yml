@@ -42,7 +42,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Cache vendor folder
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
@@ -54,14 +54,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     strategy:
+      fail-fast: false
       matrix:
-        # @TODO: "1.6.1.24" is temporarily disabled here
         ps_version: ["1.6.1.11", "1.7.8.10", "8.1.6"]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Cache vendor folder
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
@@ -76,7 +76,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Cache vendor folder
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
@@ -89,6 +89,7 @@ jobs:
     timeout-minutes: 30
     if: ${{ github.event_name == 'pull_request' }}
     strategy:
+      fail-fast: false
       matrix:
         ps_version: ["1.6.1.11", "1.7.8.10", "8.1.4", "nightly"]
     steps:
@@ -97,7 +98,7 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-      - uses: pnpm/action-setup@v3
+      - uses: pnpm/action-setup@v4
         with:
           version: latest
 
@@ -108,10 +109,13 @@ jobs:
           cache-dependency-path: e2e/pnpm-lock.yaml
 
       - name: Cache vendor folder
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
+
+      - name: install php dependencies
+        run: composer install
 
       - name: Install dependencies and setup e2e
         run: pnpm install --no-optional --force
@@ -121,7 +125,7 @@ jobs:
         run: |
           cp .env.dist .env
           docker compose build
-          docker compose up --detach --wait
+          docker compose --profile cicd up --detach --wait
         env:
           DOCKER_IMAGE_PRESTASHOP: prestashop/prestashop-flashlight:${{matrix.ps_version}}
         working-directory: e2e-env
@@ -134,7 +138,7 @@ jobs:
         if: failure()
         run: |
           docker compose logs cloudsync-mock prestashop
-          docker compose down -v
+          docker compose --profile cicd down -v
         working-directory: e2e-env
 
   e2e-lint:
@@ -148,7 +152,7 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-      - uses: pnpm/action-setup@v3
+      - uses: pnpm/action-setup@v4
         with:
           version: latest
 
@@ -159,7 +163,7 @@ jobs:
           cache-dependency-path: e2e/pnpm-lock.yaml
 
       - name: Cache vendor folder
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}

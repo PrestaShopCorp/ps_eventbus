@@ -38,22 +38,22 @@ zip: zip-prod zip-inte zip-e2e
 # target: zip-e2e                                              - Bundle a local E2E integrable zip
 .PHONY: zip-e2e
 zip-e2e: vendor tools/vendor dist
-	@$(call zip_it,./config/parameters.yml,${PACKAGE}_e2e.zip)
+	@$(call zip_it,./config.php,${PACKAGE}_e2e.zip)
 
 # target: zip-inte                                             - Bundle an integration zip
 .PHONY: zip-inte
 zip-inte: vendor tools/vendor dist
-	@$(call zip_it,.config.inte.yml,${PACKAGE}_integration.zip)
+	@$(call zip_it,.config.inte.php,${PACKAGE}_integration.zip)
 
 # target: zip-prod                                             - Bundle a production zip
 .PHONY: zip-prod
 zip-prod: vendor tools/vendor dist
-	@$(call zip_it,.config.prod.yml,${PACKAGE}.zip)
+	@$(call zip_it,.config.prod.php,${PACKAGE}.zip)
 
 # target: zip-unzipped                                          - Bundle a production module, but without zip step (only to check sources)
 .PHONY: zip-unzipped
 zip-unzipped: vendor tools/vendor dist
-	@$(call no_zip_it,.config.prod.yml)
+	@$(call no_zip_it,.config.prod.php)
 
 dist:
 	@mkdir -p ./dist
@@ -151,8 +151,13 @@ docker-phpunit-cov: tools/vendor
 .PHONY: phpstan docker-phpstan
 phpstan: tools/vendor prestashop/prestashop-${PS_VERSION}
 	phpstan analyse --memory-limit=-1 --configuration=./tests/phpstan/phpstan-local.neon;
-docker-phpstan:
+docker-phpstan: tools/vendor
 	@$(call in_docker,/usr/bin/phpstan,analyse --memory-limit=-1 --configuration=./tests/phpstan/phpstan-docker.neon)
+
+# target: header-stamp                                         - check Headers of PHP files
+.PHONY:header-stamp
+header-stamp:
+	tools/vendor/bin/header-stamp --license=tools/vendor/prestashop/header-stamp/assets/osl3.txt --exclude=vendor,tools,e2e,e2e-env,tests,composer.json,scoper.inc.php
 
 define COMMENT
 	Fixme: add "allure-framework/allure-phpunit" in composer.json to solve this.
@@ -178,7 +183,8 @@ define create_module
 	cp -r $(shell cat .zip-contents) ${TMP_DIR}/${MODULE_NAME};
 	$(call replace_version,${TMP_DIR}/${MODULE_NAME},${SEM_VERSION})
 	./tools/vendor/bin/autoindex prestashop:add:index ${TMP_DIR}
-	cp $1 ${TMP_DIR}/${MODULE_NAME}/config/parameters.yml
+	tools/vendor/bin/header-stamp --target=${TMP_DIR}/${MODULE_NAME} --license=tools/vendor/prestashop/header-stamp/assets/osl3.txt --exclude=vendor,e2e,e2e-env,tests,composer.json,scoper.inc.php
+	cp $1 ${TMP_DIR}/${MODULE_NAME}/config.php
 	cd ${TMP_DIR}/${MODULE_NAME} && composer dump-autoload
 endef
 

@@ -1,101 +1,77 @@
 <?php
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to https://devdocs.prestashop.com/ for more information.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-class SupplierRepository
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
+class SupplierRepository extends AbstractRepository implements RepositoryInterface
 {
-    /**
-     * @var \Db
-     */
-    private $db;
-
-    /**
-     * @var \Context
-     */
-    private $context;
-
-    public function __construct(\Context $context)
-    {
-        $this->db = \Db::getInstance();
-        $this->context = $context;
-    }
-
-    /**
-     * @param int $offset
-     * @param int $limit
-     * @param string $langIso
-     *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getSuppliers($offset, $limit, $langIso)
-    {
-        $query = $this->getBaseQuery($langIso);
-
-        $this->addSelectParameters($query);
-
-        $query->limit($limit, $offset);
-
-        return $this->db->executeS($query);
-    }
-
-    /**
-     * @param int $offset
-     * @param string $langIso
-     *
-     * @return int
-     */
-    public function getRemainingSuppliersCount($offset, $langIso)
-    {
-        $query = $this->getBaseQuery($langIso)
-            ->select('(COUNT(su.id_supplier) - ' . (int) $offset . ') as count');
-
-        return (int) $this->db->getValue($query);
-    }
-
-    /**
-     * @param int $limit
-     * @param string $langIso
-     * @param array<mixed> $supplierIds
-     *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getSuppliersIncremental($limit, $langIso, $supplierIds)
-    {
-        $query = $this->getBaseQuery($langIso);
-
-        $this->addSelectParameters($query);
-
-        $query->where('su.id_supplier IN(' . implode(',', array_map('intval', $supplierIds)) . ')')
-            ->limit($limit);
-
-        return $this->db->executeS($query);
-    }
+    const TABLE_NAME = 'supplier';
 
     /**
      * @param string $langIso
+     * @param bool $withSelecParameters
      *
-     * @return \DbQuery
+     * @return mixed
+     *
+     * @throws \PrestaShopException
      */
-    public function getBaseQuery($langIso)
+    public function generateFullQuery($langIso, $withSelecParameters)
     {
-        if ($this->context->shop === null) {
-            throw new \PrestaShopException('No shop context');
-        }
+        $this->generateMinimalQuery(self::TABLE_NAME, 'su');
 
-        $shopId = (int) $this->context->shop->id;
-
-        /** @var int $langId */
         $langId = (int) \Language::getIdByIso($langIso);
-        $query = new \DbQuery();
-        $query->from('supplier', 'su')
-            ->innerJoin('supplier_lang', 'sul', 'su.id_supplier = sul.id_supplier AND sul.id_lang = ' . (int) $langId)
-            ->innerJoin('supplier_shop', 'sus', 'su.id_supplier = sus.id_supplier AND sus.id_shop = ' . $shopId);
 
-        return $query;
+        $this->query
+            ->innerJoin('supplier_lang', 'sul', 'su.id_supplier = sul.id_supplier AND sul.id_lang = ' . (int) $langId)
+            ->innerJoin('supplier_shop', 'sus', 'su.id_supplier = sus.id_supplier AND sus.id_shop = ' . parent::getShopContext()->id)
+        ;
+
+        if ($withSelecParameters) {
+            $this->query
+                ->select('su.id_supplier')
+                ->select('su.name')
+                ->select('su.date_add as created_at')
+                ->select('su.date_upd as updated_at')
+                ->select('su.active')
+                ->select('sul.id_lang')
+                ->select('sul.description')
+                ->select('sul.meta_title')
+                ->select('sul.meta_description')
+                ->select('sus.id_shop')
+            ;
+
+            // REMOVED HERE: https://github.com/PrestaShop/PrestaShop/commit/f37a8f61017654bae160b528a1a2eaf49edbdac0
+            if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '9.0', '<')) {
+                $this->query->select('sul.meta_keywords');
+            }
+        }
     }
 
     /**
@@ -105,32 +81,62 @@ class SupplierRepository
      *
      * @return array<mixed>
      *
+     * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getQueryForDebug($offset, $limit, $langIso)
+    public function retrieveContentsForFull($offset, $limit, $langIso)
     {
-        $query = $this->getBaseQuery($langIso);
+        $this->generateFullQuery($langIso, true);
 
-        $this->addSelectParameters($query);
+        $this->query->limit((int) $limit, (int) $offset);
 
-        $query->limit($limit, $offset);
-
-        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
-
-        return array_merge(
-            (array) $query,
-            ['queryStringified' => $queryStringified]
-        );
+        return $this->runQuery();
     }
 
     /**
-     * @param \DbQuery $query
+     * @param int $limit
+     * @param array<mixed> $contentIds
+     * @param string $langIso
      *
-     * @return void
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
-    private function addSelectParameters(\DbQuery $query)
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        $query->select('su.id_supplier, su.name, su.date_add as created_at, su.date_upd as updated_at, su.active, sul.id_lang');
-        $query->select('sul.description, sul.meta_title, sul.meta_keywords, sul.meta_description, sus.id_shop');
+        if ($contentIds == []) {
+            return [];
+        }
+
+        $this->generateFullQuery($langIso, true);
+
+        $this->query
+            ->where('su.id_supplier IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->limit($limit)
+        ;
+
+        return $this->runQuery();
+    }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return int
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    {
+        $this->generateFullQuery($langIso, false);
+
+        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+
+        $result = $this->runQuery(true);
+
+        return $result[0]['count'];
     }
 }

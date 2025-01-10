@@ -1,5 +1,6 @@
 includes:
   - %currentWorkingDirectory%/tests/phpstan/phpstan-1-6.neon
+  - %currentWorkingDirectory%/tests/phpstan/phpstan-9-0.neon
 parameters:
   paths:
     - ../../src
@@ -17,26 +18,24 @@ parameters:
     - '#Cannot call method getOrRefreshToken\(\) on mixed.#'
     - '#Cannot call method getMetadata\(\) on mixed.#'
     - '#Method PrestaShop\\Module\\PsEventbus\\Api\\Post\\PostFileApi::getContent\(\) should return Psr\\Http\\Message\\StreamInterface but returns mixed.#'
-    - '#Property PrestaShop\\Module\\PsEventbus\\Controller\\AbstractApiController::[a-zA-Z0-9\\_\$\(\) ]+ does not accept mixed.#'
     - '#Cannot call method getShopUuid\(\) on mixed.#'
     - '#Cannot call method getPsAccountsService\(\) on mixed.#'
     - '#Cannot call method handle\(\) on mixed.#'
     - '#Cannot access property [a-z\$]+ on Context\|null.#'
     - '#Parameter \#2 \$currency of static method ToolsCore::convertPrice\(\) expects array\|object\|null, [a-z0-9<>,-\| ]+ given.#'
-    - '#Method PrestaShop\\Module\\PsEventbus\\Service\\SpecificPriceService::priceCalculation\(\) never returns void so it can be removed from the return type.#'
+    - '#Method PrestaShop\\Module\\PsEventbus\\Service\\ShopContent\\SpecificPricesService::priceCalculation\(\) never returns void so it can be removed from the return type.#'
     - '#Property PrestaShop\\Module\\PsEventbus\\Api\\Post\\Stream::\$stream \(resource\) does not accept null.#'
     - '#Cannot call method prepare\(\) on mysqli\|PDO\|resource.#'
     - '#Cannot call method bindParam\(\) on mysqli_stmt\|PDOStatement\|false.#'
     - '#Cannot call method execute\(\) on mysqli_stmt\|PDOStatement\|false.#'
     - '#Parameter \#1 \$restriction of method DbQueryCore::where\(\) expects string, int\|string given.#'
     - '#Method PrestaShop\\Module\\PsEventbus\\Repository\\MerchantConsentRepository::getConsentByShopId\(\) should return array but returns array\|mysqli_result\|PDOStatement\|resource\|false\|null.#'
-    - '#Property PrestaShop\\Module\\PsEventbus\\Api\\Post\\MultipartBody::\$stream is never read, only written.#'
     - '#Caught class GuzzleHttp\\Ring\\Exception\\ConnectException not found#'
     - '#Call to method getMessage\(\) on an unknown class GuzzleHttp\\Ring\\Exception\\ConnectException.#'
     - '#Parameter \#2 \$type of static method TaxManagerFactoryCore::getManager\(\) expects string, int given.#'
     - '#Method PrestaShop\\Module\\PsEventbus\\Factory\\ContextFactory::getController\(\) has invalid return type PrestaShopBundle\\Bridge\\AdminController\\LegacyControllerBridgeInterface.#'
     - '#Cannot call method getService\(\) on ModuleCore\|false.#'
-    - '#Method PrestaShop\\Module\\PsEventbus\\Service\\SpecificPriceService::getPriceStatic\(\) never returns void so it can be removed from the return type.#'
+    - '#Method PrestaShop\\Module\\PsEventbus\\Service\\ShopContent\\SpecificPricesService::getPriceStatic\(\) never returns void so it can be removed from the return type.#'
     - '#Call to an undefined method object::findForUpdates\(\).#'
 
     - '#Property PrestaShop\\Module\\PsEventbus\\Helper\\ModuleHelper::\$moduleManager has unknown class PrestaShop\\PrestaShop\\Core\\Module\\ModuleManager as its type.#'
@@ -46,4 +45,7 @@ parameters:
     - '#Property PrestaShop\\Module\\PsEventbus\\Helper\\ModuleHelper::\$moduleManager has unknown class PrestaShop\\PrestaShop\\Core\\Addon\\Module\\ModuleManager as its type.#'
     - '#Call to method isInstalled\(\) on an unknown class PrestaShop\\PrestaShop\\Core\\Addon\\Module\\ModuleManager.#'
     - '#Call to method isEnabled\(\) on an unknown class PrestaShop\\PrestaShop\\Core\\Addon\\Module\\ModuleManager.#'
+    - '#Constant PS_EVENTBUS_LOGS_ENABLED not found.#'
+    - '#Constant PS_EVENTBUS_VERBOSE_ENABLED not found.#'
+    - '#Constant PS_EVENTBUS_EXPLAIN_SQL_ENABLED not found.#'
   level: 8

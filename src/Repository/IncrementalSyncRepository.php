@@ -1,42 +1,51 @@
 <?php
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to https://devdocs.prestashop.com/ for more information.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandlerInterface;
+use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 
-class IncrementalSyncRepository
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
+class IncrementalSyncRepository extends AbstractRepository
 {
-    const INCREMENTAL_SYNC_TABLE = 'eventbus_incremental_sync';
+    const TABLE_NAME = 'eventbus_incremental_sync';
 
     /**
-     * @var \Db
-     */
-    private $db;
-    /**
-     * @var \Context
-     */
-    private $context;
-    /**
-     * @var ErrorHandlerInterface
+     * @var ErrorHandler
      */
     private $errorHandler;
 
-    /**
-     * @var int
-     */
-    private $shopId;
-
-    public function __construct(\Context $context, ErrorHandlerInterface $errorHandler)
+    public function __construct(ErrorHandler $errorHandler)
     {
-        $this->db = \Db::getInstance();
-        $this->context = $context;
         $this->errorHandler = $errorHandler;
 
-        if ($this->context->shop === null) {
-            throw new \PrestaShopException('No shop context');
-        }
-
-        $this->shopId = (int) $this->context->shop->id;
+        parent::__construct();
     }
 
     /**
@@ -56,7 +65,7 @@ class IncrementalSyncRepository
             $elementsCount = count($arrayOfData);
             $index = 0;
 
-            $query = 'INSERT INTO `' . _DB_PREFIX_ . $this::INCREMENTAL_SYNC_TABLE . '` (type, id_object, id_shop, lang_iso, created_at) VALUES ';
+            $query = 'INSERT INTO `' . _DB_PREFIX_ . self::TABLE_NAME . '` (type, id_object, id_shop, lang_iso, action, created_at) VALUES ';
 
             foreach ($arrayOfData as $currenData) {
                 $dateTime = new \DateTime($currenData['created_at']);
@@ -64,9 +73,10 @@ class IncrementalSyncRepository
 
                 $query .= "(
                     '{$this->db->escape($currenData['type'])}',
-                    {$this->db->escape($currenData['id_object'])},
+                    '{$this->db->escape($currenData['id_object'])}',
                     {$this->db->escape($currenData['id_shop'])},
                     '{$this->db->escape($currenData['lang_iso'])}',
+                    '{$this->db->escape($currenData['action'])}',
                     '{$this->db->escape($date)}'
                 )";
 
@@ -81,13 +91,14 @@ class IncrementalSyncRepository
                 id_object = VALUES(id_object),
                 id_shop = VALUES(id_shop),
                 lang_iso = VALUES(lang_iso),
+                action = VALUES(action),
                 created_at = VALUES(created_at)
             ';
 
             return (bool) $this->db->query($query);
-        } catch (\PrestaShopDatabaseException $e) {
+        } catch (\PrestaShopDatabaseException $exception) {
             $this->errorHandler->handle(
-                new \PrestaShopDatabaseException('Failed to insert incremental object', $e->getCode(), $e)
+                new \PrestaShopDatabaseException('Failed to insert incremental object', $exception->getCode(), $exception)
             );
 
             return false;
@@ -96,24 +107,24 @@ class IncrementalSyncRepository
 
     /**
      * @param string $type
-     * @param array<mixed> $objectIds
+     * @param array<mixed> $contentIds
      * @param string $langIso
      *
      * @return bool
      */
-    public function removeIncrementalSyncObjects($type, $objectIds, $langIso)
+    public function removeIncrementalSyncObjects($type, $contentIds, $langIso)
     {
         return $this->db->delete(
-            self::INCREMENTAL_SYNC_TABLE,
-            'type = "' . pSQL($type) . '"
-            AND id_shop = ' . $this->shopId . '
-            AND id_object IN(' . implode(',', array_map('intval', $objectIds)) . ')
-            AND lang_iso = "' . pSQL($langIso) . '"'
+            self::TABLE_NAME,
+            "type = '" . pSQL($type) . "'
+            AND id_shop = " . parent::getShopContext()->id . "
+            AND id_object IN('" . implode("','", $contentIds) . "')
+            AND lang_iso = '" . pSQL($langIso) . "'"
         );
     }
 
     /**
-     * @param string $type
+     * @param string $shopContent
      * @param string $langIso
      * @param int $limit
      *
@@ -121,26 +132,24 @@ class IncrementalSyncRepository
      *
      * @throws \PrestaShopDatabaseException
      */
-    public function getIncrementalSyncObjectIds($type, $langIso, $limit)
+    public function getIncrementalSyncObjects($shopContent, $langIso, $limit)
     {
-        $query = new \DbQuery();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'eis');
 
-        $query->select('id_object')
-            ->from(self::INCREMENTAL_SYNC_TABLE)
-            ->where('lang_iso = "' . pSQL($langIso) . '"')
-            ->where('id_shop = "' . $this->shopId . '"')
-            ->where('type = "' . pSQL($type) . '"')
-            ->limit($limit);
+        $this->query
+            ->where('eis.lang_iso = "' . pSQL($langIso) . '"')
+            ->where('eis.id_shop = "' . parent::getShopContext()->id . '"')
+            ->where('eis.type = "' . pSQL($shopContent) . '"')
+            ->limit($limit)
+        ;
 
-        $result = $this->db->executeS($query);
+        $this->query
+            ->select('eis.type')
+            ->select('eis.id_object as id')
+            ->select('eis.action')
+        ;
 
-        if (is_array($result) && !empty($result)) {
-            return array_map(function ($object) {
-                return $object['id_object'];
-            }, $result);
-        }
-
-        return [];
+        return $this->runQuery(true);
     }
 
     /**
@@ -151,15 +160,17 @@ class IncrementalSyncRepository
      */
     public function getRemainingIncrementalObjects($type, $langIso)
     {
-        $query = new \DbQuery();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'eis');
 
-        $query->select('COUNT(id_object) as count')
-            ->from(self::INCREMENTAL_SYNC_TABLE)
-            ->where('lang_iso = "' . pSQL($langIso) . '"')
-            ->where('id_shop = "' . $this->shopId . '"')
-            ->where('type = "' . pSQL($type) . '"');
+        $this->query
+            ->where('eis.lang_iso = "' . pSQL($langIso) . '"')
+            ->where('eis.id_shop = "' . parent::getShopContext()->id . '"')
+            ->where('eis.type = "' . pSQL($type) . '"')
+        ;
 
-        return (int) $this->db->getValue($query);
+        $this->query->select('COUNT(eis.id_object) as count');
+
+        return (int) $this->db->getValue($this->query);
     }
 
     /**
@@ -171,9 +182,9 @@ class IncrementalSyncRepository
     public function removeIncrementalSyncObject($type, $objectId)
     {
         return $this->db->delete(
-            self::INCREMENTAL_SYNC_TABLE,
+            self::TABLE_NAME,
             'type = "' . pSQL($type) . '"
-            AND id_shop = ' . $this->shopId . '
+            AND id_shop = ' . parent::getShopContext()->id . '
             AND id_object = ' . (int) $objectId
         );
     }
@@ -185,13 +196,12 @@ class IncrementalSyncRepository
      */
     public function getIncrementalSyncObjectCountByType($type)
     {
-        $query = new \DbQuery();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'eis');
 
-        $query->select('COUNT(type) as count')
-            ->from(self::INCREMENTAL_SYNC_TABLE)
-            ->where('type = "' . psql($type) . '"');
+        $this->query->where('eis.type = "' . psql($type) . '"');
+        $this->query->select('COUNT(eis.type) as count');
 
-        return (int) $this->db->getValue($query);
+        return (int) $this->db->getValue($this->query);
     }
 
     /**
@@ -202,7 +212,7 @@ class IncrementalSyncRepository
     public function removeIncrementaSyncObjectByType($type)
     {
         return $this->db->delete(
-            self::INCREMENTAL_SYNC_TABLE,
+            self::TABLE_NAME,
             'type = "' . pSQL($type) . '"'
         );
     }
