@@ -44,6 +44,7 @@ use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\ManufacturerRepository;
 use PrestaShop\Module\PsEventbus\Repository\ModuleRepository;
+use PrestaShop\Module\PsEventbus\Repository\OrderCarrierRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderDetailRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderRepository;
@@ -84,6 +85,7 @@ use PrestaShop\Module\PsEventbus\Service\ShopContent\InfoService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\LanguagesService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\ManufacturersService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\ModulesService;
+use PrestaShop\Module\PsEventbus\Service\ShopContent\OrderCarriersService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\OrderCartRulesService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\OrderDetailsService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\OrdersService;
@@ -239,6 +241,11 @@ class ServiceProvider implements IServiceProvider
                 $container->get(OrderRepository::class),
                 $container->get(OrderStatusHistoryRepository::class),
                 $container->get(ArrayFormatter::class)
+            );
+        });
+        $container->registerProvider(OrderCarriersService::class, static function () use ($container) {
+            return new OrderCarriersService(
+                $container->get(OrderCarrierRepository::class)
             );
         });
         $container->registerProvider(OrderCartRulesService::class, static function () use ($container) {
