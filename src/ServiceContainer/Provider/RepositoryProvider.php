@@ -20,7 +20,6 @@
 
 namespace PrestaShop\Module\PsEventbus\ServiceContainer\Provider;
 
-use OrderCarrier;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Repository\BundleRepository;
 use PrestaShop\Module\PsEventbus\Repository\CarrierDetailRepository;
