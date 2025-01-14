@@ -24,7 +24,7 @@
       "url": "http://localhost:8000/",
       "ssl": false,
       "multi_shop_count": 1,
-      "country_code": "FR"
+      "country_code": "GB"
     }
   }
 ]
