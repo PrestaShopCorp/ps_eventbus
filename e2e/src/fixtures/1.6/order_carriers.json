@@ -8,10 +8,10 @@
       "id_carrier": 2,
       "id_order_invoice": 0,
       "weight": 0,
-      "shipping_cost_tax_excl": 7,
-      "shipping_cost_tax_incl": 8,
+      "shipping_cost_tax_excl": 2,
+      "shipping_cost_tax_incl": 2,
       "tracking_number": "",
-      "date_add": "2024-10-26T06:57:16+0200"
+      "date_add": "2024-08-22T12:24:54+0200"
     }
   },
   {
@@ -23,10 +23,10 @@
       "id_carrier": 2,
       "id_order_invoice": 0,
       "weight": 0,
-      "shipping_cost_tax_excl": 7,
-      "shipping_cost_tax_incl": 8,
+      "shipping_cost_tax_excl": 2,
+      "shipping_cost_tax_incl": 2,
       "tracking_number": "",
-      "date_add": "2024-10-26T06:57:16+0200"
+      "date_add": "2024-08-22T12:24:54+0200"
     }
   },
   {
@@ -38,10 +38,10 @@
       "id_carrier": 2,
       "id_order_invoice": 0,
       "weight": 0,
-      "shipping_cost_tax_excl": 7,
-      "shipping_cost_tax_incl": 8,
+      "shipping_cost_tax_excl": 2,
+      "shipping_cost_tax_incl": 2,
       "tracking_number": "",
-      "date_add": "2024-10-26T06:57:16+0200"
+      "date_add": "2024-08-22T12:24:54+0200"
     }
   },
   {
@@ -53,10 +53,10 @@
       "id_carrier": 2,
       "id_order_invoice": 0,
       "weight": 0,
-      "shipping_cost_tax_excl": 7,
-      "shipping_cost_tax_incl": 8,
+      "shipping_cost_tax_excl": 2,
+      "shipping_cost_tax_incl": 2,
       "tracking_number": "",
-      "date_add": "2024-10-26T06:57:16+0200"
+      "date_add": "2024-08-22T12:24:54+0200"
     }
   },
   {
@@ -68,10 +68,10 @@
       "id_carrier": 2,
       "id_order_invoice": 0,
       "weight": 0,
-      "shipping_cost_tax_excl": 7,
-      "shipping_cost_tax_incl": 8,
+      "shipping_cost_tax_excl": 2,
+      "shipping_cost_tax_incl": 2,
       "tracking_number": "",
-      "date_add": "2024-10-26T06:57:16+0200"
+      "date_add": "2024-08-22T12:24:54+0200"
     }
   }
 ]
