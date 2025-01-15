@@ -63,7 +63,7 @@ class ErrorHandler
             $accountService = null;
             $eventbusModule = null;
         }
-
+        
         try {
             $this->client = new \Raven_Client(
                 $sentryDsn,
@@ -83,7 +83,10 @@ class ErrorHandler
             );
             /** @var string $configurationPsShopEmail */
             $configurationPsShopEmail = \Configuration::get('PS_SHOP_EMAIL');
-            $this->client->set_user_data($accountService->getShopUuid(), $configurationPsShopEmail);
+            $this->client->set_user_data(
+                $accountService ? $accountService->getShopUuid(): false,
+                $configurationPsShopEmail
+            );
         } catch (\Exception $e) {
         }
     }
