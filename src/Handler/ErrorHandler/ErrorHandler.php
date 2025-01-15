@@ -26,9 +26,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
-use Module;
 use PrestaShop\Module\PsEventbus\Service\CommonService;
-use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -53,14 +51,19 @@ class ErrorHandler
     public function __construct($sentryDsn, $sentryEnv)
     {
         try {
-            /** @var Module $module */
+            /** @var \ModuleCore $accountsModule */
             $accountsModule = \Module::getInstanceByName('ps_accounts');
+            /** @var mixed $accountService */
             $accountService = $accountsModule->get('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
+
+            /** @var \ModuleCore $eventbusModule */
+            $eventbusModule = \Module::getInstanceByName('ps_eventbus');
         } catch (\Exception $e) {
             $accountsModule = null;
             $accountService = null;
+            $eventbusModule = null;
         }
-        
+
         try {
             $this->client = new \Raven_Client(
                 $sentryDsn,
@@ -68,12 +71,12 @@ class ErrorHandler
                     'level' => 'warning',
                     'tags' => [
                         'shop_id' => $accountService ? $accountService->getShopUuid() : false,
-                        'ps_eventbus_version' => \Module::getInstanceByName('ps_eventbus')->version,
+                        'ps_eventbus_version' => $eventbusModule ? $eventbusModule->version : false,
                         'ps_accounts_version' => $accountsModule ? $accountsModule->version : false,
                         'php_version' => phpversion(),
                         'prestashop_version' => _PS_VERSION_,
-                        'ps_eventbus_is_enabled' => \Module::isEnabled((string) $module->name),
-                        'ps_eventbus_is_installed' => \Module::isInstalled((string) $module->name),
+                        'ps_eventbus_is_enabled' => $eventbusModule ? \Module::isEnabled((string) $eventbusModule->name) : false,
+                        'ps_eventbus_is_installed' => $eventbusModule ? \Module::isInstalled((string) $eventbusModule->name) : false,
                         'env' => $sentryEnv,
                     ],
                 ]
@@ -94,7 +97,7 @@ class ErrorHandler
      * @@throws Exception
      */
     public function handle($exception, $silent = null)
-    {    
+    {
         $logsEnabled = false;
         $verboseEnabled = false;
 
@@ -130,7 +133,7 @@ class ErrorHandler
             if ($silent) {
                 return;
             }
-        
+
             CommonService::exitWithExceptionMessage($exception);
         }
     }
