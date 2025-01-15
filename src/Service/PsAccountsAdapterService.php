@@ -26,6 +26,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
+use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Helper\ModuleHelper;
 
 if (!defined('_PS_VERSION_')) {
@@ -40,13 +41,19 @@ class PsAccountsAdapterService
     private $moduleHelper;
 
     /**
+     * @var ErrorHandler
+     */
+    private $errorHandler;
+
+    /**
      * @var false|\ModuleCore
      */
     private $psAccountModule;
 
-    public function __construct(ModuleHelper $moduleHelper)
+    public function __construct(ModuleHelper $moduleHelper, ErrorHandler $errorHandler)
     {
         $this->moduleHelper = $moduleHelper;
+        $this->errorHandler = $errorHandler;
         $this->psAccountModule = $this->moduleHelper->getInstanceByName('ps_accounts');
     }
 
@@ -78,6 +85,11 @@ class PsAccountsAdapterService
         try {
             return $this->psAccountModule->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
         } catch (\Exception $e) {
+            $this->errorHandler->handle(
+                new \PrestaShopException('Failed to load PsAccountsService', 0, $e),
+                true
+            );
+
             return false;
         }
     }
@@ -96,6 +108,11 @@ class PsAccountsAdapterService
         try {
             return $this->psAccountModule->getService('PrestaShop\Module\PsAccounts\Presenter\PsAccountsPresenter');
         } catch (\Exception $e) {
+            $this->errorHandler->handle(
+                new \PrestaShopException('Failed to load PsAccountsPresenter', 0, $e),
+                true
+            );
+
             return false;
         }
     }
@@ -114,6 +131,11 @@ class PsAccountsAdapterService
         try {
             return $this->getService()->getShopUuid();
         } catch (\Exception $e) {
+            $this->errorHandler->handle(
+                new \PrestaShopException('Failed to get shop uuid from ps_account', 0, $e),
+                true
+            );
+
             return '';
         }
     }
@@ -132,6 +154,11 @@ class PsAccountsAdapterService
         try {
             return $this->getService()->getOrRefreshToken();
         } catch (\Exception $e) {
+            $this->errorHandler->handle(
+                new \PrestaShopException('Failed to get refresh token from ps_account', 0, $e),
+                true
+            );
+
             return '';
         }
     }
