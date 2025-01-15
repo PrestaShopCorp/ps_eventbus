@@ -41,6 +41,7 @@ use PrestaShop\Module\PsEventbus\Repository\LanguageRepository;
 use PrestaShop\Module\PsEventbus\Repository\LiveSyncRepository;
 use PrestaShop\Module\PsEventbus\Repository\ManufacturerRepository;
 use PrestaShop\Module\PsEventbus\Repository\ModuleRepository;
+use PrestaShop\Module\PsEventbus\Repository\OrderCarrierRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderCartRuleRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderDetailRepository;
 use PrestaShop\Module\PsEventbus\Repository\OrderRepository;
@@ -130,6 +131,9 @@ class RepositoryProvider implements IServiceProvider
         });
         $container->registerProvider(OrderRepository::class, static function () {
             return new OrderRepository();
+        });
+        $container->registerProvider(OrderCarrierRepository::class, static function () {
+            return new OrderCarrierRepository();
         });
         $container->registerProvider(OrderCartRuleRepository::class, static function () {
             return new OrderCartRuleRepository();
