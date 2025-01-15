@@ -54,8 +54,6 @@ class PsAccountsAdapterService
      * Get psAccounts module main class, or null if module is'nt ready
      *
      * @return false|\ModuleCore
-     *
-     * @throws \PrestaShopException
      */
     public function getModule()
     {
@@ -70,8 +68,6 @@ class PsAccountsAdapterService
      * Get psAccounts service, or null if module is'nt ready
      *
      * @return mixed
-     *
-     * @throws \PrestaShopException
      */
     public function getService()
     {
@@ -79,54 +75,64 @@ class PsAccountsAdapterService
             return false;
         }
 
-        return $this->psAccountModule->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
+        try {
+            return $this->psAccountModule->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     /**
      * Get presenter from psAccounts, or null if module is'nt ready
      *
      * @return mixed
-     *
-     * @throws \PrestaShopException
      */
     public function getPresenter()
     {
-        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts')) {
+        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts') || !$this->getService()) {
             return false;
         }
 
-        return $this->psAccountModule->getService('PrestaShop\Module\PsAccounts\Presenter\PsAccountsPresenter');
+        try {
+            return $this->psAccountModule->getService('PrestaShop\Module\PsAccounts\Presenter\PsAccountsPresenter');
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     /**
      * Get shopUuid from psAccounts, or null if module is'nt ready
      *
      * @return string
-     *
-     * @throws \PrestaShopException
      */
     public function getShopUuid()
     {
-        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts')) {
+        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts') || !$this->getService()) {
             return '';
         }
 
-        return $this->getService()->getShopUuid();
+        try {
+            return $this->getService()->getShopUuid();
+        } catch (\Exception $e) {
+            return '';
+        }
     }
 
     /**
      * Get refreshToken from psAccounts, or null if module is'nt ready
      *
      * @return string
-     *
-     * @throws \PrestaShopException
      */
     public function getOrRefreshToken()
     {
-        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts')) {
+        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts') || !$this->getService()) {
             return '';
         }
 
-        return $this->getService()->getOrRefreshToken();
+        try {
+            return $this->getService()->getOrRefreshToken();
+        } catch (\Exception $e) {
+            return '';
+        }
     }
 }

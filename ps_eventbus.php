@@ -95,7 +95,7 @@ class Ps_eventbus extends Module
         $this->author = 'PrestaShop';
         $this->need_instance = 0;
         $this->bootstrap = true;
-        $this->version = '0.0.0';
+        $this->version = '4.0.1';
         $this->module_key = '7d76e08a13331c6c393755886ec8d5ce';
 
         parent::__construct();
