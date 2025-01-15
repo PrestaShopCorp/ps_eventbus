@@ -3,19 +3,7 @@ includes:
   - %currentWorkingDirectory%/tests/phpstan/phpstan-9-0.neon
 parameters:
   paths:
-    - ../../src/Api
-    - ../../src/Config
-    - ../../src/Exception
-    - ../../src/Factory
-    - ../../src/Formatter
-    - ../../src/Handler
-    - ../../src/Helper
-    - ../../src/Log
-    - ../../src/Module
-    - ../../src/Repository
-    - ../../src/Service
-    - ../../src/ServiceContainer
-    - ../../src/Traits
+    - ../../src
     - ../../controllers
     - ../../config
     - ../../ps_eventbus.php
