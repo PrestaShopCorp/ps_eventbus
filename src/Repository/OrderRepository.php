@@ -38,7 +38,7 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
      * @param string $langIso
      * @param bool $withSelecParameters
      *
-     * @return mixed
+     * @return void
      *
      * @throws \PrestaShopException
      */
@@ -176,7 +176,7 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
         $this->generateFullQuery($langIso, false);
 
         $result = $this->db->executeS('
-            SELECT (COUNT(*) - ' . (int) $offset . ') AS count
+            SELECT COUNT(*) - ' . (int) $offset . ' AS count
             FROM (' . $this->query->build() . ') as subquery;
         ');
 

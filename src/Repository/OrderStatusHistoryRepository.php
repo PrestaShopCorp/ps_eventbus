@@ -38,7 +38,7 @@ class OrderStatusHistoryRepository extends AbstractRepository implements Reposit
      * @param string $langIso
      * @param bool $withSelecParameters
      *
-     * @return mixed
+     * @return void
      *
      * @throws \PrestaShopException
      */

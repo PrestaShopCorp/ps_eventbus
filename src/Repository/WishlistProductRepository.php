@@ -38,7 +38,7 @@ class WishlistProductRepository extends AbstractRepository implements Repository
      * @param string $langIso
      * @param bool $withSelecParameters
      *
-     * @return mixed
+     * @return void
      *
      * @throws \PrestaShopException
      */
