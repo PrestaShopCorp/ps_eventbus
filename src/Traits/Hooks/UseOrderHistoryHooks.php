@@ -40,7 +40,7 @@ trait UseOrderHistoryHooks
      *
      * @return void
      */
-    public function hookActionOrderHistoryAddAfter($parameters)
+    public function hookActionObjectOrderHistoryAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);

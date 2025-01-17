@@ -33,7 +33,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-trait UseStockMVtHooks
+trait UseStockMvtHooks
 {
     /**
      * Work Only on 1.6

@@ -46,7 +46,7 @@ use PrestaShop\Module\PsEventbus\Traits\Hooks\UseOrderHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseProductHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseSpecificPriceHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseStockHooks;
-use PrestaShop\Module\PsEventbus\Traits\Hooks\UseStockMVtHooks;
+use PrestaShop\Module\PsEventbus\Traits\Hooks\UseStockMvtHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseStoreHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseSupplierHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseWishlistHooks;
@@ -77,7 +77,7 @@ trait UseHooks
     use UseProductHooks;
     use UseSpecificPriceHooks;
     use UseStockHooks;
-    use UseStockMVtHooks;
+    use UseStockMvtHooks;
     use UseStoreHooks;
     use UseSupplierHooks;
     use UseWishlistHooks;
