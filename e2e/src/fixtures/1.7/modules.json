@@ -5,10 +5,10 @@
     "properties": {
       "module_id": "1",
       "name": "blockwishlist",
-      "module_version": "2.1.2",
+      "module_version": "2.0.1",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -17,10 +17,10 @@
     "properties": {
       "module_id": "2",
       "name": "contactform",
-      "module_version": "4.4.1",
+      "module_version": "4.3.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -29,10 +29,10 @@
     "properties": {
       "module_id": "3",
       "name": "dashactivity",
-      "module_version": "2.1.0",
+      "module_version": "2.0.2",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -41,10 +41,10 @@
     "properties": {
       "module_id": "4",
       "name": "dashtrends",
-      "module_version": "2.1.2",
+      "module_version": "2.0.3",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -53,10 +53,10 @@
     "properties": {
       "module_id": "5",
       "name": "dashgoals",
-      "module_version": "2.0.4",
+      "module_version": "2.0.2",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -65,10 +65,10 @@
     "properties": {
       "module_id": "6",
       "name": "dashproducts",
-      "module_version": "2.1.3",
+      "module_version": "2.1.1",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -77,10 +77,10 @@
     "properties": {
       "module_id": "7",
       "name": "graphnvd3",
-      "module_version": "2.0.3",
+      "module_version": "2.0.1",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -89,10 +89,10 @@
     "properties": {
       "module_id": "8",
       "name": "gridhtml",
-      "module_version": "2.0.3",
+      "module_version": "2.0.1",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -101,10 +101,10 @@
     "properties": {
       "module_id": "9",
       "name": "gsitemap",
-      "module_version": "4.3.0",
+      "module_version": "4.2.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -113,10 +113,10 @@
     "properties": {
       "module_id": "10",
       "name": "pagesnotfound",
-      "module_version": "2.0.2",
+      "module_version": "2.0.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -125,10 +125,10 @@
     "properties": {
       "module_id": "11",
       "name": "productcomments",
-      "module_version": "5.0.3",
+      "module_version": "4.2.2",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -137,10 +137,10 @@
     "properties": {
       "module_id": "12",
       "name": "ps_banner",
-      "module_version": "2.1.2",
+      "module_version": "2.1.1",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -149,10 +149,10 @@
     "properties": {
       "module_id": "13",
       "name": "ps_categorytree",
-      "module_version": "2.0.3",
+      "module_version": "2.0.2",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -161,10 +161,10 @@
     "properties": {
       "module_id": "14",
       "name": "ps_checkpayment",
-      "module_version": "2.0.6",
+      "module_version": "2.0.5",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -173,10 +173,10 @@
     "properties": {
       "module_id": "15",
       "name": "ps_contactinfo",
-      "module_version": "3.3.2",
+      "module_version": "3.3.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -185,10 +185,10 @@
     "properties": {
       "module_id": "16",
       "name": "ps_crossselling",
-      "module_version": "2.0.2",
+      "module_version": "2.0.1",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -197,10 +197,10 @@
     "properties": {
       "module_id": "17",
       "name": "ps_currencyselector",
-      "module_version": "2.1.1",
+      "module_version": "2.0.1",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -209,10 +209,10 @@
     "properties": {
       "module_id": "18",
       "name": "ps_customeraccountlinks",
-      "module_version": "3.2.0",
+      "module_version": "3.1.1",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -221,10 +221,10 @@
     "properties": {
       "module_id": "19",
       "name": "ps_customersignin",
-      "module_version": "2.0.5",
+      "module_version": "2.0.4",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -233,10 +233,10 @@
     "properties": {
       "module_id": "20",
       "name": "ps_customtext",
-      "module_version": "4.2.1",
+      "module_version": "4.2.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -245,10 +245,10 @@
     "properties": {
       "module_id": "21",
       "name": "ps_dataprivacy",
-      "module_version": "2.1.1",
+      "module_version": "2.0.1",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -257,10 +257,10 @@
     "properties": {
       "module_id": "22",
       "name": "ps_emailsubscription",
-      "module_version": "2.7.1",
+      "module_version": "2.7.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -269,10 +269,10 @@
     "properties": {
       "module_id": "24",
       "name": "ps_faviconnotificationbo",
-      "module_version": "2.1.3",
+      "module_version": "2.1.1",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -281,10 +281,10 @@
     "properties": {
       "module_id": "25",
       "name": "ps_featuredproducts",
-      "module_version": "2.1.4",
+      "module_version": "2.1.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -293,10 +293,10 @@
     "properties": {
       "module_id": "26",
       "name": "ps_imageslider",
-      "module_version": "3.1.3",
+      "module_version": "3.1.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -305,10 +305,10 @@
     "properties": {
       "module_id": "27",
       "name": "ps_languageselector",
-      "module_version": "2.1.3",
+      "module_version": "2.1.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -317,10 +317,10 @@
     "properties": {
       "module_id": "28",
       "name": "ps_linklist",
-      "module_version": "5.0.5",
+      "module_version": "5.0.4",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -329,10 +329,10 @@
     "properties": {
       "module_id": "29",
       "name": "ps_mainmenu",
-      "module_version": "2.3.2",
+      "module_version": "2.3.1",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -341,10 +341,10 @@
     "properties": {
       "module_id": "30",
       "name": "ps_searchbar",
-      "module_version": "2.1.3",
+      "module_version": "2.1.2",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -353,10 +353,10 @@
     "properties": {
       "module_id": "31",
       "name": "ps_sharebuttons",
-      "module_version": "2.1.2",
+      "module_version": "2.1.1",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -365,10 +365,10 @@
     "properties": {
       "module_id": "32",
       "name": "ps_shoppingcart",
-      "module_version": "2.0.7",
+      "module_version": "2.0.4",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -377,10 +377,10 @@
     "properties": {
       "module_id": "33",
       "name": "ps_socialfollow",
-      "module_version": "2.3.0",
+      "module_version": "2.2.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -389,10 +389,10 @@
     "properties": {
       "module_id": "34",
       "name": "ps_themecusto",
-      "module_version": "1.2.3",
+      "module_version": "1.2.1",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -401,10 +401,10 @@
     "properties": {
       "module_id": "35",
       "name": "ps_wirepayment",
-      "module_version": "2.1.3",
+      "module_version": "2.1.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -413,10 +413,10 @@
     "properties": {
       "module_id": "36",
       "name": "statsbestcategories",
-      "module_version": "2.0.1",
+      "module_version": "2.0.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -425,10 +425,10 @@
     "properties": {
       "module_id": "37",
       "name": "statsbestcustomers",
-      "module_version": "2.0.4",
+      "module_version": "2.0.2",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -437,10 +437,10 @@
     "properties": {
       "module_id": "38",
       "name": "statsbestproducts",
-      "module_version": "2.0.1",
+      "module_version": "2.0.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -449,10 +449,10 @@
     "properties": {
       "module_id": "39",
       "name": "statsbestsuppliers",
-      "module_version": "2.0.2",
+      "module_version": "2.0.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -461,10 +461,10 @@
     "properties": {
       "module_id": "40",
       "name": "statsbestvouchers",
-      "module_version": "2.0.1",
+      "module_version": "2.0.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -473,10 +473,10 @@
     "properties": {
       "module_id": "41",
       "name": "statscarrier",
-      "module_version": "2.0.1",
+      "module_version": "2.0.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -485,10 +485,10 @@
     "properties": {
       "module_id": "42",
       "name": "statscatalog",
-      "module_version": "2.0.3",
+      "module_version": "2.0.1",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -497,10 +497,10 @@
     "properties": {
       "module_id": "43",
       "name": "statscheckup",
-      "module_version": "2.0.2",
+      "module_version": "2.0.1",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -509,10 +509,10 @@
     "properties": {
       "module_id": "44",
       "name": "statsdata",
-      "module_version": "2.1.1",
+      "module_version": "2.1.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -521,10 +521,10 @@
     "properties": {
       "module_id": "45",
       "name": "statsforecast",
-      "module_version": "2.0.4",
+      "module_version": "2.0.3",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -533,10 +533,10 @@
     "properties": {
       "module_id": "46",
       "name": "statsnewsletter",
-      "module_version": "2.0.3",
+      "module_version": "2.0.2",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -545,10 +545,10 @@
     "properties": {
       "module_id": "47",
       "name": "statspersonalinfos",
-      "module_version": "2.0.4",
+      "module_version": "2.0.3",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -557,10 +557,10 @@
     "properties": {
       "module_id": "48",
       "name": "statsproduct",
-      "module_version": "2.1.1",
+      "module_version": "2.1.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -569,10 +569,10 @@
     "properties": {
       "module_id": "49",
       "name": "statsregistrations",
-      "module_version": "2.0.1",
+      "module_version": "2.0.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -581,10 +581,10 @@
     "properties": {
       "module_id": "50",
       "name": "statssales",
-      "module_version": "2.1.0",
+      "module_version": "2.0.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -593,10 +593,10 @@
     "properties": {
       "module_id": "51",
       "name": "statssearch",
-      "module_version": "2.0.2",
+      "module_version": "2.0.1",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -605,10 +605,10 @@
     "properties": {
       "module_id": "52",
       "name": "statsstock",
-      "module_version": "2.0.1",
+      "module_version": "2.0.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -617,10 +617,10 @@
     "properties": {
       "module_id": "53",
       "name": "welcome",
-      "module_version": "6.0.9",
+      "module_version": "6.0.7",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -628,11 +628,11 @@
     "collection": "modules",
     "properties": {
       "module_id": "54",
-      "name": "psgdpr",
-      "module_version": "1.4.3",
+      "name": "gamification",
+      "module_version": "2.5.1",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -640,11 +640,11 @@
     "collection": "modules",
     "properties": {
       "module_id": "55",
-      "name": "ps_mbo",
-      "module_version": "3.0.1",
+      "name": "psaddonsconnect",
+      "module_version": "2.1.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -652,11 +652,11 @@
     "collection": "modules",
     "properties": {
       "module_id": "56",
-      "name": "ps_buybuttonlite",
-      "module_version": "1.0.1",
+      "name": "psgdpr",
+      "module_version": "1.4.3",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -664,11 +664,11 @@
     "collection": "modules",
     "properties": {
       "module_id": "57",
-      "name": "ps_checkout",
-      "module_version": "7.3.5.2",
+      "name": "ps_mbo",
+      "module_version": "3.2.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -676,11 +676,11 @@
     "collection": "modules",
     "properties": {
       "module_id": "58",
-      "name": "ps_metrics",
-      "module_version": "4.0.3",
+      "name": "ps_buybuttonlite",
+      "module_version": "1.0.1",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -688,11 +688,11 @@
     "collection": "modules",
     "properties": {
       "module_id": "59",
-      "name": "ps_facebook",
-      "module_version": "1.33.2",
+      "name": "ps_checkout",
+      "module_version": "7.3.6.3",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -700,11 +700,11 @@
     "collection": "modules",
     "properties": {
       "module_id": "60",
-      "name": "psxmarketingwithgoogle",
-      "module_version": "1.63.0",
+      "name": "ps_metrics",
+      "module_version": "4.0.8",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -712,11 +712,11 @@
     "collection": "modules",
     "properties": {
       "module_id": "61",
-      "name": "blockreassurance",
-      "module_version": "5.1.2",
+      "name": "ps_facebook",
+      "module_version": "1.38.1",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -724,11 +724,11 @@
     "collection": "modules",
     "properties": {
       "module_id": "62",
-      "name": "ps_facetedsearch",
-      "module_version": "3.12.1",
+      "name": "psxmarketingwithgoogle",
+      "module_version": "1.74.8",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -736,11 +736,11 @@
     "collection": "modules",
     "properties": {
       "module_id": "63",
-      "name": "ps_accounts",
-      "module_version": "42.0.0",
+      "name": "blockreassurance",
+      "module_version": "5.0.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   },
   {
@@ -748,11 +748,35 @@
     "collection": "modules",
     "properties": {
       "module_id": "64",
+      "name": "ps_facetedsearch",
+      "module_version": "3.7.1",
+      "active": true,
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
+    }
+  },
+  {
+    "action": "upsert",
+    "collection": "modules",
+    "properties": {
+      "module_id": "65",
+      "name": "ps_accounts",
+      "module_version": "7.0.2",
+      "active": true,
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
+    }
+  },
+  {
+    "action": "upsert",
+    "collection": "modules",
+    "properties": {
+      "module_id": "66",
       "name": "ps_eventbus",
       "module_version": "0.0.0",
       "active": true,
-      "created_at": "2023-12-20T22:56:03+0100",
-      "updated_at": "2023-12-20T22:56:03+0100"
+      "created_at": "2024-10-26T07:33:06+0200",
+      "updated_at": "2024-10-26T07:33:06+0200"
     }
   }
 ]

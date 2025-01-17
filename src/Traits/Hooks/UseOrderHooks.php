@@ -26,6 +26,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Traits\Hooks;
 
+use Order;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
 
@@ -45,12 +46,28 @@ trait UseOrderHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
+        /** @var Order $order */
         $order = $parameters['object'];
 
         if (isset($order->id)) {
-            $synchronizationService->sendLiveSync(Config::COLLECTION_ORDERS, Config::INCREMENTAL_TYPE_UPSERT);
+            $synchronizationService->sendLiveSync(
+                [
+                    Config::COLLECTION_ORDERS,
+                    Config::COLLECTION_ORDER_CART_RULES,
+                    Config::COLLECTION_ORDER_DETAILS,
+                    Config::COLLECTION_ORDER_STATUS_HISTORY,
+                    Config::COLLECTION_ORDER_CARRIERS
+                ],
+                Config::INCREMENTAL_TYPE_UPSERT
+            );
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_ORDERS => $order->id],
+                [
+                    Config::COLLECTION_ORDERS => $order->id,
+                    Config::COLLECTION_ORDER_CART_RULES => $order->id,
+                    Config::COLLECTION_ORDER_DETAILS => $order->id,
+                    Config::COLLECTION_ORDER_STATUS_HISTORY => $order->id,
+                    Config::COLLECTION_ORDER_CARRIERS => $order->getIdOrderCarrier()
+                ],
                 Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
@@ -69,6 +86,7 @@ trait UseOrderHooks
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
+        /** @var Order $order */
         $order = $parameters['object'];
 
         if (isset($order->id)) {
@@ -78,6 +96,7 @@ trait UseOrderHooks
                     Config::COLLECTION_ORDER_CART_RULES,
                     Config::COLLECTION_ORDER_DETAILS,
                     Config::COLLECTION_ORDER_STATUS_HISTORY,
+                    Config::COLLECTION_ORDER_CARRIERS
                 ],
                 Config::INCREMENTAL_TYPE_UPSERT
             );
@@ -87,6 +106,7 @@ trait UseOrderHooks
                     Config::COLLECTION_ORDER_CART_RULES => $order->id,
                     Config::COLLECTION_ORDER_DETAILS => $order->id,
                     Config::COLLECTION_ORDER_STATUS_HISTORY => $order->id,
+                    Config::COLLECTION_ORDER_CARRIERS => $order->getIdOrderCarrier()
                 ],
                 Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
