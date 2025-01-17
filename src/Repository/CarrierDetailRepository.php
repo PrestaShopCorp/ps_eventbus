@@ -59,7 +59,7 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
         ;
 
         if ($withSelecParameters) {
-            $this->query 
+            $this->query
                 ->select('d.id_zone')
                 ->select('
                     CASE
