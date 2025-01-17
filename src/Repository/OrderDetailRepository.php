@@ -56,6 +56,7 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
 
         $this->generateMinimalQuery(self::TABLE_NAME, 'od');
 
+        // minimal query for countable query
         $this->query
             ->where('od.id_shop = ' . $context->shop->id)
             ->innerJoin('orders', 'o', 'od.id_order = o.id_order')
@@ -63,11 +64,12 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
             ->leftJoin('product_shop', 'ps', 'od.product_id = ps.id_product AND ps.id_shop = ' . (int) $context->shop->id)
             ->leftJoin('currency', 'c', 'c.id_currency = o.id_currency')
             ->leftJoin('lang', 'l', 'o.id_lang = l.id_lang')
+            ->select('od.id_order_detail')
+            ->groupBy('od.id_order_detail')
         ;
 
         if ($withSelecParameters) {
             $this->query
-                ->select('od.id_order_detail')
                 ->select('od.id_order')
                 ->select('od.product_id')
                 ->select('od.product_attribute_id')
@@ -97,8 +99,6 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
     public function retrieveContentsForFull($offset, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
-
-        $this->query->groupBy('od.id_order_detail');
 
         $this->query->limit((int) $limit, (int) $offset);
 
@@ -143,12 +143,13 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
      */
     public function countFullSyncContentLeft($offset, $limit, $langIso)
     {
-        $this->generateFullQuery($langIso, false);
+        $this->generateFullQuery($langIso, true);
 
-        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+        $result = $this->db->executeS('
+            SELECT COUNT(*) - ' . (int) $offset . ' AS count
+                FROM (' . $this->query->build() . ') as subquery;
+        ');
 
-        $result = $this->runQuery(true);
-
-        return $result[0]['count'];
+        return is_array($result) ? $result[0]['count'] : 0;
     }
 }
