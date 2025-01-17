@@ -33,25 +33,25 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-trait UseOrderHooks
+trait UseOrderCarrierHooks
 {
     /**
      * @param array<mixed> $parameters
      *
      * @return void
      */
-    public function hookActionObjectOrderAddAfter($parameters)
+    public function hookActionObjectOrderCarrierAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
+        
+        /** @var \OrderCarrier $orderCarrier */
+        $orderCarrier = $parameters['object'];
 
-        /** @var \Order $order */
-        $order = $parameters['object'];
-
-        if (isset($order->id)) {
-            $synchronizationService->sendLiveSync(Config::COLLECTION_ORDERS, Config::INCREMENTAL_TYPE_UPSERT);
+        if (isset($orderCarrier->id)) {
+            $synchronizationService->sendLiveSync(Config::COLLECTION_ORDER_CARRIERS,Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_ORDERS => $order->id],
+                [Config::COLLECTION_ORDER_CARRIERS => $orderCarrier->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
@@ -65,18 +65,18 @@ trait UseOrderHooks
      *
      * @return void
      */
-    public function hookActionObjectOrderUpdateAfter($parameters)
+    public function hookActionObjectOrderCarrierUpdateAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
-        /** @var \Order $order */
-        $order = $parameters['object'];
+        /** @var \OrderCarrier $orderCarrier */
+        $orderCarrier = $parameters['object'];
 
-        if (isset($order->id)) {
-            $synchronizationService->sendLiveSync(Config::COLLECTION_ORDERS, Config::INCREMENTAL_TYPE_UPSERT);
+        if (isset($orderCarrier->id)) {
+            $synchronizationService->sendLiveSync(Config::COLLECTION_ORDER_CARRIERS, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_ORDERS => $order->id],
+                [Config::COLLECTION_ORDER_CARRIERS => $orderCarrier->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
