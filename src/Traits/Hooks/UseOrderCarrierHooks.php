@@ -44,12 +44,12 @@ trait UseOrderCarrierHooks
     {
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
-        
+
         /** @var \OrderCarrier $orderCarrier */
         $orderCarrier = $parameters['object'];
 
         if (isset($orderCarrier->id)) {
-            $synchronizationService->sendLiveSync(Config::COLLECTION_ORDER_CARRIERS,Config::INCREMENTAL_TYPE_UPSERT);
+            $synchronizationService->sendLiveSync(Config::COLLECTION_ORDER_CARRIERS, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_ORDER_CARRIERS => $orderCarrier->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
