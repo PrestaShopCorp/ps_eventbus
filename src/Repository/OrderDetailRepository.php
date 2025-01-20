@@ -124,8 +124,8 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('od.id_order IN(' . implode(',', array_map('intval', $contentIds)) . ')')
-            // ->limit($limit) Sub shop content depend from another, temporary disabled
+            ->where('od.id_order_detail IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->limit($limit)
         ;
 
         return $this->runQuery();
