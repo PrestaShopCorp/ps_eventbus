@@ -54,7 +54,7 @@ class ErrorHandler
             /** @var \ModuleCore $accountsModule */
             $accountsModule = \Module::getInstanceByName('ps_accounts');
             /** @var mixed $accountService */
-            $accountService = $accountsModule->get('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
+            $accountService = $accountsModule->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
 
             /** @var \ModuleCore $eventbusModule */
             $eventbusModule = \Module::getInstanceByName('ps_eventbus');
