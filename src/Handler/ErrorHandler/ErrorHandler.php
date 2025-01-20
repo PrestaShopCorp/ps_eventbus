@@ -51,7 +51,7 @@ class ErrorHandler
     public function __construct($sentryDsn, $sentryEnv)
     {
         try {
-            /** @var \ModuleCore $accountsModule */
+            /** @var false|\ModuleCore $accountsModule */
             $accountsModule = \Module::getInstanceByName('ps_accounts');
             /** @var mixed $accountService */
             $accountService = $accountsModule->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
