@@ -38,7 +38,7 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
      * @param string $langIso
      * @param bool $withSelecParameters
      *
-     * @return mixed
+     * @return void
      *
      * @throws \PrestaShopException
      */
@@ -46,6 +46,7 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
     {
         $this->generateMinimalQuery(self::TABLE_NAME, 'ca');
 
+        // minimal query for countable query
         $this->query
             ->innerJoin('delivery', 'd', 'ca.id_carrier = d.id_carrier AND d.id_zone IS NOT NULL')
             ->innerJoin('country', 'co', 'd.id_zone = co.id_zone AND co.iso_code IS NOT NULL AND co.active = 1')
@@ -53,11 +54,12 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
             ->leftJoin('range_price', 'rp', 'ca.id_carrier = rp.id_carrier AND d.id_range_price = rp.id_range_price')
             ->leftJoin('state', 's', 'co.id_zone = s.id_zone AND co.id_country = s.id_country AND s.active = 1')
             ->leftJoin('configuration', 'conf', 'conf.name = "PS_SHIPPING_METHOD"')
+            ->select('ca.id_reference')
+            ->groupBy('ca.id_reference, co.id_zone, id_range')
         ;
 
         if ($withSelecParameters) {
             $this->query
-                ->select('ca.id_reference')
                 ->select('d.id_zone')
                 ->select('
                     CASE
@@ -111,8 +113,6 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
                     ) AS price
                 ')
             ;
-
-            $this->query->groupBy('ca.id_reference, co.id_zone, id_range');
         }
     }
 
@@ -176,10 +176,10 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
         $this->generateFullQuery($langIso, true);
 
         $result = $this->db->executeS('
-            SELECT (COUNT(*) - ' . (int) $offset . ') AS count
+            SELECT COUNT(*) - ' . (int) $offset . ' AS count
                 FROM (' . $this->query->build() . ') as subquery;
         ');
 
-        return is_array($result) ? $result[0]['count'] : [];
+        return is_array($result) ? $result[0]['count'] : 0;
     }
 }

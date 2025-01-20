@@ -38,7 +38,7 @@ class OrderCarrierRepository extends AbstractRepository implements RepositoryInt
      * @param string $langIso
      * @param bool $withSelecParameters
      *
-     * @return mixed
+     * @return void
      *
      * @throws \PrestaShopException
      */

@@ -38,7 +38,7 @@ class CustomProductCarrierRepository extends AbstractRepository implements Repos
      * @param string $langIso
      * @param bool $withSelecParameters
      *
-     * @return mixed
+     * @return void
      *
      * @throws \PrestaShopException
      */

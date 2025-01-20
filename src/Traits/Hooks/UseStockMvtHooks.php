@@ -33,54 +33,31 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-trait UseOrderHooks
+trait UseStockMvtHooks
 {
     /**
+     * Work Only on 1.6
+     *
      * @param array<mixed> $parameters
      *
      * @return void
      */
-    public function hookActionObjectOrderAddAfter($parameters)
+    public function hookActionObjectStockMvtAddAfter($parameters)
     {
         /** @var SynchronizationService $synchronizationService * */
         $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
-        /** @var \Order $order */
-        $order = $parameters['object'];
+        /** @var \StockMvt $stockMvt */
+        $stockMvt = $parameters['object'];
 
-        if (isset($order->id)) {
-            $synchronizationService->sendLiveSync(Config::COLLECTION_ORDERS, Config::INCREMENTAL_TYPE_UPSERT);
+        if (isset($stockMvt->id)) {
+            $synchronizationService->sendLiveSync(Config::COLLECTION_STOCK_MOVEMENTS, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_ORDERS => $order->id],
+                [Config::COLLECTION_STOCK_MOVEMENTS => $stockMvt->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
-                false
-            );
-        }
-    }
-
-    /**
-     * @param array<mixed> $parameters
-     *
-     * @return void
-     */
-    public function hookActionObjectOrderUpdateAfter($parameters)
-    {
-        /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
-
-        /** @var \Order $order */
-        $order = $parameters['object'];
-
-        if (isset($order->id)) {
-            $synchronizationService->sendLiveSync(Config::COLLECTION_ORDERS, Config::INCREMENTAL_TYPE_UPSERT);
-            $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_ORDERS => $order->id],
-                Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
-                $this->shopId,
-                false
+                true
             );
         }
     }

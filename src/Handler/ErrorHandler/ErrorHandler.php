@@ -51,10 +51,10 @@ class ErrorHandler
     public function __construct($sentryDsn, $sentryEnv)
     {
         try {
-            /** @var \ModuleCore $accountsModule */
+            /** @var false|\ModuleCore $accountsModule */
             $accountsModule = \Module::getInstanceByName('ps_accounts');
             /** @var mixed $accountService */
-            $accountService = $accountsModule->get('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
+            $accountService = $accountsModule->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
 
             /** @var \ModuleCore $eventbusModule */
             $eventbusModule = \Module::getInstanceByName('ps_eventbus');
