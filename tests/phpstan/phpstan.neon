@@ -9,7 +9,7 @@ parameters:
     - ../../ps_eventbus.php
   reportUnmatchedIgnoredErrors: false
   parallel:
-		maximumNumberOfProcesses: 1
+    maximumNumberOfProcesses: 1
   ignoreErrors:
     - '#Call to method getOrRefreshToken\(\) on an unknown class PrestaShop\\AccountsAuth\\Service\\PsAccountsService.#'
     - '#Instantiated class Symfony\\Component\\Cache\\Adapter\\FilesystemAdapter not found.#'
