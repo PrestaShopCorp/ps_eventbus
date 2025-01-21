@@ -9,7 +9,7 @@ export class LiveSyncApiServer extends Server {
       res.status(200).end();
     });
 
-    this.api.get("/notify/:shopId", (req, res) => {
+    this.api.post("/notify/:shopId", (req, res) => {
       const shopId = req.params.shopId;
       if (shopId.startsWith("valid-shopid-")) {
         res.status(201).end();

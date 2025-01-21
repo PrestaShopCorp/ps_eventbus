@@ -1,132 +1,156 @@
 <?php
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to https://devdocs.prestashop.com/ for more information.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-class CartRuleRepository
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
+class CartRuleRepository extends AbstractRepository implements RepositoryInterface
 {
-    /**
-     * @var \Db
-     */
-    private $db;
-
-    public function __construct()
-    {
-        $this->db = \Db::getInstance();
-    }
+    const TABLE_NAME = 'cart_rule';
 
     /**
-     * @return \DbQuery
-     */
-    public function getBaseQuery()
-    {
-        $query = new \DbQuery();
-
-        $query->from('cart_rule', 'cr');
-
-        return $query;
-    }
-
-    /**
-     * @param int $limit
-     * @param int $offset
+     * @param string $langIso
+     * @param bool $withSelecParameters
      *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
+     * @return void
      *
-     * @throws \PrestaShopDatabaseException
+     * @throws \PrestaShopException
      */
-    public function getCartRules($limit, $offset)
+    public function generateFullQuery($langIso, $withSelecParameters)
     {
-        $query = $this->getBaseQuery();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'cr');
 
-        $query->select('cr.id_cart_rule,cr.id_customer, cr.code, cr.date_from AS "from",cr.date_to AS "to",cr.description,cr.quantity');
-        $query->select('cr.quantity_per_user,cr.priority,cr.partial_use,cr.minimum_amount,cr.minimum_amount_tax,cr.minimum_amount_currency');
-        $query->select('cr.minimum_amount_shipping,cr.country_restriction,cr.carrier_restriction,cr.group_restriction,cr.cart_rule_restriction');
-        $query->select('cr.product_restriction,cr.shop_restriction,cr.free_shipping,cr.reduction_percent,cr.reduction_amount,cr.reduction_tax');
-        $query->select('cr.reduction_currency,cr.reduction_product,cr.gift_product,cr.gift_product_attribute');
-        $query->select('cr.highlight,cr.active,cr.date_add AS created_at,cr.date_upd AS updated_at');
+        if ($withSelecParameters) {
+            $this->query
+                ->select('cr.id_cart_rule')
+                ->select('cr.id_customer')
+                ->select('cr.code')
+                ->select('cr.date_from AS "from"')
+                ->select('cr.date_to AS "to"')
+                ->select('cr.description')
+                ->select('cr.quantity')
+                ->select('cr.quantity_per_user')
+                ->select('cr.priority')
+                ->select('cr.partial_use')
+                ->select('cr.minimum_amount')
+                ->select('cr.minimum_amount_tax')
+                ->select('cr.minimum_amount_currency')
+                ->select('cr.minimum_amount_shipping')
+                ->select('cr.country_restriction')
+                ->select('cr.carrier_restriction')
+                ->select('cr.group_restriction')
+                ->select('cr.cart_rule_restriction')
+                ->select('cr.product_restriction')
+                ->select('cr.shop_restriction')
+                ->select('cr.free_shipping')
+                ->select('cr.reduction_percent')
+                ->select('cr.reduction_amount')
+                ->select('cr.reduction_tax')
+                ->select('cr.reduction_currency')
+                ->select('cr.reduction_product')
+                ->select('cr.gift_product')
+                ->select('cr.gift_product_attribute')
+                ->select('cr.highlight')
+                ->select('cr.active')
+                ->select('cr.date_add AS created_at')
+                ->select('cr.date_upd AS updated_at')
+            ;
 
-        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>=')) {
-            $query->select('cr.reduction_exclude_special');
+            if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>=')) {
+                $this->query->select('cr.reduction_exclude_special');
+            }
         }
-
-        $query->limit($limit, $offset);
-
-        return $this->db->executeS($query);
-    }
-
-    /**
-     * @param int $limit
-     * @param array<mixed> $cartRuleIds
-     *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getCartRulesIncremental($limit, $cartRuleIds)
-    {
-        $query = $this->getBaseQuery();
-
-        $query->select('cr.id_cart_rule,cr.id_customer, cr.code, cr.date_from AS "from",cr.date_to AS "to",cr.description,cr.quantity');
-        $query->select('cr.quantity_per_user,cr.priority,cr.partial_use,cr.minimum_amount,cr.minimum_amount_tax,cr.minimum_amount_currency');
-        $query->select('cr.minimum_amount_shipping,cr.country_restriction,cr.carrier_restriction,cr.group_restriction,cr.cart_rule_restriction');
-        $query->select('cr.product_restriction,cr.shop_restriction,cr.free_shipping,cr.reduction_percent,cr.reduction_amount,cr.reduction_tax');
-        $query->select('cr.reduction_currency,cr.reduction_product,cr.gift_product,cr.gift_product_attribute');
-        $query->select('cr.highlight,cr.active,cr.date_add AS created_at,cr.date_upd AS updated_at');
-
-        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>=')) {
-            $query->select('cr.reduction_exclude_special');
-        }
-
-        $query->where('cr.id_cart_rule IN(' . implode(',', array_map('intval', $cartRuleIds)) . ')')
-          ->limit($limit);
-
-        return $this->db->executeS($query);
     }
 
     /**
      * @param int $offset
-     *
-     * @return int
-     */
-    public function getRemainingCartRulesCount($offset)
-    {
-        $query = $this->getBaseQuery();
-
-        $query->select('(COUNT(cr.id_cart_rule) - ' . (int) $offset . ') as count');
-
-        return (int) $this->db->getValue($query);
-    }
-
-    /**
      * @param int $limit
-     * @param int $offset
+     * @param string $langIso
      *
      * @return array<mixed>
      *
+     * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getQueryForDebug($limit, $offset)
+    public function retrieveContentsForFull($offset, $limit, $langIso)
     {
-        $query = $this->getBaseQuery();
+        $this->generateFullQuery($langIso, true);
 
-        $query->select('cr.id_cart_rule,cr.id_customer, cr.code, cr.date_from AS "from",cr.date_to AS "to",cr.description,cr.quantity');
-        $query->select('cr.quantity_per_user,cr.priority,cr.partial_use,cr.minimum_amount,cr.minimum_amount_tax,cr.minimum_amount_currency');
-        $query->select('cr.minimum_amount_shipping,cr.country_restriction,cr.carrier_restriction,cr.group_restriction,cr.cart_rule_restriction');
-        $query->select('cr.product_restriction,cr.shop_restriction,cr.free_shipping,cr.reduction_percent,cr.reduction_amount,cr.reduction_tax');
-        $query->select('cr.reduction_currency,cr.reduction_product,cr.gift_product,cr.gift_product_attribute');
-        $query->select('cr.highlight,cr.active,cr.date_add AS created_at,cr.date_upd AS updated_at');
+        $this->query->limit((int) $limit, (int) $offset);
 
-        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>=')) {
-            $query->select('cr.reduction_exclude_special');
+        return $this->runQuery();
+    }
+
+    /**
+     * @param int $limit
+     * @param array<mixed> $contentIds
+     * @param string $langIso
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
+    {
+        if ($contentIds == []) {
+            return [];
         }
 
-        $query->limit($limit, $offset);
+        $this->generateFullQuery($langIso, true);
 
-        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
+        $this->query
+            ->where('cr.id_cart_rule IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->limit($limit)
+        ;
 
-        return array_merge(
-            (array) $query,
-            ['queryStringified' => $queryStringified]
-        );
+        return $this->runQuery();
+    }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return int
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    {
+        $this->generateFullQuery($langIso, false);
+
+        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+
+        $result = $this->runQuery(true);
+
+        return $result[0]['count'];
     }
 }

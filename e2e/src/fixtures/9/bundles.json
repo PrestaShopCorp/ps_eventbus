@@ -1,0 +1,24 @@
+[
+  {
+    "action": "upsert",
+    "collection": "bundles",
+    "properties": {
+      "id_product": "5",
+      "id_bundle": "15",
+      "id_product_attribute": "19",
+      "quantity": "5",
+      "unique_product_id": "15-0-en"
+    }
+  },
+  {
+    "action": "upsert",
+    "collection": "bundles",
+    "properties": {
+      "id_product": "7",
+      "id_bundle": "15",
+      "id_product_attribute": "0",
+      "quantity": "5",
+      "unique_product_id": "15-0-en"
+    }
+  }
+]

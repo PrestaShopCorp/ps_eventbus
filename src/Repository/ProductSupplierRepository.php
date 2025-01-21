@@ -1,114 +1,127 @@
 <?php
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to https://devdocs.prestashop.com/ for more information.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-class ProductSupplierRepository
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
+class ProductSupplierRepository extends AbstractRepository implements RepositoryInterface
 {
-    /**
-     * @var \Db
-     */
-    private $db;
-
-    public function __construct()
-    {
-        $this->db = \Db::getInstance();
-    }
+    const TABLE_NAME = 'product_supplier';
 
     /**
-     * @return \DbQuery
+     * @param string $langIso
+     * @param bool $withSelecParameters
+     *
+     * @return void
+     *
+     * @throws \PrestaShopException
      */
-    public function getBaseQuery()
+    public function generateFullQuery($langIso, $withSelecParameters)
     {
-        $query = new \DbQuery();
-        $query->from('product_supplier', 'ps');
+        $this->generateMinimalQuery(self::TABLE_NAME, 'ps');
 
-        return $query;
-    }
-
-    /**
-     * @param int $offset
-     * @param int $limit
-     *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getProductSuppliers($offset, $limit)
-    {
-        $query = $this->getBaseQuery();
-
-        $this->addSelectParameters($query);
-
-        $query->limit($limit, $offset);
-
-        return $this->db->executeS($query);
-    }
-
-    /**
-     * @param int $offset
-     *
-     * @return int
-     */
-    public function getRemainingProductSuppliersCount($offset)
-    {
-        $query = $this->getBaseQuery()
-            ->select('(COUNT(ps.id_product_supplier) - ' . (int) $offset . ') as count');
-
-        return (int) $this->db->getValue($query);
-    }
-
-    /**
-     * @param int $limit
-     * @param array<mixed> $productIds
-     *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getProductSuppliersIncremental($limit, $productIds)
-    {
-        $query = $this->getBaseQuery();
-
-        $this->addSelectParameters($query);
-
-        $query->where('ps.id_product IN(' . implode(',', array_map('intval', $productIds)) . ')')
-            ->limit($limit);
-
-        return $this->db->executeS($query);
+        if ($withSelecParameters) {
+            $this->query
+                ->select('ps.id_product_supplier')
+                ->select('ps.id_product')
+                ->select('ps.id_product_attribute')
+                ->select('ps.id_supplier')
+                ->select('ps.product_supplier_reference')
+                ->select('ps.product_supplier_price_te')
+                ->select('ps.id_currency')
+            ;
+        }
     }
 
     /**
      * @param int $offset
      * @param int $limit
+     * @param string $langIso
      *
      * @return array<mixed>
      *
+     * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function getQueryForDebug($offset, $limit)
+    public function retrieveContentsForFull($offset, $limit, $langIso)
     {
-        $query = $this->getBaseQuery();
+        $this->generateFullQuery($langIso, true);
 
-        $this->addSelectParameters($query);
+        $this->query->limit((int) $limit, (int) $offset);
 
-        $query->limit($limit, $offset);
-
-        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
-
-        return array_merge(
-            (array) $query,
-            ['queryStringified' => $queryStringified]
-        );
+        return $this->runQuery();
     }
 
     /**
-     * @param \DbQuery $query
+     * @param int $limit
+     * @param array<mixed> $contentIds
+     * @param string $langIso
      *
-     * @return void
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
      */
-    private function addSelectParameters(\DbQuery $query)
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        $query->select('ps.id_product_supplier, ps.id_product, ps.id_product_attribute, ps.id_supplier, ps.product_supplier_reference');
-        $query->select('ps.product_supplier_price_te, ps.id_currency');
+        if ($contentIds == []) {
+            return [];
+        }
+
+        $this->generateFullQuery($langIso, true);
+
+        $this->query
+            ->where('ps.id_product IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            // ->limit($limit) Sub shop content depend from another, temporary disabled
+        ;
+
+        return $this->runQuery();
+    }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return int
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    {
+        $this->generateFullQuery($langIso, false);
+
+        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+
+        $result = $this->runQuery(true);
+
+        return $result[0]['count'];
     }
 }

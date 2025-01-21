@@ -1,155 +1,148 @@
 <?php
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to https://devdocs.prestashop.com/ for more information.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-class CurrencyRepository
-{
-    /**
-     * @var \Db
-     */
-    private $db;
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
-    public function __construct()
+class CurrencyRepository extends AbstractRepository implements RepositoryInterface
+{
+    const TABLE_NAME = 'currency';
+
+    /**
+     * @param string $langIso
+     * @param bool $withSelecParameters
+     *
+     * @return void
+     *
+     * @throws \PrestaShopException
+     */
+    public function generateFullQuery($langIso, $withSelecParameters)
     {
-        $this->db = \Db::getInstance();
+        $this->generateMinimalQuery(self::TABLE_NAME, 'c');
+
+        if ($this->isCurrencyLangAvailable()) {
+            $this->query->innerJoin('currency_lang', 'cl', 'cl.id_currency = c.id_currency');
+        }
+
+        if ($withSelecParameters) {
+            $this->query
+                ->select('c.id_currency')
+                ->select('c.iso_code')
+                ->select('c.conversion_rate')
+                ->select('c.deleted')
+                ->select('c.active')
+            ;
+
+            if ($this->isCurrencyLangAvailable()) {
+                $this->query->select('cl.name');
+            } else {
+                $this->query->select('\'\' as name');
+            }
+
+            // https://github.com/PrestaShop/PrestaShop/commit/37807f66b40b0cebb365ef952e919be15e9d6b2f#diff-3f41d3529ffdbfd1b994927eb91826a32a0560697025a734cf128a2c8e092a45R124
+            if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.6.0', '>=')) {
+                $this->query->select('c.precision');
+            }
+        }
+    }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function retrieveContentsForFull($offset, $limit, $langIso)
+    {
+        $this->generateFullQuery($langIso, true);
+
+        $this->query->limit((int) $limit, (int) $offset);
+
+        return $this->runQuery();
+    }
+
+    /**
+     * @param int $limit
+     * @param array<mixed> $contentIds
+     * @param string $langIso
+     *
+     * @return array<mixed>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
+    {
+        if ($contentIds == []) {
+            return [];
+        }
+
+        $this->generateFullQuery($langIso, true);
+
+        $this->query
+            ->where('c.id_currency IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->limit($limit)
+        ;
+
+        return $this->runQuery();
+    }
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param string $langIso
+     *
+     * @return int
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    {
+        $this->generateFullQuery($langIso, false);
+
+        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+
+        $result = $this->runQuery(true);
+
+        return $result[0]['count'];
     }
 
     /**
      * @return mixed
      */
-    private function isLangAvailable()
+    private function isCurrencyLangAvailable()
     {
         return defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.6', '>=');
-    }
-
-    /**
-     * @return array<mixed>
-     */
-    public function getCurrenciesIsoCodes()
-    {
-        $currencies = \Currency::getCurrencies();
-
-        return array_map(function ($currency) {
-            return $currency['iso_code'];
-        }, $currencies);
-    }
-
-    /**
-     * @return string
-     */
-    public function getDefaultCurrencyIsoCode()
-    {
-        $currency = \Currency::getDefaultCurrency();
-
-        return $currency instanceof \Currency ? $currency->iso_code : '';
-    }
-
-    /**
-     * @param int $offset
-     * @param int $limit
-     *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getCurrencies($offset, $limit)
-    {
-        $query = $this->getBaseQuery();
-
-        $this->addSelectParameters($query);
-
-        $query->limit($limit, $offset);
-
-        return $this->db->executeS($query);
-    }
-
-    /**
-     * @param int $offset
-     *
-     * @return int
-     */
-    public function getRemainingCurrenciesCount($offset)
-    {
-        $query = $this->getBaseQuery()
-            ->select('(COUNT(c.id_currency) - ' . (int) $offset . ') as count');
-
-        return (int) $this->db->getValue($query);
-    }
-
-    /**
-     * @param int $limit
-     * @param array<mixed> $currencyIds
-     *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getCurrenciesIncremental($limit, $currencyIds)
-    {
-        $query = $this->getBaseQuery();
-
-        $this->addSelectParameters($query);
-
-        $query->where('c.id_currency IN(' . implode(',', array_map('intval', $currencyIds)) . ')')
-            ->limit($limit);
-
-        return $this->db->executeS($query);
-    }
-
-    /**
-     * @return \DbQuery
-     */
-    public function getBaseQuery()
-    {
-        $query = new \DbQuery();
-        $query->from('currency', 'c');
-        if ($this->isLangAvailable()) {
-            $query->innerJoin('currency_lang', 'cl', 'cl.id_currency = c.id_currency');
-        }
-
-        return $query;
-    }
-
-    /**
-     * @param int $offset
-     * @param int $limit
-     *
-     * @return array<mixed>
-     *
-     * @throws \PrestaShopDatabaseException
-     */
-    public function getQueryForDebug($offset, $limit)
-    {
-        $query = $this->getBaseQuery();
-
-        $this->addSelectParameters($query);
-
-        $query->limit($limit, $offset);
-
-        $queryStringified = preg_replace('/\s+/', ' ', $query->build());
-
-        return array_merge(
-            (array) $query,
-            ['queryStringified' => $queryStringified]
-        );
-    }
-
-    /**
-     * @param \DbQuery $query
-     *
-     * @return void
-     */
-    private function addSelectParameters(\DbQuery $query)
-    {
-        if ($this->isLangAvailable()) {
-            $query->select('c.id_currency, cl.name, c.iso_code, c.conversion_rate, c.deleted, c.active');
-        } else {
-            $query->select('c.id_currency, \'\' as name, c.iso_code, c.conversion_rate, c.deleted, c.active');
-        }
-
-        // https://github.com/PrestaShop/PrestaShop/commit/37807f66b40b0cebb365ef952e919be15e9d6b2f#diff-3f41d3529ffdbfd1b994927eb91826a32a0560697025a734cf128a2c8e092a45R124
-        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7.6.0', '>=')) {
-            $query->select('c.precision');
-        }
     }
 }
