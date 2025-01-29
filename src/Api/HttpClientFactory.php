@@ -26,14 +26,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use GuzzleHttp\Psr7\Request;
-use Prestashop\ModuleLibGuzzleAdapter\ClientFactory;
-use Prestashop\ModuleLibGuzzleAdapter\Interfaces\HttpClientInterface;
-use Symfony\Component\HttpClient\Exception\ClientException;
-use Symfony\Component\HttpClient\Exception\ServerException;
-use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -41,14 +33,10 @@ if (!defined('_PS_VERSION_')) {
 class HttpClientFactory
 {
     /**
-     * @var HttpClientInterface|\Symfony\Contracts\HttpClient\HttpClientInterface
+     * @var CurlWrapper
      */
     private $client;
 
-    /**
-     * @var \Symfony\Contracts\HttpClient\ResponseInterface|\Psr\Http\Message\ResponseInterface
-     */
-    private $response;
 
     /**
      * @param int $timeout
@@ -57,94 +45,73 @@ class HttpClientFactory
      */
     public function __construct($timeout)
     {
-        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '9', '>=')) {
-            $this->client = HttpClient::create();
-        } else {
-            $this->client = (new ClientFactory())->getClient([
-                'allow_redirects' => true,
-                'connect_timeout' => 10,
-                'http_errors' => false,
-                'read_timeout' => 30,
-                'timeout' => $timeout,
-            ]);
-        }
+        $this->client = new CurlWrapper();
+        $this->client->setOpt(CURLOPT_TIMEOUT, $timeout);
+        $this->client->setOpt(CURLOPT_CONNECTTIMEOUT, 10);
+        $this->client->setopt(CURLOPT_RETURNTRANSFER, true);
     }
 
     /**
-     * Send HTTP Request
-     *
-     * @param string $method
+     * Send HTTP GET Request
+     * 
      * @param string $endpoint
      * @param array<mixed> $headers
      * @param string $body
      *
-     * @return self
+     * @return CurlWrapper
      */
-    public function sendRequest($method, $endpoint, $headers = null, $body = null)
+    public function get($endpoint, $headers = null, $body = null)
     {
-        $params = [];
-
-        // Define $headers to array for Request() class
-        // Or for Symfony Client
-        if (is_null($headers)) {
-            $headers = [];
-        } else {
-            $params['headers'] = $headers;
-        }
-
-        if (!is_null($body)) {
-            $params['body'] = $body;
-        }
-
-        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '9', '>=')) {
-            $params['headers'] = $headers;
-
-            $this->response = $this->client->request(
-                $method,
-                $endpoint,
-                $params
-            );
-        } else {
-            $this->response = $this->client->sendRequest(
-                new Request(
-                    $method,
-                    $endpoint,
-                    $headers,
-                    $body
-                )
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getContent()
-    {
-        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '9', '>=')) {
-            try {
-                return $this->response->getContent();
-                /* } catch (ClientException $e) {
-                    //return '404 - not found';
-                } catch(ServerException $e) {
-                    //return '500 - Server error'; */
-            } catch (\Exception $e) {
-                return '';
+        if (!is_null($headers)) {
+            foreach($headers as $key => $value) {
+                $this->client->setHeader($key, $value);
             }
-        } else {
-            return $this->response->getBody()->getContents();
         }
+
+        return $this->client->get($endpoint); 
     }
 
     /**
-     * @return int
+     * Send HTTP POST Request
+     * 
+     * @param string $endpoint
+     * @param array<mixed> $headers
+     * @param string $body
+     * @param bool $asJson
      *
-     * @throws TransportExceptionInterface
+     * @return CurlWrapper
      */
-    public function getStatusCode()
+    public function post($endpoint, $headers = null, $body = null, $asJson = null)
     {
-        return $this->response->getStatusCode();
+        if (is_null($asJson)) {
+            $asJson = false;
+        }
+
+        if (!is_null($headers)) {
+            foreach($headers as $key => $value) {
+                $this->client->setHeader($key, $value);
+            }
+        }
+
+        if (!$asJson) {
+            // Créer un fichier temporaire
+            $temp = tmpfile();
+            fwrite($temp, $body);
+            rewind($temp);
+
+            // Sauvegarder le fichier temporaire pour cURL
+            $tempPath = stream_get_meta_data($temp)['uri'];
+            $data = ['file' => new \CURLFile($tempPath, 'text/plain', 'file')];
+        } else {
+            $data = $body;
+        }
+
+        $query = $this->client->post($endpoint, $data, $asJson);
+
+        if (!$asJson) {
+            fclose($temp);
+        }
+
+        return $query;
     }
 }

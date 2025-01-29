@@ -92,40 +92,22 @@ class CollectorApiClient
 
         $url = $this->collectorApiUrl . '/upload/' . $jobId;
 
-        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '9', '>=')) {
-            $contentSize = strlen($data);
-
-            $formData = new FormDataPart([
-                'file' => new DataPart($data, 'file', 'text/plain'),
-            ]);
-
-            $boundary = $formData->getPreparedHeaders()->getHeaderParameter('content-type', 'boundary');
-        } else {
-            $file = new PostFileApi('file', $data, 'file');
-            $contentSize = $file->getContent()->getSize();
-
-            $boundary = 'ps_eventbus_boundary';
-            $formData = new MultipartBody([], [$file], $boundary);
-        }
-
-        $response = $client->sendRequest(
-            'POST',
+        $request = $client->post(
             $url,
             [
                 'Accept' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->jwt,
-                'Content-Length' => $contentSize ? (string) $contentSize : '0',
-                'Content-Type' => 'multipart/form-data; boundary=' . $boundary,
                 'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
                 'User-Agent' => 'ps-eventbus/' . $this->module->version,
             ],
-            version_compare(_PS_VERSION_, '9', '>=') ? $formData->bodyToString() : $formData->getContents()
+            $data,
+            false
         );
 
         return [
-            'status' => substr((string) $response->getStatusCode(), 0, 1) === '2',
-            'httpCode' => $response->getStatusCode(),
-            'body' => json_decode($response->getContent(), true),
+            'status' => substr((string) $request->getHttpStatus(), 0, 1) === '2',
+            'httpCode' => $request->getHttpStatus(),
+            'body' => $request->getResponse(),
             'upload_url' => $url,
         ];
     }

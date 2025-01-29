@@ -72,8 +72,7 @@ class SyncApiClient
     {
         $client = new HttpClientFactory(3);
 
-        $response = $client->sendRequest(
-            'GET',
+        $request = $client->get(
             $this->syncApiUrl . '/job/' . $jobId,
             [
                 'Accept' => 'application/json',
@@ -83,8 +82,8 @@ class SyncApiClient
         );
 
         return [
-            'status' => substr((string) $response->getStatusCode(), 0, 1) === '2',
-            'httpCode' => $response->getStatusCode(),
+            'status' => substr((string) $request->getHttpStatus(), 0, 1) === '2',
+            'httpCode' => $request->getHttpStatus(),
         ];
     }
 }

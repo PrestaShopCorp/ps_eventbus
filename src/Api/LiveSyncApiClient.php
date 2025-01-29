@@ -84,8 +84,7 @@ class LiveSyncApiClient
 
         $client = new HttpClientFactory(3);
 
-        $response = $client->sendRequest(
-            'POST',
+        $request = $client->post(
             $this->liveSyncApiUrl . '/notify/' . $this->shopId,
             [
                 'Accept' => 'application/json',
@@ -93,13 +92,14 @@ class LiveSyncApiClient
                 'User-Agent' => 'ps-eventbus/' . $this->module->version,
                 'Content-Type' => 'application/json',
             ],
-            '{"shopContents": ["' . $kebabCasedShopContent . '"], "action": "' . $action . '"}'
+            '{"shopContents": ["' . $kebabCasedShopContent . '"], "action": "' . $action . '"}',
+            true
         );
 
         return [
-            'status' => substr((string) $response->getStatusCode(), 0, 1) === '2',
-            'httpCode' => $response->getStatusCode(),
-            'body' => $response->getContent(),
+            'status' => substr((string) $request->getHttpStatus(), 0, 1) === '2',
+            'httpCode' => $request->getHttpStatus(),
+            'body' => $request->getResponse(),
         ];
     }
 }
