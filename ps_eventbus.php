@@ -46,13 +46,6 @@ class Ps_eventbus extends Module
     /**
      * @var string
      */
-    const VERSION = '0.0.0';
-
-    const DEFAULT_ENV = '';
-
-    /**
-     * @var string
-     */
     public $version;
 
     /**
