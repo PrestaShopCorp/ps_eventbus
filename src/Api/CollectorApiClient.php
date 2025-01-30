@@ -88,7 +88,8 @@ class CollectorApiClient
      */
     public function upload($jobId, $data, $startTime, $fullSyncRequested = null)
     {
-        $client = new HttpClientFactory($this->getRemainingTime($startTime));
+        $client = HttpClient::getInstance();
+        $client->setTimeout($this->getRemainingTime($startTime));
 
         $url = $this->collectorApiUrl . '/upload/' . $jobId;
 

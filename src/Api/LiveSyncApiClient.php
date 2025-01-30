@@ -82,7 +82,8 @@ class LiveSyncApiClient
         // shop content send to the API must be in kebab-case
         $kebabCasedShopContent = str_replace('_', '-', $shopContent);
 
-        $client = new HttpClientFactory(3);
+        $client = HttpClient::getInstance();
+        $client->setTimeout(3);
 
         $request = $client->post(
             $this->liveSyncApiUrl . '/notify/' . $this->shopId,

@@ -1,59 +1,41 @@
 <?php
 /**
- * The MIT License (MIT)
- * 
- * Copyright (c) 2013 php-mod
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to https://devdocs.prestashop.com/ for more information.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-/**
- * An object-oriented wrapper of the PHP cURL extension.
- *
- * This library requires to have the php cURL extensions installed:
- * https://php.net/manual/curl.setup.php
- *
- * Example of making a get request with parameters:
- *
- * ```php
- * $curl = new Curl\Curl();
- * $curl->get('http://www.example.com/search', array(
- *     'q' => 'keyword',
- * ));
- * ```
- *
- * Example post request with post data:
- *
- * ```php
- * $curl = new Curl\Curl();
- * $curl->post('http://www.example.com/login/', array(
- *     'username' => 'myusername',
- *     'password' => 'mypassword',
- * ));
- * ```
- *
- * @see https://php.net/manual/curl.setup.php
- */
-class CurlWrapper
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
+class HttpClient
 {
-    // The HTTP authentication method(s) to use.
+    /**
+     * @var HttpClient
+     */
+    private static $instance = null;
 
     /**
      * @var string Type AUTH_BASIC
@@ -90,9 +72,9 @@ class CurlWrapper
      */
     const USER_AGENT = 'PHP Curl/2.3 (+https://github.com/php-mod/curl)';
 
-    private $_cookies = array();
+    private $_cookies = [];
 
-    private $_headers = array();
+    private $_headers = [];
 
     /**
      * @var resource Contains the curl resource created by `curl_init()` function
@@ -153,7 +135,7 @@ class CurlWrapper
     /**
      * @var string|array TBD (ensure type) Contains the response header information
      */
-    public $response_headers = array();
+    public $response_headers = [];
 
     /**
      * @var string|false|null Contains the response from the curl request
@@ -165,21 +147,34 @@ class CurlWrapper
      */
     protected $response_header_continue = false;
 
-    /**
-     * Constructor ensures the available curl extension is loaded.
-     *
-     * @throws \RuntimeException
-     */
-    public function __construct()
-    {
-        if (!extension_loaded('curl')) {
-            throw new \RuntimeException('The cURL extensions is not loaded, make sure you have installed the cURL extension: https://php.net/manual/curl.setup.php');
-        }
-
+    // Disable instantiation
+    private function __construct() {
         $this->init();
     }
 
-    // private methods
+    // Disable cloning
+    private function __clone() {}
+
+    // Unserialization of singleton is forbidden
+    public function __wakeup() {
+        throw new \Exception("Cannot unserialize a singleton.");
+    }
+
+    /**
+     * Get the instance of the HttpClient.
+     *
+     * @return HttpClient 
+     */
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        } else {
+            self::$instance->reset();
+        }
+        
+        return self::$instance;
+    }
 
     /**
      * Initializer for the curl resource.
@@ -195,6 +190,21 @@ class CurlWrapper
         $this->setOpt(CURLOPT_HEADER, false);
         $this->setOpt(CURLOPT_RETURNTRANSFER, true);
         $this->setOpt(CURLOPT_HEADERFUNCTION, array($this, 'addResponseHeaderLine'));
+        $this->setOpt(CURLOPT_CONNECTTIMEOUT, 10);
+
+        return $this;
+    }
+
+    /**
+     * Set the timeout for the current request.
+     *
+     * @param mixed $timeout 
+     * @return $this 
+     */
+    public function setTimeout($timeout)
+    {
+        $this->setOpt(CURLOPT_TIMEOUT, $timeout);
+        
         return $this;
     }
 
@@ -221,8 +231,6 @@ class CurlWrapper
         return strlen($header_line);
     }
 
-    // protected methods
-
     /**
      * Execute the curl request based on the respective settings.
      *
@@ -230,7 +238,7 @@ class CurlWrapper
      */
     protected function exec()
     {
-        $this->response_headers = array();
+        $this->response_headers = [];
         $this->response = curl_exec($this->curl);
         $this->curl_error_code = curl_errno($this->curl);
         $this->curl_error_message = curl_error($this->curl);
@@ -278,7 +286,7 @@ class CurlWrapper
      * @param array $data The data to be sent.
      * @return void
      */
-    protected function prepareJsonPayload(array $data)
+    protected function prepareJsonPayload($data)
     {
         $this->setOpt(CURLOPT_POST, true);
         $this->setOpt(CURLOPT_POSTFIELDS, json_encode($data));
@@ -303,36 +311,29 @@ class CurlWrapper
         $this->setOpt(CURLOPT_HTTPAUTH, $httpauth);
     }
 
-    // public methods
-
-    /**
-     * @deprecated calling exec() directly is discouraged
-     */
-    public function _exec()
-    {
-        return $this->exec();
-    }
-
-    // functions
-
     /**
      * Make a get request with optional data.
      *
      * The get request has no body data, the data will be correctly added to the $url with the http_build_query() method.
      *
      * @param string $url  The url to make the get request for
+     * @param array  $headers Optional headers to pass to the url
      * @param array  $data Optional arguments who are part of the url
      * @return self
      */
-    public function get($url, $data = array())
+    public function get($url, $headers, $data = null)
     {
-        if (count($data) > 0) {
+        $this->setHeaders($headers);
+
+        if (!is_null($data) && is_array($data) && count($data) > 0) {
             $this->setOpt(CURLOPT_URL, $url.'?'.http_build_query($data));
         } else {
             $this->setOpt(CURLOPT_URL, $url);
         }
+
         $this->setOpt(CURLOPT_HTTPGET, true);
         $this->exec();
+
         return $this;
     }
 
@@ -340,20 +341,41 @@ class CurlWrapper
      * Make a post request with optional post data.
      *
      * @param string $url  The url to make the post request
+     * @param array $headers Optional headers to pass to the url
      * @param array|object|string $data Post data to pass to the url
      * @param boolean $asJson Whether the data should be passed as json or not. {@insce 2.2.1}
      * @return self
      */
-    public function post($url, $data = array(), $asJson = false)
+    public function post($url, $headers = null, $data = null, $asJson = null)
     {
-        $this->setOpt(CURLOPT_URL, $url);
-        if ($asJson) {
-            $this->prepareJsonPayload($data);
-        } else {
-            $this->preparePayload($data);
+        if (is_null($asJson)) {
+            $asJson = false;
         }
+
+        $this->setHeaders($headers);
+        $this->setOpt(CURLOPT_URL, $url);
+
+        if (!$asJson) {
+            // Créer un fichier temporaire
+            $temp = tmpfile();
+            fwrite($temp, $data);
+            rewind($temp);
+
+            // Sauvegarder le fichier temporaire pour cURL
+            $tempPath = stream_get_meta_data($temp)['uri'];
+            $payload = ['file' => new \CURLFile($tempPath, 'text/plain', 'file')];
+            $this->preparePayload($payload);
+        } else {
+            $payload = $data;
+            $this->prepareJsonPayload($payload);
+        }
+
         $this->exec();
-        
+
+        if (!$asJson) {
+            fclose($temp);
+        }
+
         return $this;
     }
 
@@ -367,9 +389,17 @@ class CurlWrapper
      * @param bool $payload Whether the data should be transmitted trough payload or as get parameters of the string
      * @return self
      */
-    public function put($url, $data = array(), $payload = false)
+    public function put($url, $data = null, $payload = null)
     {
-        if (! empty($data)) {
+        if (is_null($data)) {
+            $data = [];
+        }
+
+        if (is_null($payload)) {
+            $payload = false;
+        }
+
+        if (!empty($data)) {
             if ($payload === false) {
                 $url .= '?'.http_build_query($data);
             } else {
@@ -393,9 +423,17 @@ class CurlWrapper
      * @param bool $payload Whether the data should be transmitted trough payload or as get parameters of the string
      * @return self
      */
-    public function patch($url, $data = array(), $payload = false)
+    public function patch($url, $data = null, $payload = null)
     {
-        if (! empty($data)) {
+        if (is_null($data)) {
+            $data = [];
+        }
+
+        if (is_null($payload)) {
+            $payload = false;
+        }
+
+        if (!empty($data)) {
             if ($payload === false) {
                 $url .= '?'.http_build_query($data);
             } else {
@@ -417,9 +455,17 @@ class CurlWrapper
      * @param bool $payload Whether the data should be transmitted trough payload or as get parameters of the string
      * @return self
      */
-    public function delete($url, $data = array(), $payload = false)
+    public function delete($url, $data = null, $payload = null)
     {
-        if (! empty($data)) {
+        if (is_null($data)) {
+            $data = [];
+        }
+
+        if (is_null($payload)) {
+            $payload = false;
+        }
+
+        if (!empty($data)) {
             if ($payload === false) {
                 $url .= '?'.http_build_query($data);
             } else {
@@ -430,10 +476,9 @@ class CurlWrapper
         $this->setOpt(CURLOPT_URL, $url);
         $this->setOpt(CURLOPT_CUSTOMREQUEST, 'DELETE');
         $this->exec();
+
         return $this;
     }
-
-    // setters
 
     /**
      * Pass basic auth data.
@@ -458,24 +503,28 @@ class CurlWrapper
     }
 
     /**
-     * Provide optional header information.
+     * Provide optional headers information.
      *
-     * In order to pass optional headers by key value pairing:
+     * In order to pass optional headers array with key value pairing:
      *
      * ```php
      * $curl = new Curl();
-     * $curl->setHeader('X-Requested-With', 'XMLHttpRequest');
+     * $curl->setHeaders(['X-Requested-With', 'XMLHttpRequest']);
      * $curl->get('http://example.com/request.php');
      * ```
      *
-     * @param string $key   The header key
-     * @param string $value The value for the given header key
+     * @param array $headers The headers to pass to the current request
      * @return self
      */
-    public function setHeader($key, $value)
+    public function setHeaders($headers)
     {
-        $this->_headers[$key] = $key.': '.$value;
-        $this->setOpt(CURLOPT_HTTPHEADER, array_values($this->_headers));
+        if (!is_null($headers)) {
+            foreach($headers as $key => $value) {
+                $this->_headers[$key] = $key.': '.$value;
+                $this->setOpt(CURLOPT_HTTPHEADER, array_values($this->_headers));
+            }
+        }
+
         return $this;
     }
 
@@ -496,18 +545,6 @@ class CurlWrapper
     public function setUserAgent($useragent)
     {
         $this->setOpt(CURLOPT_USERAGENT, $useragent);
-        return $this;
-    }
-
-    /**
-     * @deprecated Call setReferer() instead
-     *
-     * @param $referrer
-     * @return self
-     */
-    public function setReferrer($referrer)
-    {
-        $this->setReferer($referrer);
         return $this;
     }
 
@@ -589,21 +626,14 @@ class CurlWrapper
      * @param bool $on
      * @return self
      */
-    public function setVerbose($on = true)
+    public function setVerbose($on = null)
     {
+        if (is_null($on)) {
+            $on = true;
+        }
+
         $this->setOpt(CURLOPT_VERBOSE, $on);
         return $this;
-    }
-
-    /**
-     * @deprecated Call setVerbose() instead
-     *
-     * @param bool $on
-     * @return self
-     */
-    public function verbose($on = true)
-    {
-        return $this->setVerbose($on);
     }
 
     /**
@@ -615,8 +645,8 @@ class CurlWrapper
     public function reset()
     {
         $this->close();
-        $this->_cookies = array();
-        $this->_headers = array();
+        $this->_cookies = [];
+        $this->_headers = [];
         $this->error = false;
         $this->error_code = 0;
         $this->error_message = null;
@@ -627,7 +657,7 @@ class CurlWrapper
         $this->http_status_code = 0;
         $this->http_error_message = null;
         $this->request_headers = null;
-        $this->response_headers = array();
+        $this->response_headers = [];
         $this->response = false;
         $this->init();
         return $this;
@@ -732,7 +762,7 @@ class CurlWrapper
      */
     public function getResponseHeaders($headerKey = null)
     {
-        $headers = array();
+        $headers = [];
         $headerKey = strtolower($headerKey);
         
         foreach ($this->response_headers as $header) {

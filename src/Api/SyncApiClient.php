@@ -70,7 +70,9 @@ class SyncApiClient
      */
     public function validateJobId($jobId)
     {
-        $client = new HttpClientFactory(3);
+
+        $client = HttpClient::getInstance();
+        $client->setTimeout(3);
 
         $request = $client->get(
             $this->syncApiUrl . '/job/' . $jobId,
