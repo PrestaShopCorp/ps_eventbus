@@ -26,22 +26,28 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use PrestaShop\Module\PsEventbus\Api\Post\MultipartBody;
-use PrestaShop\Module\PsEventbus\Api\Post\PostFileApi;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
-use Symfony\Component\Mime\Part\DataPart;
-use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class CollectorApiClient
+class CloudSyncClient
 {
     /**
      * @var string
      */
     private $collectorApiUrl;
+
+    /**
+     * @var string
+     */
+    private $liveSyncApiUrl;
+
+    /**
+     * @var string
+     */
+    private $syncApiUrl;
 
     /**
      * @var \Ps_eventbus
@@ -56,6 +62,13 @@ class CollectorApiClient
     private $jwt;
 
     /**
+     * Accounts Shop UUID
+     *
+     * @var string
+     */
+    private $shopId;
+
+    /**
      * Default maximum execution time in seconds
      *
      * @see https://www.php.net/manual/en/info.configuration.php#ini.max-execution-time
@@ -66,14 +79,20 @@ class CollectorApiClient
 
     /**
      * @param string $collectorApiUrl
+     * @param string $liveSyncApiUrl
+     * @param string $syncApiUrl
      * @param \Ps_eventbus $module
      * @param PsAccountsAdapterService $psAccountsAdapterService
      */
-    public function __construct($collectorApiUrl, \Ps_eventbus $module, PsAccountsAdapterService $psAccountsAdapterService)
+    public function __construct($collectorApiUrl, $liveSyncApiUrl, $syncApiUrl, \Ps_eventbus $module, PsAccountsAdapterService $psAccountsAdapterService)
     {
         $this->module = $module;
         $this->jwt = $psAccountsAdapterService->getOrRefreshToken();
+        $this->shopId = $psAccountsAdapterService->getShopUuid();
+
         $this->collectorApiUrl = $collectorApiUrl;
+        $this->liveSyncApiUrl = $liveSyncApiUrl;
+        $this->syncApiUrl = $syncApiUrl;
     }
 
     /**
@@ -113,6 +132,65 @@ class CollectorApiClient
         ];
     }
 
+        /**
+     * @param string $shopContent
+     * @param string $action
+     *
+     * @return array<mixed>
+     */
+    public function liveSync($shopContent, $action)
+    {
+        // shop content send to the API must be in kebab-case
+        $kebabCasedShopContent = str_replace('_', '-', $shopContent);
+
+        $client = HttpClient::getInstance();
+        $client->setTimeout(3);
+
+        $request = $client->post(
+            $this->liveSyncApiUrl . '/notify/' . $this->shopId,
+            [
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer ' . $this->jwt,
+                'User-Agent' => 'ps-eventbus/' . $this->module->version,
+                'Content-Type' => 'application/json',
+            ],
+            '{"shopContents": ["' . $kebabCasedShopContent . '"], "action": "' . $action . '"}',
+            true
+        );
+
+        return [
+            'status' => substr((string) $request->getHttpStatus(), 0, 1) === '2',
+            'httpCode' => $request->getHttpStatus(),
+            'body' => $request->getResponse(),
+        ];
+    }
+
+    /**
+     * @param string $jobId
+     *
+     * @return array<mixed>
+     */
+    public function validateJobId($jobId)
+    {
+
+        $client = HttpClient::getInstance();
+        $client->setTimeout(3);
+
+        $request = $client->get(
+            $this->syncApiUrl . '/job/' . $jobId,
+            [
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer ' . $this->jwt,
+                'User-Agent' => 'ps-eventbus/' . $this->module->version,
+            ]
+        );
+
+        return [
+            'status' => substr((string) $request->getHttpStatus(), 0, 1) === '2',
+            'httpCode' => $request->getHttpStatus(),
+        ];
+    }
+
     /**
      * Get the remaining time of execution for the request. We keep a margin
      * of 1.5s to parse and answser our own client
@@ -130,7 +208,7 @@ class CollectorApiClient
          */
         $maxExecutionTime = (int) ini_get('max_execution_time');
         if ($maxExecutionTime <= 0) {
-            return CollectorApiClient::$DEFAULT_MAX_EXECUTION_TIME;
+            return CloudSyncClient::$DEFAULT_MAX_EXECUTION_TIME;
         }
         /*
          * An extra 2s to be arbitrary substracted
@@ -149,7 +227,7 @@ class CollectorApiClient
 
         // A protection that might never be used, but who knows
         if ($remainingTime <= 0) {
-            return CollectorApiClient::$DEFAULT_MAX_EXECUTION_TIME;
+            return CloudSyncClient::$DEFAULT_MAX_EXECUTION_TIME;
         }
 
         return $remainingTime;

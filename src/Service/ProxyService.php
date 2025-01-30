@@ -28,6 +28,7 @@ namespace PrestaShop\Module\PsEventbus\Service;
 
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Ring\Exception\ConnectException;
+use PrestaShop\Module\PsEventbus\Api\CloudSyncClient;
 use PrestaShop\Module\PsEventbus\Api\CollectorApiClient;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
@@ -40,9 +41,9 @@ if (!defined('_PS_VERSION_')) {
 class ProxyService
 {
     /**
-     * @var CollectorApiClient
+     * @var CloudSyncClient
      */
-    private $eventBusProxyClient;
+    private $cloudSyncClient;
     /**
      * @var JsonFormatter
      */
@@ -52,9 +53,9 @@ class ProxyService
      */
     private $errorHandler;
 
-    public function __construct(CollectorApiClient $eventBusProxyClient, JsonFormatter $jsonFormatter, ErrorHandler $errorHandler)
+    public function __construct(CloudSyncClient $cloudSyncClient, JsonFormatter $jsonFormatter, ErrorHandler $errorHandler)
     {
-        $this->eventBusProxyClient = $eventBusProxyClient;
+        $this->cloudSyncClient = $cloudSyncClient;
         $this->jsonFormatter = $jsonFormatter;
         $this->errorHandler = $errorHandler;
     }
@@ -74,7 +75,7 @@ class ProxyService
         $dataJson = $this->jsonFormatter->formatNewlineJsonString($data);
 
         try {
-            return $this->eventBusProxyClient->upload($jobId, $dataJson, $scriptStartTime, $isFull);
+            return $this->cloudSyncClient->upload($jobId, $dataJson, $scriptStartTime, $isFull);
         } catch (ClientException $exception) {
             $this->errorHandler->handle($exception);
 

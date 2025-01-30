@@ -26,7 +26,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient;
+use PrestaShop\Module\PsEventbus\Api\CloudSyncClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
@@ -43,9 +43,9 @@ if (!defined('_PS_VERSION_')) {
 class SynchronizationService
 {
     /**
-     * @var LiveSyncApiClient
+     * @var CloudSyncClient
      */
-    private $liveSyncApiClient;
+    private $cloudSyncClient;
 
     /**
      * @var SyncRepository
@@ -78,7 +78,7 @@ class SynchronizationService
     private $errorHandler;
 
     public function __construct(
-        LiveSyncApiClient $liveSyncApiClient,
+        CloudSyncClient $cloudSyncClient,
         SyncRepository $syncRepository,
         IncrementalSyncRepository $incrementalSyncRepository,
         LiveSyncRepository $liveSyncRepository,
@@ -86,7 +86,7 @@ class SynchronizationService
         ProxyService $proxyService,
         ErrorHandler $errorHandler
     ) {
-        $this->liveSyncApiClient = $liveSyncApiClient;
+        $this->cloudSyncClient = $cloudSyncClient;
         $this->syncRepository = $syncRepository;
         $this->incrementalSyncRepository = $incrementalSyncRepository;
         $this->liveSyncRepository = $liveSyncRepository;
@@ -245,7 +245,7 @@ class SynchronizationService
         foreach ($contents as $content) {
             if ($this->isFullSyncDone($content, $defaultIsoCode) && $this->debounceLiveSync($content)) {
                 try {
-                    $this->liveSyncApiClient->liveSync($content, $actionType);
+                    $this->cloudSyncClient->liveSync($content, $actionType);
                 } catch (\Exception $exception) {
                     $this->errorHandler->handle($exception);
                 }

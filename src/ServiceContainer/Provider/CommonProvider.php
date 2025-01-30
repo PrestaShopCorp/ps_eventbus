@@ -20,7 +20,7 @@
 
 namespace PrestaShop\Module\PsEventbus\ServiceContainer\Provider;
 
-use PrestaShop\Module\PsEventbus\Api\CollectorApiClient;
+use PrestaShop\Module\PsEventbus\Api\CloudSyncClient;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
@@ -63,7 +63,7 @@ class CommonProvider implements IServiceProvider
         });
         $container->registerProvider(ProxyService::class, static function () use ($container) {
             return new ProxyService(
-                $container->get(CollectorApiClient::class),
+                $container->get(CloudSyncClient::class),
                 $container->get(JsonFormatter::class),
                 $container->get(ErrorHandler::class)
             );

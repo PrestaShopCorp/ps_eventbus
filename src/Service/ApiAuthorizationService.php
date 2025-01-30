@@ -26,7 +26,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use PrestaShop\Module\PsEventbus\Api\SyncApiClient;
+use PrestaShop\Module\PsEventbus\Api\CloudSyncClient;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
@@ -41,8 +41,8 @@ class ApiAuthorizationService
     /** @var SyncRepository */
     private $syncRepository;
 
-    /** @var SyncApiClient */
-    private $syncApiClient;
+    /** @var CloudSyncClient */
+    private $cloudSyncClient;
 
     /** @var PsAccountsAdapterService */
     private $psAccountsAdapterService;
@@ -52,12 +52,12 @@ class ApiAuthorizationService
 
     public function __construct(
         SyncRepository $syncRepository,
-        SyncApiClient $syncApiClient,
+        CloudSyncClient $cloudSyncClient,
         PsAccountsAdapterService $psAccountsAdapterService,
         ErrorHandler $errorHandler
     ) {
         $this->syncRepository = $syncRepository;
-        $this->syncApiClient = $syncApiClient;
+        $this->cloudSyncClient = $cloudSyncClient;
         $this->psAccountsAdapterService = $psAccountsAdapterService;
         $this->errorHandler = $errorHandler;
     }
@@ -127,7 +127,7 @@ class ApiAuthorizationService
         }
 
         // Check the jobId validity to avoid Denial Of Service
-        $jobValidationResponse = $this->syncApiClient->validateJobId($jobId);
+        $jobValidationResponse = $this->cloudSyncClient->validateJobId($jobId);
 
         if ((int) $jobValidationResponse['httpCode'] !== 201) {
             return false;
