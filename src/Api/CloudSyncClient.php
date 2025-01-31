@@ -26,6 +26,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
+use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 
 if (!defined('_PS_VERSION_')) {
@@ -53,6 +54,11 @@ class CloudSyncClient
      * @var \Ps_eventbus
      */
     private $module;
+
+    /**
+     * @var JsonFormatter
+     */
+    private $jsonFormatter;
 
     /**
      * Accounts JSON Web token
@@ -83,12 +89,21 @@ class CloudSyncClient
      * @param string $syncApiUrl
      * @param \Ps_eventbus $module
      * @param PsAccountsAdapterService $psAccountsAdapterService
+     * @param JsonFormatter $jsonFormatter
      */
-    public function __construct($collectorApiUrl, $liveSyncApiUrl, $syncApiUrl, \Ps_eventbus $module, PsAccountsAdapterService $psAccountsAdapterService)
+    public function __construct(
+        $collectorApiUrl,
+        $liveSyncApiUrl,
+        $syncApiUrl,
+        \Ps_eventbus $module,
+        PsAccountsAdapterService $psAccountsAdapterService,
+        JsonFormatter $jsonFormatter
+    )
     {
         $this->module = $module;
         $this->jwt = $psAccountsAdapterService->getOrRefreshToken();
         $this->shopId = $psAccountsAdapterService->getShopUuid();
+        $this->jsonFormatter = $jsonFormatter;
 
         $this->collectorApiUrl = $collectorApiUrl;
         $this->liveSyncApiUrl = $liveSyncApiUrl;
@@ -120,7 +135,7 @@ class CloudSyncClient
                 'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
                 'User-Agent' => 'ps-eventbus/' . $this->module->version,
             ],
-            $data,
+            $this->jsonFormatter->formatNewlineJsonString($data),
             false
         );
 

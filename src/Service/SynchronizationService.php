@@ -68,11 +68,6 @@ class SynchronizationService
     private $languagesService;
 
     /**
-     * @var ProxyService
-     */
-    private $proxyService;
-
-    /**
      * @var ErrorHandler
      */
     private $errorHandler;
@@ -83,7 +78,6 @@ class SynchronizationService
         IncrementalSyncRepository $incrementalSyncRepository,
         LiveSyncRepository $liveSyncRepository,
         LanguagesService $languagesService,
-        ProxyService $proxyService,
         ErrorHandler $errorHandler
     ) {
         $this->cloudSyncClient = $cloudSyncClient;
@@ -91,7 +85,6 @@ class SynchronizationService
         $this->incrementalSyncRepository = $incrementalSyncRepository;
         $this->liveSyncRepository = $liveSyncRepository;
         $this->languagesService = $languagesService;
-        $this->proxyService = $proxyService;
         $this->errorHandler = $errorHandler;
     }
 
@@ -137,7 +130,7 @@ class SynchronizationService
         CommonService::convertDateFormat($data);
 
         if (!empty($data)) {
-            $response = $this->proxyService->upload($jobId, $data, $startTime, true);
+            $response = $this->cloudSyncClient->upload($jobId, $data, $startTime, true);
 
             if ($response['httpCode'] == 201) {
                 $offset += $limit;

@@ -64,7 +64,6 @@ use PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService;
 use PrestaShop\Module\PsEventbus\Service\ApiHealthCheckService;
 use PrestaShop\Module\PsEventbus\Service\ApiShopContentService;
 use PrestaShop\Module\PsEventbus\Service\PresenterService;
-use PrestaShop\Module\PsEventbus\Service\ProxyService;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\BundlesService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\CarrierDetailsService;
@@ -285,7 +284,6 @@ class ServiceProvider implements IServiceProvider
                 $container->get(IncrementalSyncRepository::class),
                 $container->get(LiveSyncRepository::class),
                 $container->get(LanguagesService::class),
-                $container->get(ProxyService::class),
                 $container->get(ErrorHandler::class)
             );
         });

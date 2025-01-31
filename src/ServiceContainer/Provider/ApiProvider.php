@@ -21,6 +21,7 @@
 namespace PrestaShop\Module\PsEventbus\ServiceContainer\Provider;
 
 use PrestaShop\Module\PsEventbus\Api\CloudSyncClient;
+use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 use PrestaShop\Module\PsEventbus\ServiceContainer\Contract\IServiceProvider;
 use PrestaShop\Module\PsEventbus\ServiceContainer\ServiceContainer;
@@ -40,7 +41,8 @@ class ApiProvider implements IServiceProvider
                 $container->getParameter('ps_eventbus.live_sync_api_url'),
                 $container->getParameter('ps_eventbus.sync_api_url'),
                 $container->get('ps_eventbus.module'),
-                $container->get(PsAccountsAdapterService::class)
+                $container->get(PsAccountsAdapterService::class),
+                $container->get(JsonFormatter::class)
             );
         });
     }
