@@ -132,7 +132,7 @@ class CloudSyncClient
         ];
     }
 
-        /**
+    /**
      * @param string $shopContent
      * @param string $action
      *
@@ -172,7 +172,6 @@ class CloudSyncClient
      */
     public function validateJobId($jobId)
     {
-
         $client = HttpClient::getInstance();
         $client->setTimeout(3);
 

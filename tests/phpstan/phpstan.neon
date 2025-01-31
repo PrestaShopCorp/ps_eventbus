@@ -7,6 +7,8 @@ parameters:
     - ../../controllers
     - ../../config
     - ../../ps_eventbus.php
+  excludePaths:
+    - ../../src/Api/HttpClient.php
   reportUnmatchedIgnoredErrors: false
   ignoreErrors:
     - '#Call to method getOrRefreshToken\(\) on an unknown class PrestaShop\\AccountsAuth\\Service\\PsAccountsService.#'
