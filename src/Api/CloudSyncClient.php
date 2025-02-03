@@ -51,6 +51,11 @@ class CloudSyncClient
     private $syncApiUrl;
 
     /**
+     * @var HttpClient
+     */
+    private $client;
+
+    /**
      * @var \Ps_eventbus
      */
     private $module;
@@ -98,8 +103,7 @@ class CloudSyncClient
         \Ps_eventbus $module,
         PsAccountsAdapterService $psAccountsAdapterService,
         JsonFormatter $jsonFormatter
-    )
-    {
+    ) {
         $this->module = $module;
         $this->jwt = $psAccountsAdapterService->getOrRefreshToken();
         $this->shopId = $psAccountsAdapterService->getShopUuid();
@@ -108,6 +112,9 @@ class CloudSyncClient
         $this->collectorApiUrl = $collectorApiUrl;
         $this->liveSyncApiUrl = $liveSyncApiUrl;
         $this->syncApiUrl = $syncApiUrl;
+
+        $this->client = HttpClient::getInstance();
+        $this->client->setTimeout(3);
     }
 
     /**
@@ -122,12 +129,11 @@ class CloudSyncClient
      */
     public function upload($jobId, $data, $startTime, $fullSyncRequested = null)
     {
-        $client = HttpClient::getInstance();
-        $client->setTimeout($this->getRemainingTime($startTime));
+        $this->client->setTimeout($this->getRemainingTime($startTime));
 
         $url = $this->collectorApiUrl . '/upload/' . $jobId;
 
-        $request = $client->post(
+        $request = $this->client->post(
             $url,
             [
                 'Accept' => 'application/json',
@@ -136,7 +142,7 @@ class CloudSyncClient
                 'User-Agent' => 'ps-eventbus/' . $this->module->version,
             ],
             $this->jsonFormatter->formatNewlineJsonString($data),
-            false
+            true
         );
 
         return [
@@ -158,10 +164,7 @@ class CloudSyncClient
         // shop content send to the API must be in kebab-case
         $kebabCasedShopContent = str_replace('_', '-', $shopContent);
 
-        $client = HttpClient::getInstance();
-        $client->setTimeout(3);
-
-        $request = $client->post(
+        $request = $this->client->post(
             $this->liveSyncApiUrl . '/notify/' . $this->shopId,
             [
                 'Accept' => 'application/json',
@@ -169,8 +172,7 @@ class CloudSyncClient
                 'User-Agent' => 'ps-eventbus/' . $this->module->version,
                 'Content-Type' => 'application/json',
             ],
-            '{"shopContents": ["' . $kebabCasedShopContent . '"], "action": "' . $action . '"}',
-            true
+            '{"shopContents": ["' . $kebabCasedShopContent . '"], "action": "' . $action . '"}'
         );
 
         return [
@@ -187,10 +189,7 @@ class CloudSyncClient
      */
     public function validateJobId($jobId)
     {
-        $client = HttpClient::getInstance();
-        $client->setTimeout(3);
-
-        $request = $client->get(
+        $request = $this->client->get(
             $this->syncApiUrl . '/job/' . $jobId,
             [
                 'Accept' => 'application/json',

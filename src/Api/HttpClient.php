@@ -352,20 +352,20 @@ class HttpClient
      * @param string $url The url to make the post request
      * @param array $headers Optional headers to pass to the url
      * @param array|object|string $data Post data to pass to the url
-     * @param bool $asJson Whether the data should be passed as json or not. {@insce 2.2.1}
+     * @param bool $isFile If there is a multipart, set it to true or False if it is a json
      *
      * @return self
      */
-    public function post($url, $headers = null, $data = null, $asJson = null)
+    public function post($url, $headers = null, $data = null, $isFile = null)
     {
-        if (is_null($asJson)) {
-            $asJson = false;
+        if (is_null($isFile)) {
+            $isFile = false;
         }
 
         $this->setHeaders($headers);
         $this->setOpt(CURLOPT_URL, $url);
 
-        if (!$asJson) {
+        if ($isFile) {
             // Créer un fichier temporaire
             $temp = tmpfile();
             fwrite($temp, $data);
@@ -376,13 +376,12 @@ class HttpClient
             $payload = ['file' => new \CURLFile($tempPath, 'text/plain', 'file')];
             $this->preparePayload($payload);
         } else {
-            $payload = $data;
-            $this->prepareJsonPayload($payload);
+            $this->prepareJsonPayload($data);
         }
 
         $this->exec();
 
-        if (!$asJson) {
+        if ($isFile) {
             fclose($temp);
         }
 
