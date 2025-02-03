@@ -24,6 +24,10 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
+/** This wrapper came from https://github.com/php-mod/curl
+ *  The original code was modified to fit ps_eventbus needs
+ */
+
 namespace PrestaShop\Module\PsEventbus\Api;
 
 if (!defined('_PS_VERSION_')) {
@@ -70,7 +74,7 @@ class HttpClient
     /**
      * @var string The user agent name which is set when making a request
      */
-    const USER_AGENT = 'PHP Curl/2.3 (+https://github.com/php-mod/curl)';
+    const USER_AGENT = 'PHP Curl/2.3';
 
     private $_cookies = [];
 
