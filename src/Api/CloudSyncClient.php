@@ -26,17 +26,14 @@
 
 namespace PrestaShop\Module\PsEventbus\Api;
 
-use PrestaShop\Module\PsEventbus\Api\Post\MultipartBody;
-use PrestaShop\Module\PsEventbus\Api\Post\PostFileApi;
+use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
-use Symfony\Component\Mime\Part\DataPart;
-use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class CollectorApiClient
+class CloudSyncClient
 {
     /**
      * @var string
@@ -44,9 +41,29 @@ class CollectorApiClient
     private $collectorApiUrl;
 
     /**
+     * @var string
+     */
+    private $liveSyncApiUrl;
+
+    /**
+     * @var string
+     */
+    private $syncApiUrl;
+
+    /**
+     * @var HttpClient
+     */
+    private $client;
+
+    /**
      * @var \Ps_eventbus
      */
     private $module;
+
+    /**
+     * @var JsonFormatter
+     */
+    private $jsonFormatter;
 
     /**
      * Accounts JSON Web token
@@ -54,6 +71,13 @@ class CollectorApiClient
      * @var string
      */
     private $jwt;
+
+    /**
+     * Accounts Shop UUID
+     *
+     * @var string
+     */
+    private $shopId;
 
     /**
      * Default maximum execution time in seconds
@@ -66,21 +90,38 @@ class CollectorApiClient
 
     /**
      * @param string $collectorApiUrl
+     * @param string $liveSyncApiUrl
+     * @param string $syncApiUrl
      * @param \Ps_eventbus $module
      * @param PsAccountsAdapterService $psAccountsAdapterService
+     * @param JsonFormatter $jsonFormatter
      */
-    public function __construct($collectorApiUrl, \Ps_eventbus $module, PsAccountsAdapterService $psAccountsAdapterService)
-    {
+    public function __construct(
+        $collectorApiUrl,
+        $liveSyncApiUrl,
+        $syncApiUrl,
+        \Ps_eventbus $module,
+        PsAccountsAdapterService $psAccountsAdapterService,
+        JsonFormatter $jsonFormatter
+    ) {
         $this->module = $module;
         $this->jwt = $psAccountsAdapterService->getOrRefreshToken();
+        $this->shopId = $psAccountsAdapterService->getShopUuid();
+        $this->jsonFormatter = $jsonFormatter;
+
         $this->collectorApiUrl = $collectorApiUrl;
+        $this->liveSyncApiUrl = $liveSyncApiUrl;
+        $this->syncApiUrl = $syncApiUrl;
+
+        $this->client = HttpClient::getInstance();
+        $this->client->setTimeout(3);
     }
 
     /**
      * Push some ShopContents to CloudSync
      *
      * @param string $jobId
-     * @param string $data
+     * @param array<mixed> $data
      * @param int $startTime in seconds since epoch
      * @param bool $fullSyncRequested
      *
@@ -88,45 +129,78 @@ class CollectorApiClient
      */
     public function upload($jobId, $data, $startTime, $fullSyncRequested = null)
     {
-        $client = new HttpClientFactory($this->getRemainingTime($startTime));
+        $this->client->setTimeout($this->getRemainingTime($startTime));
 
         $url = $this->collectorApiUrl . '/upload/' . $jobId;
 
-        if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '9', '>=')) {
-            $contentSize = strlen($data);
-
-            $formData = new FormDataPart([
-                'file' => new DataPart($data, 'file', 'text/plain'),
-            ]);
-
-            $boundary = $formData->getPreparedHeaders()->getHeaderParameter('content-type', 'boundary');
-        } else {
-            $file = new PostFileApi('file', $data, 'file');
-            $contentSize = $file->getContent()->getSize();
-
-            $boundary = 'ps_eventbus_boundary';
-            $formData = new MultipartBody([], [$file], $boundary);
-        }
-
-        $response = $client->sendRequest(
-            'POST',
+        $request = $this->client->post(
             $url,
             [
                 'Accept' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->jwt,
-                'Content-Length' => $contentSize ? (string) $contentSize : '0',
-                'Content-Type' => 'multipart/form-data; boundary=' . $boundary,
                 'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
                 'User-Agent' => 'ps-eventbus/' . $this->module->version,
             ],
-            version_compare(_PS_VERSION_, '9', '>=') ? $formData->bodyToString() : $formData->getContents()
+            $this->jsonFormatter->formatNewlineJsonString($data),
+            true
         );
 
         return [
-            'status' => substr((string) $response->getStatusCode(), 0, 1) === '2',
-            'httpCode' => $response->getStatusCode(),
-            'body' => json_decode($response->getContent(), true),
+            'status' => substr((string) $request->getHttpStatus(), 0, 1) === '2',
+            'httpCode' => $request->getHttpStatus(),
+            'body' => $request->getResponse(),
             'upload_url' => $url,
+        ];
+    }
+
+    /**
+     * @param string $shopContent
+     * @param string $action
+     *
+     * @return array<mixed>
+     */
+    public function liveSync($shopContent, $action)
+    {
+        // shop content send to the API must be in kebab-case
+        $kebabCasedShopContent = str_replace('_', '-', $shopContent);
+
+        $request = $this->client->post(
+            $this->liveSyncApiUrl . '/notify/' . $this->shopId,
+            [
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer ' . $this->jwt,
+                'User-Agent' => 'ps-eventbus/' . $this->module->version,
+                'Content-Type' => 'application/json',
+            ],
+            '{"shopContents": ["' . $kebabCasedShopContent . '"], "action": "' . $action . '"}'
+        );
+
+        return [
+            'status' => substr((string) $request->getHttpStatus(), 0, 1) === '2',
+            'httpCode' => $request->getHttpStatus(),
+            'body' => $request->getResponse(),
+        ];
+    }
+
+    /**
+     * @param string $jobId
+     *
+     * @return array<mixed>
+     */
+    public function validateJobId($jobId)
+    {
+        $request = $this->client->get(
+            $this->syncApiUrl . '/job/' . $jobId,
+            [
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer ' . $this->jwt,
+                'User-Agent' => 'ps-eventbus/' . $this->module->version,
+            ]
+        );
+
+        return [
+            'status' => substr((string) $request->getHttpStatus(), 0, 1) === '2',
+            'httpCode' => $request->getHttpStatus(),
         ];
     }
 
@@ -147,7 +221,7 @@ class CollectorApiClient
          */
         $maxExecutionTime = (int) ini_get('max_execution_time');
         if ($maxExecutionTime <= 0) {
-            return CollectorApiClient::$DEFAULT_MAX_EXECUTION_TIME;
+            return CloudSyncClient::$DEFAULT_MAX_EXECUTION_TIME;
         }
         /*
          * An extra 2s to be arbitrary substracted
@@ -166,7 +240,7 @@ class CollectorApiClient
 
         // A protection that might never be used, but who knows
         if ($remainingTime <= 0) {
-            return CollectorApiClient::$DEFAULT_MAX_EXECUTION_TIME;
+            return CloudSyncClient::$DEFAULT_MAX_EXECUTION_TIME;
         }
 
         return $remainingTime;
