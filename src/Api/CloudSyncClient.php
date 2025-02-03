@@ -121,7 +121,7 @@ class CloudSyncClient
      * Push some ShopContents to CloudSync
      *
      * @param string $jobId
-     * @param string $data
+     * @param array<mixed> $data
      * @param int $startTime in seconds since epoch
      * @param bool $fullSyncRequested
      *

@@ -39,6 +39,7 @@ parameters:
     - '#Cannot call method getService\(\) on ModuleCore\|false.#'
     - '#Method PrestaShop\\Module\\PsEventbus\\Service\\ShopContent\\SpecificPricesService::getPriceStatic\(\) never returns void so it can be removed from the return type.#'
     - '#Call to an undefined method object::findForUpdates\(\).#'
+    - '#Call to an undefined method ModuleCore::getService\(\)#'
 
     - '#Property PrestaShop\\Module\\PsEventbus\\Helper\\ModuleHelper::\$moduleManager has unknown class PrestaShop\\PrestaShop\\Core\\Module\\ModuleManager as its type.#'
     - '#Call to method isInstalled\(\) on an unknown class PrestaShop\\PrestaShop\\Core\\Module\\ModuleManager.#'

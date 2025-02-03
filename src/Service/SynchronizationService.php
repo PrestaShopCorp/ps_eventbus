@@ -205,7 +205,7 @@ class SynchronizationService
         CommonService::convertDateFormat($data);
 
         if (!empty($data)) {
-            $response = $this->proxyService->upload($jobId, $data, $startTime, false);
+            $response = $this->cloudSyncClient->upload($jobId, $data, $startTime, false);
 
             if ($response['httpCode'] == 201) {
                 $this->incrementalSyncRepository->removeIncrementalSyncObjects($shopContent, array_column($contentsToSync, 'id'), $langIso);
