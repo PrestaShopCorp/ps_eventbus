@@ -294,18 +294,14 @@ class HttpClient
     /**
      * Set the json payload informations to the postfield curl option.
      *
-     * @param mixed $data the data to be sent
+     * @param array $data the data to be sent
      *
      * @return void
      */
     protected function prepareJsonPayload($data)
     {
-        if (!is_string($data)) {
-            $data = json_encode($data);
-        }
-
         $this->setOpt(CURLOPT_POST, true);
-        $this->setOpt(CURLOPT_POSTFIELDS, $data);
+        $this->setOpt(CURLOPT_POSTFIELDS, json_encode($data));
     }
 
     /**
@@ -364,7 +360,7 @@ class HttpClient
      *
      * @return self
      */
-    public function post($url, $headers = null, $data = null, $isFile = null)
+    public function post($url, array $headers = [], array $data = [], $isFile = null)
     {
         if (is_null($isFile)) {
             $isFile = false;

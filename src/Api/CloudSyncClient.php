@@ -141,7 +141,7 @@ class CloudSyncClient
                 'Full-Sync-Requested' => $fullSyncRequested ? '1' : '0',
                 'User-Agent' => 'ps-eventbus/' . $this->module->version,
             ],
-            $this->jsonFormatter->formatNewlineJsonString($data),
+            $data,
             true
         );
 
@@ -172,7 +172,10 @@ class CloudSyncClient
                 'User-Agent' => 'ps-eventbus/' . $this->module->version,
                 'Content-Type' => 'application/json',
             ],
-            '{"shopContents": ["' . $kebabCasedShopContent . '"], "action": "' . $action . '"}'
+            [
+                'shopContents' => [$kebabCasedShopContent],
+                'action' => $action,
+            ]
         );
 
         return [
