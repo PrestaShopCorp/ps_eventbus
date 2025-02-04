@@ -206,20 +206,20 @@ class HttpClient
     }
 
     /**
-    * @param array<mixed> $data
-    *
-    * @return string
-    */
-private function formatNewlineJsonString($data)
-   {
-       $jsonArray = array_map(function ($dataItem) {
-           return json_encode($dataItem, JSON_UNESCAPED_SLASHES);
-       }, $data);
+     * @param array<mixed> $data
+     *
+     * @return string
+     */
+    private function formatNewlineJsonString($data)
+    {
+        $jsonArray = array_map(function ($dataItem) {
+            return json_encode($dataItem, JSON_UNESCAPED_SLASHES);
+        }, $data);
 
-       $json = implode("\r\n", $jsonArray);
+        $json = implode("\r\n", $jsonArray);
 
-       return str_replace('\\u0000', '', $json);
-   }
+        return str_replace('\\u0000', '', $json);
+    }
 
     /**
      * Set the timeout for the current request.
