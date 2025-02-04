@@ -206,6 +206,22 @@ class HttpClient
     }
 
     /**
+     * @param array<mixed> $data
+     *
+     * @return string
+     */
+    private function formatNewlineJsonString($data)
+    {
+        $jsonArray = array_map(function ($dataItem) {
+            return json_encode($dataItem, JSON_UNESCAPED_SLASHES);
+        }, $data);
+
+        $json = implode("\r\n", $jsonArray);
+
+        return str_replace('\\u0000', '', $json);
+    }
+
+    /**
      * Set the timeout for the current request.
      *
      * @param mixed $timeout
@@ -355,12 +371,12 @@ class HttpClient
      *
      * @param string $url The url to make the post request
      * @param array $headers Optional headers to pass to the url
-     * @param array|object|string $data Post data to pass to the url
+     * @param array $data Post data to pass to the url
      * @param bool $isFile If there is a multipart, set it to true or False if it is a json
      *
      * @return self
      */
-    public function post($url, $headers = null, $data = null, $isFile = null)
+    public function post($url, array $headers = [], array $data = [], $isFile = null)
     {
         if (is_null($isFile)) {
             $isFile = false;
@@ -372,7 +388,7 @@ class HttpClient
         if ($isFile) {
             // Créer un fichier temporaire
             $temp = tmpfile();
-            fwrite($temp, $data);
+            fwrite($temp, $this->formatNewlineJsonString($data));
             rewind($temp);
 
             // Sauvegarder le fichier temporaire pour cURL
