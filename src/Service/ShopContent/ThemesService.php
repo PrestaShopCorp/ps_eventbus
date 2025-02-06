@@ -79,15 +79,7 @@ class ThemesService extends ShopContentAbstractService implements ShopContentSer
      */
     public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
-        $result = $this->getAllThemes();
-
-        $themes = [];
-
-        if (!empty($result)) {
-            $themes = $this->formatThemes($result);
-        }
-
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_THEMES, $themes, $deletedContents);
+        return [];
     }
 
     /**

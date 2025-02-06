@@ -86,13 +86,7 @@ class ModulesService extends ShopContentAbstractService implements ShopContentSe
      */
     public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
-        $result = $this->moduleRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
-
-        if (!empty($result)) {
-            $this->castModules($result);
-        }
-
-        return parent::formatIncrementalSyncResponse(Config::COLLECTION_MODULES, $result, $deletedContents);
+        return [];
     }
 
     /**
