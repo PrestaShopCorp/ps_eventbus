@@ -23,22 +23,22 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-function deleteFolderRecursively($folderPath) {
+function deleteFolderRecursively($folderPath)
+{
     if (!is_dir($folderPath)) {
         return false;
     }
 
     // select all file, but don't select '.' and '..'
-    $files = array_diff(scandir($folderPath), array('.', '..'));
-    
+    $files = array_diff(scandir($folderPath), ['.', '..']);
+
     foreach ($files as $file) {
         $filePath = $folderPath . DIRECTORY_SEPARATOR . $file;
-        
+
         if (is_dir($filePath)) {
             deleteFolderRecursively($filePath);
         } else {
@@ -48,7 +48,6 @@ function deleteFolderRecursively($folderPath) {
 
     return rmdir($folderPath);
 }
-
 
 /**
  * @return bool
