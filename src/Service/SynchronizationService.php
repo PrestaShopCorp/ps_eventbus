@@ -184,13 +184,13 @@ class SynchronizationService
 
         $contentsToSync = $this->incrementalSyncRepository->getIncrementalSyncObjects($shopContent, $langIso, $limit);
 
-        if (empty($contentsToSync)) {
+        /* if (empty($contentsToSync)) {
             return [
                 'total_objects' => 0,
                 'has_remaining_objects' => false,
                 'remaining_objects' => 0,
             ];
-        }
+        } */
 
         $upsertedContents = array_filter($contentsToSync, function ($content) {
             return $content['action'] == Config::INCREMENTAL_TYPE_UPSERT;
@@ -201,7 +201,7 @@ class SynchronizationService
         });
 
         $data = $shopContentApiService->getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso);
-
+        
         CommonService::convertDateFormat($data);
 
         if (!empty($data)) {
