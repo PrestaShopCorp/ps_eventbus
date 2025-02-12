@@ -114,14 +114,10 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        if ($contentIds == []) {
-            return [];
-        }
-
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('c.id_carrier IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('c.id_carrier IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')')
             ->limit($limit);
 
         return $this->runQuery();

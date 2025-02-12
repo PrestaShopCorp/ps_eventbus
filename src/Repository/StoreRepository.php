@@ -121,14 +121,10 @@ class StoreRepository extends AbstractRepository implements RepositoryInterface
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        if ($contentIds == []) {
-            return [];
-        }
-
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('s.id_store IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('s.id_store IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')')
             ->limit($limit)
         ;
 

@@ -94,14 +94,10 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        if ($contentIds == []) {
-            return [];
-        }
-
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('ocr.id_order_cart_rule IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('ocr.id_order_cart_rule IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')')
             ->limit($limit)
         ;
 
