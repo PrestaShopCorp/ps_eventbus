@@ -94,14 +94,10 @@ class ImageRepository extends AbstractRepository implements RepositoryInterface
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        if ($contentIds == []) {
-            return [];
-        }
-
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('i.id_image IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('i.id_image IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')')
             ->limit($limit)
         ;
 

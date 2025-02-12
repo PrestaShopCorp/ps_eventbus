@@ -94,14 +94,10 @@ class TranslationRepository extends AbstractRepository implements RepositoryInte
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        if ($contentIds == []) {
-            return [];
-        }
-
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('t.id_translation IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('t.id_translation IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')')
             ->limit($limit)
         ;
 
