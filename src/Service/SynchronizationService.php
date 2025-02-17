@@ -26,7 +26,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
-use PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient;
+use PrestaShop\Module\PsEventbus\Api\CloudSyncClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
@@ -43,9 +43,9 @@ if (!defined('_PS_VERSION_')) {
 class SynchronizationService
 {
     /**
-     * @var LiveSyncApiClient
+     * @var CloudSyncClient
      */
-    private $liveSyncApiClient;
+    private $cloudSyncClient;
 
     /**
      * @var SyncRepository
@@ -68,30 +68,23 @@ class SynchronizationService
     private $languagesService;
 
     /**
-     * @var ProxyService
-     */
-    private $proxyService;
-
-    /**
      * @var ErrorHandler
      */
     private $errorHandler;
 
     public function __construct(
-        LiveSyncApiClient $liveSyncApiClient,
+        CloudSyncClient $cloudSyncClient,
         SyncRepository $syncRepository,
         IncrementalSyncRepository $incrementalSyncRepository,
         LiveSyncRepository $liveSyncRepository,
         LanguagesService $languagesService,
-        ProxyService $proxyService,
         ErrorHandler $errorHandler
     ) {
-        $this->liveSyncApiClient = $liveSyncApiClient;
+        $this->cloudSyncClient = $cloudSyncClient;
         $this->syncRepository = $syncRepository;
         $this->incrementalSyncRepository = $incrementalSyncRepository;
         $this->liveSyncRepository = $liveSyncRepository;
         $this->languagesService = $languagesService;
-        $this->proxyService = $proxyService;
         $this->errorHandler = $errorHandler;
     }
 
@@ -137,7 +130,7 @@ class SynchronizationService
         CommonService::convertDateFormat($data);
 
         if (!empty($data)) {
-            $response = $this->proxyService->upload($jobId, $data, $startTime, true);
+            $response = $this->cloudSyncClient->upload($jobId, $data, $startTime, true);
 
             if ($response['httpCode'] == 201) {
                 $offset += $limit;
@@ -212,7 +205,7 @@ class SynchronizationService
         CommonService::convertDateFormat($data);
 
         if (!empty($data)) {
-            $response = $this->proxyService->upload($jobId, $data, $startTime, false);
+            $response = $this->cloudSyncClient->upload($jobId, $data, $startTime, false);
 
             if ($response['httpCode'] == 201) {
                 $this->incrementalSyncRepository->removeIncrementalSyncObjects($shopContent, array_column($contentsToSync, 'id'), $langIso);
@@ -245,7 +238,7 @@ class SynchronizationService
         foreach ($contents as $content) {
             if ($this->isFullSyncDone($content, $defaultIsoCode) && $this->debounceLiveSync($content)) {
                 try {
-                    $this->liveSyncApiClient->liveSync($content, $actionType);
+                    $this->cloudSyncClient->liveSync($content, $actionType);
                 } catch (\Exception $exception) {
                     $this->errorHandler->handle($exception);
                 }

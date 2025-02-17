@@ -38,7 +38,7 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
      * @param string $langIso
      * @param bool $withSelecParameters
      *
-     * @return mixed
+     * @return void
      *
      * @throws \PrestaShopException
      */
@@ -46,6 +46,7 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
     {
         $this->generateMinimalQuery(self::TABLE_NAME, 'o');
 
+        // minimal query for countable query
         $this->query
             ->leftJoin('currency', 'c', 'o.id_currency = c.id_currency')
             ->leftJoin('order_slip', 'os', 'o.id_order = os.id_order')
@@ -56,11 +57,12 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
             ->leftJoin('order_state_lang', 'osl', 'o.current_state = osl.id_order_state')
             ->leftJoin('order_state', 'ost', 'o.current_state = ost.id_order_state')
             ->where('o.id_shop = ' . (int) parent::getShopContext()->id)
+            ->select('o.id_order')
+            ->groupBy('o.id_order')
         ;
 
         if ($withSelecParameters) {
             $this->query
-                ->select('o.id_order')
                 ->select('o.reference')
                 ->select('o.id_customer')
                 ->select('o.id_cart')
@@ -128,8 +130,6 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
     {
         $this->generateFullQuery($langIso, true);
 
-        $this->query->groupBy('o.id_order');
-
         $this->query->limit((int) $limit, (int) $offset);
 
         return $this->runQuery();
@@ -175,10 +175,11 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
     {
         $this->generateFullQuery($langIso, false);
 
-        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+        $result = $this->db->executeS('
+            SELECT COUNT(*) - ' . (int) $offset . ' AS count
+            FROM (' . $this->query->build() . ') as subquery;
+        ');
 
-        $result = $this->runQuery(true);
-
-        return $result[0]['count'];
+        return is_array($result) ? $result[0]['count'] : 0;
     }
 }

@@ -20,9 +20,7 @@
 
 namespace PrestaShop\Module\PsEventbus\ServiceContainer\Provider;
 
-use PrestaShop\Module\PsEventbus\Api\CollectorApiClient;
-use PrestaShop\Module\PsEventbus\Api\LiveSyncApiClient;
-use PrestaShop\Module\PsEventbus\Api\SyncApiClient;
+use PrestaShop\Module\PsEventbus\Api\CloudSyncClient;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 use PrestaShop\Module\PsEventbus\ServiceContainer\Contract\IServiceProvider;
 use PrestaShop\Module\PsEventbus\ServiceContainer\ServiceContainer;
@@ -36,23 +34,11 @@ class ApiProvider implements IServiceProvider
      */
     public function provide(ServiceContainer $container)
     {
-        $container->registerProvider(SyncApiClient::class, static function () use ($container) {
-            return new SyncApiClient(
-                $container->getParameter('ps_eventbus.sync_api_url'),
-                $container->get('ps_eventbus.module'),
-                $container->get(PsAccountsAdapterService::class)
-            );
-        });
-        $container->registerProvider(LiveSyncApiClient::class, static function () use ($container) {
-            return new LiveSyncApiClient(
-                $container->getParameter('ps_eventbus.live_sync_api_url'),
-                $container->get('ps_eventbus.module'),
-                $container->get(PsAccountsAdapterService::class)
-            );
-        });
-        $container->registerProvider(CollectorApiClient::class, static function () use ($container) {
-            return new CollectorApiClient(
+        $container->registerProvider(CloudSyncClient::class, static function () use ($container) {
+            return new CloudSyncClient(
                 $container->getParameter('ps_eventbus.proxy_api_url'),
+                $container->getParameter('ps_eventbus.live_sync_api_url'),
+                $container->getParameter('ps_eventbus.sync_api_url'),
                 $container->get('ps_eventbus.module'),
                 $container->get(PsAccountsAdapterService::class)
             );

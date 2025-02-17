@@ -24,47 +24,41 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
-namespace PrestaShop\Module\PsEventbus\Api\Post;
+namespace PrestaShop\Module\PsEventbus\Traits\Hooks;
 
-use Psr\Http\Message\StreamInterface;
+use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-/**
- * Post file upload interface
- */
-interface PostFileInterface
+trait UseStockMvtHooks
 {
     /**
-     * Get the name of the form field
+     * Work Only on 1.6
      *
-     * @return string
+     * @param array<mixed> $parameters
+     *
+     * @return void
      */
-    public function getName();
+    public function hookActionObjectStockMvtAddAfter($parameters)
+    {
+        /** @var SynchronizationService $synchronizationService * */
+        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
 
-    /**
-     * Get the full path to the file
-     *
-     * @return string
-     */
-    public function getFilename();
+        /** @var \StockMvt $stockMvt */
+        $stockMvt = $parameters['object'];
 
-    /**
-     * Get the content
-     *
-     * @return StreamInterface
-     */
-    public function getContent();
-
-    /**
-     * Gets all POST file headers.
-     *
-     * The keys represent the header name as it will be sent over the wire, and
-     * each value is a string.
-     *
-     * @return array<mixed> Returns an associative array of the file's headers
-     */
-    public function getHeaders();
+        if (isset($stockMvt->id)) {
+            $synchronizationService->sendLiveSync(Config::COLLECTION_STOCK_MOVEMENTS, Config::INCREMENTAL_TYPE_UPSERT);
+            $synchronizationService->insertContentIntoIncremental(
+                [Config::COLLECTION_STOCK_MOVEMENTS => $stockMvt->id],
+                Config::INCREMENTAL_TYPE_UPSERT,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        }
+    }
 }

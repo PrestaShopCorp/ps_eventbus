@@ -38,7 +38,7 @@ class OrderStatusHistoryRepository extends AbstractRepository implements Reposit
      * @param string $langIso
      * @param bool $withSelecParameters
      *
-     * @return mixed
+     * @return void
      *
      * @throws \PrestaShopException
      */
@@ -108,8 +108,8 @@ class OrderStatusHistoryRepository extends AbstractRepository implements Reposit
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('oh.id_order IN(' . implode(',', array_map('intval', $contentIds)) . ')')
-            // ->limit($limit) Sub shop content depend from another, temporary disabled
+            ->where('oh.id_order_history IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->limit($limit)
         ;
 
         return $this->runQuery();

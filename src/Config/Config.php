@@ -81,6 +81,7 @@ class Config
     const COLLECTION_MANUFACTURERS = 'manufacturers';
     const COLLECTION_MODULES = 'modules'; // NO INCREMENTAL
     const COLLECTION_ORDERS = 'orders';
+    const COLLECTION_ORDER_CARRIERS = 'order_carriers';
     const COLLECTION_ORDER_CART_RULES = 'order_cart_rules';
     const COLLECTION_ORDER_DETAILS = 'order_details';
     const COLLECTION_ORDER_STATUS_HISTORY = 'order_status_history';
@@ -116,6 +117,7 @@ class Config
         self::COLLECTION_MANUFACTURERS,
         self::COLLECTION_MODULES,
         self::COLLECTION_ORDERS,
+        self::COLLECTION_ORDER_CARRIERS,
         self::COLLECTION_ORDER_CART_RULES,
         self::COLLECTION_ORDER_DETAILS,
         self::COLLECTION_ORDER_STATUS_HISTORY,

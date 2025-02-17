@@ -27,27 +27,20 @@
 namespace PrestaShop\Module\PsEventbus\Service\ShopContent;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Repository\InfoRepository;
-use PrestaShop\Module\PsEventbus\Repository\ModuleRepository;
+use PrestaShop\Module\PsEventbus\Repository\OrderCarrierRepository;
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class ModulesService extends ShopContentAbstractService implements ShopContentServiceInterface
+class OrderCarriersService extends ShopContentAbstractService implements ShopContentServiceInterface
 {
-    /** @var ModuleRepository */
-    private $moduleRepository;
+    /** @var OrderCarrierRepository */
+    private $orderCarrierRepository;
 
-    /** @var InfoRepository */
-    private $infoRepository;
-
-    public function __construct(
-        ModuleRepository $moduleRepository,
-        InfoRepository $infoRepository
-    ) {
-        $this->moduleRepository = $moduleRepository;
-        $this->infoRepository = $infoRepository;
+    public function __construct(OrderCarrierRepository $orderCarrierRepository)
+    {
+        $this->orderCarrierRepository = $orderCarrierRepository;
     }
 
     /**
@@ -59,18 +52,18 @@ class ModulesService extends ShopContentAbstractService implements ShopContentSe
      */
     public function getContentsForFull($offset, $limit, $langIso)
     {
-        $result = $this->moduleRepository->retrieveContentsForFull($offset, $limit, $langIso);
+        $result = $this->orderCarrierRepository->retrieveContentsForFull($offset, $limit, $langIso);
 
         if (empty($result)) {
             return [];
         }
 
-        $this->castModules($result);
+        $this->castOrderCarriers($result);
 
         return array_map(function ($item) {
             return [
                 'action' => Config::INCREMENTAL_TYPE_UPSERT,
-                'collection' => Config::COLLECTION_MODULES,
+                'collection' => Config::COLLECTION_ORDER_CARRIERS,
                 'properties' => $item,
             ];
         }, $result);
@@ -86,7 +79,13 @@ class ModulesService extends ShopContentAbstractService implements ShopContentSe
      */
     public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
     {
-        return [];
+        $result = $this->orderCarrierRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
+
+        if (!empty($result)) {
+            $this->castOrderCarriers($result);
+        }
+
+        return parent::formatIncrementalSyncResponse(Config::COLLECTION_ORDER_CARRIERS, $result, $deletedContents);
     }
 
     /**
@@ -98,23 +97,24 @@ class ModulesService extends ShopContentAbstractService implements ShopContentSe
      */
     public function getFullSyncContentLeft($offset, $limit, $langIso)
     {
-        return $this->moduleRepository->countFullSyncContentLeft($offset, $limit, $langIso);
+        return $this->orderCarrierRepository->countFullSyncContentLeft($offset, $limit, $langIso);
     }
 
     /**
-     * @param array<mixed> $modules
+     * @param array<mixed> $orderCarriers
      *
      * @return void
      */
-    private function castModules(&$modules)
+    private function castOrderCarriers(&$orderCarriers)
     {
-        $shopCreatedAt = $this->infoRepository->getCreatedAt();
-
-        foreach ($modules as &$module) {
-            $module['module_id'] = (string) $module['module_id'];
-            $module['active'] = $module['active'] == '1';
-            $module['created_at'] = isset($module['created_at']) ? $module['created_at'] : $shopCreatedAt;
-            $module['updated_at'] = isset($module['updated_at']) ? $module['updated_at'] : $shopCreatedAt;
+        foreach ($orderCarriers as &$orderCarrier) {
+            $orderCarrier['id_order_carrier'] = (int) $orderCarrier['id_order_carrier'];
+            $orderCarrier['id_order'] = (int) $orderCarrier['id_order'];
+            $orderCarrier['id_carrier'] = (int) $orderCarrier['id_carrier'];
+            $orderCarrier['id_order_invoice'] = (int) $orderCarrier['id_order_invoice'];
+            $orderCarrier['weight'] = (int) $orderCarrier['weight'];
+            $orderCarrier['shipping_cost_tax_excl'] = (int) $orderCarrier['shipping_cost_tax_excl'];
+            $orderCarrier['shipping_cost_tax_incl'] = (int) $orderCarrier['shipping_cost_tax_incl'];
         }
     }
 }

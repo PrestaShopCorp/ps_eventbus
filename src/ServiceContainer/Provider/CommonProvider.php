@@ -20,13 +20,10 @@
 
 namespace PrestaShop\Module\PsEventbus\ServiceContainer\Provider;
 
-use PrestaShop\Module\PsEventbus\Api\CollectorApiClient;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
-use PrestaShop\Module\PsEventbus\Formatter\JsonFormatter;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Helper\ModuleHelper;
 use PrestaShop\Module\PsEventbus\Service\PresenterService;
-use PrestaShop\Module\PsEventbus\Service\ProxyService;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 use PrestaShop\Module\PsEventbus\ServiceContainer\Contract\IServiceProvider;
 use PrestaShop\Module\PsEventbus\ServiceContainer\ServiceContainer;
@@ -51,26 +48,15 @@ class CommonProvider implements IServiceProvider
         });
         $container->registerProvider(PsAccountsAdapterService::class, static function () use ($container) {
             return new PsAccountsAdapterService(
-                $container->get(ModuleHelper::class)
+                $container->get(ModuleHelper::class),
+                $container->get(ErrorHandler::class)
             );
-        });
-        $container->registerProvider(JsonFormatter::class, static function () {
-            return new JsonFormatter();
         });
         $container->registerProvider(ArrayFormatter::class, static function () {
             return new ArrayFormatter();
         });
-        $container->registerProvider(ProxyService::class, static function () use ($container) {
-            return new ProxyService(
-                $container->get(CollectorApiClient::class),
-                $container->get(JsonFormatter::class),
-                $container->get(ErrorHandler::class)
-            );
-        });
         $container->registerProvider(ErrorHandler::class, static function () use ($container) {
             return new ErrorHandler(
-                $container->get('ps_eventbus.module'),
-                $container->get(PsAccountsAdapterService::class),
                 $container->getParameter('ps_eventbus.sentry_dsn'),
                 $container->getParameter('ps_eventbus.sentry_env')
             );

@@ -38,7 +38,7 @@ class SpecificPriceRepository extends AbstractRepository implements RepositoryIn
      * @param string $langIso
      * @param bool $withSelecParameters
      *
-     * @return mixed
+     * @return void
      *
      * @throws \PrestaShopException
      */

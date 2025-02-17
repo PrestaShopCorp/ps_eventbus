@@ -26,6 +26,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
+use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Helper\ModuleHelper;
 
 if (!defined('_PS_VERSION_')) {
@@ -40,13 +41,19 @@ class PsAccountsAdapterService
     private $moduleHelper;
 
     /**
+     * @var ErrorHandler
+     */
+    private $errorHandler;
+
+    /**
      * @var false|\ModuleCore
      */
     private $psAccountModule;
 
-    public function __construct(ModuleHelper $moduleHelper)
+    public function __construct(ModuleHelper $moduleHelper, ErrorHandler $errorHandler)
     {
         $this->moduleHelper = $moduleHelper;
+        $this->errorHandler = $errorHandler;
         $this->psAccountModule = $this->moduleHelper->getInstanceByName('ps_accounts');
     }
 
@@ -54,8 +61,6 @@ class PsAccountsAdapterService
      * Get psAccounts module main class, or null if module is'nt ready
      *
      * @return false|\ModuleCore
-     *
-     * @throws \PrestaShopException
      */
     public function getModule()
     {
@@ -70,8 +75,6 @@ class PsAccountsAdapterService
      * Get psAccounts service, or null if module is'nt ready
      *
      * @return mixed
-     *
-     * @throws \PrestaShopException
      */
     public function getService()
     {
@@ -79,54 +82,84 @@ class PsAccountsAdapterService
             return false;
         }
 
-        return $this->psAccountModule->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
+        try {
+            return $this->psAccountModule->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
+        } catch (\Exception $e) {
+            $this->errorHandler->handle(
+                new \PrestaShopException('Failed to load PsAccountsService', 0, $e),
+                true
+            );
+
+            return false;
+        }
     }
 
     /**
      * Get presenter from psAccounts, or null if module is'nt ready
      *
      * @return mixed
-     *
-     * @throws \PrestaShopException
      */
     public function getPresenter()
     {
-        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts')) {
+        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts') || !$this->getService()) {
             return false;
         }
 
-        return $this->psAccountModule->getService('PrestaShop\Module\PsAccounts\Presenter\PsAccountsPresenter');
+        try {
+            return $this->psAccountModule->getService('PrestaShop\Module\PsAccounts\Presenter\PsAccountsPresenter');
+        } catch (\Exception $e) {
+            $this->errorHandler->handle(
+                new \PrestaShopException('Failed to load PsAccountsPresenter', 0, $e),
+                true
+            );
+
+            return false;
+        }
     }
 
     /**
      * Get shopUuid from psAccounts, or null if module is'nt ready
      *
      * @return string
-     *
-     * @throws \PrestaShopException
      */
     public function getShopUuid()
     {
-        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts')) {
+        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts') || !$this->getService()) {
             return '';
         }
 
-        return $this->getService()->getShopUuid();
+        try {
+            return $this->getService()->getShopUuid();
+        } catch (\Exception $e) {
+            $this->errorHandler->handle(
+                new \PrestaShopException('Failed to get shop uuid from ps_account', 0, $e),
+                true
+            );
+
+            return '';
+        }
     }
 
     /**
      * Get refreshToken from psAccounts, or null if module is'nt ready
      *
      * @return string
-     *
-     * @throws \PrestaShopException
      */
     public function getOrRefreshToken()
     {
-        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts')) {
+        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts') || !$this->getService()) {
             return '';
         }
 
-        return $this->getService()->getOrRefreshToken();
+        try {
+            return $this->getService()->getOrRefreshToken();
+        } catch (\Exception $e) {
+            $this->errorHandler->handle(
+                new \PrestaShopException('Failed to get refresh token from ps_account', 0, $e),
+                true
+            );
+
+            return '';
+        }
     }
 }

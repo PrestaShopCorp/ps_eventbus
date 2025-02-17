@@ -19,6 +19,7 @@ export const shopContentMapping = {
   manufacturers: "manufacturers",
   modules: "modules",
   orders: "orders",
+  order_carriers: "order-carriers",
   order_cart_rules: "order-cart-rules",
   order_details: "order-details",
   order_status_history: "order-status-history",

@@ -46,13 +46,6 @@ class Ps_eventbus extends Module
     /**
      * @var string
      */
-    const VERSION = '0.0.0';
-
-    const DEFAULT_ENV = '';
-
-    /**
-     * @var string
-     */
     public $version;
 
     /**
@@ -101,13 +94,13 @@ class Ps_eventbus extends Module
         parent::__construct();
 
         $this->emailSupport = 'cloudsync-support@prestashop.com';
-        $this->termsOfServiceUrl =
-            'https://www.prestashop.com/en/prestashop-account-privacy';
+        $this->termsOfServiceUrl = 'https://www.prestashop.com/en/prestashop-account-privacy';
         $this->displayName = $this->l('PrestaShop EventBus');
         $this->description = $this->l('Link your PrestaShop account to synchronize your shop data to a tech partner of your choice. Do not uninstall this module if you are already using a service, as it will prevent it from working.');
         $this->confirmUninstall = $this->l('This action will immediately prevent your PrestaShop services and Community services from working as they are using PrestaShop CloudSync for syncing.');
         $this->ps_versions_compliancy = ['min' => '1.6.1.11', 'max' => _PS_VERSION_];
         $this->adminControllers = [];
+
         // If PHP is not compliant, we will not load composer and the autoloader
         if (!$this->isPhpVersionCompliant()) {
             return;

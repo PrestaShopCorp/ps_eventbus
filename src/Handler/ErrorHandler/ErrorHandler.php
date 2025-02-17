@@ -27,7 +27,6 @@
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
 use PrestaShop\Module\PsEventbus\Service\CommonService;
-use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -44,47 +43,66 @@ class ErrorHandler
     protected $client;
 
     /**
-     * @param \Ps_eventbus $module
-     * @param PsAccountsAdapterService $psAccountsAdapterService
      * @param string $sentryDsn
      * @param string $sentryEnv
      *
      * @return void
      */
-    public function __construct(\Ps_eventbus $module, PsAccountsAdapterService $psAccountsAdapterService, $sentryDsn, $sentryEnv)
+    public function __construct($sentryDsn, $sentryEnv)
     {
         try {
+            /** @var false|\ModuleCore $accountsModule */
+            $accountsModule = \Module::getInstanceByName('ps_accounts');
+
+            /** @var \ModuleCore $eventbusModule */
+            $eventbusModule = \Module::getInstanceByName('ps_eventbus');
+
+            $shopUuid = false;
+            $psAccountVersion = false;
+
+            if ($accountsModule != false) {
+                /** @var mixed $accountService */
+                $accountService = $accountsModule->getService('PrestaShop\Module\PsAccounts\Service\PsAccountsService');
+
+                $shopUuid = $accountService->getShopUuid();
+                $psAccountVersion = $accountsModule->version;
+            }
+
             $this->client = new \Raven_Client(
                 $sentryDsn,
                 [
                     'level' => 'warning',
                     'tags' => [
-                        'shop_id' => $psAccountsAdapterService->getShopUuid(),
-                        'ps_eventbus_version' => $module->version,
-                        'ps_accounts_version' => $psAccountsAdapterService->getModule() ? $psAccountsAdapterService->getModule()->version : false,
+                        'shop_id' => $shopUuid,
+                        'ps_eventbus_version' => $eventbusModule->version,
+                        'ps_accounts_version' => $psAccountVersion,
                         'php_version' => phpversion(),
                         'prestashop_version' => _PS_VERSION_,
-                        'ps_eventbus_is_enabled' => \Module::isEnabled((string) $module->name),
-                        'ps_eventbus_is_installed' => \Module::isInstalled((string) $module->name),
+                        'ps_eventbus_is_enabled' => \Module::isEnabled((string) $eventbusModule->name),
+                        'ps_eventbus_is_installed' => \Module::isInstalled((string) $eventbusModule->name),
                         'env' => $sentryEnv,
                     ],
                 ]
             );
             /** @var string $configurationPsShopEmail */
             $configurationPsShopEmail = \Configuration::get('PS_SHOP_EMAIL');
-            $this->client->set_user_data($psAccountsAdapterService->getShopUuid(), $configurationPsShopEmail);
+            $this->client->set_user_data(
+                $shopUuid,
+                $configurationPsShopEmail
+            );
         } catch (\Exception $e) {
         }
     }
 
     /**
      * @param mixed $exception
+     * @param mixed $silent
      *
      * @return void
      *
      * @@throws Exception
      */
-    public function handle($exception)
+    public function handle($exception, $silent = null)
     {
         $logsEnabled = false;
         $verboseEnabled = false;
@@ -117,6 +135,11 @@ class ErrorHandler
             throw $exception;
         } else {
             $this->client->captureException($exception);
+
+            if ($silent) {
+                return;
+            }
+
             CommonService::exitWithExceptionMessage($exception);
         }
     }

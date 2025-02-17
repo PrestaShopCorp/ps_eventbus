@@ -30,9 +30,9 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class WishlistProductRepository extends AbstractRepository implements RepositoryInterface
+class OrderCarrierRepository extends AbstractRepository implements RepositoryInterface
 {
-    const TABLE_NAME = 'wishlist_product';
+    const TABLE_NAME = 'order_carrier';
 
     /**
      * @param string $langIso
@@ -44,16 +44,19 @@ class WishlistProductRepository extends AbstractRepository implements Repository
      */
     public function generateFullQuery($langIso, $withSelecParameters)
     {
-        $this->generateMinimalQuery(self::TABLE_NAME, 'wp');
+        $this->generateMinimalQuery(self::TABLE_NAME, 'oc');
 
         if ($withSelecParameters) {
             $this->query
-                ->select('wp.id_wishlist_product')
-                ->select('wp.id_wishlist')
-                ->select('wp.id_product')
-                ->select('wp.id_product_attribute')
-                ->select('wp.quantity')
-                ->select('wp.priority')
+                ->select('oc.id_order_carrier')
+                ->select('oc.id_order')
+                ->select('oc.id_carrier')
+                ->select('oc.id_order_invoice')
+                ->select('oc.weight')
+                ->select('oc.shipping_cost_tax_excl')
+                ->select('oc.shipping_cost_tax_incl')
+                ->select('oc.tracking_number')
+                ->select('oc.date_add')
             ;
         }
     }
@@ -70,11 +73,6 @@ class WishlistProductRepository extends AbstractRepository implements Repository
      */
     public function retrieveContentsForFull($offset, $limit, $langIso)
     {
-        // need this module for this table : https://addons.prestashop.com/en/undownloadable/9131-wishlist-block.html
-        if (empty(parent::checkIfTableExist('%wishlist'))) {
-            return [];
-        }
-
         $this->generateFullQuery($langIso, true);
 
         $this->query->limit((int) $limit, (int) $offset);
@@ -101,8 +99,8 @@ class WishlistProductRepository extends AbstractRepository implements Repository
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('wp.id_wishlist IN(' . implode(',', array_map('intval', $contentIds)) . ')')
-            // ->limit($limit) Sub shop content depend from another, temporary disabled
+            ->where('oc.id_order_carrier IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->limit($limit)
         ;
 
         return $this->runQuery();
@@ -120,11 +118,6 @@ class WishlistProductRepository extends AbstractRepository implements Repository
      */
     public function countFullSyncContentLeft($offset, $limit, $langIso)
     {
-        // need this module for this table : https://addons.prestashop.com/en/undownloadable/9131-wishlist-block.html
-        if (empty(parent::checkIfTableExist('%wishlist'))) {
-            return 0;
-        }
-
         $this->generateFullQuery($langIso, false);
 
         $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');

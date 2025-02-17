@@ -38,7 +38,7 @@ class CarrierTaxeRepository extends AbstractRepository implements RepositoryInte
      * @param string $langIso
      * @param bool $withSelecParameters
      *
-     * @return mixed
+     * @return void
      *
      * @throws \PrestaShopException
      */
@@ -46,6 +46,7 @@ class CarrierTaxeRepository extends AbstractRepository implements RepositoryInte
     {
         $this->generateMinimalQuery(self::TABLE_NAME, 'ca');
 
+        // minimal query for countable query
         $this->query
             ->innerJoin('carrier_tax_rules_group_shop', 'ctrgs', 'ca.id_carrier = ctrgs.id_carrier')
             ->innerJoin('tax_rule', 'tr', 'ctrgs.id_tax_rules_group = tr.id_tax_rules_group')
@@ -53,15 +54,13 @@ class CarrierTaxeRepository extends AbstractRepository implements RepositoryInte
             ->innerJoin('delivery', 'd', 'ca.id_carrier = d.id_carrier AND d.id_zone IS NOT NULL')
             ->innerJoin('tax', 't', 'tr.id_tax = t.id_tax AND t.active = 1')
             ->leftJoin('state', 's', 'tr.id_state = s.id_state AND s.active = 1')
-        ;
-
-        $this->query
             ->where('(co.id_zone = d.id_zone OR s.id_zone = d.id_zone)')
+            ->select('ca.id_reference')
+            ->groupBy('ca.id_reference, co.id_zone, id_range, country_id')
         ;
 
         if ($withSelecParameters) {
             $this->query
-                ->select('ca.id_reference')
                 ->select('co.id_zone')
                 ->select('
                     CASE
@@ -81,8 +80,6 @@ class CarrierTaxeRepository extends AbstractRepository implements RepositoryInte
                 ')
                 ->select('t.rate AS tax_rate')
             ;
-
-            $this->query->groupBy('ca.id_reference, co.id_zone, id_range, country_id');
         }
     }
 
@@ -146,10 +143,10 @@ class CarrierTaxeRepository extends AbstractRepository implements RepositoryInte
         $this->generateFullQuery($langIso, true);
 
         $result = $this->db->executeS('
-            SELECT (COUNT(*) - ' . (int) $offset . ') AS count
+            SELECT COUNT(*) - ' . (int) $offset . ' AS count
                 FROM (' . $this->query->build() . ') as subquery;
         ');
 
-        return is_array($result) ? $result[0]['count'] : [];
+        return is_array($result) ? $result[0]['count'] : 0;
     }
 }
