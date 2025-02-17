@@ -38,10 +38,15 @@ use PrestaShop\Module\PsEventbus\Traits\Hooks\UseImageHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseImageTypeHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseLanguageHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseManufacturerHooks;
+use PrestaShop\Module\PsEventbus\Traits\Hooks\UseOrderCarrierHooks;
+use PrestaShop\Module\PsEventbus\Traits\Hooks\UseOrderCartRuleHooks;
+use PrestaShop\Module\PsEventbus\Traits\Hooks\UseOrderDetailHooks;
+use PrestaShop\Module\PsEventbus\Traits\Hooks\UseOrderHistoryHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseOrderHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseProductHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseSpecificPriceHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseStockHooks;
+use PrestaShop\Module\PsEventbus\Traits\Hooks\UseStockMvtHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseStoreHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseSupplierHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseWishlistHooks;
@@ -64,10 +69,15 @@ trait UseHooks
     use UseImageTypeHooks;
     use UseLanguageHooks;
     use UseManufacturerHooks;
+    use UseOrderCarrierHooks;
+    use UseOrderCartRuleHooks;
+    use UseOrderDetailHooks;
+    use UseOrderHistoryHooks;
     use UseOrderHooks;
     use UseProductHooks;
     use UseSpecificPriceHooks;
     use UseStockHooks;
+    use UseStockMvtHooks;
     use UseStoreHooks;
     use UseSupplierHooks;
     use UseWishlistHooks;
@@ -125,6 +135,18 @@ trait UseHooks
             'actionObjectManufacturerAddAfter',
             'actionObjectManufacturerUpdateAfter',
             'actionObjectManufacturerDeleteAfter',
+
+            'actionObjectOrderCarrierAddAfter',
+            'actionObjectOrderCarrierUpdateAfter',
+
+            'actionObjectOrderCartRuleAddAfter',
+            'actionObjectOrderCartRuleUpdateAfter',
+
+            'actionObjectOrderDetailAddAfter',
+            'actionObjectOrderDetailUpdateAfter',
+
+            'actionObjectOrderHistoryAddAfter',
+            'actionObjectOrderHistoryUpdateAfter',
 
             'actionObjectOrderAddAfter',
             'actionObjectOrderUpdateAfter',

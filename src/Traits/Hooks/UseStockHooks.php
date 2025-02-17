@@ -84,31 +84,4 @@ trait UseStockHooks
             );
         }
     }
-
-    /**
-     * Work Only on 1.6
-     *
-     * @param array<mixed> $parameters
-     *
-     * @return void
-     */
-    public function hookActionObjectStockMvtAddAfter($parameters)
-    {
-        /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
-
-        /** @var \StockMvt $stockMvt */
-        $stockMvt = $parameters['object'];
-
-        if (isset($stockMvt->id)) {
-            $synchronizationService->sendLiveSync(Config::COLLECTION_STOCK_MOVEMENTS, Config::INCREMENTAL_TYPE_UPSERT);
-            $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_STOCK_MOVEMENTS => $stockMvt->id],
-                Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
-                $this->shopId,
-                true
-            );
-        }
-    }
 }

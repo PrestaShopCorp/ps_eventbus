@@ -38,7 +38,7 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
      * @param string $langIso
      * @param bool $withSelecParameters
      *
-     * @return mixed
+     * @return void
      *
      * @throws \PrestaShopException
      */
@@ -101,8 +101,8 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('ocr.id_order IN(' . implode(',', array_map('intval', $contentIds)) . ')')
-            // ->limit($limit) Sub shop content depend from another, temporary disabled
+            ->where('ocr.id_order_cart_rule IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->limit($limit)
         ;
 
         return $this->runQuery();

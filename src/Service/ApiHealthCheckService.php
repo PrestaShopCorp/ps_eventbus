@@ -135,9 +135,15 @@ class ApiHealthCheckService
             $phpVersion = (string) explode('-', (string) phpversion())[0];
         }
 
+        $psEventbus = \Module::getInstanceByName('ps_eventbus');
+
+        if ($psEventbus == false) {
+            throw new \Exception('ps_eventbus module is not installed');
+        }
+
         $sensibleInformation = [
             'prestashop_version' => _PS_VERSION_,
-            'ps_eventbus_version' => \Ps_eventbus::VERSION,
+            'ps_eventbus_version' => $psEventbus->version,
             'ps_accounts_version' => defined('Ps_accounts::VERSION') ? \Ps_accounts::VERSION : false, /* @phpstan-ignore-line */
             'php_version' => $phpVersion,
             'shop_id' => $this->psAccountsAdapterService->getShopUuid(),

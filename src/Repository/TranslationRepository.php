@@ -38,7 +38,7 @@ class TranslationRepository extends AbstractRepository implements RepositoryInte
      * @param string $langIso
      * @param bool $withSelecParameters
      *
-     * @return mixed
+     * @return void
      *
      * @throws \PrestaShopException
      */

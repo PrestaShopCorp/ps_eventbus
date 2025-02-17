@@ -38,7 +38,7 @@ class TaxonomyRepository extends AbstractRepository implements RepositoryInterfa
      * @param string $langIso
      * @param bool $withSelecParameters
      *
-     * @return mixed
+     * @return void
      *
      * @throws \PrestaShopException
      */

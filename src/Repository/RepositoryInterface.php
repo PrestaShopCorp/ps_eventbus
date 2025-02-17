@@ -39,7 +39,7 @@ interface RepositoryInterface
      * @param string $langIso
      * @param bool $withSelecParameters
      *
-     * @return mixed
+     * @return void
      */
     public function generateFullQuery($langIso, $withSelecParameters);
 
