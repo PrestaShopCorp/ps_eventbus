@@ -108,14 +108,10 @@ class SpecificPriceRepository extends AbstractRepository implements RepositoryIn
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        if ($contentIds == []) {
-            return [];
-        }
-
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('sp.id_specific_price IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('sp.id_specific_price IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')')
             ->limit($limit)
         ;
 
