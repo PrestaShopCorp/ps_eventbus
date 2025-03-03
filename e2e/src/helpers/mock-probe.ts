@@ -91,7 +91,9 @@ export function probe(
   );
 }
 
-export function callPsEventbus<T>(query: Record<string, string>): Promise<AxiosResponse<T, unknown>> {
+export function callPsEventbus<T>(
+  query: Record<string, string>,
+): Promise<AxiosResponse<T, unknown>> {
   const callId = { call_id: Math.random().toString(36).substring(2, 11) };
 
   const queryParams = new URLSearchParams(query);
@@ -108,7 +110,7 @@ export function callPsEventbus<T>(query: Record<string, string>): Promise<AxiosR
       },
     },
   );
-};
+}
 
 export function doFullSync(
   jobId: string,
