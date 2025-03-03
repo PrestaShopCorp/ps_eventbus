@@ -1,4 +1,4 @@
-import { lastValueFrom, toArray, withLatestFrom } from "rxjs";
+import { lastValueFrom, toArray } from "rxjs";
 import { callPsEventbus, doFullSync, ExplainSqlResponse, PsEventbusSyncResponse } from "./helpers/mock-probe";
 import { shopContentList } from "./helpers/shop-contents";
 
