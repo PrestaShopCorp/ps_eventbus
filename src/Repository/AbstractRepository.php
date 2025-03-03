@@ -142,7 +142,7 @@ abstract class AbstractRepository
     private function debugQuery()
     {
         $queryStringified = preg_replace('/\s+/', ' ', $this->query->build());
-        $queryStringified = str_replace(['"'], ["`"], $queryStringified);
+        $queryStringified = str_replace(['"'], ['`'], (string) $queryStringified);
 
         $response = array_merge(
             (array) $this->query,

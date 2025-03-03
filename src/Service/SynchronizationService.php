@@ -201,7 +201,7 @@ class SynchronizationService
         });
 
         $data = $shopContentApiService->getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso);
-        
+
         CommonService::convertDateFormat($data);
 
         if (!empty($data)) {
