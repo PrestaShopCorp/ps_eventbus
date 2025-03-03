@@ -111,8 +111,8 @@ class ErrorHandler
             return;
         }
 
-        if (defined('PS_EVENTBUS_VERBOSE_ENABLED')) {
-            $logsEnabled = PS_EVENTBUS_VERBOSE_ENABLED;
+        if (defined('PS_EVENTBUS_LOGS_ENABLED')) {
+            $logsEnabled = PS_EVENTBUS_LOGS_ENABLED;
         }
 
         if (defined('PS_EVENTBUS_VERBOSE_ENABLED')) {
