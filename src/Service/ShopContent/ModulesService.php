@@ -85,7 +85,7 @@ class ModulesService extends ShopContentAbstractService implements ShopContentSe
      * @return array<mixed>
      */
     public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso)
-    { 
+    {
         $result = $this->moduleRepository->retrieveContentsForIncremental($limit, array_column($upsertedContents, 'id'), $langIso);
 
         if (empty($result)) {
