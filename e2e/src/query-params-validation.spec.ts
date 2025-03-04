@@ -27,6 +27,7 @@ describe("Query param validation", () => {
             expect(response.data.job_id).toEqual(queryParams.job_id);
             expect(response.data.object_type).toEqual(kebabToSnake(shopContent));
             expect(response.data.total_objects).toBeLessThanOrEqual(Number(queryParams.limit));
+            expect([200, 201]).toContain(response.data.httpCode);
         });
 
         it(`${shopContent} - Check if 'remaining_objects' correctly decrease`, async () => {
@@ -67,7 +68,7 @@ describe("Query param validation", () => {
                 expect.objectContaining({
                     "\x00*\x00query": expect.any(Object),
                     queryStringified: expect.any(String),
-                    httpCode: expect.any(Number),
+                    httpCode: 200,
                 }),
             );
         });
@@ -95,7 +96,7 @@ describe("Query param validation", () => {
                 expect.objectContaining({
                     "\x00*\x00query": expect.any(Object),
                     queryStringified: expect.any(String),
-                    httpCode: expect.any(Number),
+                    httpCode: 200,
                 }),
             );
         });
