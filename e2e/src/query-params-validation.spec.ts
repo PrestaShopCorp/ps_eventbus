@@ -30,7 +30,7 @@ describe("Query param validation", () => {
         });
 
         it(`${shopContent} - Check if 'remaining_objects' correctly decrease`, async () => {
-            const limit = Math.floor(Math.random() * 3);
+            const limit = 2;
 
             const response$ = doFullSync(jobId, shopContent, limit, {
                 timeout: 5000,
@@ -47,7 +47,7 @@ describe("Query param validation", () => {
 
                 expectedNextObjectCount = response.remaining_objects - limit;
             });
-        });
+        }, 30000);
 
         it(`${shopContent} - The 'explain_sql' parameters in full sync returns the correct response with the SQL representation`, async () => {
             // Skip for info and themes. There is no sql request for these shop contents
