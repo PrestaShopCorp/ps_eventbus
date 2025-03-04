@@ -2,7 +2,7 @@ import testConfig from './helpers/test.config';
 import { beforeEach, describe, expect } from '@jest/globals';
 import axios from 'axios';
 import { from, lastValueFrom, map, toArray, zip } from 'rxjs';
-import { probe } from './helpers/mock-probe';
+import { callPsEventbus, probe, PsEventbusHealthCheckFullResponse, PsEventbusHealthCheckLiteResponse } from './helpers/mock-probe';
 import { ShopContent, shopContentList } from './helpers/shop-contents';
 
 describe('Reject invalid job-id', () => {
@@ -60,4 +60,52 @@ describe('Reject invalid job-id', () => {
             httpCode: 454,
         });
     });
+
+    it('HealthCheck without job_id (or falsy job_id) should return 200 with minimal response', async () => {
+        const queryParams = {
+            controller: "apiHealthCheck"
+        };
+
+        const response = await callPsEventbus<PsEventbusHealthCheckLiteResponse>(queryParams);
+
+        expect(response.data).toMatchObject({
+            ps_account: true,
+            is_valid_jwt: true,
+            ps_eventbus: true,
+            env: expect.objectContaining({
+                EVENT_BUS_PROXY_API_URL: expect.any(String),
+                EVENT_BUS_SYNC_API_URL: expect.any(String),
+                EVENT_BUS_LIVE_SYNC_API_URL: expect.any(String),
+            }),
+            httpCode: 200,
+        });
+    });
+
+    it('HealthCheck with correct job_id should return 200 with full response', async () => {
+        const queryParams = {
+            controller: "apiHealthCheck",
+            job_id: 'valid-job-id'
+        };
+
+        const response = await callPsEventbus<PsEventbusHealthCheckFullResponse>(queryParams);
+
+        expect(response.data).toMatchObject({
+            prestashop_version: expect.any(String),
+            ps_eventbus_version: expect.any(String),
+            ps_accounts_version: expect.any(String),
+            php_version: expect.any(String),
+            shop_id: expect.any(String),
+            ps_account: true,
+            is_valid_jwt: true,
+            ps_eventbus: true,
+            env: expect.objectContaining({
+                EVENT_BUS_PROXY_API_URL: expect.any(String),
+                EVENT_BUS_SYNC_API_URL: expect.any(String),
+                EVENT_BUS_LIVE_SYNC_API_URL: expect.any(String),
+            }),
+            httpCode: 200,
+        });
+    });
 });
+
+
