@@ -1,77 +1,77 @@
 [
-  {
-    "action": "upsert",
-    "collection": "order_carriers",
-    "properties": {
-      "id_order_carrier": 1,
-      "id_order": 1,
-      "id_carrier": 2,
-      "id_order_invoice": 0,
-      "weight": 0,
-      "shipping_cost_tax_excl": 7,
-      "shipping_cost_tax_incl": 8,
-      "tracking_number": "",
-      "date_add": "2024-10-26T06:57:16+0200"
+    {
+        "action": "upsert",
+        "collection": "order_carriers",
+        "properties": {
+            "id_order_carrier": 1,
+            "id_order": 1,
+            "id_carrier": 2,
+            "id_order_invoice": 0,
+            "weight": 0,
+            "shipping_cost_tax_excl": 7,
+            "shipping_cost_tax_incl": 8,
+            "tracking_number": "",
+            "date_add": "2024-10-26T06:57:16+0200"
+        }
+    },
+    {
+        "action": "upsert",
+        "collection": "order_carriers",
+        "properties": {
+            "id_order_carrier": 2,
+            "id_order": 2,
+            "id_carrier": 2,
+            "id_order_invoice": 0,
+            "weight": 0,
+            "shipping_cost_tax_excl": 7,
+            "shipping_cost_tax_incl": 8,
+            "tracking_number": "",
+            "date_add": "2024-10-26T06:57:16+0200"
+        }
+    },
+    {
+        "action": "upsert",
+        "collection": "order_carriers",
+        "properties": {
+            "id_order_carrier": 3,
+            "id_order": 3,
+            "id_carrier": 2,
+            "id_order_invoice": 0,
+            "weight": 0,
+            "shipping_cost_tax_excl": 7,
+            "shipping_cost_tax_incl": 8,
+            "tracking_number": "",
+            "date_add": "2024-10-26T06:57:16+0200"
+        }
+    },
+    {
+        "action": "upsert",
+        "collection": "order_carriers",
+        "properties": {
+            "id_order_carrier": 4,
+            "id_order": 4,
+            "id_carrier": 2,
+            "id_order_invoice": 0,
+            "weight": 0,
+            "shipping_cost_tax_excl": 7,
+            "shipping_cost_tax_incl": 8,
+            "tracking_number": "",
+            "date_add": "2024-10-26T06:57:16+0200"
+        }
+    },
+    {
+        "action": "upsert",
+        "collection": "order_carriers",
+        "properties": {
+            "id_order_carrier": 5,
+            "id_order": 5,
+            "id_carrier": 2,
+            "id_order_invoice": 0,
+            "weight": 0,
+            "shipping_cost_tax_excl": 7,
+            "shipping_cost_tax_incl": 8,
+            "tracking_number": "",
+            "date_add": "2024-10-26T06:57:16+0200"
+        }
     }
-  },
-  {
-    "action": "upsert",
-    "collection": "order_carriers",
-    "properties": {
-      "id_order_carrier": 2,
-      "id_order": 2,
-      "id_carrier": 2,
-      "id_order_invoice": 0,
-      "weight": 0,
-      "shipping_cost_tax_excl": 7,
-      "shipping_cost_tax_incl": 8,
-      "tracking_number": "",
-      "date_add": "2024-10-26T06:57:16+0200"
-    }
-  },
-  {
-    "action": "upsert",
-    "collection": "order_carriers",
-    "properties": {
-      "id_order_carrier": 3,
-      "id_order": 3,
-      "id_carrier": 2,
-      "id_order_invoice": 0,
-      "weight": 0,
-      "shipping_cost_tax_excl": 7,
-      "shipping_cost_tax_incl": 8,
-      "tracking_number": "",
-      "date_add": "2024-10-26T06:57:16+0200"
-    }
-  },
-  {
-    "action": "upsert",
-    "collection": "order_carriers",
-    "properties": {
-      "id_order_carrier": 4,
-      "id_order": 4,
-      "id_carrier": 2,
-      "id_order_invoice": 0,
-      "weight": 0,
-      "shipping_cost_tax_excl": 7,
-      "shipping_cost_tax_incl": 8,
-      "tracking_number": "",
-      "date_add": "2024-10-26T06:57:16+0200"
-    }
-  },
-  {
-    "action": "upsert",
-    "collection": "order_carriers",
-    "properties": {
-      "id_order_carrier": 5,
-      "id_order": 5,
-      "id_carrier": 2,
-      "id_order_invoice": 0,
-      "weight": 0,
-      "shipping_cost_tax_excl": 7,
-      "shipping_cost_tax_incl": 8,
-      "tracking_number": "",
-      "date_add": "2024-10-26T06:57:16+0200"
-    }
-  }
 ]
