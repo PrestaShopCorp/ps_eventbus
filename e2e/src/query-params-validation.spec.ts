@@ -32,9 +32,7 @@ describe("Query param validation", () => {
         it(`${shopContent} - Check if 'remaining_objects' correctly decrease`, async () => {
             const limit = 2;
 
-            const response$ = doFullSync(jobId, shopContent, limit, {
-                timeout: 5000,
-            });
+            const response$ = doFullSync(jobId, shopContent, limit, { timeout: 5000 });
 
             const messages = await lastValueFrom(response$.pipe(toArray()));
 

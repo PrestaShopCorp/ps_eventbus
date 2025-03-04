@@ -3,7 +3,7 @@ import { WebSocketSubject } from 'rxjs/webSocket';
 import { EMPTY, expand, filter, from, map, Observable, takeUntil, timeout, timer } from 'rxjs';
 import R from 'ramda';
 import testConfig from './test.config';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { ShopContent } from './shop-contents';
 
 const DEFAULT_OPTIONS = {
@@ -25,6 +25,12 @@ export type PsEventbusSyncResponse = {
     httpCode: number;
     body: unknown; // not sure what this is
     upload_url: string;
+};
+
+export type ExplainSqlResponse = {
+  "*query": string;
+  queryStringified: string;
+  httpCode: number;
 };
 
 // TODO define collection as type literal
@@ -70,14 +76,14 @@ export function probe(match?: Partial<MockProbeResponse>, options?: MockProbeOpt
     );
 }
 
-export function doFullSync(jobId: string, shopContent: ShopContent, options?: MockClientOptions): Observable<PsEventbusSyncResponse> {
+export function doFullSync(jobId: string, shopContent: ShopContent, limit: number, options?: MockClientOptions): Observable<PsEventbusSyncResponse> {
     options = R.mergeLeft(options, DEFAULT_OPTIONS);
 
     const callId = { call_id: Math.random().toString(36).substring(2, 11) };
 
     const requestNext = (full: number) => {
         return axios.post<PsEventbusSyncResponse>(
-            `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiShopContent&shop_content=${shopContent}&limit=5&full=${full}&job_id=${jobId}`,
+            `${testConfig.prestashopUrl}/index.php?fc=module&module=ps_eventbus&controller=apiShopContent&shop_content=${shopContent}&limit=${limit}&full=${full}&job_id=${jobId}`,
             callId,
             {
                 headers: {
@@ -118,3 +124,4 @@ export function callPsEventbus<T>(query: Record<string, string>): Promise<AxiosR
       },
     },
   );
+}
