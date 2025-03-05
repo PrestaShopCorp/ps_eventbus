@@ -30,7 +30,7 @@ describe("Query param validation", () => {
             expect([200, 201]).toContain(response.data.httpCode);
         });
 
-        it.skip(`${shopContent} - Check if 'remaining_objects' correctly decrease`, async () => {
+        it(`${shopContent} - Check if 'remaining_objects' correctly decrease`, async () => {
             const limit = 2;
 
             const response$ = doFullSync(jobId, shopContent, limit, { timeout: 5000 });
