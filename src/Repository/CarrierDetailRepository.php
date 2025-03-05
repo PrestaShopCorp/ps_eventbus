@@ -147,14 +147,10 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        if ($contentIds == []) {
-            return [];
-        }
-
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('ca.id_carrier IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('ca.id_carrier IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')')
             // ->limit($limit) Sub shop content depend from another, temporary disabled
         ;
 

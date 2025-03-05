@@ -69,6 +69,9 @@ class CartRepository extends AbstractRepository implements RepositoryInterface
      */
     public function retrieveContentsForFull($offset, $limit, $langIso)
     {
+        /* dump('full');
+        die; */
+
         $this->generateFullQuery($langIso, true);
 
         $this->query->limit((int) $limit, (int) $offset);
@@ -88,14 +91,10 @@ class CartRepository extends AbstractRepository implements RepositoryInterface
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        if ($contentIds == []) {
-            return [];
-        }
-
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('c.id_cart IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('c.id_cart IN(' . implode(',', array_map('intval', $contentIds ?: [-1] ?: [-1])) . ')')
             ->limit($limit)
         ;
 

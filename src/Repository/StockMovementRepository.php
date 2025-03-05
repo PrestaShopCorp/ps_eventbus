@@ -105,13 +105,9 @@ class StockMovementRepository extends AbstractRepository implements RepositoryIn
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        if ($contentIds == []) {
-            return [];
-        }
-
         $this->generateFullQuery($langIso, true);
 
-        $this->query->where('sm.id_stock_mvt IN(' . implode(',', array_map('intval', $contentIds)) . ')');
+        $this->query->where('sm.id_stock_mvt IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')');
 
         return $this->runQuery();
     }
