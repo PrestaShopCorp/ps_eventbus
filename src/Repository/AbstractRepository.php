@@ -116,20 +116,20 @@ abstract class AbstractRepository
             $this->debugQuery();
         }
 
-        /**
+        /*
          * This is a workaround to avoid case where the table does not exist
          * Exemple with Taxonomies. 'fb_category_match' table does not exist in some cases
          * and the query will throw an exception.
-         * 
+         *
          * Previously, we have used the 'checkIfTableExist' method in parent class to check if the table exists
          * but it is not enough because explain_sql is not reachable in this case.
-         * 
+         *
          * The solution is to catch the exception and return an empty array when error code is '42S02' (Table does not exist error code)
          */
         try {
             return (array) $this->db->executeS($this->query);
         } catch (\PrestaShopException $e) {
-            if ($e->getPrevious()->getCode() === '42S02') {
+            if (!is_null($e->getPrevious()) && $e->getPrevious()->getCode() === '42S02') {
                 return [];
             }
 
