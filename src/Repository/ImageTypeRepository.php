@@ -120,6 +120,6 @@ class ImageTypeRepository extends AbstractRepository implements RepositoryInterf
 
         $result = $this->runQuery(true);
 
-        return $result[0]['count'];
+        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
     }
 }
