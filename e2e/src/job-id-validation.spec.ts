@@ -63,7 +63,7 @@ describe('Reject invalid job-id', () => {
 
     it('HealthCheck without job_id (or falsy job_id) should return 200 with minimal response', async () => {
         const queryParams = {
-            controller: "apiHealthCheck"
+            controller: 'apiHealthCheck',
         };
 
         const response = await callPsEventbus<PsEventbusHealthCheckLiteResponse>(queryParams);
@@ -83,8 +83,8 @@ describe('Reject invalid job-id', () => {
 
     it('HealthCheck with correct job_id should return 200 with full response', async () => {
         const queryParams = {
-            controller: "apiHealthCheck",
-            job_id: 'valid-job-id'
+            controller: 'apiHealthCheck',
+            job_id: 'valid-job-id',
         };
 
         const response = await callPsEventbus<PsEventbusHealthCheckFullResponse>(queryParams);
@@ -107,5 +107,3 @@ describe('Reject invalid job-id', () => {
         });
     });
 });
-
-
