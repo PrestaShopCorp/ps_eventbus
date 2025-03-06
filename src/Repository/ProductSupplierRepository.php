@@ -118,6 +118,6 @@ class ProductSupplierRepository extends AbstractRepository implements Repository
 
         $result = $this->runQuery(true);
 
-        return $result[0]['count'];
+        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
     }
 }

@@ -68,11 +68,6 @@ class TaxonomyRepository extends AbstractRepository implements RepositoryInterfa
      */
     public function retrieveContentsForFull($offset, $limit, $langIso)
     {
-        // need this module for this table : https://addons.prestashop.com/en/products-on-facebook-social-networks/50291-prestashop-social-with-facebook-instagram.html
-        if (empty($this->checkIfPsFacebookIsInstalled())) {
-            return [];
-        }
-
         $this->generateFullQuery($langIso, true);
 
         $this->query->limit((int) $limit, (int) $offset);
@@ -114,30 +109,12 @@ class TaxonomyRepository extends AbstractRepository implements RepositoryInterfa
      */
     public function countFullSyncContentLeft($offset, $limit, $langIso)
     {
-        // need this module for this table : https://addons.prestashop.com/en/products-on-facebook-social-networks/50291-prestashop-social-with-facebook-instagram.html
-        if (empty($this->checkIfPsFacebookIsInstalled())) {
-            return 0;
-        }
-
         $this->generateFullQuery($langIso, false);
 
         $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
 
         $result = $this->runQuery(true);
 
-        return $result[0]['count'];
-    }
-
-    /**
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
-     * @throws \PrestaShopException
-     * @throws \PrestaShopDatabaseException
-     */
-    private function checkIfPsFacebookIsInstalled()
-    {
-        $moduleisInstalledQuery = 'SELECT * FROM information_schema.tables WHERE table_name LIKE \'%fb_category_match\' LIMIT 1;';
-
-        return $this->db->executeS($moduleisInstalledQuery);
+        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
     }
 }
