@@ -127,8 +127,15 @@ abstract class AbstractRepository
          * The solution is to catch the exception and return an empty array when error code is '42S02' (Table does not exist error code)
          */
         try {
-            return (array) $this->db->executeS($this->query);
-        } catch (\PrestaShopException $e) {
+            $result = $this->db->executeS($this->query);
+
+            // for 1.6 compatibility. executeS returns false if no result
+            if ($result == false) {
+                return [];
+            }
+
+            return (array) $result;
+        } catch (\Exception $e) {
             if (!is_null($e->getPrevious()) && $e->getPrevious()->getCode() === '42S02') {
                 return [];
             }
