@@ -40,7 +40,7 @@ export type PsEventbusHealthCheckFullResponse = {
         EVENT_BUS_PROXY_API_URL: string;
         EVENT_BUS_SYNC_API_URL: string;
         EVENT_BUS_LIVE_SYNC_API_URL: string;
-    },
+    };
     httpCode: number;
 };
 
@@ -52,14 +52,14 @@ export type PsEventbusHealthCheckLiteResponse = {
         EVENT_BUS_PROXY_API_URL: string;
         EVENT_BUS_SYNC_API_URL: string;
         EVENT_BUS_LIVE_SYNC_API_URL: string;
-    },
+    };
     httpCode: number;
 };
 
 export type ExplainSqlResponse = {
-  "*query": string;
-  queryStringified: string;
-  httpCode: number;
+    '*query': string;
+    queryStringified: string;
+    httpCode: number;
 };
 
 // TODO define collection as type literal
@@ -137,20 +137,16 @@ export function doFullSync(jobId: string, shopContent: ShopContent, limit: numbe
 }
 
 export function callPsEventbus<T>(query: Record<string, string>): Promise<AxiosResponse<T, unknown>> {
-  const callId = { call_id: Math.random().toString(36).substring(2, 11) };
+    const callId = { call_id: Math.random().toString(36).substring(2, 11) };
 
-  const queryParams = new URLSearchParams(query);
-  queryParams.set("fc", "module");
-  queryParams.set("module", "ps_eventbus");
+    const queryParams = new URLSearchParams(query);
+    queryParams.set('fc', 'module');
+    queryParams.set('module', 'ps_eventbus');
 
-  return axios.post<T>(
-    `${testConfig.prestashopUrl}/index.php?${queryParams.toString()}`,
-    callId,
-    {
-      headers: {
-        Host: testConfig.prestaShopHostHeader,
-        "Content-Type": "application/x-www-form-urlencoded", // for compat PHP 5.6
-      },
-    },
-  );
+    return axios.post<T>(`${testConfig.prestashopUrl}/index.php?${queryParams.toString()}`, callId, {
+        headers: {
+            Host: testConfig.prestaShopHostHeader,
+            'Content-Type': 'application/x-www-form-urlencoded', // for compat PHP 5.6
+        },
+    });
 }
