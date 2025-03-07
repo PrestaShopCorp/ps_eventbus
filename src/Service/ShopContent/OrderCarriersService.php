@@ -108,10 +108,10 @@ class OrderCarriersService extends ShopContentAbstractService implements ShopCon
     private function castOrderCarriers(&$orderCarriers)
     {
         foreach ($orderCarriers as &$orderCarrier) {
-            $orderCarrier['id_order_carrier'] = (int) $orderCarrier['id_order_carrier'];
-            $orderCarrier['id_order'] = (int) $orderCarrier['id_order'];
-            $orderCarrier['id_carrier'] = (int) $orderCarrier['id_carrier'];
-            $orderCarrier['id_order_invoice'] = (int) $orderCarrier['id_order_invoice'];
+            $orderCarrier['id_order_carrier'] = (string) $orderCarrier['id_order_carrier'];
+            $orderCarrier['id_order'] = (string) $orderCarrier['id_order'];
+            $orderCarrier['id_carrier'] = (string) $orderCarrier['id_carrier'];
+            $orderCarrier['id_order_invoice'] = (string) $orderCarrier['id_order_invoice'];
             $orderCarrier['weight'] = (int) $orderCarrier['weight'];
             $orderCarrier['shipping_cost_tax_excl'] = (int) $orderCarrier['shipping_cost_tax_excl'];
             $orderCarrier['shipping_cost_tax_incl'] = (int) $orderCarrier['shipping_cost_tax_incl'];
