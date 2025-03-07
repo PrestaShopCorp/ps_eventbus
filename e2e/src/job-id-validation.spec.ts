@@ -4,17 +4,15 @@ import axios from 'axios';
 import { from, lastValueFrom, map, toArray, zip } from 'rxjs';
 import { callPsEventbus, probe, PsEventbusHealthCheckFullResponse, PsEventbusHealthCheckLiteResponse } from './helpers/mock-probe';
 import { ShopContent, shopContentList } from './helpers/shop-contents';
+import { generateFakeJobId } from './helpers/data-helper';
 
 describe('Reject invalid job-id', () => {
-    let generatedNumber = 0;
-
     const shopContents: ShopContent[] = shopContentList;
 
     let jobId: string;
 
     beforeEach(() => {
-        generatedNumber = Date.now() + Math.trunc(Math.random() * 100000000000000);
-        jobId = `invalid-job-id-${generatedNumber}`;
+        jobId = generateFakeJobId(false);
     });
 
     it.each(shopContents)(`%s should return 454 with an invalid job id (sync-api status 454)`, async (shopContent) => {

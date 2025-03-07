@@ -4,7 +4,7 @@ import { dumpUploadData, logAxiosError } from './helpers/log-helper';
 import axios from 'axios';
 import { doFullSync, probe, PsEventbusSyncUpload } from './helpers/mock-probe';
 import { lastValueFrom, toArray, withLatestFrom } from 'rxjs';
-import { loadFixture, omitProperties, sortUploadData } from './helpers/data-helper';
+import { generateFakeJobId, loadFixture, omitProperties, sortUploadData } from './helpers/data-helper';
 import { shopContentList } from './helpers/shop-contents';
 
 expect.extend(matchers);
@@ -39,13 +39,10 @@ const specialFieldAssert: { [index: string]: (val) => void } = {
 };
 
 describe('Full Sync', () => {
-    let generatedNumber = 0;
-
     let jobId: string;
 
     beforeEach(() => {
-        generatedNumber = Date.now() + Math.trunc(Math.random() * 100000000000000);
-        jobId = `valid-job-full-${generatedNumber}`;
+        jobId = generateFakeJobId();
     });
 
     describe.each(shopContentList)('%s', (shopContent) => {

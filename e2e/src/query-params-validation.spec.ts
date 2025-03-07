@@ -1,14 +1,13 @@
 import { lastValueFrom, toArray } from 'rxjs';
 import { callPsEventbus, doFullSync, ExplainSqlResponse, PsEventbusSyncResponse } from './helpers/mock-probe';
 import { shopContentList } from './helpers/shop-contents';
+import { generateFakeJobId } from './helpers/data-helper';
 
 describe('Query param validation', () => {
-    let generatedNumber = 0;
     let jobId: string;
 
     beforeEach(() => {
-        generatedNumber = Date.now() + Math.trunc(Math.random() * 100000000000000);
-        jobId = `valid-job-full-${generatedNumber}`;
+        jobId = generateFakeJobId();
     });
 
     const kebabToSnake = (str) => str.replace(/-/g, '_');
