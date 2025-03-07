@@ -94,7 +94,11 @@ describe('Query param validation', () => {
 
             expect(response.data).toEqual(
                 expect.objectContaining({
-                    '\x00*\x00query': expect.any(Object),
+                    '\x00*\x00query': expect.objectContaining({
+                        where: expect.arrayContaining([
+                            expect.stringContaining('IN(-1)')
+                        ])
+                    }),
                     queryStringified: expect.any(String),
                     httpCode: 200,
                 })
