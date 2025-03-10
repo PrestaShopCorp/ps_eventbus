@@ -91,7 +91,7 @@ class CustomProductCarrierRepository extends AbstractRepository implements Repos
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('pc.id_carrier_reference IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where("CONCAT(pc.id_product, '-', IFNULL(pc.id_carrier_reference, 0)) IN('" . implode("','", $contentIds) . "')")
             ->limit($limit)
         ;
 
@@ -130,6 +130,8 @@ class CustomProductCarrierRepository extends AbstractRepository implements Repos
     public function getCustomProductCarrierIdsByProductId($idProduct)
     {
         $this->generateMinimalQuery(self::TABLE_NAME, 'pc');
+
+        $this->query->select("CONCAT(pc.id_product, '-', COALESCE(pc.id_carrier_reference, 0)) AS id_custom_product_carrier");
 
         $this->query
             ->where('pc.id_product = ' . (int) $idProduct)
