@@ -1,4 +1,3 @@
-import WebSocket from 'ws';
 import { WebSocketSubject } from 'rxjs/webSocket';
 import { EMPTY, expand, filter, from, map, Observable, takeUntil, timeout, timer } from 'rxjs';
 import R from 'ramda';
@@ -16,14 +15,14 @@ export type MockClientOptions = typeof DEFAULT_OPTIONS;
 export type PsEventbusSyncResponse = {
     job_id: string;
     object_type: string;
-    syncType: string; // 'full' | 'incremental'
-    total_objects: number; // may not always be accurate, can't be relied on
-    has_remaining_objects: boolean; // reliable
-    remaining_objects: number; // may not always be accurate, can't be relied on
+    syncType: 'full'|'incremental';
+    total_objects: number;
+    has_remaining_objects: boolean;
+    remaining_objects: number;
     md5: string;
     status: boolean;
     httpCode: number;
-    body: unknown; // not sure what this is
+    body: unknown;
     upload_url: string;
 };
 
@@ -62,11 +61,8 @@ export type ExplainSqlResponse = {
     httpCode: number;
 };
 
-// TODO define collection as type literal
-export type Collection = string;
-
 export type PsEventbusSyncUpload = {
-    collection: Collection;
+    collection: ShopContent;
     id: string;
     properties: unknown;
 };
@@ -80,12 +76,6 @@ export type MockProbeResponse = {
     params: Record<string, string>;
     body: Record<string, unknown> & { file: PsEventbusSyncUpload[] };
 };
-
-// no Websocket implementation seems to exist in jest runner
-if (!global.WebSocket) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (global as any).WebSocket = WebSocket;
-}
 
 let wsConnection: Observable<MockProbeResponse> = null;
 function getProbeSocket(): Observable<MockProbeResponse> {
