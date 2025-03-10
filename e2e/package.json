@@ -45,5 +45,10 @@
   },
   "dependencies": {
     "semver": "^7.6.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@swc/core"
+    ]
   }
 }
