@@ -4,6 +4,7 @@ import R from 'ramda';
 import testConfig from './test.config';
 import axios, { AxiosResponse } from 'axios';
 import { ShopContent } from './shop-contents';
+import WebSocket from 'ws';
 
 const DEFAULT_OPTIONS = {
     timeout: 500,
@@ -76,6 +77,12 @@ export type MockProbeResponse = {
     params: Record<string, string>;
     body: Record<string, unknown> & { file: PsEventbusSyncUpload[] };
 };
+
+// no Websocket implementation seems to exist in jest runner
+if (!global.WebSocket) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (global as any).WebSocket = WebSocket;
+}
 
 let wsConnection: Observable<MockProbeResponse> = null;
 function getProbeSocket(): Observable<MockProbeResponse> {
