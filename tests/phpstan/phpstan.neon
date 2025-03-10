@@ -1,6 +1,5 @@
 includes:
   - /var/www/html/modules/ps_eventbus/tests/phpstan/phpstan-1-6.neon
-  - /var/www/html/modules/ps_eventbus/tests/phpstan/phpstan-9-0.neon
 parameters:
   paths:
     - ../../src
