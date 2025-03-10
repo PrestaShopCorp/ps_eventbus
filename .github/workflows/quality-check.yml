@@ -68,9 +68,9 @@ jobs:
       - name: PHPStan PrestaShop ${{ matrix.ps_version }}
         run: |
           if [[ "${{ matrix.ps_version }}" == 1.6.* ]]; then
-            make docker-phpstan-1-6
+            PS_VERSION="${{ matrix.ps_version }}" make docker-phpstan-1-6
           else
-            make docker-phpstan
+            PS_VERSION="${{ matrix.ps_version }}" make docker-phpstan
           fi
 
   phpunit:
