@@ -1,16 +1,16 @@
 includes:
-  - %currentWorkingDirectory%/tests/phpstan/phpstan-1-6.neon
-  - %currentWorkingDirectory%/tests/phpstan/phpstan-9-0.neon
+  - /var/www/html/modules/ps_eventbus/tests/phpstan/phpstan-1-6.neon
+  - /var/www/html/modules/ps_eventbus/tests/phpstan/phpstan-9-0.neon
 parameters:
   paths:
     - ../../src
     - ../../controllers
     - ../../config
     - ../../ps_eventbus.php
-  excludePaths:
-    - ../../src/Api/HttpClient.php
   reportUnmatchedIgnoredErrors: false
   ignoreErrors:
+    - message: "#.*#"
+      path: "../../src/Api/HttpClient.php"
     - '#Call to method getOrRefreshToken\(\) on an unknown class PrestaShop\\AccountsAuth\\Service\\PsAccountsService.#'
     - '#Instantiated class Symfony\\Component\\Cache\\Adapter\\FilesystemAdapter not found.#'
     - '#Call to method getItem\(\) on an unknown class Symfony\\Component\\Cache\\Adapter\\FilesystemAdapter.#'

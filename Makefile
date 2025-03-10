@@ -4,7 +4,7 @@ VERSION ?= $(shell git describe --tags 2> /dev/null || echo "v0.0.0")
 SEM_VERSION ?= $(shell echo ${VERSION} | sed 's/^v//')
 BRANCH_NAME ?= $(shell git rev-parse --abbrev-ref HEAD | sed -e 's/\//_/g')
 PACKAGE ?= ${MODULE_NAME}-${VERSION}
-PS_VERSION ?= 8.1.7
+PS_VERSION ?= 1.6.1.11
 TESTING_IMAGE ?= prestashop/prestashop-flashlight:${PS_VERSION}
 PS_ROOT_DIR ?= $(shell pwd)/prestashop/prestashop-${PS_VERSION}
 WORKDIR ?= ./
@@ -154,6 +154,9 @@ phpstan: tools/vendor prestashop/prestashop-${PS_VERSION}
 docker-phpstan: tools/vendor
 	@$(call in_docker,/usr/bin/phpstan,analyse --memory-limit=-1 --configuration=./tests/phpstan/phpstan-docker.neon)
 
+docker-phpstan-1-6: tools/vendor
+	@$(call in_docker_1_6,/usr/bin/phpstan,analyse --memory-limit=-1 --configuration=./modules/ps_eventbus/tests/phpstan/phpstan-docker.neon)
+
 # target: header-stamp                                         - check Headers of PHP files
 .PHONY:header-stamp
 header-stamp:
@@ -206,6 +209,12 @@ define in_docker
 	docker run \
 	--rm \
 	--workdir /var/www/html/modules/${MODULE_NAME} \
+	--volume $(shell pwd):/var/www/html/modules/${MODULE_NAME}:rw \
+	--entrypoint $1 ${TESTING_IMAGE} $2
+endef
+
+define in_docker_1_6
+	docker run --rm \
 	--volume $(shell pwd):/var/www/html/modules/${MODULE_NAME}:rw \
 	--entrypoint $1 ${TESTING_IMAGE} $2
 endef
