@@ -101,14 +101,10 @@ class OrderStatusHistoryRepository extends AbstractRepository implements Reposit
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        if ($contentIds == []) {
-            return [];
-        }
-
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('oh.id_order_history IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('oh.id_order_history IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')')
             ->limit($limit)
         ;
 
@@ -133,7 +129,7 @@ class OrderStatusHistoryRepository extends AbstractRepository implements Reposit
 
         $result = $this->runQuery(true);
 
-        return $result[0]['count'];
+        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
     }
 
     /**

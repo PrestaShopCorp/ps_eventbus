@@ -97,21 +97,6 @@ abstract class AbstractRepository
     }
 
     /**
-     * @param string $tableName
-     *
-     * @return array<mixed>|bool|\mysqli_result|\PDOStatement|resource|null
-     *
-     * @throws \PrestaShopException
-     * @throws \PrestaShopDatabaseException
-     */
-    protected function checkIfTableExist($tableName)
-    {
-        $request = 'SELECT * FROM information_schema.tables WHERE table_name LIKE \'' . $tableName . '\' LIMIT 1;';
-
-        return $this->db->executeS($request);
-    }
-
-    /**
      * @param bool $disableCurrentExplain
      *
      * @return array<mixed>
@@ -131,7 +116,32 @@ abstract class AbstractRepository
             $this->debugQuery();
         }
 
-        return (array) $this->db->executeS($this->query);
+        /*
+         * This is a workaround to avoid case where the table does not exist
+         * Exemple with Taxonomies. 'fb_category_match' table does not exist in some cases
+         * and the query will throw an exception.
+         *
+         * Previously, we have used the 'checkIfTableExist' method in parent class to check if the table exists
+         * but it is not enough because explain_sql is not reachable in this case.
+         *
+         * The solution is to catch the exception and return an empty array when error code is '42S02' (Table does not exist error code)
+         */
+        try {
+            $result = $this->db->executeS($this->query);
+
+            // for 1.6 compatibility. executeS returns false if no result
+            if ($result == false) {
+                return [];
+            }
+
+            return (array) $result;
+        } catch (\Exception $e) {
+            if (!is_null($e->getPrevious()) && $e->getPrevious()->getCode() === '42S02') {
+                return [];
+            }
+
+            throw $e;
+        }
     }
 
     /**
@@ -142,6 +152,7 @@ abstract class AbstractRepository
     private function debugQuery()
     {
         $queryStringified = preg_replace('/\s+/', ' ', $this->query->build());
+        $queryStringified = str_replace(['"'], ["'"], (string) $queryStringified);
 
         $response = array_merge(
             (array) $this->query,

@@ -1,5 +1,7 @@
 parameters:
   ignoreErrors:
+    - message: '#.*Raven_Client.*#'
+      path: '../../src/Handler/ErrorHandler/ErrorHandler.php'
     - '#Parameter \#1 \$hook_name of method ModuleCore::registerHook\(\) expects string, array<string> given#'
     - '#Access to undefined constant Module::MULTISTORE_COMPATIBILITY_YES#'
     - '#Property ObjectModelCore::\$id \(int\) in isset\(\) is not nullable#'

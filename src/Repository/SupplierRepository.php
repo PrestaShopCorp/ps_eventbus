@@ -105,14 +105,10 @@ class SupplierRepository extends AbstractRepository implements RepositoryInterfa
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        if ($contentIds == []) {
-            return [];
-        }
-
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('su.id_supplier IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('su.id_supplier IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')')
             ->limit($limit)
         ;
 
@@ -137,6 +133,6 @@ class SupplierRepository extends AbstractRepository implements RepositoryInterfa
 
         $result = $this->runQuery(true);
 
-        return $result[0]['count'];
+        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
     }
 }

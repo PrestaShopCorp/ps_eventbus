@@ -172,14 +172,10 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        if ($contentIds == []) {
-            return [];
-        }
-
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where("CONCAT(p.id_product, '-', IFNULL(pas.id_product_attribute, 0)) IN('" . implode("','", $contentIds) . "')")
+            ->where("CONCAT(p.id_product, '-', IFNULL(pas.id_product_attribute, 0)) IN(" . implode("','", $contentIds ?: [-1]) . ')')
             ->limit($limit)
         ;
 
@@ -204,7 +200,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
 
         $result = $this->runQuery(true);
 
-        return $result[0]['count'];
+        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
     }
 
     /**

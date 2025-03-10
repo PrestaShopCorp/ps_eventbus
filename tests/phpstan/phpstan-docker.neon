@@ -1,3 +1,3 @@
 includes:
   - /var/opt/prestashop/coding-standards/phpstan/ps-module-extension.neon
-  - %currentWorkingDirectory%/tests/phpstan/phpstan.neon
+  - /var/www/html/modules/ps_eventbus/tests/phpstan/phpstan.neon
