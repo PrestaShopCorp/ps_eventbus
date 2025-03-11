@@ -24,25 +24,27 @@ describe('Query param validation', () => {
             const response = await callPsEventbus<PsEventbusSyncResponse>(queryParams);
 
             const expectedKeys = [
-                "job_id",
-                "object_type",
-                "syncType",
-                "total_objects",
-                "has_remaining_objects",
-                "remaining_objects",
-                "md5",
-                "httpCode",
+                'job_id',
+                'object_type',
+                'syncType',
+                'total_objects',
+                'has_remaining_objects',
+                'remaining_objects',
+                'md5',
+                'httpCode',
                 // Clés facultatives, présentens que lorsqu'il y a upload de data
-                "body",
-                "upload_url",
-                "status"
+                'body',
+                'upload_url',
+                'status',
             ];
-            
+
             // Vérifier que les clés de response.data sont strictement contenues dans expectedKeys
             expect(Object.keys(response.data).sort()).toStrictEqual(
-                Object.keys(response.data).filter(key => expectedKeys.includes(key)).sort()
+                Object.keys(response.data)
+                    .filter((key) => expectedKeys.includes(key))
+                    .sort()
             );
-            
+
             // Vérifier que les propriétés requises sont bien présentes avec leurs types attendus
             expect(response.data).toMatchObject({
                 job_id: queryParams.job_id,
@@ -96,9 +98,9 @@ describe('Query param validation', () => {
             const response = await callPsEventbus<ExplainSqlResponse>(queryParams);
 
             expect(response.data).toStrictEqual({
-                    '\x00*\x00query': expect.any(Object),
-                    queryStringified: expect.any(String),
-                    httpCode: 200,
+                '\x00*\x00query': expect.any(Object),
+                queryStringified: expect.any(String),
+                httpCode: 200,
             });
         });
 
