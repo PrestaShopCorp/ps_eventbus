@@ -16,7 +16,7 @@ export type MockClientOptions = typeof DEFAULT_OPTIONS;
 export type PsEventbusSyncResponse = {
     job_id: string;
     object_type: string;
-    syncType: 'full'|'incremental';
+    syncType: 'full' | 'incremental';
     total_objects: number;
     has_remaining_objects: boolean;
     remaining_objects: number;
