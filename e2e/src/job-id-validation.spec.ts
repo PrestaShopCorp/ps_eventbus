@@ -66,15 +66,15 @@ describe('Reject invalid job-id', () => {
 
         const response = await callPsEventbus<PsEventbusHealthCheckLiteResponse>(queryParams);
 
-        expect(response.data).toMatchObject({
+        expect(response.data).toStrictEqual({
             ps_account: true,
             is_valid_jwt: true,
             ps_eventbus: true,
-            env: expect.objectContaining({
+            env: {
                 EVENT_BUS_PROXY_API_URL: expect.any(String),
                 EVENT_BUS_SYNC_API_URL: expect.any(String),
                 EVENT_BUS_LIVE_SYNC_API_URL: expect.any(String),
-            }),
+            },
             httpCode: 200,
         });
     });
@@ -87,7 +87,7 @@ describe('Reject invalid job-id', () => {
 
         const response = await callPsEventbus<PsEventbusHealthCheckFullResponse>(queryParams);
 
-        expect(response.data).toMatchObject({
+        expect(response.data).toStrictEqual({
             prestashop_version: expect.any(String),
             ps_eventbus_version: expect.any(String),
             ps_accounts_version: expect.any(String),
@@ -96,11 +96,11 @@ describe('Reject invalid job-id', () => {
             ps_account: true,
             is_valid_jwt: true,
             ps_eventbus: true,
-            env: expect.objectContaining({
+            env: {
                 EVENT_BUS_PROXY_API_URL: expect.any(String),
                 EVENT_BUS_SYNC_API_URL: expect.any(String),
                 EVENT_BUS_LIVE_SYNC_API_URL: expect.any(String),
-            }),
+            },
             httpCode: 200,
         });
     });
