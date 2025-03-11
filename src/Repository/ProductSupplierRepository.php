@@ -90,14 +90,10 @@ class ProductSupplierRepository extends AbstractRepository implements Repository
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        if ($contentIds == []) {
-            return [];
-        }
-
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('ps.id_product IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('ps.id_product IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')')
             // ->limit($limit) Sub shop content depend from another, temporary disabled
         ;
 
@@ -122,6 +118,6 @@ class ProductSupplierRepository extends AbstractRepository implements Repository
 
         $result = $this->runQuery(true);
 
-        return $result[0]['count'];
+        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
     }
 }

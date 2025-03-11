@@ -92,14 +92,10 @@ class OrderCarrierRepository extends AbstractRepository implements RepositoryInt
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        if ($contentIds == []) {
-            return [];
-        }
-
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('oc.id_order_carrier IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('oc.id_order_carrier IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')')
             ->limit($limit)
         ;
 
@@ -124,6 +120,6 @@ class OrderCarrierRepository extends AbstractRepository implements RepositoryInt
 
         $result = $this->runQuery(true);
 
-        return $result[0]['count'];
+        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
     }
 }

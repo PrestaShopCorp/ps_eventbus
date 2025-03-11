@@ -117,14 +117,10 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        if ($contentIds == []) {
-            return [];
-        }
-
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('od.id_order_detail IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('od.id_order_detail IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')')
             ->limit($limit)
         ;
 

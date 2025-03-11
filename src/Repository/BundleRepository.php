@@ -95,14 +95,10 @@ class BundleRepository extends AbstractRepository implements RepositoryInterface
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        if ($contentIds == []) {
-            return [];
-        }
-
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('pac.id_product_pack IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('pac.id_product_pack IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')')
             ->limit($limit)
         ;
 
@@ -127,6 +123,6 @@ class BundleRepository extends AbstractRepository implements RepositoryInterface
 
         $result = $this->runQuery(true);
 
-        return $result[0]['count'];
+        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
     }
 }

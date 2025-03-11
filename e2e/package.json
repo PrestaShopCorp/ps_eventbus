@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "test:e2e": "jest --config=jest.config.json",
+    "test:e2e": "jest --config=jest.config.json --runInBand",
     "test:e2e:watch": "jest --config=jest.config.json --watchAll",
     "test:e2e:detectOpenHandles": "jest --config=jest.config.json --detectOpenHandles",
     "lint": "eslint 'src/**/*.ts'",
@@ -15,8 +15,6 @@
   "devDependencies": {
     "@eslint/js": "^9.10.0",
     "@jest/globals": "^29.7.0",
-    "@swc/core": "^1.11.7",
-    "@swc/jest": "^0.2.37",
     "@types/eslint__js": "^8.42.3",
     "@types/jest": "^29.5.13",
     "@types/node": "^22.5.4",

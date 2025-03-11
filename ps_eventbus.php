@@ -191,14 +191,6 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @return Monolog\Logger
-     */
-    public function getLogger()
-    {
-        return $this->getService('ps_eventbus.logger');
-    }
-
-    /**
      * Set PHP compatibility to 5.6
      *
      * @return bool
