@@ -69,9 +69,6 @@ class CartRepository extends AbstractRepository implements RepositoryInterface
      */
     public function retrieveContentsForFull($offset, $limit, $langIso)
     {
-        /* dump('full');
-        die; */
-
         $this->generateFullQuery($langIso, true);
 
         $this->query->limit((int) $limit, (int) $offset);
