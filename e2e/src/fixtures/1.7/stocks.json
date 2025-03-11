@@ -9,10 +9,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 2400,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -26,10 +26,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 2100,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -43,10 +43,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 1500,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -60,10 +60,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 1500,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -77,10 +77,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 900,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -94,10 +94,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -111,10 +111,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -128,10 +128,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -145,10 +145,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 600,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -162,10 +162,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 600,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -179,10 +179,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 600,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -196,10 +196,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -213,10 +213,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -230,10 +230,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -247,10 +247,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 100,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -264,10 +264,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 1200,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -281,10 +281,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 1200,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -298,10 +298,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 1200,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -315,10 +315,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -332,10 +332,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -349,10 +349,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -366,10 +366,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -383,10 +383,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -400,10 +400,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -417,10 +417,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -434,10 +434,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -451,10 +451,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -468,10 +468,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 1200,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -485,10 +485,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -502,10 +502,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -519,10 +519,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -536,10 +536,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 900,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -553,10 +553,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -570,10 +570,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -587,10 +587,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 900,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -604,10 +604,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -621,10 +621,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -638,10 +638,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -655,10 +655,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -672,10 +672,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -689,10 +689,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -706,10 +706,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -723,10 +723,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -740,10 +740,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -757,10 +757,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -774,10 +774,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -791,10 +791,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -808,10 +808,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -825,10 +825,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -842,10 +842,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -859,10 +859,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -876,10 +876,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -893,10 +893,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -910,10 +910,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -927,10 +927,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -944,10 +944,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -961,10 +961,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     },
@@ -978,10 +978,10 @@
             "id_shop": 1,
             "id_shop_group": 0,
             "quantity": 300,
-            "physical_quantity": 0,
-            "reserved_quantity": 0,
             "depends_on_stock": false,
             "out_of_stock": true,
+            "physical_quantity": 0,
+            "reserved_quantity": 0,
             "location": ""
         }
     }

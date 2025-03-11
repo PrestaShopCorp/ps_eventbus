@@ -76,11 +76,6 @@ class WishlistRepository extends AbstractRepository implements RepositoryInterfa
      */
     public function retrieveContentsForFull($offset, $limit, $langIso)
     {
-        // need this module for this table : https://addons.prestashop.com/en/undownloadable/9131-wishlist-block.html
-        if (empty(parent::checkIfTableExist('%wishlist'))) {
-            return [];
-        }
-
         $this->generateFullQuery($langIso, true);
 
         $this->query->limit((int) $limit, (int) $offset);
@@ -100,14 +95,10 @@ class WishlistRepository extends AbstractRepository implements RepositoryInterfa
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        if ($contentIds == []) {
-            return [];
-        }
-
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('w.id_wishlist IN(' . implode(',', array_map('intval', $contentIds)) . ')')
+            ->where('w.id_wishlist IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')')
             ->limit($limit)
         ;
 
@@ -126,17 +117,12 @@ class WishlistRepository extends AbstractRepository implements RepositoryInterfa
      */
     public function countFullSyncContentLeft($offset, $limit, $langIso)
     {
-        // need this module for this table : https://addons.prestashop.com/en/undownloadable/9131-wishlist-block.html
-        if (empty(parent::checkIfTableExist('%wishlist'))) {
-            return 0;
-        }
-
         $this->generateFullQuery($langIso, false);
 
         $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
 
         $result = $this->runQuery(true);
 
-        return $result[0]['count'];
+        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
     }
 }

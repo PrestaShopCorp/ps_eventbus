@@ -84,14 +84,10 @@ class CustomProductCarrierRepository extends AbstractRepository implements Repos
      */
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso)
     {
-        if ($contentIds == []) {
-            return [];
-        }
-
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where("CONCAT(pc.id_product, '-', IFNULL(pc.id_carrier_reference, 0)) IN('" . implode("','", $contentIds) . "')")
+            ->where("CONCAT(pc.id_product, '-', IFNULL(pc.id_carrier_reference, 0)) IN('" . implode(',', array_map('intval', $contentIds ?: [-1])) . "')")
             ->limit($limit)
         ;
 
@@ -116,7 +112,7 @@ class CustomProductCarrierRepository extends AbstractRepository implements Repos
 
         $result = $this->runQuery(true);
 
-        return $result[0]['count'];
+        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
     }
 
     /**
