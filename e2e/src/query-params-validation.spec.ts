@@ -18,7 +18,7 @@ describe('Query param validation', () => {
                 controller: 'apiShopContent',
                 shop_content: shopContent,
                 job_id: jobId,
-                limit: Math.floor(Math.random() * 100).toString(),
+                limit: (Math.floor(Math.random() * 100) + 1).toString(),
             };
 
             const response = await callPsEventbus<PsEventbusSyncResponse>(queryParams);
