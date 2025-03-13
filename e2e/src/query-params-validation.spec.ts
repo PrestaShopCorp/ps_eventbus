@@ -1,7 +1,7 @@
 import { lastValueFrom, toArray } from 'rxjs';
 import { callPsEventbus, doFullSync, ExplainSqlResponse, PsEventbusSyncResponse } from './helpers/mock-probe';
 import { shopContentList } from './helpers/shop-contents';
-import { generateFakeJobId } from './helpers/data-helper';
+import { generateFakeJobId } from './helpers/utils';
 
 describe('Query param validation', () => {
     let jobId: string;

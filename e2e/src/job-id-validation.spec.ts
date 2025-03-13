@@ -4,7 +4,7 @@ import axios from 'axios';
 import { from, lastValueFrom, map, toArray, zip } from 'rxjs';
 import { callPsEventbus, probe, PsEventbusHealthCheckFullResponse, PsEventbusHealthCheckLiteResponse } from './helpers/mock-probe';
 import { ShopContent, shopContentList } from './helpers/shop-contents';
-import { generateFakeJobId } from './helpers/data-helper';
+import { generateFakeJobId } from './helpers/utils';
 
 describe('Reject invalid job-id', () => {
     const shopContents: ShopContent[] = shopContentList;
