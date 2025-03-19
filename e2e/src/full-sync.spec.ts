@@ -4,7 +4,8 @@ import { dumpUploadData, logAxiosError } from './helpers/log-helper';
 import axios from 'axios';
 import { doFullSync, probe, PsEventbusSyncUpload } from './helpers/mock-probe';
 import { lastValueFrom, toArray, withLatestFrom } from 'rxjs';
-import { generateFakeJobId, loadFixture, omitProperties, sortUploadData } from './helpers/data-helper';
+import { loadFixture, omitProperties, sortUploadData } from './helpers/data-helper';
+import { generateFakeJobId } from './helpers/utils';
 import { shopContentList } from './helpers/shop-contents';
 
 expect.extend(matchers);
