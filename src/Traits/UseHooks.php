@@ -50,6 +50,7 @@ use PrestaShop\Module\PsEventbus\Traits\Hooks\UseStockMvtHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseStoreHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseSupplierHooks;
 use PrestaShop\Module\PsEventbus\Traits\Hooks\UseWishlistHooks;
+use Tools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
