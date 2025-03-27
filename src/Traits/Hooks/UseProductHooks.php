@@ -37,6 +37,8 @@ if (!defined('_PS_VERSION_')) {
 
 trait UseProductHooks
 {
+    private static $firstCallReceived = false;
+
     /**
      * @param array<mixed> $parameters
      *
@@ -119,8 +121,7 @@ trait UseProductHooks
 
         $incrementalSyncItems = [
             Config::COLLECTION_PRODUCTS => $uniqueProductIds,
-            Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id,
-            Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds,
+            Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id
         ];
 
         // is for bundle only
@@ -129,17 +130,37 @@ trait UseProductHooks
             $incrementalSyncItems[Config::COLLECTION_BUNDLES] = $product->id;
         }
 
-        $synchronizationService->sendLiveSync(
-            $liveSyncItems,
-            Config::INCREMENTAL_TYPE_UPSERT
-        );
+        /**
+         * This trick is here to compensate for the fact that this hook is called multiple times in a row when saving a product.
+         * On the first call, we receive the old version of the carriers, and then we receive the new version six times.
+         * With this piece of code, we ensure that the previous state is marked as "delete" and upsert only what is actually defined.
+         */
+        if (SELF::$firstCallReceived == false) {
+            SELF::$firstCallReceived = true;
 
-        $synchronizationService->insertContentIntoIncremental(
-            $incrementalSyncItems,
-            Config::INCREMENTAL_TYPE_UPSERT,
-            date(DATE_ATOM),
-            $this->shopId,
-            true
-        );
+            $synchronizationService->insertContentIntoIncremental(
+                [Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds],
+                Config::INCREMENTAL_TYPE_DELETE,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+        } else {
+            $incrementalSyncItems[Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS] = $customProductCarrierIds;
+
+            $synchronizationService->insertContentIntoIncremental(
+                $incrementalSyncItems,
+                Config::INCREMENTAL_TYPE_UPSERT,
+                date(DATE_ATOM),
+                $this->shopId,
+                true
+            );
+
+            
+            $synchronizationService->sendLiveSync(
+                $liveSyncItems,
+                Config::INCREMENTAL_TYPE_UPSERT
+            );
+        }
     }
 }
