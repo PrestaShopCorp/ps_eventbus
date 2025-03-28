@@ -37,6 +37,9 @@ if (!defined('_PS_VERSION_')) {
 
 trait UseProductHooks
 {
+    /**
+     * @var bool
+     */
     private static $firstCallReceived = false;
 
     /**
@@ -121,7 +124,7 @@ trait UseProductHooks
 
         $incrementalSyncItems = [
             Config::COLLECTION_PRODUCTS => $uniqueProductIds,
-            Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id
+            Config::COLLECTION_PRODUCT_SUPPLIERS => $product->id,
         ];
 
         // is for bundle only
@@ -130,13 +133,13 @@ trait UseProductHooks
             $incrementalSyncItems[Config::COLLECTION_BUNDLES] = $product->id;
         }
 
-        /**
+        /*
          * This trick is here to compensate for the fact that this hook is called multiple times in a row when saving a product.
          * On the first call, we receive the old version of the carriers, and then we receive the new version six times.
          * With this piece of code, we ensure that the previous state is marked as "delete" and upsert only what is actually defined.
          */
-        if (SELF::$firstCallReceived == false) {
-            SELF::$firstCallReceived = true;
+        if (self::$firstCallReceived == false) {
+            self::$firstCallReceived = true;
 
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds],
@@ -156,7 +159,6 @@ trait UseProductHooks
                 true
             );
 
-            
             $synchronizationService->sendLiveSync(
                 $liveSyncItems,
                 Config::INCREMENTAL_TYPE_UPSERT
