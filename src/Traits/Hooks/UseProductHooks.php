@@ -138,7 +138,7 @@ trait UseProductHooks
          * On the first call, we receive the old version of the carriers, and then we receive the new version six times.
          * With this piece of code, we ensure that the previous state is marked as "delete" and upsert only what is actually defined.
          */
-        if (self::$firstCallReceived == false) {
+        if (!self::$firstCallReceived) {
             self::$firstCallReceived = true;
 
             $synchronizationService->insertContentIntoIncremental(
