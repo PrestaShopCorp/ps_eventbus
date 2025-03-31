@@ -182,9 +182,9 @@ class ApiHealthCheckService
 
         // Remove the prefix of the tables (ex: ps_)
         $filteredRequiredTables = array_map(function ($item) {
-            return substr($item, strpos($item, '_') + 1);
+            return substr($item, strlen(_DB_PREFIX_));
         }, $requiredTables);
-
+    
         // return array<string>, with list of missing required table
         return array_diff(self::REQUIRED_TABLES, $filteredRequiredTables);
     }
