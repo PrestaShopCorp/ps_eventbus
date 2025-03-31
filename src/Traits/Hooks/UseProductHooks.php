@@ -134,22 +134,25 @@ trait UseProductHooks
         }
 
         /*
-         * This trick is here to compensate for the fact that this hook is called multiple times in a row when saving a product.
-         * On the first call, we receive the old version of the carriers, and then we receive the new version six times.
-         * With this piece of code, we ensure that the previous state is marked as "delete" and upsert only what is actually defined.
-         */
-        if (!self::$firstCallReceived) {
-            self::$firstCallReceived = true;
+        * This trick is here to compensate for the fact that this hook is called multiple times in a row when saving a product, in V2 product page.
+        * On the first call, we receive the old version of the carriers, and then we receive the new version six times.
+        * With this piece of code, we ensure that the previous state is marked as "delete" and upsert only what is actually defined.
+        *
+        * For the Legacy page, we don't have this problem, because the hook is called only once. But we need to handle it differently.
+        * In the legacy page, we have the selected carriers only, but we don't have the list of carrier was unselected before.
+        */  
+        if (\Context::getContext()->controller instanceof \AdminProductsController) {
+            // We are on legacy product page
 
+            $allProductCarrierAvailables = $customProductCarrierRepository->getAllAvailableProductCarrierIdsForProduct($product->id);
+            
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds],
+                [Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $allProductCarrierAvailables],
                 Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
                 $this->shopId,
                 true
             );
-        } else {
-            $incrementalSyncItems[Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS] = $customProductCarrierIds;
 
             $synchronizationService->insertContentIntoIncremental(
                 $incrementalSyncItems,
@@ -158,11 +161,34 @@ trait UseProductHooks
                 $this->shopId,
                 true
             );
+        } else {
+            // we are on v2 product page
+            if (!self::$firstCallReceived) {
+                self::$firstCallReceived = true;
 
-            $synchronizationService->sendLiveSync(
-                $liveSyncItems,
-                Config::INCREMENTAL_TYPE_UPSERT
-            );
+                $synchronizationService->insertContentIntoIncremental(
+                    [Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds],
+                    Config::INCREMENTAL_TYPE_DELETE,
+                    date(DATE_ATOM),
+                    $this->shopId,
+                    true
+                );
+            } else {
+                $incrementalSyncItems[Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS] = $customProductCarrierIds;
+
+                $synchronizationService->insertContentIntoIncremental(
+                    $incrementalSyncItems,
+                    Config::INCREMENTAL_TYPE_UPSERT,
+                    date(DATE_ATOM),
+                    $this->shopId,
+                    true
+                );
+
+                $synchronizationService->sendLiveSync(
+                    $liveSyncItems,
+                    Config::INCREMENTAL_TYPE_UPSERT
+                );
+            }
         }
     }
 }
