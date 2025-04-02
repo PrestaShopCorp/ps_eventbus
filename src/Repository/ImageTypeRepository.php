@@ -95,7 +95,7 @@ class ImageTypeRepository extends AbstractRepository implements RepositoryInterf
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('it.id_image_type IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')')
+            ->where("it.id_image_type IN('" . implode(',', array_map('intval', $contentIds ?: [-1])) . "')")
             ->limit($limit)
         ;
 

@@ -97,7 +97,7 @@ class OrderCartRuleRepository extends AbstractRepository implements RepositoryIn
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('ocr.id_order_cart_rule IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')')
+            ->where("ocr.id_order_cart_rule IN('" . implode(',', array_map('intval', $contentIds ?: [-1])) . "')")
             ->limit($limit)
         ;
 
