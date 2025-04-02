@@ -82,6 +82,8 @@ class Ps_eventbus extends Module
             $this->multistoreCompatibility = parent::MULTISTORE_COMPATIBILITY_YES;
         }
 
+        $this->registerHook('actionProductSave');
+
         // @see https://devdocs.prestashop-project.org/8/modules/concepts/module-class/
         $this->name = 'ps_eventbus';
         $this->tab = 'administration';

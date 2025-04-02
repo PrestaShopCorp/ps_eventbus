@@ -57,10 +57,10 @@ trait UseProductHooks
      *
      * @return void
      */
-    public function hookActionObjectProductUpdateAfter($parameters)
+/*     public function hookActionObjectProductUpdateAfter($parameters)
     {
         $this->sendUpsertProduct($parameters);
-    }
+    } */
 
     /**
      * @param array<mixed> $parameters
@@ -92,10 +92,20 @@ trait UseProductHooks
      *
      * @return void
      */
+    public function hookActionProductSave($parameters)
+    {
+        $this->sendUpsertProduct($parameters);
+    }
+
+    /**
+     * @param array<mixed> $parameters
+     *
+     * @return void
+     */
     private function sendUpsertProduct($parameters)
     {
         /** @var \Product $product */
-        $product = $parameters['object'];
+        $product = $parameters['product'];
 
         if (!isset($product->id)) {
             return;
@@ -143,11 +153,14 @@ trait UseProductHooks
         */  
         if (\Context::getContext()->controller instanceof \AdminProductsController) {
             // We are on legacy product page
+            $incrementalSyncItems[Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS] = $customProductCarrierIds;
 
-            $allProductCarrierAvailables = $customProductCarrierRepository->getAllAvailableProductCarrierIdsForProduct($product->id);
-            
+            $productCarrierIdList = $customProductCarrierRepository->getAllAvailableProductCarrierIdsForProduct($product->id);
+            $productCarrierIds = array_column($productCarrierIdList, 'custom_product_carrier_id');
+            dump($productCarrierIds, $customProductCarrierIds);
+
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $allProductCarrierAvailables],
+                [Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $productCarrierIds],
                 Config::INCREMENTAL_TYPE_DELETE,
                 date(DATE_ATOM),
                 $this->shopId,
