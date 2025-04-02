@@ -150,7 +150,7 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where("o.id_order IN('" . implode(',', array_map('intval', $contentIds ?: [-1])) . "')")
+            ->where("o.id_order IN('" . implode("','", array_map('intval', $contentIds ?: [-1])) . "')")
             ->limit($limit)
         ;
 

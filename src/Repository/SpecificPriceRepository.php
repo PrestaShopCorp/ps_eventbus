@@ -111,7 +111,7 @@ class SpecificPriceRepository extends AbstractRepository implements RepositoryIn
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where("sp.id_specific_price IN('" . implode(',', array_map('intval', $contentIds ?: [-1])) . "')")
+            ->where("sp.id_specific_price IN('" . implode("','", array_map('intval', $contentIds ?: [-1])) . "')")
             ->limit($limit)
         ;
 

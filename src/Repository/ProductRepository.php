@@ -222,7 +222,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
             ->leftJoin('attribute', 'a', 'a.id_attribute = pac.id_attribute')
             ->leftJoin('attribute_group_lang', 'agl', 'agl.id_attribute_group = a.id_attribute_group AND agl.id_lang = ' . $langId)
             ->leftJoin('attribute_lang', 'al', 'al.id_attribute = pac.id_attribute AND al.id_lang = agl.id_lang')
-            ->where('pas.id_product_attribute IN (' . implode(',', array_map('intval', $attributeIds)) . ') AND pas.id_shop = ' . parent::getShopContext()->id)
+            ->where("pas.id_product_attribute IN ('" . implode("','", array_map('intval', $attributeIds)) . "') AND pas.id_shop = " . parent::getShopContext()->id)
         ;
 
         $this->query
@@ -259,7 +259,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
         $this->query
             ->leftJoin('feature_lang', 'fl', 'fl.id_feature = fp.id_feature AND fl.id_lang = ' . $langId)
             ->leftJoin('feature_value_lang', 'fvl', 'fvl.id_feature_value = fp.id_feature_value AND fvl.id_lang = fl.id_lang')
-            ->where('fp.id_product IN (' . implode(',', array_map('intval', $productIds)) . ')')
+            ->where("fp.id_product IN ('" . implode("','", array_map('intval', $productIds)) . "')")
         ;
 
         $this->query
@@ -291,7 +291,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
         $this->generateMinimalQuery('image_shop', 'imgs');
 
         $this->query
-            ->where('imgs.id_shop = ' . parent::getShopContext()->id . ' AND imgs.id_product IN (' . implode(',', array_map('intval', $productIds)) . ')');
+            ->where('imgs.id_shop = ' . parent::getShopContext()->id . ' AND imgs.id_product IN (' . implode("','", array_map('intval', $productIds)) . ')');
 
         $this->query
             ->select('imgs.id_product, imgs.id_image, IFNULL(imgs.cover, 0) as cover')
@@ -314,7 +314,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
         $this->generateMinimalQuery('product_attribute_image', 'pai');
 
         $this->query
-            ->where('pai.id_product_attribute IN (' . implode(',', array_map('intval', $attributeIds)) . ')')
+            ->where("pai.id_product_attribute IN ('" . implode("','", array_map('intval', $attributeIds)) . "')")
         ;
 
         $this->query

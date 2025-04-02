@@ -95,7 +95,7 @@ class OrderCarrierRepository extends AbstractRepository implements RepositoryInt
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where("oc.id_order_carrier IN('" . implode(',', array_map('intval', $contentIds ?: [-1])) . "')")
+            ->where("oc.id_order_carrier IN('" . implode("','", array_map('intval', $contentIds ?: [-1])) . "')")
             ->limit($limit)
         ;
 

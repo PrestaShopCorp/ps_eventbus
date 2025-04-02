@@ -122,7 +122,7 @@ class CartRuleRepository extends AbstractRepository implements RepositoryInterfa
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where("cr.id_cart_rule IN('" . implode(',', array_map('intval', $contentIds ?: [-1])) . "')")
+            ->where("cr.id_cart_rule IN('" . implode("','", array_map('intval', $contentIds ?: [-1])) . "')")
             ->limit($limit)
         ;
 

@@ -120,7 +120,7 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where("od.id_order_detail IN('" . implode(',', array_map('intval', $contentIds ?: [-1])) . "')")
+            ->where("od.id_order_detail IN('" . implode("','", array_map('intval', $contentIds ?: [-1])) . "')")
             ->limit($limit)
         ;
 

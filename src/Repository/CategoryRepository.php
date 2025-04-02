@@ -111,7 +111,7 @@ class CategoryRepository extends AbstractRepository implements RepositoryInterfa
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where("cs.id_category IN('" . implode(',', array_map('intval', $contentIds ?: [-1])) . "')")
+            ->where("cs.id_category IN('" . implode("','", array_map('intval', $contentIds ?: [-1])) . "')")
             ->limit($limit)
         ;
 

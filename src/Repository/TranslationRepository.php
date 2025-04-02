@@ -92,7 +92,7 @@ class TranslationRepository extends AbstractRepository implements RepositoryInte
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where("t.id_translation IN('" . implode(',', array_map('intval', $contentIds ?: [-1])) . "')")
+            ->where("t.id_translation IN('" . implode("','", array_map('intval', $contentIds ?: [-1])) . "')")
             ->limit($limit)
         ;
 

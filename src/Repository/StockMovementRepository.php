@@ -107,7 +107,7 @@ class StockMovementRepository extends AbstractRepository implements RepositoryIn
     {
         $this->generateFullQuery($langIso, true);
 
-        $this->query->where("sm.id_stock_mvt IN('" . implode(',', array_map('intval', $contentIds ?: [-1])) . "')");
+        $this->query->where("sm.id_stock_mvt IN('" . implode("','", array_map('intval', $contentIds ?: [-1])) . "')");
 
         return $this->runQuery();
     }

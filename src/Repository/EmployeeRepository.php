@@ -113,7 +113,7 @@ class EmployeeRepository extends AbstractRepository implements RepositoryInterfa
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where("e.id_employee IN('" . implode(',', array_map('intval', $contentIds ?: [-1])) . "')")
+            ->where("e.id_employee IN('" . implode("','", array_map('intval', $contentIds ?: [-1])) . "')")
             ->limit($limit)
         ;
 
