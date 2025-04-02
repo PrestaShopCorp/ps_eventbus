@@ -91,7 +91,7 @@ class CartRepository extends AbstractRepository implements RepositoryInterface
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('c.id_cart IN(' . implode(',', array_map('intval', $contentIds ?: [-1] ?: [-1])) . ')')
+            ->where("c.id_cart IN('" . implode(',', array_map('intval', $contentIds ?: [-1] ?: [-1])) . "')")
             ->limit($limit)
         ;
 
