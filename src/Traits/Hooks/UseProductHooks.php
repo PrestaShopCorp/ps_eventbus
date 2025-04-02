@@ -57,10 +57,10 @@ trait UseProductHooks
      *
      * @return void
      */
-/*     public function hookActionObjectProductUpdateAfter($parameters)
+    public function hookActionObjectProductUpdateAfter($parameters)
     {
         $this->sendUpsertProduct($parameters);
-    } */
+    }
 
     /**
      * @param array<mixed> $parameters
@@ -87,15 +87,6 @@ trait UseProductHooks
         }
     }
 
-    /**
-     * @param array<mixed> $parameters
-     *
-     * @return void
-     */
-    public function hookActionProductSave($parameters)
-    {
-        $this->sendUpsertProduct($parameters);
-    }
 
     /**
      * @param array<mixed> $parameters
@@ -105,7 +96,7 @@ trait UseProductHooks
     private function sendUpsertProduct($parameters)
     {
         /** @var \Product $product */
-        $product = $parameters['product'];
+        $product = $parameters['object'];
 
         if (!isset($product->id)) {
             return;

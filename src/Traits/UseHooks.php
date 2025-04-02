@@ -154,7 +154,6 @@ trait UseHooks
             'actionObjectProductAddAfter',
             'actionObjectProductUpdateAfter',
             'actionObjectProductDeleteAfter',
-            'actionProductSave',
 
             'actionObjectSpecificPriceAddAfter',
             'actionObjectSpecificPriceUpdateAfter',
