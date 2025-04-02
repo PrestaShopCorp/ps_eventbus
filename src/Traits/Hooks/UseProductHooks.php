@@ -148,7 +148,6 @@ trait UseProductHooks
 
             $productCarrierIdList = $customProductCarrierRepository->getAllAvailableProductCarrierIdsForProduct($product->id);
             $productCarrierIds = array_column($productCarrierIdList, 'custom_product_carrier_id');
-            dump($productCarrierIds, $customProductCarrierIds);
 
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $productCarrierIds],
