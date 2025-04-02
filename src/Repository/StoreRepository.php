@@ -124,7 +124,7 @@ class StoreRepository extends AbstractRepository implements RepositoryInterface
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('s.id_store IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')')
+            ->where("s.id_store IN('" . implode(',', array_map('intval', $contentIds ?: [-1])) . "')")
             ->limit($limit)
         ;
 

@@ -90,7 +90,7 @@ class TaxonomyRepository extends AbstractRepository implements RepositoryInterfa
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('fbcm.id_category IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')')
+            ->where("fbcm.id_category IN('" . implode(',', array_map('intval', $contentIds ?: [-1])) . "')")
             ->limit($limit)
         ;
 

@@ -99,7 +99,7 @@ class CustomerRepository extends AbstractRepository implements RepositoryInterfa
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('c.id_customer IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')')
+            ->where("c.id_customer IN('" . implode(',', array_map('intval', $contentIds ?: [-1])) . "')")
             ->limit($limit)
         ;
 

@@ -117,7 +117,7 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('c.id_carrier IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')')
+            ->where("c.id_carrier IN('" . implode(',', array_map('intval', $contentIds ?: [-1])) . "')")
             ->limit($limit);
 
         return $this->runQuery();

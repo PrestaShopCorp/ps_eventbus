@@ -108,7 +108,7 @@ class SupplierRepository extends AbstractRepository implements RepositoryInterfa
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where('su.id_supplier IN(' . implode(',', array_map('intval', $contentIds ?: [-1])) . ')')
+            ->where("su.id_supplier IN('" . implode(',', array_map('intval', $contentIds ?: [-1])) . "')")
             ->limit($limit)
         ;
 
