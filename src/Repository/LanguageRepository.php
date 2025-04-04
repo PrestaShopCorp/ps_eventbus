@@ -102,7 +102,7 @@ class LanguageRepository extends AbstractRepository implements RepositoryInterfa
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where("la.id_lang IN('" . implode(',', array_map('intval', $contentIds ?: [-1])) . "')")
+            ->where("la.id_lang IN('" . implode("','", array_map('intval', $contentIds ?: [-1])) . "')")
             ->limit($limit)
         ;
 

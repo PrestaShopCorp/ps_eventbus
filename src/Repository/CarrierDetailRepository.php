@@ -150,7 +150,7 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where("ca.id_carrier IN('" . implode(',', array_map('intval', $contentIds ?: [-1])) . "')")
+            ->where("ca.id_carrier IN('" . implode("','", array_map('intval', $contentIds ?: [-1])) . "')")
             // ->limit($limit) Sub shop content depend from another, temporary disabled
         ;
 

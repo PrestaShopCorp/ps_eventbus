@@ -109,7 +109,7 @@ class StockRepository extends AbstractRepository implements RepositoryInterface
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where("sa.id_stock_available IN('" . implode(',', array_map('intval', $contentIds ?: [-1])) . "')")
+            ->where("sa.id_stock_available IN('" . implode("','", array_map('intval', $contentIds ?: [-1])) . "')")
             ->limit($limit)
         ;
 
