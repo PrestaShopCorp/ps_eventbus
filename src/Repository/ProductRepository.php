@@ -291,7 +291,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
         $this->generateMinimalQuery('image_shop', 'imgs');
 
         $this->query
-            ->where('imgs.id_shop = ' . parent::getShopContext()->id . ' AND imgs.id_product IN (' . implode("','", array_map('intval', $productIds)) . ')');
+            ->where("imgs.id_shop = " . parent::getShopContext()->id . " AND imgs.id_product IN ('" . implode("','", array_map('intval', $productIds)) . "')");
 
         $this->query
             ->select('imgs.id_product, imgs.id_image, IFNULL(imgs.cover, 0) as cover')
