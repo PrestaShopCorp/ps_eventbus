@@ -175,7 +175,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where("CONCAT(p.id_product, '-', IFNULL(pas.id_product_attribute, 0)) IN('" . implode("','", $contentIds ?: [-1]) . "')")
+            ->where("CONCAT(p.id_product, '-', IFNULL(pas.id_product_attribute, 0)) IN('" . implode("','", array_map('strval', $contentIds ?: [-1])) . "')")
             ->limit($limit)
         ;
 

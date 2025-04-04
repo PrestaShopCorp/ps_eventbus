@@ -148,7 +148,7 @@ class OrderStatusHistoryRepository extends AbstractRepository implements Reposit
 
         $this->generateFullQuery($langIso, true);
 
-        $this->query->where('oh.id_order IN (' . implode(',', array_map('intval', $orderIds)) . ')');
+        $this->query->where("oh.id_order IN ('" . implode("','", array_map('intval', $orderIds)) . "')");
 
         return $this->runQuery();
     }
