@@ -136,4 +136,18 @@ class CustomProductCarrierRepository extends AbstractRepository implements Repos
 
         return $this->runQuery(true);
     }
+
+    /**
+     * @param int $productId
+     *
+     * @return array<mixed>
+     */
+    public function getAllAvailableProductCarrierIdsForProduct($productId)
+    {
+        $this->generateMinimalQuery('carrier', 'c');
+
+        $this->query->select("CONCAT('" . $productId . "', '-', c.id_carrier) AS custom_product_carrier_id");
+
+        return $this->runQuery();
+    }
 }
