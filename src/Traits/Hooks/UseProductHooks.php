@@ -87,7 +87,6 @@ trait UseProductHooks
         }
     }
 
-
     /**
      * @param array<mixed> $parameters
      *
@@ -141,7 +140,7 @@ trait UseProductHooks
         *
         * For the Legacy page, we don't have this problem, because the hook is called only once. But we need to handle it differently.
         * In the legacy page, we have the selected carriers only, but we don't have the list of carrier was unselected before.
-        */  
+        */
         if (\Context::getContext()->controller instanceof \AdminProductsController) {
             // We are on legacy product page
             $incrementalSyncItems[Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS] = $customProductCarrierIds;
