@@ -85,6 +85,9 @@ class OrderCarriersService extends ShopContentAbstractService implements ShopCon
             $this->castOrderCarriers($result);
         }
 
+        dump($result);
+        die;
+
         return parent::formatIncrementalSyncResponse(Config::COLLECTION_ORDER_CARRIERS, $result, $deletedContents);
     }
 
@@ -112,9 +115,9 @@ class OrderCarriersService extends ShopContentAbstractService implements ShopCon
             $orderCarrier['id_order'] = (string) $orderCarrier['id_order'];
             $orderCarrier['id_carrier'] = (string) $orderCarrier['id_carrier'];
             $orderCarrier['id_order_invoice'] = (string) $orderCarrier['id_order_invoice'];
-            $orderCarrier['weight'] = (int) $orderCarrier['weight'];
-            $orderCarrier['shipping_cost_tax_excl'] = (int) $orderCarrier['shipping_cost_tax_excl'];
-            $orderCarrier['shipping_cost_tax_incl'] = (int) $orderCarrier['shipping_cost_tax_incl'];
+            $orderCarrier['weight'] = (float) $orderCarrier['weight'];
+            $orderCarrier['shipping_cost_tax_excl'] = (float) $orderCarrier['shipping_cost_tax_excl'];
+            $orderCarrier['shipping_cost_tax_incl'] = (float) $orderCarrier['shipping_cost_tax_incl'];
         }
     }
 }
