@@ -85,9 +85,6 @@ class OrderCarriersService extends ShopContentAbstractService implements ShopCon
             $this->castOrderCarriers($result);
         }
 
-        dump($result);
-        die;
-
         return parent::formatIncrementalSyncResponse(Config::COLLECTION_ORDER_CARRIERS, $result, $deletedContents);
     }
 
