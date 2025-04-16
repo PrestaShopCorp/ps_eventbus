@@ -132,7 +132,7 @@ trait UseProductHooks
             $liveSyncItems[] = Config::COLLECTION_BUNDLES;
             $incrementalSyncItems[Config::COLLECTION_BUNDLES] = $product->id;
         }
-
+        
         /*
         * This trick is here to compensate for the fact that this hook is called multiple times in a row when saving a product, in V2 product page.
         * On the first call, we receive the old version of the carriers, and then we receive the new version six times.
