@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true,
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strict": true,
+    "strictFunctionTypes": true,
+    "noEmit": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "baseUrl": "./",
+    "paths": {
+      "@data/*": [
+        "src/data/*"
+      ],
+      "@fixtures/*": [
+        "src/tests/fixtures/*"
+      ],
+      "@helpers/*": [
+        "src/helpers/*"
+      ],
+      "@services/*": [
+        "src/services/*"
+      ]
+    },
+    "typeRoots": [
+      "types",
+      "node_modules/@types"
+    ]
+  },
+}

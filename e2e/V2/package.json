@@ -1,0 +1,26 @@
+{
+  "name": "V2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "setup:healthcheck": "npx playwright test -g @healthcheck",
+    "incremental:create": "npx playwright test --project INCREMENTAL-CREATE",
+    "test:specific": "npx playwright test -g"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.7.0",
+  "dependencies": {
+    "@playwright/test": "^1.51.1",
+    "@prestashop-core/ui-testing": "https://github.com/PrestaShop/ui-testing-library#main",
+    "dotenv": "^16.5.0",
+    "prisma": "^6.6.0",
+    "semver": "^7.6.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "tsconfig-paths": "^4.2.0"
+  }
+}
