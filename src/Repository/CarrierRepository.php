@@ -36,7 +36,9 @@ class CarrierRepository extends AbstractRepository implements RepositoryInterfac
 
     /**
      * @param string $langIso
-     * @param bool $withSelecParametersgit@github.com:PrestaShopCorp/ps_eventbus.git
+     * @param bool $withSelecParameters
+     *
+     * @return void
      *
      * @throws \PrestaShopException
      */
