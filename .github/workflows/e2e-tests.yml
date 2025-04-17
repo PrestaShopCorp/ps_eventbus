@@ -47,9 +47,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        campaign: [ ${ { github.event.inputs.campaign } } ]
-        ps-version: [ ${ { github.event.inputs.ps-version } } ]
-        eventbus-version: [ ${ { github.event.inputs.eventbus-version } } ]
+        campaign: [${{ github.event.inputs.campaign }}]
+        ps-version: [${{ github.event.inputs.ps-version }}]
+        eventbus-version: [${{ github.event.inputs.eventbus-version }}]
 
     env:
       CAMPAIGN: ${{ matrix.campaign }}
