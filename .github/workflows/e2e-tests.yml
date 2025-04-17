@@ -43,6 +43,8 @@ on:
         description: Flashlight 1.6.1.11-nginx
         required: false
         default: true
+env:
+  NODE_BUILDER_VERSION: "20"
 
 jobs:
   generate-matrix:
@@ -96,27 +98,55 @@ jobs:
 
     env:
       CAMPAIGN: ${{ matrix.campaign }}
-      PS_VERSION: ${{ matrix.ps_version }}
+      DOCKER_IMAGE_PRESTASHOP: prestashop/prestashop-flashlight:${{ matrix.ps_version }}
       EVENTBUS_VERSION: ${{ matrix.eventbus_version }}
+      HOST_PORT_BIND_PRESTASHOP: 8000
+      HOST_PORT_BIND_MYSQL: 3306
+      HOST_PORT_BIND_PHP_MY_ADMIN: 6060
+      HOST_PORT_BIND_CLOUDSYNC_REVERSE_PROXY: 3030
+      SYNC_API_PORT: 3232
+      COLLECTOR_API_PORT: 3333
+      LIVE_SYNC_API_PORT: 3434
+      WS_PORT: 8080
 
     steps:
-      - name: Checkout the repository 🎁
+      - name: Checkout the repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
           version: latest
 
-      - name: Setup node env 🏗
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: latest
-          cache: 'pnpm'
+          node-version: ${{ env.NODE_BUILDER_VERSION }}
+          cache: "pnpm"
+          cache-dependency-path: e2e/V2/pnpm-lock.yaml
+
+      - name: Cache vendor folder
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: php-${{ hashFiles('composer.lock') }}
+
+      - name: install php dependencies
+        run: composer install
 
       - name: Install tests dependencies 👨🏻‍💻
         run: pnpm install -P
         working-directory: ./e2e/V2
+
+      - name: Setup e2e-env with Prestashop ${{ matrix.ps_version }}
+        run: |
+          cp .env.dist .env
+          docker compose build
+          docker compose --profile cicd up --detach --wait
+        env:
+          DOCKER_IMAGE_PRESTASHOP: prestashop/prestashop-flashlight:${{matrix.ps_version}}
+        working-directory: e2e-env
 
       - name: Install Playwright
         run: pnpm playwright install --with-deps

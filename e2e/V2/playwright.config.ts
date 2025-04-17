@@ -123,8 +123,8 @@ export default defineConfig({
       testMatch: 'healthcheck.setup.ts',
     },
     {
-      name: "INCREMENTAL-CREATE",
-      testDir: './src/tests/incremental/create/',
+      name: "INCREMENTAL",
+      testDir: './src/tests/incremental/',
       dependencies: ['healthcheck'],
     }
   ],
