@@ -1,0 +1,103 @@
+name: EVENTBUS E2E TESTS
+
+on:
+  #pull_request:
+  #schedule:
+  #  - cron: "0 9 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      campaign:
+        type: choice
+        description: 'Choose the tests campaign'
+        required: true
+        default: 'incremental'
+        options:
+          - 'incremental'
+          - 'full'
+          # Add more campaign options as needed
+
+      ps-version:
+        type: choice
+        description: 'Choose the PrestaShop version'
+        required: true
+        default: 'latest'
+        options:
+          - 'latest'
+          - '8.1.7-nginx'
+          - '8.0.5-nginx'
+          - '1.7.8.11-nginx'
+          - '1.7.7.8-nginx'
+          - '1.6.1.11-nginx'
+          # Add more version options as needed
+
+      eventbus-version:
+        type: choice
+        description: 'Choose the ps_eventbus version'
+        required: true
+        default: 'build'
+        options:
+          - 'build'
+          - 'latest'
+          - '4.0.7'
+          # Add more version options as needed
+
+jobs:
+  e2e-tests:
+    name: Create campaign matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        campaign: [ ${ { github.event.inputs.campaign } } ]
+        ps-version: [ ${ { github.event.inputs.ps-version } } ]
+        eventbus-version: [ ${ { github.event.inputs.eventbus-version } } ]
+
+    env:
+      CAMPAIGN: ${{ matrix.campaign }}
+      PS-VERSION: ${{ matrix.ps-version }}
+      EVENTBUS-VERSION: ${{ matrix.eventbus-version }}
+
+    steps:
+      - name: Build tests env
+        id: envSetup
+        shell: bash
+        run: |
+          COMPOSE_PROFILES=localhost docker compose up -d
+
+      - name: Checkout the repository 🎁
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - name: Setup node env 🏗
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: 'pnpm'
+
+      - name: Install tests dependencies 👨🏻‍💻
+        run: pnpm install -P
+        working-directory: ./e2e/V2
+
+      - name: Install Playwright
+        run: pnpm playwright install --with-deps
+        working-directory: ./e2e/V2
+
+      - name: Run ${{ matrix.campaign }} tests 🧪
+        run: pnpm run test:${{ matrix.campaign }}
+        working-directory: ./e2e/V2
+
+      - name: Set date variable
+        shell: bash
+        run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+      - name: Upload Playwright Test Reports
+        uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: ${{ env.PLAYWRIGHT_NAME }}
+          path: ./e2e/V2/playwright-report
+        env:
+          PLAYWRIGHT_NAME: ${{ matrix.ps-version }}-${{ matrix.campaign }}-${{ matrix.eventbus-version }}-playwright-report-${{ env.DATE }}
