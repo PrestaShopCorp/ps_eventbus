@@ -1,55 +1,98 @@
 name: EVENTBUS E2E TESTS
 
 on:
-  #pull_request:
-  #schedule:
-  #  - cron: "0 9 * * 1-5"
   workflow_dispatch:
     inputs:
-      campaign:
-        type: choice
-        description: Choose the tests campaign
-        required: true
-        default: incremental
-        options:
-          - incremental
-          - full
-          # Add more campaign options as needed
-      ps_version:
-        type: choice
-        description: Choose the PrestaShop version
-        required: true
-        default: latest
-        options:
-          - latest
-          - 8.1.7-nginx
-          - 8.0.5-nginx
-          - 1.7.8.11-nginx
-          - 1.7.7.8-nginx
-          - 1.6.1.11-nginx
-          # Add more version options as needed
-      eventbus_version:
-        type: choice
-        description: Choose the ps_eventbus version
-        required: true
-        default: latest
-        options:
-          - build
-          - latest
-          - 4.0.7
-          # Add more version options as needed
+      incremental:
+        type: boolean
+        description: Run incremental campaign
+        required: false
+        default: true
+      full:
+        type: boolean
+        description: Run fullsync campaign
+        required: false
+        default: true
+      ps_latest:
+        type: boolean
+        description: Latest available flashlight
+        required: false
+        default: true
+      ps_8_1_7:
+        type: boolean
+        description: Flashlight 8.1.7-nginx
+        required: false
+        default: true
+      ps_8_0_5:
+        type: boolean
+        description: Flashlight 8.0.5-nginx
+        required: false
+        default: true
+      ps_1_7_8_11:
+        type: boolean
+        description: Flashlight 1.7.8.11-nginx
+        required: false
+        default: true
+      ps_1_7_7_8:
+        type: boolean
+        description: Flashlight 1.7.7.8-nginx
+        required: false
+        default: true
+      ps_1_6_1_11:
+        type: boolean
+        description: Flashlight 1.6.1.11-nginx
+        required: false
+        default: true
 
 jobs:
-  e2e_tests:
-    name: Create campaign matrix
+  generate-matrix:
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Generate matrix JSON
+        id: set-matrix
+        run: |
+          echo "📦 Building matrix…"
 
+          campaigns=()
+          [[ "${{ inputs.incremental }}" == "true" ]] && campaigns+=("incremental")
+          [[ "${{ inputs.full }}" == "true" ]] && campaigns+=("full")
+
+          versions=()
+          [[ "${{ inputs.ps_latest }}" == "true" ]] && versions+=("latest")
+          [[ "${{ inputs.ps_8_1_7 }}" == "true" ]] && versions+=("8.1.7-nginx")
+          [[ "${{ inputs.ps_8_0_5 }}" == "true" ]] && versions+=("8.0.5-nginx")
+          [[ "${{ inputs.ps_1_7_8_11 }}" == "true" ]] && versions+=("1.7.8.11-nginx")
+          [[ "${{ inputs.ps_1_7_7_8 }}" == "true" ]] && versions+=("1.7.7.8-nginx")
+          [[ "${{ inputs.ps_1_6_1_11 }}" == "true" ]] && versions+=("1.6.1.11-nginx")
+
+          # fallback si vide → on prend tout
+          [[ "${#campaigns[@]}" -eq 0 ]] && campaigns=("incremental" "full")
+          [[ "${#versions[@]}" -eq 0 ]] && versions=("latest" "8.1.7-nginx" "8.0.5-nginx" "1.7.8.11-nginx" "1.7.7.8-nginx" "1.6.1.11-nginx")
+
+          # build matrix
+          matrix="["
+          for c in "${campaigns[@]}"; do
+            for v in "${versions[@]}"; do
+              matrix+='{"campaign":"'"$c"'","ps_version":"'"$v"'","eventbus_version":"latest"},'
+            done
+          done
+          matrix="${matrix%,}"  # remove last comma
+          matrix+="]"
+
+          echo "Generated matrix:"
+          echo "$matrix"
+
+          echo "matrix=$matrix" >> $GITHUB_OUTPUT
+
+  e2e_tests:
+    name: Run matrix
+    needs: generate-matrix
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        include:
-          - campaign: ${{ inputs.campaign }}
-            ps_version: ${{ inputs.ps_version }}
-            eventbus_version: ${{ inputs.eventbus_version }}
+        include: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
 
     env:
       CAMPAIGN: ${{ matrix.campaign }}
@@ -57,12 +100,6 @@ jobs:
       EVENTBUS_VERSION: ${{ matrix.eventbus_version }}
 
     steps:
-      - name: Build tests env
-        id: envSetup
-        shell: bash
-        run: |
-          COMPOSE_PROFILES=localhost docker compose up -d
-
       - name: Checkout the repository 🎁
         uses: actions/checkout@v4
 
