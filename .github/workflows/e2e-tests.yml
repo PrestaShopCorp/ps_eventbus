@@ -8,35 +8,35 @@ on:
     inputs:
       campaign:
         type: choice
-        description: 'Choose the tests campaign'
+        description: Choose the tests campaign
         required: true
         default: 'incremental'
         options:
-          - 'incremental'
-          - 'full'
+          - incremental
+          - full
           # Add more campaign options as needed
       ps_version:
         type: choice
-        description: 'Choose the PrestaShop version'
+        description: Choose the PrestaShop version
         required: true
-        default: 'latest'
+        default: latest
         options:
-          - 'latest'
-          - '8.1.7-nginx'
-          - '8.0.5-nginx'
-          - '1.7.8.11-nginx'
-          - '1.7.7.8-nginx'
-          - '1.6.1.11-nginx'
+          - latest'
+          - 8.1.7-nginx
+          - 8.0.5-nginx
+          - 1.7.8.11-nginx
+          - 1.7.7.8-nginx
+          - 1.6.1.11-nginx
           # Add more version options as needed
       eventbus_version:
         type: choice
-        description: 'Choose the ps_eventbus version'
+        description: Choose the ps_eventbus version
         required: true
-        default: 'build'
+        default: latest
         options:
-          - 'build'
-          - 'latest'
-          - '4.0.7'
+          - build
+          - latest
+          - 4.0.7
           # Add more version options as needed
 
 jobs:
