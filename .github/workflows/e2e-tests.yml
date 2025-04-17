@@ -43,11 +43,13 @@ jobs:
   e2e_tests:
     name: Create campaign matrix
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        campaign: [${{ github.event.inputs.campaign }}]
-        ps_version: [${{ github.event.inputs.ps_version }}]
-        eventbus_version: [${{ github.event.inputs.eventbus_version }}]
+        include:
+          - campaign: ${{ inputs.campaign }}
+            ps_version: ${{ inputs.ps_version }}
+            eventbus_version: ${{ inputs.eventbus_version }}
 
     env:
       CAMPAIGN: ${{ matrix.campaign }}
