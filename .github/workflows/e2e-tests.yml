@@ -16,7 +16,7 @@ on:
           - 'full'
           # Add more campaign options as needed
 
-      ps-version:
+      ps_version:
         type: choice
         description: 'Choose the PrestaShop version'
         required: true
@@ -30,7 +30,7 @@ on:
           - '1.6.1.11-nginx'
           # Add more version options as needed
 
-      eventbus-version:
+      eventbus_version:
         type: choice
         description: 'Choose the ps_eventbus version'
         required: true
@@ -42,19 +42,19 @@ on:
           # Add more version options as needed
 
 jobs:
-  e2e-tests:
+  e2e_tests:
     name: Create campaign matrix
     runs-on: ubuntu-latest
     strategy:
       matrix:
         campaign: [${{ github.event.inputs.campaign }}]
-        ps-version: [${{ github.event.inputs.ps-version }}]
-        eventbus-version: [${{ github.event.inputs.eventbus-version }}]
+        ps_version: [${{ github.event.inputs.ps_version }}]
+        eventbus_version: [${{ github.event.inputs.eventbus_version }}]
 
     env:
       CAMPAIGN: ${{ matrix.campaign }}
-      PS-VERSION: ${{ matrix.ps-version }}
-      EVENTBUS-VERSION: ${{ matrix.eventbus-version }}
+      PS_VERSION: ${{ matrix.ps_version }}
+      EVENTBUS_VERSION: ${{ matrix.eventbus_version }}
 
     steps:
       - name: Build tests env
@@ -100,4 +100,4 @@ jobs:
           name: ${{ env.PLAYWRIGHT_NAME }}
           path: ./e2e/V2/playwright-report
         env:
-          PLAYWRIGHT_NAME: ${{ matrix.ps-version }}-${{ matrix.campaign }}-${{ matrix.eventbus-version }}-playwright-report-${{ env.DATE }}
+          PLAYWRIGHT_NAME: ${{ matrix.ps_version }}-${{ matrix.campaign }}-${{ matrix.eventbus_version }}-playwright-report-${{ env.DATE }}
