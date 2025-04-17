@@ -15,7 +15,6 @@ on:
           - 'incremental'
           - 'full'
           # Add more campaign options as needed
-
       ps_version:
         type: choice
         description: 'Choose the PrestaShop version'
@@ -29,7 +28,6 @@ on:
           - '1.7.7.8-nginx'
           - '1.6.1.11-nginx'
           # Add more version options as needed
-
       eventbus_version:
         type: choice
         description: 'Choose the ps_eventbus version'
