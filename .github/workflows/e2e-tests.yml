@@ -10,7 +10,7 @@ on:
         type: choice
         description: Choose the tests campaign
         required: true
-        default: 'incremental'
+        default: incremental
         options:
           - incremental
           - full
@@ -21,7 +21,7 @@ on:
         required: true
         default: latest
         options:
-          - latest'
+          - latest
           - 8.1.7-nginx
           - 8.0.5-nginx
           - 1.7.8.11-nginx
