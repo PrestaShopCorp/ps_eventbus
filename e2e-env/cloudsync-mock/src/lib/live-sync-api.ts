@@ -5,10 +5,6 @@ export class LiveSyncApiServer extends Server {
   public constructor(probe: WsServer) {
     super( probe);
 
-    this.api.get("/", (_req, res) => {
-      res.status(200).end();
-    });
-
     this.api.post("/notify/:shopId", (req, res) => {
       const shopId = req.params.shopId;
       if (shopId.startsWith("valid-shopid-")) {

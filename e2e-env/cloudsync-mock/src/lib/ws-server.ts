@@ -21,7 +21,7 @@ export class WsServer {
     })
 
     this.server.on('connection', client => {
-      console.log(`Probe connected. ${this.history.length} messages to replay.`);
+      console.log(`Probe connected. ${this.history.length} messages to send (${MAX_AGE}ms in history).`);
       for (const el of this.history) {
         client.send(JSON.stringify(el.data));
       }
