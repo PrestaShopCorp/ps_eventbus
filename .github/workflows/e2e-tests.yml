@@ -174,11 +174,12 @@ jobs:
           PLAYWRIGHT_NAME: ${{ matrix.ps_version }}-${{ matrix.campaign }}-playwright-report
 
       - name: Send Slack notification 📬
+        working-directory: ./e2e/V2
         if: ${{ always() }}
         run: |
           echo "📤 Preparing Slack notification..."
 
-          STATS_PATH="./e2e/V2/playwright-report/results.json"
+          STATS_PATH="playwright-report/results.json"
 
           if [ -f "$STATS_PATH" ]; then
             passed=$(jq '.suites | map(.tests | map(select(.status == "passed")) | length) | add' "$STATS_PATH")
