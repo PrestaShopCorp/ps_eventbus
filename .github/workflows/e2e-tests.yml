@@ -226,15 +226,15 @@ jobs:
                   "fields": [
                     {
                       "type": "mrkdwn",
-                      "text": "*✅ Passed:* ${{ steps.summary.outputs.passed }} / ${{ steps.summary.outputs.total }}"
+                      "text": "*✅ Passed:* ${{ steps.parse-results.outputs.passed }} / ${{ steps.parse-results.outputs.total }}"
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*❌ Failed:* ${{ steps.summary.outputs.failed }} / ${{ steps.summary.outputs.total }}"
+                      "text": "*❌ Failed:* ${{ steps.parse-results.outputs.failed }} / ${{ steps.parse-results.outputs.total }}"
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*🔷 Skipped:* ${{ steps.summary.outputs.skipped }} / ${{ steps.summary.outputs.total }}"
+                      "text": "*🔷 Skipped:* ${{ steps.parse-results.outputs.skipped }} / ${{ steps.parse-results.outputs.total }}"
                     }
                   ]
                 }
