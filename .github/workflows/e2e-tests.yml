@@ -173,41 +173,54 @@ jobs:
         env:
           PLAYWRIGHT_NAME: ${{ matrix.ps_version }}-${{ matrix.campaign }}-playwright-report
 
-      - name: Send Slack notification 📬
+      - name: Send custom JSON data to Slack workflow
         working-directory: ./e2e/V2
-        if: ${{ always() }}
-        run: |
-          echo "📤 Preparing Slack notification..."
-
-          STATS_PATH="playwright-report/results.json"
-
-          if [ -f "$STATS_PATH" ]; then
-            # Vérifie si la clé .suites existe et n'est pas null
-            suites=$(jq '.suites' "$STATS_PATH")
-
-            if [ "$suites" != "null" ]; then
-              # Nombre de tests réussis
-              passed=$(jq '[.suites[].specs[].tests[] | select(.status == "passed")] | length' "$STATS_PATH")
-              # Nombre de tests échoués
-              failed=$(jq '[.suites[].specs[].tests[] | select(.status == "failed")] | length' "$STATS_PATH")
-              # Total des tests (réussis + échoués)
-              total=$((passed + failed))
-              campaign=${{ matrix.campaign }}
-              version=${{ matrix.ps_version }}
-
-              message="🧪 Eventbus E2E Tests Report "
-              message+="*Campaign*: `${campaign}` "
-              message+="*PS_Version*: `${version}` "
-              message+="✅ Passed: *${passed}* /// ❌ Failed: *${failed}* /// 🧮 Total: *${total}* "
-
-              payload=$(jq -n --arg text "$message" '{text: $text}')
-              curl -X POST -H 'Content-type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
-            else
-              echo "⚠️ Aucune suite de tests trouvée dans $STATS_PATH"
-            fi
-          else
-            echo "⚠️ Fichier de stats non trouvé à $STATS_PATH"
-          fi
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        id: slack
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+              {
+                "blocks": [
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "*🧪 Eventbus E2E Tests Report *"
+                    }
+                  },
+                  {
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Campaign*\n${{ matrix.campaign }}"
+                      },
+                      {
+                        "type": "mrkdwn",
+                        "text": "*PS_Version*\n${{ matrix.ps_version }}"
+                      },
+                    ]
+                  },
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "* Results *"
+                      }
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "*✅ Passed:*\n$(jq '.results.summary.passed' ./report-summary/summary.json)"
+                      },
+                      {
+                        "type": "mrkdwn",
+                        "text": "*❌ Failed:*\n$(jq '.results.summary.failed' ./report-summary/summary.json)"
+                      }
+                  ]
+                }
+                ]
+              }
 

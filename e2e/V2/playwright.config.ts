@@ -104,13 +104,13 @@ export default defineConfig({
     ['list', {printSteps: true}],
     ['html', {open: 'never'}],
     ['json', {outputFile: 'playwright-report/results.json'}],
-/*    [
+    [
       'playwright-ctrf-json-reporter',
       {
         outputFile: 'summary.json',
         outputDir: 'report-summary'
       }
-    ]*/
+    ],
   ],
   use: {
     screenshot: 'only-on-failure',
