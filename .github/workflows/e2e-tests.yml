@@ -45,7 +45,6 @@ on:
         default: true
 
 env:
-  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   NODE_BUILDER_VERSION: "20"
 
 jobs:
@@ -198,6 +197,7 @@ jobs:
           total: ${{ steps.parse-results.outputs.total }}
           skipped: ${{ steps.parse-results.outputs.failed }}
           run_id: ${{ github.run_id }}
+          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 
 

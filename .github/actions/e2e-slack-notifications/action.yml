@@ -22,9 +22,9 @@ inputs:
   run_id:
     required: true
     type: string
-
-env:
-  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  slack_webhook_url:
+    required: true
+    type: string
 
 runs:
   using: "composite"
@@ -47,19 +47,19 @@ runs:
                 "fields": [
                   {
                     "type": "mrkdwn",
-                    "text": "*🎏 Campaign*\n${{ matrix.campaign }}"
+                    "text": "*🎏 Campaign*\n${{ inputs.campaign }}"
                   },
                   {
                     "type": "mrkdwn",
-                    "text": "*🐧 PrestaShop Version*\n${{ matrix.ps_version }}"
+                    "text": "*🐧 PrestaShop Version*\n${{ inputs.ps_version }}"
                   },
                   {
                   "type": "mrkdwn",
-                  "text": ":mag: *[Playwright Report](\${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts)*"
+                  "text": ":mag: *[Playwright Report](\${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ inputs.run_id }}#artifacts)*"
                   },
                   {
                   "type": "mrkdwn",
-                  "text": ":rocket: *[GitHub Run](\${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*"
+                  "text": ":rocket: *[GitHub Run](\${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ inputs.run_id }})*"
                   }
                 ]
               },
@@ -68,19 +68,19 @@ runs:
                 "fields": [
                   {
                     "type": "mrkdwn",
-                    "text": "*✅ Passed:* ${{ steps.parse-results.outputs.passed }} / ${{ steps.parse-results.outputs.total }} tests"
+                    "text": "*✅ Passed:* ${{ inputs.passed }} / ${{ inputs.total }} tests"
                   },
                   {
                     "type": "mrkdwn",
-                    "text": "*❌ Failed:* ${{ steps.parse-results.outputs.failed }} / ${{ steps.parse-results.outputs.total }} tests"
+                    "text": "*❌ Failed:* ${{ inputs.failed }} / ${{ inputs.total }} tests"
                   },
                   {
                     "type": "mrkdwn",
-                    "text": "*🔷 Skipped:* ${{ steps.parse-results.outputs.skipped }} / ${{ steps.parse-results.outputs.total }} tests"
+                    "text": "*🔷 Skipped:* ${{ inputs.skipped }} / ${{ inputs.total }} tests"
                   }
                 ]
               }
           }
       env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_URL: ${{ inputs.slack_webhook_url }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
