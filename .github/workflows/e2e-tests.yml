@@ -134,10 +134,6 @@ jobs:
       - name: install php dependencies
         run: composer install
 
-      - name: Install tests dependencies 👨🏻‍💻
-        run: pnpm install -P
-        working-directory: ./e2e/V2
-
       - name: Setup e2e-env with Prestashop ${{ matrix.ps_version }}
         run: |
           cp .env.dist .env
@@ -145,7 +141,11 @@ jobs:
           docker compose --profile cicd up --detach --wait
         env:
           DOCKER_IMAGE_PRESTASHOP: prestashop/prestashop-flashlight:${{matrix.ps_version}}
-        working-directory: e2e-env
+        working-directory: ./e2e-env
+
+      - name: Install tests dependencies 👨🏻‍💻
+        run: pnpm install
+        working-directory: ./e2e/V2
 
       - name: Install Playwright
         run: pnpm playwright install --with-deps
