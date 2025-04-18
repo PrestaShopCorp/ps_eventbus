@@ -101,6 +101,7 @@ jobs:
     env:
       CAMPAIGN: ${{ matrix.campaign }}
       DOCKER_IMAGE_PRESTASHOP: prestashop/prestashop-flashlight:${{ matrix.ps_version }}
+      URL_FO: http://localhost:8000/
       HOST_PORT_BIND_PRESTASHOP: 8000
       HOST_PORT_BIND_MYSQL: 3306
       HOST_PORT_BIND_PHP_MY_ADMIN: 6060
