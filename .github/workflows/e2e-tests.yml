@@ -174,14 +174,17 @@ jobs:
           PLAYWRIGHT_NAME: ${{ matrix.ps_version }}-${{ matrix.campaign }}-playwright-report
 
       - name: 📊 Parse test results
+        if: ${{ always() }}
         id: parse-results
         run: |
           passed=$(jq '.results.summary.passed' ./report-summary/summary.json)
           failed=$(jq '.results.summary.failed' ./report-summary/summary.json)
           echo "passed=$passed" >> $GITHUB_OUTPUT
           echo "failed=$failed" >> $GITHUB_OUTPUT
+        working-directory: ./e2e/V2
 
       - name: 📤 Send custom JSON data to Slack
+        if: ${{ always() }}
         id: slack
         uses: slackapi/slack-github-action@v1.26.0
         with:
