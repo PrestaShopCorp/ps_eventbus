@@ -187,27 +187,19 @@ jobs:
           echo "total=$total" >> $GITHUB_OUTPUT
         working-directory: ./e2e/V2
 
-    outputs:
-      campaign: ${{ matrix.campaign }}
-      ps_version: ${{ matrix.ps_version }}
-      passed: ${{ steps.parse-results.outputs.passed }}
-      failed: ${{ steps.parse-results.outputs.failed }}
-      skipped: ${{ steps.parse-results.outputs.skipped }}
-      total: ${{ steps.parse-results.outputs.total }}
+      - name: 📣 Trigger Slack Notification
+        uses: ./.github/workflows/e2e-slack.yml
+        with:
+          campaign: ${{ matrix.campaign }}
+          ps_version: ${{ matrix.ps_version }}
+          passed: ${{ steps.parse-results.outputs.passed }}
+          failed: ${{ steps.parse-results.outputs.failed }}
+          total: ${{ steps.parse-results.outputs.total }}
+          skipped: ${{ steps.parse-results.outputs.failed }}
+          run_id: ${{ github.run_id }}
+        secrets:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-  notify:
-    needs: e2e_tests
-    uses: ./.github/workflows/e2e-slack.yml
-    with:
-      campaign: ${{ matrix.campaign }}
-      ps_version: ${{ matrix.ps_version }}
-      passed: ${{ steps.parse-results.outputs.passed }}
-      failed: ${{ steps.parse-results.outputs.failed }}
-      skipped: ${{ steps.parse-results.outputs.skipped }}
-      total: ${{ steps.parse-results.outputs.total }}
-      run_id: ${{ github.run_id }}
-    secrets:
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 
 
