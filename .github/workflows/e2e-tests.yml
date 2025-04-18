@@ -188,7 +188,8 @@ jobs:
         working-directory: ./e2e/V2
 
       - name: 📣 Trigger Slack Notification
-        uses: ./.github/workflows/e2e-slack.yml
+        if: ${{ always() }}
+        uses: SD1982/ps_eventbus/.github/workflows/slack.yml@main
         with:
           campaign: ${{ matrix.campaign }}
           ps_version: ${{ matrix.ps_version }}

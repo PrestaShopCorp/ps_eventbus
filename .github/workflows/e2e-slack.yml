@@ -58,11 +58,11 @@ jobs:
                     },
                     {
                     "type": "mrkdwn",
-                    "text": ":mag: *[View Test Report Artifact](\${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts)*"
+                    "text": ":mag: *[Playwright Report](\${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts)*"
                     },
                     {
                     "type": "mrkdwn",
-                    "text": ":rocket: *[View GitHub Run](\${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*"
+                    "text": ":rocket: *[GitHub Run](\${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*"
                     }
                   ]
                 },
