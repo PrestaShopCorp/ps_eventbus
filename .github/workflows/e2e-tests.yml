@@ -197,7 +197,7 @@ jobs:
 
   notify:
     needs: e2e_tests
-    uses: ./.github/workflows/e2e-slack.yml@main
+    uses: ./.github/workflows/e2e-slack.yml
     with:
       campaign: ${{ matrix.campaign }}
       ps_version: ${{ matrix.ps_version }}

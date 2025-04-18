@@ -1,4 +1,4 @@
-name: 📣 Slack Notification
+name: Slack Notification
 
 on:
   workflow_call:
