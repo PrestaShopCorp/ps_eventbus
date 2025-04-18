@@ -187,6 +187,7 @@ jobs:
         working-directory: ./e2e/V2
 
       - name: 📤 Send Slack notification
+        if: ${{ always() }}
         uses: slackapi/slack-github-action@v1.26.0
         with:
           payload: |
