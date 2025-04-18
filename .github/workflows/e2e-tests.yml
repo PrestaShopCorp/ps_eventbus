@@ -195,11 +195,10 @@ jobs:
               campaign=${{ matrix.campaign }}
               version=${{ matrix.ps_version }}
 
-              message="🧪 *E2E Test Report*\n"
-              message+="📦 *Campaign*: \`${campaign}\`\n"
-              message+="🔢 *Version*: \`${version}\`\n"
-              message+="✅ Passed: *${passed}* / ❌ Failed: *${failed}* / 🧮 Total: *${total}*\n"
-              message+="🔗 <${run_url}|Voir les détails>"
+              message="🧪 Eventbus E2E Tests Report"
+              message+="*Campaign*: `${campaign}`"
+              message+="*Version*: `${version}`"
+              message+="✅ Passed: *${passed}* / ❌ Failed: *${failed}* / 🧮 Total: *${total}*"
 
               payload=$(jq -n --arg text "$message" '{text: $text}')
               curl -X POST -H 'Content-type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
