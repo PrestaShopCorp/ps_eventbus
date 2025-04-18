@@ -199,7 +199,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "*🧪 Eventbus E2E Tests Report*"
+                    "text": "*🚀 Eventbus E2E Tests Results*"
                   }
                 },
                 {
@@ -207,11 +207,11 @@ jobs:
                   "fields": [
                     {
                       "type": "mrkdwn",
-                      "text": "*Campaign*\n${{ matrix.campaign }}"
+                      "text": "*🎏 Campaign*\n${{ matrix.campaign }}"
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*PS_Version*\n${{ matrix.ps_version }}"
+                      "text": "*🐧 PrestaShop Version*\n${{ matrix.ps_version }}"
                     },
                   ]
                 },
@@ -231,8 +231,20 @@ jobs:
                       "text": "*🔷 Skipped:* ${{ steps.parse-results.outputs.skipped }} / ${{ steps.parse-results.outputs.total }} tests"
                     }
                   ]
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                    "type": "mrkdwn",
+                    "text": ":mag: *[View Test Report Artifact](\${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts)*"
+                    },
+                    {
+                    "type": "mrkdwn",
+                    "text": ":rocket: *[View GitHub Run](\${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*"
+                    }
+                  ]
                 }
-              ]
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
