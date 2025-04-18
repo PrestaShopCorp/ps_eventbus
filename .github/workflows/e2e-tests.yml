@@ -238,7 +238,7 @@ jobs:
                     }
                     {
                       "type": "mrkdwn",
-                      "text": "*⭐ Total:* ${{ steps.parse-results.outputs.total }}"
+                      "text": "*⚡ Total:* ${{ steps.parse-results.outputs.total }}"
                     }
                   ]
                 }
