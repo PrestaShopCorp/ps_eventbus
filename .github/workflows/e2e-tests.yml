@@ -213,6 +213,14 @@ jobs:
                       "type": "mrkdwn",
                       "text": "*🐧 PrestaShop Version*\n${{ matrix.ps_version }}"
                     },
+                    {
+                    "type": "mrkdwn",
+                    "text": ":mag: *[View Test Report Artifact](\${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts)*"
+                    },
+                    {
+                    "type": "mrkdwn",
+                    "text": ":rocket: *[View GitHub Run](\${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*"
+                    }
                   ]
                 },
                 {
@@ -229,19 +237,6 @@ jobs:
                     {
                       "type": "mrkdwn",
                       "text": "*🔷 Skipped:* ${{ steps.parse-results.outputs.skipped }} / ${{ steps.parse-results.outputs.total }} tests"
-                    }
-                  ]
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                    "type": "mrkdwn",
-                    "text": ":mag: *[View Test Report Artifact](\${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts)*"
-                    },
-                    {
-                    "type": "mrkdwn",
-                    "text": ":rocket: *[View GitHub Run](\${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*"
                     }
                   ]
                 }
