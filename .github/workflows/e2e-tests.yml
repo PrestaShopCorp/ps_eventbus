@@ -182,22 +182,30 @@ jobs:
           STATS_PATH="playwright-report/results.json"
 
           if [ -f "$STATS_PATH" ]; then
-            passed=$(jq '.suites | map(.tests | map(select(.status == "passed")) | length) | add' "$STATS_PATH")
-            failed=$(jq '.suites | map(.tests | map(select(.status == "failed")) | length) | add' "$STATS_PATH")
-            total=$((passed + failed))
-            campaign="${{ matrix.campaign }}"
-            version="${{ matrix.ps_version }}"
-            repo="${{ github.repository }}"
-            run_url="https://github.com/${repo}/actions/runs/${{ github.run_id }}"
+            # Vérifie si la clé .suites existe et n'est pas null
+            suites=$(jq '.suites' "$STATS_PATH")
 
-            message="🧪 *E2E Test Report*\n"
-            message+="📦 *Campaign*: \`${campaign}\`\n"
-            message+="🔢 *Version*: \`${version}\`\n"
-            message+="✅ Passed: *${passed}* / ❌ Failed: *${failed}* / 🧮 Total: *${total}*\n"
-            message+="🔗 <${run_url}|Voir les détails>"
+            if [ "$suites" != "null" ]; then
+              # Nombre de tests réussis
+              passed=$(jq '[.suites[].specs[].tests[] | select(.status == "passed")] | length' "$STATS_PATH")
+              # Nombre de tests échoués
+              failed=$(jq '[.suites[].specs[].tests[] | select(.status == "failed")] | length' "$STATS_PATH")
+              # Total des tests (réussis + échoués)
+              total=$((passed + failed))
+              campaign=${{ matrix.campaign }}
+              version=${{ matrix.ps_version }}
 
-            payload=$(jq -n --arg text "$message" '{text: $text}')
-            curl -X POST -H 'Content-type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
+              message="🧪 *E2E Test Report*\n"
+              message+="📦 *Campaign*: \`${campaign}\`\n"
+              message+="🔢 *Version*: \`${version}\`\n"
+              message+="✅ Passed: *${passed}* / ❌ Failed: *${failed}* / 🧮 Total: *${total}*\n"
+              message+="🔗 <${run_url}|Voir les détails>"
+
+              payload=$(jq -n --arg text "$message" '{text: $text}')
+              curl -X POST -H 'Content-type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
+            else
+              echo "⚠️ Aucune suite de tests trouvée dans $STATS_PATH"
+            fi
           else
             echo "⚠️ Fichier de stats non trouvé à $STATS_PATH"
           fi
