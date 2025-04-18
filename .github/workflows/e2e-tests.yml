@@ -186,18 +186,63 @@ jobs:
           echo "total=$total" >> $GITHUB_OUTPUT
         working-directory: ./e2e/V2
 
-      - name: 📣 Slack Notification
-        if: ${{ always() }}
-        uses: ./.github/actions/e2e-slack-notifications
+      - name: 📤 Send Slack notification
+        uses: slackapi/slack-github-action@v1.26.0
         with:
-          campaign: ${{ matrix.campaign }}
-          ps_version: ${{ matrix.ps_version }}
-          passed: ${{ steps.parse-results.outputs.passed }}
-          failed: ${{ steps.parse-results.outputs.failed }}
-          total: ${{ steps.parse-results.outputs.total }}
-          skipped: ${{ steps.parse-results.outputs.failed }}
-          run_id: ${{ github.run_id }}
-          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*🚀 Eventbus E2E CI notifications*"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*🎏 Campaign*\n${{ matrix.campaign }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*🐧 PrestaShop Version*\n${{ matrix.ps_version }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": ":mag: *<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts|Playwright Report>*"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": ":rocket: *<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|GitHub Run>*"
+                    }
+                  ]
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*✅ Passed:* ${{ steps.summary.outputs.passed }} / ${{ steps.summary.outputs.total }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*❌ Failed:* ${{ steps.summary.outputs.failed }} / ${{ steps.summary.outputs.total }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*🔷 Skipped:* ${{ steps.summary.outputs.skipped }} / ${{ steps.summary.outputs.total }}"
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
 
 
 
