@@ -33,72 +33,76 @@ runs:
       id: slack-payload
       shell: bash
       run: |
-        payload=$(
-          jq -n --arg campaign "${{ inputs.campaign }}" \
-                --arg ps_version "${{ inputs.ps_version }}" \
-                --arg passed "${{ inputs.passed }}" \
-                --arg failed "${{ inputs.failed }}" \
-                --arg skipped "${{ inputs.skipped }}" \
-                --arg total "${{ inputs.total }}" \
-                --arg run_id "${{ inputs.run_id }}" \
-                --arg repo "${{ github.repository }}" \
-                --arg url "${{ github.server_url }}" \
-          '{
-            blocks: [
-              {
-                type: "section",
-                text: {
-                  type: "mrkdwn",
-                  text: "*🚀 Eventbus E2E Tests Results*"
-                }
-              },
-              {
-                type: "section",
-                fields: [
-                  {
-                    type: "mrkdwn",
-                    text: "*🎏 Campaign*\n\($campaign)"
-                  },
-                  {
-                    type: "mrkdwn",
-                    text: "*🐧 PrestaShop Version*\n\($ps_version)"
-                  },
-                  {
-                    type: "mrkdwn",
-                    text: ":mag: *[Playwright Report](\($url)/\($repo)/actions/runs/\($run_id)#artifacts)*"
-                  },
-                  {
-                    type: "mrkdwn",
-                    text: ":rocket: *[GitHub Run](\($url)/\($repo)/actions/runs/\($run_id))*"
-                  }
-                ]
-              },
-              {
-                type: "section",
-                fields: [
-                  {
-                    type: "mrkdwn",
-                    text: "*✅ Passed:* \($passed) / \($total) tests"
-                  },
-                  {
-                    type: "mrkdwn",
-                    text: "*❌ Failed:* \($failed) / \($total) tests"
-                  },
-                  {
-                    type: "mrkdwn",
-                    text: "*🔷 Skipped:* \($skipped) / \($total) tests"
-                  }
-                ]
+        payload=$(jq -n --arg campaign "${{ inputs.campaign }}" \
+                       --arg ps_version "${{ inputs.ps_version }}" \
+                       --arg passed "${{ inputs.passed }}" \
+                       --arg failed "${{ inputs.failed }}" \
+                       --arg skipped "${{ inputs.skipped }}" \
+                       --arg total "${{ inputs.total }}" \
+                       --arg run_id "${{ inputs.run_id }}" \
+                       --arg repo "${{ github.repository }}" \
+                       --arg url "${{ github.server_url }}" \
+        '{
+          blocks: [
+            {
+              type: "section",
+              text: {
+                type: "mrkdwn",
+                text: "*🚀 Eventbus E2E Tests Results*"
               }
-            ]
-          }'
-        )
-        echo "payload=$payload" >> $GITHUB_OUTPUT
+            },
+            {
+              type: "section",
+              fields: [
+                {
+                  type: "mrkdwn",
+                  text: "*🎏 Campaign*\n\($campaign)"
+                },
+                {
+                  type: "mrkdwn",
+                  text: "*🐧 PrestaShop Version*\n\($ps_version)"
+                },
+                {
+                  type: "mrkdwn",
+                  text: ":mag: *[Playwright Report](\($url)/\($repo)/actions/runs/\($run_id)#artifacts)*"
+                },
+                {
+                  type: "mrkdwn",
+                  text: ":rocket: *[GitHub Run](\($url)/\($repo)/actions/runs/\($run_id))*"
+                }
+              ]
+            },
+            {
+              type: "section",
+              fields: [
+                {
+                  type: "mrkdwn",
+                  text: "*✅ Passed:* \($passed) / \($total) tests"
+                },
+                {
+                  type: "mrkdwn",
+                  text: "*❌ Failed:* \($failed) / \($total) tests"
+                },
+                {
+                  type: "mrkdwn",
+                  text: "*🔷 Skipped:* \($skipped) / \($total) tests"
+                }
+              ]
+            }
+          ]
+        }')
+
+        encoded=$(echo "$payload" | base64)
+        echo "payload_b64=$encoded" >> $GITHUB_OUTPUT
 
     - name: 📤 Send to Slack
+      run: |
+        echo "${{ steps.slack-payload.outputs.payload_b64 }}" | base64 --decode > slack_payload.json
+        cat slack_payload.json  # facultatif : debug
+        shell: bash
       uses: slackapi/slack-github-action@v1.26.0
       with:
-        payload: ${{ steps.slack-payload.outputs.payload }}
+        payload-file-path: ./slack_payload.json
       env:
         SLACK_WEBHOOK_URL: ${{ inputs.slack_webhook_url }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
