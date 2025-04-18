@@ -5,14 +5,14 @@ on:
     inputs:
       incremental:
         type: boolean
-        description: Run incremental campaign
+        description: Run incremental-sync campaign
         required: false
         default: true
       full:
         type: boolean
-        description: Run fullsync campaign
+        description: Run full-sync campaign
         required: false
-        default: true
+        default: false
       ps_latest:
         type: boolean
         description: Latest available flashlight
@@ -93,6 +93,7 @@ jobs:
     needs: generate-matrix
     runs-on: ubuntu-latest
     strategy:
+      max-parallel: 1
       matrix:
         include: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
 
