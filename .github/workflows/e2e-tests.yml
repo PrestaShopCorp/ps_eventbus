@@ -187,62 +187,27 @@ jobs:
           echo "total=$total" >> $GITHUB_OUTPUT
         working-directory: ./e2e/V2
 
-      - name: 📤 Send custom JSON data to Slack
-        if: ${{ always() }}
-        id: slack
-        uses: slackapi/slack-github-action@v1.26.0
-        with:
-          payload: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "*🚀 Eventbus E2E Tests Results*"
-                  }
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*🎏 Campaign*\n${{ matrix.campaign }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*🐧 PrestaShop Version*\n${{ matrix.ps_version }}"
-                    },
-                    {
-                    "type": "mrkdwn",
-                    "text": ":mag: *[View Test Report Artifact](\${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts)*"
-                    },
-                    {
-                    "type": "mrkdwn",
-                    "text": ":rocket: *[View GitHub Run](\${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*"
-                    }
-                  ]
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*✅ Passed:* ${{ steps.parse-results.outputs.passed }} / ${{ steps.parse-results.outputs.total }} tests"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*❌ Failed:* ${{ steps.parse-results.outputs.failed }} / ${{ steps.parse-results.outputs.total }} tests"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*🔷 Skipped:* ${{ steps.parse-results.outputs.skipped }} / ${{ steps.parse-results.outputs.total }} tests"
-                    }
-                  ]
-                }
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+    outputs:
+      campaign: ${{ matrix.campaign }}
+      ps_version: ${{ matrix.ps_version }}
+      passed: ${{ steps.parse-results.outputs.passed }}
+      failed: ${{ steps.parse-results.outputs.failed }}
+      skipped: ${{ steps.parse-results.outputs.skipped }}
+      total: ${{ steps.parse-results.outputs.total }}
+
+  notify:
+    needs: e2e_tests
+    uses: ./.github/workflows/e2e-slack.yml@main
+    with:
+      campaign: ${{ matrix.campaign }}
+      ps_version: ${{ matrix.ps_version }}
+      passed: ${{ steps.parse-results.outputs.passed }}
+      failed: ${{ steps.parse-results.outputs.failed }}
+      skipped: ${{ steps.parse-results.outputs.skipped }}
+      total: ${{ steps.parse-results.outputs.total }}
+      run_id: ${{ github.run_id }}
+    secrets:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
 
 
