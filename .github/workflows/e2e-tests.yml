@@ -213,6 +213,11 @@ jobs:
                       "type": "mrkdwn",
                       "text": "*PS_Version*\n${{ matrix.ps_version }}"
                     },
+                  ]
+                },
+                {
+                  "type": "section",
+                  "fields": [
                     {
                       "type": "mrkdwn",
                       "text": "*✅ Passed:* ${{ steps.parse-results.outputs.passed }} / ${{ steps.parse-results.outputs.total }} tests"
