@@ -178,7 +178,7 @@ jobs:
         run: |
           echo "📤 Preparing Slack notification..."
 
-          STATS_PATH="./e2e/V2/playwright-report/.playwright-status/stats.json"
+          STATS_PATH="./e2e/V2/playwright-report/results.json"
 
           if [ -f "$STATS_PATH" ]; then
             passed=$(jq '.suites | map(.tests | map(select(.status == "passed")) | length) | add' "$STATS_PATH")
