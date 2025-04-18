@@ -187,9 +187,9 @@ jobs:
           echo "total=$total" >> $GITHUB_OUTPUT
         working-directory: ./e2e/V2
 
-      - name: 📣 Trigger Slack Notification
+      - name: 📣 Slack Notification
         if: ${{ always() }}
-        uses: SD1982/ps_eventbus/.github/workflows/slack.yml@main
+        uses: ./.github/actions/e2e-slack-notifications
         with:
           campaign: ${{ matrix.campaign }}
           ps_version: ${{ matrix.ps_version }}

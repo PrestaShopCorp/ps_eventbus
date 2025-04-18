@@ -1,0 +1,82 @@
+name: E2E Tests Results Slack Notification
+description: Send slack notification
+inputs:
+  campaign:
+    required: true
+    type: string
+  ps_version:
+    required: true
+    type: string
+  passed:
+    required: true
+    type: string
+  failed:
+    required: true
+    type: string
+  skipped:
+    required: true
+    type: string
+  total:
+    required: true
+    type: string
+  run_id:
+    required: true
+    type: string
+runs:
+  using: "composite"
+  steps:
+    - name: 📤 Send custom JSON data to Slack
+      uses: slackapi/slack-github-action@v1.26.0
+      with:
+        payload: |
+          {
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*🚀 Eventbus E2E Tests Results*"
+                }
+              },
+              {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*🎏 Campaign*\n${{ matrix.campaign }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*🐧 PrestaShop Version*\n${{ matrix.ps_version }}"
+                  },
+                  {
+                  "type": "mrkdwn",
+                  "text": ":mag: *[Playwright Report](\${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts)*"
+                  },
+                  {
+                  "type": "mrkdwn",
+                  "text": ":rocket: *[GitHub Run](\${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*"
+                  }
+                ]
+              },
+              {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*✅ Passed:* ${{ steps.parse-results.outputs.passed }} / ${{ steps.parse-results.outputs.total }} tests"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*❌ Failed:* ${{ steps.parse-results.outputs.failed }} / ${{ steps.parse-results.outputs.total }} tests"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*🔷 Skipped:* ${{ steps.parse-results.outputs.skipped }} / ${{ steps.parse-results.outputs.total }} tests"
+                  }
+                ]
+              }
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
