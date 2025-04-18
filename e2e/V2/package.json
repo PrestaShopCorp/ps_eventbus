@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "setup:healthcheck": "npx playwright test -g @healthcheck",
-    "test:incremental": "npx playwright test --project INCREMENTAL-CREATE",
+    "test:incremental": "npx playwright test --project INCREMENTAL",
     "test:specific": "npx playwright test -g"
   },
   "keywords": [],
