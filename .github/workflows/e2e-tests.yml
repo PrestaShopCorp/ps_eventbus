@@ -155,10 +155,6 @@ jobs:
         run: pnpm run test:${{ matrix.campaign }}
         working-directory: ./e2e/V2
 
-      - name: Set date variable
-        shell: bash
-        run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
-
       - name: Upload Playwright Test Reports
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
@@ -166,4 +162,4 @@ jobs:
           name: ${{ env.PLAYWRIGHT_NAME }}
           path: ./e2e/V2/playwright-report
         env:
-          PLAYWRIGHT_NAME: ${{ matrix.ps_version }}-${{ matrix.campaign }}-playwright-report-${{ env.DATE }}
+          PLAYWRIGHT_NAME: ${{ matrix.ps_version }}-${{ matrix.campaign }}-playwright-report
