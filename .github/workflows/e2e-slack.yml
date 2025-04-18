@@ -24,9 +24,9 @@ on:
       run_id:
         required: true
         type: string
-    secrets:
-      SLACK_WEBHOOK_URL:
-        required: true
+
+env:
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 jobs:
   notify:

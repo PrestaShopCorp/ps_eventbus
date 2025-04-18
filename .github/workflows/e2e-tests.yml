@@ -197,8 +197,6 @@ jobs:
           total: ${{ steps.parse-results.outputs.total }}
           skipped: ${{ steps.parse-results.outputs.failed }}
           run_id: ${{ github.run_id }}
-        secrets:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 
 
