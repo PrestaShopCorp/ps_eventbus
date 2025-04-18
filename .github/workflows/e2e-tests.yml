@@ -1,4 +1,4 @@
-name: 🧪 EVENTBUS E2E TESTS
+name: EVENTBUS E2E TESTS
 
 on:
   workflow_dispatch:
@@ -15,7 +15,7 @@ on:
         default: false
       ps_latest:
         type: boolean
-        description: Latest available flashlight
+        description: Flashlight latest
         required: false
         default: true
       ps_8_1_7:
@@ -179,8 +179,12 @@ jobs:
         run: |
           passed=$(jq '.results.summary.passed' ./report-summary/summary.json)
           failed=$(jq '.results.summary.failed' ./report-summary/summary.json)
+          skipped=$(jq '.results.summary.skipped' ./report-summary/summary.json)
+          total=$(jq '.results.summary.tests' ./report-summary/summary.json)
           echo "passed=$passed" >> $GITHUB_OUTPUT
           echo "failed=$failed" >> $GITHUB_OUTPUT
+          echo "skipped=$skipped" >> $GITHUB_OUTPUT
+          echo "total=$total" >> $GITHUB_OUTPUT
         working-directory: ./e2e/V2
 
       - name: 📤 Send custom JSON data to Slack
@@ -211,11 +215,15 @@ jobs:
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*✅ Passed:*\n${{ steps.parse-results.outputs.passed }}"
+                      "text": "*✅ Passed:* ${{ steps.parse-results.outputs.passed }} / ${{ steps.parse-results.outputs.total }} tests"
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*❌ Failed:*\n${{ steps.parse-results.outputs.failed }}"
+                      "text": "*❌ Failed:* ${{ steps.parse-results.outputs.failed }} / ${{ steps.parse-results.outputs.total }} tests"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*🔷 Skipped:* ${{ steps.parse-results.outputs.skipped }} / ${{ steps.parse-results.outputs.total }} tests"
                     }
                   ]
                 }
