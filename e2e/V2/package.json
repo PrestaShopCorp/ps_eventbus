@@ -14,6 +14,7 @@
   "packageManager": "pnpm@10.7.0",
   "dependencies": {
     "@playwright/test": "^1.51.1",
+    "playwright-ctrf-json-reporter": "^0.0.7",
     "@prestashop-core/ui-testing": "https://github.com/PrestaShop/ui-testing-library#main",
     "dotenv": "^16.5.0",
     "prisma": "^6.6.0",

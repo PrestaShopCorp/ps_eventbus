@@ -10,6 +10,7 @@ setup('[HEALTHCHECK] - @healthcheck', async () => {
   await test.step('Should check ps_eventbus is up and ready', async () => {
     const healthCheck = await getShopHealthCheck({cache: false});
     expect(healthCheck.ps_eventbus).toEqual(true);
+    process.env['PS_VERSION'] = healthCheck.prestashop_version;
   });
 
   await test.step('Should check Collector mock is up and ready', async () => {

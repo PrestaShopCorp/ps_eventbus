@@ -96,10 +96,10 @@ loadGlobal();
  */
 export default defineConfig({
   testDir: './src/tests',
+  // don't run test on parallel mode
   fullyParallel: false,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  retries: 0,
+  workers: 1,
   reporter: [
     ['list', {printSteps: true}],
     ['html', {open: 'never'}],
@@ -113,8 +113,12 @@ export default defineConfig({
     ]*/
   ],
   use: {
+    screenshot: 'only-on-failure',
     headless: !(process.env.HEADLESS === 'false'),
     trace: 'on-first-retry',
+    launchOptions: {
+      slowMo: parseInt(process.env.SLOW_MO ?? '750', 10)
+    },
   },
 
   projects: [
