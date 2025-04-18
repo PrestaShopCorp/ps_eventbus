@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@playwright/test':
         specifier: ^1.51.1
-        version: 1.51.1
+        version: 1.52.0
       '@prestashop-core/ui-testing':
         specifier: https://github.com/PrestaShop/ui-testing-library#main
         version: https://codeload.github.com/PrestaShop/ui-testing-library/tar.gz/df14b61fe1c1720dd1a06dea59e6637c5e385586(canvas@2.11.2)
@@ -27,14 +27,17 @@ importers:
       '@types/node':
         specifier: ^22.14.0
         version: 22.14.1
+      '@types/semver':
+        specifier: ^7.5.8
+        version: 7.7.0
       tsconfig-paths:
         specifier: ^4.2.0
         version: 4.2.0
 
 packages:
 
-  '@asamuzakjp/css-color@3.1.1':
-    resolution: {integrity: sha512-hpRD68SV2OMcZCsrbdkccTw5FXjNDLo5OuqSHyHZfwweGsDWZwDJ2+gONyNAbazZclobMirACLw0lk8WVxIqxA==}
+  '@asamuzakjp/css-color@3.1.2':
+    resolution: {integrity: sha512-nwgc7jPn3LpZ4JWsoHtuwBsad1qSSLDDX634DdG0PBJofIuIEtSWk4KkRmuXyu178tjuHAbwiMNNzwqIyLYxZw==}
 
   '@csstools/color-helpers@5.0.2':
     resolution: {integrity: sha512-JqWH1vsgdGcw2RR6VliXXdA0/59LttzlU8UlRT/iUUsEeWfYq8I+K0yhihEUTTHLRm1EXvpsCx3083EU15ecsA==}
@@ -226,8 +229,8 @@ packages:
     resolution: {integrity: sha512-Yhlar6v9WQgUp/He7BdgzOz8lqMQ8sU+jkCq7Wx8Myc5YFJLbEe7lgui/V7G1qB1DJykHSGwreceSaD60Y0PUQ==}
     hasBin: true
 
-  '@playwright/test@1.51.1':
-    resolution: {integrity: sha512-nM+kEaTSAoVlXmMPH10017vn3FSiFqr/bh4fKg9vmAdMfd9SDqRZNvPSiAHADc/itWak+qPvMPZQOPwCBW7k7Q==}
+  '@playwright/test@1.52.0':
+    resolution: {integrity: sha512-uh6W7sb55hl7D6vsAeA+V2p5JnlAqzhqFyF0VcJkKZXkgnFcVG9PziERRHQfPLfNGx1C292a4JqbWzhR8L4R1g==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -264,6 +267,9 @@ packages:
 
   '@types/node@22.14.1':
     resolution: {integrity: sha512-u0HuPQwe/dHrItgHHpmw3N2fYCR6x4ivMNbPHRkBVP4CvN+kiRrKHWk3i8tXiO/joPwXLMYvF9TTF0eqgHIuOw==}
+
+  '@types/semver@7.7.0':
+    resolution: {integrity: sha512-k107IF4+Xr7UHjwDc7Cfd6PRQfbdkiRabXGRjo07b4WyPahFBZCZ1sE+BNxYIJPPg73UkfOsVOLwqVc/6ETrIA==}
 
   '@types/trusted-types@2.0.7':
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
@@ -888,13 +894,13 @@ packages:
     resolution: {integrity: sha512-TdTZPf1trZ8/UFu5Cx/GXB7GZM30LT+wWUNfsi6Bq8ePLnb+woNKtDymI2mxZYBpMbonNFqKmiz684DIfnd8dA==}
     engines: {node: '>=18'}
 
-  playwright-core@1.51.1:
-    resolution: {integrity: sha512-/crRMj8+j/Nq5s8QcvegseuyeZPxpQCZb6HNk3Sos3BlZyAknRjoyJPFWkpNn8v0+P3WiwqFF8P+zQo4eqiNuw==}
+  playwright-core@1.52.0:
+    resolution: {integrity: sha512-l2osTgLXSMeuLZOML9qYODUQoPPnUsKsb5/P6LJ2e6uPKXUdPK5WYhN4z03G+YNbWmGDY4YENauNu4ZKczreHg==}
     engines: {node: '>=18'}
     hasBin: true
 
-  playwright@1.51.1:
-    resolution: {integrity: sha512-kkx+MB2KQRkyxjYPc3a0wLZZoDczmppyGJIvQ43l+aZihkaVvmu/21kiyaHeHjiFxjxNNFnUncKmcGIyOojsaw==}
+  playwright@1.52.0:
+    resolution: {integrity: sha512-JAwMNMBlxJ2oD1kce4KPtMkDeKGHQstdpFPcPH3maElAXon/QZeTvtsfXmTMRyO9TslfoYOXkSsvao2nE1ilTw==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -1073,8 +1079,8 @@ packages:
   tr46@0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
 
-  tr46@5.1.0:
-    resolution: {integrity: sha512-IUWnUK7ADYR5Sl1fZlO1INDUhVhatWl7BtJWsIhwJ0UAK7ilzzIa8uIqOO/aYVWHZPJkKbEL+362wrzoeRF7bw==}
+  tr46@5.1.1:
+    resolution: {integrity: sha512-hdF5ZgjTqgAntKkklYw0R03MG2x/bSzTtkxmIRw/sTNV8YXsCJ1tfLAX23lhxhHJlEf3CRCOCGGWw3vI3GaSPw==}
     engines: {node: '>=18'}
 
   tsconfig-paths@4.2.0:
@@ -1208,7 +1214,7 @@ packages:
 
 snapshots:
 
-  '@asamuzakjp/css-color@3.1.1':
+  '@asamuzakjp/css-color@3.1.2':
     dependencies:
       '@csstools/css-calc': 2.1.2(@csstools/css-parser-algorithms@3.0.4(@csstools/css-tokenizer@3.0.3))(@csstools/css-tokenizer@3.0.3)
       '@csstools/css-color-parser': 3.0.8(@csstools/css-parser-algorithms@3.0.4(@csstools/css-tokenizer@3.0.3))(@csstools/css-tokenizer@3.0.3)
@@ -1335,14 +1341,14 @@ snapshots:
       - supports-color
     optional: true
 
-  '@playwright/test@1.51.1':
+  '@playwright/test@1.52.0':
     dependencies:
-      playwright: 1.51.1
+      playwright: 1.52.0
 
   '@prestashop-core/ui-testing@https://codeload.github.com/PrestaShop/ui-testing-library/tar.gz/df14b61fe1c1720dd1a06dea59e6637c5e385586(canvas@2.11.2)':
     dependencies:
       '@faker-js/faker': 9.7.0
-      '@playwright/test': 1.51.1
+      '@playwright/test': 1.52.0
       '@s3pweb/keycloak-admin-client-cjs': 26.1.4
       '@xmldom/xmldom': 0.9.8
       csv-writer: 1.6.0
@@ -1404,6 +1410,8 @@ snapshots:
   '@types/node@22.14.1':
     dependencies:
       undici-types: 6.21.0
+
+  '@types/semver@7.7.0': {}
 
   '@types/trusted-types@2.0.7':
     optional: true
@@ -1565,7 +1573,7 @@ snapshots:
 
   cssstyle@4.3.0:
     dependencies:
-      '@asamuzakjp/css-color': 3.1.1
+      '@asamuzakjp/css-color': 3.1.2
       rrweb-cssom: 0.8.0
 
   csv-writer@1.6.0: {}
@@ -2100,11 +2108,11 @@ snapshots:
       - encoding
       - supports-color
 
-  playwright-core@1.51.1: {}
+  playwright-core@1.52.0: {}
 
-  playwright@1.51.1:
+  playwright@1.52.0:
     dependencies:
-      playwright-core: 1.51.1
+      playwright-core: 1.52.0
     optionalDependencies:
       fsevents: 2.3.2
 
@@ -2337,7 +2345,7 @@ snapshots:
   tr46@0.0.3:
     optional: true
 
-  tr46@5.1.0:
+  tr46@5.1.1:
     dependencies:
       punycode: 2.3.1
 
@@ -2396,7 +2404,7 @@ snapshots:
 
   whatwg-url@14.2.0:
     dependencies:
-      tr46: 5.1.0
+      tr46: 5.1.1
       webidl-conversions: 7.0.0
 
   whatwg-url@5.0.0:
