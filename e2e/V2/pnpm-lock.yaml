@@ -20,16 +20,10 @@ importers:
       prisma:
         specifier: ^6.6.0
         version: 6.6.0
-      semver:
-        specifier: ^7.6.2
-        version: 7.7.1
     devDependencies:
       '@types/node':
         specifier: ^22.14.0
         version: 22.14.1
-      '@types/semver':
-        specifier: ^7.5.8
-        version: 7.7.0
       tsconfig-paths:
         specifier: ^4.2.0
         version: 4.2.0
@@ -267,9 +261,6 @@ packages:
 
   '@types/node@22.14.1':
     resolution: {integrity: sha512-u0HuPQwe/dHrItgHHpmw3N2fYCR6x4ivMNbPHRkBVP4CvN+kiRrKHWk3i8tXiO/joPwXLMYvF9TTF0eqgHIuOw==}
-
-  '@types/semver@7.7.0':
-    resolution: {integrity: sha512-k107IF4+Xr7UHjwDc7Cfd6PRQfbdkiRabXGRjo07b4WyPahFBZCZ1sE+BNxYIJPPg73UkfOsVOLwqVc/6ETrIA==}
 
   '@types/trusted-types@2.0.7':
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
@@ -1410,8 +1401,6 @@ snapshots:
   '@types/node@22.14.1':
     dependencies:
       undici-types: 6.21.0
-
-  '@types/semver@7.7.0': {}
 
   '@types/trusted-types@2.0.7':
     optional: true
