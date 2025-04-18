@@ -145,6 +145,10 @@ jobs:
 
       - name: Install tests dependencies 👨🏻‍💻
         run: pnpm install
+        working-directory: ./e2e
+
+      - name: Install tests V2 dependencies 👨🏻‍💻
+        run: pnpm install
         working-directory: ./e2e/V2
 
       - name: Install Playwright

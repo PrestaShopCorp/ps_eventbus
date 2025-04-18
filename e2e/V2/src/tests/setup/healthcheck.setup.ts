@@ -1,8 +1,8 @@
 // Import types
 import {test as setup, test, expect} from '@playwright/test';
-import testConfig from '@helpers/test.config';
+import testConfig from '../../../../src/helpers/test.config';
 import axios from 'axios';
-import { getShopHealthCheck } from '@helpers/data-helper';
+import { getShopHealthCheck } from '../../../../src/helpers/data-helper';
 
 // This suite is designed to help troubleshoot the e2e environment by checking if some prerequisites are met.
 setup('[HEALTHCHECK] - @healthcheck', async () => {
