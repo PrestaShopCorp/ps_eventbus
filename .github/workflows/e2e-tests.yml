@@ -93,7 +93,7 @@ jobs:
     needs: generate-matrix
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 1
+      max-parallel: 3
       fail-fast: false
       matrix:
         include: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
