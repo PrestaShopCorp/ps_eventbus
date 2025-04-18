@@ -29,58 +29,76 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: 📤 Send custom JSON data to Slack
-      uses: slackapi/slack-github-action@v1.26.0
-      with:
-        payload: |
-          {
-            "blocks": [
+    - name: 🔧 Build JSON payload
+      id: slack-payload
+      shell: bash
+      run: |
+        payload=$(
+          jq -n --arg campaign "${{ inputs.campaign }}" \
+                --arg ps_version "${{ inputs.ps_version }}" \
+                --arg passed "${{ inputs.passed }}" \
+                --arg failed "${{ inputs.failed }}" \
+                --arg skipped "${{ inputs.skipped }}" \
+                --arg total "${{ inputs.total }}" \
+                --arg run_id "${{ inputs.run_id }}" \
+                --arg repo "${{ github.repository }}" \
+                --arg url "${{ github.server_url }}" \
+          '{
+            blocks: [
               {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "*🚀 Eventbus E2E Tests Results*"
+                type: "section",
+                text: {
+                  type: "mrkdwn",
+                  text: "*🚀 Eventbus E2E Tests Results*"
                 }
               },
               {
-                "type": "section",
-                "fields": [
+                type: "section",
+                fields: [
                   {
-                    "type": "mrkdwn",
-                    "text": "*🎏 Campaign*\n${{ inputs.campaign }}"
+                    type: "mrkdwn",
+                    text: "*🎏 Campaign*\n\($campaign)"
                   },
                   {
-                    "type": "mrkdwn",
-                    "text": "*🐧 PrestaShop Version*\n${{ inputs.ps_version }}"
+                    type: "mrkdwn",
+                    text: "*🐧 PrestaShop Version*\n\($ps_version)"
                   },
                   {
-                  "type": "mrkdwn",
-                  "text": ":mag: *[Playwright Report](\${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ inputs.run_id }}#artifacts)*"
+                    type: "mrkdwn",
+                    text: ":mag: *[Playwright Report](\($url)/\($repo)/actions/runs/\($run_id)#artifacts)*"
                   },
                   {
-                  "type": "mrkdwn",
-                  "text": ":rocket: *[GitHub Run](\${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ inputs.run_id }})*"
+                    type: "mrkdwn",
+                    text: ":rocket: *[GitHub Run](\($url)/\($repo)/actions/runs/\($run_id))*"
                   }
                 ]
               },
               {
-                "type": "section",
-                "fields": [
+                type: "section",
+                fields: [
                   {
-                    "type": "mrkdwn",
-                    "text": "*✅ Passed:* ${{ inputs.passed }} / ${{ inputs.total }} tests"
+                    type: "mrkdwn",
+                    text: "*✅ Passed:* \($passed) / \($total) tests"
                   },
                   {
-                    "type": "mrkdwn",
-                    "text": "*❌ Failed:* ${{ inputs.failed }} / ${{ inputs.total }} tests"
+                    type: "mrkdwn",
+                    text: "*❌ Failed:* \($failed) / \($total) tests"
                   },
                   {
-                    "type": "mrkdwn",
-                    "text": "*🔷 Skipped:* ${{ inputs.skipped }} / ${{ inputs.total }} tests"
+                    type: "mrkdwn",
+                    text: "*🔷 Skipped:* \($skipped) / \($total) tests"
                   }
                 ]
               }
-          }
+            ]
+          }'
+        )
+        echo "payload=$payload" >> $GITHUB_OUTPUT
+
+    - name: 📤 Send to Slack
+      uses: slackapi/slack-github-action@v1.26.0
+      with:
+        payload: ${{ steps.slack-payload.outputs.payload }}
       env:
         SLACK_WEBHOOK_URL: ${{ inputs.slack_webhook_url }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
