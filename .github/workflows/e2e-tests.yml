@@ -175,9 +175,6 @@ jobs:
 
       - name: Send custom JSON data to Slack workflow
         working-directory: ./e2e/V2
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
         id: slack
         uses: slackapi/slack-github-action@v1.26.0
         with:
@@ -223,4 +220,7 @@ jobs:
                 }
                 ]
               }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
