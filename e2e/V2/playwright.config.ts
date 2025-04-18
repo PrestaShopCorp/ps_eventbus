@@ -52,7 +52,7 @@ function loadGlobal(): void {
     config: {
       headless: process.env.HEADLESS ? JSON.parse(process.env.HEADLESS) : true,
       timeout: 0,
-      slowMo: process.env.SLOW_MO ? parseInt(process.env.SLOW_MO, 10) : 5,
+      slowMo: parseInt(process.env.SLOW_MO ?? '1000', 10)
     },
     interceptErrors: process.env.INTERCEPT_ERRORS ? JSON.parse(process.env.INTERCEPT_ERRORS) : false,
   };
@@ -114,11 +114,7 @@ export default defineConfig({
   ],
   use: {
     screenshot: 'only-on-failure',
-    headless: !(process.env.HEADLESS === 'false'),
     trace: 'on-first-retry',
-    launchOptions: {
-      slowMo: parseInt(process.env.SLOW_MO ?? '750', 10)
-    },
   },
 
   projects: [
