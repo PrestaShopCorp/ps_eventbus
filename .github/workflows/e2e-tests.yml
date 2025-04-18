@@ -77,7 +77,7 @@ jobs:
           matrix="["
           for c in "${campaigns[@]}"; do
             for v in "${versions[@]}"; do
-              matrix+='{"campaign":"'"$c"'","ps_version":"'"$v"'","eventbus_version":"latest"},'
+              matrix+='{"campaign":"'"$c"'","ps_version":"'"$v"'"},'
             done
           done
           matrix="${matrix%,}"  # remove last comma
@@ -99,7 +99,6 @@ jobs:
     env:
       CAMPAIGN: ${{ matrix.campaign }}
       DOCKER_IMAGE_PRESTASHOP: prestashop/prestashop-flashlight:${{ matrix.ps_version }}
-      EVENTBUS_VERSION: ${{ matrix.eventbus_version }}
       HOST_PORT_BIND_PRESTASHOP: 8000
       HOST_PORT_BIND_MYSQL: 3306
       HOST_PORT_BIND_PHP_MY_ADMIN: 6060
@@ -167,4 +166,4 @@ jobs:
           name: ${{ env.PLAYWRIGHT_NAME }}
           path: ./e2e/V2/playwright-report
         env:
-          PLAYWRIGHT_NAME: ${{ matrix.ps_version }}-${{ matrix.campaign }}-${{ matrix.eventbus_version }}-playwright-report-${{ env.DATE }}
+          PLAYWRIGHT_NAME: ${{ matrix.ps_version }}-${{ matrix.campaign }}-playwright-report-${{ env.DATE }}
