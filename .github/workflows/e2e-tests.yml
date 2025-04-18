@@ -197,7 +197,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "*🚀 Eventbus E2E CI notifications*"
+                    "text": "*Eventbus E2E CI notifications*"
                   }
                 },
                 {
@@ -205,19 +205,19 @@ jobs:
                   "fields": [
                     {
                       "type": "mrkdwn",
-                      "text": "*🎏 Campaign*\n${{ matrix.campaign }}"
+                      "text": "*📂 Campaign:* ${{ matrix.campaign }}"
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*🐧 PrestaShop Version*\n${{ matrix.ps_version }}"
+                      "text": "*🐧 PrestaShop Version:* ${{ matrix.ps_version }}"
                     },
                     {
                       "type": "mrkdwn",
-                      "text": ":mag: *<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts|Playwright Report>*"
+                      "text": "🔗 *<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts|Playwright Report>*"
                     },
                     {
                       "type": "mrkdwn",
-                      "text": ":rocket: *<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|GitHub Run>*"
+                      "text": "🔗 *<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|GitHub Run>*"
                     }
                   ]
                 },
@@ -226,15 +226,19 @@ jobs:
                   "fields": [
                     {
                       "type": "mrkdwn",
-                      "text": "*✅ Passed:* ${{ steps.parse-results.outputs.passed }} / ${{ steps.parse-results.outputs.total }}"
+                      "text": "*✅ Passed:* ${{ steps.parse-results.outputs.passed }}"
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*❌ Failed:* ${{ steps.parse-results.outputs.failed }} / ${{ steps.parse-results.outputs.total }}"
+                      "text": "*❌ Failed:* ${{ steps.parse-results.outputs.failed }}"
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*🔷 Skipped:* ${{ steps.parse-results.outputs.skipped }} / ${{ steps.parse-results.outputs.total }}"
+                      "text": "*🔷 Skipped:* ${{ steps.parse-results.outputs.skipped }}"
+                    }
+                    {
+                      "type": "mrkdwn",
+                      "text": "*⭐ Total:* ${{ steps.parse-results.outputs.total }}"
                     }
                   ]
                 }
