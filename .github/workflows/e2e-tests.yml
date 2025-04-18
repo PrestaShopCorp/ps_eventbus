@@ -173,54 +173,53 @@ jobs:
         env:
           PLAYWRIGHT_NAME: ${{ matrix.ps_version }}-${{ matrix.campaign }}-playwright-report
 
-      - name: Send custom JSON data to Slack workflow
-        working-directory: ./e2e/V2
+      - name: 📊 Parse test results
+        id: parse-results
+        run: |
+          passed=$(jq '.results.summary.passed' ./report-summary/summary.json)
+          failed=$(jq '.results.summary.failed' ./report-summary/summary.json)
+          echo "passed=$passed" >> $GITHUB_OUTPUT
+          echo "failed=$failed" >> $GITHUB_OUTPUT
+
+      - name: 📤 Send custom JSON data to Slack
         id: slack
         uses: slackapi/slack-github-action@v1.26.0
         with:
           payload: |
-              {
-                "blocks": [
-                  {
-                    "type": "section",
-                    "text": {
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*🧪 Eventbus E2E Tests Report*"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
                       "type": "mrkdwn",
-                      "text": "*🧪 Eventbus E2E Tests Report *"
+                      "text": "*Campaign*\n${{ matrix.campaign }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*PS_Version*\n${{ matrix.ps_version }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*✅ Passed:*\n${{ steps.parse-results.outputs.passed }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*❌ Failed:*\n${{ steps.parse-results.outputs.failed }}"
                     }
-                  },
-                  {
-                    "type": "section",
-                    "fields": [
-                      {
-                        "type": "mrkdwn",
-                        "text": "*Campaign*\n${{ matrix.campaign }}"
-                      },
-                      {
-                        "type": "mrkdwn",
-                        "text": "*PS_Version*\n${{ matrix.ps_version }}"
-                      },
-                    ]
-                  },
-                  {
-                    "type": "section",
-                    "text": {
-                      "type": "mrkdwn",
-                      "text": "* Results *"
-                      }
-                    "fields": [
-                      {
-                        "type": "mrkdwn",
-                        "text": "*✅ Passed:*\n$(jq '.results.summary.passed' ./report-summary/summary.json)"
-                      },
-                      {
-                        "type": "mrkdwn",
-                        "text": "*❌ Failed:*\n$(jq '.results.summary.failed' ./report-summary/summary.json)"
-                      }
                   ]
                 }
-                ]
-              }
+              ]
+            }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
 
