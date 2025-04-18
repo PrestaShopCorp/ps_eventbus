@@ -235,7 +235,7 @@ jobs:
                     {
                       "type": "mrkdwn",
                       "text": "*🔷 Skipped:* ${{ steps.parse-results.outputs.skipped }}"
-                    }
+                    },
                     {
                       "type": "mrkdwn",
                       "text": "*⚡ Total:* ${{ steps.parse-results.outputs.total }}"
