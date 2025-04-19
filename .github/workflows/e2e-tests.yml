@@ -197,7 +197,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "*Eventbus E2E CI notifications*"
+                    "text": "🚨 *Eventbus E2E CI notifications* 🚨"
                   }
                 },
                 {
@@ -238,7 +238,7 @@ jobs:
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*⚡ Total:* ${{ steps.parse-results.outputs.total }}"
+                      "text": "*🎯 Total:* ${{ steps.parse-results.outputs.total }}"
                     }
                   ]
                 }
