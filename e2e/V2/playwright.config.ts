@@ -78,7 +78,7 @@ function loadGlobal(): void {
     keycloakAdminPass: process.env.KEYCLOAK_ADMIN_PASS || 'admin',
     keycloakClientId: process.env.KEYCLOAK_CLIENT_ID || 'prestashop-keycloak',
     //@ts-ignore
-    keycloakClientSecret: process.env.KEYCLOAK_CLIENT_SECRET || 'O2kKN0fprCK2HWP6PS6reVbZThWf5LFw',
+    keycloakClientSecret: process.env.KEYCLOAK_CLIENT_SECRET || 'aapfdgdfghdsfuhgdsfydsffgpoihfg',
   };
 }
 
@@ -113,6 +113,7 @@ export default defineConfig({
     ],
   ],
   use: {
+    headless: !(process.env.HEADLESS === 'false'),
     screenshot: 'only-on-failure',
     trace: 'on-first-retry',
   },

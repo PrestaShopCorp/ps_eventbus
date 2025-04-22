@@ -197,20 +197,12 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "🚨 *Eventbus E2E CI notifications* 🚨"
+                    "text": "🚨 *Eventbus E2E ${{ matrix.campaign }} tests résults for PS-${{ matrix.ps_version }}* 🚨"
                   }
                 },
                 {
                   "type": "section",
                   "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*📂 Campaign:* ${{ matrix.campaign }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*🐧 PrestaShop Version:* ${{ matrix.ps_version }}"
-                    },
                     {
                       "type": "mrkdwn",
                       "text": "🔗 *<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts|Playwright Report>*"
@@ -247,8 +239,3 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-
-
-
-
-

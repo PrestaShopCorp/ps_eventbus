@@ -1,0 +1,52 @@
+{
+  "results": {
+    "tool": {
+      "name": "playwright"
+    },
+    "summary": {
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "pending": 0,
+      "skipped": 0,
+      "other": 0,
+      "start": 1745325627289,
+      "stop": 1745325643906,
+      "suites": 0
+    },
+    "tests": [
+      {
+        "name": "[HEALTHCHECK] - @healthcheck",
+        "status": "passed",
+        "duration": 126,
+        "start": 1745325627,
+        "stop": 1745325627,
+        "rawStatus": "passed",
+        "tags": [
+          "@healthcheck"
+        ],
+        "type": "e2e",
+        "filePath": "/home/sdecisy/Devs/ps_eventbus/e2e/V2/src/tests/setup/healthcheck.setup.ts",
+        "retry": 0,
+        "flake": false,
+        "suite": "healthcheck > setup/healthcheck.setup.ts"
+      },
+      {
+        "name": "[INCREMENTAL] @orders-incremental",
+        "status": "passed",
+        "duration": 14275,
+        "start": 1745325629,
+        "stop": 1745325643,
+        "rawStatus": "passed",
+        "tags": [
+          "@orders"
+        ],
+        "type": "e2e",
+        "filePath": "/home/sdecisy/Devs/ps_eventbus/e2e/V2/src/tests/incremental/01_orders.spec.ts",
+        "retry": 0,
+        "flake": false,
+        "suite": "INCREMENTAL > incremental/01_orders.spec.ts"
+      }
+    ]
+  }
+}
