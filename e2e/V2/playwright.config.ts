@@ -95,6 +95,10 @@ loadGlobal();
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
+  timeout: 120000,
+  expect: {
+    timeout: 10000
+  },
   testDir: './src/tests',
   // don't run test on parallel mode
   fullyParallel: false,

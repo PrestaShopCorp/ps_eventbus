@@ -94,7 +94,7 @@ jobs:
     needs: generate-matrix
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 3
+      max-parallel: 1
       fail-fast: false
       matrix:
         include: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
@@ -206,10 +206,6 @@ jobs:
                     {
                       "type": "mrkdwn",
                       "text": "🔗 *<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts|Playwright Report>*"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "🔗 *<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|GitHub Run>*"
                     }
                   ]
                 },

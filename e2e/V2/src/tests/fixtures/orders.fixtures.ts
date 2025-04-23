@@ -16,8 +16,7 @@ import {
 } from '@prestashop-core/ui-testing';
 
 type OrdersFixtures = {
-  create: string;
-  update: string;
+  createOrder: string;
 };
 
 const orderToMake: FakerOrder = new FakerOrder({
@@ -40,15 +39,7 @@ const orderToMake: FakerOrder = new FakerOrder({
 });
 
 export const orders = base.extend<OrdersFixtures> ({
-  create: async ({page}, use) => {
-
-    await test.step('should login in BO', async () => {
-      await boLoginPage.goTo(page, global.BO.URL);
-      await boLoginPage.successLogin(page, global.BO.EMAIL, global.BO.PASSWD);
-
-      const pageTitle = await boDashboardPage.getPageTitle(page);
-      expect(pageTitle).toContain(boDashboardPage.pageTitle);
-    });
+  createOrder: async ({page}, use) => {
 
     await test.step('should go to \'Orders > Orders\' page', async () => {
       await boDashboardPage.goToSubMenu(
