@@ -136,7 +136,7 @@ docker-php-lint:
 # target: phpunit (or docker-phpunit)                          - Run phpunit tests
 .PHONY: phpunit docker-phpunit
 phpunit: tools/vendor
-	phpunit --configuration=./tests/phpunit.xml;
+	phpunit --configuration=./tests/phpunit.xml --debug;
 docker-phpunit: tools/vendor
 	@$(call in_docker,make,phpunit)
 
