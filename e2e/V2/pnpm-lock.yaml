@@ -16,7 +16,7 @@ importers:
         version: 1.52.0
       '@prestashop-core/ui-testing':
         specifier: github:PrestaShop/ui-testing-library#adapt4eventbus
-        version: https://codeload.github.com/PrestaShop/ui-testing-library/tar.gz/1a58abd077472aa8a165fe934249d92e2565469b(canvas@2.11.2)
+        version: https://codeload.github.com/PrestaShop/ui-testing-library/tar.gz/47091005564bfb7278c21f09947b596db52e1506(canvas@2.11.2)
       axios:
         specifier: ^1.8.4
         version: 1.8.4
@@ -241,8 +241,8 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  '@prestashop-core/ui-testing@https://codeload.github.com/PrestaShop/ui-testing-library/tar.gz/1a58abd077472aa8a165fe934249d92e2565469b':
-    resolution: {tarball: https://codeload.github.com/PrestaShop/ui-testing-library/tar.gz/1a58abd077472aa8a165fe934249d92e2565469b}
+  '@prestashop-core/ui-testing@https://codeload.github.com/PrestaShop/ui-testing-library/tar.gz/47091005564bfb7278c21f09947b596db52e1506':
+    resolution: {tarball: https://codeload.github.com/PrestaShop/ui-testing-library/tar.gz/47091005564bfb7278c21f09947b596db52e1506}
     version: 0.0.12
 
   '@prisma/config@6.6.0':
@@ -1369,7 +1369,7 @@ snapshots:
     dependencies:
       playwright: 1.52.0
 
-  '@prestashop-core/ui-testing@https://codeload.github.com/PrestaShop/ui-testing-library/tar.gz/1a58abd077472aa8a165fe934249d92e2565469b(canvas@2.11.2)':
+  '@prestashop-core/ui-testing@https://codeload.github.com/PrestaShop/ui-testing-library/tar.gz/47091005564bfb7278c21f09947b596db52e1506(canvas@2.11.2)':
     dependencies:
       '@faker-js/faker': 9.7.0
       '@playwright/test': 1.52.0
