@@ -8,12 +8,15 @@ importers:
 
   .:
     dependencies:
+      '@faker-js/faker':
+        specifier: ^8.4.1
+        version: 8.4.1
       '@playwright/test':
         specifier: ^1.51.1
         version: 1.52.0
       '@prestashop-core/ui-testing':
-        specifier: https://github.com/PrestaShop/ui-testing-library#main
-        version: https://codeload.github.com/PrestaShop/ui-testing-library/tar.gz/df14b61fe1c1720dd1a06dea59e6637c5e385586(canvas@2.11.2)
+        specifier: github:PrestaShop/ui-testing-library#adapt4eventbus
+        version: https://codeload.github.com/PrestaShop/ui-testing-library/tar.gz/1a58abd077472aa8a165fe934249d92e2565469b(canvas@2.11.2)
       axios:
         specifier: ^1.8.4
         version: 1.8.4
@@ -217,6 +220,10 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@faker-js/faker@8.4.1':
+    resolution: {integrity: sha512-XQ3cU+Q8Uqmrbf2e0cIC/QN43sTBSC8KF12u29Mb47tWrt2hAgBXSgpZMj4Ao8Uk0iJcU99QsOCaIL8934obCg==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0, npm: '>=6.14.13'}
+
   '@faker-js/faker@9.7.0':
     resolution: {integrity: sha512-aozo5vqjCmDoXLNUJarFZx2IN/GgGaogY4TMJ6so/WLZOWpSV7fvj2dmrV6sEAnUm1O7aCrhTibjpzeDFgNqbg==}
     engines: {node: '>=18.0.0', npm: '>=9.0.0'}
@@ -234,8 +241,8 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  '@prestashop-core/ui-testing@https://codeload.github.com/PrestaShop/ui-testing-library/tar.gz/df14b61fe1c1720dd1a06dea59e6637c5e385586':
-    resolution: {tarball: https://codeload.github.com/PrestaShop/ui-testing-library/tar.gz/df14b61fe1c1720dd1a06dea59e6637c5e385586}
+  '@prestashop-core/ui-testing@https://codeload.github.com/PrestaShop/ui-testing-library/tar.gz/1a58abd077472aa8a165fe934249d92e2565469b':
+    resolution: {tarball: https://codeload.github.com/PrestaShop/ui-testing-library/tar.gz/1a58abd077472aa8a165fe934249d92e2565469b}
     version: 0.0.12
 
   '@prisma/config@6.6.0':
@@ -1332,6 +1339,8 @@ snapshots:
   '@esbuild/win32-x64@0.25.2':
     optional: true
 
+  '@faker-js/faker@8.4.1': {}
+
   '@faker-js/faker@9.7.0': {}
 
   '@keycloak/keycloak-admin-client@26.1.4':
@@ -1360,7 +1369,7 @@ snapshots:
     dependencies:
       playwright: 1.52.0
 
-  '@prestashop-core/ui-testing@https://codeload.github.com/PrestaShop/ui-testing-library/tar.gz/df14b61fe1c1720dd1a06dea59e6637c5e385586(canvas@2.11.2)':
+  '@prestashop-core/ui-testing@https://codeload.github.com/PrestaShop/ui-testing-library/tar.gz/1a58abd077472aa8a165fe934249d92e2565469b(canvas@2.11.2)':
     dependencies:
       '@faker-js/faker': 9.7.0
       '@playwright/test': 1.52.0

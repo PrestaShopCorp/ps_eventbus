@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lib:refresh": "pnpm update @prestashop-core/ui-testing",
     "setup:healthcheck": "npx playwright test -g @healthcheck",
     "test:incremental": "npx playwright test --project INCREMENTAL",
     "test:specific": "npx playwright test -g"
@@ -13,9 +14,10 @@
   "license": "ISC",
   "packageManager": "pnpm@10.7.0",
   "dependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@playwright/test": "^1.51.1",
     "playwright-ctrf-json-reporter": "^0.0.7",
-    "@prestashop-core/ui-testing": "https://github.com/PrestaShop/ui-testing-library#main",
+    "@prestashop-core/ui-testing": "github:PrestaShop/ui-testing-library#adapt4eventbus",
     "dotenv": "^16.5.0",
     "prisma": "^6.6.0",
     "axios": "^1.8.4"
