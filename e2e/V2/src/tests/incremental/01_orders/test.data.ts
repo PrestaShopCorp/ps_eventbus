@@ -35,6 +35,10 @@ export const carrier: FakerCarrier = new FakerCarrier({
       weightMax: 5,
       zones: [
         {
+          zone: dataZones.europeNonEu,
+          price: 3,
+        },
+        {
           zone: dataZones.europe,
           price: 5,
         },
@@ -49,6 +53,10 @@ export const carrier: FakerCarrier = new FakerCarrier({
       weightMax: 10,
       zones: [
         {
+          zone: dataZones.europeNonEu,
+          price: 6,
+        },
+        {
           zone: dataZones.europe,
           price: 10,
         },
@@ -62,6 +70,10 @@ export const carrier: FakerCarrier = new FakerCarrier({
       weightMin: 10,
       weightMax: 20,
       zones: [
+        {
+          zone: dataZones.europeNonEu,
+          price: 9,
+        },
         {
           zone: dataZones.europe,
           price: 20,
