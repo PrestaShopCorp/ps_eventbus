@@ -28,6 +28,9 @@
       ],
       "@services/*": [
         "src/services/*"
+      ],
+      "@types/*": [
+        "types/*"
       ]
     },
     "typeRoots": [

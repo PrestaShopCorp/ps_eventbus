@@ -9,7 +9,7 @@ import {
 } from "@prestashop-core/ui-testing";
 import {faker} from "@faker-js/faker";
 
-const superAddressName = `Eventbus ${faker.person.lastName()} address`
+const superAddressName = `Eventbus ${faker.word.words({count: 1})}`
 
 export const customerAddress: FakerAddress = new FakerAddress({
   name: superAddressName,
@@ -20,7 +20,7 @@ export const customerAddress: FakerAddress = new FakerAddress({
 
 export const carrier: FakerCarrier = new FakerCarrier({
   // General settings
-  name: `Eventbus ${faker.animal.dog()} Carrier`,
+  name: `Eventbus ${faker.word.words({count: 1})}`,
   speedGrade: 7,
   trackingURL: 'https://example.com/track.php?num=@',
   // Shipping locations and cost
