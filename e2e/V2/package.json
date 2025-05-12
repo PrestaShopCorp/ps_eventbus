@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prisma:generate-client": "npx prisma generate --schema=src/prisma/schema.prisma",
     "lib:refresh": "pnpm update @prestashop-core/ui-testing",
     "setup:healthcheck": "npx playwright test -g @healthcheck",
     "setup:full-sync": "npx playwright test -g @full-sync",
