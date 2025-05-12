@@ -1,0 +1,26 @@
+[
+    {
+        "action": "upsert",
+        "collection": "currencies",
+        "properties": {
+            "id_currency": 1,
+            "name": "",
+            "iso_code": "EUR",
+            "conversion_rate": 1,
+            "deleted": false,
+            "active": true
+        }
+    },
+    {
+        "action": "upsert",
+        "collection": "currencies",
+        "properties": {
+            "id_currency": 2,
+            "name": "",
+            "iso_code": "USD",
+            "conversion_rate": 1.089977,
+            "deleted": false,
+            "active": true
+        }
+    }
+]

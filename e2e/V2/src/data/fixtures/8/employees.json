@@ -1,0 +1,26 @@
+[
+    {
+        "action": "upsert",
+        "collection": "employees",
+        "properties": {
+            "id_employee": 1,
+            "id_profile": 1,
+            "id_lang": 1,
+            "bo_color": null,
+            "bo_theme": "default",
+            "bo_css": "theme.css",
+            "default_tab": 1,
+            "bo_width": 0,
+            "bo_menu": true,
+            "active": true,
+            "optin": false,
+            "id_last_order": 0,
+            "id_last_customer_message": 0,
+            "id_last_customer": 0,
+            "last_connection_date": null,
+            "has_enabled_gravatar": false,
+            "id_shop": 1,
+            "email_hash": "d6368bdac9599988fe4f9d878fc339eee894a71ddd2992c143264252bfb5ad2b"
+        }
+    }
+]

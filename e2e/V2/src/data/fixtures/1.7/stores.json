@@ -1,0 +1,102 @@
+[
+    {
+        "action": "upsert",
+        "collection": "stores",
+        "properties": {
+            "id_store": 1,
+            "id_country": 21,
+            "id_state": 12,
+            "city": "Miami",
+            "postcode": "33135",
+            "active": true,
+            "created_at": "2023-12-20T22:56:50+0100",
+            "updated_at": "2023-12-20T22:56:50+0100",
+            "id_lang": 1,
+            "name": "Dade County",
+            "address1": "3030 SW 8th St Miami",
+            "address2": "",
+            "hours": " [[\"09:00AM - 07:00PM\"],[\"09:00AM - 07:00PM\"],[\"09:00AM - 07:00PM\"],[\"09:00AM - 07:00PM\"],[\"09:00AM - 07:00PM\"],[\"10:00AM - 04:00PM\"],[\"10:00AM - 04:00PM\"]]",
+            "id_shop": 1
+        }
+    },
+    {
+        "action": "upsert",
+        "collection": "stores",
+        "properties": {
+            "id_store": 2,
+            "id_country": 21,
+            "id_state": 12,
+            "city": "Miami",
+            "postcode": "33304",
+            "active": true,
+            "created_at": "2023-12-20T22:56:50+0100",
+            "updated_at": "2023-12-20T22:56:50+0100",
+            "id_lang": 1,
+            "name": "E Fort Lauderdale",
+            "address1": "1000 Northeast 4th Ave Fort Lauderdale",
+            "address2": "",
+            "hours": " [[\"09:00AM - 07:00PM\"],[\"09:00AM - 07:00PM\"],[\"09:00AM - 07:00PM\"],[\"09:00AM - 07:00PM\"],[\"09:00AM - 07:00PM\"],[\"10:00AM - 04:00PM\"],[\"10:00AM - 04:00PM\"]]",
+            "id_shop": 1
+        }
+    },
+    {
+        "action": "upsert",
+        "collection": "stores",
+        "properties": {
+            "id_store": 3,
+            "id_country": 21,
+            "id_state": 12,
+            "city": "Miami",
+            "postcode": "33026",
+            "active": true,
+            "created_at": "2023-12-20T22:56:50+0100",
+            "updated_at": "2023-12-20T22:56:50+0100",
+            "id_lang": 1,
+            "name": "Pembroke Pines",
+            "address1": "11001 Pines Blvd Pembroke Pines",
+            "address2": "",
+            "hours": " [[\"09:00AM - 07:00PM\"],[\"09:00AM - 07:00PM\"],[\"09:00AM - 07:00PM\"],[\"09:00AM - 07:00PM\"],[\"09:00AM - 07:00PM\"],[\"10:00AM - 04:00PM\"],[\"10:00AM - 04:00PM\"]]",
+            "id_shop": 1
+        }
+    },
+    {
+        "action": "upsert",
+        "collection": "stores",
+        "properties": {
+            "id_store": 4,
+            "id_country": 21,
+            "id_state": 12,
+            "city": "Miami",
+            "postcode": "33133",
+            "active": true,
+            "created_at": "2023-12-20T22:56:50+0100",
+            "updated_at": "2023-12-20T22:56:50+0100",
+            "id_lang": 1,
+            "name": "Coconut Grove",
+            "address1": "2999 SW 32nd Avenue",
+            "address2": "",
+            "hours": " [[\"09:00AM - 07:00PM\"],[\"09:00AM - 07:00PM\"],[\"09:00AM - 07:00PM\"],[\"09:00AM - 07:00PM\"],[\"09:00AM - 07:00PM\"],[\"10:00AM - 04:00PM\"],[\"10:00AM - 04:00PM\"]]",
+            "id_shop": 1
+        }
+    },
+    {
+        "action": "upsert",
+        "collection": "stores",
+        "properties": {
+            "id_store": 5,
+            "id_country": 21,
+            "id_state": 12,
+            "city": "Miami",
+            "postcode": "33181",
+            "active": true,
+            "created_at": "2023-12-20T22:56:50+0100",
+            "updated_at": "2023-12-20T22:56:50+0100",
+            "id_lang": 1,
+            "name": "N Miami/Biscayne",
+            "address1": "12055 Biscayne Blvd",
+            "address2": "",
+            "hours": " [[\"09:00AM - 07:00PM\"],[\"09:00AM - 07:00PM\"],[\"09:00AM - 07:00PM\"],[\"09:00AM - 07:00PM\"],[\"09:00AM - 07:00PM\"],[\"10:00AM - 04:00PM\"],[\"10:00AM - 04:00PM\"]]",
+            "id_shop": 1
+        }
+    }
+]

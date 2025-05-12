@@ -1,0 +1,19 @@
+[
+    {
+        "action": "upsert",
+        "collection": "customers",
+        "properties": {
+            "id_customer": 1,
+            "id_lang": 1,
+            "newsletter": true,
+            "newsletter_date_add": "2013-12-13T08:19:15+0100",
+            "optin": true,
+            "active": true,
+            "is_guest": false,
+            "deleted": false,
+            "created_at": "2024-07-16T15:33:56+0200",
+            "updated_at": "2024-07-16T15:33:56+0200",
+            "email_hash": "abf48c68c3b53f7f60a1ba1327701aae275a2555e999b60c72becbf309c6d9ad"
+        }
+    }
+]

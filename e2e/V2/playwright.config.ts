@@ -128,9 +128,18 @@ export default defineConfig({
       testMatch: 'healthcheck.setup.ts',
     },
     {
+      name: 'full-sync',
+      testMatch: 'full-sync.setup.ts',
+      dependencies: ['healthcheck'],
+    },
+    {
       name: "INCREMENTAL",
       testDir: './src/tests/incremental/',
-      dependencies: ['healthcheck'],
+      dependencies: ['full-sync'],
+    },
+    {
+      name: "SANITY",
+      testDir: './src/tests/sanity/',
     }
   ],
 });

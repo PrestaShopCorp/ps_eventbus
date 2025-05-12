@@ -6,8 +6,10 @@
   "scripts": {
     "lib:refresh": "pnpm update @prestashop-core/ui-testing",
     "setup:healthcheck": "npx playwright test -g @healthcheck",
+    "setup:full-sync": "npx playwright test -g @full-sync",
     "test:incremental": "npx playwright test --project INCREMENTAL",
-    "test:specific": "npx playwright test -g"
+    "test:specific": "npx playwright test -g",
+    "test:sanity": "npx playwright test --project SANITY"
   },
   "keywords": [],
   "author": "",
@@ -16,14 +18,17 @@
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
     "@playwright/test": "^1.51.1",
-    "playwright-ctrf-json-reporter": "^0.0.7",
     "@prestashop-core/ui-testing": "github:PrestaShop/ui-testing-library#adapt4eventbus",
+    "@prisma/client": "^6.7.0",
+    "axios": "^1.8.4",
     "dotenv": "^16.5.0",
-    "prisma": "^6.6.0",
-    "axios": "^1.8.4"
+    "playwright-ctrf-json-reporter": "^0.0.7",
+    "prisma": "^6.7.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
+    "@types/object-hash": "^3.0.6",
+    "object-hash": "3.0.0",
     "tsconfig-paths": "^4.2.0"
   }
 }

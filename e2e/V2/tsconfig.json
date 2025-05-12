@@ -20,14 +20,17 @@
       "@data/*": [
         "src/data/*"
       ],
-      "@fixtures/*": [
+      "@tests-fixtures/*": [
         "src/tests/fixtures/*"
+      ],
+      "@data-fixtures/*": [
+        "@data/fixtures/*"
       ],
       "@helpers/*": [
         "src/helpers/*"
       ],
-      "@services/*": [
-        "src/services/*"
+      "@prismaClient/*": [
+        "src/generated/*"
       ],
       "@types/*": [
         "types/*"

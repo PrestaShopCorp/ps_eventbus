@@ -1,0 +1,200 @@
+[
+    {
+        "action": "upsert",
+        "collection": "categories",
+        "properties": {
+            "unique_category_id": "1-en",
+            "id_category": 1,
+            "id_parent": 0,
+            "name": "Root",
+            "description": "",
+            "link_rewrite": "root",
+            "meta_title": "",
+            "meta_keywords": "",
+            "meta_description": "",
+            "iso_code": "en",
+            "created_at": "2024-07-16T15:33:52+0200",
+            "updated_at": "2024-07-16T15:33:52+0200"
+        }
+    },
+    {
+        "action": "upsert",
+        "collection": "categories",
+        "properties": {
+            "unique_category_id": "2-en",
+            "id_category": 2,
+            "id_parent": 1,
+            "name": "Home",
+            "description": "",
+            "link_rewrite": "home",
+            "meta_title": "",
+            "meta_keywords": "",
+            "meta_description": "",
+            "iso_code": "en",
+            "created_at": "2024-07-16T15:33:52+0200",
+            "updated_at": "2024-07-16T15:33:52+0200"
+        }
+    },
+    {
+        "action": "upsert",
+        "collection": "categories",
+        "properties": {
+            "unique_category_id": "3-en",
+            "id_category": 3,
+            "id_parent": 2,
+            "name": "Women",
+            "description": "PHA+PHN0cm9uZz5Zb3Ugd2lsbCBmaW5kIGhlcmUgYWxsIHdvbWFuIGZhc2hpb24gY29sbGVjdGlvbnMuPC9zdHJvbmc+PC9wPg0KPHA+VGhpcyBjYXRlZ29yeSBpbmNsdWRlcyBhbGwgdGhlIGJhc2ljcyBvZiB5b3VyIHdhcmRyb2JlIGFuZCBtdWNoIG1vcmU6PC9wPg0KPHA+c2hvZXMsIGFjY2Vzc29yaWVzLCBwcmludGVkIHQtc2hpcnRzLCBmZW1pbmluZSBkcmVzc2VzLCB3b21lbidzIGplYW5zITwvcD4=",
+            "link_rewrite": "women",
+            "meta_title": "",
+            "meta_keywords": "",
+            "meta_description": "",
+            "iso_code": "en",
+            "created_at": "2024-07-16T15:33:54+0200",
+            "updated_at": "2024-07-16T15:33:54+0200"
+        }
+    },
+    {
+        "action": "upsert",
+        "collection": "categories",
+        "properties": {
+            "unique_category_id": "4-en",
+            "id_category": 4,
+            "id_parent": 3,
+            "name": "Tops",
+            "description": "PHA+Q2hvb3NlIGZyb20gdC1zaGlydHMsIHRvcHMsIGJsb3VzZXMsIHNob3J0IHNsZWV2ZXMsIGxvbmcgc2xlZXZlcywgdGFuayB0b3BzLCAzLzQgc2xlZXZlcyBhbmQgbW9yZS48L3A+DQo8cD5GaW5kIHRoZSBjdXQgdGhhdCBzdWl0cyB5b3UgdGhlIGJlc3QhPC9wPg==",
+            "link_rewrite": "tops",
+            "meta_title": "",
+            "meta_keywords": "",
+            "meta_description": "",
+            "iso_code": "en",
+            "created_at": "2024-07-16T15:33:54+0200",
+            "updated_at": "2024-07-16T15:33:54+0200"
+        }
+    },
+    {
+        "action": "upsert",
+        "collection": "categories",
+        "properties": {
+            "unique_category_id": "5-en",
+            "id_category": 5,
+            "id_parent": 4,
+            "name": "T-shirts",
+            "description": "PHA+VGhlIG11c3QgaGF2ZSBvZiB5b3VyIHdhcmRyb2JlLCB0YWtlIGEgbG9vayBhdCBvdXIgZGlmZmVyZW50IGNvbG9ycyw8L3A+DQo8cD5zaGFwZXMgYW5kIHN0eWxlIG9mIG91ciBjb2xsZWN0aW9uITwvcD4=",
+            "link_rewrite": "tshirts",
+            "meta_title": "",
+            "meta_keywords": "",
+            "meta_description": "",
+            "iso_code": "en",
+            "created_at": "2024-07-16T15:33:54+0200",
+            "updated_at": "2024-07-16T15:33:54+0200"
+        }
+    },
+    {
+        "action": "upsert",
+        "collection": "categories",
+        "properties": {
+            "unique_category_id": "6-en",
+            "id_category": 6,
+            "id_parent": 4,
+            "name": "Tops",
+            "description": "Q2hvb3NlIHRoZSB0b3AgdGhhdCBiZXN0IHN1aXRzIHlvdSBmcm9tIHRoZSB3aWRlIHZhcmlldHkgb2YgdG9wcyB3ZSBoYXZlLiA=",
+            "link_rewrite": "top",
+            "meta_title": "",
+            "meta_keywords": "",
+            "meta_description": "",
+            "iso_code": "en",
+            "created_at": "2024-07-16T15:33:54+0200",
+            "updated_at": "2024-07-16T15:33:54+0200"
+        }
+    },
+    {
+        "action": "upsert",
+        "collection": "categories",
+        "properties": {
+            "unique_category_id": "7-en",
+            "id_category": 7,
+            "id_parent": 4,
+            "name": "Blouses",
+            "description": "TWF0Y2ggeW91ciBmYXZvcml0ZXMgYmxvdXNlcyB3aXRoIHRoZSByaWdodCBhY2Nlc3NvcmllcyBmb3IgdGhlIHBlcmZlY3QgbG9vay4=",
+            "link_rewrite": "blouses",
+            "meta_title": "",
+            "meta_keywords": "",
+            "meta_description": "",
+            "iso_code": "en",
+            "created_at": "2024-07-16T15:33:54+0200",
+            "updated_at": "2024-07-16T15:33:54+0200"
+        }
+    },
+    {
+        "action": "upsert",
+        "collection": "categories",
+        "properties": {
+            "unique_category_id": "8-en",
+            "id_category": 8,
+            "id_parent": 3,
+            "name": "Dresses",
+            "description": "PHA+RmluZCB5b3VyIGZhdm9yaXRlcyBkcmVzc2VzIGZyb20gb3VyIHdpZGUgY2hvaWNlIG9mIGV2ZW5pbmcsIGNhc3VhbCBvciBzdW1tZXIgZHJlc3NlcyE8L3A+DQo8cD5XZSBvZmZlciBkcmVzc2VzIGZvciBldmVyeSBkYXksIGV2ZXJ5IHN0eWxlIGFuZCBldmVyeSBvY2Nhc2lvbi48L3A+",
+            "link_rewrite": "dresses",
+            "meta_title": "",
+            "meta_keywords": "",
+            "meta_description": "",
+            "iso_code": "en",
+            "created_at": "2024-07-16T15:33:54+0200",
+            "updated_at": "2024-07-16T15:33:54+0200"
+        }
+    },
+    {
+        "action": "upsert",
+        "collection": "categories",
+        "properties": {
+            "unique_category_id": "9-en",
+            "id_category": 9,
+            "id_parent": 8,
+            "name": "Casual Dresses",
+            "description": "PHA+WW91IGFyZSBsb29raW5nIGZvciBhIGRyZXNzIGZvciBldmVyeSBkYXk/IFRha2UgYSBsb29rIGF0PC9wPg0KPHA+b3VyIHNlbGVjdGlvbiBvZiBkcmVzc2VzIHRvIGZpbmQgb25lIHRoYXQgc3VpdHMgeW91LjwvcD4=",
+            "link_rewrite": "casual-dresses",
+            "meta_title": "",
+            "meta_keywords": "",
+            "meta_description": "",
+            "iso_code": "en",
+            "created_at": "2024-07-16T15:33:54+0200",
+            "updated_at": "2024-07-16T15:33:54+0200"
+        }
+    },
+    {
+        "action": "upsert",
+        "collection": "categories",
+        "properties": {
+            "unique_category_id": "10-en",
+            "id_category": 10,
+            "id_parent": 8,
+            "name": "Evening Dresses",
+            "description": "QnJvd3NlIG91ciBkaWZmZXJlbnQgZHJlc3NlcyB0byBjaG9vc2UgdGhlIHBlcmZlY3QgZHJlc3MgZm9yIGFuIHVuZm9yZ2V0dGFibGUgZXZlbmluZyE=",
+            "link_rewrite": "evening-dresses",
+            "meta_title": "",
+            "meta_keywords": "",
+            "meta_description": "",
+            "iso_code": "en",
+            "created_at": "2024-07-16T15:33:54+0200",
+            "updated_at": "2024-07-16T15:33:54+0200"
+        }
+    },
+    {
+        "action": "upsert",
+        "collection": "categories",
+        "properties": {
+            "unique_category_id": "11-en",
+            "id_category": 11,
+            "id_parent": 8,
+            "name": "Summer Dresses",
+            "description": "U2hvcnQgZHJlc3MsIGxvbmcgZHJlc3MsIHNpbGsgZHJlc3MsIHByaW50ZWQgZHJlc3MsIHlvdSB3aWxsIGZpbmQgdGhlIHBlcmZlY3QgZHJlc3MgZm9yIHN1bW1lci4=",
+            "link_rewrite": "summer-dresses",
+            "meta_title": "",
+            "meta_keywords": "",
+            "meta_description": "",
+            "iso_code": "en",
+            "created_at": "2024-07-16T15:33:54+0200",
+            "updated_at": "2024-07-16T15:33:54+0200"
+        }
+    }
+]
