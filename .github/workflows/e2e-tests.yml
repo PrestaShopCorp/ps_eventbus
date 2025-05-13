@@ -165,6 +165,10 @@ jobs:
         run: pnpm playwright install --with-deps
         working-directory: ./e2e/V2
 
+      - name: 👨🏻‍💻 Generate prisma client
+        run: pnpm run prisma:generate-client
+        working-directory: ./e2e/V2
+
       - name: 🧪 Run ${{ matrix.campaign }} tests
         run: pnpm run test:${{ matrix.campaign }}
         working-directory: ./e2e/V2
