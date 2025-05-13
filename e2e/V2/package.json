@@ -11,7 +11,7 @@
     "test:all": "npx playwright test",
     "test:incremental": "npx playwright test --project INCREMENTAL",
     "test:specific": "npx playwright test -g",
-    "test:sanity": "npx playwright test --project SANITY"
+    "test:sanity": "npx playwright test --project SANITY --workers 6"
   },
   "keywords": [],
   "author": "",
