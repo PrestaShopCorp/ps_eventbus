@@ -8,6 +8,11 @@ on:
         description: Run incremental-sync campaign
         required: false
         default: true
+      sanity:
+        type: boolean
+        description: Run sanity campaign
+        required: false
+        default: true
       full:
         type: boolean
         description: Run full-sync campaign
@@ -61,6 +66,7 @@ jobs:
           campaigns=()
           [[ "${{ inputs.incremental }}" == "true" ]] && campaigns+=("incremental")
           [[ "${{ inputs.full }}" == "true" ]] && campaigns+=("full")
+          [[ "${{ inputs.sanity }}" == "true" ]] && campaigns+=("sanity")
 
           versions=()
           [[ "${{ inputs.ps_latest }}" == "true" ]] && versions+=("latest")
@@ -71,7 +77,7 @@ jobs:
           [[ "${{ inputs.ps_1_6_1_24 }}" == "true" ]] && versions+=("1.6.1.24-nginx")
 
           # fallback si vide → on prend tout
-          [[ "${#campaigns[@]}" -eq 0 ]] && campaigns=("incremental" "full")
+          [[ "${#campaigns[@]}" -eq 0 ]] && campaigns=("incremental" "full" "sanity")
           [[ "${#versions[@]}" -eq 0 ]] && versions=("latest" "8.1.7-nginx" "8.0.5-nginx" "1.7.8.11-nginx" "1.7.7.8-nginx" "1.6.1.24-nginx")
 
           # build matrix
