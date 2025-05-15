@@ -143,8 +143,8 @@ trait UseProductHooks
         * In the legacy page, we have the selected carriers only, but we don't have the list of carrier was unselected before.
         */
         if (
-            \Context::getContext()->controller instanceof \AdminProductsController ||
-            (!is_null(\Context::getContext()->container) && get_class(\Context::getContext()->container) === 'WebserviceContainer') // <== Trick for webservice only
+            \Context::getContext()->controller instanceof \AdminProductsController
+            || (!is_null(\Context::getContext()->container) && get_class(\Context::getContext()->container) === 'WebserviceContainer') // <== Trick for webservice only
         ) {
             // We are on legacy product page
             $incrementalSyncItems[Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS] = $customProductCarrierIds;
