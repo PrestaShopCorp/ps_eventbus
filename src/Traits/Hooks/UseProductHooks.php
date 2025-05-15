@@ -147,7 +147,7 @@ trait UseProductHooks
         */
         if (
             \Context::getContext()->controller instanceof \AdminProductsController
-            || (isset(\Context::getContext()->container) && !is_null(\Context::getContext()->container) && get_class(\Context::getContext()->container) === 'WebserviceContainer') // <== Trick for webservice only
+            || (isset(\Context::getContext()->container) && !is_null(\Context::getContext()->container) && get_class(\Context::getContext()->container) == 'WebserviceContainer') // <== Trick for webservice only
         ) {
             // We are on legacy product page
             $incrementalSyncItems[Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS] = $customProductCarrierIds;
