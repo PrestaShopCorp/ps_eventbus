@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -141,7 +142,10 @@ trait UseProductHooks
         * For the Legacy page, we don't have this problem, because the hook is called only once. But we need to handle it differently.
         * In the legacy page, we have the selected carriers only, but we don't have the list of carrier was unselected before.
         */
-        if (\Context::getContext()->controller instanceof \AdminProductsController) {
+        if (
+            \Context::getContext()->controller instanceof \AdminProductsController ||
+            (!is_null(\Context::getContext()->container) && get_class(\Context::getContext()->container) === 'WebserviceContainer') // <== Trick for webservice only
+        ) {
             // We are on legacy product page
             $incrementalSyncItems[Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS] = $customProductCarrierIds;
 
