@@ -23,7 +23,7 @@
   "dependencies": {
     "express": "^4.19.2",
     "ws": "^8.17.0",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^2.0.1"
   },
   "devDependencies": {
     "@swc/cli": "^0.3.12",
