@@ -33,6 +33,7 @@ services:
       - ..:/var/www/html/modules/ps_eventbus:rw
       - ./init-scripts/install-ps-accounts-mock.sh:/tmp/init-scripts/install-ps-accounts-mock.sh:ro
       - ./init-scripts/install-ps-eventbus.sh:/tmp/init-scripts/install-ps-eventbus.sh:ro
+      - ./init-scripts/install-fixturesGenerator.sh:/tmp/init-scripts/install-fixturesGenerator.sh:ro
       # Notice: you might enable this if your uid is not 1000, or encounter permission issues
       # - /var/www/html/modules/ps_eventbus/vendor
       # - /var/www/html/modules/ps_eventbus/tools/vendor

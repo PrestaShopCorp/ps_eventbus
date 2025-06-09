@@ -1,3 +1,4 @@
+
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -20,6 +21,21 @@ model ps_configuration {
   @@index([id_shop], map: "id_shop")
   @@index([id_shop_group], map: "id_shop_group")
   @@index([name], map: "name")
+}
+
+model ps_currency {
+  id_currency      Int     @id @default(autoincrement()) @db.UnsignedInt
+  name             String  @db.VarChar(64)
+  iso_code         String  @default("0") @db.VarChar(3)
+  numeric_iso_code String? @db.VarChar(3)
+  precision        Int     @default(6)
+  conversion_rate  Decimal @db.Decimal(13, 6)
+  deleted          Boolean @default(false)
+  active           Boolean @default(true)
+  unofficial       Boolean @default(false)
+  modified         Boolean @default(false)
+
+  @@index([iso_code], map: "currency_iso_code")
 }
 
 model ps_eventbus_incremental_sync {
@@ -55,4 +71,95 @@ model ps_eventbus_type_sync {
   last_sync_date     DateTime @db.DateTime(0)
 
   @@id([type, id_shop, lang_iso])
+}
+
+model ps_order_state {
+  id_order_state Int      @id @default(autoincrement()) @db.UnsignedInt
+  invoice        Boolean? @default(false)
+  send_email     Boolean  @default(false)
+  module_name    String?  @db.VarChar(255)
+  color          String?  @db.VarChar(32)
+  unremovable    Boolean
+  hidden         Boolean  @default(false)
+  logable        Boolean  @default(false)
+  delivery       Boolean  @default(false)
+  shipped        Boolean  @default(false)
+  paid           Boolean  @default(false)
+  pdf_invoice    Boolean  @default(false)
+  pdf_delivery   Boolean  @default(false)
+  deleted        Boolean  @default(false)
+
+  @@index([module_name], map: "module_name")
+}
+
+model ps_order_state_lang {
+  id_order_state Int    @db.UnsignedInt
+  id_lang        Int    @db.UnsignedInt
+  name           String @db.VarChar(64)
+  template       String @db.VarChar(64)
+
+  @@id([id_order_state, id_lang])
+}
+
+model ps_orders {
+  id_order                 Int      @id @default(autoincrement()) @db.UnsignedInt
+  reference                String?  @db.VarChar(9)
+  id_shop_group            Int      @default(1) @db.UnsignedInt
+  id_shop                  Int      @default(1) @db.UnsignedInt
+  id_carrier               Int      @db.UnsignedInt
+  id_lang                  Int      @db.UnsignedInt
+  id_customer              Int      @db.UnsignedInt
+  id_cart                  Int      @db.UnsignedInt
+  id_currency              Int      @db.UnsignedInt
+  id_address_delivery      Int      @db.UnsignedInt
+  id_address_invoice       Int      @db.UnsignedInt
+  current_state            Int      @db.UnsignedInt
+  secure_key               String   @default("-1") @db.VarChar(32)
+  payment                  String   @db.VarChar(255)
+  conversion_rate          Decimal  @default(1.000000) @db.Decimal(13, 6)
+  module                   String?  @db.VarChar(255)
+  recyclable               Boolean  @default(false)
+  gift                     Boolean  @default(false)
+  gift_message             String?  @db.MediumText
+  mobile_theme             Boolean  @default(false)
+  total_discounts          Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_discounts_tax_incl Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_discounts_tax_excl Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_paid               Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_paid_tax_incl      Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_paid_tax_excl      Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_paid_real          Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_products           Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_products_wt        Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_shipping           Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_shipping_tax_incl  Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_shipping_tax_excl  Decimal  @default(0.000000) @db.Decimal(20, 6)
+  carrier_tax_rate         Decimal  @default(0.000) @db.Decimal(10, 3)
+  total_wrapping           Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_wrapping_tax_incl  Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_wrapping_tax_excl  Decimal  @default(0.000000) @db.Decimal(20, 6)
+  round_mode               Int      @default(2) @db.TinyInt
+  round_type               Boolean  @default(true)
+  invoice_number           Int      @default(0) @db.UnsignedInt
+  delivery_number          Int      @default(0) @db.UnsignedInt
+  invoice_date             DateTime @db.DateTime(0)
+  delivery_date            DateTime @db.DateTime(0)
+  valid                    Int      @default(0) @db.UnsignedInt
+  date_add                 DateTime @db.DateTime(0)
+  date_upd                 DateTime @db.DateTime(0)
+  note                     String?  @db.MediumText
+
+  @@index([current_state], map: "current_state")
+  @@index([date_add], map: "date_add")
+  @@index([id_address_delivery], map: "id_address_delivery")
+  @@index([id_address_invoice], map: "id_address_invoice")
+  @@index([id_carrier], map: "id_carrier")
+  @@index([id_cart], map: "id_cart")
+  @@index([id_currency], map: "id_currency")
+  @@index([id_customer], map: "id_customer")
+  @@index([id_lang], map: "id_lang")
+  @@index([id_shop], map: "id_shop")
+  @@index([id_shop_group], map: "id_shop_group")
+  @@index([invoice_number], map: "invoice_number")
+  @@index([reference], map: "reference")
 }

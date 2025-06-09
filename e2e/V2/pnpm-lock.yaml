@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@eslint/js':
+        specifier: ^9.10.0
+        version: 9.26.0
       '@faker-js/faker':
         specifier: ^8.4.1
         version: 8.4.1
@@ -20,25 +23,6 @@ importers:
       '@prisma/client':
         specifier: ^6.7.0
         version: 6.7.0(prisma@6.7.0(typescript@5.8.3))(typescript@5.8.3)
-      axios:
-        specifier: ^1.8.4
-        version: 1.8.4
-      dotenv:
-        specifier: ^16.5.0
-        version: 16.5.0
-      playwright-ctrf-json-reporter:
-        specifier: ^0.0.7
-        version: 0.0.7
-      prisma:
-        specifier: ^6.7.0
-        version: 6.7.0(typescript@5.8.3)
-      semver:
-        specifier: ^7.6.3
-        version: 7.7.1
-    devDependencies:
-      '@eslint/js':
-        specifier: ^9.10.0
-        version: 9.26.0
       '@types/eslint__js':
         specifier: ^8.42.3
         version: 8.42.3
@@ -54,18 +38,36 @@ importers:
       '@types/ws':
         specifier: ^8.5.12
         version: 8.18.1
+      axios:
+        specifier: ^1.7.7
+        version: 1.8.4
+      date-fns:
+        specifier: ^4.1.0
+        version: 4.1.0
+      dotenv:
+        specifier: ^16.5.0
+        version: 16.5.0
       eslint:
         specifier: ^9.10.0
         version: 9.26.0
       object-hash:
         specifier: 3.0.0
         version: 3.0.0
+      playwright-ctrf-json-reporter:
+        specifier: ^0.0.7
+        version: 0.0.7
+      prisma:
+        specifier: ^6.7.0
+        version: 6.7.0(typescript@5.8.3)
       ramda:
         specifier: ^0.30.1
         version: 0.30.1
       rxjs:
         specifier: ^7.8.1
         version: 7.8.2
+      semver:
+        specifier: ^7.6.3
+        version: 7.7.1
       ts-jest:
         specifier: ^29.2.5
         version: 29.3.2(@babel/core@7.27.1)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.27.1))(esbuild@0.25.2)(jest@29.7.0(@types/node@22.14.1))(typescript@5.8.3)
@@ -1095,6 +1097,9 @@ packages:
   data-urls@5.0.0:
     resolution: {integrity: sha512-ZYP5VBHshaDAiVZxjbRVcFJpc+4xGgT0bK3vzy1HLN8jTO975HEbuYzZJcHoQEY5K1a0z8YayJkyVETa08eNTg==}
     engines: {node: '>=18'}
+
+  date-fns@4.1.0:
+    resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
 
   debug@2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
@@ -3992,6 +3997,8 @@ snapshots:
     dependencies:
       whatwg-mimetype: 4.0.0
       whatwg-url: 14.2.0
+
+  date-fns@4.1.0: {}
 
   debug@2.6.9:
     dependencies:

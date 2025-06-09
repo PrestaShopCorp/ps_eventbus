@@ -135,7 +135,13 @@ export default defineConfig({
     {
       name: "INCREMENTAL",
       testDir: './src/tests/incremental/',
-      dependencies: ['full-sync'],
+      dependencies: ['HEALTHCHECK'],
+      teardown: 'RESTORE-DB'
+      //dependencies: ['FULL-SYNC'],
+    },
+    {
+      name: "RESTORE-DB",
+      testMatch: 'restore-db.teardown.ts',
     },
     {
       name: "SANITY",

@@ -17,7 +17,7 @@ export const shopContentMapping = {
     image_types: 'image-types',
     languages: 'languages',
     manufacturers: 'manufacturers',
-    modules: 'modules',
+    //modules: 'modules',
     orders: 'orders',
     order_carriers: 'order-carriers',
     order_cart_rules: 'order-cart-rules',
