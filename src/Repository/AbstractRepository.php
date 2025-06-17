@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -27,6 +28,7 @@
 namespace PrestaShop\Module\PsEventbus\Repository;
 
 use PrestaShop\Module\PsEventbus\Service\CommonService;
+use PrestaShop\Module\PsEventbus\Helper\CustomDbQuery;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -45,7 +47,7 @@ abstract class AbstractRepository
     protected $db;
 
     /**
-     * @var \DbQuery
+     * @var CustomDbQuery
      */
     protected $query;
 
@@ -69,7 +71,7 @@ abstract class AbstractRepository
      */
     protected function generateMinimalQuery($tableName, $alias = null)
     {
-        $this->query = new \DbQuery();
+        $this->query = new CustomDbQuery();
 
         $this->query->from($tableName, $alias);
     }
@@ -151,7 +153,13 @@ abstract class AbstractRepository
      */
     private function debugQuery()
     {
-        $queryStringified = preg_replace('/\s+/', ' ', $this->query->build());
+        if ($this->query instanceof CustomDbQuery) {
+            $query = $this->query->build();
+        } else {
+            $query = (string) $this->query;
+        }
+
+        $queryStringified = preg_replace('/\s+/', ' ', $query);
         $queryStringified = str_replace(['"'], ["'"], (string) $queryStringified);
 
         $response = array_merge(

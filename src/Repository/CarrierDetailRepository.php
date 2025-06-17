@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -46,14 +47,42 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
     {
         $this->generateMinimalQuery(self::TABLE_NAME, 'ca');
 
+        $latestDeliveryPriceCteQuery = '
+            WITH latest_delivery_prices AS (
+                SELECT
+                    id_carrier,
+                    price,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY
+                        id_carrier
+                        ORDER BY
+                        id_delivery DESC
+                    ) as rn
+                FROM ps_delivery
+                WHERE price IS NOT NULL
+            )
+        ';
+
+        $configCteQuery = '
+            config_val AS (
+                SELECT value as shipping_method_config
+                FROM ps_configuration
+                WHERE name = \'PS_SHIPPING_METHOD\'
+            )
+        ';
+
+        $this->query->addCte($latestDeliveryPriceCteQuery);
+        $this->query->addCte($configCteQuery);
+
         // minimal query for countable query
         $this->query
             ->innerJoin('delivery', 'd', 'ca.id_carrier = d.id_carrier AND d.id_zone IS NOT NULL')
             ->innerJoin('country', 'co', 'd.id_zone = co.id_zone AND co.iso_code IS NOT NULL AND co.active = 1')
+            ->join('INNER JOIN latest_delivery_prices ldp ON ca.id_carrier = ldp.id_carrier AND ldp.rn = 1')
             ->leftJoin('range_weight', 'rw', 'ca.id_carrier = rw.id_carrier AND d.id_range_weight = rw.id_range_weight')
             ->leftJoin('range_price', 'rp', 'ca.id_carrier = rp.id_carrier AND d.id_range_price = rp.id_range_price')
             ->leftJoin('state', 's', 'co.id_zone = s.id_zone AND co.id_country = s.id_country AND s.active = 1')
-            ->leftJoin('configuration', 'conf', 'conf.name = "PS_SHIPPING_METHOD"')
+            ->join('CROSS JOIN config_val conf')
             ->select('ca.id_reference')
             ->groupBy('ca.id_reference, co.id_zone, id_range')
         ;
@@ -61,6 +90,7 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
         if ($withSelecParameters) {
             $this->query
                 ->select('d.id_zone')
+                ->select('ldp.price')
                 ->select('
                     CASE
                         WHEN d.id_range_weight IS NOT NULL AND d.id_range_weight != 0 THEN d.id_range_weight
@@ -70,24 +100,14 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
                 ->select('
                     CASE
                         WHEN ca.is_free = 1 THEN "free_shipping"
-                        WHEN ca.shipping_method = 0 AND conf.value IS NULL THEN "range_price"
-                        WHEN ca.shipping_method = 0 AND conf.value IS NOT NULL THEN "range_weight"
+                        WHEN ca.shipping_method = 0 AND conf.shipping_method_config IS NULL THEN "range_price"
+                        WHEN ca.shipping_method = 0 AND conf.shipping_method_config IS NOT NULL THEN "range_weight"
                         WHEN ca.shipping_method = 1 THEN "range_weight"
                         WHEN ca.shipping_method = 2 THEN "range_price"
                     END AS shipping_method
                 ')
-                ->select('
-                    CASE
-                        WHEN rw.delimiter1 IS NOT NULL THEN rw.delimiter1
-                        WHEN rp.delimiter1 IS NOT NULL THEN rp.delimiter1
-                    END AS delimiter1
-                ')
-                ->select('
-                    CASE
-                        WHEN rw.delimiter2 IS NOT NULL THEN rw.delimiter2
-                        WHEN rp.delimiter2 IS NOT NULL THEN rp.delimiter2
-                    END AS delimiter2
-                ')
+                ->select('COALESCE(rw.delimiter1, rp.delimiter1) AS delimiter1')
+                ->select('COALESCE(rw.delimiter2, rp.delimiter2) AS delimiter2')
                 ->select('
                     GROUP_CONCAT(
                         DISTINCT co.iso_code
@@ -102,15 +122,6 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
                         ORDER BY s.iso_code ASC
                         SEPARATOR \',\'
                     ) AS state_ids
-                ')
-                ->select('
-                    (
-                        SELECT d2.price
-                        FROM ' . _DB_PREFIX_ . 'delivery d2
-                        WHERE d2.id_carrier = d.id_carrier
-                        ORDER BY d2.id_delivery DESC
-                        LIMIT 1
-                    ) AS price
                 ')
             ;
         }
