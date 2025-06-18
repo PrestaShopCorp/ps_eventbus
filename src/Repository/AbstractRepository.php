@@ -27,7 +27,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PDOStatement;
 use PrestaShop\Module\PsEventbus\Helper\CustomDbQuery;
 use PrestaShop\Module\PsEventbus\Service\CommonService;
 
@@ -132,7 +131,7 @@ abstract class AbstractRepository
         try {
             $result = $this->db->query($this->query);
 
-            if ($result instanceof PDOStatement) {
+            if ($result instanceof \PDOStatement) {
                 $result = $result->fetchAll(\PDO::FETCH_ASSOC);
             }
 
