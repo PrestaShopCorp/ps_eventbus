@@ -23,7 +23,7 @@ on:
         description: Flashlight latest
         required: false
         default: true
-      ps_8_1_7:
+      ps_8_2_1:
         type: boolean
         description: Flashlight 8.1.7-nginx
         required: false
@@ -70,7 +70,7 @@ jobs:
 
           versions=()
           [[ "${{ inputs.ps_latest }}" == "true" ]] && versions+=("latest")
-          [[ "${{ inputs.ps_8_1_7 }}" == "true" ]] && versions+=("8.1.7-nginx")
+          [[ "${{ inputs.ps_8_2_1 }}" == "true" ]] && versions+=("8.2.1-nginx")
           [[ "${{ inputs.ps_8_0_5 }}" == "true" ]] && versions+=("8.0.5-nginx")
           [[ "${{ inputs.ps_1_7_8_11 }}" == "true" ]] && versions+=("1.7.8.11-nginx")
           [[ "${{ inputs.ps_1_7_7_8 }}" == "true" ]] && versions+=("1.7.7.8-nginx")
