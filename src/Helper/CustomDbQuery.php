@@ -42,7 +42,7 @@ class CustomDbQuery extends \DbQuery
     /**
      * List of data to build the query.
      *
-     * @var array
+     * @var array<mixed>
      */
     protected $query = [
         'type' => 'SELECT',
@@ -76,7 +76,7 @@ class CustomDbQuery extends \DbQuery
      *
      * @return string
      *
-     * @throws PrestaShopException
+     * @throws \PrestaShopException
      */
     public function build()
     {
