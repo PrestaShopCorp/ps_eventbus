@@ -37,7 +37,7 @@ if (!defined('_PS_VERSION_')) {
  * This class is a custom implementation of DbQuery to build SQL queries in a more flexible way.
  * It allows to create complex queries with CTEs.
  */
-class CustomDbQuery
+class CustomDbQuery extends \DbQuery
 {
     /**
      * List of data to build the query.
@@ -58,24 +58,6 @@ class CustomDbQuery
     ];
 
     /**
-     * Sets type of the query.
-     *
-     * @param string $type SELECT|DELETE
-     *
-     * @return $this
-     */
-    public function type($type)
-    {
-        $types = ['SELECT', 'DELETE'];
-
-        if (!empty($type) && in_array($type, $types)) {
-            $this->query['type'] = $type;
-        }
-
-        return $this;
-    }
-
-    /**
      * Sets Common Table Expression (CTE) for the query.
      *
      * @param string $query CTE query
@@ -85,219 +67,6 @@ class CustomDbQuery
     public function addCte($query)
     {
         $this->query['cte'][] = $query;
-
-        return $this;
-    }
-
-    /**
-     * Adds fields to SELECT clause.
-     *
-     * @param string $fields List of fields to concat to other fields
-     *
-     * @return $this
-     */
-    public function select($fields)
-    {
-        if (!empty($fields)) {
-            $this->query['select'][] = $fields;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Sets table for FROM clause.
-     *
-     * @param string|DbQuery $table Table name
-     * @param string|null $alias Table alias
-     *
-     * @return $this
-     */
-    public function from($table, $alias = null)
-    {
-        if (!empty($table)) {
-            if ($table instanceof CustomDbQuery) {
-                $query = '(' . $table->build() . ')';
-            } else {
-                $query = '`' . _DB_PREFIX_ . $table . '`';
-            }
-
-            $this->query['from'][] = $query . ($alias ? ' ' . $alias : '');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Adds JOIN clause
-     * E.g. $this->join('RIGHT JOIN '._DB_PREFIX_.'product p ON ...');.
-     *
-     * @param string $join Complete string
-     *
-     * @return $this
-     */
-    public function join($join)
-    {
-        if (!empty($join)) {
-            $this->query['join'][] = $join;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Adds a LEFT JOIN clause.
-     *
-     * @param string $table Table name (without prefix)
-     * @param string|null $alias Table alias
-     * @param string|null $on ON clause
-     *
-     * @return $this
-     */
-    public function leftJoin($table, $alias = null, $on = null)
-    {
-        return $this->join('LEFT JOIN `' . _DB_PREFIX_ . bqSQL($table) . '`' . ($alias ? ' `' . pSQL($alias) . '`' : '') . ($on ? ' ON ' . $on : ''));
-    }
-
-    /**
-     * Adds an INNER JOIN clause
-     * E.g. $this->innerJoin('product p ON ...').
-     *
-     * @param string $table Table name (without prefix)
-     * @param string|null $alias Table alias
-     * @param string|null $on ON clause
-     *
-     * @return $this
-     */
-    public function innerJoin($table, $alias = null, $on = null)
-    {
-        return $this->join('INNER JOIN `' . _DB_PREFIX_ . bqSQL($table) . '`' . ($alias ? ' `' . pSQL($alias) . '`' : '') . ($on ? ' ON ' . $on : ''));
-    }
-
-    /**
-     * Adds a LEFT OUTER JOIN clause.
-     *
-     * @param string $table Table name (without prefix)
-     * @param string|null $alias Table alias
-     * @param string|null $on ON clause
-     *
-     * @return $this
-     */
-    public function leftOuterJoin($table, $alias = null, $on = null)
-    {
-        return $this->join('LEFT OUTER JOIN `' . _DB_PREFIX_ . bqSQL($table) . '`' . ($alias ? ' `' . pSQL($alias) . '`' : '') . ($on ? ' ON ' . $on : ''));
-    }
-
-    /**
-     * Adds a NATURAL JOIN clause.
-     *
-     * @param string $table Table name (without prefix)
-     * @param string|null $alias Table alias
-     *
-     * @return $this
-     */
-    public function naturalJoin($table, $alias = null)
-    {
-        return $this->join('NATURAL JOIN `' . _DB_PREFIX_ . bqSQL($table) . '`' . ($alias ? ' `' . pSQL($alias) . '`' : ''));
-    }
-
-    /**
-     * Adds a RIGHT JOIN clause.
-     *
-     * @param string $table Table name (without prefix)
-     * @param string|null $alias Table alias
-     * @param string|null $on ON clause
-     *
-     * @return $this
-     */
-    public function rightJoin($table, $alias = null, $on = null)
-    {
-        return $this->join('RIGHT JOIN `' . _DB_PREFIX_ . bqSQL($table) . '`' . ($alias ? ' `' . pSQL($alias) . '`' : '') . ($on ? ' ON ' . $on : ''));
-    }
-
-    /**
-     * Adds a restriction in WHERE clause (each restriction will be separated by AND statement).
-     *
-     * @param string $restriction
-     *
-     * @return $this
-     */
-    public function where($restriction)
-    {
-        if (!empty($restriction)) {
-            $this->query['where'][] = $restriction;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Adds a restriction in HAVING clause (each restriction will be separated by AND statement).
-     *
-     * @param string $restriction
-     *
-     * @return $this
-     */
-    public function having($restriction)
-    {
-        if (!empty($restriction)) {
-            $this->query['having'][] = $restriction;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Adds an ORDER BY restriction.
-     *
-     * @param string $fields List of fields to sort. E.g. $this->order('myField, b.mySecondField DESC')
-     *
-     * @return $this
-     */
-    public function orderBy($fields)
-    {
-        if (!empty($fields)) {
-            $this->query['order'][] = $fields;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Adds a GROUP BY restriction.
-     *
-     * @param string $fields List of fields to group. E.g. $this->group('myField1, myField2')
-     *
-     * @return $this
-     */
-    public function groupBy($fields)
-    {
-        if (!empty($fields)) {
-            $this->query['group'][] = $fields;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Sets query offset and limit.
-     *
-     * @param int $limit
-     * @param int $offset
-     *
-     * @return $this
-     */
-    public function limit($limit, $offset = 0)
-    {
-        $offset = (int) $offset;
-        if ($offset < 0) {
-            $offset = 0;
-        }
-
-        $this->query['limit'] = [
-            'offset' => $offset,
-            'limit' => (int) $limit,
-        ];
 
         return $this;
     }
@@ -355,25 +124,5 @@ class CustomDbQuery
         }
 
         return $sql;
-    }
-
-    /**
-     * Converts object to string.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->build();
-    }
-
-    /**
-     * Get query.
-     *
-     * @return array
-     */
-    public function getQuery(): array
-    {
-        return $this->query;
     }
 }
