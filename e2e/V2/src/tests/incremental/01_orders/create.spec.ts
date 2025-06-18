@@ -9,7 +9,12 @@ import {colorText, generateFakeJobId} from "@helpers/utils";
 import {carriers} from "@tests-fixtures/carriers.fixtures";
 import {addresses} from "@tests-fixtures/addresses.fixtures";
 import {orders} from "@tests-fixtures/orders.fixtures";
-import {carrier, customerAddress, generateOrderAssertData, orderToCreate} from "./test.data";
+import {
+  assertCreatedOrder,
+  carrier,
+  customerAddress,
+  orderToCreate
+} from "./test.data";
 import {authentication} from "@tests-fixtures/authentication.fixtures";
 
 // Pass required datas to fixtures
@@ -25,9 +30,7 @@ const mergedFixtures = mergeTests(sync, authentication, addresses, carriers, ord
 const testTags = ['@incremental', '@orders-incremental', '@orders-incremental-create'];
 const testTitle = `${colorText('[INCREMENTAL]', ["bold", "cyan", "italic"])} ==> ORDER CREATE`;
 // Test variables
-let incrementalSyncTableBefore;
 let liveSyncTableAfter;
-let incrementalTableAfter;
 const jobId = generateFakeJobId();
 const messages$: MockProbeResponse[] = [];
 
@@ -57,7 +60,7 @@ mergedFixtures(testTitle, {tag: testTags}, async ({forceFullSync, bo_login, crea
 
   // Récupération du contenu de la table incremental (orders / upsert) avant la sync
   await test.step('Collect eventbus_incremental_sync table content BEFORE sync', async () => {
-    incrementalSyncTableBefore = await prisma.ps_eventbus_incremental_sync.findMany({
+    const incrementalSyncTableBefore = await prisma.ps_eventbus_incremental_sync.findMany({
       where: {
         type: 'orders',
         action: 'upsert'
@@ -66,8 +69,6 @@ mergedFixtures(testTitle, {tag: testTags}, async ({forceFullSync, bo_login, crea
     //console.log(incrementalSyncTableBefore);
     // TODO ici quoi vérifier dans la table ??
   });
-
-
 
   // Subscribe websocket and trigger sync
   await test.step('Trigger incremental sync for ORDERS', async () => {
@@ -85,22 +86,12 @@ mergedFixtures(testTitle, {tag: testTags}, async ({forceFullSync, bo_login, crea
       explain_sql: '0',
     };
 
-    const response = await callPsEventbus(queryParams);
-    console.log(response)
+    // trigger sync
+    await callPsEventbus(queryParams);
 
-    const createdOrder = messages$[0].body.file;
-    const assertionData = await generateOrderAssertData();
+    const createdOrderFromProbe = messages$[0].body.file;
 
-    expect(createdOrder).toMatchObject(assertionData);
-    //expect(messages$[0].body.file).toMatchObject(orderForAssert);
-
-/*    messages$.forEach((message) => {
-      const toCheck = message.body.file
-      console.log(toCheck);
-    });*/
-
-/*    const orders = await prisma.ps_orders.findMany();
-    console.log(orders[0]);*/
+    await assertCreatedOrder(createdOrderFromProbe[0]);
   });
 
   // Récupération du contenu de la table incremental (orders / upsert) apres la sync (expect empty)
@@ -108,7 +99,6 @@ mergedFixtures(testTitle, {tag: testTags}, async ({forceFullSync, bo_login, crea
     const incrementalSyncTableAfter = await prisma.ps_eventbus_incremental_sync.findMany({
       where: {
         type: 'orders',
-        action: 'upsert'
       }
     });
     expect(incrementalSyncTableAfter.length).toEqual(0);

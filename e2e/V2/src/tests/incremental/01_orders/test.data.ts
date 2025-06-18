@@ -1,6 +1,7 @@
 import {
-  dataAddresses,
-  dataCustomers, dataOrderStatuses, dataPaymentMethods,
+  dataCustomers,
+  dataOrderStatuses,
+  dataPaymentMethods,
   dataProducts,
   dataZones,
   FakerAddress,
@@ -8,9 +9,14 @@ import {
   FakerOrder
 } from "@prestashop-core/ui-testing";
 import {faker} from "@faker-js/faker";
-import { PrismaClient } from "@prismaClient/prisma";
-// Prisma client
-const prisma = new PrismaClient();
+import {expect} from "@playwright/test";
+import {
+  getCurrencyById,
+  getLastCreatedOrder,
+  getStatusLabelNameByOrderState
+} from "@helpers/database-helper";
+import {format} from "date-fns-tz";
+import {toIsoNoColon, toSqlDateTime} from "@helpers/date-format-helper";
 
 const superAddressName = `Eventbus ${faker.word.words({count: 1})}`
 
@@ -22,11 +28,9 @@ export const customerAddress: FakerAddress = new FakerAddress({
 });
 
 export const carrier: FakerCarrier = new FakerCarrier({
-  // General settings
   name: `Eventbus ${faker.word.words({count: 1})}`,
   speedGrade: 7,
   trackingURL: 'https://example.com/track.php?num=@',
-  // Shipping locations and cost
   handlingCosts: false,
   freeShipping: false,
   billing: 'According to total weight',
@@ -88,7 +92,6 @@ export const carrier: FakerCarrier = new FakerCarrier({
       ],
     },
   ],
-  // Size weight and group access
   maxWidth: 200,
   maxHeight: 200,
   maxDepth: 200,
@@ -115,82 +118,72 @@ export const orderToCreate: FakerOrder = new FakerOrder({
   totalPrice: (dataProducts.demo_5.priceTaxExcluded * 4) * 1.2, // Price tax included
 });
 
+export async function assertCreatedOrder(createdOrderFromProbe: any) {
 
-export async function generateOrderAssertData() {
-  const lastCreatedOrder = await prisma.ps_orders.findMany({
-    orderBy: {
-      date_add: 'desc'
-    },
-    take: 1,
-  });
+  const lastCreatedOrderFromDb = await getLastCreatedOrder();
+  const currency = await getCurrencyById(lastCreatedOrderFromDb.id_currency);
+  const statusLabel = await getStatusLabelNameByOrderState(lastCreatedOrderFromDb.current_state);
 
-  const currency = await prisma.ps_currency.findUnique({
-    where: { id_currency: lastCreatedOrder[0].id_currency }
-  });
-
-  const orderState = await prisma.ps_order_state.findUnique({
-    where: { id_order_state: lastCreatedOrder[0].current_state }
-  });
-
-// Si tu veux le label :
-  const statusLabel = await prisma.ps_order_state_lang.findFirst({
-    where: { id_order_state: lastCreatedOrder[0].current_state }
-  });
-  return {
+  expect(createdOrderFromProbe).toMatchObject({
     action: 'upsert',
     collection: 'orders',
     properties: {
-      id_order: lastCreatedOrder[0].id_order,
-      reference: lastCreatedOrder[0].reference,
-      id_customer: dataCustomers.johnDoe.id,
-      id_cart: lastCreatedOrder[0].id_cart,
-      current_state: lastCreatedOrder[0].current_state,
-      conversion_rate: lastCreatedOrder[0].conversion_rate,
-      total_paid_tax_excl: lastCreatedOrder[0].total_paid_tax_excl,
-      total_paid_tax_incl: lastCreatedOrder[0].total_paid_tax_incl,
-      currency: 'EUR',
+      id_order: lastCreatedOrderFromDb.id_order,
+      reference: lastCreatedOrderFromDb.reference,
+      id_customer: lastCreatedOrderFromDb.id_customer,
+      id_cart: String(lastCreatedOrderFromDb.id_cart),
+      current_state: lastCreatedOrderFromDb.current_state,
+      conversion_rate: Number(lastCreatedOrderFromDb.conversion_rate),
+      carrier_tax_rate: 0,
+      total_paid_tax_excl: Number(lastCreatedOrderFromDb.total_paid_tax_excl),
+      total_paid_tax_incl: Number(lastCreatedOrderFromDb.total_paid_tax_incl),
+      currency: currency!.iso_code,
       payment_module: 'ps_checkpayment',
       payment_mode: 'Payments by check',
-      total_paid_real: lastCreatedOrder[0].total_paid_real,
+      total_paid_real: lastCreatedOrderFromDb.total_paid_real,
       shipping_cost: 3,
-      created_at: lastCreatedOrder[0].date_add,
-      updated_at: lastCreatedOrder[0].date_upd,
-      id_carrier: lastCreatedOrder[0].id_carrier,
+      //created_at: lastCreatedOrderFromDb.date_add,
+      created_at: toIsoNoColon(lastCreatedOrderFromDb.date_add),
+      updated_at: toIsoNoColon(lastCreatedOrderFromDb.date_upd),
+      //updated_at: lastCreatedOrderFromDb.date_upd,
+      id_carrier: lastCreatedOrderFromDb.id_carrier,
       payment_name: 'ps_checkpayment',
       is_validated: '1',
       is_paid: true,
       is_shipped: '1',
-      status_label: 'Delivered',
-      id_shop_group: 1,
-      id_shop: 1,
-      id_lang: 1,
+      status_label: statusLabel,
+      id_shop_group: lastCreatedOrderFromDb.id_shop_group,
+      id_shop: lastCreatedOrderFromDb.id_shop,
+      id_lang: lastCreatedOrderFromDb.id_lang,
       id_currency: 1,
       recyclable: false,
       gift: false,
-      total_discounts: lastCreatedOrder[0].total_discounts,
-      total_discounts_tax_incl: lastCreatedOrder[0].total_discounts_tax_incl,
-      total_discounts_tax_excl: lastCreatedOrder[0].total_discounts_tax_excl,
-      total_products: lastCreatedOrder[0].total_products,
-      total_products_wt: lastCreatedOrder[0].total_products_wt,
-      total_shipping_tax_incl: lastCreatedOrder[0].total_shipping_tax_incl,
-      total_wrapping: lastCreatedOrder[0].total_wrapping,
-      total_wrapping_tax_incl: lastCreatedOrder[0].total_wrapping_tax_incl,
-      total_wrapping_tax_excl: lastCreatedOrder[0].total_wrapping_tax_excl,
-      round_mode: lastCreatedOrder[0].round_mode,
-      round_type: lastCreatedOrder[0].round_type,
-      invoice_number: lastCreatedOrder[0].invoice_number,
-      delivery_number: lastCreatedOrder[0].delivery_number,
-      invoice_date: lastCreatedOrder[0].invoice_date,
-      delivery_date: lastCreatedOrder[0].delivery_date,
-      valid: true,
+      total_discounts: Number(lastCreatedOrderFromDb.total_discounts),
+      total_discounts_tax_incl: Number(lastCreatedOrderFromDb.total_discounts_tax_incl),
+      total_discounts_tax_excl: Number(lastCreatedOrderFromDb.total_discounts_tax_excl),
+      total_products: Number(lastCreatedOrderFromDb.total_products),
+      total_products_wt: Number(lastCreatedOrderFromDb.total_products_wt),
+      total_shipping_tax_incl: Number(lastCreatedOrderFromDb.total_shipping_tax_incl),
+      total_wrapping: Number(lastCreatedOrderFromDb.total_wrapping),
+      total_wrapping_tax_incl: Number(lastCreatedOrderFromDb.total_wrapping_tax_incl),
+      total_wrapping_tax_excl: Number(lastCreatedOrderFromDb.total_wrapping_tax_excl),
+      round_mode: lastCreatedOrderFromDb.round_mode,
+      round_type: true,
+      invoice_number: lastCreatedOrderFromDb.invoice_number,
+      delivery_number: lastCreatedOrderFromDb.delivery_number,
+      //invoice_date: lastCreatedOrderFromDb.invoice_date,
+      invoice_date: toSqlDateTime(lastCreatedOrderFromDb.invoice_date),
+      //delivery_date: lastCreatedOrderFromDb.delivery_date,
+      delivery_date: toSqlDateTime(lastCreatedOrderFromDb.delivery_date),
+      valid: lastCreatedOrderFromDb.valid,
       refund: 0,
       refund_tax_excl: 0,
       new_customer: false,
       total_paid_tax: 0,
       delivery_country_code: 'GB',
       invoice_country_code: 'GB'
-    }
-  }
+    },
+  })
 }
 
 

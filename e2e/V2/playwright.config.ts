@@ -146,6 +146,7 @@ export default defineConfig({
     {
       name: "SANITY",
       testDir: './src/tests/sanity/',
+      dependencies: ['HEALTHCHECK']
     }
   ],
 });
