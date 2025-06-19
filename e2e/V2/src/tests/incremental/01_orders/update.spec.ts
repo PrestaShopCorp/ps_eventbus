@@ -16,9 +16,15 @@ import {
   orderToCreate
 } from "./test.data";
 import {authentication} from "@tests-fixtures/authentication.fixtures";
+import {
+  boOrdersViewBasePage,
+  boOrdersViewBlockProductsPage,
+  boOrdersViewBlockTabListPage,
+  dataOrderStatuses
+} from "@prestashop-core/ui-testing";
 
 // Pass required datas to fixtures
-sync.use({shopContent: ['orders']});
+sync.use({shopContent: ['orders', 'carriers']});
 addresses.use({address: customerAddress});
 carriers.use({carrier: carrier});
 orders.use({order: orderToCreate});
@@ -30,25 +36,38 @@ const mergedFixtures = mergeTests(sync, authentication, addresses, carriers, ord
 const testTags = ['@incremental', '@orders-incremental', '@orders-incremental-update'];
 const testTitle = `${colorText('[INCREMENTAL]', ["bold", "cyan", "italic"])} ==> ORDER UPDATE`;
 // Test variables
-let liveSyncTableAfter;
 const jobId = generateFakeJobId();
 const messages$: MockProbeResponse[] = [];
 
-mergedFixtures(testTitle, {tag: testTags}, async ({forceFullSync, bo_login, createCarrier, createAddress, createOrder}) => {
+mergedFixtures(testTitle, {tag: testTags}, async ({forceFullSync, bo_login, createCarrier, createAddress, createOrder, page}) => {
 
   // TEST STEPS
 
-  await test.step('Update created order', async () => {});
-
-  // Récupération du contenu de la table incremental (orders / upsert) avant la sync
-  await test.step('Collect eventbus_incremental_sync table content BEFORE sync', async () => {
+  await test.step('Collect eventbus_incremental_sync table content BEFORE update & sync', async () => {
     const incrementalSyncTableBefore = await prisma.ps_eventbus_incremental_sync.findMany({
       where: {
         type: 'orders',
         action: 'upsert'
       }
     });
-    //console.log(incrementalSyncTableBefore);
+    console.table(incrementalSyncTableBefore);
+    // TODO ici quoi vérifier dans la table ??
+  });
+
+  await test.step('Update created order', async () => {
+    await page.waitForTimeout(5000);
+    await boOrdersViewBlockProductsPage.deleteDiscount(page);
+  });
+
+
+  await test.step('Collect eventbus_incremental_sync table content BEFORE update & sync', async () => {
+    const incrementalSyncTableBefore = await prisma.ps_eventbus_incremental_sync.findMany({
+      where: {
+        type: 'orders',
+        action: 'upsert'
+      }
+    });
+    console.table(incrementalSyncTableBefore);
     // TODO ici quoi vérifier dans la table ??
   });
 
@@ -83,6 +102,7 @@ mergedFixtures(testTitle, {tag: testTags}, async ({forceFullSync, bo_login, crea
         type: 'orders',
       }
     });
+    console.table(incrementalSyncTableAfter);
     expect(incrementalSyncTableAfter.length).toEqual(0);
   });
 });

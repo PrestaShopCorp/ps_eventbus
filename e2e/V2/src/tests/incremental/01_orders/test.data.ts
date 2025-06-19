@@ -114,7 +114,7 @@ export const orderToCreate: FakerOrder = new FakerOrder({
     freeShipping: true,
   },
   paymentMethod: dataPaymentMethods.checkPayment,
-  status: dataOrderStatuses.delivered,
+  status: dataOrderStatuses.shipped,
   totalPrice: (dataProducts.demo_5.priceTaxExcluded * 4) * 1.2, // Price tax included
 });
 
@@ -142,10 +142,8 @@ export async function assertCreatedOrder(createdOrderFromProbe: any) {
       payment_mode: 'Payments by check',
       total_paid_real: lastCreatedOrderFromDb.total_paid_real,
       shipping_cost: 3,
-      //created_at: lastCreatedOrderFromDb.date_add,
       created_at: toIsoNoColon(lastCreatedOrderFromDb.date_add),
       updated_at: toIsoNoColon(lastCreatedOrderFromDb.date_upd),
-      //updated_at: lastCreatedOrderFromDb.date_upd,
       id_carrier: lastCreatedOrderFromDb.id_carrier,
       payment_name: 'ps_checkpayment',
       is_validated: '1',
@@ -171,9 +169,7 @@ export async function assertCreatedOrder(createdOrderFromProbe: any) {
       round_type: true,
       invoice_number: lastCreatedOrderFromDb.invoice_number,
       delivery_number: lastCreatedOrderFromDb.delivery_number,
-      //invoice_date: lastCreatedOrderFromDb.invoice_date,
       invoice_date: toSqlDateTime(lastCreatedOrderFromDb.invoice_date),
-      //delivery_date: lastCreatedOrderFromDb.delivery_date,
       delivery_date: toSqlDateTime(lastCreatedOrderFromDb.delivery_date),
       valid: lastCreatedOrderFromDb.valid,
       refund: 0,
