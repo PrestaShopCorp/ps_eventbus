@@ -47,42 +47,39 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
     {
         $this->generateMinimalQuery(self::TABLE_NAME, 'ca');
 
-        $latestDeliveryPriceCteQuery = '
-            WITH latest_delivery_prices AS (
+        $latestDeliveryPriceQueryJoin = '
+            INNER JOIN (
                 SELECT
                     id_carrier,
-                    price,
-                    ROW_NUMBER() OVER (
-                        PARTITION BY
-                        id_carrier
-                        ORDER BY
-                        id_delivery DESC
-                    ) as rn
-                FROM ps_delivery
+                    price
+                FROM ps_delivery d1
                 WHERE price IS NOT NULL
-            )
+                AND id_delivery = (
+                    SELECT MAX(id_delivery)
+                    FROM ps_delivery d2
+                    WHERE d2.id_carrier = d1.id_carrier AND d2.price IS NOT NULL
+                )
+            ) ldp ON ca.id_carrier = ldp.id_carrier
         ';
 
-        $configCteQuery = '
-            config_val AS (
-                SELECT value as shipping_method_config
+        $configQueryJoin = '
+            CROSS JOIN (
+                SELECT value AS shipping_method_config
                 FROM ps_configuration
                 WHERE name = \'PS_SHIPPING_METHOD\'
-            )
+                LIMIT 1
+            ) conf
         ';
-
-        $this->query->addCte($latestDeliveryPriceCteQuery);
-        $this->query->addCte($configCteQuery);
 
         // minimal query for countable query
         $this->query
+            ->join($latestDeliveryPriceQueryJoin)
             ->innerJoin('delivery', 'd', 'ca.id_carrier = d.id_carrier AND d.id_zone IS NOT NULL')
             ->innerJoin('country', 'co', 'd.id_zone = co.id_zone AND co.iso_code IS NOT NULL AND co.active = 1')
-            ->join('INNER JOIN latest_delivery_prices ldp ON ca.id_carrier = ldp.id_carrier AND ldp.rn = 1')
             ->leftJoin('range_weight', 'rw', 'ca.id_carrier = rw.id_carrier AND d.id_range_weight = rw.id_range_weight')
             ->leftJoin('range_price', 'rp', 'ca.id_carrier = rp.id_carrier AND d.id_range_price = rp.id_range_price')
             ->leftJoin('state', 's', 'co.id_zone = s.id_zone AND co.id_country = s.id_country AND s.active = 1')
-            ->join('CROSS JOIN config_val conf')
+            ->join($configQueryJoin)
             ->select('ca.id_reference')
             ->groupBy('ca.id_reference, co.id_zone, id_range')
         ;

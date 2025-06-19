@@ -27,7 +27,6 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
-use PrestaShop\Module\PsEventbus\Helper\CustomDbQuery;
 use PrestaShop\Module\PsEventbus\Service\CommonService;
 
 if (!defined('_PS_VERSION_')) {
@@ -47,7 +46,7 @@ abstract class AbstractRepository
     protected $db;
 
     /**
-     * @var CustomDbQuery
+     * @var \DbQuery
      */
     protected $query;
 
@@ -71,7 +70,7 @@ abstract class AbstractRepository
      */
     protected function generateMinimalQuery($tableName, $alias = null)
     {
-        $this->query = new CustomDbQuery();
+        $this->query = new \DbQuery();
 
         $this->query->from($tableName, $alias);
     }
@@ -129,7 +128,7 @@ abstract class AbstractRepository
          * The solution is to catch the exception and return an empty array when error code is '42S02' (Table does not exist error code)
          */
         try {
-            $result = $this->db->query($this->query);
+            $result = $this->db->executeS($this->query);
 
             if ($result instanceof \PDOStatement) {
                 $result = $result->fetchAll(\PDO::FETCH_ASSOC);
@@ -157,9 +156,7 @@ abstract class AbstractRepository
      */
     private function debugQuery()
     {
-        $query = $this->query->build();
-
-        $queryStringified = preg_replace('/\s+/', ' ', $query);
+        $queryStringified = preg_replace('/\s+/', ' ', $this->query->build());
         $queryStringified = str_replace(['"'], ["'"], (string) $queryStringified);
 
         $response = array_merge(
