@@ -47,39 +47,47 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
     {
         $this->generateMinimalQuery(self::TABLE_NAME, 'ca');
 
-        $latestDeliveryPriceQueryJoin = '
-            INNER JOIN (
-                SELECT
-                    id_carrier,
-                    price
-                FROM ps_delivery d1
-                WHERE price IS NOT NULL
-                AND id_delivery = (
-                    SELECT MAX(id_delivery)
-                    FROM ps_delivery d2
-                    WHERE d2.id_carrier = d1.id_carrier AND d2.price IS NOT NULL
-                )
-            ) ldp ON ca.id_carrier = ldp.id_carrier
-        ';
+        // Create temporary table to get the latest delivery prices
+        $this->db->execute('
+            CREATE TEMPORARY TABLE IF NOT EXISTS TEMP_TABLE_latest_delivery_prices (
+                id_carrier INT UNSIGNED NOT NULL,
+                price DECIMAL(20,6) NOT NULL,
+                PRIMARY KEY (id_carrier),
+                INDEX idx_price (price)
+            );
+        ');
 
-        $configQueryJoin = '
-            CROSS JOIN (
-                SELECT value AS shipping_method_config
-                FROM ps_configuration
-                WHERE name = \'PS_SHIPPING_METHOD\'
-                LIMIT 1
-            ) conf
-        ';
+        // insert the latest delivery prices into the temporary table
+        $this->db->execute('
+            INSERT IGNORE INTO TEMP_TABLE_latest_delivery_prices (id_carrier, price)
+            SELECT
+                d.id_carrier,
+                d.price
+            FROM ' . _DB_PREFIX_ . 'delivery d
+            INNER JOIN (
+                SELECT id_carrier, MAX(id_delivery) AS max_delivery
+                FROM ' . _DB_PREFIX_ . 'delivery
+                WHERE price IS NOT NULL
+                GROUP BY id_carrier
+            ) latest ON d.id_carrier = latest.id_carrier AND d.id_delivery = latest.max_delivery
+            WHERE d.price IS NOT NULL;
+        ');
+
+        // Get the shipping method configuration
+        $psShippingMethod = $this->db->getValue('
+            SELECT 1 AS shipping_method
+            FROM ' . _DB_PREFIX_ . 'configuration
+            WHERE name = \'PS_SHIPPING_METHOD\'
+        ');
 
         // minimal query for countable query
         $this->query
-            ->join($latestDeliveryPriceQueryJoin)
+            ->join('INNER JOIN TEMP_TABLE_latest_delivery_prices ldp ON ca.id_carrier = ldp.id_carrier')
             ->innerJoin('delivery', 'd', 'ca.id_carrier = d.id_carrier AND d.id_zone IS NOT NULL')
             ->innerJoin('country', 'co', 'd.id_zone = co.id_zone AND co.iso_code IS NOT NULL AND co.active = 1')
             ->leftJoin('range_weight', 'rw', 'ca.id_carrier = rw.id_carrier AND d.id_range_weight = rw.id_range_weight')
             ->leftJoin('range_price', 'rp', 'ca.id_carrier = rp.id_carrier AND d.id_range_price = rp.id_range_price')
             ->leftJoin('state', 's', 'co.id_zone = s.id_zone AND co.id_country = s.id_country AND s.active = 1')
-            ->join($configQueryJoin)
             ->select('ca.id_reference')
             ->groupBy('ca.id_reference, co.id_zone, id_range')
         ;
@@ -94,15 +102,15 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
                         WHEN d.id_range_price IS NOT NULL AND d.id_range_price != 0 THEN d.id_range_price
                     END AS id_range
                 ')
-                ->select('
+                ->select("
                     CASE
-                        WHEN ca.is_free = 1 THEN "free_shipping"
-                        WHEN ca.shipping_method = 0 AND conf.shipping_method_config IS NULL THEN "range_price"
-                        WHEN ca.shipping_method = 0 AND conf.shipping_method_config IS NOT NULL THEN "range_weight"
-                        WHEN ca.shipping_method = 1 THEN "range_weight"
-                        WHEN ca.shipping_method = 2 THEN "range_price"
+                        WHEN ca.is_free = 1 THEN 'free_shipping'
+                        WHEN ca.shipping_method = 0 AND {$psShippingMethod} = 0 THEN 'range_price'
+                        WHEN ca.shipping_method = 0 AND {$psShippingMethod} = 1 THEN 'range_weight'
+                        WHEN ca.shipping_method = 1 THEN 'range_weight'
+                        WHEN ca.shipping_method = 2 THEN 'range_price'
                     END AS shipping_method
-                ')
+                ")
                 ->select('COALESCE(rw.delimiter1, rp.delimiter1) AS delimiter1')
                 ->select('COALESCE(rw.delimiter2, rp.delimiter2) AS delimiter2')
                 ->select('
