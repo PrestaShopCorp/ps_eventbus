@@ -52,8 +52,7 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
             CREATE TEMPORARY TABLE IF NOT EXISTS TEMP_TABLE_latest_delivery_prices (
                 id_carrier INT UNSIGNED NOT NULL,
                 price DECIMAL(20,6) NOT NULL,
-                PRIMARY KEY (id_carrier),
-                INDEX idx_price (price)
+                PRIMARY KEY (id_carrier)
             );
         ');
 
@@ -73,12 +72,7 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
             WHERE d.price IS NOT NULL;
         ');
 
-        // Get the shipping method configuration
-        $psShippingMethod = $this->db->getValue('
-            SELECT 1 AS shipping_method
-            FROM ' . _DB_PREFIX_ . 'configuration
-            WHERE name = \'PS_SHIPPING_METHOD\'
-        ');
+        $psShippingMethod = \Configuration::get('PS_SHIPPING_METHOD');
 
         // minimal query for countable query
         $this->query
