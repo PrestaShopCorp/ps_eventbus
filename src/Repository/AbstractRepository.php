@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -128,6 +129,10 @@ abstract class AbstractRepository
          */
         try {
             $result = $this->db->executeS($this->query);
+
+            if ($result instanceof \PDOStatement) {
+                $result = $result->fetchAll(\PDO::FETCH_ASSOC);
+            }
 
             // for 1.6 compatibility. executeS returns false if no result
             if ($result == false) {
