@@ -1,0 +1,3339 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("SHOP_DATABASE_URL")
+}
+
+model ps_access {
+  id_profile            Int @db.UnsignedInt
+  id_authorization_role Int @db.UnsignedInt
+
+  @@id([id_profile, id_authorization_role])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ps_accessory {
+  id_product_1 Int @db.UnsignedInt
+  id_product_2 Int @db.UnsignedInt
+
+  @@index([id_product_1, id_product_2], map: "accessory_product")
+  @@ignore
+}
+
+model ps_address {
+  id_address      Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_country      Int      @db.UnsignedInt
+  id_state        Int?     @db.UnsignedInt
+  id_customer     Int      @default(0) @db.UnsignedInt
+  id_manufacturer Int      @default(0) @db.UnsignedInt
+  id_supplier     Int      @default(0) @db.UnsignedInt
+  id_warehouse    Int      @default(0) @db.UnsignedInt
+  alias           String   @db.VarChar(32)
+  company         String?  @db.VarChar(255)
+  lastname        String   @db.VarChar(255)
+  firstname       String   @db.VarChar(255)
+  address1        String   @db.VarChar(128)
+  address2        String?  @db.VarChar(128)
+  postcode        String?  @db.VarChar(12)
+  city            String   @db.VarChar(64)
+  other           String?  @db.MediumText
+  phone           String?  @db.VarChar(32)
+  phone_mobile    String?  @db.VarChar(32)
+  vat_number      String?  @db.VarChar(32)
+  dni             String?  @db.VarChar(16)
+  date_add        DateTime @db.DateTime(0)
+  date_upd        DateTime @db.DateTime(0)
+  active          Boolean  @default(true)
+  deleted         Boolean  @default(false)
+
+  @@index([id_customer], map: "address_customer")
+  @@index([id_country], map: "id_country")
+  @@index([id_manufacturer], map: "id_manufacturer")
+  @@index([id_state], map: "id_state")
+  @@index([id_supplier], map: "id_supplier")
+  @@index([id_warehouse], map: "id_warehouse")
+}
+
+model ps_address_format {
+  id_country Int    @id @db.UnsignedInt
+  format     String @default("") @db.VarChar(255)
+}
+
+model ps_admin_filter {
+  id         Int    @id @default(autoincrement())
+  employee   Int
+  shop       Int
+  controller String @db.VarChar(60)
+  action     String @db.VarChar(100)
+  filter     String @db.LongText
+  filter_id  String
+
+  @@unique([employee, shop, controller, action, filter_id], map: "admin_filter_search_id_idx")
+}
+
+model ps_alias {
+  id_alias Int     @id @default(autoincrement()) @db.UnsignedInt
+  alias    String  @unique(map: "alias")
+  search   String  @db.VarChar(255)
+  active   Boolean @default(true)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ps_api_access {
+  id_api_access             Int     @id @default(autoincrement()) @db.UnsignedInt
+  id_authorized_application Int     @db.UnsignedInt
+  client_id                 String  @db.VarChar(255)
+  client_secret             String  @db.VarChar(255)
+  active                    Boolean
+  scopes                    String  @db.LongText
+
+  @@index([id_authorized_application], map: "IDX_6E064442D8BFF738")
+}
+
+model ps_attachment {
+  id_attachment Int    @id @default(autoincrement()) @db.UnsignedInt
+  file          String @db.VarChar(40)
+  file_name     String @db.VarChar(128)
+  file_size     BigInt @default(0) @db.UnsignedBigInt
+  mime          String @db.VarChar(128)
+}
+
+model ps_attachment_lang {
+  id_attachment Int     @default(autoincrement()) @db.UnsignedInt
+  id_lang       Int     @db.UnsignedInt
+  name          String? @db.VarChar(32)
+  description   String? @db.MediumText
+
+  @@id([id_attachment, id_lang])
+}
+
+model ps_attribute {
+  id_attribute       Int    @id @default(autoincrement())
+  id_attribute_group Int
+  color              String @db.VarChar(32)
+  position           Int
+
+  @@index([id_attribute_group], map: "attribute_group")
+}
+
+model ps_attribute_group {
+  id_attribute_group Int     @id @default(autoincrement())
+  is_color_group     Boolean
+  group_type         String  @db.VarChar(255)
+  position           Int
+}
+
+model ps_attribute_group_lang {
+  id_attribute_group Int
+  id_lang            Int
+  name               String @db.VarChar(128)
+  public_name        String @db.VarChar(64)
+
+  @@id([id_attribute_group, id_lang])
+  @@index([id_attribute_group], map: "IDX_4653726C67A664FB")
+  @@index([id_lang], map: "IDX_4653726CBA299860")
+}
+
+model ps_attribute_group_shop {
+  id_attribute_group Int
+  id_shop            Int
+
+  @@id([id_attribute_group, id_shop])
+  @@index([id_shop], map: "IDX_DB30BAAC274A50A0")
+  @@index([id_attribute_group], map: "IDX_DB30BAAC67A664FB")
+}
+
+model ps_attribute_lang {
+  id_attribute Int
+  id_lang      Int
+  name         String @db.VarChar(128)
+
+  @@id([id_attribute, id_lang])
+  @@index([id_attribute], map: "IDX_3ABE46A77A4F53DC")
+  @@index([id_lang], map: "IDX_3ABE46A7BA299860")
+}
+
+model ps_attribute_shop {
+  id_attribute Int
+  id_shop      Int
+
+  @@id([id_attribute, id_shop])
+  @@index([id_shop], map: "IDX_A7DD8E67274A50A0")
+  @@index([id_attribute], map: "IDX_A7DD8E677A4F53DC")
+}
+
+model ps_authorization_role {
+  id_authorization_role Int    @id @default(autoincrement()) @db.UnsignedInt
+  slug                  String @unique(map: "slug")
+}
+
+model ps_authorized_application {
+  id_authorized_application Int    @id @default(autoincrement()) @db.UnsignedInt
+  name                      String @unique(map: "UNIQ_475B9BA55E237E06") @db.VarChar(50)
+  description               String @db.LongText
+}
+
+model ps_blockwishlist_statistics {
+  id_statistics        Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_cart              Int?     @db.UnsignedInt
+  id_product           Int      @db.UnsignedInt
+  id_product_attribute Int      @db.UnsignedInt
+  date_add             DateTime @db.DateTime(0)
+  id_shop              Int?     @default(1) @db.UnsignedInt
+}
+
+model ps_carrier {
+  id_carrier           Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_reference         Int      @db.UnsignedInt
+  name                 String   @db.VarChar(64)
+  url                  String?  @db.VarChar(255)
+  active               Boolean  @default(false)
+  deleted              Boolean  @default(false)
+  shipping_handling    Boolean  @default(true)
+  range_behavior       Boolean  @default(false)
+  is_module            Boolean  @default(false)
+  is_free              Boolean  @default(false)
+  shipping_external    Boolean  @default(false)
+  need_range           Boolean  @default(false)
+  external_module_name String?  @db.VarChar(64)
+  shipping_method      Int      @default(0)
+  position             Int      @default(0) @db.UnsignedInt
+  max_width            Int?     @default(0)
+  max_height           Int?     @default(0)
+  max_depth            Int?     @default(0)
+  max_weight           Decimal? @default(0.000000) @db.Decimal(20, 6)
+  grade                Int?     @default(0)
+
+  @@index([deleted, active], map: "deleted")
+  @@index([id_reference, deleted, active], map: "reference")
+}
+
+model ps_carrier_group {
+  id_carrier Int @db.UnsignedInt
+  id_group   Int @db.UnsignedInt
+
+  @@id([id_carrier, id_group])
+}
+
+model ps_carrier_lang {
+  id_carrier Int     @db.UnsignedInt
+  id_shop    Int     @default(1) @db.UnsignedInt
+  id_lang    Int     @db.UnsignedInt
+  delay      String? @db.VarChar(512)
+
+  @@id([id_lang, id_shop, id_carrier])
+}
+
+model ps_carrier_shop {
+  id_carrier Int @db.UnsignedInt
+  id_shop    Int @db.UnsignedInt
+
+  @@id([id_carrier, id_shop])
+  @@index([id_shop], map: "id_shop")
+}
+
+model ps_carrier_tax_rules_group_shop {
+  id_carrier         Int @db.UnsignedInt
+  id_tax_rules_group Int @db.UnsignedInt
+  id_shop            Int @db.UnsignedInt
+
+  @@id([id_carrier, id_tax_rules_group, id_shop])
+}
+
+model ps_carrier_zone {
+  id_carrier Int @db.UnsignedInt
+  id_zone    Int @db.UnsignedInt
+
+  @@id([id_carrier, id_zone])
+}
+
+model ps_cart {
+  id_cart                 Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_shop_group           Int      @default(1) @db.UnsignedInt
+  id_shop                 Int      @default(1) @db.UnsignedInt
+  id_carrier              Int      @db.UnsignedInt
+  delivery_option         String   @db.MediumText
+  id_lang                 Int      @db.UnsignedInt
+  id_address_delivery     Int      @db.UnsignedInt
+  id_address_invoice      Int      @db.UnsignedInt
+  id_currency             Int      @db.UnsignedInt
+  id_customer             Int      @db.UnsignedInt
+  id_guest                Int      @db.UnsignedInt
+  secure_key              String   @default("-1") @db.VarChar(32)
+  recyclable              Boolean  @default(true)
+  gift                    Boolean  @default(false)
+  gift_message            String?  @db.MediumText
+  mobile_theme            Boolean  @default(false)
+  allow_seperated_package Boolean  @default(false)
+  date_add                DateTime @db.DateTime(0)
+  date_upd                DateTime @db.DateTime(0)
+  checkout_session_data   String?  @db.MediumText
+
+  @@index([id_customer], map: "cart_customer")
+  @@index([id_address_delivery], map: "id_address_delivery")
+  @@index([id_address_invoice], map: "id_address_invoice")
+  @@index([id_carrier], map: "id_carrier")
+  @@index([id_currency], map: "id_currency")
+  @@index([id_guest], map: "id_guest")
+  @@index([id_lang], map: "id_lang")
+  @@index([id_shop, date_add], map: "id_shop")
+  @@index([id_shop, date_upd], map: "id_shop_2")
+  @@index([id_shop_group], map: "id_shop_group")
+}
+
+model ps_cart_cart_rule {
+  id_cart      Int @db.UnsignedInt
+  id_cart_rule Int @db.UnsignedInt
+
+  @@id([id_cart, id_cart_rule])
+  @@index([id_cart_rule], map: "id_cart_rule")
+}
+
+model ps_cart_product {
+  id_cart              Int      @db.UnsignedInt
+  id_product           Int      @db.UnsignedInt
+  id_address_delivery  Int      @default(0) @db.UnsignedInt
+  id_shop              Int      @default(1) @db.UnsignedInt
+  id_product_attribute Int      @default(0) @db.UnsignedInt
+  id_customization     Int      @default(0) @db.UnsignedInt
+  quantity             Int      @default(0) @db.UnsignedInt
+  date_add             DateTime @db.DateTime(0)
+
+  @@id([id_cart, id_product, id_product_attribute, id_customization, id_address_delivery])
+  @@index([id_cart, date_add, id_product, id_product_attribute], map: "id_cart_order")
+  @@index([id_product_attribute], map: "id_product_attribute")
+}
+
+model ps_cart_rule {
+  id_cart_rule              Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_customer               Int      @default(0) @db.UnsignedInt
+  date_from                 DateTime @db.DateTime(0)
+  date_to                   DateTime @db.DateTime(0)
+  description               String?  @db.MediumText
+  quantity                  Int      @default(0) @db.UnsignedInt
+  quantity_per_user         Int      @default(0) @db.UnsignedInt
+  priority                  Int      @default(1) @db.UnsignedInt
+  partial_use               Boolean  @default(false)
+  code                      String   @db.VarChar(254)
+  minimum_amount            Decimal  @default(0.000000) @db.Decimal(20, 6)
+  minimum_amount_tax        Boolean  @default(false)
+  minimum_amount_currency   Int      @default(0) @db.UnsignedInt
+  minimum_amount_shipping   Boolean  @default(false)
+  country_restriction       Boolean  @default(false)
+  carrier_restriction       Boolean  @default(false)
+  group_restriction         Boolean  @default(false)
+  cart_rule_restriction     Boolean  @default(false)
+  product_restriction       Boolean  @default(false)
+  shop_restriction          Boolean  @default(false)
+  free_shipping             Boolean  @default(false)
+  reduction_percent         Decimal  @default(0.00) @db.Decimal(5, 2)
+  reduction_amount          Decimal  @default(0.000000) @db.Decimal(20, 6)
+  reduction_tax             Boolean  @default(false)
+  reduction_currency        Int      @default(0) @db.UnsignedInt
+  reduction_product         Int      @default(0)
+  reduction_exclude_special Boolean  @default(false)
+  gift_product              Int      @default(0) @db.UnsignedInt
+  gift_product_attribute    Int      @default(0) @db.UnsignedInt
+  highlight                 Boolean  @default(false)
+  active                    Boolean  @default(false)
+  date_add                  DateTime @db.DateTime(0)
+  date_upd                  DateTime @db.DateTime(0)
+
+  @@index([date_from], map: "date_from")
+  @@index([date_to], map: "date_to")
+  @@index([group_restriction, active, date_to], map: "group_restriction")
+  @@index([group_restriction, active, highlight, date_to], map: "group_restriction_2")
+  @@index([id_customer, active, date_to], map: "id_customer")
+  @@index([id_customer, active, highlight, date_to], map: "id_customer_2")
+}
+
+model ps_cart_rule_carrier {
+  id_cart_rule Int @db.UnsignedInt
+  id_carrier   Int @db.UnsignedInt
+
+  @@id([id_cart_rule, id_carrier])
+}
+
+model ps_cart_rule_combination {
+  id_cart_rule_1 Int @db.UnsignedInt
+  id_cart_rule_2 Int @db.UnsignedInt
+
+  @@id([id_cart_rule_1, id_cart_rule_2])
+  @@index([id_cart_rule_1], map: "id_cart_rule_1")
+  @@index([id_cart_rule_2], map: "id_cart_rule_2")
+}
+
+model ps_cart_rule_country {
+  id_cart_rule Int @db.UnsignedInt
+  id_country   Int @db.UnsignedInt
+
+  @@id([id_cart_rule, id_country])
+}
+
+model ps_cart_rule_group {
+  id_cart_rule Int @db.UnsignedInt
+  id_group     Int @db.UnsignedInt
+
+  @@id([id_cart_rule, id_group])
+}
+
+model ps_cart_rule_lang {
+  id_cart_rule Int    @db.UnsignedInt
+  id_lang      Int    @db.UnsignedInt
+  name         String @db.VarChar(254)
+
+  @@id([id_cart_rule, id_lang])
+}
+
+model ps_cart_rule_product_rule {
+  id_product_rule       Int                            @id @default(autoincrement()) @db.UnsignedInt
+  id_product_rule_group Int                            @db.UnsignedInt
+  type                  ps_cart_rule_product_rule_type
+}
+
+model ps_cart_rule_product_rule_group {
+  id_product_rule_group Int @id @default(autoincrement()) @db.UnsignedInt
+  id_cart_rule          Int @db.UnsignedInt
+  quantity              Int @default(1) @db.UnsignedInt
+}
+
+model ps_cart_rule_product_rule_value {
+  id_product_rule Int @db.UnsignedInt
+  id_item         Int @db.UnsignedInt
+
+  @@id([id_product_rule, id_item])
+}
+
+model ps_cart_rule_shop {
+  id_cart_rule Int @db.UnsignedInt
+  id_shop      Int @db.UnsignedInt
+
+  @@id([id_cart_rule, id_shop])
+}
+
+model ps_category {
+  id_category      Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_parent        Int      @db.UnsignedInt
+  id_shop_default  Int      @default(1) @db.UnsignedInt
+  level_depth      Int      @default(0) @db.UnsignedTinyInt
+  nleft            Int      @default(0) @db.UnsignedInt
+  nright           Int      @default(0) @db.UnsignedInt
+  active           Boolean  @default(false)
+  date_add         DateTime @db.DateTime(0)
+  date_upd         DateTime @db.DateTime(0)
+  position         Int      @default(0) @db.UnsignedInt
+  is_root_category Boolean  @default(false)
+
+  @@index([active, nleft], map: "activenleft")
+  @@index([active, nright], map: "activenright")
+  @@index([id_parent], map: "category_parent")
+  @@index([level_depth], map: "level_depth")
+  @@index([nleft, nright, active], map: "nleftrightactive")
+  @@index([nright], map: "nright")
+}
+
+model ps_category_group {
+  id_category Int @db.UnsignedInt
+  id_group    Int @db.UnsignedInt
+
+  @@id([id_category, id_group])
+  @@index([id_category], map: "id_category")
+  @@index([id_group], map: "id_group")
+}
+
+model ps_category_lang {
+  id_category            Int     @db.UnsignedInt
+  id_shop                Int     @default(1) @db.UnsignedInt
+  id_lang                Int     @db.UnsignedInt
+  name                   String  @db.VarChar(128)
+  description            String? @db.MediumText
+  additional_description String? @db.MediumText
+  link_rewrite           String  @db.VarChar(128)
+  meta_title             String? @db.VarChar(255)
+  meta_keywords          String? @db.VarChar(255)
+  meta_description       String? @db.VarChar(512)
+
+  @@id([id_category, id_shop, id_lang])
+  @@index([name], map: "category_name")
+}
+
+model ps_category_product {
+  id_category Int @db.UnsignedInt
+  id_product  Int @db.UnsignedInt
+  position    Int @default(0) @db.UnsignedInt
+
+  @@id([id_category, id_product])
+  @@index([id_category, position], map: "id_category")
+  @@index([id_product], map: "id_product")
+}
+
+model ps_category_shop {
+  id_category Int
+  id_shop     Int
+  position    Int @default(0) @db.UnsignedInt
+
+  @@id([id_category, id_shop])
+}
+
+model ps_cms {
+  id_cms          Int     @id @default(autoincrement()) @db.UnsignedInt
+  id_cms_category Int     @db.UnsignedInt
+  position        Int     @default(0) @db.UnsignedInt
+  active          Boolean @default(false)
+  indexation      Boolean @default(true)
+}
+
+model ps_cms_category {
+  id_cms_category Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_parent       Int      @db.UnsignedInt
+  level_depth     Int      @default(0) @db.UnsignedTinyInt
+  active          Boolean  @default(false)
+  date_add        DateTime @db.DateTime(0)
+  date_upd        DateTime @db.DateTime(0)
+  position        Int      @default(0) @db.UnsignedInt
+
+  @@index([id_parent], map: "category_parent")
+}
+
+model ps_cms_category_lang {
+  id_cms_category  Int     @db.UnsignedInt
+  id_lang          Int     @db.UnsignedInt
+  id_shop          Int     @default(1) @db.UnsignedInt
+  name             String  @db.VarChar(128)
+  description      String? @db.MediumText
+  link_rewrite     String  @db.VarChar(128)
+  meta_title       String? @db.VarChar(255)
+  meta_keywords    String? @db.VarChar(255)
+  meta_description String? @db.VarChar(512)
+
+  @@id([id_cms_category, id_shop, id_lang])
+  @@index([name], map: "category_name")
+}
+
+model ps_cms_category_shop {
+  id_cms_category Int @default(autoincrement()) @db.UnsignedInt
+  id_shop         Int @db.UnsignedInt
+
+  @@id([id_cms_category, id_shop])
+  @@index([id_shop], map: "id_shop")
+}
+
+model ps_cms_lang {
+  id_cms           Int     @db.UnsignedInt
+  id_lang          Int     @db.UnsignedInt
+  id_shop          Int     @default(1) @db.UnsignedInt
+  meta_title       String  @db.VarChar(255)
+  head_seo_title   String? @db.VarChar(255)
+  meta_description String? @db.VarChar(512)
+  meta_keywords    String? @db.VarChar(255)
+  content          String? @db.LongText
+  link_rewrite     String  @db.VarChar(128)
+
+  @@id([id_cms, id_shop, id_lang])
+}
+
+model ps_cms_role {
+  id_cms_role Int    @default(autoincrement()) @db.UnsignedInt
+  name        String @unique(map: "name") @db.VarChar(50)
+  id_cms      Int    @db.UnsignedInt
+
+  @@id([id_cms_role, id_cms])
+}
+
+model ps_cms_role_lang {
+  id_cms_role Int     @db.UnsignedInt
+  id_lang     Int     @db.UnsignedInt
+  id_shop     Int     @db.UnsignedInt
+  name        String? @db.VarChar(128)
+
+  @@id([id_cms_role, id_lang, id_shop])
+}
+
+model ps_cms_shop {
+  id_cms  Int @db.UnsignedInt
+  id_shop Int @db.UnsignedInt
+
+  @@id([id_cms, id_shop])
+  @@index([id_shop], map: "id_shop")
+}
+
+model ps_configuration {
+  id_configuration Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_shop_group    Int?     @db.UnsignedInt
+  id_shop          Int?     @db.UnsignedInt
+  name             String   @db.VarChar(254)
+  value            String?  @db.MediumText
+  date_add         DateTime @db.DateTime(0)
+  date_upd         DateTime @db.DateTime(0)
+
+  @@index([id_shop], map: "id_shop")
+  @@index([id_shop_group], map: "id_shop_group")
+  @@index([name], map: "name")
+}
+
+model ps_configuration_kpi {
+  id_configuration_kpi Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_shop_group        Int?     @db.UnsignedInt
+  id_shop              Int?     @db.UnsignedInt
+  name                 String   @db.VarChar(64)
+  value                String?  @db.MediumText
+  date_add             DateTime @db.DateTime(0)
+  date_upd             DateTime @db.DateTime(0)
+
+  @@index([id_shop], map: "id_shop")
+  @@index([id_shop_group], map: "id_shop_group")
+  @@index([name], map: "name")
+}
+
+model ps_configuration_kpi_lang {
+  id_configuration_kpi Int       @db.UnsignedInt
+  id_lang              Int       @db.UnsignedInt
+  value                String?   @db.MediumText
+  date_upd             DateTime? @db.DateTime(0)
+
+  @@id([id_configuration_kpi, id_lang])
+}
+
+model ps_configuration_lang {
+  id_configuration Int       @db.UnsignedInt
+  id_lang          Int       @db.UnsignedInt
+  value            String?   @db.MediumText
+  date_upd         DateTime? @db.DateTime(0)
+
+  @@id([id_configuration, id_lang])
+}
+
+model ps_connections {
+  id_connections Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_shop_group  Int      @default(1) @db.UnsignedInt
+  id_shop        Int      @default(1) @db.UnsignedInt
+  id_guest       Int      @db.UnsignedInt
+  id_page        Int      @db.UnsignedInt
+  ip_address     BigInt?
+  date_add       DateTime @db.DateTime(0)
+  http_referer   String?  @db.VarChar(255)
+
+  @@index([date_add], map: "date_add")
+  @@index([id_guest], map: "id_guest")
+  @@index([id_page], map: "id_page")
+}
+
+model ps_connections_page {
+  id_connections Int       @db.UnsignedInt
+  id_page        Int       @db.UnsignedInt
+  time_start     DateTime  @db.DateTime(0)
+  time_end       DateTime? @db.DateTime(0)
+
+  @@id([id_connections, id_page, time_start])
+}
+
+model ps_connections_source {
+  id_connections_source Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_connections        Int      @db.UnsignedInt
+  http_referer          String?  @db.VarChar(255)
+  request_uri           String?  @db.VarChar(255)
+  keywords              String?  @db.VarChar(255)
+  date_add              DateTime @db.DateTime(0)
+
+  @@index([id_connections], map: "connections")
+  @@index([http_referer], map: "http_referer")
+  @@index([date_add], map: "orderby")
+  @@index([request_uri], map: "request_uri")
+}
+
+model ps_contact {
+  id_contact       Int     @id @default(autoincrement()) @db.UnsignedInt
+  email            String  @db.VarChar(255)
+  customer_service Boolean @default(false)
+  position         Int     @default(0) @db.UnsignedTinyInt
+}
+
+model ps_contact_lang {
+  id_contact  Int     @db.UnsignedInt
+  id_lang     Int     @db.UnsignedInt
+  name        String  @db.VarChar(255)
+  description String? @db.MediumText
+
+  @@id([id_contact, id_lang])
+}
+
+model ps_contact_shop {
+  id_contact Int @db.UnsignedInt
+  id_shop    Int @db.UnsignedInt
+
+  @@id([id_contact, id_shop])
+  @@index([id_shop], map: "id_shop")
+}
+
+model ps_country {
+  id_country                 Int     @id @default(autoincrement()) @db.UnsignedInt
+  id_zone                    Int     @db.UnsignedInt
+  id_currency                Int     @default(0) @db.UnsignedInt
+  iso_code                   String  @db.VarChar(3)
+  call_prefix                Int     @default(0)
+  active                     Boolean @default(false)
+  contains_states            Boolean @default(false)
+  need_identification_number Boolean @default(false)
+  need_zip_code              Boolean @default(true)
+  zip_code_format            String  @default("") @db.VarChar(12)
+  display_tax_label          Boolean
+
+  @@index([id_zone], map: "country_")
+  @@index([iso_code], map: "country_iso_code")
+}
+
+model ps_country_lang {
+  id_country Int    @db.UnsignedInt
+  id_lang    Int    @db.UnsignedInt
+  name       String @db.VarChar(64)
+
+  @@id([id_country, id_lang])
+}
+
+model ps_country_shop {
+  id_country Int @db.UnsignedInt
+  id_shop    Int @db.UnsignedInt
+
+  @@id([id_country, id_shop])
+  @@index([id_shop], map: "id_shop")
+}
+
+model ps_currency {
+  id_currency      Int     @id @default(autoincrement()) @db.UnsignedInt
+  name             String  @db.VarChar(64)
+  iso_code         String  @default("0") @db.VarChar(3)
+  numeric_iso_code String? @db.VarChar(3)
+  precision        Int     @default(6)
+  conversion_rate  Decimal @db.Decimal(13, 6)
+  deleted          Boolean @default(false)
+  active           Boolean @default(true)
+  unofficial       Boolean @default(false)
+  modified         Boolean @default(false)
+
+  @@index([iso_code], map: "currency_iso_code")
+}
+
+model ps_currency_lang {
+  id_currency Int     @db.UnsignedInt
+  id_lang     Int     @db.UnsignedInt
+  name        String  @db.VarChar(255)
+  symbol      String  @db.VarChar(255)
+  pattern     String? @db.VarChar(255)
+
+  @@id([id_currency, id_lang])
+}
+
+model ps_currency_shop {
+  id_currency     Int     @db.UnsignedInt
+  id_shop         Int     @db.UnsignedInt
+  conversion_rate Decimal @db.Decimal(13, 6)
+
+  @@id([id_currency, id_shop])
+  @@index([id_shop], map: "id_shop")
+}
+
+model ps_customer {
+  id_customer                Int       @id @default(autoincrement()) @db.UnsignedInt
+  id_shop_group              Int       @default(1) @db.UnsignedInt
+  id_shop                    Int       @default(1) @db.UnsignedInt
+  id_gender                  Int       @db.UnsignedInt
+  id_default_group           Int       @default(1) @db.UnsignedInt
+  id_lang                    Int?      @db.UnsignedInt
+  id_risk                    Int       @default(1) @db.UnsignedInt
+  company                    String?   @db.VarChar(255)
+  siret                      String?   @db.VarChar(14)
+  ape                        String?   @db.VarChar(6)
+  firstname                  String    @db.VarChar(255)
+  lastname                   String    @db.VarChar(255)
+  email                      String    @db.VarChar(255)
+  passwd                     String    @db.VarChar(255)
+  last_passwd_gen            DateTime  @default(now()) @db.Timestamp(0)
+  birthday                   DateTime? @db.Date
+  newsletter                 Boolean   @default(false)
+  ip_registration_newsletter String?   @db.VarChar(15)
+  newsletter_date_add        DateTime? @db.DateTime(0)
+  optin                      Boolean   @default(false)
+  website                    String?   @db.VarChar(128)
+  outstanding_allow_amount   Decimal   @default(0.000000) @db.Decimal(20, 6)
+  show_public_prices         Boolean   @default(false)
+  max_payment_days           Int       @default(60) @db.UnsignedInt
+  secure_key                 String    @default("-1") @db.VarChar(32)
+  note                       String?   @db.MediumText
+  active                     Boolean   @default(false)
+  is_guest                   Boolean   @default(false)
+  deleted                    Boolean   @default(false)
+  date_add                   DateTime  @db.DateTime(0)
+  date_upd                   DateTime  @db.DateTime(0)
+  reset_password_token       String?   @db.VarChar(40)
+  reset_password_validity    DateTime? @db.DateTime(0)
+
+  @@index([email], map: "customer_email")
+  @@index([email, passwd], map: "customer_login")
+  @@index([id_customer, passwd], map: "id_customer_passwd")
+  @@index([id_gender], map: "id_gender")
+  @@index([id_shop, date_add], map: "id_shop")
+  @@index([id_shop_group], map: "id_shop_group")
+}
+
+model ps_customer_group {
+  id_customer Int @db.UnsignedInt
+  id_group    Int @db.UnsignedInt
+
+  @@id([id_customer, id_group])
+  @@index([id_group], map: "customer_login")
+  @@index([id_customer], map: "id_customer")
+}
+
+model ps_customer_message {
+  id_customer_message Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_customer_thread  Int?
+  id_employee         Int?     @db.UnsignedInt
+  message             String   @db.MediumText
+  file_name           String?  @db.VarChar(18)
+  ip_address          String?  @db.VarChar(16)
+  user_agent          String?  @db.VarChar(128)
+  date_add            DateTime @db.DateTime(0)
+  date_upd            DateTime @db.DateTime(0)
+  private             Int      @default(0) @db.TinyInt
+  read                Boolean  @default(false)
+
+  @@index([id_customer_thread], map: "id_customer_thread")
+  @@index([id_employee], map: "id_employee")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ps_customer_message_sync_imap {
+  md5_header Bytes @db.VarBinary(32)
+
+  @@index([md5_header(length: 4)], map: "md5_header_index")
+  @@ignore
+}
+
+model ps_customer_session {
+  id_customer_session Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_customer         Int?     @db.UnsignedInt
+  token               String?  @db.VarChar(40)
+  date_add            DateTime @db.DateTime(0)
+  date_upd            DateTime @db.DateTime(0)
+}
+
+model ps_customer_thread {
+  id_customer_thread Int                       @id @default(autoincrement()) @db.UnsignedInt
+  id_shop            Int                       @default(1) @db.UnsignedInt
+  id_lang            Int                       @db.UnsignedInt
+  id_contact         Int                       @db.UnsignedInt
+  id_customer        Int?                      @db.UnsignedInt
+  id_order           Int?                      @db.UnsignedInt
+  id_product         Int?                      @db.UnsignedInt
+  status             ps_customer_thread_status @default(open)
+  email              String                    @db.VarChar(255)
+  token              String?                   @db.VarChar(12)
+  date_add           DateTime                  @db.DateTime(0)
+  date_upd           DateTime                  @db.DateTime(0)
+
+  @@index([id_contact], map: "id_contact")
+  @@index([id_customer], map: "id_customer")
+  @@index([id_lang], map: "id_lang")
+  @@index([id_order], map: "id_order")
+  @@index([id_product], map: "id_product")
+  @@index([id_shop], map: "id_shop")
+}
+
+model ps_customization {
+  id_customization     Int     @default(autoincrement()) @db.UnsignedInt
+  id_product_attribute Int     @default(0) @db.UnsignedInt
+  id_address_delivery  Int     @default(0) @db.UnsignedInt
+  id_cart              Int     @db.UnsignedInt
+  id_product           Int
+  quantity             Int
+  quantity_refunded    Int     @default(0)
+  quantity_returned    Int     @default(0)
+  in_cart              Boolean @default(false)
+
+  @@id([id_customization, id_cart, id_product, id_address_delivery])
+  @@index([id_cart, id_product, id_product_attribute], map: "id_cart_product")
+  @@index([id_product_attribute], map: "id_product_attribute")
+}
+
+model ps_customization_field {
+  id_customization_field Int     @id @default(autoincrement()) @db.UnsignedInt
+  id_product             Int     @db.UnsignedInt
+  type                   Boolean
+  required               Boolean
+  is_module              Boolean @default(false)
+  is_deleted             Boolean @default(false)
+
+  @@index([id_product], map: "id_product")
+}
+
+model ps_customization_field_lang {
+  id_customization_field Int    @db.UnsignedInt
+  id_lang                Int    @db.UnsignedInt
+  id_shop                Int    @default(1) @db.UnsignedInt
+  name                   String @db.VarChar(255)
+
+  @@id([id_customization_field, id_lang, id_shop])
+}
+
+model ps_customized_data {
+  id_customization Int     @db.UnsignedInt
+  type             Boolean
+  index            Int
+  value            String  @db.VarChar(255)
+  id_module        Int     @default(0)
+  price            Decimal @default(0.000000) @db.Decimal(20, 6)
+  weight           Decimal @default(0.000000) @db.Decimal(20, 6)
+
+  @@id([id_customization, type, index])
+}
+
+model ps_date_range {
+  id_date_range Int      @id @default(autoincrement()) @db.UnsignedInt
+  time_start    DateTime @db.DateTime(0)
+  time_end      DateTime @db.DateTime(0)
+}
+
+model ps_delivery {
+  id_delivery     Int     @id @default(autoincrement()) @db.UnsignedInt
+  id_shop         Int?    @db.UnsignedInt
+  id_shop_group   Int?    @db.UnsignedInt
+  id_carrier      Int     @db.UnsignedInt
+  id_range_price  Int?    @db.UnsignedInt
+  id_range_weight Int?    @db.UnsignedInt
+  id_zone         Int     @db.UnsignedInt
+  price           Decimal @db.Decimal(20, 6)
+
+  @@index([id_carrier, id_zone], map: "id_carrier")
+  @@index([id_range_price], map: "id_range_price")
+  @@index([id_range_weight], map: "id_range_weight")
+  @@index([id_zone], map: "id_zone")
+}
+
+model ps_emailsubscription {
+  id                         Int       @id @default(autoincrement())
+  id_shop                    Int       @default(1) @db.UnsignedInt
+  id_shop_group              Int       @default(1) @db.UnsignedInt
+  email                      String    @db.VarChar(255)
+  newsletter_date_add        DateTime? @db.DateTime(0)
+  ip_registration_newsletter String    @db.VarChar(15)
+  http_referer               String?   @db.VarChar(255)
+  active                     Boolean   @default(false)
+  id_lang                    Int       @default(0)
+}
+
+model ps_employee {
+  id_employee              Int       @id @default(autoincrement()) @db.UnsignedInt
+  id_profile               Int       @db.UnsignedInt
+  id_lang                  Int       @default(0) @db.UnsignedInt
+  lastname                 String    @db.VarChar(255)
+  firstname                String    @db.VarChar(255)
+  email                    String    @db.VarChar(255)
+  passwd                   String    @db.VarChar(255)
+  last_passwd_gen          DateTime  @default(now()) @db.Timestamp(0)
+  stats_date_from          DateTime? @db.Date
+  stats_date_to            DateTime? @db.Date
+  stats_compare_from       DateTime? @db.Date
+  stats_compare_to         DateTime? @db.Date
+  stats_compare_option     Int       @default(1) @db.UnsignedInt
+  preselect_date_range     String?   @db.VarChar(32)
+  bo_color                 String?   @db.VarChar(32)
+  bo_theme                 String?   @db.VarChar(32)
+  bo_css                   String?   @db.VarChar(64)
+  default_tab              Int       @default(0) @db.UnsignedInt
+  bo_width                 Int       @default(0) @db.UnsignedInt
+  bo_menu                  Boolean   @default(true)
+  active                   Boolean   @default(false)
+  optin                    Boolean?
+  id_last_order            Int       @default(0) @db.UnsignedInt
+  id_last_customer_message Int       @default(0) @db.UnsignedInt
+  id_last_customer         Int       @default(0) @db.UnsignedInt
+  last_connection_date     DateTime? @db.Date
+  reset_password_token     String?   @db.VarChar(40)
+  reset_password_validity  DateTime? @db.DateTime(0)
+  has_enabled_gravatar     Int       @default(0) @db.UnsignedTinyInt
+
+  @@index([email, passwd], map: "employee_login")
+  @@index([id_employee, passwd], map: "id_employee_passwd")
+  @@index([id_profile], map: "id_profile")
+}
+
+model ps_employee_session {
+  id_employee_session Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_employee         Int?     @db.UnsignedInt
+  token               String?  @db.VarChar(40)
+  date_add            DateTime @db.DateTime(0)
+  date_upd            DateTime @db.DateTime(0)
+}
+
+model ps_employee_shop {
+  id_employee Int @db.UnsignedInt
+  id_shop     Int @db.UnsignedInt
+
+  @@id([id_employee, id_shop])
+  @@index([id_shop], map: "id_shop")
+}
+
+model ps_eventbus_incremental_sync {
+  type       String   @db.VarChar(50)
+  action     String   @default("upsert") @db.VarChar(50)
+  id_object  String   @db.VarChar(50)
+  id_shop    Int      @db.UnsignedInt
+  lang_iso   String   @db.VarChar(3)
+  created_at DateTime @db.DateTime(0)
+
+  @@id([type, id_object, id_shop, lang_iso])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ps_eventbus_job {
+  job_id     String   @db.VarChar(200)
+  created_at DateTime @db.DateTime(0)
+
+  @@ignore
+}
+
+model ps_eventbus_live_sync {
+  shop_content   String   @id @db.VarChar(50)
+  last_change_at DateTime @db.DateTime(0)
+}
+
+model ps_eventbus_type_sync {
+  type               String   @db.VarChar(50)
+  offset             Int      @default(0) @db.UnsignedInt
+  id_shop            Int      @db.UnsignedInt
+  lang_iso           String   @db.VarChar(3)
+  full_sync_finished Boolean  @default(false)
+  last_sync_date     DateTime @db.DateTime(0)
+
+  @@id([type, id_shop, lang_iso])
+}
+
+model ps_feature {
+  id_feature Int @id @default(autoincrement()) @db.UnsignedInt
+  position   Int @default(0) @db.UnsignedInt
+}
+
+model ps_feature_flag {
+  id_feature_flag     Int     @id @default(autoincrement()) @db.UnsignedInt
+  name                String  @unique(map: "UNIQ_91700F175E237E06")
+  state               Boolean @default(false)
+  label_wording       String  @default("") @db.VarChar(512)
+  label_domain        String  @default("") @db.VarChar(255)
+  description_wording String  @default("") @db.VarChar(512)
+  description_domain  String  @default("") @db.VarChar(255)
+  stability           String  @default("beta") @db.VarChar(64)
+}
+
+model ps_feature_lang {
+  id_feature Int     @db.UnsignedInt
+  id_lang    Int     @db.UnsignedInt
+  name       String? @db.VarChar(128)
+
+  @@id([id_feature, id_lang])
+  @@index([id_lang, name], map: "id_lang")
+}
+
+model ps_feature_product {
+  id_feature       Int @db.UnsignedInt
+  id_product       Int @db.UnsignedInt
+  id_feature_value Int @db.UnsignedInt
+
+  @@id([id_feature, id_product, id_feature_value])
+  @@index([id_feature_value], map: "id_feature_value")
+  @@index([id_product], map: "id_product")
+}
+
+model ps_feature_shop {
+  id_feature Int @db.UnsignedInt
+  id_shop    Int @db.UnsignedInt
+
+  @@id([id_feature, id_shop])
+  @@index([id_shop], map: "id_shop")
+}
+
+model ps_feature_value {
+  id_feature_value Int  @id @default(autoincrement()) @db.UnsignedInt
+  id_feature       Int  @db.UnsignedInt
+  custom           Int? @db.UnsignedTinyInt
+
+  @@index([id_feature], map: "feature")
+}
+
+model ps_feature_value_lang {
+  id_feature_value Int     @db.UnsignedInt
+  id_lang          Int     @db.UnsignedInt
+  value            String? @db.VarChar(255)
+
+  @@id([id_feature_value, id_lang])
+}
+
+model ps_ganalytics {
+  id_google_analytics Int       @id @default(autoincrement())
+  id_order            Int
+  id_customer         Int
+  id_shop             Int
+  sent                Boolean?
+  refund_sent         Boolean?
+  date_add            DateTime? @db.DateTime(0)
+
+  @@index([id_order], map: "id_order")
+  @@index([sent], map: "sent")
+}
+
+model ps_ganalytics_data {
+  id_cart Int     @id
+  id_shop Int
+  data    String? @db.Text
+}
+
+model ps_gender {
+  id_gender Int     @id @default(autoincrement())
+  type      Boolean
+}
+
+model ps_gender_lang {
+  id_gender Int    @db.UnsignedInt
+  id_lang   Int    @db.UnsignedInt
+  name      String @db.VarChar(20)
+
+  @@id([id_gender, id_lang])
+  @@index([id_gender], map: "id_gender")
+}
+
+model ps_group {
+  id_group             Int      @id @default(autoincrement()) @db.UnsignedInt
+  reduction            Decimal  @default(0.00) @db.Decimal(5, 2)
+  price_display_method Int      @default(0) @db.TinyInt
+  show_prices          Boolean  @default(true)
+  date_add             DateTime @db.DateTime(0)
+  date_upd             DateTime @db.DateTime(0)
+}
+
+model ps_group_lang {
+  id_group Int    @db.UnsignedInt
+  id_lang  Int    @db.UnsignedInt
+  name     String @db.VarChar(32)
+
+  @@id([id_group, id_lang])
+}
+
+model ps_group_reduction {
+  id_group_reduction Int     @id @default(autoincrement()) @db.UnsignedMediumInt
+  id_group           Int     @db.UnsignedInt
+  id_category        Int     @db.UnsignedInt
+  reduction          Decimal @db.Decimal(5, 4)
+
+  @@unique([id_group, id_category], map: "id_group")
+}
+
+model ps_group_shop {
+  id_group Int @db.UnsignedInt
+  id_shop  Int @db.UnsignedInt
+
+  @@id([id_group, id_shop])
+  @@index([id_shop], map: "id_shop")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ps_gsitemap_sitemap {
+  link    String? @db.VarChar(255)
+  id_shop Int?    @default(0)
+
+  @@ignore
+}
+
+model ps_guest {
+  id_guest            Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_operating_system Int?     @db.UnsignedInt
+  id_web_browser      Int?     @db.UnsignedInt
+  id_customer         Int?     @db.UnsignedInt
+  javascript          Boolean? @default(false)
+  screen_resolution_x Int?     @db.UnsignedSmallInt
+  screen_resolution_y Int?     @db.UnsignedSmallInt
+  screen_color        Int?     @db.UnsignedTinyInt
+  sun_java            Boolean?
+  adobe_flash         Boolean?
+  adobe_director      Boolean?
+  apple_quicktime     Boolean?
+  real_player         Boolean?
+  windows_media       Boolean?
+  accept_language     String?  @db.VarChar(8)
+  mobile_theme        Boolean  @default(false)
+
+  @@index([id_customer], map: "id_customer")
+  @@index([id_operating_system], map: "id_operating_system")
+  @@index([id_web_browser], map: "id_web_browser")
+}
+
+model ps_homeslider {
+  id_homeslider_slides Int @default(autoincrement()) @db.UnsignedInt
+  id_shop              Int @db.UnsignedInt
+
+  @@id([id_homeslider_slides, id_shop])
+}
+
+model ps_homeslider_slides {
+  id_homeslider_slides Int     @id @default(autoincrement()) @db.UnsignedInt
+  position             Int     @default(0) @db.UnsignedInt
+  active               Boolean @default(false)
+}
+
+model ps_homeslider_slides_lang {
+  id_homeslider_slides Int    @db.UnsignedInt
+  id_lang              Int    @db.UnsignedInt
+  title                String @db.VarChar(255)
+  description          String @db.Text
+  legend               String @db.VarChar(255)
+  url                  String @db.VarChar(255)
+  image                String @db.VarChar(255)
+
+  @@id([id_homeslider_slides, id_lang])
+}
+
+model ps_hook {
+  id_hook     Int     @id @default(autoincrement()) @db.UnsignedInt
+  name        String  @unique(map: "hook_name")
+  title       String  @db.VarChar(255)
+  description String? @db.MediumText
+  active      Boolean @default(true)
+  position    Boolean @default(true)
+}
+
+model ps_hook_alias {
+  id_hook_alias Int    @id @default(autoincrement()) @db.UnsignedInt
+  alias         String @unique(map: "alias")
+  name          String
+}
+
+model ps_hook_module {
+  id_module Int @db.UnsignedInt
+  id_shop   Int @default(1) @db.UnsignedInt
+  id_hook   Int @db.UnsignedInt
+  position  Int @db.UnsignedTinyInt
+
+  @@id([id_module, id_hook, id_shop])
+  @@index([id_hook], map: "id_hook")
+  @@index([id_module], map: "id_module")
+  @@index([id_shop, position], map: "position")
+}
+
+model ps_hook_module_exceptions {
+  id_hook_module_exceptions Int     @id @default(autoincrement()) @db.UnsignedInt
+  id_shop                   Int     @default(1) @db.UnsignedInt
+  id_module                 Int     @db.UnsignedInt
+  id_hook                   Int     @db.UnsignedInt
+  file_name                 String? @db.VarChar(255)
+
+  @@index([id_hook], map: "id_hook")
+  @@index([id_module], map: "id_module")
+}
+
+model ps_image {
+  id_image   Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_product Int      @db.UnsignedInt
+  position   Int      @default(0) @db.UnsignedSmallInt
+  cover      Boolean?
+
+  @@unique([id_product, cover], map: "id_product_cover")
+  @@unique([id_image, id_product, cover], map: "idx_product_image")
+  @@index([id_product], map: "image_product")
+}
+
+model ps_image_lang {
+  id_image Int     @db.UnsignedInt
+  id_lang  Int     @db.UnsignedInt
+  legend   String? @db.VarChar(128)
+
+  @@id([id_image, id_lang])
+  @@index([id_image], map: "id_image")
+}
+
+model ps_image_shop {
+  id_product Int      @db.UnsignedInt
+  id_image   Int      @db.UnsignedInt
+  id_shop    Int      @db.UnsignedInt
+  cover      Boolean?
+
+  @@id([id_image, id_shop])
+  @@unique([id_product, id_shop, cover], map: "id_product")
+  @@index([id_shop], map: "id_shop")
+}
+
+model ps_image_type {
+  id_image_type Int     @id @default(autoincrement()) @db.UnsignedInt
+  name          String  @db.VarChar(64)
+  width         Int     @db.UnsignedInt
+  height        Int     @db.UnsignedInt
+  products      Boolean @default(true)
+  categories    Boolean @default(true)
+  manufacturers Boolean @default(true)
+  suppliers     Boolean @default(true)
+  stores        Boolean @default(true)
+
+  @@index([name], map: "image_type_name")
+}
+
+model ps_import_match {
+  id_import_match Int    @id @default(autoincrement())
+  name            String @db.VarChar(32)
+  match           String @db.MediumText
+  skip            Int
+}
+
+model ps_info {
+  id_info Int @id @default(autoincrement()) @db.UnsignedInt
+}
+
+model ps_info_lang {
+  id_info Int    @db.UnsignedInt
+  id_shop Int    @db.UnsignedInt
+  id_lang Int    @db.UnsignedInt
+  text    String @db.Text
+
+  @@id([id_info, id_lang, id_shop])
+}
+
+model ps_info_shop {
+  id_info Int @db.UnsignedInt
+  id_shop Int @db.UnsignedInt
+
+  @@id([id_info, id_shop])
+}
+
+model ps_lang {
+  id_lang          Int     @id @default(autoincrement())
+  name             String  @db.VarChar(32)
+  active           Boolean
+  iso_code         String  @db.VarChar(2)
+  language_code    String  @db.VarChar(5)
+  locale           String  @db.VarChar(5)
+  date_format_lite String  @db.VarChar(32)
+  date_format_full String  @db.VarChar(32)
+  is_rtl           Boolean
+}
+
+model ps_lang_shop {
+  id_lang Int
+  id_shop Int
+
+  @@id([id_lang, id_shop])
+  @@index([id_shop], map: "IDX_2F43BFC7274A50A0")
+  @@index([id_lang], map: "IDX_2F43BFC7BA299860")
+}
+
+model ps_layered_category {
+  id_layered_category Int                      @id @default(autoincrement()) @db.UnsignedInt
+  id_shop             Int                      @db.UnsignedInt
+  controller          String                   @db.VarChar(64)
+  id_category         Int                      @db.UnsignedInt
+  id_value            Int?                     @default(0) @db.UnsignedInt
+  type                ps_layered_category_type
+  position            Int                      @db.UnsignedInt
+  filter_type         Int                      @default(0) @db.UnsignedInt
+  filter_show_limit   Int                      @default(0) @db.UnsignedInt
+
+  @@index([id_category, type], map: "id_category")
+  @@index([id_category, id_shop, type, id_value, position], map: "id_category_shop")
+}
+
+model ps_layered_filter {
+  id_layered_filter Int      @id @default(autoincrement()) @db.UnsignedInt
+  name              String   @db.VarChar(64)
+  filters           String?  @db.LongText
+  n_categories      Int      @db.UnsignedInt
+  date_add          DateTime @db.DateTime(0)
+}
+
+model ps_layered_filter_block {
+  hash String  @id @default("") @db.Char(32)
+  data String? @db.Text
+}
+
+model ps_layered_filter_shop {
+  id_layered_filter Int @db.UnsignedInt
+  id_shop           Int @db.UnsignedInt
+
+  @@id([id_layered_filter, id_shop])
+  @@index([id_shop], map: "id_shop")
+}
+
+model ps_layered_indexable_attribute_group {
+  id_attribute_group Int     @id
+  indexable          Boolean @default(false)
+}
+
+model ps_layered_indexable_attribute_group_lang_value {
+  id_attribute_group Int
+  id_lang            Int
+  url_name           String? @db.VarChar(128)
+  meta_title         String? @db.VarChar(128)
+
+  @@id([id_attribute_group, id_lang])
+}
+
+model ps_layered_indexable_attribute_lang_value {
+  id_attribute Int
+  id_lang      Int
+  url_name     String? @db.VarChar(128)
+  meta_title   String? @db.VarChar(128)
+
+  @@id([id_attribute, id_lang])
+}
+
+model ps_layered_indexable_feature {
+  id_feature Int     @id
+  indexable  Boolean @default(false)
+}
+
+model ps_layered_indexable_feature_lang_value {
+  id_feature Int
+  id_lang    Int
+  url_name   String  @db.VarChar(128)
+  meta_title String? @db.VarChar(128)
+
+  @@id([id_feature, id_lang])
+}
+
+model ps_layered_indexable_feature_value_lang_value {
+  id_feature_value Int
+  id_lang          Int
+  url_name         String? @db.VarChar(128)
+  meta_title       String? @db.VarChar(128)
+
+  @@id([id_feature_value, id_lang])
+}
+
+model ps_layered_price_index {
+  id_product  Int
+  id_currency Int
+  id_shop     Int
+  price_min   Decimal @db.Decimal(20, 6)
+  price_max   Decimal @db.Decimal(20, 6)
+  id_country  Int
+
+  @@id([id_product, id_currency, id_shop, id_country])
+  @@index([id_currency], map: "id_currency")
+  @@index([price_max], map: "price_max")
+  @@index([price_min], map: "price_min")
+}
+
+model ps_layered_product_attribute {
+  id_attribute       Int @db.UnsignedInt
+  id_product         Int @db.UnsignedInt
+  id_attribute_group Int @default(0) @db.UnsignedInt
+  id_shop            Int @default(1) @db.UnsignedInt
+
+  @@id([id_attribute, id_product, id_shop])
+  @@unique([id_attribute_group, id_attribute, id_product, id_shop], map: "id_attribute_group")
+}
+
+model ps_link_block {
+  id_link_block Int     @id @default(autoincrement()) @db.UnsignedInt
+  id_hook       Int?    @db.UnsignedInt
+  position      Int     @default(0) @db.UnsignedInt
+  content       String? @db.Text
+}
+
+model ps_link_block_lang {
+  id_link_block  Int     @db.UnsignedInt
+  id_lang        Int     @db.UnsignedInt
+  name           String  @default("") @db.VarChar(40)
+  custom_content String? @db.Text
+
+  @@id([id_link_block, id_lang])
+}
+
+model ps_link_block_shop {
+  id_link_block Int @default(autoincrement()) @db.UnsignedInt
+  id_shop       Int @db.UnsignedInt
+  position      Int @default(0) @db.UnsignedInt
+
+  @@id([id_link_block, id_shop])
+}
+
+model ps_linksmenutop {
+  id_linksmenutop Int     @id @default(autoincrement()) @db.UnsignedInt
+  id_shop         Int     @db.UnsignedInt
+  new_window      Boolean
+
+  @@index([id_shop], map: "id_shop")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ps_linksmenutop_lang {
+  id_linksmenutop Int    @db.UnsignedInt
+  id_lang         Int    @db.UnsignedInt
+  id_shop         Int    @db.UnsignedInt
+  label           String @db.VarChar(128)
+  link            String @db.VarChar(128)
+
+  @@index([id_linksmenutop, id_lang, id_shop], map: "id_linksmenutop")
+  @@ignore
+}
+
+model ps_log {
+  id_log        Int      @id @default(autoincrement()) @db.UnsignedInt
+  severity      Boolean
+  error_code    Int?
+  message       String   @db.MediumText
+  object_type   String?  @db.VarChar(32)
+  object_id     Int?     @db.UnsignedInt
+  id_shop       Int?     @db.UnsignedInt
+  id_shop_group Int?     @db.UnsignedInt
+  id_lang       Int?     @db.UnsignedInt
+  in_all_shops  Boolean  @default(false)
+  id_employee   Int?     @db.UnsignedInt
+  date_add      DateTime @db.DateTime(0)
+  date_upd      DateTime @db.DateTime(0)
+}
+
+model ps_mail {
+  id_mail   Int      @id @default(autoincrement()) @db.UnsignedInt
+  recipient String   @db.VarChar(126)
+  template  String   @db.VarChar(62)
+  subject   String   @db.VarChar(254)
+  id_lang   Int      @db.UnsignedInt
+  date_add  DateTime @default(now()) @db.Timestamp(0)
+
+  @@index([recipient(length: 10)], map: "recipient")
+}
+
+model ps_mailalert_customer_oos {
+  id_customer          Int    @db.UnsignedInt
+  customer_email       String @db.VarChar(128)
+  id_product           Int    @db.UnsignedInt
+  id_product_attribute Int    @db.UnsignedInt
+  id_shop              Int    @db.UnsignedInt
+  id_lang              Int    @db.UnsignedInt
+
+  @@id([id_customer, customer_email, id_product, id_product_attribute, id_shop])
+}
+
+model ps_manufacturer {
+  id_manufacturer Int      @id @default(autoincrement()) @db.UnsignedInt
+  name            String   @db.VarChar(64)
+  date_add        DateTime @db.DateTime(0)
+  date_upd        DateTime @db.DateTime(0)
+  active          Boolean  @default(false)
+}
+
+model ps_manufacturer_lang {
+  id_manufacturer   Int     @db.UnsignedInt
+  id_lang           Int     @db.UnsignedInt
+  description       String? @db.MediumText
+  short_description String? @db.MediumText
+  meta_title        String? @db.VarChar(255)
+  meta_keywords     String? @db.VarChar(255)
+  meta_description  String? @db.VarChar(512)
+
+  @@id([id_manufacturer, id_lang])
+}
+
+model ps_manufacturer_shop {
+  id_manufacturer Int @db.UnsignedInt
+  id_shop         Int @db.UnsignedInt
+
+  @@id([id_manufacturer, id_shop])
+  @@index([id_shop], map: "id_shop")
+}
+
+model ps_memcached_servers {
+  id_memcached_server Int    @id @default(autoincrement()) @db.UnsignedInt
+  ip                  String @db.VarChar(254)
+  port                Int    @db.UnsignedInt
+  weight              Int    @db.UnsignedInt
+}
+
+model ps_message {
+  id_message  Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_cart     Int?     @db.UnsignedInt
+  id_customer Int      @db.UnsignedInt
+  id_employee Int?     @db.UnsignedInt
+  id_order    Int      @db.UnsignedInt
+  message     String   @db.MediumText
+  private     Boolean  @default(true)
+  date_add    DateTime @db.DateTime(0)
+
+  @@index([id_cart], map: "id_cart")
+  @@index([id_customer], map: "id_customer")
+  @@index([id_employee], map: "id_employee")
+  @@index([id_order], map: "message_order")
+}
+
+model ps_message_readed {
+  id_message  Int      @db.UnsignedInt
+  id_employee Int      @db.UnsignedInt
+  date_add    DateTime @db.DateTime(0)
+
+  @@id([id_message, id_employee])
+}
+
+model ps_meta {
+  id_meta      Int     @id @default(autoincrement()) @db.UnsignedInt
+  page         String  @unique(map: "page") @db.VarChar(64)
+  configurable Boolean @default(true)
+}
+
+model ps_meta_lang {
+  id_meta     Int     @db.UnsignedInt
+  id_shop     Int     @default(1) @db.UnsignedInt
+  id_lang     Int     @db.UnsignedInt
+  title       String? @db.VarChar(128)
+  description String? @db.VarChar(255)
+  keywords    String? @db.VarChar(255)
+  url_rewrite String  @db.VarChar(254)
+
+  @@id([id_meta, id_shop, id_lang])
+  @@index([id_lang], map: "id_lang")
+  @@index([id_shop], map: "id_shop")
+}
+
+model ps_module {
+  id_module Int     @id @default(autoincrement()) @db.UnsignedInt
+  name      String  @unique(map: "name_UNIQUE") @db.VarChar(64)
+  active    Boolean @default(false)
+  version   String  @db.VarChar(8)
+
+  @@index([name], map: "name")
+}
+
+model ps_module_access {
+  id_profile            Int @db.UnsignedInt
+  id_authorization_role Int @db.UnsignedInt
+
+  @@id([id_profile, id_authorization_role])
+}
+
+model ps_module_carrier {
+  id_module    Int @db.UnsignedInt
+  id_shop      Int @default(1) @db.UnsignedInt
+  id_reference Int
+
+  @@id([id_module, id_shop, id_reference])
+}
+
+model ps_module_country {
+  id_module  Int @db.UnsignedInt
+  id_shop    Int @default(1) @db.UnsignedInt
+  id_country Int @db.UnsignedInt
+
+  @@id([id_module, id_shop, id_country])
+}
+
+model ps_module_currency {
+  id_module   Int @db.UnsignedInt
+  id_shop     Int @default(1) @db.UnsignedInt
+  id_currency Int
+
+  @@id([id_module, id_shop, id_currency])
+  @@index([id_module], map: "id_module")
+}
+
+model ps_module_group {
+  id_module Int @db.UnsignedInt
+  id_shop   Int @default(1) @db.UnsignedInt
+  id_group  Int @db.UnsignedInt
+
+  @@id([id_module, id_shop, id_group])
+}
+
+model ps_module_history {
+  id          Int      @id @default(autoincrement())
+  id_employee Int
+  id_module   Int
+  date_add    DateTime @db.DateTime(0)
+  date_upd    DateTime @db.DateTime(0)
+}
+
+model ps_module_preference {
+  id_module_preference Int      @id @default(autoincrement())
+  id_employee          Int
+  module               String
+  interest             Boolean?
+  favorite             Boolean?
+
+  @@unique([id_employee, module], map: "employee_module")
+}
+
+model ps_module_shop {
+  id_module     Int @db.UnsignedInt
+  id_shop       Int @db.UnsignedInt
+  enable_device Int @default(7) @db.TinyInt
+
+  @@id([id_module, id_shop])
+  @@index([id_shop], map: "id_shop")
+}
+
+model ps_operating_system {
+  id_operating_system Int     @id @default(autoincrement()) @db.UnsignedInt
+  name                String? @db.VarChar(64)
+}
+
+model ps_order_carrier {
+  id_order_carrier       Int      @id @default(autoincrement())
+  id_order               Int      @db.UnsignedInt
+  id_carrier             Int      @db.UnsignedInt
+  id_order_invoice       Int?     @db.UnsignedInt
+  weight                 Decimal? @db.Decimal(20, 6)
+  shipping_cost_tax_excl Decimal? @db.Decimal(20, 6)
+  shipping_cost_tax_incl Decimal? @db.Decimal(20, 6)
+  tracking_number        String?  @db.VarChar(64)
+  date_add               DateTime @db.DateTime(0)
+
+  @@index([id_carrier], map: "id_carrier")
+  @@index([id_order], map: "id_order")
+  @@index([id_order_invoice], map: "id_order_invoice")
+}
+
+model ps_order_cart_rule {
+  id_order_cart_rule Int     @id @default(autoincrement()) @db.UnsignedInt
+  id_order           Int     @db.UnsignedInt
+  id_cart_rule       Int     @db.UnsignedInt
+  id_order_invoice   Int?    @default(0) @db.UnsignedInt
+  name               String  @db.VarChar(254)
+  value              Decimal @default(0.000000) @db.Decimal(20, 6)
+  value_tax_excl     Decimal @default(0.000000) @db.Decimal(20, 6)
+  free_shipping      Boolean @default(false)
+  deleted            Boolean @default(false)
+
+  @@index([id_cart_rule], map: "id_cart_rule")
+  @@index([id_order], map: "id_order")
+}
+
+model ps_order_detail {
+  id_order_detail               Int       @id @default(autoincrement()) @db.UnsignedInt
+  id_order                      Int       @db.UnsignedInt
+  id_order_invoice              Int?
+  id_warehouse                  Int?      @default(0) @db.UnsignedInt
+  id_shop                       Int       @db.UnsignedInt
+  product_id                    Int       @db.UnsignedInt
+  product_attribute_id          Int?      @db.UnsignedInt
+  id_customization              Int?      @default(0) @db.UnsignedInt
+  product_name                  String    @db.MediumText
+  product_quantity              Int       @default(0) @db.UnsignedInt
+  product_quantity_in_stock     Int       @default(0)
+  product_quantity_refunded     Int       @default(0) @db.UnsignedInt
+  product_quantity_return       Int       @default(0) @db.UnsignedInt
+  product_quantity_reinjected   Int       @default(0) @db.UnsignedInt
+  product_price                 Decimal   @default(0.000000) @db.Decimal(20, 6)
+  reduction_percent             Decimal   @default(0.00) @db.Decimal(5, 2)
+  reduction_amount              Decimal   @default(0.000000) @db.Decimal(20, 6)
+  reduction_amount_tax_incl     Decimal   @default(0.000000) @db.Decimal(20, 6)
+  reduction_amount_tax_excl     Decimal   @default(0.000000) @db.Decimal(20, 6)
+  group_reduction               Decimal   @default(0.00) @db.Decimal(5, 2)
+  product_quantity_discount     Decimal   @default(0.000000) @db.Decimal(20, 6)
+  product_ean13                 String?   @db.VarChar(13)
+  product_isbn                  String?   @db.VarChar(32)
+  product_upc                   String?   @db.VarChar(12)
+  product_mpn                   String?   @db.VarChar(40)
+  product_reference             String?   @db.VarChar(64)
+  product_supplier_reference    String?   @db.VarChar(64)
+  product_weight                Decimal   @db.Decimal(20, 6)
+  id_tax_rules_group            Int?      @default(0) @db.UnsignedInt
+  tax_computation_method        Boolean   @default(false)
+  tax_name                      String    @db.VarChar(16)
+  tax_rate                      Decimal   @default(0.000) @db.Decimal(10, 3)
+  ecotax                        Decimal   @default(0.000000) @db.Decimal(17, 6)
+  ecotax_tax_rate               Decimal   @default(0.000) @db.Decimal(5, 3)
+  discount_quantity_applied     Boolean   @default(false)
+  download_hash                 String?   @db.VarChar(255)
+  download_nb                   Int?      @default(0) @db.UnsignedInt
+  download_deadline             DateTime? @db.DateTime(0)
+  total_price_tax_incl          Decimal   @default(0.000000) @db.Decimal(20, 6)
+  total_price_tax_excl          Decimal   @default(0.000000) @db.Decimal(20, 6)
+  unit_price_tax_incl           Decimal   @default(0.000000) @db.Decimal(20, 6)
+  unit_price_tax_excl           Decimal   @default(0.000000) @db.Decimal(20, 6)
+  total_shipping_price_tax_incl Decimal   @default(0.000000) @db.Decimal(20, 6)
+  total_shipping_price_tax_excl Decimal   @default(0.000000) @db.Decimal(20, 6)
+  purchase_supplier_price       Decimal   @default(0.000000) @db.Decimal(20, 6)
+  original_product_price        Decimal   @default(0.000000) @db.Decimal(20, 6)
+  original_wholesale_price      Decimal   @default(0.000000) @db.Decimal(20, 6)
+  total_refunded_tax_excl       Decimal   @default(0.000000) @db.Decimal(20, 6)
+  total_refunded_tax_incl       Decimal   @default(0.000000) @db.Decimal(20, 6)
+
+  @@index([id_order, id_order_detail], map: "id_order_id_order_detail")
+  @@index([id_tax_rules_group], map: "id_tax_rules_group")
+  @@index([id_order], map: "order_detail_order")
+  @@index([product_attribute_id], map: "product_attribute_id")
+  @@index([product_id, product_attribute_id], map: "product_id")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ps_order_detail_tax {
+  id_order_detail Int
+  id_tax          Int
+  unit_amount     Decimal @default(0.000000) @db.Decimal(16, 6)
+  total_amount    Decimal @default(0.000000) @db.Decimal(16, 6)
+
+  @@index([id_order_detail], map: "id_order_detail")
+  @@index([id_tax], map: "id_tax")
+  @@ignore
+}
+
+model ps_order_history {
+  id_order_history Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_employee      Int      @db.UnsignedInt
+  id_order         Int      @db.UnsignedInt
+  id_order_state   Int      @db.UnsignedInt
+  date_add         DateTime @db.DateTime(0)
+
+  @@index([id_employee], map: "id_employee")
+  @@index([id_order_state], map: "id_order_state")
+  @@index([id_order], map: "order_history_order")
+}
+
+model ps_order_invoice {
+  id_order_invoice                Int       @id @default(autoincrement()) @db.UnsignedInt
+  id_order                        Int
+  number                          Int
+  delivery_number                 Int
+  delivery_date                   DateTime? @db.DateTime(0)
+  total_discount_tax_excl         Decimal   @default(0.000000) @db.Decimal(20, 6)
+  total_discount_tax_incl         Decimal   @default(0.000000) @db.Decimal(20, 6)
+  total_paid_tax_excl             Decimal   @default(0.000000) @db.Decimal(20, 6)
+  total_paid_tax_incl             Decimal   @default(0.000000) @db.Decimal(20, 6)
+  total_products                  Decimal   @default(0.000000) @db.Decimal(20, 6)
+  total_products_wt               Decimal   @default(0.000000) @db.Decimal(20, 6)
+  total_shipping_tax_excl         Decimal   @default(0.000000) @db.Decimal(20, 6)
+  total_shipping_tax_incl         Decimal   @default(0.000000) @db.Decimal(20, 6)
+  shipping_tax_computation_method Int       @db.UnsignedInt
+  total_wrapping_tax_excl         Decimal   @default(0.000000) @db.Decimal(20, 6)
+  total_wrapping_tax_incl         Decimal   @default(0.000000) @db.Decimal(20, 6)
+  shop_address                    String?   @db.MediumText
+  note                            String?   @db.MediumText
+  date_add                        DateTime  @db.DateTime(0)
+
+  @@index([id_order], map: "id_order")
+}
+
+model ps_order_invoice_payment {
+  id_order_invoice Int @db.UnsignedInt
+  id_order_payment Int @db.UnsignedInt
+  id_order         Int @db.UnsignedInt
+
+  @@id([id_order_invoice, id_order_payment])
+  @@index([id_order], map: "id_order")
+  @@index([id_order_payment], map: "order_payment")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ps_order_invoice_tax {
+  id_order_invoice Int
+  type             String  @db.VarChar(15)
+  id_tax           Int
+  amount           Decimal @default(0.000000) @db.Decimal(10, 6)
+
+  @@index([id_tax], map: "id_tax")
+  @@ignore
+}
+
+model ps_order_message {
+  id_order_message Int      @id @default(autoincrement()) @db.UnsignedInt
+  date_add         DateTime @db.DateTime(0)
+}
+
+model ps_order_message_lang {
+  id_order_message Int    @db.UnsignedInt
+  id_lang          Int    @db.UnsignedInt
+  name             String @db.VarChar(128)
+  message          String @db.MediumText
+
+  @@id([id_order_message, id_lang])
+}
+
+model ps_order_payment {
+  id_order_payment Int      @id @default(autoincrement())
+  order_reference  String?  @db.VarChar(9)
+  id_currency      Int      @db.UnsignedInt
+  amount           Decimal  @db.Decimal(20, 6)
+  payment_method   String   @db.VarChar(255)
+  conversion_rate  Decimal  @default(1.000000) @db.Decimal(13, 6)
+  transaction_id   String?  @db.VarChar(254)
+  card_number      String?  @db.VarChar(254)
+  card_brand       String?  @db.VarChar(254)
+  card_expiration  String?  @db.Char(7)
+  card_holder      String?  @db.VarChar(254)
+  date_add         DateTime @db.DateTime(0)
+  id_employee      Int?
+
+  @@index([order_reference], map: "order_reference")
+}
+
+model ps_order_return {
+  id_order_return Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_customer     Int      @db.UnsignedInt
+  id_order        Int      @db.UnsignedInt
+  state           Boolean  @default(true)
+  question        String   @db.MediumText
+  date_add        DateTime @db.DateTime(0)
+  date_upd        DateTime @db.DateTime(0)
+
+  @@index([id_order], map: "id_order")
+  @@index([id_customer], map: "order_return_customer")
+}
+
+model ps_order_return_detail {
+  id_order_return  Int @db.UnsignedInt
+  id_order_detail  Int @db.UnsignedInt
+  id_customization Int @default(0) @db.UnsignedInt
+  product_quantity Int @default(0) @db.UnsignedInt
+
+  @@id([id_order_return, id_order_detail, id_customization])
+}
+
+model ps_order_return_state {
+  id_order_return_state Int     @id @default(autoincrement()) @db.UnsignedInt
+  color                 String? @db.VarChar(32)
+}
+
+model ps_order_return_state_lang {
+  id_order_return_state Int    @db.UnsignedInt
+  id_lang               Int    @db.UnsignedInt
+  name                  String @db.VarChar(64)
+
+  @@id([id_order_return_state, id_lang])
+}
+
+model ps_order_slip {
+  id_order_slip           Int      @id @default(autoincrement()) @db.UnsignedInt
+  conversion_rate         Decimal  @default(1.000000) @db.Decimal(13, 6)
+  id_customer             Int      @db.UnsignedInt
+  id_order                Int      @db.UnsignedInt
+  total_products_tax_excl Decimal? @db.Decimal(20, 6)
+  total_products_tax_incl Decimal? @db.Decimal(20, 6)
+  total_shipping_tax_excl Decimal? @db.Decimal(20, 6)
+  total_shipping_tax_incl Decimal? @db.Decimal(20, 6)
+  shipping_cost           Int      @default(0) @db.UnsignedTinyInt
+  amount                  Decimal  @default(0.000000) @db.Decimal(20, 6)
+  shipping_cost_amount    Decimal  @default(0.000000) @db.Decimal(20, 6)
+  partial                 Boolean
+  order_slip_type         Boolean  @default(false)
+  date_add                DateTime @db.DateTime(0)
+  date_upd                DateTime @db.DateTime(0)
+
+  @@index([id_order], map: "id_order")
+  @@index([id_customer], map: "order_slip_customer")
+}
+
+model ps_order_slip_detail {
+  id_order_slip        Int      @db.UnsignedInt
+  id_order_detail      Int      @db.UnsignedInt
+  product_quantity     Int      @default(0) @db.UnsignedInt
+  unit_price_tax_excl  Decimal? @db.Decimal(20, 6)
+  unit_price_tax_incl  Decimal? @db.Decimal(20, 6)
+  total_price_tax_excl Decimal? @db.Decimal(20, 6)
+  total_price_tax_incl Decimal? @db.Decimal(20, 6)
+  amount_tax_excl      Decimal? @db.Decimal(20, 6)
+  amount_tax_incl      Decimal? @db.Decimal(20, 6)
+
+  @@id([id_order_slip, id_order_detail])
+}
+
+model ps_order_state {
+  id_order_state Int      @id @default(autoincrement()) @db.UnsignedInt
+  invoice        Boolean? @default(false)
+  send_email     Boolean  @default(false)
+  module_name    String?  @db.VarChar(255)
+  color          String?  @db.VarChar(32)
+  unremovable    Boolean
+  hidden         Boolean  @default(false)
+  logable        Boolean  @default(false)
+  delivery       Boolean  @default(false)
+  shipped        Boolean  @default(false)
+  paid           Boolean  @default(false)
+  pdf_invoice    Boolean  @default(false)
+  pdf_delivery   Boolean  @default(false)
+  deleted        Boolean  @default(false)
+
+  @@index([module_name], map: "module_name")
+}
+
+model ps_order_state_lang {
+  id_order_state Int    @db.UnsignedInt
+  id_lang        Int    @db.UnsignedInt
+  name           String @db.VarChar(64)
+  template       String @db.VarChar(64)
+
+  @@id([id_order_state, id_lang])
+}
+
+model ps_orders {
+  id_order                 Int      @id @default(autoincrement()) @db.UnsignedInt
+  reference                String?  @db.VarChar(9)
+  id_shop_group            Int      @default(1) @db.UnsignedInt
+  id_shop                  Int      @default(1) @db.UnsignedInt
+  id_carrier               Int      @db.UnsignedInt
+  id_lang                  Int      @db.UnsignedInt
+  id_customer              Int      @db.UnsignedInt
+  id_cart                  Int      @db.UnsignedInt
+  id_currency              Int      @db.UnsignedInt
+  id_address_delivery      Int      @db.UnsignedInt
+  id_address_invoice       Int      @db.UnsignedInt
+  current_state            Int      @db.UnsignedInt
+  secure_key               String   @default("-1") @db.VarChar(32)
+  payment                  String   @db.VarChar(255)
+  conversion_rate          Decimal  @default(1.000000) @db.Decimal(13, 6)
+  module                   String?  @db.VarChar(255)
+  recyclable               Boolean  @default(false)
+  gift                     Boolean  @default(false)
+  gift_message             String?  @db.MediumText
+  mobile_theme             Boolean  @default(false)
+  total_discounts          Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_discounts_tax_incl Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_discounts_tax_excl Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_paid               Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_paid_tax_incl      Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_paid_tax_excl      Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_paid_real          Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_products           Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_products_wt        Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_shipping           Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_shipping_tax_incl  Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_shipping_tax_excl  Decimal  @default(0.000000) @db.Decimal(20, 6)
+  carrier_tax_rate         Decimal  @default(0.000) @db.Decimal(10, 3)
+  total_wrapping           Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_wrapping_tax_incl  Decimal  @default(0.000000) @db.Decimal(20, 6)
+  total_wrapping_tax_excl  Decimal  @default(0.000000) @db.Decimal(20, 6)
+  round_mode               Int      @default(2) @db.TinyInt
+  round_type               Boolean  @default(true)
+  invoice_number           Int      @default(0) @db.UnsignedInt
+  delivery_number          Int      @default(0) @db.UnsignedInt
+  invoice_date             DateTime @db.DateTime(0)
+  delivery_date            DateTime @db.DateTime(0)
+  valid                    Int      @default(0) @db.UnsignedInt
+  date_add                 DateTime @db.DateTime(0)
+  date_upd                 DateTime @db.DateTime(0)
+  note                     String?  @db.MediumText
+
+  @@index([current_state], map: "current_state")
+  @@index([date_add], map: "date_add")
+  @@index([id_address_delivery], map: "id_address_delivery")
+  @@index([id_address_invoice], map: "id_address_invoice")
+  @@index([id_carrier], map: "id_carrier")
+  @@index([id_cart], map: "id_cart")
+  @@index([id_currency], map: "id_currency")
+  @@index([id_customer], map: "id_customer")
+  @@index([id_lang], map: "id_lang")
+  @@index([id_shop], map: "id_shop")
+  @@index([id_shop_group], map: "id_shop_group")
+  @@index([invoice_number], map: "invoice_number")
+  @@index([reference], map: "reference")
+}
+
+model ps_pack {
+  id_product_pack           Int @db.UnsignedInt
+  id_product_item           Int @db.UnsignedInt
+  id_product_attribute_item Int @db.UnsignedInt
+  quantity                  Int @default(1) @db.UnsignedInt
+
+  @@id([id_product_pack, id_product_item, id_product_attribute_item])
+  @@index([id_product_item, id_product_attribute_item], map: "product_item")
+}
+
+model ps_page {
+  id_page      Int  @id @default(autoincrement()) @db.UnsignedInt
+  id_page_type Int  @db.UnsignedInt
+  id_object    Int? @db.UnsignedInt
+
+  @@index([id_object], map: "id_object")
+  @@index([id_page_type], map: "id_page_type")
+}
+
+model ps_page_type {
+  id_page_type Int    @id @default(autoincrement()) @db.UnsignedInt
+  name         String @db.VarChar(255)
+
+  @@index([name], map: "name")
+}
+
+model ps_page_viewed {
+  id_page       Int @db.UnsignedInt
+  id_shop_group Int @default(1) @db.UnsignedInt
+  id_shop       Int @default(1) @db.UnsignedInt
+  id_date_range Int @db.UnsignedInt
+  counter       Int @db.UnsignedInt
+
+  @@id([id_page, id_date_range, id_shop])
+}
+
+model ps_pagenotfound {
+  id_pagenotfound Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_shop         Int      @default(1) @db.UnsignedInt
+  id_shop_group   Int      @default(1) @db.UnsignedInt
+  request_uri     String   @db.VarChar(256)
+  http_referer    String   @db.VarChar(256)
+  date_add        DateTime @db.DateTime(0)
+
+  @@index([date_add], map: "date_add")
+}
+
+model ps_product {
+  id_product                Int                      @id @default(autoincrement()) @db.UnsignedInt
+  id_supplier               Int?                     @db.UnsignedInt
+  id_manufacturer           Int?                     @db.UnsignedInt
+  id_category_default       Int?                     @db.UnsignedInt
+  id_shop_default           Int                      @default(1) @db.UnsignedInt
+  id_tax_rules_group        Int                      @db.UnsignedInt
+  on_sale                   Boolean                  @default(false)
+  online_only               Boolean                  @default(false)
+  ean13                     String?                  @db.VarChar(13)
+  isbn                      String?                  @db.VarChar(32)
+  upc                       String?                  @db.VarChar(12)
+  mpn                       String?                  @db.VarChar(40)
+  ecotax                    Decimal                  @default(0.000000) @db.Decimal(17, 6)
+  quantity                  Int                      @default(0)
+  minimal_quantity          Int                      @default(1) @db.UnsignedInt
+  low_stock_threshold       Int?
+  low_stock_alert           Boolean                  @default(false)
+  price                     Decimal                  @default(0.000000) @db.Decimal(20, 6)
+  wholesale_price           Decimal                  @default(0.000000) @db.Decimal(20, 6)
+  unity                     String?                  @db.VarChar(255)
+  unit_price                Decimal                  @default(0.000000) @db.Decimal(20, 6)
+  unit_price_ratio          Decimal                  @default(0.000000) @db.Decimal(20, 6)
+  additional_shipping_cost  Decimal                  @default(0.000000) @db.Decimal(20, 6)
+  reference                 String?                  @db.VarChar(64)
+  supplier_reference        String?                  @db.VarChar(64)
+  location                  String                   @default("") @db.VarChar(255)
+  width                     Decimal                  @default(0.000000) @db.Decimal(20, 6)
+  height                    Decimal                  @default(0.000000) @db.Decimal(20, 6)
+  depth                     Decimal                  @default(0.000000) @db.Decimal(20, 6)
+  weight                    Decimal                  @default(0.000000) @db.Decimal(20, 6)
+  out_of_stock              Int                      @default(2) @db.UnsignedInt
+  additional_delivery_times Boolean                  @default(true)
+  quantity_discount         Boolean?                 @default(false)
+  customizable              Int                      @default(0) @db.TinyInt
+  uploadable_files          Int                      @default(0) @db.TinyInt
+  text_fields               Int                      @default(0) @db.TinyInt
+  active                    Boolean                  @default(false)
+  redirect_type             ps_product_redirect_type @default(default)
+  id_type_redirected        Int                      @default(0) @db.UnsignedInt
+  available_for_order       Boolean                  @default(true)
+  available_date            DateTime?                @db.Date
+  show_condition            Boolean                  @default(false)
+  condition                 ps_product_condition     @default(new)
+  show_price                Boolean                  @default(true)
+  indexed                   Boolean                  @default(false)
+  visibility                ps_product_visibility    @default(both)
+  cache_is_pack             Boolean                  @default(false)
+  cache_has_attachments     Boolean                  @default(false)
+  is_virtual                Boolean                  @default(false)
+  cache_default_attribute   Int?                     @db.UnsignedInt
+  date_add                  DateTime                 @db.DateTime(0)
+  date_upd                  DateTime                 @db.DateTime(0)
+  advanced_stock_management Boolean                  @default(false)
+  pack_stock_type           Int                      @default(3) @db.UnsignedInt
+  state                     Int                      @default(1) @db.UnsignedInt
+  product_type              ps_product_product_type  @default(EMPTY_ENUM_VALUE)
+
+  @@index([date_add], map: "date_add")
+  @@index([id_category_default], map: "id_category_default")
+  @@index([indexed], map: "indexed")
+  @@index([id_manufacturer, id_product], map: "product_manufacturer")
+  @@index([id_supplier], map: "product_supplier")
+  @@index([reference], map: "reference_idx")
+  @@index([state, date_upd], map: "state")
+  @@index([supplier_reference], map: "supplier_reference_idx")
+}
+
+model ps_product_attachment {
+  id_product    Int @db.UnsignedInt
+  id_attachment Int @db.UnsignedInt
+
+  @@id([id_product, id_attachment])
+}
+
+model ps_product_attribute {
+  id_product_attribute Int       @id @default(autoincrement()) @db.UnsignedInt
+  id_product           Int       @db.UnsignedInt
+  reference            String?   @db.VarChar(64)
+  supplier_reference   String?   @db.VarChar(64)
+  ean13                String?   @db.VarChar(13)
+  isbn                 String?   @db.VarChar(32)
+  upc                  String?   @db.VarChar(12)
+  mpn                  String?   @db.VarChar(40)
+  wholesale_price      Decimal   @default(0.000000) @db.Decimal(20, 6)
+  price                Decimal   @default(0.000000) @db.Decimal(20, 6)
+  ecotax               Decimal   @default(0.000000) @db.Decimal(17, 6)
+  weight               Decimal   @default(0.000000) @db.Decimal(20, 6)
+  unit_price_impact    Decimal   @default(0.000000) @db.Decimal(20, 6)
+  default_on           Boolean?
+  minimal_quantity     Int       @default(1) @db.UnsignedInt
+  low_stock_threshold  Int?
+  low_stock_alert      Boolean   @default(false)
+  available_date       DateTime? @db.Date
+
+  @@unique([id_product, default_on], map: "product_default")
+  @@index([id_product_attribute, id_product], map: "id_product_id_product_attribute")
+  @@index([id_product], map: "product_attribute_product")
+  @@index([reference], map: "reference")
+  @@index([supplier_reference], map: "supplier_reference")
+}
+
+model ps_product_attribute_combination {
+  id_attribute         Int @db.UnsignedInt
+  id_product_attribute Int @db.UnsignedInt
+
+  @@id([id_attribute, id_product_attribute])
+  @@index([id_product_attribute], map: "id_product_attribute")
+}
+
+model ps_product_attribute_image {
+  id_product_attribute Int @db.UnsignedInt
+  id_image             Int @db.UnsignedInt
+
+  @@id([id_product_attribute, id_image])
+  @@index([id_image], map: "id_image")
+}
+
+model ps_product_attribute_lang {
+  id_product_attribute Int     @db.UnsignedInt
+  id_lang              Int     @db.UnsignedInt
+  available_now        String? @db.VarChar(255)
+  available_later      String? @db.VarChar(255)
+
+  @@id([id_product_attribute, id_lang])
+}
+
+model ps_product_attribute_shop {
+  id_product           Int       @db.UnsignedInt
+  id_product_attribute Int       @db.UnsignedInt
+  id_shop              Int       @db.UnsignedInt
+  wholesale_price      Decimal   @default(0.000000) @db.Decimal(20, 6)
+  price                Decimal   @default(0.000000) @db.Decimal(20, 6)
+  ecotax               Decimal   @default(0.000000) @db.Decimal(17, 6)
+  weight               Decimal   @default(0.000000) @db.Decimal(20, 6)
+  unit_price_impact    Decimal   @default(0.000000) @db.Decimal(20, 6)
+  default_on           Boolean?
+  minimal_quantity     Int       @default(1) @db.UnsignedInt
+  low_stock_threshold  Int?
+  low_stock_alert      Boolean   @default(false)
+  available_date       DateTime? @db.Date
+
+  @@id([id_product_attribute, id_shop])
+  @@unique([id_product, id_shop, default_on], map: "id_product")
+}
+
+model ps_product_carrier {
+  id_product           Int @db.UnsignedInt
+  id_carrier_reference Int @db.UnsignedInt
+  id_shop              Int @db.UnsignedInt
+
+  @@id([id_product, id_carrier_reference, id_shop])
+}
+
+model ps_product_comment {
+  id_product_comment Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_product         Int      @db.UnsignedInt
+  id_customer        Int      @db.UnsignedInt
+  id_guest           Int?     @db.UnsignedInt
+  title              String?  @db.VarChar(64)
+  content            String   @db.Text
+  customer_name      String?  @db.VarChar(64)
+  grade              Float    @db.Float
+  validate           Boolean
+  deleted            Boolean
+  date_add           DateTime @db.DateTime(0)
+
+  @@index([id_customer], map: "id_customer")
+  @@index([id_guest], map: "id_guest")
+  @@index([id_product], map: "id_product")
+}
+
+model ps_product_comment_criterion {
+  id_product_comment_criterion      Int     @id @default(autoincrement()) @db.UnsignedInt
+  id_product_comment_criterion_type Boolean
+  active                            Boolean
+}
+
+model ps_product_comment_criterion_category {
+  id_product_comment_criterion Int @db.UnsignedInt
+  id_category                  Int @db.UnsignedInt
+
+  @@id([id_product_comment_criterion, id_category])
+  @@index([id_category], map: "id_category")
+}
+
+model ps_product_comment_criterion_lang {
+  id_product_comment_criterion Int    @db.UnsignedInt
+  id_lang                      Int    @db.UnsignedInt
+  name                         String @db.VarChar(64)
+
+  @@id([id_product_comment_criterion, id_lang])
+}
+
+model ps_product_comment_criterion_product {
+  id_product                   Int @db.UnsignedInt
+  id_product_comment_criterion Int @db.UnsignedInt
+
+  @@id([id_product, id_product_comment_criterion])
+  @@index([id_product_comment_criterion], map: "id_product_comment_criterion")
+}
+
+model ps_product_comment_grade {
+  id_product_comment           Int @db.UnsignedInt
+  id_product_comment_criterion Int @db.UnsignedInt
+  grade                        Int @db.UnsignedInt
+
+  @@id([id_product_comment, id_product_comment_criterion])
+  @@index([id_product_comment_criterion], map: "id_product_comment_criterion")
+}
+
+model ps_product_comment_report {
+  id_product_comment Int @db.UnsignedInt
+  id_customer        Int @db.UnsignedInt
+
+  @@id([id_product_comment, id_customer])
+}
+
+model ps_product_comment_usefulness {
+  id_product_comment Int     @db.UnsignedInt
+  id_customer        Int     @db.UnsignedInt
+  usefulness         Boolean
+
+  @@id([id_product_comment, id_customer])
+}
+
+model ps_product_country_tax {
+  id_product Int
+  id_country Int
+  id_tax     Int
+
+  @@id([id_product, id_country])
+}
+
+model ps_product_download {
+  id_product_download Int       @id @default(autoincrement()) @db.UnsignedInt
+  id_product          Int       @db.UnsignedInt
+  display_filename    String?   @db.VarChar(255)
+  filename            String?   @db.VarChar(255)
+  date_add            DateTime  @db.DateTime(0)
+  date_expiration     DateTime? @db.DateTime(0)
+  nb_days_accessible  Int?      @db.UnsignedInt
+  nb_downloadable     Int?      @default(1) @db.UnsignedInt
+  active              Boolean   @default(true)
+  is_shareable        Boolean   @default(false)
+}
+
+model ps_product_group_reduction_cache {
+  id_product Int     @db.UnsignedInt
+  id_group   Int     @db.UnsignedInt
+  reduction  Decimal @db.Decimal(5, 4)
+
+  @@id([id_product, id_group])
+}
+
+model ps_product_lang {
+  id_product         Int     @db.UnsignedInt
+  id_shop            Int     @default(1) @db.UnsignedInt
+  id_lang            Int     @db.UnsignedInt
+  description        String? @db.MediumText
+  description_short  String? @db.MediumText
+  link_rewrite       String  @db.VarChar(128)
+  meta_description   String? @db.VarChar(512)
+  meta_keywords      String? @db.VarChar(255)
+  meta_title         String? @db.VarChar(128)
+  name               String  @db.VarChar(128)
+  available_now      String? @db.VarChar(255)
+  available_later    String? @db.VarChar(255)
+  delivery_in_stock  String? @db.VarChar(255)
+  delivery_out_stock String? @db.VarChar(255)
+
+  @@id([id_product, id_shop, id_lang])
+  @@index([id_lang], map: "id_lang")
+  @@index([name], map: "name")
+}
+
+model ps_product_sale {
+  id_product Int       @id @db.UnsignedInt
+  quantity   Int       @default(0) @db.UnsignedInt
+  sale_nbr   Int       @default(0) @db.UnsignedInt
+  date_upd   DateTime? @db.Date
+
+  @@index([quantity], map: "quantity")
+}
+
+model ps_product_shop {
+  id_product                Int                           @db.UnsignedInt
+  id_shop                   Int                           @db.UnsignedInt
+  id_category_default       Int?                          @db.UnsignedInt
+  id_tax_rules_group        Int                           @db.UnsignedInt
+  on_sale                   Boolean                       @default(false)
+  online_only               Boolean                       @default(false)
+  ecotax                    Decimal                       @default(0.000000) @db.Decimal(17, 6)
+  minimal_quantity          Int                           @default(1) @db.UnsignedInt
+  low_stock_threshold       Int?
+  low_stock_alert           Boolean                       @default(false)
+  price                     Decimal                       @default(0.000000) @db.Decimal(20, 6)
+  wholesale_price           Decimal                       @default(0.000000) @db.Decimal(20, 6)
+  unity                     String?                       @db.VarChar(255)
+  unit_price                Decimal                       @default(0.000000) @db.Decimal(20, 6)
+  unit_price_ratio          Decimal                       @default(0.000000) @db.Decimal(20, 6)
+  additional_shipping_cost  Decimal                       @default(0.000000) @db.Decimal(20, 6)
+  customizable              Int                           @default(0) @db.TinyInt
+  uploadable_files          Int                           @default(0) @db.TinyInt
+  text_fields               Int                           @default(0) @db.TinyInt
+  active                    Boolean                       @default(false)
+  redirect_type             ps_product_shop_redirect_type @default(default)
+  id_type_redirected        Int                           @default(0) @db.UnsignedInt
+  available_for_order       Boolean                       @default(true)
+  available_date            DateTime?                     @db.Date
+  show_condition            Boolean                       @default(true)
+  condition                 ps_product_shop_condition     @default(new)
+  show_price                Boolean                       @default(true)
+  indexed                   Boolean                       @default(false)
+  visibility                ps_product_shop_visibility    @default(both)
+  cache_default_attribute   Int?                          @db.UnsignedInt
+  advanced_stock_management Boolean                       @default(false)
+  date_add                  DateTime                      @db.DateTime(0)
+  date_upd                  DateTime                      @db.DateTime(0)
+  pack_stock_type           Int                           @default(3) @db.UnsignedInt
+
+  @@id([id_product, id_shop])
+  @@index([date_add, active, visibility], map: "date_add")
+  @@index([id_category_default], map: "id_category_default")
+  @@index([indexed, active, id_product], map: "indexed")
+}
+
+model ps_product_supplier {
+  id_product_supplier        Int     @id @default(autoincrement()) @db.UnsignedInt
+  id_product                 Int     @db.UnsignedInt
+  id_product_attribute       Int     @default(0) @db.UnsignedInt
+  id_supplier                Int     @db.UnsignedInt
+  product_supplier_reference String? @db.VarChar(64)
+  product_supplier_price_te  Decimal @default(0.000000) @db.Decimal(20, 6)
+  id_currency                Int     @db.UnsignedInt
+
+  @@unique([id_product, id_product_attribute, id_supplier], map: "id_product")
+  @@index([id_supplier, id_product], map: "id_supplier")
+}
+
+model ps_product_tag {
+  id_product Int @db.UnsignedInt
+  id_tag     Int @db.UnsignedInt
+  id_lang    Int @db.UnsignedInt
+
+  @@id([id_product, id_tag])
+  @@index([id_lang, id_tag], map: "id_lang")
+  @@index([id_tag], map: "id_tag")
+}
+
+model ps_profile {
+  id_profile Int @id @default(autoincrement()) @db.UnsignedInt
+}
+
+model ps_profile_lang {
+  id_lang    Int    @db.UnsignedInt
+  id_profile Int    @db.UnsignedInt
+  name       String @db.VarChar(128)
+
+  @@id([id_profile, id_lang])
+}
+
+model ps_psgdpr_consent {
+  id_gdpr_consent Int      @default(autoincrement()) @db.UnsignedInt
+  id_module       Int      @db.UnsignedInt
+  active          Int
+  error           Int?
+  error_message   String?  @db.Text
+  date_add        DateTime @db.DateTime(0)
+  date_upd        DateTime @db.DateTime(0)
+
+  @@id([id_gdpr_consent, id_module])
+}
+
+model ps_psgdpr_consent_lang {
+  id_gdpr_consent Int     @default(autoincrement()) @db.UnsignedInt
+  id_lang         Int     @db.UnsignedInt
+  message         String? @db.Text
+  id_shop         Int     @db.UnsignedInt
+
+  @@id([id_gdpr_consent, id_lang, id_shop])
+}
+
+model ps_psgdpr_log {
+  id_gdpr_log  Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_customer  Int?     @db.UnsignedInt
+  id_guest     Int?     @db.UnsignedInt
+  client_name  String?  @db.VarChar(250)
+  id_module    Int      @db.UnsignedInt
+  request_type Int
+  date_add     DateTime @db.DateTime(0)
+  date_upd     DateTime @db.DateTime(0)
+
+  @@index([id_customer], map: "id_customer")
+  @@index([id_customer, id_guest, client_name, id_module, date_add, date_upd], map: "idx_id_customer")
+}
+
+model ps_psreassurance {
+  id_psreassurance Int       @id @default(autoincrement()) @db.UnsignedInt
+  icon             String?   @db.VarChar(255)
+  custom_icon      String?   @db.VarChar(255)
+  status           Int       @db.UnsignedInt
+  position         Int       @db.UnsignedInt
+  type_link        Int?      @db.UnsignedInt
+  id_cms           Int?      @db.UnsignedInt
+  date_add         DateTime  @db.DateTime(0)
+  date_upd         DateTime? @db.DateTime(0)
+}
+
+model ps_psreassurance_lang {
+  id_psreassurance Int    @db.UnsignedInt
+  id_lang          Int    @db.UnsignedInt
+  title            String @db.VarChar(255)
+  description      String @db.VarChar(255)
+  link             String @db.VarChar(255)
+
+  @@id([id_psreassurance, id_lang])
+}
+
+model ps_quick_access {
+  id_quick_access Int     @id @default(autoincrement()) @db.UnsignedInt
+  new_window      Boolean @default(false)
+  link            String  @db.VarChar(255)
+}
+
+model ps_quick_access_lang {
+  id_quick_access Int    @db.UnsignedInt
+  id_lang         Int    @db.UnsignedInt
+  name            String @db.VarChar(32)
+
+  @@id([id_quick_access, id_lang])
+}
+
+model ps_range_price {
+  id_range_price Int     @id @default(autoincrement()) @db.UnsignedInt
+  id_carrier     Int     @db.UnsignedInt
+  delimiter1     Decimal @db.Decimal(20, 6)
+  delimiter2     Decimal @db.Decimal(20, 6)
+
+  @@unique([id_carrier, delimiter1, delimiter2], map: "id_carrier")
+}
+
+model ps_range_weight {
+  id_range_weight Int     @id @default(autoincrement()) @db.UnsignedInt
+  id_carrier      Int     @db.UnsignedInt
+  delimiter1      Decimal @db.Decimal(20, 6)
+  delimiter2      Decimal @db.Decimal(20, 6)
+
+  @@unique([id_carrier, delimiter1, delimiter2], map: "id_carrier")
+}
+
+model ps_request_sql {
+  id_request_sql Int    @id @default(autoincrement())
+  name           String @db.VarChar(200)
+  sql            String @db.MediumText
+}
+
+model ps_required_field {
+  id_required_field Int    @id @default(autoincrement())
+  object_name       String @db.VarChar(32)
+  field_name        String @db.VarChar(32)
+
+  @@index([object_name], map: "object_name")
+}
+
+model ps_risk {
+  id_risk Int     @id @default(autoincrement()) @db.UnsignedInt
+  percent Int     @db.TinyInt
+  color   String? @db.VarChar(32)
+}
+
+model ps_risk_lang {
+  id_risk Int    @db.UnsignedInt
+  id_lang Int    @db.UnsignedInt
+  name    String @db.VarChar(20)
+
+  @@id([id_risk, id_lang])
+  @@index([id_risk], map: "id_risk")
+}
+
+model ps_search_engine {
+  id_search_engine Int    @id @default(autoincrement()) @db.UnsignedInt
+  server           String @db.VarChar(64)
+  getvar           String @db.VarChar(16)
+}
+
+model ps_search_index {
+  id_product Int @db.UnsignedInt
+  id_word    Int @db.UnsignedInt
+  weight     Int @default(1) @db.UnsignedSmallInt
+
+  @@id([id_word, id_product])
+  @@index([id_product, weight], map: "id_product")
+}
+
+model ps_search_word {
+  id_word Int    @id @default(autoincrement()) @db.UnsignedInt
+  id_shop Int    @default(1) @db.UnsignedInt
+  id_lang Int    @db.UnsignedInt
+  word    String @db.VarChar(30)
+
+  @@unique([id_lang, id_shop, word], map: "id_lang")
+}
+
+model ps_shop {
+  id_shop       Int     @id @default(autoincrement())
+  id_shop_group Int
+  name          String  @db.VarChar(64)
+  color         String  @db.VarChar(50)
+  id_category   Int
+  theme_name    String  @db.VarChar(255)
+  active        Boolean
+  deleted       Boolean
+
+  @@index([id_shop_group], map: "IDX_CBDFBB9EF5C9E40")
+}
+
+model ps_shop_group {
+  id_shop_group  Int     @id @default(autoincrement())
+  name           String  @db.VarChar(64)
+  color          String  @db.VarChar(50)
+  share_customer Boolean
+  share_order    Boolean
+  share_stock    Boolean
+  active         Boolean
+  deleted        Boolean
+}
+
+model ps_shop_url {
+  id_shop_url  Int     @id @default(autoincrement())
+  id_shop      Int
+  domain       String  @db.VarChar(150)
+  domain_ssl   String  @db.VarChar(150)
+  physical_uri String  @db.VarChar(64)
+  virtual_uri  String  @db.VarChar(64)
+  main         Boolean
+  active       Boolean
+
+  @@index([id_shop], map: "IDX_279F19DA274A50A0")
+}
+
+model ps_smarty_cache {
+  id_smarty_cache String   @id @db.Char(40)
+  name            String   @db.Char(40)
+  cache_id        String?  @db.VarChar(254)
+  modified        DateTime @default(now()) @db.Timestamp(0)
+  content         String   @db.LongText
+
+  @@index([cache_id], map: "cache_id")
+  @@index([modified], map: "modified")
+  @@index([name], map: "name")
+}
+
+model ps_smarty_last_flush {
+  type       ps_smarty_last_flush_type @id
+  last_flush DateTime                  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+}
+
+model ps_smarty_lazy_cache {
+  template_hash String   @default("") @db.VarChar(32)
+  cache_id      String   @default("")
+  compile_id    String   @default("") @db.VarChar(32)
+  filepath      String   @default("") @db.VarChar(255)
+  last_update   DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+
+  @@id([template_hash, cache_id, compile_id])
+}
+
+model ps_specific_price {
+  id_specific_price      Int                              @id @default(autoincrement()) @db.UnsignedInt
+  id_specific_price_rule Int                              @db.UnsignedInt
+  id_cart                Int                              @db.UnsignedInt
+  id_product             Int                              @db.UnsignedInt
+  id_shop                Int                              @default(1) @db.UnsignedInt
+  id_shop_group          Int                              @db.UnsignedInt
+  id_currency            Int                              @db.UnsignedInt
+  id_country             Int                              @db.UnsignedInt
+  id_group               Int                              @db.UnsignedInt
+  id_customer            Int                              @db.UnsignedInt
+  id_product_attribute   Int                              @db.UnsignedInt
+  price                  Decimal                          @db.Decimal(20, 6)
+  from_quantity          Int                              @db.UnsignedMediumInt
+  reduction              Decimal                          @db.Decimal(20, 6)
+  reduction_tax          Boolean                          @default(true)
+  reduction_type         ps_specific_price_reduction_type
+  from                   DateTime                         @db.DateTime(0)
+  to                     DateTime                         @db.DateTime(0)
+
+  @@unique([id_product, id_product_attribute, id_customer, id_cart, from, to, id_shop, id_shop_group, id_currency, id_country, id_group, from_quantity, id_specific_price_rule], map: "id_product_2")
+  @@index([from], map: "from")
+  @@index([from_quantity], map: "from_quantity")
+  @@index([id_cart], map: "id_cart")
+  @@index([id_customer], map: "id_customer")
+  @@index([id_product, id_shop, id_currency, id_country, id_group, id_customer, from_quantity, from, to], map: "id_product")
+  @@index([id_product_attribute], map: "id_product_attribute")
+  @@index([id_shop], map: "id_shop")
+  @@index([id_specific_price_rule], map: "id_specific_price_rule")
+  @@index([to], map: "to")
+}
+
+model ps_specific_price_priority {
+  id_specific_price_priority Int    @default(autoincrement())
+  id_product                 Int    @unique(map: "id_product")
+  priority                   String @db.VarChar(80)
+
+  @@id([id_specific_price_priority, id_product])
+}
+
+model ps_specific_price_rule {
+  id_specific_price_rule Int                                   @id @default(autoincrement()) @db.UnsignedInt
+  name                   String                                @db.VarChar(255)
+  id_shop                Int                                   @default(1) @db.UnsignedInt
+  id_currency            Int                                   @db.UnsignedInt
+  id_country             Int                                   @db.UnsignedInt
+  id_group               Int                                   @db.UnsignedInt
+  from_quantity          Int                                   @db.UnsignedMediumInt
+  price                  Decimal?                              @db.Decimal(20, 6)
+  reduction              Decimal                               @db.Decimal(20, 6)
+  reduction_tax          Boolean                               @default(true)
+  reduction_type         ps_specific_price_rule_reduction_type
+  from                   DateTime                              @db.DateTime(0)
+  to                     DateTime                              @db.DateTime(0)
+
+  @@index([id_shop, id_currency, id_country, id_group, from_quantity, from, to], map: "id_product")
+}
+
+model ps_specific_price_rule_condition {
+  id_specific_price_rule_condition       Int    @id @default(autoincrement()) @db.UnsignedInt
+  id_specific_price_rule_condition_group Int    @db.UnsignedInt
+  type                                   String @db.VarChar(255)
+  value                                  String @db.VarChar(255)
+
+  @@index([id_specific_price_rule_condition_group], map: "id_specific_price_rule_condition_group")
+}
+
+model ps_specific_price_rule_condition_group {
+  id_specific_price_rule_condition_group Int @default(autoincrement()) @db.UnsignedInt
+  id_specific_price_rule                 Int @db.UnsignedInt
+
+  @@id([id_specific_price_rule_condition_group, id_specific_price_rule])
+}
+
+model ps_state {
+  id_state     Int     @id @default(autoincrement()) @db.UnsignedInt
+  id_country   Int     @db.UnsignedInt
+  id_zone      Int     @db.UnsignedInt
+  name         String  @db.VarChar(80)
+  iso_code     String  @db.VarChar(7)
+  tax_behavior Int     @default(0) @db.SmallInt
+  active       Boolean @default(false)
+
+  @@index([id_country], map: "id_country")
+  @@index([id_zone], map: "id_zone")
+  @@index([name], map: "name")
+}
+
+model ps_statssearch {
+  id_statssearch Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_shop        Int      @default(1) @db.UnsignedInt
+  id_shop_group  Int      @default(1) @db.UnsignedInt
+  keywords       String   @db.VarChar(255)
+  results        Int      @default(0)
+  date_add       DateTime @db.DateTime(0)
+}
+
+model ps_stock {
+  id_stock             Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_warehouse         Int      @db.UnsignedInt
+  id_product           Int      @db.UnsignedInt
+  id_product_attribute Int      @db.UnsignedInt
+  reference            String   @db.VarChar(64)
+  ean13                String?  @db.VarChar(13)
+  isbn                 String?  @db.VarChar(32)
+  upc                  String?  @db.VarChar(12)
+  mpn                  String?  @db.VarChar(40)
+  physical_quantity    Int      @db.UnsignedInt
+  usable_quantity      Int      @db.UnsignedInt
+  price_te             Decimal? @default(0.000000) @db.Decimal(20, 6)
+
+  @@index([id_product], map: "id_product")
+  @@index([id_product_attribute], map: "id_product_attribute")
+  @@index([id_warehouse], map: "id_warehouse")
+}
+
+model ps_stock_available {
+  id_stock_available   Int     @id @default(autoincrement()) @db.UnsignedInt
+  id_product           Int     @db.UnsignedInt
+  id_product_attribute Int     @db.UnsignedInt
+  id_shop              Int     @db.UnsignedInt
+  id_shop_group        Int     @db.UnsignedInt
+  quantity             Int     @default(0)
+  physical_quantity    Int     @default(0)
+  reserved_quantity    Int     @default(0)
+  depends_on_stock     Boolean @default(false)
+  out_of_stock         Boolean @default(false)
+  location             String  @default("") @db.VarChar(255)
+
+  @@unique([id_product, id_product_attribute, id_shop, id_shop_group], map: "product_sqlstock")
+  @@index([id_product], map: "id_product")
+  @@index([id_product_attribute], map: "id_product_attribute")
+  @@index([id_shop], map: "id_shop")
+  @@index([id_shop_group], map: "id_shop_group")
+}
+
+model ps_stock_mvt {
+  id_stock_mvt        BigInt   @id @default(autoincrement())
+  id_stock            Int
+  id_order            Int?
+  id_supply_order     Int?
+  id_stock_mvt_reason Int
+  id_employee         Int
+  employee_lastname   String?  @db.VarChar(255)
+  employee_firstname  String?  @db.VarChar(255)
+  physical_quantity   Int      @db.UnsignedInt
+  date_add            DateTime @db.DateTime(0)
+  sign                Int      @default(1) @db.SmallInt
+  price_te            Decimal? @default(0.000000) @db.Decimal(20, 6)
+  last_wa             Decimal? @default(0.000000) @db.Decimal(20, 6)
+  current_wa          Decimal? @default(0.000000) @db.Decimal(20, 6)
+  referer             BigInt?
+
+  @@index([id_stock], map: "id_stock")
+  @@index([id_stock_mvt_reason], map: "id_stock_mvt_reason")
+}
+
+model ps_stock_mvt_reason {
+  id_stock_mvt_reason Int      @id @default(autoincrement()) @db.UnsignedInt
+  sign                Boolean  @default(true)
+  date_add            DateTime @db.DateTime(0)
+  date_upd            DateTime @db.DateTime(0)
+  deleted             Boolean  @default(false)
+}
+
+model ps_stock_mvt_reason_lang {
+  id_stock_mvt_reason Int    @db.UnsignedInt
+  id_lang             Int    @db.UnsignedInt
+  name                String @db.VarChar(255)
+
+  @@id([id_stock_mvt_reason, id_lang])
+}
+
+model ps_store {
+  id_store   Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_country Int      @db.UnsignedInt
+  id_state   Int?     @db.UnsignedInt
+  city       String   @db.VarChar(64)
+  postcode   String   @db.VarChar(12)
+  latitude   Decimal? @db.Decimal(13, 8)
+  longitude  Decimal? @db.Decimal(13, 8)
+  phone      String?  @db.VarChar(16)
+  fax        String?  @db.VarChar(16)
+  email      String?  @db.VarChar(255)
+  active     Boolean  @default(false)
+  date_add   DateTime @db.DateTime(0)
+  date_upd   DateTime @db.DateTime(0)
+}
+
+model ps_store_lang {
+  id_store Int     @db.UnsignedInt
+  id_lang  Int     @db.UnsignedInt
+  name     String  @db.VarChar(255)
+  address1 String  @db.VarChar(255)
+  address2 String? @db.VarChar(255)
+  hours    String? @db.MediumText
+  note     String? @db.MediumText
+
+  @@id([id_store, id_lang])
+}
+
+model ps_store_shop {
+  id_store Int @db.UnsignedInt
+  id_shop  Int @db.UnsignedInt
+
+  @@id([id_store, id_shop])
+  @@index([id_shop], map: "id_shop")
+}
+
+model ps_supplier {
+  id_supplier Int      @id @default(autoincrement()) @db.UnsignedInt
+  name        String   @db.VarChar(64)
+  date_add    DateTime @db.DateTime(0)
+  date_upd    DateTime @db.DateTime(0)
+  active      Boolean  @default(false)
+}
+
+model ps_supplier_lang {
+  id_supplier      Int     @db.UnsignedInt
+  id_lang          Int     @db.UnsignedInt
+  description      String? @db.MediumText
+  meta_title       String? @db.VarChar(255)
+  meta_keywords    String? @db.VarChar(255)
+  meta_description String? @db.VarChar(512)
+
+  @@id([id_supplier, id_lang])
+}
+
+model ps_supplier_shop {
+  id_supplier Int @db.UnsignedInt
+  id_shop     Int @db.UnsignedInt
+
+  @@id([id_supplier, id_shop])
+  @@index([id_shop], map: "id_shop")
+}
+
+model ps_supply_order {
+  id_supply_order        Int       @id @default(autoincrement()) @db.UnsignedInt
+  id_supplier            Int       @db.UnsignedInt
+  supplier_name          String    @db.VarChar(64)
+  id_lang                Int       @db.UnsignedInt
+  id_warehouse           Int       @db.UnsignedInt
+  id_supply_order_state  Int       @db.UnsignedInt
+  id_currency            Int       @db.UnsignedInt
+  id_ref_currency        Int       @db.UnsignedInt
+  reference              String    @db.VarChar(64)
+  date_add               DateTime  @db.DateTime(0)
+  date_upd               DateTime  @db.DateTime(0)
+  date_delivery_expected DateTime? @db.DateTime(0)
+  total_te               Decimal?  @default(0.000000) @db.Decimal(20, 6)
+  total_with_discount_te Decimal?  @default(0.000000) @db.Decimal(20, 6)
+  total_tax              Decimal?  @default(0.000000) @db.Decimal(20, 6)
+  total_ti               Decimal?  @default(0.000000) @db.Decimal(20, 6)
+  discount_rate          Decimal?  @default(0.000000) @db.Decimal(20, 6)
+  discount_value_te      Decimal?  @default(0.000000) @db.Decimal(20, 6)
+  is_template            Boolean?  @default(false)
+
+  @@index([id_supplier], map: "id_supplier")
+  @@index([id_warehouse], map: "id_warehouse")
+  @@index([reference], map: "reference")
+}
+
+model ps_supply_order_detail {
+  id_supply_order_detail        Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_supply_order               Int      @db.UnsignedInt
+  id_currency                   Int      @db.UnsignedInt
+  id_product                    Int      @db.UnsignedInt
+  id_product_attribute          Int      @db.UnsignedInt
+  reference                     String   @db.VarChar(64)
+  supplier_reference            String   @db.VarChar(64)
+  name                          String   @db.VarChar(128)
+  ean13                         String?  @db.VarChar(13)
+  isbn                          String?  @db.VarChar(32)
+  upc                           String?  @db.VarChar(12)
+  mpn                           String?  @db.VarChar(40)
+  exchange_rate                 Decimal? @default(0.000000) @db.Decimal(20, 6)
+  unit_price_te                 Decimal? @default(0.000000) @db.Decimal(20, 6)
+  quantity_expected             Int      @db.UnsignedInt
+  quantity_received             Int      @db.UnsignedInt
+  price_te                      Decimal? @default(0.000000) @db.Decimal(20, 6)
+  discount_rate                 Decimal? @default(0.000000) @db.Decimal(20, 6)
+  discount_value_te             Decimal? @default(0.000000) @db.Decimal(20, 6)
+  price_with_discount_te        Decimal? @default(0.000000) @db.Decimal(20, 6)
+  tax_rate                      Decimal? @default(0.000000) @db.Decimal(20, 6)
+  tax_value                     Decimal? @default(0.000000) @db.Decimal(20, 6)
+  price_ti                      Decimal? @default(0.000000) @db.Decimal(20, 6)
+  tax_value_with_order_discount Decimal? @default(0.000000) @db.Decimal(20, 6)
+  price_with_order_discount_te  Decimal? @default(0.000000) @db.Decimal(20, 6)
+
+  @@index([id_product_attribute], map: "id_product_attribute")
+  @@index([id_product, id_product_attribute], map: "id_product_product_attribute")
+  @@index([id_supply_order, id_product], map: "id_supply_order")
+}
+
+model ps_supply_order_history {
+  id_supply_order_history Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_supply_order         Int      @db.UnsignedInt
+  id_employee             Int      @db.UnsignedInt
+  employee_lastname       String?  @default("") @db.VarChar(255)
+  employee_firstname      String?  @default("") @db.VarChar(255)
+  id_state                Int      @db.UnsignedInt
+  date_add                DateTime @db.DateTime(0)
+
+  @@index([id_employee], map: "id_employee")
+  @@index([id_state], map: "id_state")
+  @@index([id_supply_order], map: "id_supply_order")
+}
+
+model ps_supply_order_receipt_history {
+  id_supply_order_receipt_history Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_supply_order_detail          Int      @db.UnsignedInt
+  id_employee                     Int      @db.UnsignedInt
+  employee_lastname               String?  @default("") @db.VarChar(255)
+  employee_firstname              String?  @default("") @db.VarChar(255)
+  id_supply_order_state           Int      @db.UnsignedInt
+  quantity                        Int      @db.UnsignedInt
+  date_add                        DateTime @db.DateTime(0)
+
+  @@index([id_supply_order_detail], map: "id_supply_order_detail")
+  @@index([id_supply_order_state], map: "id_supply_order_state")
+}
+
+model ps_supply_order_state {
+  id_supply_order_state Int     @id @default(autoincrement()) @db.UnsignedInt
+  delivery_note         Boolean @default(false)
+  editable              Boolean @default(false)
+  receipt_state         Boolean @default(false)
+  pending_receipt       Boolean @default(false)
+  enclosed              Boolean @default(false)
+  color                 String? @db.VarChar(32)
+}
+
+model ps_supply_order_state_lang {
+  id_supply_order_state Int     @db.UnsignedInt
+  id_lang               Int     @db.UnsignedInt
+  name                  String? @db.VarChar(128)
+
+  @@id([id_supply_order_state, id_lang])
+}
+
+model ps_tab {
+  id_tab         Int     @id @default(autoincrement())
+  id_parent      Int
+  position       Int
+  module         String? @db.VarChar(64)
+  class_name     String  @db.VarChar(64)
+  route_name     String? @db.VarChar(256)
+  active         Boolean
+  enabled        Boolean
+  icon           String? @db.VarChar(32)
+  wording        String? @db.VarChar(255)
+  wording_domain String? @db.VarChar(255)
+}
+
+model ps_tab_lang {
+  id_tab  Int
+  id_lang Int
+  name    String @db.VarChar(128)
+
+  @@id([id_tab, id_lang])
+  @@index([id_lang], map: "IDX_CFD9262DBA299860")
+  @@index([id_tab], map: "IDX_CFD9262DED47AB56")
+}
+
+model ps_tab_module_preference {
+  id_tab_module_preference Int    @id @default(autoincrement())
+  id_employee              Int
+  id_tab                   Int
+  module                   String
+
+  @@unique([id_employee, id_tab, module], map: "employee_module")
+}
+
+model ps_tag {
+  id_tag  Int    @id @default(autoincrement()) @db.UnsignedInt
+  id_lang Int    @db.UnsignedInt
+  name    String @db.VarChar(32)
+
+  @@index([id_lang], map: "id_lang")
+  @@index([name], map: "tag_name")
+}
+
+model ps_tag_count {
+  id_group Int @default(0) @db.UnsignedInt
+  id_tag   Int @default(0) @db.UnsignedInt
+  id_lang  Int @default(0) @db.UnsignedInt
+  id_shop  Int @default(0) @db.UnsignedInt
+  counter  Int @default(0) @db.UnsignedInt
+
+  @@id([id_group, id_tag])
+  @@index([id_group, id_lang, id_shop, counter], map: "id_group")
+}
+
+model ps_tax {
+  id_tax  Int     @id @default(autoincrement()) @db.UnsignedInt
+  rate    Decimal @db.Decimal(10, 3)
+  active  Boolean @default(true)
+  deleted Boolean @default(false)
+}
+
+model ps_tax_lang {
+  id_tax  Int    @db.UnsignedInt
+  id_lang Int    @db.UnsignedInt
+  name    String @db.VarChar(32)
+
+  @@id([id_tax, id_lang])
+}
+
+model ps_tax_rule {
+  id_tax_rule        Int    @id @default(autoincrement())
+  id_tax_rules_group Int
+  id_country         Int
+  id_state           Int
+  zipcode_from       String @db.VarChar(12)
+  zipcode_to         String @db.VarChar(12)
+  id_tax             Int
+  behavior           Int
+  description        String @db.VarChar(100)
+
+  @@index([id_tax_rules_group, id_country, id_state, zipcode_from], map: "category_getproducts")
+  @@index([id_tax], map: "id_tax")
+  @@index([id_tax_rules_group], map: "id_tax_rules_group")
+}
+
+model ps_tax_rules_group {
+  id_tax_rules_group Int      @id @default(autoincrement())
+  name               String   @db.VarChar(50)
+  active             Int
+  deleted            Boolean
+  date_add           DateTime @db.DateTime(0)
+  date_upd           DateTime @db.DateTime(0)
+}
+
+model ps_tax_rules_group_shop {
+  id_tax_rules_group Int @db.UnsignedInt
+  id_shop            Int @db.UnsignedInt
+
+  @@id([id_tax_rules_group, id_shop])
+  @@index([id_shop], map: "id_shop")
+}
+
+model ps_timezone {
+  id_timezone Int    @id @default(autoincrement()) @db.UnsignedInt
+  name        String @db.VarChar(32)
+}
+
+model ps_translation {
+  id_translation Int     @id @default(autoincrement())
+  id_lang        Int
+  key            String  @db.Text
+  translation    String  @db.Text
+  domain         String  @db.VarChar(80)
+  theme          String? @db.VarChar(32)
+
+  @@index([id_lang], map: "IDX_ADEBEB36BA299860")
+  @@index([domain], map: "key")
+}
+
+model ps_warehouse {
+  id_warehouse    Int                          @id @default(autoincrement()) @db.UnsignedInt
+  id_currency     Int                          @db.UnsignedInt
+  id_address      Int                          @db.UnsignedInt
+  id_employee     Int                          @db.UnsignedInt
+  reference       String?                      @db.VarChar(64)
+  name            String                       @db.VarChar(45)
+  management_type ps_warehouse_management_type @default(WA)
+  deleted         Boolean                      @default(false)
+}
+
+model ps_warehouse_carrier {
+  id_carrier   Int @db.UnsignedInt
+  id_warehouse Int @db.UnsignedInt
+
+  @@id([id_warehouse, id_carrier])
+  @@index([id_carrier], map: "id_carrier")
+  @@index([id_warehouse], map: "id_warehouse")
+}
+
+model ps_warehouse_product_location {
+  id_warehouse_product_location Int     @id @default(autoincrement()) @db.UnsignedInt
+  id_product                    Int     @db.UnsignedInt
+  id_product_attribute          Int     @db.UnsignedInt
+  id_warehouse                  Int     @db.UnsignedInt
+  location                      String? @db.VarChar(64)
+
+  @@unique([id_product, id_product_attribute, id_warehouse], map: "id_product")
+}
+
+model ps_warehouse_shop {
+  id_shop      Int @db.UnsignedInt
+  id_warehouse Int @db.UnsignedInt
+
+  @@id([id_warehouse, id_shop])
+  @@index([id_shop], map: "id_shop")
+  @@index([id_warehouse], map: "id_warehouse")
+}
+
+model ps_web_browser {
+  id_web_browser Int     @id @default(autoincrement()) @db.UnsignedInt
+  name           String? @db.VarChar(64)
+}
+
+model ps_webservice_account {
+  id_webservice_account Int     @id @default(autoincrement())
+  key                   String  @db.VarChar(32)
+  description           String? @db.MediumText
+  class_name            String  @default("WebserviceRequest") @db.VarChar(50)
+  is_module             Int     @default(0) @db.TinyInt
+  module_name           String? @db.VarChar(50)
+  active                Int     @db.TinyInt
+
+  @@index([key], map: "key")
+}
+
+model ps_webservice_account_shop {
+  id_webservice_account Int @db.UnsignedInt
+  id_shop               Int @db.UnsignedInt
+
+  @@id([id_webservice_account, id_shop])
+  @@index([id_shop], map: "id_shop")
+}
+
+model ps_webservice_permission {
+  id_webservice_permission Int                             @id @default(autoincrement())
+  resource                 String                          @db.VarChar(50)
+  method                   ps_webservice_permission_method
+  id_webservice_account    Int
+
+  @@unique([resource, method, id_webservice_account], map: "resource_2")
+  @@index([id_webservice_account], map: "id_webservice_account")
+  @@index([method], map: "method")
+  @@index([resource], map: "resource")
+}
+
+model ps_wishlist {
+  id_wishlist   Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_customer   Int      @db.UnsignedInt
+  id_shop       Int?     @default(1) @db.UnsignedInt
+  id_shop_group Int?     @default(1) @db.UnsignedInt
+  token         String   @db.VarChar(64)
+  name          String   @db.VarChar(64)
+  counter       Int?     @db.UnsignedInt
+  date_add      DateTime @db.DateTime(0)
+  date_upd      DateTime @db.DateTime(0)
+  default       Int?     @default(0) @db.UnsignedInt
+}
+
+model ps_wishlist_product {
+  id_wishlist_product  Int @id @default(autoincrement())
+  id_wishlist          Int @db.UnsignedInt
+  id_product           Int @db.UnsignedInt
+  id_product_attribute Int @db.UnsignedInt
+  quantity             Int @db.UnsignedInt
+  priority             Int @db.UnsignedInt
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ps_wishlist_product_cart {
+  id_wishlist_product Int      @db.UnsignedInt
+  id_cart             Int      @db.UnsignedInt
+  quantity            Int      @db.UnsignedInt
+  date_add            DateTime @db.DateTime(0)
+
+  @@ignore
+}
+
+model ps_zone {
+  id_zone Int     @id @default(autoincrement()) @db.UnsignedInt
+  name    String  @db.VarChar(64)
+  active  Boolean @default(false)
+}
+
+model ps_zone_shop {
+  id_zone Int @db.UnsignedInt
+  id_shop Int @db.UnsignedInt
+
+  @@id([id_zone, id_shop])
+  @@index([id_shop], map: "id_shop")
+}
+
+enum ps_smarty_last_flush_type {
+  compile
+  template
+}
+
+enum ps_webservice_permission_method {
+  GET
+  POST
+  PUT
+  PATCH
+  DELETE
+  HEAD
+}
+
+enum ps_cart_rule_product_rule_type {
+  products
+  categories
+  attributes
+  manufacturers
+  suppliers
+}
+
+enum ps_layered_category_type {
+  category
+  id_feature
+  id_attribute_group
+  availability
+  condition
+  manufacturer
+  weight
+  price
+  extras
+}
+
+enum ps_warehouse_management_type {
+  WA
+  FIFO
+  LIFO
+}
+
+enum ps_customer_thread_status {
+  open
+  closed
+  pending1
+  pending2
+}
+
+enum ps_specific_price_rule_reduction_type {
+  amount
+  percentage
+}
+
+enum ps_specific_price_reduction_type {
+  amount
+  percentage
+}
+
+enum ps_product_shop_redirect_type {
+  EMPTY_ENUM_VALUE @map("")
+  // 404 @map("404")
+  // 410 @map("410")
+  product          @map("301-product")
+  product          @map("302-product")
+  category         @map("301-category")
+  category         @map("302-category")
+  displayed        @map("200-displayed")
+  displayed        @map("404-displayed")
+  displayed        @map("410-displayed")
+  default
+}
+
+enum ps_product_shop_condition {
+  new
+  used
+  refurbished
+}
+
+enum ps_product_shop_visibility {
+  both
+  catalog
+  search
+  none
+}
+
+enum ps_product_redirect_type {
+  EMPTY_ENUM_VALUE @map("")
+  // 404 @map("404")
+  // 410 @map("410")
+  product          @map("301-product")
+  product          @map("302-product")
+  category         @map("301-category")
+  category         @map("302-category")
+  displayed        @map("200-displayed")
+  displayed        @map("404-displayed")
+  displayed        @map("410-displayed")
+  default
+}
+
+enum ps_product_condition {
+  new
+  used
+  refurbished
+}
+
+enum ps_product_visibility {
+  both
+  catalog
+  search
+  none
+}
+
+enum ps_product_product_type {
+  standard
+  pack
+  virtual
+  combinations
+  EMPTY_ENUM_VALUE @map("")
+}

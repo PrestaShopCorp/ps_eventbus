@@ -1,0 +1,16 @@
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/report-summary/
+
+
+## tests artefacts
+*.jpg
+/dumps
+
+## prisma client
+/src/generated

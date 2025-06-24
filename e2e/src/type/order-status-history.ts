@@ -1,4 +1,4 @@
-import fixture from '../fixtures/latest/order_status_histories.json';
+import fixture from '../../V2/src/data/fixtures/latest/order_status_histories.json';
 
 // test type
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

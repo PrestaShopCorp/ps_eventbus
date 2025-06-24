@@ -1,0 +1,247 @@
+name: EVENTBUS E2E TESTS
+
+on:
+  workflow_dispatch:
+    inputs:
+      incremental:
+        type: boolean
+        description: Run incremental-sync campaign
+        required: false
+        default: true
+      sanity:
+        type: boolean
+        description: Run sanity campaign
+        required: false
+        default: true
+      full:
+        type: boolean
+        description: Run full-sync campaign
+        required: false
+        default: false
+      ps_latest:
+        type: boolean
+        description: Flashlight latest
+        required: false
+        default: true
+      ps_8_2_1:
+        type: boolean
+        description: Flashlight 8.1.7-nginx
+        required: false
+        default: true
+      ps_8_0_5:
+        type: boolean
+        description: Flashlight 8.0.5-nginx
+        required: false
+        default: true
+      ps_1_7_8_11:
+        type: boolean
+        description: Flashlight 1.7.8.11-nginx
+        required: false
+        default: true
+      ps_1_7_7_8:
+        type: boolean
+        description: Flashlight 1.7.7.8-nginx
+        required: false
+        default: true
+      ps_1_6_1_24:
+        type: boolean
+        description: Flashlight 1.6.1.24-nginx
+        required: false
+        default: true
+
+env:
+  NODE_BUILDER_VERSION: "20"
+
+jobs:
+  generate-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: 🧮 Generate matrix JSON
+        id: set-matrix
+        run: |
+          echo "📦 Building matrix…"
+
+          campaigns=()
+          [[ "${{ inputs.incremental }}" == "true" ]] && campaigns+=("incremental")
+          [[ "${{ inputs.full }}" == "true" ]] && campaigns+=("full")
+          [[ "${{ inputs.sanity }}" == "true" ]] && campaigns+=("sanity")
+
+          versions=()
+          [[ "${{ inputs.ps_latest }}" == "true" ]] && versions+=("latest")
+          [[ "${{ inputs.ps_8_2_1 }}" == "true" ]] && versions+=("8.2.1-nginx")
+          [[ "${{ inputs.ps_8_0_5 }}" == "true" ]] && versions+=("8.0.5-nginx")
+          [[ "${{ inputs.ps_1_7_8_11 }}" == "true" ]] && versions+=("1.7.8.11-nginx")
+          [[ "${{ inputs.ps_1_7_7_8 }}" == "true" ]] && versions+=("1.7.7.8-nginx")
+          [[ "${{ inputs.ps_1_6_1_24 }}" == "true" ]] && versions+=("1.6.1.24-nginx")
+
+          # fallback si vide → on prend tout
+          [[ "${#campaigns[@]}" -eq 0 ]] && campaigns=("incremental" "full" "sanity")
+          [[ "${#versions[@]}" -eq 0 ]] && versions=("latest" "8.1.7-nginx" "8.0.5-nginx" "1.7.8.11-nginx" "1.7.7.8-nginx" "1.6.1.24-nginx")
+
+          # build matrix
+          matrix="["
+          for c in "${campaigns[@]}"; do
+            for v in "${versions[@]}"; do
+              matrix+='{"campaign":"'"$c"'","ps_version":"'"$v"'"},'
+            done
+          done
+          matrix="${matrix%,}"  # remove last comma
+          matrix+="]"
+
+          echo "Generated matrix:"
+          echo "$matrix"
+
+          echo "matrix=$matrix" >> $GITHUB_OUTPUT
+
+  e2e_tests:
+    name: 🚀 Run matrix
+    needs: generate-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 2
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
+
+    env:
+      CAMPAIGN: ${{ matrix.campaign }}
+      DOCKER_IMAGE_PRESTASHOP: prestashop/prestashop-flashlight:${{ matrix.ps_version }}
+      HOST_PORT_BIND_PRESTASHOP: 8000
+      HOST_PORT_BIND_MYSQL: 3306
+      HOST_PORT_BIND_PHP_MY_ADMIN: 6060
+      HOST_PORT_BIND_CLOUDSYNC_REVERSE_PROXY: 3030
+      SYNC_API_PORT: 3232
+      COLLECTOR_API_PORT: 3333
+      LIVE_SYNC_API_PORT: 3434
+      WS_PORT: 8080
+
+    steps:
+      - name: 🛎️ Checkout the repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - name: 📦 Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - name: 🧰 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_BUILDER_VERSION }}
+          cache: "pnpm"
+          cache-dependency-path: e2e/V2/pnpm-lock.yaml
+
+      - name: 📁 Cache vendor folder
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: php-${{ hashFiles('composer.lock') }}
+
+      - name: 🎼 Install PHP dependencies
+        run: composer install
+
+      - name: 🧪 Setup e2e-env with Prestashop ${{ matrix.ps_version }}
+        run: |
+          cp .env.dist .env
+          docker compose build
+          docker compose --profile cicd up --detach --wait
+        env:
+          DOCKER_IMAGE_PRESTASHOP: prestashop/prestashop-flashlight:${{matrix.ps_version}}
+        working-directory: ./e2e-env
+
+      - name: 👨🏻‍💻 Install tests dependencies
+        run: pnpm install
+        working-directory: ./e2e
+
+      - name: 👨🏻‍💻 Install tests V2 dependencies
+        run: pnpm install
+        working-directory: ./e2e/V2
+
+      - name: 🎭 Install Playwright
+        run: pnpm playwright install --with-deps
+        working-directory: ./e2e/V2
+
+      - name: 👨🏻‍💻 Generate prisma client
+        run: pnpm run prisma:generate-client
+        working-directory: ./e2e/V2
+
+      - name: 🧪 Run ${{ matrix.campaign }} tests
+        run: pnpm run test:${{ matrix.campaign }}
+        working-directory: ./e2e/V2
+
+      - name: 📤 Upload Playwright Test Reports
+        uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: ${{ env.PLAYWRIGHT_NAME }}
+          path: ./e2e/V2/playwright-report
+        env:
+          PLAYWRIGHT_NAME: ${{ matrix.ps_version }}-${{ matrix.campaign }}-playwright-report
+
+      - name: 📊 Parse test results
+        if: ${{ always() }}
+        id: parse-results
+        run: |
+          passed=$(jq '.results.summary.passed' ./report-summary/summary.json)
+          failed=$(jq '.results.summary.failed' ./report-summary/summary.json)
+          skipped=$(jq '.results.summary.skipped' ./report-summary/summary.json)
+          total=$(jq '.results.summary.tests' ./report-summary/summary.json)
+          echo "passed=$passed" >> $GITHUB_OUTPUT
+          echo "failed=$failed" >> $GITHUB_OUTPUT
+          echo "skipped=$skipped" >> $GITHUB_OUTPUT
+          echo "total=$total" >> $GITHUB_OUTPUT
+        working-directory: ./e2e/V2
+
+      - name: 📤 Send Slack notification
+        if: ${{ always() }}
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "🚨 *Eventbus E2E ${{ matrix.campaign }} tests résults for PS-${{ matrix.ps_version }}* 🚨"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "🔗 *<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts|Playwright Report>*"
+                    }
+                  ]
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*✅ Passed:* ${{ steps.parse-results.outputs.passed }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*❌ Failed:* ${{ steps.parse-results.outputs.failed }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*🔷 Skipped:* ${{ steps.parse-results.outputs.skipped }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*🎯 Total:* ${{ steps.parse-results.outputs.total }}"
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
