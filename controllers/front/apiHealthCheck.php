@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -26,6 +27,7 @@
 
 use PrestaShop\Module\PsEventbus\Service\ApiHealthCheckService;
 use PrestaShop\Module\PsEventbus\Service\CommonService;
+use PrestaShop\Module\PsEventbus\Service\ShopBenchmark;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -49,6 +51,13 @@ class ps_EventbusApiHealthCheckModuleFrontController extends ModuleFrontControll
         /** @var ApiHealthCheckService $apiHealthCheckService */
         $apiHealthCheckService = $module->getService(ApiHealthCheckService::class);
         $response = $apiHealthCheckService->getHealthCheck($jobId);
+
+        $response['benchmark'] = ShopBenchmark::runBenchmark([
+            ShopBenchmark::CPU_BENCH,
+            ShopBenchmark::FILE_BENCH,
+            ShopBenchmark::DB_BENCH,
+            ShopBenchmark::NETWORK_BENCH,
+        ]);
 
         CommonService::exitWithResponse($response);
     }
