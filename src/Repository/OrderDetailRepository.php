@@ -118,9 +118,9 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
         $seekStartId = 0;
 
         if (
-            is_array($seekStartIdResult) &&
-            !empty($seekStartIdResult) &&
-            isset($seekStartIdResult[0]['id_order_detail'])
+            is_array($seekStartIdResult)
+            && !empty($seekStartIdResult)
+            && isset($seekStartIdResult[0]['id_order_detail'])
         ) {
             $seekStartId = (int) $seekStartIdResult[0]['id_order_detail'];
         }
