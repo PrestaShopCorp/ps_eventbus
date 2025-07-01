@@ -65,11 +65,11 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
             ->select('od.id_order_detail')
         ;
 
-        $refundRequest = '(SELECT SUM(osd.total_price_tax_incl) 
+        $refundRequest = '(SELECT osd.total_price_tax_incl
             FROM ' . _DB_PREFIX_ . 'order_slip_detail osd 
             WHERE osd.id_order_detail = od.id_order_detail) AS refund';
 
-        $refundTaxExclRequest = '(SELECT SUM(osd.total_price_tax_excl) 
+        $refundTaxExclRequest = '(SELECT osd.total_price_tax_excl
             FROM ' . _DB_PREFIX_ . 'order_slip_detail osd 
             WHERE osd.id_order_detail = od.id_order_detail) AS refund_tax_excl';
 
