@@ -91,7 +91,6 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
         }
     }
 
-
     /**
      * @param int $offset
      * @param int $limit
