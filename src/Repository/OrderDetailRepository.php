@@ -115,6 +115,10 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
             LIMIT ' . (int) $offset . ', 1'
         );
 
+        if (empty($seekStartId)) {
+            $seekStartId[0] = ['id_order_detail' => 0];
+        }
+
         $this->query
             ->where('od.id_order_detail >=' . (int) $seekStartId[0]['id_order_detail'])
             ->limit((int) $limit);
