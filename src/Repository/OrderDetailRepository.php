@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -56,17 +57,21 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
 
         $this->generateMinimalQuery(self::TABLE_NAME, 'od');
 
-        // minimal query for countable query
         $this->query
-            ->where('od.id_shop = ' . $context->shop->id)
             ->innerJoin('orders', 'o', 'od.id_order = o.id_order')
-            ->leftJoin('order_slip_detail', 'osd', 'od.id_order_detail = osd.id_order_detail')
             ->leftJoin('product_shop', 'ps', 'od.product_id = ps.id_product AND ps.id_shop = ' . (int) $context->shop->id)
             ->leftJoin('currency', 'c', 'c.id_currency = o.id_currency')
             ->leftJoin('lang', 'l', 'o.id_lang = l.id_lang')
             ->select('od.id_order_detail')
-            ->groupBy('od.id_order_detail')
         ;
+
+        $refundRequest = '(SELECT osd.total_price_tax_incl
+            FROM ' . _DB_PREFIX_ . 'order_slip_detail osd
+            WHERE osd.id_order_detail = od.id_order_detail) AS refund';
+
+        $refundTaxExclRequest = '(SELECT osd.total_price_tax_excl
+            FROM ' . _DB_PREFIX_ . 'order_slip_detail osd
+            WHERE osd.id_order_detail = od.id_order_detail) AS refund_tax_excl';
 
         if ($withSelecParameters) {
             $this->query
@@ -76,8 +81,8 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
                 ->select('od.product_quantity')
                 ->select('od.unit_price_tax_incl')
                 ->select('od.unit_price_tax_excl')
-                ->select('osd.total_price_tax_incl as refund')
-                ->select('osd.total_price_tax_excl as refund_tax_excl')
+                ->select($refundRequest)
+                ->select($refundTaxExclRequest)
                 ->select('c.iso_code as currency')
                 ->select('ps.id_category_default as category')
                 ->select('l.iso_code')
@@ -100,7 +105,37 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
     {
         $this->generateFullQuery($langIso, true);
 
-        $this->query->limit((int) $limit, (int) $offset);
+        $context = \Context::getContext();
+
+        if ($context == null) {
+            throw new \PrestaShopException('Context is null');
+        }
+
+        if ($context->shop === null) {
+            throw new \PrestaShopException('No shop context');
+        }
+
+        $seekStartIdResult = $this->db->executeS(
+            'SELECT id_order_detail
+            FROM ' . _DB_PREFIX_ . self::TABLE_NAME . '
+            WHERE id_shop = ' . (int) $context->shop->id . '
+            ORDER BY id_order_detail
+            LIMIT ' . (int) $offset . ', 1'
+        );
+
+        $seekStartId = 0;
+
+        if (
+            is_array($seekStartIdResult)
+            && !empty($seekStartIdResult)
+            && isset($seekStartIdResult[0]['id_order_detail'])
+        ) {
+            $seekStartId = (int) $seekStartIdResult[0]['id_order_detail'];
+        }
+
+        $this->query
+            ->where('od.id_order_detail >=' . $seekStartId)
+            ->limit((int) $limit);
 
         return $this->runQuery();
     }

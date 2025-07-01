@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -197,6 +198,7 @@ class Ps_eventbus extends Module
      */
     private function isPhpVersionCompliant()
     {
+        /* @phpstan-ignore-next-line */
         return PHP_VERSION_ID >= 50600;
     }
 }

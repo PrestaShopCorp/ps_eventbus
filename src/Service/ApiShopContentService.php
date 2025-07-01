@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -163,6 +164,7 @@ class ApiShopContentService
                         'job_id' => $jobId,
                         'object_type' => $shopContent,
                         'syncType' => $isFullSync ? 'full' : 'incremental',
+                        'execution_time_in_seconds' => round(microtime(true) - REQUEST_START_TIME, 2),
                     ],
                     $response
                 )

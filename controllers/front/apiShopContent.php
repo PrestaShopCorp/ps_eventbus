@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -80,6 +81,10 @@ class ps_EventbusApiShopContentModuleFrontController extends ModuleFrontControll
 
         if (!defined('PS_EVENTBUS_LOGS_ENABLED')) {
             define('PS_EVENTBUS_LOGS_ENABLED', $psLogsEnabled);
+        }
+
+        if (!defined('REQUEST_START_TIME')) {
+            define('REQUEST_START_TIME', microtime(true));
         }
 
         // edit shopContent for matching Config.php const
