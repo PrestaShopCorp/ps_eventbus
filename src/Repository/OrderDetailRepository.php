@@ -107,6 +107,14 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
 
         $context = \Context::getContext();
 
+        if ($context == null) {
+            throw new \PrestaShopException('Context is null');
+        }
+
+        if ($context->shop === null) {
+            throw new \PrestaShopException('No shop context');
+        }
+
         $seekStartIdResult = $this->db->executeS(
             'SELECT id_order_detail
             FROM ' . _DB_PREFIX_ . self::TABLE_NAME . '
