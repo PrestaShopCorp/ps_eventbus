@@ -126,12 +126,12 @@ class ApiShopContentService
                     $fullSyncIsFinished,
                     $langIso
                 );
-                // Else if fullsync is not finished
+            // Else if fullsync is not finished
             } elseif (!boolval($typeSync['full_sync_finished'])) {
                 $isFullSync = true;
                 $fullSyncIsFinished = false;
                 $offset = (int) $typeSync['offset'];
-                // Else, we are in incremental sync
+            // Else, we are in incremental sync
             } else {
                 $isFullSync = false;
                 $fullSyncIsFinished = $typeSync['full_sync_finished'];
@@ -164,7 +164,7 @@ class ApiShopContentService
                         'job_id' => $jobId,
                         'object_type' => $shopContent,
                         'syncType' => $isFullSync ? 'full' : 'incremental',
-                        'execution_time_in_seconds' => round(microtime(true) - REQUEST_START_TIME, 2)
+                        'execution_time_in_seconds' => round(microtime(true) - REQUEST_START_TIME, 2),
                     ],
                     $response
                 )
