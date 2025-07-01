@@ -58,7 +58,6 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
         $this->generateMinimalQuery(self::TABLE_NAME, 'od');
 
         $this->query
-            ->join('LEFT JOIN TEMP_TABLE_latest_refunds lrf ON od.id_order_detail = lrf.id_order_detail')
             ->innerJoin('orders', 'o', 'od.id_order = o.id_order')
             ->leftJoin('product_shop', 'ps', 'od.product_id = ps.id_product AND ps.id_shop = ' . (int) $context->shop->id)
             ->leftJoin('currency', 'c', 'c.id_currency = o.id_currency')
@@ -84,8 +83,6 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
                 ->select('od.unit_price_tax_excl')
                 ->select($refundRequest)
                 ->select($refundTaxExclRequest)
-                #->select('lrf.refund')
-                #->select('lrf.refund_tax_excl')
                 ->select('c.iso_code as currency')
                 ->select('ps.id_category_default as category')
                 ->select('l.iso_code')
