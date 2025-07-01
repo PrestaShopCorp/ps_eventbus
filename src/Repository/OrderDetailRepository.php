@@ -57,25 +57,6 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
 
         $this->generateMinimalQuery(self::TABLE_NAME, 'od');
 
-        // Create temporary table to get the latest order refunds
-        $this->db->execute('
-            CREATE TEMPORARY TABLE IF NOT EXISTS TEMP_TABLE_latest_refunds (
-                id_order_detail INT UNSIGNED NOT NULL,
-                refund DECIMAL(20,6) DEFAULT 0,
-                refund_tax_excl DECIMAL(20,6) DEFAULT 0,
-                PRIMARY KEY (id_order_detail)
-            );
-        ');
-
-        $this->db->execute('
-            INSERT IGNORE INTO TEMP_TABLE_latest_refunds (id_order_detail, refund, refund_tax_excl)
-            SELECT
-                osd.id_order_detail,
-                osd.total_price_tax_incl,
-                osd.total_price_tax_excl
-            FROM ' . _DB_PREFIX_ . 'order_slip_detail osd;
-        ');
-
         $this->query
             ->join('LEFT JOIN TEMP_TABLE_latest_refunds lrf ON od.id_order_detail = lrf.id_order_detail')
             ->innerJoin('orders', 'o', 'od.id_order = o.id_order')
@@ -83,7 +64,15 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
             ->leftJoin('currency', 'c', 'c.id_currency = o.id_currency')
             ->leftJoin('lang', 'l', 'o.id_lang = l.id_lang')
             ->select('od.id_order_detail')
-            ->groupBy('od.id_order_detail');
+        ;
+
+        $refundRequest = '(SELECT SUM(osd.total_price_tax_incl) 
+            FROM ' . _DB_PREFIX_ . 'order_slip_detail osd 
+            WHERE osd.id_order_detail = od.id_order_detail) AS refund';
+
+        $refundTaxExclRequest = '(SELECT SUM(osd.total_price_tax_excl) 
+            FROM ' . _DB_PREFIX_ . 'order_slip_detail osd 
+            WHERE osd.id_order_detail = od.id_order_detail) AS refund_tax_excl';
 
         if ($withSelecParameters) {
             $this->query
@@ -93,12 +82,15 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
                 ->select('od.product_quantity')
                 ->select('od.unit_price_tax_incl')
                 ->select('od.unit_price_tax_excl')
-                ->select('lrf.refund')
-                ->select('lrf.refund_tax_excl')
+                ->select($refundRequest)
+                ->select($refundTaxExclRequest)
+                #->select('lrf.refund')
+                #->select('lrf.refund_tax_excl')
                 ->select('c.iso_code as currency')
                 ->select('ps.id_category_default as category')
                 ->select('l.iso_code')
-                ->select('o.conversion_rate as conversion_rate');
+                ->select('o.conversion_rate as conversion_rate')
+            ;
         }
     }
 
