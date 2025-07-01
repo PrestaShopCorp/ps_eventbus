@@ -105,7 +105,22 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
     {
         $this->generateFullQuery($langIso, true);
 
-        $this->query->limit((int) $limit, (int) $offset);
+        $context = \Context::getContext();
+
+        $seekStartId = $this->db->executeS(
+            'SELECT id_order_detail
+            FROM ' . _DB_PREFIX_ . self::TABLE_NAME . '
+            WHERE id_shop = ' . (int) $context->shop->id . '
+            ORDER BY id_order_detail
+            LIMIT ' . (int) $offset . ', 1'
+        );
+
+        $this->query
+            ->where('od.id_order_detail >=' . (int) $seekStartId[0]['id_order_detail'])
+            ->limit((int) $limit);
+
+
+        // $this->query->limit((int) $limit, (int) $offset);
 
         return $this->runQuery();
     }
