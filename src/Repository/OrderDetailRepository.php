@@ -107,7 +107,7 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
 
         $context = \Context::getContext();
 
-        $seekStartId = $this->db->executeS(
+        $seekStartIdResult = $this->db->executeS(
             'SELECT id_order_detail
             FROM ' . _DB_PREFIX_ . self::TABLE_NAME . '
             WHERE id_shop = ' . (int) $context->shop->id . '
@@ -115,12 +115,18 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
             LIMIT ' . (int) $offset . ', 1'
         );
 
-        if (empty($seekStartId)) {
-            $seekStartId[0] = ['id_order_detail' => 0];
+        $seekStartId = 0;
+
+        if (
+            is_array($seekStartIdResult) &&
+            !empty($seekStartIdResult) &&
+            isset($seekStartIdResult[0]['id_order_detail'])
+        ) {
+            $seekStartId = (int) $seekStartIdResult[0]['id_order_detail'];
         }
 
         $this->query
-            ->where('od.id_order_detail >=' . (int) $seekStartId[0]['id_order_detail'])
+            ->where('od.id_order_detail >=' . $seekStartId)
             ->limit((int) $limit);
 
         return $this->runQuery();
