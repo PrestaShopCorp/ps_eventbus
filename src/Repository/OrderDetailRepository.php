@@ -66,11 +66,11 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
         ;
 
         $refundRequest = '(SELECT osd.total_price_tax_incl
-            FROM ' . _DB_PREFIX_ . 'order_slip_detail osd 
+            FROM ' . _DB_PREFIX_ . 'order_slip_detail osd
             WHERE osd.id_order_detail = od.id_order_detail) AS refund';
 
         $refundTaxExclRequest = '(SELECT osd.total_price_tax_excl
-            FROM ' . _DB_PREFIX_ . 'order_slip_detail osd 
+            FROM ' . _DB_PREFIX_ . 'order_slip_detail osd
             WHERE osd.id_order_detail = od.id_order_detail) AS refund_tax_excl';
 
         if ($withSelecParameters) {
@@ -118,9 +118,6 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
         $this->query
             ->where('od.id_order_detail >=' . (int) $seekStartId[0]['id_order_detail'])
             ->limit((int) $limit);
-
-
-        // $this->query->limit((int) $limit, (int) $offset);
 
         return $this->runQuery();
     }
