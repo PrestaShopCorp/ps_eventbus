@@ -99,7 +99,7 @@ class ImageRepository extends AbstractRepository implements RepositoryInterface
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where("i.id IN('" . implode("','", array_map('intval', $contentIds ?: [-1])) . "')")
+            ->where("i.id_image IN('" . implode("','", array_map('intval', $contentIds ?: [-1])) . "')")
             ->limit($limit)
         ;
 
