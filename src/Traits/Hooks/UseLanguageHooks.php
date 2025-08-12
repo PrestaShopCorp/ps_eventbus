@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -48,7 +49,7 @@ trait UseLanguageHooks
         /** @var \Language $language */
         $language = $parameters['object'];
 
-        if ($language->id) {
+        if (isset($language->id)) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_LANGUAGES, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_LANGUAGES => $language->id],
@@ -73,7 +74,7 @@ trait UseLanguageHooks
         /** @var \Language $language */
         $language = $parameters['object'];
 
-        if ($language->id) {
+        if (isset($language->id)) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_LANGUAGES, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_LANGUAGES => $language->id],
@@ -98,7 +99,7 @@ trait UseLanguageHooks
         /** @var \Language $language */
         $language = $parameters['object'];
 
-        if ($language->id) {
+        if (isset($language->id)) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_LANGUAGES, Config::INCREMENTAL_TYPE_DELETE);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_LANGUAGES => $language->id],

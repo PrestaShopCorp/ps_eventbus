@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -47,7 +48,7 @@ trait UseWishlistHooks
 
         $wishlist = $parameters['object'];
 
-        if ($wishlist->id) {
+        if (isset($wishlist->id)) {
             $synchronizationService->sendLiveSync(
                 [
                     Config::COLLECTION_WISHLISTS,
@@ -80,7 +81,7 @@ trait UseWishlistHooks
 
         $wishlist = $parameters['object'];
 
-        if ($wishlist->id) {
+        if (isset($wishlist->id)) {
             $synchronizationService->sendLiveSync(
                 [
                     Config::COLLECTION_WISHLISTS,
@@ -113,7 +114,7 @@ trait UseWishlistHooks
 
         $wishlist = $parameters['object'];
 
-        if ($wishlist->id) {
+        if (isset($wishlist->id)) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_WISHLISTS, Config::INCREMENTAL_TYPE_DELETE);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_WISHLISTS => $wishlist->id],

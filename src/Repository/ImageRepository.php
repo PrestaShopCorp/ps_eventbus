@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -52,6 +53,7 @@ class ImageRepository extends AbstractRepository implements RepositoryInterface
 
         if ($withSelecParameters) {
             $this->query
+                ->select('i.id')
                 ->select('i.id_image')
                 ->select('i.id_product')
                 ->select('i.position')
@@ -97,7 +99,7 @@ class ImageRepository extends AbstractRepository implements RepositoryInterface
         $this->generateFullQuery($langIso, true);
 
         $this->query
-            ->where("i.id_image IN('" . implode("','", array_map('intval', $contentIds ?: [-1])) . "')")
+            ->where("i.id IN('" . implode("','", array_map('intval', $contentIds ?: [-1])) . "')")
             ->limit($limit)
         ;
 

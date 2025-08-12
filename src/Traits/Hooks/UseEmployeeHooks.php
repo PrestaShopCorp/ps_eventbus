@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -48,14 +49,16 @@ trait UseEmployeeHooks
         /** @var \Employee $employee * */
         $employee = $parameters['object'];
 
-        $synchronizationService->sendLiveSync(Config::COLLECTION_EMPLOYEES, Config::INCREMENTAL_TYPE_UPSERT);
-        $synchronizationService->insertContentIntoIncremental(
-            [Config::COLLECTION_EMPLOYEES => $employee->id],
-            Config::INCREMENTAL_TYPE_UPSERT,
-            date(DATE_ATOM),
-            $this->shopId,
-            false
-        );
+        if (isset($employee->id)) {
+            $synchronizationService->sendLiveSync(Config::COLLECTION_EMPLOYEES, Config::INCREMENTAL_TYPE_UPSERT);
+            $synchronizationService->insertContentIntoIncremental(
+                [Config::COLLECTION_EMPLOYEES => $employee->id],
+                Config::INCREMENTAL_TYPE_UPSERT,
+                date(DATE_ATOM),
+                $this->shopId,
+                false
+            );
+        }
     }
 
     /**
@@ -71,14 +74,16 @@ trait UseEmployeeHooks
         /** @var \Employee $employee * */
         $employee = $parameters['object'];
 
-        $synchronizationService->sendLiveSync(Config::COLLECTION_EMPLOYEES, Config::INCREMENTAL_TYPE_UPSERT);
-        $synchronizationService->insertContentIntoIncremental(
-            [Config::COLLECTION_EMPLOYEES => $employee->id],
-            Config::INCREMENTAL_TYPE_UPSERT,
-            date(DATE_ATOM),
-            $this->shopId,
-            false
-        );
+        if (isset($employee->id)) {
+            $synchronizationService->sendLiveSync(Config::COLLECTION_EMPLOYEES, Config::INCREMENTAL_TYPE_UPSERT);
+            $synchronizationService->insertContentIntoIncremental(
+                [Config::COLLECTION_EMPLOYEES => $employee->id],
+                Config::INCREMENTAL_TYPE_UPSERT,
+                date(DATE_ATOM),
+                $this->shopId,
+                false
+            );
+        }
     }
 
     /**
@@ -94,13 +99,15 @@ trait UseEmployeeHooks
         /** @var \Employee $employee * */
         $employee = $parameters['object'];
 
-        $synchronizationService->sendLiveSync(Config::COLLECTION_EMPLOYEES, Config::INCREMENTAL_TYPE_DELETE);
-        $synchronizationService->insertContentIntoIncremental(
-            [Config::COLLECTION_EMPLOYEES => $employee->id],
-            Config::INCREMENTAL_TYPE_DELETE,
-            date(DATE_ATOM),
-            $this->shopId,
-            false
-        );
+        if (isset($employee->id)) {
+            $synchronizationService->sendLiveSync(Config::COLLECTION_EMPLOYEES, Config::INCREMENTAL_TYPE_DELETE);
+            $synchronizationService->insertContentIntoIncremental(
+                [Config::COLLECTION_EMPLOYEES => $employee->id],
+                Config::INCREMENTAL_TYPE_DELETE,
+                date(DATE_ATOM),
+                $this->shopId,
+                false
+            );
+        }
     }
 }
