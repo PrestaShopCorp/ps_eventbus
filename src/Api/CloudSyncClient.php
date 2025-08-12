@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -97,7 +98,7 @@ class CloudSyncClient
         PsAccountsAdapterService $psAccountsAdapterService
     ) {
         $this->module = $module;
-        $this->jwt = $psAccountsAdapterService->getOrRefreshToken();
+        $this->jwt = $psAccountsAdapterService->getShopToken();
         $this->shopId = $psAccountsAdapterService->getShopUuid();
 
         $this->collectorApiUrl = $collectorApiUrl;
