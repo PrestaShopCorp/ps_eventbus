@@ -53,7 +53,6 @@ class ImageRepository extends AbstractRepository implements RepositoryInterface
 
         if ($withSelecParameters) {
             $this->query
-                ->select('i.id')
                 ->select('i.id_image')
                 ->select('i.id_product')
                 ->select('i.position')
