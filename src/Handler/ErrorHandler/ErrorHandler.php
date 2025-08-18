@@ -36,13 +36,24 @@ if (!defined('_PS_VERSION_')) {
 
 class ErrorHandler
 {
+    /** @var string|null */
     private $sentryUrl;
+
+    /** @var string */
     private $sentryKey;
+
+    /** @var string */
     private $sentryEnv;
+
+    /** @var array<mixed> */
     private $tags = [];
 
     private function __clone() {}
 
+    /**
+     * @param string $sentryDsn
+     * @param string $sentryEnv
+     */
     public function __construct($sentryDsn, $sentryEnv)
     {
         try {
@@ -71,22 +82,28 @@ class ErrorHandler
             }
 
             $this->tags = [
-                'shop_id'                  => $shopUuid,
-                'ps_eventbus_version'      => $eventbusModule->version ?? null,
-                'ps_accounts_version'      => $psAccountVersion,
-                'php_version'              => phpversion(),
-                'prestashop_version'       => _PS_VERSION_,
-                'ps_eventbus_is_enabled'   => \Module::isEnabled((string) $eventbusModule->name),
-                'ps_eventbus_is_installed' => \Module::isInstalled((string) $eventbusModule->name),
+                'shop_id' => $shopUuid,
+                'ps_eventbus_version' => $eventbusModule->version ?? null,
+                'ps_accounts_version' => $psAccountVersion,
+                'php_version' => phpversion(),
+                'prestashop_version' => _PS_VERSION_,
+                'ps_eventbus_is_enabled' => \Module::isEnabled('ps_eventbus'),
+                'ps_eventbus_is_installed' => \Module::isInstalled('ps_eventbus'),
             ];
         } catch (\Exception $e) {
             $this->sentryUrl = null;
         }
     }
 
-    public function handle($exception, $silent = null)
+    /**
+     * @param \Exception $exception
+     * @param bool|null $silent
+     *
+     * @return void
+     */
+    public function handle($exception, $silent = null): void
     {
-        $logsEnabled    = defined('PS_EVENTBUS_LOGS_ENABLED') ? PS_EVENTBUS_LOGS_ENABLED : false;
+        $logsEnabled = defined('PS_EVENTBUS_LOGS_ENABLED') ? PS_EVENTBUS_LOGS_ENABLED : false;
         $verboseEnabled = defined('PS_EVENTBUS_VERBOSE_ENABLED') ? PS_EVENTBUS_VERBOSE_ENABLED : false;
 
         if ($logsEnabled) {
@@ -113,55 +130,67 @@ class ErrorHandler
         }
     }
 
+    /**
+     * @param \Throwable $exception
+     * @param string $category
+     * 
+     * @return void
+     */
     private function sendToSentry(\Throwable $exception, string $category = 'error'): void
     {
         $configurationPsShopEmail = \Configuration::get('PS_SHOP_EMAIL');
 
         $event = [
-            'message'     => $exception->getMessage(),
-            'level'       => 'error',
-            'logger'      => 'ps_eventbus',
-            'platform'    => 'php',
+            'message' => $exception->getMessage(),
+            'level' => 'error',
+            'logger' => 'ps_eventbus',
+            'platform' => 'php',
             'environment' => $this->sentryEnv,
-            'tags'        => array_merge($this->tags, ['category' => $category]),
-            'user'        => [
-                'id'    => $this->tags['shop_id'] ?? null,
+            'tags' => array_merge($this->tags, ['category' => $category]),
+            'user' => [
+                'id' => $this->tags['shop_id'] ?? null,
                 'email' => $configurationPsShopEmail,
             ],
-            'exception'   => [
+            'exception' => [
                 'values' => [[
-                    'type'       => get_class($exception),
-                    'value'      => $exception->getMessage(),
+                    'type' => get_class($exception),
+                    'value' => $exception->getMessage(),
                     'stacktrace' => [
                         'frames' => $this->buildFrames($exception->getTrace()),
                     ],
                 ]],
             ],
-            'extra'       => [
-                'code'    => $exception->getCode(),
-                'file'    => $exception->getFile(),
-                'line'    => $exception->getLine(),
+            'extra' => [
+                'code' => $exception->getCode(),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
             ],
-            'timestamp'   => gmdate('Y-m-d\TH:i:s\Z'),
+            'timestamp' => gmdate('Y-m-d\TH:i:s\Z'),
         ];
 
-        $client = \PrestaShop\Module\PsEventbus\Api\HttpClient::getInstance()->post(
-            $this->sentryUrl,
+        HttpClient::getInstance()->post(
+            (string) $this->sentryUrl,
             [
                 'Authorization' => 'Sentry sentry_version=7, sentry_client=ps_eventbus/1.0, sentry_key=' . $this->sentryKey,
-                'Content-Type'  => 'application/json',
+                'Content-Type' => 'application/json',
             ],
             $event
         );
     }
 
-
+    /**
+     * Build Sentry stack frames from a PHP error stack trace.
+     *
+     * @param array<mixed> $trace
+     * 
+     * @return array<mixed>
+     */
     private function buildFrames(array $trace): array
     {
         $frames = [];
         foreach (array_reverse($trace) as $t) {
             $file = $t['file'] ?? null;
-            $line = (int)($t['line'] ?? 0);
+            $line = (int) ($t['line'] ?? 0);
 
             // 1) Variables/args (scrub + truncate)
             $vars = [];
@@ -175,26 +204,46 @@ class ErrorHandler
             [$contextLine, $pre, $post] = $this->getCodeContext($file, $line, 3);
 
             $frames[] = [
-                'filename'     => $file ?: '<internal>',
-                'lineno'       => $line,
-                'function'     => $t['function'] ?? '',
-                'in_app'       => $this->isInApp($file),
-                'vars'         => $vars ?: null,
+                'filename' => $file ?: '<internal>',
+                'lineno' => $line,
+                'function' => $t['function'] ?? '',
+                'in_app' => $this->isInApp($file),
+                'vars' => $vars ?: null,
                 'context_line' => $contextLine,
-                'pre_context'  => $pre ?: null,
+                'pre_context' => $pre ?: null,
                 'post_context' => $post ?: null,
             ];
         }
+
         return $frames;
     }
 
+    /**
+     * Check if the file is part of the application code.
+     *
+     * @param ?string $file
+     *
+     * @return bool
+     */
     private function isInApp(?string $file): bool
     {
-        if (!$file) return false;
+        if (!$file) {
+            return false;
+        }
+
         // Mark module files as "in_app" for better readability
-        return (bool)preg_match('#/modules/ps_eventbus/#', $file);
+        return (bool) preg_match('#/modules/ps_eventbus/#', $file);
     }
 
+    /**
+     * Get the code context around a specific line in a file.
+     *
+     * @param ?string $file
+     * @param int $line
+     * @param int $radius
+     *
+     * @return array<mixed>
+     */
     private function getCodeContext(?string $file, int $line, int $radius = 3): array
     {
         if (!$file || $line <= 0 || !is_readable($file)) {
@@ -203,28 +252,38 @@ class ErrorHandler
 
         $lines = @file($file, FILE_IGNORE_NEW_LINES);
 
-        if (!$lines) return [null, [], []];
+        if (!$lines) {
+            return [null, [], []];
+        }
 
         $idx = $line - 1;
         $start = max(0, $idx - $radius);
-        $end   = min(count($lines) - 1, $idx + $radius);
+        $end = min(count($lines) - 1, $idx + $radius);
 
-        $pre  = array_slice($lines, $start, max(0, $idx - $start));
+        $pre = array_slice($lines, $start, max(0, $idx - $start));
         $curr = $lines[$idx] ?? null;
         $post = array_slice($lines, $idx + 1, max(0, $end - $idx));
 
         // Hard size limit to avoid exceeding event size
         $truncate = function ($s) {
-            return mb_strimwidth((string)$s, 0, 500, '…');
+            return mb_strimwidth((string) $s, 0, 500, '…');
         };
 
-        $pre  = array_map($truncate, $pre);
+        $pre = array_map($truncate, $pre);
         $curr = $curr ? $truncate($curr) : null;
         $post = array_map($truncate, $post);
 
         return [$curr, $pre, $post];
     }
 
+    /**
+     * Scrub and normalize a value for safe logging.
+     *
+     * @param mixed $value
+     * @param int $depth
+     *
+     * @return mixed
+     */
     private function scrubAndNormalize($value, int $depth = 0)
     {
         if ($depth > 3) { // avoid giant structures
@@ -240,6 +299,7 @@ class ErrorHandler
             if (strlen($value) > 2000) {
                 return mb_substr($value, 0, 2000) . '…';
             }
+
             return $value;
         }
 
@@ -255,6 +315,7 @@ class ErrorHandler
             foreach (get_object_vars($value) as $k => $v) {
                 $out[$k] = $this->scrubAndNormalize($v, $depth + 1);
             }
+
             return $out;
         }
 
