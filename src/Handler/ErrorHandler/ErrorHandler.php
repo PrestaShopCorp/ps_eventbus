@@ -41,11 +41,13 @@ class ErrorHandler
     private $sentryEnv;
     private $tags = [];
 
+    private function __clone() {}
+
     public function __construct($sentryDsn, $sentryEnv)
     {
         try {
-            // Ex: https://<public_key>@sentry.io/<project_id>
             $parts = parse_url($sentryDsn);
+
             if (!isset($parts['host'], $parts['path'], $parts['user'])) {
                 throw new \Exception('Invalid Sentry DSN');
             }
@@ -59,6 +61,7 @@ class ErrorHandler
             $eventbusModule = \Module::getInstanceByName('ps_eventbus');
 
             $shopUuid = $psAccountVersion = null;
+
             if ($accountsModule) {
                 $accountService = $accountsModule->getService(
                     'PrestaShop\Module\PsAccounts\Service\PsAccountsService'
@@ -98,16 +101,14 @@ class ErrorHandler
         }
 
         if (_PS_MODE_DEV_ && $verboseEnabled) {
-            throw $exception; // en dev on veut voir l’erreur réelle
+            throw $exception;
         }
 
         if ($this->sentryUrl) {
             $this->sendToSentry($exception, 'error');
         }
 
-        // IMPORTANT : ne remonte jamais la réponse Sentry à l’utilisateur
         if (!$silent) {
-            // Affiche seulement ton message générique côté FO/BO
             CommonService::exitWithExceptionMessage($exception);
         }
     }
@@ -170,7 +171,7 @@ class ErrorHandler
                 }
             }
 
-            // 2) Contexte de code (quelques lignes autour)
+            // 2) Code Context
             [$contextLine, $pre, $post] = $this->getCodeContext($file, $line, 3);
 
             $frames[] = [
@@ -190,7 +191,7 @@ class ErrorHandler
     private function isInApp(?string $file): bool
     {
         if (!$file) return false;
-        // Marque les fichiers du module comme "in_app" pour un rendu plus lisible
+        // Mark module files as "in_app" for better readability
         return (bool)preg_match('#/modules/ps_eventbus/#', $file);
     }
 
@@ -199,7 +200,9 @@ class ErrorHandler
         if (!$file || $line <= 0 || !is_readable($file)) {
             return [null, [], []];
         }
+
         $lines = @file($file, FILE_IGNORE_NEW_LINES);
+
         if (!$lines) return [null, [], []];
 
         $idx = $line - 1;
@@ -210,10 +213,11 @@ class ErrorHandler
         $curr = $lines[$idx] ?? null;
         $post = array_slice($lines, $idx + 1, max(0, $end - $idx));
 
-        // Limite de taille brutale pour ne pas dépasser la taille d’événement
+        // Hard size limit to avoid exceeding event size
         $truncate = function ($s) {
             return mb_strimwidth((string)$s, 0, 500, '…');
         };
+
         $pre  = array_map($truncate, $pre);
         $curr = $curr ? $truncate($curr) : null;
         $post = array_map($truncate, $post);
@@ -223,16 +227,16 @@ class ErrorHandler
 
     private function scrubAndNormalize($value, int $depth = 0)
     {
-        if ($depth > 3) { // évite les structures gigantesques
+        if ($depth > 3) { // avoid giant structures
             return '/* depth limit */';
         }
 
-        // Types scalaires
+        // Scalar types
         if (is_null($value) || is_bool($value) || is_int($value) || is_float($value)) {
             return $value;
         }
         if (is_string($value)) {
-            // Tronque les très longues chaînes
+            // Truncate very long strings
             if (strlen($value) > 2000) {
                 return mb_substr($value, 0, 2000) . '…';
             }
@@ -241,22 +245,21 @@ class ErrorHandler
 
         // Objets
         if (is_object($value)) {
-            // Ne pas serialiser des ressources PDO, cURL, etc.
+            // Do not serialize PDO, cURL, etc. resources
             if ($value instanceof \Throwable) {
                 return sprintf('Throwable(%s): %s', get_class($value), $value->getMessage());
             }
-            // Représentation simple des objets
+            // Simple representation of objects
             $out = ['__class' => get_class($value)];
-            // Tente d’extraire les propriétés publiques
+            // Attempt to extract public properties
             foreach (get_object_vars($value) as $k => $v) {
                 $out[$k] = $this->scrubAndNormalize($v, $depth + 1);
             }
             return $out;
         }
 
-        // Tableaux
         if (is_array($value)) {
-            // Scrub de clés sensibles
+            // Scrub sensitive keys
             $scrubKeys = ['password', 'passwd', 'pwd', 'secret', 'token', 'api_key', 'apikey', 'authorization', 'cookie', 'set-cookie', 'bearer'];
             $out = [];
             foreach ($value as $k => $v) {
@@ -267,21 +270,19 @@ class ErrorHandler
                     $out[$k] = $this->scrubAndNormalize($v, $depth + 1);
                 }
             }
-            // Limite de taille du tableau
+
+            // Hard size limit for array
             if (count($out) > 50) {
                 $out = array_slice($out, 0, 50, true) + ['__truncated' => '…'];
             }
+
             return $out;
         }
 
-        // Ressources
         if (is_resource($value)) {
             return sprintf('resource(%s)', get_resource_type($value));
         }
 
         return '(unserializable)';
     }
-
-
-    private function __clone() {}
 }
