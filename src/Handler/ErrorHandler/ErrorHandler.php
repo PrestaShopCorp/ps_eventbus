@@ -48,7 +48,9 @@ class ErrorHandler
     /** @var array<mixed> */
     private $tags = [];
 
-    private function __clone() {}
+    private function __clone()
+    {
+    }
 
     /**
      * @param string $sentryDsn
@@ -58,6 +60,10 @@ class ErrorHandler
     {
         try {
             $parts = parse_url($sentryDsn);
+
+            if ($parts === false) {
+                throw new \InvalidArgumentException('Invalid Sentry DSN');
+            }
 
             if (!isset($parts['host'], $parts['path'], $parts['user'])) {
                 throw new \Exception('Invalid Sentry DSN');
@@ -83,7 +89,7 @@ class ErrorHandler
 
             $this->tags = [
                 'shop_id' => $shopUuid,
-                'ps_eventbus_version' => $eventbusModule->version ?? null,
+                'ps_eventbus_version' => $eventbusModule ? $eventbusModule->version : null,
                 'ps_accounts_version' => $psAccountVersion,
                 'php_version' => phpversion(),
                 'prestashop_version' => _PS_VERSION_,
@@ -101,7 +107,7 @@ class ErrorHandler
      *
      * @return void
      */
-    public function handle($exception, $silent = null): void
+    public function handle($exception, $silent = null)
     {
         $logsEnabled = defined('PS_EVENTBUS_LOGS_ENABLED') ? PS_EVENTBUS_LOGS_ENABLED : false;
         $verboseEnabled = defined('PS_EVENTBUS_VERBOSE_ENABLED') ? PS_EVENTBUS_VERBOSE_ENABLED : false;
@@ -133,11 +139,13 @@ class ErrorHandler
     /**
      * @param \Throwable $exception
      * @param string $category
-     * 
+     *
      * @return void
      */
-    private function sendToSentry(\Throwable $exception, string $category = 'error'): void
+    private function sendToSentry(\Throwable $exception, string $category)
     {
+        $category = $category ? $category : 'error';
+
         $configurationPsShopEmail = \Configuration::get('PS_SHOP_EMAIL');
 
         $event = [
@@ -148,7 +156,7 @@ class ErrorHandler
             'environment' => $this->sentryEnv,
             'tags' => array_merge($this->tags, ['category' => $category]),
             'user' => [
-                'id' => $this->tags['shop_id'] ?? null,
+                'id' => $this->tags['shop_id'] ? $this->tags['shop_id'] : null,
                 'email' => $configurationPsShopEmail,
             ],
             'exception' => [
@@ -182,36 +190,36 @@ class ErrorHandler
      * Build Sentry stack frames from a PHP error stack trace.
      *
      * @param array<mixed> $trace
-     * 
+     *
      * @return array<mixed>
      */
-    private function buildFrames(array $trace): array
+    private function buildFrames(array $trace)
     {
         $frames = [];
         foreach (array_reverse($trace) as $t) {
-            $file = $t['file'] ?? null;
-            $line = (int) ($t['line'] ?? 0);
+            $file = $t['file'] ? $t['file'] : null;
+            $line = (int) ($t['line'] ? $t['line'] : 0);
 
             // 1) Variables/args (scrub + truncate)
             $vars = [];
             if (!empty($t['args'])) {
                 foreach ($t['args'] as $i => $arg) {
-                    $vars['arg' . $i] = $this->scrubAndNormalize($arg);
+                    $vars['arg' . $i] = $this->scrubAndNormalize($arg, 0);
                 }
             }
 
             // 2) Code Context
-            [$contextLine, $pre, $post] = $this->getCodeContext($file, $line, 3);
+            $codeContext = $this->getCodeContext($file, $line, 3);
 
             $frames[] = [
                 'filename' => $file ?: '<internal>',
                 'lineno' => $line,
-                'function' => $t['function'] ?? '',
+                'function' => $t['function'] ? $t['function'] : '',
                 'in_app' => $this->isInApp($file),
                 'vars' => $vars ?: null,
-                'context_line' => $contextLine,
-                'pre_context' => $pre ?: null,
-                'post_context' => $post ?: null,
+                'context_line' => $codeContext['contextLine'],
+                'pre_context' => $codeContext['pre'] ?: null,
+                'post_context' => $codeContext['post'] ?: null,
             ];
         }
 
@@ -221,11 +229,11 @@ class ErrorHandler
     /**
      * Check if the file is part of the application code.
      *
-     * @param ?string $file
+     * @param string $file
      *
      * @return bool
      */
-    private function isInApp(?string $file): bool
+    private function isInApp(string $file)
     {
         if (!$file) {
             return false;
@@ -238,14 +246,18 @@ class ErrorHandler
     /**
      * Get the code context around a specific line in a file.
      *
-     * @param ?string $file
+     * @param string $file
      * @param int $line
      * @param int $radius
      *
      * @return array<mixed>
      */
-    private function getCodeContext(?string $file, int $line, int $radius = 3): array
+    private function getCodeContext(string $file, int $line, int $radius)
     {
+        if (!$radius) {
+            $radius = 3; // Default radius if not specified
+        }
+
         if (!$file || $line <= 0 || !is_readable($file)) {
             return [null, [], []];
         }
@@ -261,7 +273,7 @@ class ErrorHandler
         $end = min(count($lines) - 1, $idx + $radius);
 
         $pre = array_slice($lines, $start, max(0, $idx - $start));
-        $curr = $lines[$idx] ?? null;
+        $curr = $lines[$idx] ? $lines[$idx] : null;
         $post = array_slice($lines, $idx + 1, max(0, $end - $idx));
 
         // Hard size limit to avoid exceeding event size
@@ -284,7 +296,7 @@ class ErrorHandler
      *
      * @return mixed
      */
-    private function scrubAndNormalize($value, int $depth = 0)
+    private function scrubAndNormalize($value, int $depth)
     {
         if ($depth > 3) { // avoid giant structures
             return '/* depth limit */';
