@@ -49,7 +49,9 @@ class ErrorHandler
     private $tags = [];
 
     // Disable cloning
-    private function __clone() {}
+    private function __clone()
+    {
+    }
 
     /**
      * @param string $sentryDsn
