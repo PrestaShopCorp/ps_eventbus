@@ -49,7 +49,8 @@ trait UseEmployeeHooks
         /** @var \Employee $employee * */
         $employee = $parameters['object'];
 
-        if (isset($employee->id)) {
+        // Not nullable
+        if ($employee->id) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_EMPLOYEES, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_EMPLOYEES => $employee->id],
@@ -74,7 +75,8 @@ trait UseEmployeeHooks
         /** @var \Employee $employee * */
         $employee = $parameters['object'];
 
-        if (isset($employee->id)) {
+        // Not nullable
+        if ($employee->id) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_EMPLOYEES, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_EMPLOYEES => $employee->id],
@@ -99,7 +101,8 @@ trait UseEmployeeHooks
         /** @var \Employee $employee * */
         $employee = $parameters['object'];
 
-        if (isset($employee->id)) {
+        // Not nullable
+        if ($employee->id) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_EMPLOYEES, Config::INCREMENTAL_TYPE_DELETE);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_EMPLOYEES => $employee->id],
