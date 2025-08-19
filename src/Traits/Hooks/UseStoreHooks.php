@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -48,6 +49,7 @@ trait UseStoreHooks
         /** @var \Store $store */
         $store = $parameters['object'];
 
+        // Not nullable
         if ($store->id) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_STORES, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
@@ -73,6 +75,7 @@ trait UseStoreHooks
         /** @var \Store $store */
         $store = $parameters['object'];
 
+        // Not nullable
         if ($store->id) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_STORES, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
@@ -98,6 +101,7 @@ trait UseStoreHooks
         /** @var \Store $store */
         $store = $parameters['object'];
 
+        // Not nullable
         if ($store->id) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_STORES, Config::INCREMENTAL_TYPE_DELETE);
             $synchronizationService->insertContentIntoIncremental(
