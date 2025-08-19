@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -72,7 +73,7 @@ trait UseSpecificPriceHooks
         /** @var \SpecificPrice $specificPrice */
         $specificPrice = $parameters['object'];
 
-        if ($specificPrice->id) {
+        if (isset($specificPrice->id)) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_SPECIFIC_PRICES, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id],
@@ -97,7 +98,7 @@ trait UseSpecificPriceHooks
         /** @var \SpecificPrice $specificPrice */
         $specificPrice = $parameters['object'];
 
-        if ($specificPrice->id) {
+        if (isset($specificPrice->id)) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_SPECIFIC_PRICES, Config::INCREMENTAL_TYPE_DELETE);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id],
