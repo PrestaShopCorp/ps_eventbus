@@ -48,9 +48,8 @@ class ErrorHandler
     /** @var array<mixed> */
     private $tags = [];
 
-    private function __clone()
-    {
-    }
+    // Disable cloning
+    private function __clone() {}
 
     /**
      * @param string $sentryDsn
@@ -66,7 +65,7 @@ class ErrorHandler
             }
 
             if (!isset($parts['host'], $parts['path'], $parts['user'])) {
-                throw new \Exception('Invalid Sentry DSN');
+                throw new \PrestaShopException('Invalid Sentry DSN');
             }
 
             $projectId = ltrim($parts['path'], '/');
