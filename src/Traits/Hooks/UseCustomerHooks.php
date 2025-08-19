@@ -49,7 +49,8 @@ trait UseCustomerHooks
         /** @var \Customer $customer * */
         $customer = $parameters['object'];
 
-        if (isset($customer->id)) {
+        // Not nullable
+        if ($customer->id) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_CUSTOMERS, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CUSTOMERS => $customer->id],
@@ -74,7 +75,8 @@ trait UseCustomerHooks
         /** @var \Customer $customer * */
         $customer = $parameters['object'];
 
-        if (isset($customer->id)) {
+        // Not nullable
+        if ($customer->id) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_CUSTOMERS, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CUSTOMERS => $customer->id],
@@ -99,7 +101,8 @@ trait UseCustomerHooks
         /** @var \Customer $customer * */
         $customer = $parameters['object'];
 
-        if (isset($customer->id)) {
+        // Not nullable
+        if ($customer->id) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_CUSTOMERS, Config::INCREMENTAL_TYPE_DELETE);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CUSTOMERS => $customer->id],

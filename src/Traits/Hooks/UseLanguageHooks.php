@@ -49,7 +49,8 @@ trait UseLanguageHooks
         /** @var \Language $language */
         $language = $parameters['object'];
 
-        if (isset($language->id)) {
+        // Not nullable
+        if ($language->id) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_LANGUAGES, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_LANGUAGES => $language->id],
@@ -74,7 +75,8 @@ trait UseLanguageHooks
         /** @var \Language $language */
         $language = $parameters['object'];
 
-        if (isset($language->id)) {
+        // Not nullable
+        if ($language->id) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_LANGUAGES, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_LANGUAGES => $language->id],
@@ -99,7 +101,8 @@ trait UseLanguageHooks
         /** @var \Language $language */
         $language = $parameters['object'];
 
-        if (isset($language->id)) {
+        // Not nullable
+        if ($language->id) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_LANGUAGES, Config::INCREMENTAL_TYPE_DELETE);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_LANGUAGES => $language->id],

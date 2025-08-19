@@ -49,7 +49,8 @@ trait UseStoreHooks
         /** @var \Store $store */
         $store = $parameters['object'];
 
-        if (isset($store->id)) {
+        // Not nullable
+        if ($store->id) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_STORES, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STORES => $store->id],
@@ -74,7 +75,8 @@ trait UseStoreHooks
         /** @var \Store $store */
         $store = $parameters['object'];
 
-        if (isset($store->id)) {
+        // Not nullable
+        if ($store->id) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_STORES, Config::INCREMENTAL_TYPE_UPSERT);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STORES => $store->id],
@@ -99,7 +101,8 @@ trait UseStoreHooks
         /** @var \Store $store */
         $store = $parameters['object'];
 
-        if (isset($store->id)) {
+        // Not nullable
+        if ($store->id) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_STORES, Config::INCREMENTAL_TYPE_DELETE);
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STORES => $store->id],
