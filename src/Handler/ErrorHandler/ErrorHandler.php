@@ -28,7 +28,10 @@
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
 use PrestaShop\Module\PsEventbus\Api\HttpClient;
+use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
+use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
 use PrestaShop\Module\PsEventbus\Service\CommonService;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -195,33 +198,17 @@ class ErrorHandler
      */
     private function mapExceptionToCategory(\Throwable $e): string
     {
-        if (class_exists('PrestaShopDatabaseException') && $e instanceof \PrestaShopDatabaseException) {
-            return 'fatal';
-        }
+        switch ($e) {
+            case $e instanceof \PrestaShopDatabaseException:
+                return 'fatal';
 
-        if (class_exists('PrestaShopException') && $e instanceof \PrestaShopException) {
-            return 'error';
-        }
-
-        // 2) Module Exceptions
-        if (class_exists('ModuleErrorException') && $e instanceof \ModuleErrorException) {
-            return 'warning';
-        }
-
-        // Exceptions HTTP
-        if ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface) {
-            $status = $e->getStatusCode();
-            if ($status >= 500) {
+            case $e instanceof EnvVarException:
+            case $e instanceof HttpExceptionInterface && $e->getStatusCode() >= 500:
                 return 'error';
-            }
-            if ($status === 404 || $status === 410) {
-                return 'warning';
-            }
-            if (in_array($status, [401, 403], true)) {
-                return 'warning';
-            }
 
-            return 'warning';
+            case $e instanceof FirebaseException:
+            case $e instanceof HttpExceptionInterface && in_array($e->getStatusCode(), [401, 403, 404, 410], true):
+                return 'warning';
         }
 
         if ($e instanceof \ErrorException) {
