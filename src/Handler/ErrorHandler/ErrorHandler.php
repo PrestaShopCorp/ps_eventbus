@@ -209,6 +209,9 @@ class ErrorHandler
             case $e instanceof FirebaseException:
             case $e instanceof HttpExceptionInterface && in_array($e->getStatusCode(), [401, 403, 404, 410], true):
                 return 'warning';
+
+            default:
+                return 'error';
         }
 
         if ($e instanceof \ErrorException) {
