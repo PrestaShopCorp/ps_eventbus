@@ -129,7 +129,7 @@ class ErrorHandler
         }
 
         if ($this->sentryUrl) {
-            $this->sendToSentry($exception, 'error');
+            $this->sendToSentry($exception);
         }
 
         if (!$silent) {
@@ -139,23 +139,26 @@ class ErrorHandler
 
     /**
      * @param \Throwable $exception
-     * @param string $category
      *
      * @return void
      */
-    private function sendToSentry(\Throwable $exception, string $category)
+    private function sendToSentry(\Throwable $exception)
     {
-        $category = $category ? $category : 'error';
-
+        $level = $this->mapExceptionToCategory($exception);
         $configurationPsShopEmail = \Configuration::get('PS_SHOP_EMAIL');
+
+        $exceptionTags = [
+            'exception_class' => get_class($exception),
+            'code' => (string) $exception->getCode(),
+        ];
 
         $event = [
             'message' => $exception->getMessage(),
-            'level' => 'error',
+            'level' => $level,
             'logger' => 'ps_eventbus',
             'platform' => 'php',
             'environment' => $this->sentryEnv,
-            'tags' => array_merge($this->tags, ['category' => $category]),
+            'tags' => array_merge($this->tags, $exceptionTags),
             'user' => [
                 'id' => $this->tags['shop_id'] ? $this->tags['shop_id'] : null,
                 'email' => $configurationPsShopEmail,
@@ -185,6 +188,70 @@ class ErrorHandler
             ],
             $event
         );
+    }
+
+    /**
+     * Determines a Sentry level from PrestaShop/Symfony exception types
+     */
+    private function mapExceptionToCategory(\Throwable $e): string
+    {
+        if (class_exists('PrestaShopDatabaseException') && $e instanceof \PrestaShopDatabaseException) {
+            return 'fatal';
+        }
+
+        if (class_exists('PrestaShopException') && $e instanceof \PrestaShopException) {
+            return 'error';
+        }
+
+        // 2) Module Exceptions
+        if (class_exists('ModuleErrorException') && $e instanceof \ModuleErrorException) {
+            return 'warning';
+        }
+
+        // Exceptions HTTP
+        if ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface) {
+            $status = $e->getStatusCode();
+            if ($status >= 500) {
+                return 'error';
+            }
+            if ($status === 404 || $status === 410) {
+                return 'warning';
+            }
+            if (in_array($status, [401, 403], true)) {
+                return 'warning';
+            }
+
+            return 'warning';
+        }
+
+        if ($e instanceof \ErrorException) {
+            switch ($e->getSeverity()) {
+                case E_NOTICE:
+                case E_USER_NOTICE:
+                case E_DEPRECATED:
+                case E_USER_DEPRECATED:
+                    return 'info';
+
+                case E_WARNING:
+                case E_USER_WARNING:
+                    return 'warning';
+
+                case E_RECOVERABLE_ERROR:
+                    return 'error';
+
+                case E_ERROR:
+                case E_USER_ERROR:
+                case E_CORE_ERROR:
+                case E_COMPILE_ERROR:
+                case E_PARSE:
+                    return 'fatal';
+
+                default:
+                    return 'error';
+            }
+        }
+
+        return 'error';
     }
 
     /**
@@ -218,9 +285,9 @@ class ErrorHandler
                 'function' => $t['function'] ? $t['function'] : '',
                 'in_app' => $this->isInApp($file),
                 'vars' => $vars ?: null,
-                'context_line' => $codeContext['contextLine'],
-                'pre_context' => $codeContext['pre'] ?: null,
-                'post_context' => $codeContext['post'] ?: null,
+                'context_line' => $codeContext[0],
+                'pre_context' => $codeContext[1] ?: null,
+                'post_context' => $codeContext[2] ?: null,
             ];
         }
 
