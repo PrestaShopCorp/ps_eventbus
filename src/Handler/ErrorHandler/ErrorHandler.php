@@ -52,7 +52,9 @@ class ErrorHandler
     private $tags = [];
 
     // Disable cloning
-    private function __clone() {}
+    private function __clone()
+    {
+    }
 
     /**
      * @param string $sentryDsn
@@ -193,19 +195,25 @@ class ErrorHandler
 
     /**
      * Determines a Sentry level from PrestaShop/Symfony exception types
+     *
+     * @param \Throwable $e
+     *
+     * @return string
      */
-    private function mapExceptionToCategory(\Throwable $e): string
+    private function mapExceptionToCategory(\Throwable $e)
     {
+        $isPrestaShop16 = defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.6.1.11', '>=');
+
         switch ($e) {
             case $e instanceof \PrestaShopDatabaseException:
                 return 'fatal';
 
             case $e instanceof EnvVarException:
-            case $e instanceof HttpExceptionInterface && $e->getStatusCode() >= 500:
+            case !$isPrestaShop16 && $e instanceof HttpExceptionInterface && $e->getStatusCode() >= 500:
                 return 'error';
 
             case $e instanceof FirebaseException:
-            case $e instanceof HttpExceptionInterface && in_array($e->getStatusCode(), [401, 403, 404, 410], true):
+            case !$isPrestaShop16 && $e instanceof HttpExceptionInterface && in_array($e->getStatusCode(), [401, 403, 404, 410], true):
                 return 'warning';
         }
 
