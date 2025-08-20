@@ -52,9 +52,7 @@ class ErrorHandler
     private $tags = [];
 
     // Disable cloning
-    private function __clone()
-    {
-    }
+    private function __clone() {}
 
     /**
      * @param string $sentryDsn
@@ -209,9 +207,6 @@ class ErrorHandler
             case $e instanceof FirebaseException:
             case $e instanceof HttpExceptionInterface && in_array($e->getStatusCode(), [401, 403, 404, 410], true):
                 return 'warning';
-
-            default:
-                return 'error';
         }
 
         if ($e instanceof \ErrorException) {
