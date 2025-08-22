@@ -204,16 +204,23 @@ class ErrorHandler
     {
         $isPrestaShop16 = defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.6.1.11', '>=');
 
+        // Specific handling for version >= 1.6.1.11
+        if (!$isPrestaShop16) {
+            if ($e instanceof HttpExceptionInterface && $e->getStatusCode() >= 500) {
+                return 'fatal';
+            } elseif ($e instanceof HttpExceptionInterface && in_array($e->getStatusCode(), [401, 403, 404, 410], true)) {
+                return 'warning';
+            }
+        }
+
         switch ($e) {
             case $e instanceof \PrestaShopDatabaseException:
                 return 'fatal';
 
             case $e instanceof EnvVarException:
-            case !$isPrestaShop16 && $e instanceof HttpExceptionInterface && $e->getStatusCode() >= 500:
                 return 'error';
 
             case $e instanceof FirebaseException:
-            case !$isPrestaShop16 && $e instanceof HttpExceptionInterface && in_array($e->getStatusCode(), [401, 403, 404, 410], true):
                 return 'warning';
         }
 
