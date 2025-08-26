@@ -1,0 +1,116 @@
+name: E2e PR
+
+on:
+  workflow_call:
+    inputs:
+      ps-version:
+        description: 'Prestashop version (if latest no Php version needed).'
+        type: string
+        required: false
+        default: latest
+      php-version:
+        description: 'Php version'
+        type: string
+        required: false
+        default: 8.1
+  workflow_dispatch:
+    inputs:
+      ps-version:
+        description: 'Prestashop version  (if latest no Php version needed) \n
+        Compatibility: \n
+        ps8.x.x with php 8.1, 8.0, 7.4, 7.3, 7.2, 7.1 \n
+        ps1.7.8.x with 7.4, 7.3, 7.2, 7.1 \n
+        ps1.7.7.x with 7.3, 7.2, 7.1 \n
+        ps1.7.5.x & ps1.7.6.x with php 7.2, 7.1, 7.0 \n
+        ps1.7.0.x to ps1.7.4.x with php 7.1, 7.0
+        ps1.6.1.x with php 7.1, 7.0, 5.6, 5.5, 5.4, 5.3, 5.2'
+        default: 'latest'
+        type: choice
+        options:
+          - latest
+          - 8.1.7
+          - 8.0.5
+          - 1.7.8.11
+          - 1.7.7.8
+          - 1.7.6.9
+          - 1.7.5.2
+          - 1.7.4.4
+          - 1.7.3.4
+          - 1.7.2.5
+          - 1.7.1.2
+          - 1.7.0.6
+          - 1.6.1.24
+      php-version:
+        description: 'Php version'
+        default: '8.1'
+        type: choice
+        options:
+          - 8.1
+          - 8.0
+          - 7.4
+          - 7.3
+          - 7.2
+          - 7.1
+          - 7.0
+          - 5.6
+          - 5.5
+          - 5.4
+          - 5.3
+          - 5.2
+
+env:
+  DOCKER_COMPOSE_VERSION: v2.27.0
+  NODE_BUILDER_VERSION: "20"
+
+jobs:
+  e2e-tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: latest
+
+      - name: Auth Docker GCP
+        uses: ./.github/actions/auth-docker-gcp
+        with:
+          workload-identity-provider: ${{ secrets.WI_PROVIDER_INTEGRATION }}
+          service-account: ${{ secrets.WI_SA_INTEGRATION }}
+
+      - name: e2e tests
+        uses: ./.github/actions/e2e
+        with:
+          ps-version: ${{ inputs.ps-version }}
+          php-version: ${{ inputs.php-version }}
+          docker-compose-version: ${{ env.DOCKER_COMPOSE_VERSION }}
+          node-builder-version: ${{ env.NODE_BUILDER_VERSION }}
+
+      - name: Slack notification on failures
+        if: github.event_name == 'schedule' && failure()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_COLOR: EC1111
+          SLACK_TITLE: E2E Capture tests PS$${{ inputs.ps-version }} & Php${{ inputs.php-version }}
+          SLACK_MESSAGE: The latest E2E Capture tests failed :(
+          SLACK_FOOTER: 'Review the last github actions here: https://github.com/PrestaShopCorp/cloudsync/actions/workflows/e2e.yml'
+          SLACK_USERNAME: QABot
+          SLACK_CHANNEL: squad-cloudsync-qa
+          SLACK_ICON: https://avatars.githubusercontent.com/u/56089550?s=48&v=4
+
+      - name: Slack notification on success
+        if: github.event_name == 'schedule' && success()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_COLOR: 0CAD34
+          SLACK_TITLE: E2E Capture tests PS${{ matrix.ps-version }} & Php${{ matrix.php-version }}
+          SLACK_MESSAGE: ✓ The latest E2E Capture tests just passed!
+          SLACK_FOOTER: ''
+          SLACK_USERNAME: QABot
+          SLACK_CHANNEL: squad-cloudsync-qa
+          SLACK_ICON: https://avatars.githubusercontent.com/u/56089550?s=48&v=4

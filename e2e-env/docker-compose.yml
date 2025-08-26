@@ -1,6 +1,7 @@
 x-service:
   prestashop-base: &prestashop-base
     image: ${DOCKER_IMAGE_PRESTASHOP:?See e2e-env/.env.dist}
+    container_name: prestashop
     depends_on:
       mysql:
         condition: service_healthy
@@ -56,8 +57,9 @@ services:
 
   mysql:
     image: mariadb:${DOCKER_VERSION_MARIADB:?See e2e-env/.env.dist}
+    container_name: mysql
     healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect"]
+      test: [ "CMD", "healthcheck.sh", "--connect" ]
     environment:
       - MYSQL_HOST=mysql
       - MYSQL_USER=prestashop
@@ -70,6 +72,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin:latest
+    container_name: phpmyadmin
     depends_on:
       mysql:
         condition: service_healthy
@@ -87,10 +90,11 @@ services:
     build:
       context: ./cloudsync-mock
       dockerfile: Dockerfile
+    container_name: cloudsync-mock
     environment:
       - RUN_IN_DOCKER=1
     healthcheck:
-      test: ["CMD", "curl", "-sI", "http://localhost:8080"]
+      test: [ "CMD", "curl", "-sI", "http://localhost:8080" ]
     volumes:
       - ./cloudsync-mock/src:/home/node/src:ro
     ports:
@@ -101,11 +105,12 @@ services:
 
   reverse-proxy:
     image: nginx:stable-alpine
+    container_name: reverse-proxy
     healthcheck:
-      test: ["CMD", "curl", "-sI", "http://localhost:80/nginx_status"]
+      test: [ "CMD", "curl", "-sI", "http://localhost:80/nginx_status" ]
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro,cached
-    command: [nginx-debug, "-g", "daemon off;"]
+    command: [ nginx-debug, "-g", "daemon off;" ]
     ports:
       - ${HOST_PORT_BIND_CLOUDSYNC_REVERSE_PROXY:?See e2e-env/.env.dist}:80
 
