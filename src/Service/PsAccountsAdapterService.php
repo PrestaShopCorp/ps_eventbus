@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -76,7 +77,7 @@ class PsAccountsAdapterService
      *
      * @return mixed
      */
-    public function getService()
+    public function getAccountService()
     {
         if (!$this->moduleHelper->isInstalledAndActive('ps_accounts')) {
             return false;
@@ -95,41 +96,18 @@ class PsAccountsAdapterService
     }
 
     /**
-     * Get presenter from psAccounts, or null if module is'nt ready
-     *
-     * @return mixed
-     */
-    public function getPresenter()
-    {
-        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts') || !$this->getService()) {
-            return false;
-        }
-
-        try {
-            return $this->psAccountModule->getService('PrestaShop\Module\PsAccounts\Presenter\PsAccountsPresenter');
-        } catch (\Exception $e) {
-            $this->errorHandler->handle(
-                new \PrestaShopException('Failed to load PsAccountsPresenter', 0, $e),
-                true
-            );
-
-            return false;
-        }
-    }
-
-    /**
      * Get shopUuid from psAccounts, or null if module is'nt ready
      *
      * @return string
      */
     public function getShopUuid()
     {
-        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts') || !$this->getService()) {
+        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts') || !$this->getAccountService()) {
             return '';
         }
 
         try {
-            return $this->getService()->getShopUuid();
+            return $this->getAccountService()->getShopUuid();
         } catch (\Exception $e) {
             $this->errorHandler->handle(
                 new \PrestaShopException('Failed to get shop uuid from ps_account', 0, $e),
@@ -145,14 +123,18 @@ class PsAccountsAdapterService
      *
      * @return string
      */
-    public function getOrRefreshToken()
+    public function getShopToken()
     {
-        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts') || !$this->getService()) {
+        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts') || !$this->getAccountService()) {
             return '';
         }
 
         try {
-            return $this->getService()->getOrRefreshToken();
+            if (version_compare($this->psAccountModule->version, '7.1.1', '>=')) {
+                return $this->getAccountService()->getShopToken();
+            } else {
+                return $this->getAccountService()->getOrRefreshToken();
+            }
         } catch (\Exception $e) {
             $this->errorHandler->handle(
                 new \PrestaShopException('Failed to get refresh token from ps_account', 0, $e),
