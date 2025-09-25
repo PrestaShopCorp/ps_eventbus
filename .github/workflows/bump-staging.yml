@@ -32,4 +32,4 @@ jobs:
             --generate-notes \
             --latest=false
         env:
-          GH_TOKEN: ${{ secrets.GA_ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
