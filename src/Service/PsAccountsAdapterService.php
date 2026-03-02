@@ -129,6 +129,10 @@ class PsAccountsAdapterService
             return '';
         }
 
+        if ($this->psAccountModule == false) {
+            return '';
+        }
+
         try {
             if (version_compare($this->psAccountModule->version, '7.1.1', '>=')) {
                 return $this->getAccountService()->getShopToken();
