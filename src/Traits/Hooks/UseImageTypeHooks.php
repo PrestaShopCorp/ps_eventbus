@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -48,7 +49,7 @@ trait UseImageTypeHooks
         /** @var \ImageType $imageType */
         $imageType = $parameters['object'];
 
-        if ($imageType->id) {
+        if (isset($imageType->id)) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_IMAGE_TYPES, Config::INCREMENTAL_TYPE_UPSERT);
 
             $synchronizationService->insertContentIntoIncremental(
@@ -74,7 +75,7 @@ trait UseImageTypeHooks
         /** @var \ImageType $imageType */
         $imageType = $parameters['object'];
 
-        if ($imageType->id) {
+        if (isset($imageType->id)) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_IMAGE_TYPES, Config::INCREMENTAL_TYPE_UPSERT);
 
             $synchronizationService->insertContentIntoIncremental(
@@ -100,7 +101,7 @@ trait UseImageTypeHooks
         /** @var \ImageType $imageType */
         $imageType = $parameters['object'];
 
-        if ($imageType->id) {
+        if (isset($imageType->id)) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_IMAGE_TYPES, Config::INCREMENTAL_TYPE_DELETE);
 
             $synchronizationService->insertContentIntoIncremental(

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -48,11 +49,11 @@ trait UseImageHooks
         /** @var \Image $image */
         $image = $parameters['object'];
 
-        if ($image->id_product) {
+        if (isset($image->id)) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_IMAGES, Config::INCREMENTAL_TYPE_UPSERT);
 
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_IMAGES => $image->id_image],
+                [Config::COLLECTION_IMAGES => $image->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
@@ -74,11 +75,11 @@ trait UseImageHooks
         /** @var \Image $image */
         $image = $parameters['object'];
 
-        if ($image->id_product) {
+        if (isset($image->id)) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_IMAGES, Config::INCREMENTAL_TYPE_UPSERT);
 
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_IMAGES => $image->id_image],
+                [Config::COLLECTION_IMAGES => $image->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
@@ -100,11 +101,11 @@ trait UseImageHooks
         /** @var \Image $image */
         $image = $parameters['object'];
 
-        if ($image->id_product) {
+        if (isset($image->id)) {
             $synchronizationService->sendLiveSync(Config::COLLECTION_IMAGES, Config::INCREMENTAL_TYPE_UPSERT);
 
             $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_IMAGES => $image->id_image],
+                [Config::COLLECTION_IMAGES => $image->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
                 date(DATE_ATOM),
                 $this->shopId,
