@@ -1,28 +1,28 @@
 [
-  {
-    "action": "upsert",
-    "collection": "currencies",
-    "properties": {
-      "id_currency": 1,
-      "iso_code": "EUR",
-      "conversion_rate": 1,
-      "deleted": false,
-      "active": true,
-      "name": "Euro",
-      "precision": 2
+    {
+        "action": "upsert",
+        "collection": "currencies",
+        "properties": {
+            "id_currency": 1,
+            "iso_code": "EUR",
+            "conversion_rate": 1,
+            "deleted": false,
+            "active": true,
+            "name": "Euro",
+            "precision": 2
+        }
+    },
+    {
+        "action": "upsert",
+        "collection": "currencies",
+        "properties": {
+            "id_currency": 2,
+            "iso_code": "USD",
+            "conversion_rate": 1.180079,
+            "deleted": false,
+            "active": true,
+            "name": "US Dollar",
+            "precision": 2
+        }
     }
-  },
-  {
-    "action": "upsert",
-    "collection": "currencies",
-    "properties": {
-      "id_currency": 2,
-      "iso_code": "USD",
-      "conversion_rate": 1.180079,
-      "deleted": false,
-      "active": true,
-      "name": "US Dollar",
-      "precision": 2
-    }
-  }
 ]
