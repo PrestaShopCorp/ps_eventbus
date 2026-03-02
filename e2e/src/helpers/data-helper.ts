@@ -64,18 +64,19 @@ export async function loadFixture(shopContent: ShopContent): Promise<PsEventbusS
         withFileTypes: true,
     });
 
-    // use either fixture specific to PS version or latest fixture
-    const matchingFixtures = fixtureVersions
-        .filter((version) => version.isDirectory())
-        .map((version) => version.name)
-        .filter((fixtureDir) => semver.satisfies(shopSemver, fixtureDir));
+    const availableVersions = fixtureVersions.filter((v) => v.isDirectory()).map((v) => v.name);
+
+    // Cascade from most specific to least specific: patch > minor > major
+    // e.g. for 9.1.9: try "9.1.9", then "9.1", then "9"
+    const { major, minor, patch } = shopSemver;
+    const candidates = [`${major}.${minor}.${patch}`, `${major}.${minor}`, `${major}`];
+
+    const matchingFixture = candidates.find((candidate) => availableVersions.includes(candidate));
 
     let useFixture = 'latest';
 
-    if (matchingFixtures.length > 1) {
-        throw new Error(`More than one fixture matches prestashop version ${shopVersion} : ${JSON.stringify(useFixture)}`);
-    } else if (matchingFixtures.length === 1) {
-        useFixture = matchingFixtures[0];
+    if (matchingFixture) {
+        useFixture = matchingFixture;
     }
 
     const files = contents.map((content) => fs.promises.readFile(`${FIXTURE_DIR}/${useFixture}/${content}.json`, 'utf-8'));
