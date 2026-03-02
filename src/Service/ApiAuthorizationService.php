@@ -81,7 +81,7 @@ class ApiAuthorizationService
             }
 
             try {
-                $token = $this->psAccountsAdapterService->getOrRefreshToken();
+                $token = $this->psAccountsAdapterService->getShopToken();
             } catch (\Exception $exception) {
                 throw new FirebaseException($exception->getMessage());
             }

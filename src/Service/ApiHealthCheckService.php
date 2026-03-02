@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -103,7 +104,7 @@ class ApiHealthCheckService
         $isAuthentified = $this->apiAuthorizationService->authorize($jobId, true);
 
         try {
-            $token = $this->psAccountsAdapterService->getOrRefreshToken();
+            $token = $this->psAccountsAdapterService->getShopToken();
             if ($token) {
                 $psAccount = \Module::getInstanceByName('ps_accounts');
 
