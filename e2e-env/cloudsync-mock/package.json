@@ -7,7 +7,7 @@
   "engines": {
     "yarn": "please use pnpm",
     "npm": "please use pnpm",
-    "node": ">=18",
+    "node": ">=26",
     "pnpm": ">=8"
   },
   "scripts": {
