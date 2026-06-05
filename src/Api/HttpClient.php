@@ -372,38 +372,36 @@ class HttpClient
      * @param string $url The url to make the post request
      * @param array $headers Optional headers to pass to the url
      * @param array $data Post data to pass to the url
-     * @param bool $isFile If there is a multipart, set it to true or False if it is a json
+     * @param bool $isMultipart If there is a multipart, set it to true or False if it is a json
      *
      * @return self
      */
-    public function post($url, array $headers = [], array $data = [], $isFile = null)
+    public function post($url, array $headers = [], array $data = [], $isMultipart = null)
     {
-        if (is_null($isFile)) {
-            $isFile = false;
+        if (is_null($isMultipart)) {
+            $isMultipart = false;
         }
 
         $this->setHeaders($headers);
         $this->setOpt(CURLOPT_URL, $url);
 
-        if ($isFile) {
-            // Créer un fichier temporaire
-            $temp = tmpfile();
-            fwrite($temp, $this->formatNewlineJsonString($data));
-            rewind($temp);
-
-            // Sauvegarder le fichier temporaire pour cURL
-            $tempPath = stream_get_meta_data($temp)['uri'];
-            $payload = ['file' => new \CURLFile($tempPath, 'text/plain', 'file')];
-            $this->preparePayload($payload);
+        if ($isMultipart) {
+            $boundary = uniqid('', true);
+            // proper way to do this would be to use CURLStringFile, only with php >= 8.1.0
+            $body = "--{$boundary}\r\n"
+                . "Content-Disposition: form-data; name=\"file\"; filename=\"file\"\r\n"
+                . "Content-Type: text/plain\r\n\r\n"
+                . $this->formatNewlineJsonString($data)
+                . "\r\n--{$boundary}--\r\n";
+            $this->setOpt(CURLOPT_POST, true);
+            $this->setOpt(CURLOPT_POSTFIELDS, $body);
+            $this->_headers['Content-Type'] = 'Content-Type: multipart/form-data; boundary=' . $boundary;
+            $this->setOpt(CURLOPT_HTTPHEADER, array_values($this->_headers));
         } else {
             $this->prepareJsonPayload($data);
         }
 
         $this->exec();
-
-        if ($isFile) {
-            fclose($temp);
-        }
 
         return $this;
     }
