@@ -9,10 +9,7 @@ RUN npm install -g pnpm
 WORKDIR /home/node
 ADD . /home/node
 
-# Avoid "failed to compile" error from ARM deps shipped in pnpm-lock.yaml
-RUN rm pnpm-lock.yaml \
-  && pnpm install \
-  && pnpm run build
+RUN pnpm install && pnpm run build
 
 ENTRYPOINT [ "pnpm" ]
 CMD [ "start" ]
