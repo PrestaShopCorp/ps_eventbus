@@ -395,7 +395,10 @@ class HttpClient
                 . "\r\n--{$boundary}--\r\n";
             $this->setOpt(CURLOPT_POST, true);
             $this->setOpt(CURLOPT_POSTFIELDS, $body);
-            $this->setOpt(CURLOPT_HTTPHEADER, ['Content-Type: multipart/form-data; boundary=' . $boundary]);
+            // Merge boundary Content-Type into _headers, otherwise this overwrites
+            // CURLOPT_HTTPHEADER and drops Authorization/User-Agent set above.
+            $this->_headers['Content-Type'] = 'Content-Type: multipart/form-data; boundary=' . $boundary;
+            $this->setOpt(CURLOPT_HTTPHEADER, array_values($this->_headers));
         } else {
             $this->prepareJsonPayload($data);
         }
