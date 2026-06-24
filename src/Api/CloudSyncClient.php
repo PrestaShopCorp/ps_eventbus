@@ -125,6 +125,16 @@ class CloudSyncClient
 
         $url = $this->collectorApiUrl . '/upload/' . $jobId;
 
+        // TODO: gate behind `if (defined('PS_EVENTBUS_TRACE') && PS_EVENTBUS_TRACE)` once env-driven toggle is wired
+        HttpClient::traceLog(sprintf(
+            'upload jobId=%s shopId=%s items=%d fullSync=%s url=%s',
+            $jobId,
+            $this->shopId,
+            is_array($data) ? count($data) : 0,
+            $fullSyncRequested ? '1' : '0',
+            $url
+        ));
+
         $request = $this->client->post(
             $url,
             [
