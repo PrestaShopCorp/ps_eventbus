@@ -75,38 +75,3 @@ docker compose build --no-cache
 ## Usage
 
 Once the environment is running, navigate to the e2e directory and run the e2e tests.
-
-## Production profile (real ps-accounts + real CloudSync)
-
-Use the `production` profile to point the e2e shop at the real CloudSync prod URLs (from `.config.prod.php`) and authenticate against real `ps-accounts` via a Cloudflare tunnel.
-
-1. Create a Cloudflare tunnel and credentials file:
-
-   ```shell
-   cloudflared tunnel login                       # opens browser, picks a zone
-   cloudflared tunnel create ps-eventbus-e2e      # outputs <TUNNEL_UUID>.json credentials
-   cloudflared tunnel route dns ps-eventbus-e2e <your-hostname>.example.com
-   cp ~/.cloudflared/<TUNNEL_UUID>.json ./credentials.json
-   ```
-
-   The `credentials.json` file must contain the tunnel credentials (`AccountTag`, `TunnelSecret`, `TunnelID`).
-
-2. Configure `.env`:
-
-   ```env
-   COMPOSE_PROFILES=production
-   TUNNEL_NAME=<your-hostname>.example.com
-   ```
-
-3. Start the stack:
-
-   ```shell
-   docker compose up
-   ```
-
-   The `prestashop-prod` service mounts `../.config.prod.php` over the module's `config.php`, so requests go to:
-   - `https://eventbus-proxy.psessentials.net`
-   - `https://eventbus-sync.psessentials.net`
-   - `https://api.cloudsync.prestashop.com/live-sync/v1`
-
-   The `cloudsync-mock` and `reverse-proxy` containers are not started under this profile.
