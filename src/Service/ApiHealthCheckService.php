@@ -28,6 +28,7 @@
 namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsAccounts\Api\Client\AccountsClient;
+use PrestaShop\Module\PsAccounts\Service\OAuth2\Token\Validator\Validator;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 
 if (!defined('_PS_VERSION_')) {
@@ -107,17 +108,8 @@ class ApiHealthCheckService
             $token = $this->psAccountsAdapterService->getShopToken();
             if ($token) {
                 $psAccount = \Module::getInstanceByName('ps_accounts');
-
-                /* @phpstan-ignore-next-line */
-                $accountsClient = $psAccount->getService(AccountsClient::class);
-
                 $tokenIsSet = true;
-
-                /** @phpstan-ignore-next-line */
-                $response = $accountsClient->verifyToken($token);
-                if ($response && true === $response['status']) {
-                    $tokenValid = true;
-                }
+                $tokenValid = $this->verifyShopToken($psAccount, $token);
             }
         } catch (\Exception $exception) {
             $this->errorHandler->handle($exception);
@@ -188,5 +180,39 @@ class ApiHealthCheckService
 
         // return array<string>, with list of missing required table
         return array_diff(self::REQUIRED_TABLES, $filteredRequiredTables);
+    }
+
+    /**
+     * Verify a shop token. ps_accounts v8+ emits hydra tokens validated locally
+     * via JWKS (Validator). Older versions emit firebase tokens validated via
+     * the legacy /v1/shop/token/verify endpoint (AccountsClient, deprecated v8).
+     *
+     * @param \ModuleCore|false $psAccount
+     * @param string $token
+     *
+     * @return bool
+     */
+    private function verifyShopToken($psAccount, $token)
+    {
+        if (!$psAccount) {
+            return false;
+        }
+
+        $isV8 = version_compare($psAccount->version, '8.0.0', '>=');
+        /** @phpstan-ignore-next-line */
+        $serviceClass = $isV8 ? Validator::class : AccountsClient::class;
+
+        try {
+            /** @phpstan-ignore-next-line */
+            $service = $psAccount->getService($serviceClass);
+            /** @phpstan-ignore-next-line */
+            $response = $service->verifyToken($token);
+
+            return $isV8 || ($response && true === $response['status']);
+        } catch (\Exception $e) {
+            $this->errorHandler->handle($e, true);
+
+            return false;
+        }
     }
 }
