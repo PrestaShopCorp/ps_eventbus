@@ -312,6 +312,43 @@ class HttpClient
     }
 
     /**
+     * Log an inbound HTTP request hitting one of the ps_eventbus controllers.
+     * Reads $_SERVER / $_GET / $_POST / php://input.
+     *
+     * @param string $controller short controller name (e.g. 'apiShopContent')
+     *
+     * @return void
+     */
+    public static function traceIncoming($controller)
+    {
+        // TODO: gate behind `if (defined('PS_EVENTBUS_TRACE') && PS_EVENTBUS_TRACE)` once env-driven toggle is wired
+        $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : '?';
+        $uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '?';
+        $remote = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '?';
+        $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+        $authPresent = !empty($_SERVER['HTTP_AUTHORIZATION']) ? 'yes' : 'no';
+        $ctype = isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : '';
+        $body = '';
+        if ($method !== 'GET') {
+            $raw = @file_get_contents('php://input');
+            if ($raw !== false) {
+                $body = substr($raw, 0, 500);
+            }
+        }
+        self::traceLog(sprintf(
+            '⇆ inbound %s %s %s remote=%s auth=%s ctype=%s ua=%s body=%s',
+            $controller,
+            $method,
+            $uri,
+            $remote,
+            $authPresent,
+            $ctype,
+            substr($ua, 0, 80),
+            $body
+        ));
+    }
+
+    /**
      * @param array|object|string $data
      */
     protected function preparePayload($data)
