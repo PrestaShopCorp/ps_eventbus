@@ -306,7 +306,8 @@ class HttpClient
         if (!self::isTraceEnabled()) {
             return;
         }
-        $file = getenv('PS_EVENTBUS_TRACE_FILE') ?: dirname(dirname(__DIR__)) . '/trace.log';
+        $file = getenv('PS_EVENTBUS_TRACE_FILE')
+            ?: dirname(dirname(__DIR__)) . '/trace-' . date('Y-m-d') . '.log';
         $line = '[' . date('Y-m-d H:i:s') . '] [ps_eventbus] ' . $message . "\n";
         @file_put_contents($file, $line, FILE_APPEND);
     }
