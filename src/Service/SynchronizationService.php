@@ -27,6 +27,7 @@
 namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Api\CloudSyncClient;
+use PrestaShop\Module\PsEventbus\Api\HttpClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Repository\IncrementalSyncRepository;
@@ -129,12 +130,22 @@ class SynchronizationService
 
         CommonService::convertDateFormat($data);
 
+        HttpClient::traceLog(sprintf(
+            'sendFullSync shopContent=%s rows=%d offset=%d limit=%d',
+            $shopContent,
+            is_array($data) ? count($data) : 0,
+            $offset,
+            $limit
+        ));
+
         if (!empty($data)) {
             $response = $this->cloudSyncClient->upload($jobId, $data, $startTime, true);
 
             if ($response['httpCode'] == 201) {
                 $offset += $limit;
             }
+        } else {
+            HttpClient::traceLog('sendFullSync skip upload: data empty');
         }
 
         $remainingObjects = (int) $shopContentApiService->getFullSyncContentLeft($offset, $limit, $langIso);
@@ -196,6 +207,14 @@ class SynchronizationService
 
         CommonService::convertDateFormat($data);
 
+        HttpClient::traceLog(sprintf(
+            'sendIncrementalSync shopContent=%s rows=%d upserts=%d deletes=%d',
+            $shopContent,
+            is_array($data) ? count($data) : 0,
+            count($upsertedContents),
+            count($deletedContents)
+        ));
+
         if (!empty($data)) {
             $response = $this->cloudSyncClient->upload($jobId, $data, $startTime, false);
 
@@ -203,6 +222,7 @@ class SynchronizationService
                 $this->incrementalSyncRepository->removeIncrementalSyncObjects($shopContent, array_column($contentsToSync, 'id'), $langIso);
             }
         } else {
+            HttpClient::traceLog('sendIncrementalSync skip upload: data empty');
             $this->incrementalSyncRepository->removeIncrementalSyncObjects($shopContent, array_column($contentsToSync, 'id'), $langIso);
         }
 
