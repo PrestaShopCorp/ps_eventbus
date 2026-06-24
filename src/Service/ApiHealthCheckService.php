@@ -187,7 +187,7 @@ class ApiHealthCheckService
      * via JWKS (Validator). Older versions emit firebase tokens validated via
      * the legacy /v1/shop/token/verify endpoint (AccountsClient, deprecated v8).
      *
-     * @param \Module|false $psAccount
+     * @param \ModuleCore|false $psAccount
      * @param string $token
      *
      * @return bool
@@ -198,26 +198,21 @@ class ApiHealthCheckService
             return false;
         }
 
-        if (version_compare($psAccount->version, '8.0.0', '>=')) {
-            try {
-                /** @var Validator $validator */
-                /** @phpstan-ignore-next-line */
-                $validator = $psAccount->getService(Validator::class);
-                $validator->verifyToken($token);
-
-                return true;
-            } catch (\Exception $e) {
-                $this->errorHandler->handle($e, true);
-
-                return false;
-            }
-        }
-
-        /* @phpstan-ignore-next-line */
-        $accountsClient = $psAccount->getService(AccountsClient::class);
+        $isV8 = version_compare($psAccount->version, '8.0.0', '>=');
         /** @phpstan-ignore-next-line */
-        $response = $accountsClient->verifyToken($token);
+        $serviceClass = $isV8 ? Validator::class : AccountsClient::class;
 
-        return $response && true === $response['status'];
+        try {
+            /** @phpstan-ignore-next-line */
+            $service = $psAccount->getService($serviceClass);
+            /** @phpstan-ignore-next-line */
+            $response = $service->verifyToken($token);
+
+            return $isV8 || ($response && true === $response['status']);
+        } catch (\Exception $e) {
+            $this->errorHandler->handle($e, true);
+
+            return false;
+        }
     }
 }
