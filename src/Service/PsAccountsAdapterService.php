@@ -134,11 +134,14 @@ class PsAccountsAdapterService
         }
 
         try {
-            if (version_compare($this->psAccountModule->version, '7.1.1', '>=')) {
+            if (
+                version_compare($this->psAccountModule->version, '7.1.1', '>=')
+                && version_compare($this->psAccountModule->version, '8.0.0', '<')
+            ) {
                 return $this->getAccountService()->getShopToken();
-            } else {
-                return $this->getAccountService()->getOrRefreshToken();
             }
+
+            return $this->getAccountService()->getOrRefreshToken();
         } catch (\Exception $e) {
             $this->errorHandler->handle(
                 new \PrestaShopException('Failed to get refresh token from ps_account', 0, $e),
