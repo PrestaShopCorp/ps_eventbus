@@ -39,4 +39,4 @@ sonar-project.properties
 
 ### Mytuns
 credentials.json
-trace.log
+trace-*.log
