@@ -133,7 +133,7 @@ class SynchronizationService
         HttpClient::traceLog(sprintf(
             'sendFullSync shopContent=%s rows=%d offset=%d limit=%d',
             $shopContent,
-            is_array($data) ? count($data) : 0,
+            count($data),
             $offset,
             $limit
         ));
@@ -210,7 +210,7 @@ class SynchronizationService
         HttpClient::traceLog(sprintf(
             'sendIncrementalSync shopContent=%s rows=%d upserts=%d deletes=%d',
             $shopContent,
-            is_array($data) ? count($data) : 0,
+            count($data),
             count($upsertedContents),
             count($deletedContents)
         ));

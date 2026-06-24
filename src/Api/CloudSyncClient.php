@@ -129,7 +129,7 @@ class CloudSyncClient
             'upload jobId=%s shopId=%s items=%d fullSync=%s url=%s',
             $jobId,
             $this->shopId,
-            is_array($data) ? count($data) : 0,
+            count($data),
             $fullSyncRequested ? '1' : '0',
             $url
         ));
