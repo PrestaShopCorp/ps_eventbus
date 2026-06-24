@@ -134,10 +134,7 @@ class PsAccountsAdapterService
         }
 
         try {
-            if (
-                version_compare($this->psAccountModule->version, '7.1.1', '>=')
-                && version_compare($this->psAccountModule->version, '8.0.0', '<')
-            ) {
+            if (version_compare($this->psAccountModule->version, '7.1.1', '>=')) {
                 return $this->getAccountService()->getShopToken();
             }
 
