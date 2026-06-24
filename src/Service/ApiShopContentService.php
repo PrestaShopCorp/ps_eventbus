@@ -27,6 +27,7 @@
 
 namespace PrestaShop\Module\PsEventbus\Service;
 
+use PrestaShop\Module\PsEventbus\Api\HttpClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Exception\QueryParamsException;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
@@ -86,15 +87,27 @@ class ApiShopContentService
     public function handleDataSync($shopContent, $jobId, $langIso, $limit, $fullSyncRequested)
     {
         try {
+            HttpClient::traceLog(sprintf(
+                'handleDataSync shopContent=%s jobId=%s langIso=%s limit=%s fullSync=%s',
+                $shopContent,
+                $jobId,
+                $langIso,
+                (string) $limit,
+                $fullSyncRequested ? '1' : '0'
+            ));
+
             if (!in_array($shopContent, Config::SHOP_CONTENTS, true)) {
+                HttpClient::traceLog('handleDataSync bail: shopContent not in Config::SHOP_CONTENTS');
                 CommonService::exitWithExceptionMessage(new QueryParamsException('404 - ShopContent not found', Config::INVALID_URL_QUERY));
             }
 
             if ($limit < 0) {
+                HttpClient::traceLog('handleDataSync bail: negative limit');
                 CommonService::exitWithExceptionMessage(new QueryParamsException('Invalid URL Parameters', Config::INVALID_URL_QUERY));
             }
 
-            $this->apiAuthorizationService->authorize($jobId, false);
+            $authorized = $this->apiAuthorizationService->authorize($jobId, false);
+            HttpClient::traceLog('handleDataSync authorize() returned ' . ($authorized ? 'true' : 'false'));
 
             $response = [];
 
@@ -137,6 +150,12 @@ class ApiShopContentService
                 $fullSyncIsFinished = $typeSync['full_sync_finished'];
                 $offset = (int) $typeSync['offset'];
             }
+
+            HttpClient::traceLog(sprintf(
+                'handleDataSync branch: %s (offset=%d)',
+                $isFullSync ? 'sendFullSync' : 'sendIncrementalSync',
+                $offset
+            ));
 
             if ($isFullSync) {
                 $response = $this->synchronizationService->sendFullSync(
