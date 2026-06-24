@@ -125,20 +125,14 @@ class ApiAuthorizationService
         }
 
         // Check if the job already exists
-        $job = $this->syncRepository->findJobById($jobId);
-
-        if ($job) {
+        if ($this->syncRepository->findJobById($jobId)) {
             return true;
         }
 
         // Check the jobId validity to avoid Denial Of Service
         $jobValidationResponse = $this->cloudSyncClient->validateJobId($jobId);
 
-        if ((int) $jobValidationResponse['httpCode'] !== 201) {
-            return false;
-        }
-
-        // Cache the valid jobId
-        return $this->syncRepository->insertJob($jobId, date(DATE_ATOM));
+        return (int) $jobValidationResponse['httpCode'] === 201
+            && $this->syncRepository->insertJob($jobId, date(DATE_ATOM));
     }
 }
