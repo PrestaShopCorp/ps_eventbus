@@ -265,6 +265,10 @@ class HttpClient
      */
     protected function exec()
     {
+        // TODO: gate behind `if (defined('PS_EVENTBUS_TRACE') && PS_EVENTBUS_TRACE)` once env-driven toggle is wired
+        $url = curl_getinfo($this->curl, CURLINFO_EFFECTIVE_URL);
+        self::traceLog('→ ' . $url);
+
         $this->response_headers = [];
         $this->response = curl_exec($this->curl);
         $this->curl_error_code = curl_errno($this->curl);
@@ -278,7 +282,33 @@ class HttpClient
         $this->http_error_message = $this->error ? (isset($this->response_headers['0']) ? $this->response_headers['0'] : '') : '';
         $this->error_message = $this->curl_error ? $this->getErrorMessage() : $this->http_error_message;
 
+        // TODO: gate behind `if (defined('PS_EVENTBUS_TRACE') && PS_EVENTBUS_TRACE)` once env-driven toggle is wired
+        self::traceLog(sprintf(
+            '← %d %s%s body=%s',
+            $this->http_status_code,
+            $url,
+            $this->curl_error ? ' curl_err=' . $this->curl_error_message : '',
+            substr((string) $this->response, 0, 500)
+        ));
+
         return $this->error_code;
+    }
+
+    /**
+     * Append a trace line to the ps_eventbus log file.
+     * File path overridable via env var PS_EVENTBUS_TRACE_FILE (default: /var/log/ps_eventbus/trace.log).
+     * Host-mountable via docker-compose volume.
+     *
+     * @param string $message
+     *
+     * @return void
+     */
+    public static function traceLog($message)
+    {
+        // Default: write next to the module sources (host-mounted) so the file appears at the repo root.
+        $file = getenv('PS_EVENTBUS_TRACE_FILE') ?: dirname(dirname(__DIR__)) . '/trace.log';
+        $line = '[' . date('Y-m-d H:i:s') . '] [ps_eventbus] ' . $message . "\n";
+        @file_put_contents($file, $line, FILE_APPEND);
     }
 
     /**
