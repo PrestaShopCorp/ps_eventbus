@@ -120,6 +120,10 @@ class ApiAuthorizationService
      */
     private function authorizeCall($jobId)
     {
+        if (empty($jobId)) {
+            return false;
+        }
+
         // Check if the job already exists
         $job = $this->syncRepository->findJobById($jobId);
 
