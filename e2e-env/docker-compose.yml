@@ -61,6 +61,7 @@ services:
     environment:
       - PS_DOMAIN=${TUNNEL_NAME}
       - PS_PROTOCOL=https
+      - DEBUG_MODE=true
     ports:
       - ${HOST_PORT_BIND_PRESTASHOP:?See e2e-env/.env.dist}:80
     volumes:
