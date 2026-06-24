@@ -40,7 +40,7 @@ class ps_EventbusApiHealthCheckModuleFrontController extends ModuleFrontControll
      */
     public function postProcess()
     {
-        \PrestaShop\Module\PsEventbus\Api\HttpClient::traceIncoming('apiHealthCheck');
+        PrestaShop\Module\PsEventbus\Api\HttpClient::traceIncoming('apiHealthCheck');
 
         /** @var string $jobId */
         $jobId = Tools::getValue('job_id');

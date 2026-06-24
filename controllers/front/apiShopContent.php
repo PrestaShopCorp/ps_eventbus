@@ -40,7 +40,7 @@ class ps_EventbusApiShopContentModuleFrontController extends ModuleFrontControll
      */
     public function postProcess()
     {
-        \PrestaShop\Module\PsEventbus\Api\HttpClient::traceIncoming('apiShopContent');
+        PrestaShop\Module\PsEventbus\Api\HttpClient::traceIncoming('apiShopContent');
 
         /** @var string $shopContent */
         $shopContent = Tools::getValue('shop_content');
