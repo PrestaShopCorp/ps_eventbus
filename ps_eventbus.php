@@ -89,7 +89,11 @@ class Ps_eventbus extends Module
         $this->author = 'PrestaShop';
         $this->need_instance = 0;
         $this->bootstrap = true;
-        $this->version = '0.0.0';
+        // Must be 4.0.0+ — CloudSync routes sync requests to apiShopContent only when
+        // the module reports v4+. Lower versions get routed to legacy controllers
+        // (apiOrders, apiInfo, …) that this module no longer ships, so every sync 404s.
+        // The Makefile's `replace_version` rewrites this at zip build time from the git tag.
+        $this->version = '4.0.0';
         $this->module_key = '7d76e08a13331c6c393755886ec8d5ce';
 
         parent::__construct();
