@@ -1,0 +1,156 @@
+[
+  {
+    "tag": "1.0.0",
+    "added": [
+      "carts",
+      "categories",
+      "deletedobjects",
+      "googletaxonomies",
+      "healthcheck",
+      "info",
+      "modules",
+      "orders",
+      "products",
+      "themes"
+    ],
+    "removed": []
+  },
+  {
+    "tag": "v1.4.0",
+    "added": [
+      "carrier"
+    ],
+    "removed": []
+  },
+  {
+    "tag": "v1.6.4",
+    "added": [
+      "bundles",
+      "cartproducts",
+      "customprices",
+      "customproductcarrier",
+      "deleted",
+      "orderdetails",
+      "shops",
+      "specificprice",
+      "taxonomies"
+    ],
+    "removed": []
+  },
+  {
+    "tag": "v1.7.0",
+    "added": [
+      "attributes",
+      "carriers",
+      "customproductcarriers",
+      "specificprices"
+    ],
+    "removed": [
+      "carrier",
+      "customprices",
+      "customproductcarrier",
+      "specificprice"
+    ]
+  },
+  {
+    "tag": "v1.7.8",
+    "added": [
+      "orderstatushistory"
+    ],
+    "removed": []
+  },
+  {
+    "tag": "v1.9.4",
+    "added": [
+      "currencies"
+    ],
+    "removed": []
+  },
+  {
+    "tag": "v1.10.0",
+    "added": [
+      "customers"
+    ],
+    "removed": []
+  },
+  {
+    "tag": "v1.10.3",
+    "added": [
+      "wishlistproducts",
+      "wishlists"
+    ],
+    "removed": []
+  },
+  {
+    "tag": "v1.10.6",
+    "added": [
+      "cartrules",
+      "ordercartrules"
+    ],
+    "removed": []
+  },
+  {
+    "tag": "v1.10.7",
+    "added": [
+      "stores"
+    ],
+    "removed": []
+  },
+  {
+    "tag": "v1.10.8",
+    "added": [
+      "stockmovements",
+      "stocks"
+    ],
+    "removed": []
+  },
+  {
+    "tag": "v2.3.0",
+    "added": [
+      "manufacturers",
+      "productsuppliers",
+      "suppliers"
+    ],
+    "removed": []
+  },
+  {
+    "tag": "v2.3.2",
+    "added": [
+      "languages"
+    ],
+    "removed": []
+  },
+  {
+    "tag": "v3.0.0",
+    "added": [
+      "employees",
+      "images",
+      "imagetypes",
+      "translations"
+    ],
+    "removed": []
+  },
+  {
+    "tag": "v4.0.0",
+    "added": [
+      "carrierdetails",
+      "carriertaxes",
+      "shopcontent",
+      "shopcontentabstract"
+    ],
+    "removed": [
+      "attributes",
+      "deleted",
+      "deletedobjects",
+      "googletaxonomies",
+      "shops"
+    ]
+  },
+  {
+    "tag": "v4.0.2",
+    "added": [
+      "ordercarriers"
+    ],
+    "removed": []
+  }
+]

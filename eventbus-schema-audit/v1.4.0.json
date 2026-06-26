@@ -1,0 +1,318 @@
+{
+  "tag": "v1.4.0",
+  "api_controllers": [
+    "carrier",
+    "carts",
+    "categories",
+    "deletedobjects",
+    "googletaxonomies",
+    "healthcheck",
+    "info",
+    "modules",
+    "orders",
+    "products",
+    "themes"
+  ],
+  "shop_content_services": [],
+  "config_collections": [],
+  "fields_by_type": {
+    "cart": {
+      "created_at": {
+        "type": "string",
+        "source": "select"
+      },
+      "id_cart": {
+        "type": "string",
+        "source": "select"
+      },
+      "updated_at": {
+        "type": "string",
+        "source": "select"
+      }
+    },
+    "cart_product": {
+      "created_at": {
+        "type": "string",
+        "source": "select"
+      },
+      "id_cart": {
+        "type": "string",
+        "source": "select"
+      },
+      "id_product": {
+        "type": "string",
+        "source": "select"
+      },
+      "id_product_attribute": {
+        "type": "string",
+        "source": "select"
+      },
+      "quantity": {
+        "type": "string",
+        "source": "select"
+      }
+    },
+    "category": {
+      "id_category": {
+        "type": "string",
+        "source": "select"
+      },
+      "id_parent": {
+        "type": "string",
+        "source": "select"
+      },
+      "name": {
+        "type": "string",
+        "source": "select"
+      }
+    },
+    "google_taxonomy": {
+      "google_category_id": {
+        "type": "string",
+        "source": "select"
+      },
+      "id_category": {
+        "type": "string",
+        "source": "select"
+      }
+    },
+    "image": {
+      "id_image": {
+        "type": "string",
+        "source": "select"
+      }
+    },
+    "module": {
+      "active": {
+        "type": "string",
+        "source": "select"
+      },
+      "module_id": {
+        "type": "string",
+        "source": "select"
+      },
+      "module_version": {
+        "type": "string",
+        "source": "select"
+      },
+      "name": {
+        "type": "string",
+        "source": "select"
+      }
+    },
+    "order": {
+      "conversion_rate": {
+        "type": "string",
+        "source": "select"
+      },
+      "current_state": {
+        "type": "string",
+        "source": "select"
+      },
+      "id_cart": {
+        "type": "string",
+        "source": "select"
+      },
+      "id_customer": {
+        "type": "string",
+        "source": "select"
+      },
+      "id_order": {
+        "type": "string",
+        "source": "select"
+      },
+      "reference": {
+        "type": "string",
+        "source": "select"
+      },
+      "total_paid_tax_excl": {
+        "type": "string",
+        "source": "select"
+      },
+      "total_paid_tax_incl": {
+        "type": "string",
+        "source": "select"
+      }
+    },
+    "order_detail": {
+      "category": {
+        "type": "string",
+        "source": "select"
+      },
+      "conversion_rate": {
+        "type": "string",
+        "source": "select"
+      },
+      "created_at": {
+        "type": "string",
+        "source": "select"
+      },
+      "currency": {
+        "type": "string",
+        "source": "select"
+      },
+      "id_order": {
+        "type": "string",
+        "source": "select"
+      },
+      "id_order_detail": {
+        "type": "string",
+        "source": "select"
+      },
+      "iso_code": {
+        "type": "string",
+        "source": "select"
+      },
+      "product_attribute_id": {
+        "type": "string",
+        "source": "select"
+      },
+      "product_id": {
+        "type": "string",
+        "source": "select"
+      },
+      "product_quantity": {
+        "type": "string",
+        "source": "select"
+      },
+      "refund": {
+        "type": "string",
+        "source": "select"
+      },
+      "refund_tax_excl": {
+        "type": "string",
+        "source": "select"
+      },
+      "unit_price_tax_excl": {
+        "type": "string",
+        "source": "select"
+      },
+      "unit_price_tax_incl": {
+        "type": "string",
+        "source": "select"
+      },
+      "updated_at": {
+        "type": "string",
+        "source": "select"
+      }
+    },
+    "product": {
+      "active": {
+        "type": "string",
+        "source": "select"
+      },
+      "condition": {
+        "type": "string",
+        "source": "select"
+      },
+      "cover": {
+        "type": "string",
+        "source": "select"
+      },
+      "created_at": {
+        "type": "string",
+        "source": "select"
+      },
+      "default_category": {
+        "type": "string",
+        "source": "select"
+      },
+      "description": {
+        "type": "string",
+        "source": "select"
+      },
+      "description_short": {
+        "type": "string",
+        "source": "select"
+      },
+      "ean": {
+        "type": "string",
+        "source": "select"
+      },
+      "id_attribute": {
+        "type": "string",
+        "source": "select"
+      },
+      "id_category_default": {
+        "type": "string",
+        "source": "select"
+      },
+      "id_image": {
+        "type": "string",
+        "source": "select"
+      },
+      "id_product": {
+        "type": "string",
+        "source": "select"
+      },
+      "id_product_attribute": {
+        "type": "string",
+        "source": "select"
+      },
+      "is_default_attribute": {
+        "type": "string",
+        "source": "select"
+      },
+      "isbn": {
+        "type": "string",
+        "source": "select"
+      },
+      "link_rewrite": {
+        "type": "string",
+        "source": "select"
+      },
+      "manufacturer": {
+        "type": "string",
+        "source": "select"
+      },
+      "name": {
+        "type": "string",
+        "source": "select"
+      },
+      "price_tax_excl": {
+        "type": "string",
+        "source": "select"
+      },
+      "quantity": {
+        "type": "string",
+        "source": "select"
+      },
+      "reference": {
+        "type": "string",
+        "source": "select"
+      },
+      "upc": {
+        "type": "string",
+        "source": "select"
+      },
+      "updated_at": {
+        "type": "string",
+        "source": "select"
+      },
+      "visibility": {
+        "type": "string",
+        "source": "select"
+      },
+      "weight": {
+        "type": "string",
+        "source": "select"
+      }
+    },
+    "state": {
+      "iso_code": {
+        "type": "string",
+        "source": "select"
+      }
+    },
+    "tax": {
+      "country_iso_code": {
+        "type": "string",
+        "source": "select"
+      },
+      "rate": {
+        "type": "string",
+        "source": "select"
+      }
+    }
+  }
+}
