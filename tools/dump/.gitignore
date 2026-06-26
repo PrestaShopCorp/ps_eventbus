@@ -1,0 +1,4 @@
+worktrees/
+dumps/_run.log
+dumps/_summary.txt
+dumps/_log_*.txt

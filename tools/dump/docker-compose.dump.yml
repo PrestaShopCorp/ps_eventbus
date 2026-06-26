@@ -1,0 +1,41 @@
+services:
+  prestashop-dump:
+    image: ${DOCKER_IMAGE_PRESTASHOP:?set in .env}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      cloudsync-mock:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "-sI",
+          "-H",
+          "Host: localhost:${HOST_PORT_BIND_PRESTASHOP}",
+          "http://localhost:80/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+    environment:
+      - ON_INIT_SCRIPT_FAILURE=fail
+      - DEBUG_MODE=true
+      - INIT_SCRIPTS_USER=root
+      - PS_DOMAIN=localhost:${HOST_PORT_BIND_PRESTASHOP}
+    ports:
+      - ${HOST_PORT_BIND_PRESTASHOP}:80
+    volumes:
+      - ${DUMP_WORKTREE:?set DUMP_WORKTREE}:/var/www/html/modules/ps_eventbus:rw
+      - ../tools/dump/init-scripts/install-ps-accounts-mock.sh:/tmp/init-scripts/install-ps-accounts-mock.sh:ro
+      - ./init-scripts/install-ps-eventbus.sh:/tmp/init-scripts/install-ps-eventbus.sh:ro
+    profiles: [dump]
+
+  cloudsync-mock:
+    environment:
+      - RUN_IN_DOCKER=1
+      - DUMP_DIR=/dumps
+      - DUMP_LABEL=${DUMP_LABEL:?set DUMP_LABEL}
+    volumes:
+      - ${DUMP_OUTPUT_DIR:?set DUMP_OUTPUT_DIR}:/dumps:rw
