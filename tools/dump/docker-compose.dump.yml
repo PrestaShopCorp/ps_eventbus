@@ -1,6 +1,32 @@
 services:
+  mysql:
+    image: mariadb:lts
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect"]
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=prestashop
+      - MYSQL_PASSWORD=prestashop
+      - MYSQL_ROOT_PASSWORD=prestashop
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=prestashop
+
+  cloudsync-mock:
+    build:
+      context: ../../e2e-env/cloudsync-mock
+      dockerfile: Dockerfile
+    healthcheck:
+      test: ["CMD", "curl", "-sI", "http://localhost:8080"]
+    environment:
+      - RUN_IN_DOCKER=1
+      - DUMP_DIR=/dumps
+      - DUMP_LABEL=${DUMP_LABEL:?set DUMP_LABEL}
+    volumes:
+      - ../../e2e-env/cloudsync-mock/src:/home/node/src:ro
+      - ${DUMP_OUTPUT_DIR:?set DUMP_OUTPUT_DIR}:/dumps:rw
+
   prestashop-dump:
-    image: ${DOCKER_IMAGE_PRESTASHOP:?set in .env}
+    image: ${DOCKER_IMAGE_PRESTASHOP:?set DOCKER_IMAGE_PRESTASHOP}
     depends_on:
       mysql:
         condition: service_healthy
@@ -12,30 +38,17 @@ services:
           "CMD",
           "curl",
           "-sI",
-          "-H",
-          "Host: localhost:${HOST_PORT_BIND_PRESTASHOP}",
           "http://localhost:80/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck",
         ]
       interval: 10s
       timeout: 5s
-      retries: 30
+      retries: 60
     environment:
       - ON_INIT_SCRIPT_FAILURE=fail
       - DEBUG_MODE=true
       - INIT_SCRIPTS_USER=root
-      - PS_DOMAIN=localhost:${HOST_PORT_BIND_PRESTASHOP}
-    ports:
-      - ${HOST_PORT_BIND_PRESTASHOP}:80
+      - PS_DOMAIN=localhost
     volumes:
       - ${DUMP_WORKTREE:?set DUMP_WORKTREE}:/var/www/html/modules/ps_eventbus:rw
-      - ../tools/dump/init-scripts/install-ps-accounts-mock.sh:/tmp/init-scripts/install-ps-accounts-mock.sh:ro
-      - ./init-scripts/install-ps-eventbus.sh:/tmp/init-scripts/install-ps-eventbus.sh:ro
-    profiles: [dump]
-
-  cloudsync-mock:
-    environment:
-      - RUN_IN_DOCKER=1
-      - DUMP_DIR=/dumps
-      - DUMP_LABEL=${DUMP_LABEL:?set DUMP_LABEL}
-    volumes:
-      - ${DUMP_OUTPUT_DIR:?set DUMP_OUTPUT_DIR}:/dumps:rw
+      - ./init-scripts/install-ps-accounts-mock.sh:/tmp/init-scripts/install-ps-accounts-mock.sh:ro
+      - ../../e2e-env/init-scripts/install-ps-eventbus.sh:/tmp/init-scripts/install-ps-eventbus.sh:ro
