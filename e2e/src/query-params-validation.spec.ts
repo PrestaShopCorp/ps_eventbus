@@ -76,7 +76,14 @@ describe('Query param validation', () => {
 
             messages.forEach((response) => {
                 if (expectedNextObjectCount !== null && expectedNextObjectCount >= 0) {
-                    expect(response.remaining_objects).toEqual(expectedNextObjectCount);
+                    // carrier-details paginates per id_reference (one ref = one
+                    // page, all its rows emitted together), so remaining_objects
+                    // does not decrease by `limit` rows per page.
+                    if (shopContent === 'carrier-details') {
+                        expect(response.remaining_objects).toBeLessThanOrEqual(expectedNextObjectCount + limit);
+                    } else {
+                        expect(response.remaining_objects).toEqual(expectedNextObjectCount);
+                    }
                 }
 
                 expectedNextObjectCount = response.remaining_objects - limit;

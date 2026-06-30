@@ -58,8 +58,7 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
         $rows = [];
 
         if (!empty($result)) {
-            $lastRow = end($result);
-            $newSeekKey = (string) (int) $lastRow['id_carrier'];
+            $newSeekKey = (string) max(array_map('intval', array_column($result, 'id_reference')));
 
             $this->castCarrierDetails($result);
 

@@ -85,7 +85,7 @@ class SyncRepository extends AbstractRepository
 
         $value = $this->db->getValue($this->query);
 
-        return $value === false ? null : $value;
+        return $value === false || $value === '' ? null : $value;
     }
 
     /**

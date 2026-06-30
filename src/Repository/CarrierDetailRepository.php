@@ -83,8 +83,7 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
             ->leftJoin('range_price', 'rp', 'ca.id_carrier = rp.id_carrier AND d.id_range_price = rp.id_range_price')
             ->leftJoin('state', 's', 'co.id_zone = s.id_zone AND co.id_country = s.id_country AND s.active = 1')
             ->select('ca.id_reference')
-            ->select('ca.id_carrier')
-            ->groupBy('ca.id_carrier, ca.id_reference, co.id_zone, id_range')
+            ->groupBy('ca.id_reference, co.id_zone, id_range')
         ;
 
         if ($withSelecParameters) {
@@ -123,19 +122,17 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
                         SEPARATOR \',\'
                     ) AS state_ids
                 ')
-                ->orderBy('ca.id_carrier ASC')
             ;
         }
     }
 
     /**
-     * Seek-based page: returns rows strictly after $lastSeekKey, ordered by ca.id_carrier.
-     * The outbox id_object for carrier_details is the parent id_carrier, so pagination
-     * is also by id_carrier — a page may include multiple detail rows per carrier and
-     * $limit is therefore approximate.
+     * Seek per id_reference: one page emits every (id_zone, id_range) row for
+     * the next $limit references after the cursor. $limit applies to the
+     * reference count, not the row count.
      *
      * @param string|null $lastSeekKey
-     * @param int $limit
+     * @param int $limit max number of references emitted in this page
      * @param string $langIso
      *
      * @return array<mixed>
@@ -147,11 +144,20 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
     {
         $this->generateFullQuery($langIso, true);
 
-        if ($lastSeekKey !== null) {
-            $this->query->where('ca.id_carrier > ' . (int) $lastSeekKey);
+        $refs = $this->db->executeS('
+            SELECT DISTINCT ca.id_reference
+              FROM ' . _DB_PREFIX_ . self::TABLE_NAME . ' ca
+             WHERE ca.id_reference > ' . (int) $lastSeekKey . '
+             ORDER BY ca.id_reference ASC
+             LIMIT ' . (int) $limit . '
+        ');
+
+        if (!is_array($refs) || empty($refs)) {
+            return [];
         }
 
-        $this->query->limit((int) $limit);
+        $ids = array_map('intval', array_column($refs, 'id_reference'));
+        $this->query->where('ca.id_reference IN (' . implode(',', $ids) . ')');
 
         return $this->runQuery();
     }
@@ -179,8 +185,7 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
     }
 
     /**
-     * Count rows with ca.id_carrier > cursor. Uses a subquery wrapper because
-     * the underlying query has a GROUP BY and aggregate selects.
+     * Remaining grouped rows for references strictly after the cursor.
      *
      * @param string|null $lastSeekKey
      * @param string $langIso
@@ -193,10 +198,7 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
     public function countFullSyncContentLeft($lastSeekKey, $langIso)
     {
         $this->generateFullQuery($langIso, true);
-
-        if ($lastSeekKey !== null) {
-            $this->query->where('ca.id_carrier > ' . (int) $lastSeekKey);
-        }
+        $this->query->where('ca.id_reference > ' . (int) $lastSeekKey);
 
         $result = $this->db->executeS('
             SELECT COUNT(*) AS count
