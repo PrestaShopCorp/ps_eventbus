@@ -78,7 +78,6 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
                 ->select('o.date_add as created_at')
                 ->select('o.date_upd as updated_at')
                 ->select('o.id_carrier')
-                ->select('o.payment as payment_name')
                 ->select('o.valid as is_validated')
                 ->select('ost.paid as is_paid')
                 ->select('ost.shipped as is_shipped')
