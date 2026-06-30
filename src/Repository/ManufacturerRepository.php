@@ -63,6 +63,7 @@ class ManufacturerRepository extends AbstractRepository implements RepositoryInt
                 ->select('mal.meta_title')
                 ->select('mal.meta_description')
                 ->select('mas.id_shop')
+                ->orderBy('ma.id_manufacturer ASC')
             ;
 
             // REMOVED HERE: https://github.com/PrestaShop/PrestaShop/commit/f37a8f61017654bae160b528a1a2eaf49edbdac0
@@ -73,7 +74,9 @@ class ManufacturerRepository extends AbstractRepository implements RepositoryInt
     }
 
     /**
-     * @param int $offset
+     * Seek-based page: returns rows strictly after $lastSeekKey, ordered by ma.id_manufacturer.
+     *
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
@@ -82,11 +85,15 @@ class ManufacturerRepository extends AbstractRepository implements RepositoryInt
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso)
+    public function retrieveContentsForFull($lastSeekKey, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
 
-        $this->query->limit((int) $limit, (int) $offset);
+        if ($lastSeekKey !== null) {
+            $this->query->where('ma.id_manufacturer > ' . (int) $lastSeekKey);
+        }
+
+        $this->query->limit((int) $limit);
 
         return $this->runQuery();
     }
@@ -114,8 +121,9 @@ class ManufacturerRepository extends AbstractRepository implements RepositoryInt
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * Count rows with ma.id_manufacturer > cursor.
+     *
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
@@ -123,14 +131,18 @@ class ManufacturerRepository extends AbstractRepository implements RepositoryInt
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    public function countFullSyncContentLeft($lastSeekKey, $langIso)
     {
         $this->generateFullQuery($langIso, false);
 
-        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+        if ($lastSeekKey !== null) {
+            $this->query->where('ma.id_manufacturer > ' . (int) $lastSeekKey);
+        }
+
+        $this->query->select('COUNT(*) as count');
 
         $result = $this->runQuery(true);
 
-        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
+        return !empty($result[0]['count']) ? (int) $result[0]['count'] : 0;
     }
 }

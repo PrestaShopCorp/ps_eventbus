@@ -58,6 +58,7 @@ class StockRepository extends AbstractRepository implements RepositoryInterface
                 ->select('sa.quantity')
                 ->select('sa.depends_on_stock')
                 ->select('sa.out_of_stock')
+                ->orderBy('sa.id_stock_available ASC')
             ;
 
             // https://github.com/PrestaShop/PrestaShop/commit/2a3269ad93b1985f2615d6604458061d4989f0ea#diff-e98d435095567c145b49744715fd575eaab7050328c211b33aa9a37158421ff4R2186
@@ -76,7 +77,9 @@ class StockRepository extends AbstractRepository implements RepositoryInterface
     }
 
     /**
-     * @param int $offset
+     * Seek-based page: returns rows strictly after $lastSeekKey, ordered by sa.id_stock_available.
+     *
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
@@ -85,11 +88,15 @@ class StockRepository extends AbstractRepository implements RepositoryInterface
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso)
+    public function retrieveContentsForFull($lastSeekKey, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
 
-        $this->query->limit((int) $limit, (int) $offset);
+        if ($lastSeekKey !== null) {
+            $this->query->where('sa.id_stock_available > ' . (int) $lastSeekKey);
+        }
+
+        $this->query->limit((int) $limit);
 
         return $this->runQuery();
     }
@@ -117,8 +124,9 @@ class StockRepository extends AbstractRepository implements RepositoryInterface
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * Count rows with sa.id_stock_available > cursor.
+     *
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
@@ -126,14 +134,18 @@ class StockRepository extends AbstractRepository implements RepositoryInterface
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    public function countFullSyncContentLeft($lastSeekKey, $langIso)
     {
         $this->generateFullQuery($langIso, false);
 
-        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+        if ($lastSeekKey !== null) {
+            $this->query->where('sa.id_stock_available > ' . (int) $lastSeekKey);
+        }
+
+        $this->query->select('COUNT(*) as count');
 
         $result = $this->runQuery(true);
 
-        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
+        return !empty($result[0]['count']) ? (int) $result[0]['count'] : 0;
     }
 }

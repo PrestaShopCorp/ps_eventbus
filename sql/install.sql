@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS `PREFIX_eventbus_type_sync`
 (
     `type`               VARCHAR(50)      NOT NULL,
-    `offset`             INT(10) UNSIGNED NOT NULL DEFAULT 0,
+    `last_seek_key`      VARCHAR(190)              DEFAULT NULL,
     `id_shop`            INT(10) UNSIGNED NOT NULL,
     `lang_iso`           VARCHAR(3),
     `full_sync_finished` TINYINT(1)       NOT NULL DEFAULT 0,

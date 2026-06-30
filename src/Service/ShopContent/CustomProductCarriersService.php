@@ -44,27 +44,55 @@ class CustomProductCarriersService extends ShopContentAbstractService implements
     }
 
     /**
-     * @param int $offset
+     * Encode the composite outbox id_object "{id_product}-{id_carrier_reference}"
+     * into a lexicographically-comparable seek key matching the format
+     * produced inside getContentsForFull.
+     *
+     * @param string $idObject
+     *
+     * @return string
+     */
+    public function encodeOutboxIdAsSeekKey($idObject)
+    {
+        list($a, $b) = array_pad(explode('-', (string) $idObject, 2), 2, '0');
+
+        return $this->padInt((int) $a) . '-' . $this->padInt((int) $b);
+    }
+
+    /**
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
-     * @return array<mixed>
+     * @return array{rows: array<mixed>, lastSeekKey: ?string}
      */
-    public function getContentsForFull($offset, $limit, $langIso)
+    public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $result = $this->customProductCarrierRepository->retrieveContentsForFull($offset, $limit, $langIso);
+        $rawRows = $this->customProductCarrierRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
-        if (empty($result)) {
-            return [];
+        $newSeekKey = $lastSeekKey;
+        $rows = [];
+
+        if (!empty($rawRows)) {
+            $lastRow = end($rawRows);
+            $idCarrierReference = isset($lastRow['id_carrier_reference']) ? (int) $lastRow['id_carrier_reference'] : 0;
+            $newSeekKey = $this->padInt((int) $lastRow['id_product'])
+                . '-'
+                . $this->padInt($idCarrierReference);
+
+            $rows = array_map(function ($item) {
+                return [
+                    'action' => Config::INCREMENTAL_TYPE_UPSERT,
+                    'collection' => Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
+                    'properties' => $item,
+                ];
+            }, $rawRows);
         }
 
-        return array_map(function ($item) {
-            return [
-                'action' => Config::INCREMENTAL_TYPE_UPSERT,
-                'collection' => Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS,
-                'properties' => $item,
-            ];
-        }, $result);
+        return [
+            'rows' => $rows,
+            'lastSeekKey' => $newSeekKey,
+        ];
     }
 
     /**
@@ -83,14 +111,13 @@ class CustomProductCarriersService extends ShopContentAbstractService implements
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
      */
-    public function getFullSyncContentLeft($offset, $limit, $langIso)
+    public function getFullSyncContentLeft($lastSeekKey, $langIso)
     {
-        return $this->customProductCarrierRepository->countFullSyncContentLeft($offset, $limit, $langIso);
+        return $this->customProductCarrierRepository->countFullSyncContentLeft($lastSeekKey, $langIso);
     }
 }

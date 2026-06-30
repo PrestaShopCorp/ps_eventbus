@@ -49,12 +49,21 @@ class CustomProductCarrierRepository extends AbstractRepository implements Repos
         $this->query->where('pc.id_shop = ' . parent::getShopContext()->id);
 
         if ($withSelecParameters) {
-            $this->query->select('pc.*');
+            $this->query
+                ->select('pc.*')
+                ->orderBy('pc.id_product ASC, IFNULL(pc.id_carrier_reference, 0) ASC')
+            ;
         }
     }
 
     /**
-     * @param int $offset
+     * Seek-based page: returns rows strictly after $lastSeekKey, ordered by
+     * (pc.id_product, IFNULL(pc.id_carrier_reference, 0)).
+     *
+     * The seek key encodes the composite (id_product, id_carrier_reference)
+     * pair as 'pad(11)-pad(11)'.
+     *
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
@@ -63,13 +72,36 @@ class CustomProductCarrierRepository extends AbstractRepository implements Repos
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso)
+    public function retrieveContentsForFull($lastSeekKey, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
 
-        $this->query->limit((int) $limit, (int) $offset);
+        if ($lastSeekKey !== null) {
+            list($lastA, $lastB) = $this->decodeCompositeSeekKey($lastSeekKey);
+            $this->query->where(
+                '(pc.id_product > ' . $lastA
+                . ' OR (pc.id_product = ' . $lastA
+                . ' AND IFNULL(pc.id_carrier_reference, 0) > ' . $lastB . '))'
+            );
+        }
+
+        $this->query->limit((int) $limit);
 
         return $this->runQuery();
+    }
+
+    /**
+     * @param string $seekKey
+     *
+     * @return array{0: int, 1: int}
+     */
+    private function decodeCompositeSeekKey($seekKey)
+    {
+        $parts = explode('-', $seekKey, 2);
+        $a = isset($parts[0]) ? (int) $parts[0] : 0;
+        $b = isset($parts[1]) ? (int) $parts[1] : 0;
+
+        return [$a, $b];
     }
 
     /**
@@ -95,8 +127,7 @@ class CustomProductCarrierRepository extends AbstractRepository implements Repos
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
@@ -104,15 +135,24 @@ class CustomProductCarrierRepository extends AbstractRepository implements Repos
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    public function countFullSyncContentLeft($lastSeekKey, $langIso)
     {
         $this->generateFullQuery($langIso, false);
 
-        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+        if ($lastSeekKey !== null) {
+            list($lastA, $lastB) = $this->decodeCompositeSeekKey($lastSeekKey);
+            $this->query->where(
+                '(pc.id_product > ' . $lastA
+                . ' OR (pc.id_product = ' . $lastA
+                . ' AND IFNULL(pc.id_carrier_reference, 0) > ' . $lastB . '))'
+            );
+        }
+
+        $this->query->select('COUNT(*) as count');
 
         $result = $this->runQuery(true);
 
-        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
+        return !empty($result[0]['count']) ? (int) $result[0]['count'] : 0;
     }
 
     /**

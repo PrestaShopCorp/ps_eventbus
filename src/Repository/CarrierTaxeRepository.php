@@ -56,7 +56,8 @@ class CarrierTaxeRepository extends AbstractRepository implements RepositoryInte
             ->leftJoin('state', 's', 'tr.id_state = s.id_state AND s.active = 1')
             ->where('(co.id_zone = d.id_zone OR s.id_zone = d.id_zone)')
             ->select('ca.id_reference')
-            ->groupBy('ca.id_reference, co.id_zone, id_range, country_id')
+            ->select('ca.id_carrier')
+            ->groupBy('ca.id_carrier, ca.id_reference, co.id_zone, id_range, country_id')
         ;
 
         if ($withSelecParameters) {
@@ -79,12 +80,18 @@ class CarrierTaxeRepository extends AbstractRepository implements RepositoryInte
                     ) AS state_ids
                 ')
                 ->select('t.rate AS tax_rate')
+                ->orderBy('ca.id_carrier ASC')
             ;
         }
     }
 
     /**
-     * @param int $offset
+     * Seek-based page: returns rows strictly after $lastSeekKey, ordered by ca.id_carrier.
+     * The outbox id_object for carrier_taxes is the parent id_carrier, so pagination
+     * is also by id_carrier — a page may include multiple rows per carrier and
+     * $limit is therefore approximate.
+     *
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
@@ -93,11 +100,15 @@ class CarrierTaxeRepository extends AbstractRepository implements RepositoryInte
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso)
+    public function retrieveContentsForFull($lastSeekKey, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
 
-        $this->query->limit((int) $limit, (int) $offset);
+        if ($lastSeekKey !== null) {
+            $this->query->where('ca.id_carrier > ' . (int) $lastSeekKey);
+        }
+
+        $this->query->limit((int) $limit);
 
         return $this->runQuery();
     }
@@ -125,8 +136,10 @@ class CarrierTaxeRepository extends AbstractRepository implements RepositoryInte
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * Count rows with ca.id_carrier > cursor. Uses a subquery wrapper because
+     * the underlying query has a GROUP BY and aggregate selects.
+     *
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
@@ -134,15 +147,19 @@ class CarrierTaxeRepository extends AbstractRepository implements RepositoryInte
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    public function countFullSyncContentLeft($lastSeekKey, $langIso)
     {
         $this->generateFullQuery($langIso, true);
 
+        if ($lastSeekKey !== null) {
+            $this->query->where('ca.id_carrier > ' . (int) $lastSeekKey);
+        }
+
         $result = $this->db->executeS('
-            SELECT COUNT(*) - ' . (int) $offset . ' AS count
+            SELECT COUNT(*) AS count
                 FROM (' . $this->query->build() . ') as subquery;
         ');
 
-        return is_array($result) ? $result[0]['count'] : 0;
+        return is_array($result) && isset($result[0]['count']) ? (int) $result[0]['count'] : 0;
     }
 }

@@ -44,29 +44,38 @@ class CartsService extends ShopContentAbstractService implements ShopContentServ
     }
 
     /**
-     * @param int $offset
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
-     * @return array<mixed>
+     * @return array{rows: array<mixed>, lastSeekKey: ?string}
      */
-    public function getContentsForFull($offset, $limit, $langIso)
+    public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $result = $this->cartRepository->retrieveContentsForFull($offset, $limit, $langIso);
+        $rawRows = $this->cartRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
-        if (empty($result)) {
-            return [];
+        $newSeekKey = $lastSeekKey;
+        $rows = [];
+
+        if (!empty($rawRows)) {
+            $this->castCarts($rawRows);
+
+            $lastRow = end($rawRows);
+            $newSeekKey = $this->padInt((int) $lastRow['id_cart']);
+
+            $rows = array_map(function ($item) {
+                return [
+                    'action' => Config::INCREMENTAL_TYPE_UPSERT,
+                    'collection' => Config::COLLECTION_CARTS,
+                    'properties' => $item,
+                ];
+            }, $rawRows);
         }
 
-        $this->castCarts($result);
-
-        return array_map(function ($item) {
-            return [
-                'action' => Config::INCREMENTAL_TYPE_UPSERT,
-                'collection' => Config::COLLECTION_CARTS,
-                'properties' => $item,
-            ];
-        }, $result);
+        return [
+            'rows' => $rows,
+            'lastSeekKey' => $newSeekKey,
+        ];
     }
 
     /**
@@ -89,15 +98,14 @@ class CartsService extends ShopContentAbstractService implements ShopContentServ
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
      */
-    public function getFullSyncContentLeft($offset, $limit, $langIso)
+    public function getFullSyncContentLeft($lastSeekKey, $langIso)
     {
-        return $this->cartRepository->countFullSyncContentLeft($offset, $limit, $langIso);
+        return $this->cartRepository->countFullSyncContentLeft($lastSeekKey, $langIso);
     }
 
     /**

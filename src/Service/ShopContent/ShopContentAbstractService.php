@@ -35,6 +35,41 @@ if (!defined('_PS_VERSION_')) {
 abstract class ShopContentAbstractService
 {
     /**
+     * Default seek-key padding width. Subclasses whose primary key column
+     * is wider than INT UNSIGNED redeclare this constant (typically to
+     * ShopContentServiceInterface::SEEK_KEY_PAD_BIGINT).
+     */
+    const SEEK_KEY_PAD = ShopContentServiceInterface::SEEK_KEY_PAD_INT;
+
+    /**
+     * Default outbox id encoding: assume id_object is a plain integer.
+     * Subclasses with composite (e.g. ProductsService) or sentinel
+     * encodings (e.g. InfoService, ThemesService) override this.
+     *
+     * @param string $idObject
+     *
+     * @return string
+     */
+    public function encodeOutboxIdAsSeekKey($idObject)
+    {
+        return $this->padInt((int) $idObject);
+    }
+
+    /**
+     * Zero-pad an integer to SEEK_KEY_PAD digits so lexicographic string
+     * comparison matches numeric ordering. Uses static:: so subclasses
+     * that override SEEK_KEY_PAD pick up the wider width.
+     *
+     * @param int $value
+     *
+     * @return string
+     */
+    protected function padInt($value)
+    {
+        return str_pad((string) $value, static::SEEK_KEY_PAD, '0', STR_PAD_LEFT);
+    }
+
+    /**
      * @param string $collection
      * @param array<mixed> $upsertedContents
      * @param array<mixed> $deletedList

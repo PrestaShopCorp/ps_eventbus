@@ -70,12 +70,15 @@ class StockMovementRepository extends AbstractRepository implements RepositoryIn
                 ->select('sm.current_wa')
                 ->select('sm.referer')
                 ->select('smr.deleted')
+                ->orderBy('sm.id_stock_mvt ASC')
             ;
         }
     }
 
     /**
-     * @param int $offset
+     * Seek-based page: returns rows strictly after $lastSeekKey, ordered by sm.id_stock_mvt.
+     *
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
@@ -84,11 +87,15 @@ class StockMovementRepository extends AbstractRepository implements RepositoryIn
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso)
+    public function retrieveContentsForFull($lastSeekKey, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
 
-        $this->query->limit((int) $limit, (int) $offset);
+        if ($lastSeekKey !== null) {
+            $this->query->where('sm.id_stock_mvt > ' . (int) $lastSeekKey);
+        }
+
+        $this->query->limit((int) $limit);
 
         return $this->runQuery();
     }
@@ -113,8 +120,9 @@ class StockMovementRepository extends AbstractRepository implements RepositoryIn
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * Count rows with sm.id_stock_mvt > cursor.
+     *
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
@@ -122,14 +130,18 @@ class StockMovementRepository extends AbstractRepository implements RepositoryIn
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    public function countFullSyncContentLeft($lastSeekKey, $langIso)
     {
         $this->generateFullQuery($langIso, false);
 
-        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+        if ($lastSeekKey !== null) {
+            $this->query->where('sm.id_stock_mvt > ' . (int) $lastSeekKey);
+        }
+
+        $this->query->select('COUNT(*) as count');
 
         $result = $this->runQuery(true);
 
-        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
+        return !empty($result[0]['count']) ? (int) $result[0]['count'] : 0;
     }
 }

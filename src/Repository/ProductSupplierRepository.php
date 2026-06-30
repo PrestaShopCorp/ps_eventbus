@@ -55,12 +55,15 @@ class ProductSupplierRepository extends AbstractRepository implements Repository
                 ->select('ps.product_supplier_reference')
                 ->select('ps.product_supplier_price_te')
                 ->select('ps.id_currency')
+                ->orderBy('ps.id_product_supplier ASC')
             ;
         }
     }
 
     /**
-     * @param int $offset
+     * Seek-based page: returns rows strictly after $lastSeekKey, ordered by ps.id_product_supplier.
+     *
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
@@ -69,11 +72,15 @@ class ProductSupplierRepository extends AbstractRepository implements Repository
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso)
+    public function retrieveContentsForFull($lastSeekKey, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
 
-        $this->query->limit((int) $limit, (int) $offset);
+        if ($lastSeekKey !== null) {
+            $this->query->where('ps.id_product_supplier > ' . (int) $lastSeekKey);
+        }
+
+        $this->query->limit((int) $limit);
 
         return $this->runQuery();
     }
@@ -101,8 +108,9 @@ class ProductSupplierRepository extends AbstractRepository implements Repository
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * Count rows with ps.id_product_supplier > cursor.
+     *
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
@@ -110,14 +118,18 @@ class ProductSupplierRepository extends AbstractRepository implements Repository
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    public function countFullSyncContentLeft($lastSeekKey, $langIso)
     {
         $this->generateFullQuery($langIso, false);
 
-        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+        if ($lastSeekKey !== null) {
+            $this->query->where('ps.id_product_supplier > ' . (int) $lastSeekKey);
+        }
+
+        $this->query->select('COUNT(*) as count');
 
         $result = $this->runQuery(true);
 
-        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
+        return !empty($result[0]['count']) ? (int) $result[0]['count'] : 0;
     }
 }

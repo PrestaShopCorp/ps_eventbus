@@ -44,29 +44,38 @@ class CustomersService extends ShopContentAbstractService implements ShopContent
     }
 
     /**
-     * @param int $offset
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
-     * @return array<mixed>
+     * @return array{rows: array<mixed>, lastSeekKey: ?string}
      */
-    public function getContentsForFull($offset, $limit, $langIso)
+    public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $result = $this->customerRepository->retrieveContentsForFull($offset, $limit, $langIso);
+        $rawRows = $this->customerRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
-        if (empty($result)) {
-            return [];
+        $newSeekKey = $lastSeekKey;
+        $rows = [];
+
+        if (!empty($rawRows)) {
+            $lastRow = end($rawRows);
+            $newSeekKey = $this->padInt((int) $lastRow['id_customer']);
+
+            $this->castCustomers($rawRows);
+
+            $rows = array_map(function ($item) {
+                return [
+                    'action' => Config::INCREMENTAL_TYPE_UPSERT,
+                    'collection' => Config::COLLECTION_CUSTOMERS,
+                    'properties' => $item,
+                ];
+            }, $rawRows);
         }
 
-        $this->castCustomers($result);
-
-        return array_map(function ($item) {
-            return [
-                'action' => Config::INCREMENTAL_TYPE_UPSERT,
-                'collection' => Config::COLLECTION_CUSTOMERS,
-                'properties' => $item,
-            ];
-        }, $result);
+        return [
+            'rows' => $rows,
+            'lastSeekKey' => $newSeekKey,
+        ];
     }
 
     /**
@@ -89,15 +98,14 @@ class CustomersService extends ShopContentAbstractService implements ShopContent
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
      */
-    public function getFullSyncContentLeft($offset, $limit, $langIso)
+    public function getFullSyncContentLeft($lastSeekKey, $langIso)
     {
-        return $this->customerRepository->countFullSyncContentLeft($offset, $limit, $langIso);
+        return $this->customerRepository->countFullSyncContentLeft($lastSeekKey, $langIso);
     }
 
     /**

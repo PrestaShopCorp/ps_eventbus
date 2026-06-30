@@ -44,29 +44,38 @@ class CartRulesService extends ShopContentAbstractService implements ShopContent
     }
 
     /**
-     * @param int $offset
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
-     * @return array<mixed>
+     * @return array{rows: array<mixed>, lastSeekKey: ?string}
      */
-    public function getContentsForFull($offset, $limit, $langIso)
+    public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $result = $this->cartRuleRepository->retrieveContentsForFull($offset, $limit, $langIso);
+        $rawRows = $this->cartRuleRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
-        if (empty($result)) {
-            return [];
+        $newSeekKey = $lastSeekKey;
+        $rows = [];
+
+        if (!empty($rawRows)) {
+            $lastRow = end($rawRows);
+            $newSeekKey = $this->padInt((int) $lastRow['id_cart_rule']);
+
+            $this->castCartRules($rawRows);
+
+            $rows = array_map(function ($item) {
+                return [
+                    'action' => Config::INCREMENTAL_TYPE_UPSERT,
+                    'collection' => Config::COLLECTION_CART_RULES,
+                    'properties' => $item,
+                ];
+            }, $rawRows);
         }
 
-        $this->castCartRules($result);
-
-        return array_map(function ($item) {
-            return [
-                'action' => Config::INCREMENTAL_TYPE_UPSERT,
-                'collection' => Config::COLLECTION_CART_RULES,
-                'properties' => $item,
-            ];
-        }, $result);
+        return [
+            'rows' => $rows,
+            'lastSeekKey' => $newSeekKey,
+        ];
     }
 
     /**
@@ -89,15 +98,14 @@ class CartRulesService extends ShopContentAbstractService implements ShopContent
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
      */
-    public function getFullSyncContentLeft($offset, $limit, $langIso)
+    public function getFullSyncContentLeft($lastSeekKey, $langIso)
     {
-        return $this->cartRuleRepository->countFullSyncContentLeft($offset, $limit, $langIso);
+        return $this->cartRuleRepository->countFullSyncContentLeft($lastSeekKey, $langIso);
     }
 
     /**

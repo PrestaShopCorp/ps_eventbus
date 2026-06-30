@@ -57,6 +57,7 @@ class CurrencyRepository extends AbstractRepository implements RepositoryInterfa
                 ->select('c.conversion_rate')
                 ->select('c.deleted')
                 ->select('c.active')
+                ->orderBy('c.id_currency ASC')
             ;
 
             if ($this->isCurrencyLangAvailable()) {
@@ -73,7 +74,9 @@ class CurrencyRepository extends AbstractRepository implements RepositoryInterfa
     }
 
     /**
-     * @param int $offset
+     * Seek-based page: returns rows strictly after $lastSeekKey, ordered by c.id_currency.
+     *
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
@@ -82,11 +85,15 @@ class CurrencyRepository extends AbstractRepository implements RepositoryInterfa
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso)
+    public function retrieveContentsForFull($lastSeekKey, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
 
-        $this->query->limit((int) $limit, (int) $offset);
+        if ($lastSeekKey !== null) {
+            $this->query->where('c.id_currency > ' . (int) $lastSeekKey);
+        }
+
+        $this->query->limit((int) $limit);
 
         return $this->runQuery();
     }
@@ -114,8 +121,9 @@ class CurrencyRepository extends AbstractRepository implements RepositoryInterfa
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * Count rows with c.id_currency > cursor.
+     *
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
@@ -123,15 +131,19 @@ class CurrencyRepository extends AbstractRepository implements RepositoryInterfa
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    public function countFullSyncContentLeft($lastSeekKey, $langIso)
     {
         $this->generateFullQuery($langIso, false);
 
-        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+        if ($lastSeekKey !== null) {
+            $this->query->where('c.id_currency > ' . (int) $lastSeekKey);
+        }
+
+        $this->query->select('COUNT(*) as count');
 
         $result = $this->runQuery(true);
 
-        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
+        return !empty($result[0]['count']) ? (int) $result[0]['count'] : 0;
     }
 
     /**

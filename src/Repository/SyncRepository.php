@@ -37,20 +37,20 @@ class SyncRepository extends AbstractRepository
 
     /**
      * @param string $type
-     * @param int $offset
      * @param string $date
      * @param bool $fullSyncFinished
      * @param string $langIso
+     * @param string|null $lastSeekKey
      *
      * @return bool
      */
-    public function upsertTypeSync($type, $offset, $date, $fullSyncFinished, $langIso = null)
+    public function upsertTypeSync($type, $date, $fullSyncFinished, $langIso = null, $lastSeekKey = null)
     {
         return $this->db->insert(
             self::TYPE_SYNC_TABLE_NAME,
             [
                 'type' => pSQL((string) $type),
-                'offset' => (int) $offset,
+                'last_seek_key' => $lastSeekKey === null ? null : pSQL((string) $lastSeekKey),
                 'id_shop' => parent::getShopContext()->id,
                 'lang_iso' => pSQL((string) $langIso),
                 'full_sync_finished' => (int) $fullSyncFinished,
@@ -60,6 +60,32 @@ class SyncRepository extends AbstractRepository
             true,
             \Db::ON_DUPLICATE_KEY
         );
+    }
+
+    /**
+     * Returns the last emitted seek key for the (type, lang, shop) cursor,
+     * or null when full sync has not started or no row was emitted yet.
+     *
+     * @param string $type
+     * @param string|null $langIso
+     *
+     * @return string|null
+     */
+    public function getLastSeekKey($type, $langIso = null)
+    {
+        $this->generateMinimalQuery(self::TYPE_SYNC_TABLE_NAME, 'ets');
+
+        $this->query
+            ->where('ets.type = "' . pSQL($type) . '"')
+            ->where('ets.lang_iso = "' . pSQL((string) $langIso) . '"')
+            ->where('ets.id_shop = ' . parent::getShopContext()->id)
+        ;
+
+        $this->query->select('ets.last_seek_key');
+
+        $value = $this->db->getValue($this->query);
+
+        return $value === false || $value === null || $value === '' ? null : (string) $value;
     }
 
     /**

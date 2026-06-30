@@ -92,7 +92,6 @@ class SynchronizationService
      * @param string $shopContent
      * @param string $jobId
      * @param string $langIso
-     * @param int $offset
      * @param int $limit
      * @param int $startTime
      * @param string $dateNow
@@ -105,7 +104,6 @@ class SynchronizationService
         string $shopContent,
         string $jobId,
         string $langIso,
-        int $offset,
         int $limit,
         int $startTime,
         string $dateNow
@@ -125,28 +123,29 @@ class SynchronizationService
             throw new ServiceNotFoundException($serviceId);
         }
 
-        $data = $shopContentApiService->getContentsForFull($offset, $limit, $langIso);
+        $lastSeekKey = $this->syncRepository->getLastSeekKey($shopContent, $langIso);
+
+        $page = $shopContentApiService->getContentsForFull($lastSeekKey, $limit, $langIso);
+        $data = isset($page['rows']) ? $page['rows'] : [];
+        $newSeekKey = isset($page['lastSeekKey']) ? $page['lastSeekKey'] : $lastSeekKey;
+        $remainingObjects = (int) $shopContentApiService->getFullSyncContentLeft($newSeekKey, $langIso);
 
         CommonService::convertDateFormat($data);
 
         if (!empty($data)) {
             $response = $this->cloudSyncClient->upload($jobId, $data, $startTime, true);
 
-            if ($response['httpCode'] == 201) {
-                $offset += $limit;
+            if ($response['httpCode'] != 201) {
+                $newSeekKey = $lastSeekKey;
+                $remainingObjects = max($remainingObjects, 1);
             }
         }
 
-        $remainingObjects = (int) $shopContentApiService->getFullSyncContentLeft($offset, $limit, $langIso);
+        $fullSyncFinished = $remainingObjects <= 0;
 
-        if ($remainingObjects <= 0) {
-            $remainingObjects = 0;
-            $offset = 0;
-        }
+        $this->syncRepository->upsertTypeSync($shopContent, $dateNow, $fullSyncFinished, $langIso, $fullSyncFinished ? null : $newSeekKey);
 
-        $this->syncRepository->upsertTypeSync($shopContent, $offset, $dateNow, $remainingObjects === 0, $langIso);
-
-        return $this->returnSyncResponse($data, $response, $remainingObjects);
+        return $this->returnSyncResponse($data, $response, $fullSyncFinished ? 0 : $remainingObjects);
     }
 
     /**
@@ -268,7 +267,6 @@ class SynchronizationService
                     if ($hasDeleted) {
                         $this->syncRepository->upsertTypeSync(
                             $contentType,
-                            0,
                             $createdAt,
                             false,
                             $this->languagesService->getDefaultLanguageIsoCode()
@@ -287,7 +285,7 @@ class SynchronizationService
 
             foreach ($allIsoCodes as $langIso) {
                 foreach ($contentTypesWithIds as $contentType => $contentIds) {
-                    if ($this->isFullSyncDone($contentType, $langIso)) {
+                    if ($this->isFullSyncDone($contentType, $langIso) || $this->syncRepository->getLastSeekKey($contentType, $langIso) !== null) {
                         if (!is_array($contentIds)) {
                             $contentIds = [$contentIds];
                         }
@@ -308,6 +306,10 @@ class SynchronizationService
                             ];
                         }, $contentIds);
 
+                        $finalContent = array_filter($finalContent, function ($item) use ($contentType, $langIso) {
+                            return $this->shouldRecordIntoOutbox($contentType, $langIso, (string) $item['id_object']);
+                        });
+
                         $contentToInsert = array_merge($contentToInsert, $finalContent);
                     }
                 }
@@ -316,7 +318,7 @@ class SynchronizationService
             $defaultIsoCode = $this->languagesService->getDefaultLanguageIsoCode();
 
             foreach ($contentTypesWithIds as $contentType => $contentIds) {
-                if ($this->isFullSyncDone($contentType, $defaultIsoCode)) {
+                if ($this->isFullSyncDone($contentType, $defaultIsoCode) || $this->syncRepository->getLastSeekKey($contentType, $defaultIsoCode) !== null) {
                     if (!is_array($contentIds)) {
                         $contentIds = [$contentIds];
                     }
@@ -331,6 +333,11 @@ class SynchronizationService
                             'created_at' => $createdAt,
                         ];
                     }, $contentIds);
+
+                    $finalContent = array_filter($finalContent, function ($item) use ($contentType, $defaultIsoCode) {
+                        return $this->shouldRecordIntoOutbox($contentType, $defaultIsoCode, (string) $item['id_object']);
+                    });
+
                     $contentToInsert = array_merge($contentToInsert, $finalContent);
                 }
             }
@@ -377,6 +384,57 @@ class SynchronizationService
     private function isFullSyncDone($shopContent, $langIso)
     {
         return $this->syncRepository->isFullSyncDoneForThisTypeSync($shopContent, $langIso);
+    }
+
+    /**
+     * Record a hook mutation into the outbox when full sync is done, or when
+     * the row's encoded id sits behind the cursor of an in-progress full sync.
+     * Rows ahead of the cursor are skipped: the moving full-sync window will
+     * pick them up.
+     *
+     * @param string $contentType
+     * @param string $langIso
+     * @param string $contentId
+     *
+     * @return bool
+     */
+    private function shouldRecordIntoOutbox($contentType, $langIso, $contentId)
+    {
+        if ($this->isFullSyncDone($contentType, $langIso)) {
+            return true;
+        }
+
+        $lastSeekKey = $this->syncRepository->getLastSeekKey($contentType, $langIso);
+        if ($lastSeekKey === null) {
+            return false;
+        }
+
+        $service = $this->getShopContentService($contentType);
+        if ($service === null) {
+            return false;
+        }
+
+        return strcmp($service->encodeOutboxIdAsSeekKey($contentId), $lastSeekKey) <= 0;
+    }
+
+    /**
+     * @param string $contentType
+     *
+     * @return ShopContentServiceInterface|null
+     */
+    private function getShopContentService($contentType)
+    {
+        $serviceName = str_replace('_', '', ucwords($contentType, '_'));
+        $serviceId = 'PrestaShop\\Module\\PsEventbus\\Service\\ShopContent\\' . $serviceName . 'Service';
+
+        /** @var \Ps_eventbus $module */
+        $module = \Module::getInstanceByName('ps_eventbus');
+
+        try {
+            return $module->getService($serviceId);
+        } catch (ServiceNotFoundException $e) {
+            return null;
+        }
     }
 
     /**
