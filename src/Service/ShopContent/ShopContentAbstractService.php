@@ -47,11 +47,12 @@ abstract class ShopContentAbstractService
         $a = array_map('intval', explode('-', (string) $id));
         $b = array_map('intval', explode('-', (string) $cursor));
         $n = min(count($a), count($b));
-        for ($i = 0; $i < $n; $i++) {
+        for ($i = 0; $i < $n; ++$i) {
             if ($a[$i] !== $b[$i]) {
                 return $a[$i] < $b[$i];
             }
         }
+
         return count($a) <= count($b);
     }
 

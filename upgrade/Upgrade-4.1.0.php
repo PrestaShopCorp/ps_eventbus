@@ -40,7 +40,7 @@ if (!defined('_PS_VERSION_')) {
  */
 function upgrade_module_4_1_0()
 {
-    $db = \Db::getInstance();
+    $db = Db::getInstance();
 
     $hasLastSeekKey = $db->executeS(
         'SHOW COLUMNS FROM `' . _DB_PREFIX_ . 'eventbus_type_sync` LIKE "last_seek_key"'

@@ -156,5 +156,4 @@ class InfoService extends ShopContentAbstractService implements ShopContentServi
     {
         return 0;
     }
-
 }
