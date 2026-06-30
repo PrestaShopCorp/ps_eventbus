@@ -33,18 +33,6 @@ if (!defined('_PS_VERSION_')) {
 interface ShopContentServiceInterface
 {
     /**
-     * Zero-pad width for INT UNSIGNED primary keys (max 4 294 967 295,
-     * 10 digits + 1 headroom).
-     */
-    const SEEK_KEY_PAD_INT = 11;
-
-    /**
-     * Zero-pad width for BIGINT UNSIGNED primary keys (max
-     * 18 446 744 073 709 551 615, 20 digits).
-     */
-    const SEEK_KEY_PAD_BIGINT = 20;
-
-    /**
      * Fetch one page of full-sync content strictly after $lastSeekKey.
      *
      * @param string|null $lastSeekKey cursor from the previous page, or null on first call
@@ -66,22 +54,12 @@ interface ShopContentServiceInterface
     public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso);
 
     /**
-     * @param string|null $lastSeekKey
-     * @param string $langIso
+     * Compare two seek keys (plain "123" or composite "a-b") as int tuples.
      *
-     * @return int
+     * @param string $id
+     * @param string $cursor
+     *
+     * @return bool
      */
-    public function getFullSyncContentLeft($lastSeekKey, $langIso);
-
-    /**
-     * Encode an outbox id_object string (as written by
-     * SynchronizationService::insertContentIntoIncremental) into the same
-     * lexicographically comparable form used for seek keys, so the outbox
-     * gate can compare them with strcmp.
-     *
-     * @param string $idObject
-     *
-     * @return string
-     */
-    public function encodeOutboxIdAsSeekKey($idObject);
+    public function isAtOrBehindSeekKey($id, $cursor);
 }

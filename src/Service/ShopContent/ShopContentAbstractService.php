@@ -35,38 +35,24 @@ if (!defined('_PS_VERSION_')) {
 abstract class ShopContentAbstractService
 {
     /**
-     * Default seek-key padding width. Subclasses whose primary key column
-     * is wider than INT UNSIGNED redeclare this constant (typically to
-     * ShopContentServiceInterface::SEEK_KEY_PAD_BIGINT).
-     */
-    const SEEK_KEY_PAD = ShopContentServiceInterface::SEEK_KEY_PAD_INT;
-
-    /**
-     * Default outbox id encoding: assume id_object is a plain integer.
-     * Subclasses with composite (e.g. ProductsService) or sentinel
-     * encodings (e.g. InfoService, ThemesService) override this.
+     * Compare two seek keys (plain "123" or composite "a-b") as int tuples.
      *
-     * @param string $idObject
+     * @param string $id
+     * @param string $cursor
      *
-     * @return string
+     * @return bool true when $id is at or behind $cursor (id <= cursor)
      */
-    public function encodeOutboxIdAsSeekKey($idObject)
+    public function isAtOrBehindSeekKey($id, $cursor)
     {
-        return $this->padInt((int) $idObject);
-    }
-
-    /**
-     * Zero-pad an integer to SEEK_KEY_PAD digits so lexicographic string
-     * comparison matches numeric ordering. Uses static:: so subclasses
-     * that override SEEK_KEY_PAD pick up the wider width.
-     *
-     * @param int $value
-     *
-     * @return string
-     */
-    protected function padInt($value)
-    {
-        return str_pad((string) $value, static::SEEK_KEY_PAD, '0', STR_PAD_LEFT);
+        $a = array_map('intval', explode('-', (string) $id));
+        $b = array_map('intval', explode('-', (string) $cursor));
+        $n = min(count($a), count($b));
+        for ($i = 0; $i < $n; $i++) {
+            if ($a[$i] !== $b[$i]) {
+                return $a[$i] < $b[$i];
+            }
+        }
+        return count($a) <= count($b);
     }
 
     /**

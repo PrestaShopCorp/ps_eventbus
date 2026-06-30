@@ -52,16 +52,16 @@ class ManufacturersService extends ShopContentAbstractService implements ShopCon
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->manufacturerRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->manufacturerRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_manufacturer']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_manufacturer'];
 
-            $this->castManufacturers($rawRows);
+            $this->castManufacturers($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -69,7 +69,7 @@ class ManufacturersService extends ShopContentAbstractService implements ShopCon
                     'collection' => Config::COLLECTION_MANUFACTURERS,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

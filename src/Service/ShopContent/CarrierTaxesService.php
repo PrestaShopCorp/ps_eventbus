@@ -52,16 +52,16 @@ class CarrierTaxesService extends ShopContentAbstractService implements ShopCont
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->carrierTaxeRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->carrierTaxeRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_carrier']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_carrier'];
 
-            $this->castCarrierTaxes($rawRows);
+            $this->castCarrierTaxes($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -69,7 +69,7 @@ class CarrierTaxesService extends ShopContentAbstractService implements ShopCont
                     'collection' => Config::COLLECTION_CARRIER_TAXES,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

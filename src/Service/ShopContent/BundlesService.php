@@ -52,16 +52,16 @@ class BundlesService extends ShopContentAbstractService implements ShopContentSe
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->bundleRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->bundleRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_bundle']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_bundle'];
 
-            $this->castBundles($rawRows);
+            $this->castBundles($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -69,7 +69,7 @@ class BundlesService extends ShopContentAbstractService implements ShopContentSe
                     'collection' => Config::COLLECTION_BUNDLES,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

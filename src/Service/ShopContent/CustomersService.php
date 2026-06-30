@@ -52,16 +52,16 @@ class CustomersService extends ShopContentAbstractService implements ShopContent
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->customerRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->customerRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_customer']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_customer'];
 
-            $this->castCustomers($rawRows);
+            $this->castCustomers($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -69,7 +69,7 @@ class CustomersService extends ShopContentAbstractService implements ShopContent
                     'collection' => Config::COLLECTION_CUSTOMERS,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

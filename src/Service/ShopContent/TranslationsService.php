@@ -52,16 +52,16 @@ class TranslationsService extends ShopContentAbstractService implements ShopCont
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->translationRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->translationRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_translation']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_translation'];
 
-            $this->castTranslations($rawRows);
+            $this->castTranslations($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -69,7 +69,7 @@ class TranslationsService extends ShopContentAbstractService implements ShopCont
                     'collection' => Config::COLLECTION_TRANSLATIONS,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

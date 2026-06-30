@@ -52,16 +52,16 @@ class StoresService extends ShopContentAbstractService implements ShopContentSer
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->storeRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->storeRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_store']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_store'];
 
-            $this->castStores($rawRows);
+            $this->castStores($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -69,7 +69,7 @@ class StoresService extends ShopContentAbstractService implements ShopContentSer
                     'collection' => Config::COLLECTION_STORES,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

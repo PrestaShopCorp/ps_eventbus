@@ -143,7 +143,7 @@ class SynchronizationService
 
         $fullSyncFinished = $remainingObjects <= 0;
 
-        $this->syncRepository->upsertTypeSync($shopContent, $dateNow, $fullSyncFinished, $langIso, $fullSyncFinished ? null : $newSeekKey);
+        $this->syncRepository->upsertTypeSync($shopContent, $fullSyncFinished ? null : $newSeekKey, $dateNow, $fullSyncFinished, $langIso);
 
         return $this->returnSyncResponse($data, $response, $fullSyncFinished ? 0 : $remainingObjects);
     }
@@ -267,6 +267,7 @@ class SynchronizationService
                     if ($hasDeleted) {
                         $this->syncRepository->upsertTypeSync(
                             $contentType,
+                            null,
                             $createdAt,
                             false,
                             $this->languagesService->getDefaultLanguageIsoCode()
@@ -414,7 +415,7 @@ class SynchronizationService
             return false;
         }
 
-        return strcmp($service->encodeOutboxIdAsSeekKey($contentId), $lastSeekKey) <= 0;
+        return $service->isAtOrBehindSeekKey($contentId, $lastSeekKey);
     }
 
     /**

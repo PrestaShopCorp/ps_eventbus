@@ -52,16 +52,16 @@ class StockMovementsService extends ShopContentAbstractService implements ShopCo
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->stockMovementRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->stockMovementRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_stock_mvt']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_stock_mvt'];
 
-            $this->castStockMovements($rawRows);
+            $this->castStockMovements($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -69,7 +69,7 @@ class StockMovementsService extends ShopContentAbstractService implements ShopCo
                     'collection' => Config::COLLECTION_STOCK_MOVEMENTS,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

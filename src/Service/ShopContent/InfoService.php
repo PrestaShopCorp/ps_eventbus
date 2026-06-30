@@ -157,17 +157,4 @@ class InfoService extends ShopContentAbstractService implements ShopContentServi
         return 0;
     }
 
-    /**
-     * Info is a singleton payload, not a row in a paginated table. The
-     * outbox never references a numeric id_object for it, so collapse any
-     * encoding to the same sentinel value used as the seek key.
-     *
-     * @param string $idObject
-     *
-     * @return string
-     */
-    public function encodeOutboxIdAsSeekKey($idObject)
-    {
-        return 'DONE';
-    }
 }

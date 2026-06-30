@@ -59,16 +59,16 @@ class ModulesService extends ShopContentAbstractService implements ShopContentSe
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->moduleRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->moduleRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['module_id']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['module_id'];
 
-            $this->castModules($rawRows);
+            $this->castModules($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -76,7 +76,7 @@ class ModulesService extends ShopContentAbstractService implements ShopContentSe
                     'collection' => Config::COLLECTION_MODULES,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

@@ -52,16 +52,16 @@ class OrderStatusHistoryService extends ShopContentAbstractService implements Sh
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->orderStatusHistoryRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->orderStatusHistoryRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_order_history']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_order_history'];
 
-            $this->castOrderStatusHistories($rawRows);
+            $this->castOrderStatusHistories($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -69,7 +69,7 @@ class OrderStatusHistoryService extends ShopContentAbstractService implements Sh
                     'collection' => Config::COLLECTION_ORDER_STATUS_HISTORY,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

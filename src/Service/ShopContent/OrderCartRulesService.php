@@ -52,16 +52,16 @@ class OrderCartRulesService extends ShopContentAbstractService implements ShopCo
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->orderCartRuleRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->orderCartRuleRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_order_cart_rule']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_order_cart_rule'];
 
-            $this->castOrderCartRules($rawRows);
+            $this->castOrderCartRules($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -69,7 +69,7 @@ class OrderCartRulesService extends ShopContentAbstractService implements ShopCo
                     'collection' => Config::COLLECTION_ORDER_CART_RULES,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

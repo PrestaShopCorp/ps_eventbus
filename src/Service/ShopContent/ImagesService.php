@@ -52,16 +52,16 @@ class ImagesService extends ShopContentAbstractService implements ShopContentSer
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->imageRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->imageRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_image']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_image'];
 
-            $this->castImages($rawRows);
+            $this->castImages($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -69,7 +69,7 @@ class ImagesService extends ShopContentAbstractService implements ShopContentSer
                     'collection' => Config::COLLECTION_IMAGES,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

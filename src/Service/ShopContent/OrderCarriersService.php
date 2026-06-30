@@ -52,16 +52,16 @@ class OrderCarriersService extends ShopContentAbstractService implements ShopCon
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->orderCarrierRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->orderCarrierRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_order_carrier']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_order_carrier'];
 
-            $this->castOrderCarriers($rawRows);
+            $this->castOrderCarriers($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -69,7 +69,7 @@ class OrderCarriersService extends ShopContentAbstractService implements ShopCon
                     'collection' => Config::COLLECTION_ORDER_CARRIERS,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

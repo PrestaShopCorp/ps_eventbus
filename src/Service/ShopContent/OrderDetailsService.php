@@ -52,16 +52,16 @@ class OrderDetailsService extends ShopContentAbstractService implements ShopCont
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->orderDetailRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->orderDetailRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_order_detail']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_order_detail'];
 
-            $this->castOrderDetails($rawRows);
+            $this->castOrderDetails($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -69,7 +69,7 @@ class OrderDetailsService extends ShopContentAbstractService implements ShopCont
                     'collection' => Config::COLLECTION_ORDER_DETAILS,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

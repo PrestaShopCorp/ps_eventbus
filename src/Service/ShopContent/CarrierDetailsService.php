@@ -52,16 +52,16 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->carrierDetailRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->carrierDetailRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_carrier']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_carrier'];
 
-            $this->castCarrierDetails($rawRows);
+            $this->castCarrierDetails($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -69,7 +69,7 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
                     'collection' => Config::COLLECTION_CARRIER_DETAILS,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

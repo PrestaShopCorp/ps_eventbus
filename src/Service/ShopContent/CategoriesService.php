@@ -52,16 +52,16 @@ class CategoriesService extends ShopContentAbstractService implements ShopConten
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->categoryRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->categoryRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_category']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_category'];
 
-            $this->castCategories($rawRows);
+            $this->castCategories($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -69,7 +69,7 @@ class CategoriesService extends ShopContentAbstractService implements ShopConten
                     'collection' => Config::COLLECTION_CATEGORIES,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

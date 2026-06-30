@@ -52,16 +52,16 @@ class CartProductsService extends ShopContentAbstractService implements ShopCont
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->cartProductRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->cartProductRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_cart']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_cart'];
 
-            $this->castCartProducts($rawRows);
+            $this->castCartProducts($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -69,7 +69,7 @@ class CartProductsService extends ShopContentAbstractService implements ShopCont
                     'collection' => Config::COLLECTION_CART_PRODUCTS,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

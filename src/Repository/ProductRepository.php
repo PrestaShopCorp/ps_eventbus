@@ -178,20 +178,6 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
     }
 
     /**
-     * @param string $seekKey
-     *
-     * @return array{0: int, 1: int}
-     */
-    private function decodeCompositeSeekKey($seekKey)
-    {
-        $parts = explode('-', $seekKey, 2);
-        $a = isset($parts[0]) ? (int) $parts[0] : 0;
-        $b = isset($parts[1]) ? (int) $parts[1] : 0;
-
-        return [$a, $b];
-    }
-
-    /**
      * @param int $limit
      * @param array<mixed> $contentIds
      * @param string $langIso

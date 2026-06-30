@@ -81,22 +81,6 @@ class ProductsService extends ShopContentAbstractService implements ShopContentS
     }
 
     /**
-     * Encode the composite outbox id_object "{id_product}-{id_product_attribute}"
-     * into a lexicographically-comparable seek key matching the format
-     * produced inside getContentsForFull.
-     *
-     * @param string $idObject
-     *
-     * @return string
-     */
-    public function encodeOutboxIdAsSeekKey($idObject)
-    {
-        list($a, $b) = array_pad(explode('-', (string) $idObject, 2), 2, '0');
-
-        return $this->padInt((int) $a) . '-' . $this->padInt((int) $b);
-    }
-
-    /**
      * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
@@ -105,19 +89,17 @@ class ProductsService extends ShopContentAbstractService implements ShopContentS
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->productRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->productRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_product'])
-                . '-'
-                . $this->padInt((int) $lastRow['id_attribute']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = ((int) $lastRow['id_product']) . '-' . ((int) $lastRow['id_attribute']);
 
-            $this->decorateProducts($rawRows, $langIso);
-            $this->castProducts($rawRows);
+            $this->decorateProducts($result, $langIso);
+            $this->castProducts($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -125,7 +107,7 @@ class ProductsService extends ShopContentAbstractService implements ShopContentS
                     'collection' => Config::COLLECTION_PRODUCTS,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

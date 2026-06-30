@@ -104,19 +104,6 @@ class ThemesService extends ShopContentAbstractService implements ShopContentSer
     }
 
     /**
-     * Themes are a singleton payload, not a row in a paginated table.
-     * Collapse any outbox id_object to the same sentinel used as seek key.
-     *
-     * @param string $idObject
-     *
-     * @return string
-     */
-    public function encodeOutboxIdAsSeekKey($idObject)
-    {
-        return 'DONE';
-    }
-
-    /**
      * Get all Themes
      *
      * @return mixed

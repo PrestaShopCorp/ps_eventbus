@@ -52,16 +52,16 @@ class StocksService extends ShopContentAbstractService implements ShopContentSer
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->stockRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->stockRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_stock_available']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_stock_available'];
 
-            $this->castStocks($rawRows);
+            $this->castStocks($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -69,7 +69,7 @@ class StocksService extends ShopContentAbstractService implements ShopContentSer
                     'collection' => Config::COLLECTION_STOCKS,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

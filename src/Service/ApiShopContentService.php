@@ -119,6 +119,7 @@ class ApiShopContentService
 
                 $this->syncRepository->upsertTypeSync(
                     $shopContent,
+                    null,
                     $dateNow,
                     false,
                     $langIso

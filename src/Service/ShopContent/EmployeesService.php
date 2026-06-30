@@ -52,16 +52,16 @@ class EmployeesService extends ShopContentAbstractService implements ShopContent
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->employeeRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->employeeRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_employee']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_employee'];
 
-            $this->castEmployees($rawRows);
+            $this->castEmployees($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -69,7 +69,7 @@ class EmployeesService extends ShopContentAbstractService implements ShopContent
                     'collection' => Config::COLLECTION_EMPLOYEES,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

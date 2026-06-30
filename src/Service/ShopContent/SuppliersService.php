@@ -52,16 +52,16 @@ class SuppliersService extends ShopContentAbstractService implements ShopContent
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->supplierRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->supplierRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_supplier']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_supplier'];
 
-            $this->castSuppliers($rawRows);
+            $this->castSuppliers($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -69,7 +69,7 @@ class SuppliersService extends ShopContentAbstractService implements ShopContent
                     'collection' => Config::COLLECTION_SUPPLIERS,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

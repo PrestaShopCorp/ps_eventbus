@@ -65,16 +65,16 @@ class OrdersService extends ShopContentAbstractService implements ShopContentSer
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->orderRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->orderRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_order']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_order'];
 
-            $this->castOrders($rawRows, $langIso);
+            $this->castOrders($result, $langIso);
 
             $rows = array_map(function ($item) {
                 return [
@@ -82,7 +82,7 @@ class OrdersService extends ShopContentAbstractService implements ShopContentSer
                     'collection' => Config::COLLECTION_ORDERS,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

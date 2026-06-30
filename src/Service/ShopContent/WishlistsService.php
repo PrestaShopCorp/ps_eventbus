@@ -52,16 +52,16 @@ class WishlistsService extends ShopContentAbstractService implements ShopContent
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->wishlistRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->wishlistRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_wishlist']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_wishlist'];
 
-            $this->castWishlists($rawRows);
+            $this->castWishlists($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -69,7 +69,7 @@ class WishlistsService extends ShopContentAbstractService implements ShopContent
                     'collection' => Config::COLLECTION_WISHLISTS,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [

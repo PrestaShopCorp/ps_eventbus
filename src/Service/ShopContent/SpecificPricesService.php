@@ -59,16 +59,16 @@ class SpecificPricesService extends ShopContentAbstractService implements ShopCo
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $rawRows = $this->specificPriceRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $this->specificPriceRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
         $newSeekKey = $lastSeekKey;
         $rows = [];
 
-        if (!empty($rawRows)) {
-            $lastRow = end($rawRows);
-            $newSeekKey = $this->padInt((int) $lastRow['id_specific_price']);
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_specific_price'];
 
-            $this->castCustomPrices($rawRows);
+            $this->castCustomPrices($result);
 
             $rows = array_map(function ($item) {
                 return [
@@ -76,7 +76,7 @@ class SpecificPricesService extends ShopContentAbstractService implements ShopCo
                     'collection' => Config::COLLECTION_SPECIFIC_PRICES,
                     'properties' => $item,
                 ];
-            }, $rawRows);
+            }, $result);
         }
 
         return [
