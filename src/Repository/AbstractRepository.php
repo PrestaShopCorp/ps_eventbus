@@ -173,9 +173,7 @@ abstract class AbstractRepository
     protected function decodeCompositeSeekKey($seekKey)
     {
         $parts = explode('-', $seekKey, 2);
-        $a = isset($parts[0]) ? (int) $parts[0] : 0;
-        $b = isset($parts[1]) ? (int) $parts[1] : 0;
 
-        return [$a, $b];
+        return [(int) $parts[0], isset($parts[1]) ? (int) $parts[1] : 0];
     }
 }

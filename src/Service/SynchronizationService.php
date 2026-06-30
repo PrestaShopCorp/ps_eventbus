@@ -126,8 +126,8 @@ class SynchronizationService
         $lastSeekKey = $this->syncRepository->getLastSeekKey($shopContent, $langIso);
 
         $page = $shopContentApiService->getContentsForFull($lastSeekKey, $limit, $langIso);
-        $data = isset($page['rows']) ? $page['rows'] : [];
-        $newSeekKey = isset($page['lastSeekKey']) ? $page['lastSeekKey'] : $lastSeekKey;
+        $data = $page['rows'];
+        $newSeekKey = $page['lastSeekKey'] !== null ? $page['lastSeekKey'] : $lastSeekKey;
         $remainingObjects = (int) $shopContentApiService->getFullSyncContentLeft($newSeekKey, $langIso);
 
         CommonService::convertDateFormat($data);

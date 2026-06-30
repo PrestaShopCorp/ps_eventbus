@@ -54,6 +54,14 @@ interface ShopContentServiceInterface
     public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso);
 
     /**
+     * @param string|null $lastSeekKey
+     * @param string $langIso
+     *
+     * @return int
+     */
+    public function getFullSyncContentLeft($lastSeekKey, $langIso);
+
+    /**
      * Compare two seek keys (plain "123" or composite "a-b") as int tuples.
      *
      * @param string $id
