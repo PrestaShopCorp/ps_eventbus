@@ -279,64 +279,37 @@ class SynchronizationService
             }
         }
 
+        $isoCodes = $hasMultiLang
+            ? $this->languagesService->getLanguagesIsoCodes()
+            : [$this->languagesService->getDefaultLanguageIsoCode()];
+
         $contentToInsert = [];
 
-        if ($hasMultiLang) {
-            $allIsoCodes = $this->languagesService->getLanguagesIsoCodes();
-
-            foreach ($allIsoCodes as $langIso) {
-                foreach ($contentTypesWithIds as $contentType => $contentIds) {
-                    if (!is_array($contentIds)) {
-                        $contentIds = [$contentIds];
-                    }
-
-                    $finalContent = array_map(function ($contentId) use ($contentType, $shopId, $langIso, $actionType, $createdAt) {
-                        // transform id_product to unique_product_id
-                        if ($contentType == Config::COLLECTION_PRODUCTS) {
-                            $contentId = is_int($contentId) ? $contentId . '-0' : $contentId;
-                        }
-
-                        return [
-                            'type' => $contentType,
-                            'id_object' => $contentId,
-                            'id_shop' => $shopId,
-                            'lang_iso' => $langIso,
-                            'action' => $actionType,
-                            'created_at' => $createdAt,
-                        ];
-                    }, $contentIds);
-
-                    $finalContent = array_filter($finalContent, function ($item) use ($contentType, $langIso) {
-                        return $this->shouldRecordIntoOutbox($contentType, $langIso, (string) $item['id_object']);
-                    });
-
-                    $contentToInsert = array_merge($contentToInsert, $finalContent);
-                }
-            }
-        } else {
-            $defaultIsoCode = $this->languagesService->getDefaultLanguageIsoCode();
-
+        foreach ($isoCodes as $langIso) {
             foreach ($contentTypesWithIds as $contentType => $contentIds) {
                 if (!is_array($contentIds)) {
                     $contentIds = [$contentIds];
                 }
 
-                $finalContent = array_map(function ($contentId) use ($contentType, $shopId, $defaultIsoCode, $actionType, $createdAt) {
-                    return [
+                foreach ($contentIds as $contentId) {
+                    // transform id_product to unique_product_id (multi-lang path only, pre-existing behavior)
+                    if ($hasMultiLang && $contentType == Config::COLLECTION_PRODUCTS && is_int($contentId)) {
+                        $contentId = $contentId . '-0';
+                    }
+
+                    if (!$this->shouldRecordIntoOutbox($contentType, $langIso, (string) $contentId)) {
+                        continue;
+                    }
+
+                    $contentToInsert[] = [
                         'type' => $contentType,
                         'id_object' => $contentId,
                         'id_shop' => $shopId,
-                        'lang_iso' => $defaultIsoCode,
+                        'lang_iso' => $langIso,
                         'action' => $actionType,
                         'created_at' => $createdAt,
                     ];
-                }, $contentIds);
-
-                $finalContent = array_filter($finalContent, function ($item) use ($contentType, $defaultIsoCode) {
-                    return $this->shouldRecordIntoOutbox($contentType, $defaultIsoCode, (string) $item['id_object']);
-                });
-
-                $contentToInsert = array_merge($contentToInsert, $finalContent);
+                }
             }
         }
 
