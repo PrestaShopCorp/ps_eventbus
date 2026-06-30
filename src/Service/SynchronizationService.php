@@ -286,61 +286,57 @@ class SynchronizationService
 
             foreach ($allIsoCodes as $langIso) {
                 foreach ($contentTypesWithIds as $contentType => $contentIds) {
-                    if ($this->isFullSyncDone($contentType, $langIso) || $this->syncRepository->getLastSeekKey($contentType, $langIso) !== null) {
-                        if (!is_array($contentIds)) {
-                            $contentIds = [$contentIds];
+                    if (!is_array($contentIds)) {
+                        $contentIds = [$contentIds];
+                    }
+
+                    $finalContent = array_map(function ($contentId) use ($contentType, $shopId, $langIso, $actionType, $createdAt) {
+                        // transform id_product to unique_product_id
+                        if ($contentType == Config::COLLECTION_PRODUCTS) {
+                            $contentId = is_int($contentId) ? $contentId . '-0' : $contentId;
                         }
 
-                        $finalContent = array_map(function ($contentId) use ($contentType, $shopId, $langIso, $actionType, $createdAt) {
-                            // transform id_product to unique_product_id
-                            if ($contentType == Config::COLLECTION_PRODUCTS) {
-                                $contentId = is_int($contentId) ? $contentId . '-0' : $contentId;
-                            }
+                        return [
+                            'type' => $contentType,
+                            'id_object' => $contentId,
+                            'id_shop' => $shopId,
+                            'lang_iso' => $langIso,
+                            'action' => $actionType,
+                            'created_at' => $createdAt,
+                        ];
+                    }, $contentIds);
 
-                            return [
-                                'type' => $contentType,
-                                'id_object' => $contentId,
-                                'id_shop' => $shopId,
-                                'lang_iso' => $langIso,
-                                'action' => $actionType,
-                                'created_at' => $createdAt,
-                            ];
-                        }, $contentIds);
+                    $finalContent = array_filter($finalContent, function ($item) use ($contentType, $langIso) {
+                        return $this->shouldRecordIntoOutbox($contentType, $langIso, (string) $item['id_object']);
+                    });
 
-                        $finalContent = array_filter($finalContent, function ($item) use ($contentType, $langIso) {
-                            return $this->shouldRecordIntoOutbox($contentType, $langIso, (string) $item['id_object']);
-                        });
-
-                        $contentToInsert = array_merge($contentToInsert, $finalContent);
-                    }
+                    $contentToInsert = array_merge($contentToInsert, $finalContent);
                 }
             }
         } else {
             $defaultIsoCode = $this->languagesService->getDefaultLanguageIsoCode();
 
             foreach ($contentTypesWithIds as $contentType => $contentIds) {
-                if ($this->isFullSyncDone($contentType, $defaultIsoCode) || $this->syncRepository->getLastSeekKey($contentType, $defaultIsoCode) !== null) {
-                    if (!is_array($contentIds)) {
-                        $contentIds = [$contentIds];
-                    }
-
-                    $finalContent = array_map(function ($contentId) use ($contentType, $shopId, $defaultIsoCode, $actionType, $createdAt) {
-                        return [
-                            'type' => $contentType,
-                            'id_object' => $contentId,
-                            'id_shop' => $shopId,
-                            'lang_iso' => $defaultIsoCode,
-                            'action' => $actionType,
-                            'created_at' => $createdAt,
-                        ];
-                    }, $contentIds);
-
-                    $finalContent = array_filter($finalContent, function ($item) use ($contentType, $defaultIsoCode) {
-                        return $this->shouldRecordIntoOutbox($contentType, $defaultIsoCode, (string) $item['id_object']);
-                    });
-
-                    $contentToInsert = array_merge($contentToInsert, $finalContent);
+                if (!is_array($contentIds)) {
+                    $contentIds = [$contentIds];
                 }
+
+                $finalContent = array_map(function ($contentId) use ($contentType, $shopId, $defaultIsoCode, $actionType, $createdAt) {
+                    return [
+                        'type' => $contentType,
+                        'id_object' => $contentId,
+                        'id_shop' => $shopId,
+                        'lang_iso' => $defaultIsoCode,
+                        'action' => $actionType,
+                        'created_at' => $createdAt,
+                    ];
+                }, $contentIds);
+
+                $finalContent = array_filter($finalContent, function ($item) use ($contentType, $defaultIsoCode) {
+                    return $this->shouldRecordIntoOutbox($contentType, $defaultIsoCode, (string) $item['id_object']);
+                });
+
+                $contentToInsert = array_merge($contentToInsert, $finalContent);
             }
         }
 
