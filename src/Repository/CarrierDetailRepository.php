@@ -84,6 +84,7 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
             ->leftJoin('state', 's', 'co.id_zone = s.id_zone AND co.id_country = s.id_country AND s.active = 1')
             ->select('ca.id_reference')
             ->groupBy('ca.id_reference, co.id_zone, id_range')
+            ->orderBy('ca.id_reference ASC')
         ;
 
         if ($withSelecParameters) {
@@ -127,17 +128,15 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
     }
 
     /**
-     * Seek per id_reference: one page emits every (id_zone, id_range) row for
-     * the next $limit references after the cursor. Returns rows plus the max
-     * reference id picked in this page — cursor must advance even when the
-     * join produces zero rows for those refs (fixture / config edge case),
-     * otherwise the sync loops forever.
+     * Offset-based page. $lastSeekKey is the row count emitted so far.
+     * SQL LIMIT/OFFSET is stable because generateFullQuery adds
+     * ORDER BY ca.id_reference ASC.
      *
-     * @param string|null $lastSeekKey
-     * @param int $limit max number of references emitted in this page
+     * @param string|null $lastSeekKey row offset emitted so far
+     * @param int $limit
      * @param string $langIso
      *
-     * @return array{rows: array<mixed>, lastId: int|null}
+     * @return array<mixed>
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
@@ -145,23 +144,9 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
     public function retrieveContentsForFull($lastSeekKey, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
+        $this->query->limit((int) $limit, (int) $lastSeekKey);
 
-        $refs = $this->db->executeS('
-            SELECT DISTINCT ca.id_reference
-              FROM ' . _DB_PREFIX_ . self::TABLE_NAME . ' ca
-             WHERE ca.id_reference > ' . (int) $lastSeekKey . '
-             ORDER BY ca.id_reference ASC
-             LIMIT ' . (int) $limit . '
-        ');
-
-        if (!is_array($refs) || empty($refs)) {
-            return ['rows' => [], 'lastId' => null];
-        }
-
-        $ids = array_map('intval', array_column($refs, 'id_reference'));
-        $this->query->where('ca.id_reference IN (' . implode(',', $ids) . ')');
-
-        return ['rows' => $this->runQuery(), 'lastId' => max($ids)];
+        return $this->runQuery();
     }
 
     /**
@@ -187,10 +172,10 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
     }
 
     /**
-     * Count distinct references strictly after the cursor — pagination
-     * granularity is per-reference, not per-row.
+     * Remaining row count = total grouped rows - offset already emitted.
+     * Total requires the full GROUP BY + joins, so wrap in a subquery.
      *
-     * @param string|null $lastSeekKey
+     * @param string|null $lastSeekKey row offset emitted so far
      * @param string $langIso
      *
      * @return int
@@ -200,10 +185,15 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
      */
     public function countFullSyncContentLeft($lastSeekKey, $langIso)
     {
-        return (int) $this->db->getValue('
-            SELECT COUNT(DISTINCT ca.id_reference)
-              FROM ' . _DB_PREFIX_ . self::TABLE_NAME . ' ca
-             WHERE ca.id_reference > ' . (int) $lastSeekKey . '
+        $this->generateFullQuery($langIso, true);
+
+        $result = $this->db->executeS('
+            SELECT COUNT(*) AS count
+                FROM (' . $this->query->build() . ') as subquery;
         ');
+
+        $total = is_array($result) && isset($result[0]['count']) ? (int) $result[0]['count'] : 0;
+
+        return max(0, $total - (int) $lastSeekKey);
     }
 }

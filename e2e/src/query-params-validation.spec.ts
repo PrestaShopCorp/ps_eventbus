@@ -76,15 +76,7 @@ describe('Query param validation', () => {
 
             messages.forEach((response) => {
                 if (expectedNextObjectCount !== null && expectedNextObjectCount >= 0) {
-                    // carrier-details and cart-products paginate per parent
-                    // entity (id_reference / id_cart) — all child rows emitted
-                    // together — so remaining_objects does not decrease by
-                    // `limit` rows per page.
-                    if (shopContent === 'carrier-details' || shopContent === 'cart-products') {
-                        expect(response.remaining_objects).toBeLessThanOrEqual(expectedNextObjectCount + limit);
-                    } else {
-                        expect(response.remaining_objects).toEqual(expectedNextObjectCount);
-                    }
+                    expect(response.remaining_objects).toEqual(expectedNextObjectCount);
                 }
 
                 expectedNextObjectCount = response.remaining_objects - limit;

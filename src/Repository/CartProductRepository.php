@@ -61,16 +61,15 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
     }
 
     /**
-     * Seek per id_cart: one page emits every (id_product, id_product_attribute)
-     * row for the next $limit carts after the cursor. $limit applies to the
-     * cart count, not the row count — paginating per row would split a cart
-     * across pages and the seek cursor (id_cart) would skip the remainder.
+     * Offset-based page. $lastSeekKey is the row count emitted so far.
+     * SQL LIMIT/OFFSET is stable because generateFullQuery adds
+     * ORDER BY cp.id_cart ASC.
      *
-     * @param string|null $lastSeekKey
-     * @param int $limit max number of carts emitted in this page
+     * @param string|null $lastSeekKey row offset emitted so far
+     * @param int $limit
      * @param string $langIso
      *
-     * @return array{rows: array<mixed>, lastId: int|null}
+     * @return array<mixed>
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
@@ -78,26 +77,9 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
     public function retrieveContentsForFull($lastSeekKey, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
+        $this->query->limit((int) $limit, (int) $lastSeekKey);
 
-        $shopId = (int) parent::getShopContext()->id;
-
-        $carts = $this->db->executeS('
-            SELECT DISTINCT cp.id_cart
-              FROM ' . _DB_PREFIX_ . self::TABLE_NAME . ' cp
-             WHERE cp.id_shop = ' . $shopId . '
-               AND cp.id_cart > ' . (int) $lastSeekKey . '
-             ORDER BY cp.id_cart ASC
-             LIMIT ' . (int) $limit . '
-        ');
-
-        if (!is_array($carts) || empty($carts)) {
-            return ['rows' => [], 'lastId' => null];
-        }
-
-        $ids = array_map('intval', array_column($carts, 'id_cart'));
-        $this->query->where('cp.id_cart IN (' . implode(',', $ids) . ')');
-
-        return ['rows' => $this->runQuery(), 'lastId' => max($ids)];
+        return $this->runQuery();
     }
 
     /**
@@ -123,10 +105,9 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
     }
 
     /**
-     * Count distinct carts strictly after the cursor — pagination granularity
-     * is per-cart, not per-row.
+     * Remaining row count = total rows for this shop - offset already emitted.
      *
-     * @param string|null $lastSeekKey
+     * @param string|null $lastSeekKey row offset emitted so far
      * @param string $langIso
      *
      * @return int
@@ -138,11 +119,12 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
     {
         $shopId = (int) parent::getShopContext()->id;
 
-        return (int) $this->db->getValue('
-            SELECT COUNT(DISTINCT cp.id_cart)
+        $total = (int) $this->db->getValue('
+            SELECT COUNT(*)
               FROM ' . _DB_PREFIX_ . self::TABLE_NAME . ' cp
              WHERE cp.id_shop = ' . $shopId . '
-               AND cp.id_cart > ' . (int) $lastSeekKey . '
         ');
+
+        return max(0, $total - (int) $lastSeekKey);
     }
 }

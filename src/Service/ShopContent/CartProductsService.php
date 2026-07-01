@@ -52,10 +52,9 @@ class CartProductsService extends ShopContentAbstractService implements ShopCont
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $page = $this->cartProductRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
-        $result = $page['rows'];
+        $result = $this->cartProductRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
-        $newSeekKey = $page['lastId'] !== null ? (string) $page['lastId'] : $lastSeekKey;
+        $newSeekKey = (string) ((int) $lastSeekKey + count($result));
         $rows = [];
 
         if (!empty($result)) {
@@ -104,6 +103,19 @@ class CartProductsService extends ShopContentAbstractService implements ShopCont
     public function getFullSyncContentLeft($lastSeekKey, $langIso)
     {
         return $this->cartProductRepository->countFullSyncContentLeft($lastSeekKey, $langIso);
+    }
+
+    /**
+     * Cursor is a row offset, not a content id — a numeric compare against
+     * id_cart would be misleading. Always record: over-recording during full
+     * sync is safe (incremental sync will re-upload extra rows), while under-
+     * recording could drop a mutation to an already-uploaded cart.
+     *
+     * {@inheritdoc}
+     */
+    public function isAtOrBehindSeekKey($id, $cursor)
+    {
+        return true;
     }
 
     /**
