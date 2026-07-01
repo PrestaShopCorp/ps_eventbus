@@ -145,7 +145,10 @@ class SynchronizationService
 
         $this->syncRepository->upsertTypeSync($shopContent, $fullSyncFinished ? null : $newSeekKey, $dateNow, $fullSyncFinished, $langIso);
 
-        return $this->returnSyncResponse($data, $response, $fullSyncFinished ? 0 : $remainingObjects);
+        $reportedRemaining = $fullSyncFinished ? 0 : $remainingObjects;
+        $reportedRemaining += $this->incrementalSyncRepository->getRemainingIncrementalObjects($shopContent, $langIso);
+
+        return $this->returnSyncResponse($data, $response, $reportedRemaining);
     }
 
     /**
