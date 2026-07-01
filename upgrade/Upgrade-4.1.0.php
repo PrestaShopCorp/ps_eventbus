@@ -29,12 +29,8 @@ if (!defined('_PS_VERSION_')) {
 
 /**
  * Switches eventbus_type_sync from offset to seek pagination:
- *  - adds `last_seek_key` (the new cursor)
+ *  - adds `last_seek_key` (the new cursor, starts NULL for every row)
  *  - drops the now-unused `offset` column
- *  - resets any in-progress full sync so the new cursor restarts cleanly
- *
- * Pre-4.1.0 syncs lost mid-sync changes to already-uploaded rows, so a
- * fresh full sync is the safest heal for shops still mid-sync at upgrade.
  *
  * @return bool
  */
@@ -52,12 +48,6 @@ function upgrade_module_4_1_0()
              ADD COLUMN `last_seek_key` VARCHAR(190) DEFAULT NULL'
         );
     }
-
-    $db->execute(
-        'UPDATE `' . _DB_PREFIX_ . 'eventbus_type_sync`
-         SET `last_seek_key` = NULL
-         WHERE `full_sync_finished` = 0'
-    );
 
     $hasOffset = $db->executeS(
         'SHOW COLUMNS FROM `' . _DB_PREFIX_ . 'eventbus_type_sync` LIKE "offset"'
