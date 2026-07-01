@@ -38,27 +38,11 @@ function upgrade_module_4_1_0()
 {
     $db = Db::getInstance();
 
-    $hasLastSeekKey = $db->executeS(
-        'SHOW COLUMNS FROM `' . _DB_PREFIX_ . 'eventbus_type_sync` LIKE "last_seek_key"'
+    $db->execute(
+        'ALTER TABLE `' . _DB_PREFIX_ . 'eventbus_type_sync`
+          ADD COLUMN `last_seek_key` VARCHAR(190) DEFAULT NULL
+          DROP COLUMN `offset`'
     );
-
-    if (empty($hasLastSeekKey)) {
-        $db->execute(
-            'ALTER TABLE `' . _DB_PREFIX_ . 'eventbus_type_sync`
-             ADD COLUMN `last_seek_key` VARCHAR(190) DEFAULT NULL'
-        );
-    }
-
-    $hasOffset = $db->executeS(
-        'SHOW COLUMNS FROM `' . _DB_PREFIX_ . 'eventbus_type_sync` LIKE "offset"'
-    );
-
-    if (!empty($hasOffset)) {
-        $db->execute(
-            'ALTER TABLE `' . _DB_PREFIX_ . 'eventbus_type_sync`
-             DROP COLUMN `offset`'
-        );
-    }
 
     return true;
 }
