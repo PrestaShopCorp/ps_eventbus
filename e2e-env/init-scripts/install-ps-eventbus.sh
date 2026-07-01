@@ -15,8 +15,12 @@ error() {
 ps_eventbus_install() {
   # Notice: you might enable this if your uid is not 1000, or encounter permission issues
   # composer install -n -d ./modules/ps_eventbus
-  echo "* [ps_eventbus] installing the module..."
   cd "$PS_FOLDER"
+  # Some flashlight images ship ps_eventbus pre-installed with a stale schema
+  # (e.g. missing last_seek_key). Uninstall first so install.sql runs fresh.
+  echo "* [ps_eventbus] uninstalling any pre-baked version..."
+  php -d memory_limit=-1 bin/console prestashop:module --no-interaction uninstall "ps_eventbus" || true
+  echo "* [ps_eventbus] installing the module..."
   php -d memory_limit=-1 bin/console prestashop:module --no-interaction install "ps_eventbus"
 }
 

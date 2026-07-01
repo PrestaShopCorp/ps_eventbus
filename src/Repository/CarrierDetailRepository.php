@@ -128,14 +128,16 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
 
     /**
      * Seek per id_reference: one page emits every (id_zone, id_range) row for
-     * the next $limit references after the cursor. $limit applies to the
-     * reference count, not the row count.
+     * the next $limit references after the cursor. Returns rows plus the max
+     * reference id picked in this page — cursor must advance even when the
+     * join produces zero rows for those refs (fixture / config edge case),
+     * otherwise the sync loops forever.
      *
      * @param string|null $lastSeekKey
      * @param int $limit max number of references emitted in this page
      * @param string $langIso
      *
-     * @return array<mixed>
+     * @return array{rows: array<mixed>, lastId: int|null}
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
@@ -153,13 +155,13 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
         ');
 
         if (!is_array($refs) || empty($refs)) {
-            return [];
+            return ['rows' => [], 'lastId' => null];
         }
 
         $ids = array_map('intval', array_column($refs, 'id_reference'));
         $this->query->where('ca.id_reference IN (' . implode(',', $ids) . ')');
 
-        return $this->runQuery();
+        return ['rows' => $this->runQuery(), 'lastId' => max($ids)];
     }
 
     /**
@@ -185,7 +187,8 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
     }
 
     /**
-     * Remaining grouped rows for references strictly after the cursor.
+     * Count distinct references strictly after the cursor — pagination
+     * granularity is per-reference, not per-row.
      *
      * @param string|null $lastSeekKey
      * @param string $langIso
@@ -197,14 +200,10 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
      */
     public function countFullSyncContentLeft($lastSeekKey, $langIso)
     {
-        $this->generateFullQuery($langIso, true);
-        $this->query->where('ca.id_reference > ' . (int) $lastSeekKey);
-
-        $result = $this->db->executeS('
-            SELECT COUNT(*) AS count
-                FROM (' . $this->query->build() . ') as subquery;
+        return (int) $this->db->getValue('
+            SELECT COUNT(DISTINCT ca.id_reference)
+              FROM ' . _DB_PREFIX_ . self::TABLE_NAME . ' ca
+             WHERE ca.id_reference > ' . (int) $lastSeekKey . '
         ');
-
-        return is_array($result) && isset($result[0]['count']) ? (int) $result[0]['count'] : 0;
     }
 }

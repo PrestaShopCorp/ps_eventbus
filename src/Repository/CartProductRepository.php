@@ -70,7 +70,7 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
      * @param int $limit max number of carts emitted in this page
      * @param string $langIso
      *
-     * @return array<mixed>
+     * @return array{rows: array<mixed>, lastId: int|null}
      *
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
@@ -91,13 +91,13 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
         ');
 
         if (!is_array($carts) || empty($carts)) {
-            return [];
+            return ['rows' => [], 'lastId' => null];
         }
 
         $ids = array_map('intval', array_column($carts, 'id_cart'));
         $this->query->where('cp.id_cart IN (' . implode(',', $ids) . ')');
 
-        return $this->runQuery();
+        return ['rows' => $this->runQuery(), 'lastId' => max($ids)];
     }
 
     /**
@@ -123,7 +123,8 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
     }
 
     /**
-     * Count rows with cp.id_cart > cursor.
+     * Count distinct carts strictly after the cursor — pagination granularity
+     * is per-cart, not per-row.
      *
      * @param string|null $lastSeekKey
      * @param string $langIso
@@ -135,16 +136,13 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
      */
     public function countFullSyncContentLeft($lastSeekKey, $langIso)
     {
-        $this->generateFullQuery($langIso, false);
+        $shopId = (int) parent::getShopContext()->id;
 
-        if ($lastSeekKey !== null) {
-            $this->query->where('cp.id_cart > ' . (int) $lastSeekKey);
-        }
-
-        $this->query->select('COUNT(*) as count');
-
-        $result = $this->runQuery(true);
-
-        return !empty($result[0]['count']) ? (int) $result[0]['count'] : 0;
+        return (int) $this->db->getValue('
+            SELECT COUNT(DISTINCT cp.id_cart)
+              FROM ' . _DB_PREFIX_ . self::TABLE_NAME . ' cp
+             WHERE cp.id_shop = ' . $shopId . '
+               AND cp.id_cart > ' . (int) $lastSeekKey . '
+        ');
     }
 }

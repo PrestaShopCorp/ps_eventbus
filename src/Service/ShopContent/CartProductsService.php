@@ -52,15 +52,13 @@ class CartProductsService extends ShopContentAbstractService implements ShopCont
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $result = $this->cartProductRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $page = $this->cartProductRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $page['rows'];
 
-        $newSeekKey = $lastSeekKey;
+        $newSeekKey = $page['lastId'] !== null ? (string) $page['lastId'] : $lastSeekKey;
         $rows = [];
 
         if (!empty($result)) {
-            $lastRow = end($result);
-            $newSeekKey = (string) (int) $lastRow['id_cart'];
-
             $this->castCartProducts($result);
 
             $rows = array_map(function ($item) {

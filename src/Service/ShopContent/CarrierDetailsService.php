@@ -52,14 +52,13 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
      */
     public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $result = $this->carrierDetailRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $page = $this->carrierDetailRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
+        $result = $page['rows'];
 
-        $newSeekKey = $lastSeekKey;
+        $newSeekKey = $page['lastId'] !== null ? (string) $page['lastId'] : $lastSeekKey;
         $rows = [];
 
         if (!empty($result)) {
-            $newSeekKey = (string) max(array_map('intval', array_column($result, 'id_reference')));
-
             $this->castCarrierDetails($result);
 
             $rows = array_map(function ($item) {
