@@ -84,6 +84,7 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
             ->leftJoin('state', 's', 'co.id_zone = s.id_zone AND co.id_country = s.id_country AND s.active = 1')
             ->select('ca.id_reference')
             ->groupBy('ca.id_reference, co.id_zone, id_range')
+            ->orderBy('ca.id_reference ASC')
         ;
 
         if ($withSelecParameters) {
@@ -127,7 +128,11 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
     }
 
     /**
-     * @param int $offset
+     * Offset-based page. $lastSeekKey is the row count emitted so far.
+     * SQL LIMIT/OFFSET is stable because generateFullQuery adds
+     * ORDER BY ca.id_reference ASC.
+     *
+     * @param string|null $lastSeekKey row offset emitted so far
      * @param int $limit
      * @param string $langIso
      *
@@ -136,11 +141,10 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso)
+    public function retrieveContentsForFull($lastSeekKey, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
-
-        $this->query->limit((int) $limit, (int) $offset);
+        $this->query->limit((int) $limit, (int) $lastSeekKey);
 
         return $this->runQuery();
     }
@@ -168,8 +172,10 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * Remaining row count = total grouped rows - offset already emitted.
+     * Total requires the full GROUP BY + joins, so wrap in a subquery.
+     *
+     * @param string|null $lastSeekKey row offset emitted so far
      * @param string $langIso
      *
      * @return int
@@ -177,15 +183,17 @@ class CarrierDetailRepository extends AbstractRepository implements RepositoryIn
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    public function countFullSyncContentLeft($lastSeekKey, $langIso)
     {
         $this->generateFullQuery($langIso, true);
 
         $result = $this->db->executeS('
-            SELECT COUNT(*) - ' . (int) $offset . ' AS count
+            SELECT COUNT(*) AS count
                 FROM (' . $this->query->build() . ') as subquery;
         ');
 
-        return is_array($result) ? $result[0]['count'] : 0;
+        $total = is_array($result) && isset($result[0]['count']) ? (int) $result[0]['count'] : 0;
+
+        return max(0, $total - (int) $lastSeekKey);
     }
 }

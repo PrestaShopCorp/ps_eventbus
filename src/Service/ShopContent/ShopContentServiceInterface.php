@@ -33,13 +33,15 @@ if (!defined('_PS_VERSION_')) {
 interface ShopContentServiceInterface
 {
     /**
-     * @param int $offset
+     * Fetch one page of full-sync content strictly after $lastSeekKey.
+     *
+     * @param string|null $lastSeekKey cursor from the previous page, or null on first call
      * @param int $limit
      * @param string $langIso
      *
-     * @return array<mixed>
+     * @return array{rows: array<mixed>, lastSeekKey: ?string}
      */
-    public function getContentsForFull($offset, $limit, $langIso);
+    public function getContentsForFull($lastSeekKey, $limit, $langIso);
 
     /**
      * @param int $limit
@@ -52,11 +54,20 @@ interface ShopContentServiceInterface
     public function getContentsForIncremental($limit, $upsertedContents, $deletedContents, $langIso);
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
      */
-    public function getFullSyncContentLeft($offset, $limit, $langIso);
+    public function getFullSyncContentLeft($lastSeekKey, $langIso);
+
+    /**
+     * Compare two seek keys (plain "123" or composite "a-b") as int tuples.
+     *
+     * @param string $id
+     * @param string $cursor
+     *
+     * @return bool
+     */
+    public function isAtOrBehindSeekKey($id, $cursor);
 }

@@ -110,8 +110,6 @@ class ApiShopContentService
             // If no typesync exist, or if fullsync is requested by user
             if (!is_array($typeSync) || $fullSyncRequested) {
                 $isFullSync = true;
-                $fullSyncIsFinished = false;
-                $offset = 0;
 
                 if ($typeSync) {
                     /** @var IncrementalSyncRepository $incrementalSyncRepository */
@@ -121,21 +119,17 @@ class ApiShopContentService
 
                 $this->syncRepository->upsertTypeSync(
                     $shopContent,
-                    $offset,
+                    null,
                     $dateNow,
-                    $fullSyncIsFinished,
+                    false,
                     $langIso
                 );
             // Else if fullsync is not finished
             } elseif (!boolval($typeSync['full_sync_finished'])) {
                 $isFullSync = true;
-                $fullSyncIsFinished = false;
-                $offset = (int) $typeSync['offset'];
             // Else, we are in incremental sync
             } else {
                 $isFullSync = false;
-                $fullSyncIsFinished = $typeSync['full_sync_finished'];
-                $offset = (int) $typeSync['offset'];
             }
 
             if ($isFullSync) {
@@ -143,7 +137,6 @@ class ApiShopContentService
                     $shopContent,
                     $jobId,
                     $langIso,
-                    $offset,
                     $limit,
                     $this->startTime,
                     $dateNow

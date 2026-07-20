@@ -44,29 +44,39 @@ class ThemesService extends ShopContentAbstractService implements ShopContentSer
     }
 
     /**
-     * @param int $offset
+     * Singleton payload: enumerate every installed theme once. Themes are
+     * a discovery-time list and not a paginated SQL table, so emit them
+     * on the first call and report "done" for any subsequent call.
+     *
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
-     * @return array<mixed>
+     * @return array{rows: array<mixed>, lastSeekKey: ?string}
      */
-    public function getContentsForFull($offset, $limit, $langIso)
+    public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
+        if ($lastSeekKey !== null) {
+            return ['rows' => [], 'lastSeekKey' => 'DONE'];
+        }
+
         $result = $this->getAllThemes();
 
         if (empty($result)) {
-            return [];
+            return ['rows' => [], 'lastSeekKey' => 'DONE'];
         }
 
         $themes = $this->formatThemes($result);
 
-        return array_map(function ($item) {
+        $rows = array_map(function ($item) {
             return [
                 'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => Config::COLLECTION_THEMES,
                 'properties' => $item,
             ];
         }, $themes);
+
+        return ['rows' => $rows, 'lastSeekKey' => 'DONE'];
     }
 
     /**
@@ -83,13 +93,12 @@ class ThemesService extends ShopContentAbstractService implements ShopContentSer
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
      */
-    public function getFullSyncContentLeft($offset, $limit, $langIso)
+    public function getFullSyncContentLeft($lastSeekKey, $langIso)
     {
         return 0;
     }

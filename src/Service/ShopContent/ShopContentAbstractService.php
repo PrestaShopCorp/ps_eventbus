@@ -35,6 +35,28 @@ if (!defined('_PS_VERSION_')) {
 abstract class ShopContentAbstractService
 {
     /**
+     * Compare two seek keys (plain "123" or composite "a-b") as int tuples.
+     *
+     * @param string $id
+     * @param string $cursor
+     *
+     * @return bool true when $id is at or behind $cursor (id <= cursor)
+     */
+    public function isAtOrBehindSeekKey($id, $cursor)
+    {
+        $a = array_map('intval', explode('-', (string) $id));
+        $b = array_map('intval', explode('-', (string) $cursor));
+        $n = min(count($a), count($b));
+        for ($i = 0; $i < $n; ++$i) {
+            if ($a[$i] !== $b[$i]) {
+                return $a[$i] < $b[$i];
+            }
+        }
+
+        return count($a) <= count($b);
+    }
+
+    /**
      * @param string $collection
      * @param array<mixed> $upsertedContents
      * @param array<mixed> $deletedList

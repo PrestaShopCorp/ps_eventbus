@@ -70,6 +70,7 @@ class EmployeeRepository extends AbstractRepository implements RepositoryInterfa
                 ->select('e.id_last_customer')
                 ->select('e.last_connection_date')
                 ->select('es.id_shop as id_shop')
+                ->orderBy('e.id_employee ASC')
             ;
 
             // https://github.com/PrestaShop/PrestaShop/commit/20f1d9fe8a03559dfa9d1f7109de1f70c99f1874#diff-cde6a9d4a58afb13ff068801ee09c0e712c5e90b0cbf5632a0cc965f15cb6802R107
@@ -80,7 +81,9 @@ class EmployeeRepository extends AbstractRepository implements RepositoryInterfa
     }
 
     /**
-     * @param int $offset
+     * Seek-based page: returns rows strictly after $lastSeekKey, ordered by e.id_employee.
+     *
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
@@ -89,11 +92,15 @@ class EmployeeRepository extends AbstractRepository implements RepositoryInterfa
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso)
+    public function retrieveContentsForFull($lastSeekKey, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
 
-        $this->query->limit((int) $limit, (int) $offset);
+        if ($lastSeekKey !== null) {
+            $this->query->where('e.id_employee > ' . (int) $lastSeekKey);
+        }
+
+        $this->query->limit((int) $limit);
 
         return $this->runQuery();
     }
@@ -121,8 +128,9 @@ class EmployeeRepository extends AbstractRepository implements RepositoryInterfa
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * Count rows with e.id_employee > cursor.
+     *
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
@@ -130,14 +138,18 @@ class EmployeeRepository extends AbstractRepository implements RepositoryInterfa
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    public function countFullSyncContentLeft($lastSeekKey, $langIso)
     {
         $this->generateFullQuery($langIso, false);
 
-        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+        if ($lastSeekKey !== null) {
+            $this->query->where('e.id_employee > ' . (int) $lastSeekKey);
+        }
+
+        $this->query->select('COUNT(*) as count');
 
         $result = $this->runQuery(true);
 
-        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
+        return !empty($result[0]['count']) ? (int) $result[0]['count'] : 0;
     }
 }

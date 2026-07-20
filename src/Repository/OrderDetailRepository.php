@@ -87,12 +87,15 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
                 ->select('ps.id_category_default as category')
                 ->select('l.iso_code')
                 ->select('o.conversion_rate as conversion_rate')
+                ->orderBy('od.id_order_detail ASC')
             ;
         }
     }
 
     /**
-     * @param int $offset
+     * Seek-based page: returns rows strictly after $lastSeekKey, ordered by od.id_order_detail.
+     *
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
@@ -101,41 +104,15 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso)
+    public function retrieveContentsForFull($lastSeekKey, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
 
-        $context = \Context::getContext();
-
-        if ($context == null) {
-            throw new \PrestaShopException('Context is null');
+        if ($lastSeekKey !== null) {
+            $this->query->where('od.id_order_detail > ' . (int) $lastSeekKey);
         }
 
-        if ($context->shop === null) {
-            throw new \PrestaShopException('No shop context');
-        }
-
-        $seekStartIdResult = $this->db->executeS(
-            'SELECT id_order_detail
-            FROM ' . _DB_PREFIX_ . self::TABLE_NAME . '
-            WHERE id_shop = ' . (int) $context->shop->id . '
-            ORDER BY id_order_detail
-            LIMIT ' . (int) $offset . ', 1'
-        );
-
-        $seekStartId = 0;
-
-        if (
-            is_array($seekStartIdResult)
-            && !empty($seekStartIdResult)
-            && isset($seekStartIdResult[0]['id_order_detail'])
-        ) {
-            $seekStartId = (int) $seekStartIdResult[0]['id_order_detail'];
-        }
-
-        $this->query
-            ->where('od.id_order_detail >=' . $seekStartId)
-            ->limit((int) $limit);
+        $this->query->limit((int) $limit);
 
         return $this->runQuery();
     }
@@ -163,8 +140,9 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * Count rows with od.id_order_detail > cursor.
+     *
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
@@ -172,15 +150,18 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    public function countFullSyncContentLeft($lastSeekKey, $langIso)
     {
-        $this->generateFullQuery($langIso, true);
+        $this->generateFullQuery($langIso, false);
 
-        $result = $this->db->executeS('
-            SELECT COUNT(*) - ' . (int) $offset . ' AS count
-                FROM (' . $this->query->build() . ') as subquery;
-        ');
+        if ($lastSeekKey !== null) {
+            $this->query->where('od.id_order_detail > ' . (int) $lastSeekKey);
+        }
 
-        return is_array($result) ? $result[0]['count'] : 0;
+        $this->query->select('COUNT(*) as count');
+
+        $result = $this->runQuery(true);
+
+        return !empty($result[0]['count']) ? (int) $result[0]['count'] : 0;
     }
 }

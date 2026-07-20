@@ -55,12 +55,17 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
                 ->select('cp.id_product_attribute')
                 ->select('cp.quantity')
                 ->select('cp.date_add as created_at')
+                ->orderBy('cp.id_cart ASC')
             ;
         }
     }
 
     /**
-     * @param int $offset
+     * Offset-based page. $lastSeekKey is the row count emitted so far.
+     * SQL LIMIT/OFFSET is stable because generateFullQuery adds
+     * ORDER BY cp.id_cart ASC.
+     *
+     * @param string|null $lastSeekKey row offset emitted so far
      * @param int $limit
      * @param string $langIso
      *
@@ -69,11 +74,10 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso)
+    public function retrieveContentsForFull($lastSeekKey, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
-
-        $this->query->limit((int) $limit, (int) $offset);
+        $this->query->limit((int) $limit, (int) $lastSeekKey);
 
         return $this->runQuery();
     }
@@ -101,8 +105,9 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * Remaining row count = total rows for this shop - offset already emitted.
+     *
+     * @param string|null $lastSeekKey row offset emitted so far
      * @param string $langIso
      *
      * @return int
@@ -110,14 +115,16 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    public function countFullSyncContentLeft($lastSeekKey, $langIso)
     {
-        $this->generateFullQuery($langIso, false);
+        $shopId = (int) parent::getShopContext()->id;
 
-        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+        $total = (int) $this->db->getValue('
+            SELECT COUNT(*)
+              FROM ' . _DB_PREFIX_ . self::TABLE_NAME . ' cp
+             WHERE cp.id_shop = ' . $shopId . '
+        ');
 
-        $result = $this->runQuery(true);
-
-        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
+        return max(0, $total - (int) $lastSeekKey);
     }
 }

@@ -68,14 +68,22 @@ class InfoService extends ShopContentAbstractService implements ShopContentServi
     }
 
     /**
-     * @param int $offset
+     * Singleton payload: the shop "info" is a single synthetic row, not a
+     * paginated table. We emit it once on the first call, then report
+     * "done" for any subsequent call within the same full sync.
+     *
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
-     * @return array<mixed>
+     * @return array{rows: array<mixed>, lastSeekKey: ?string}
      */
-    public function getContentsForFull($offset, $limit, $langIso)
+    public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
+        if ($lastSeekKey !== null) {
+            return ['rows' => [], 'lastSeekKey' => 'DONE'];
+        }
+
         $langId = !empty($langIso) ? (int) \Language::getIdByIso($langIso) : null;
 
         /* This file is created on installation and never modified.
@@ -91,7 +99,7 @@ class InfoService extends ShopContentAbstractService implements ShopContentServi
             throw new \PrestaShopException('No link context');
         }
 
-        return [
+        $rows = [
             [
                 'action' => Config::INCREMENTAL_TYPE_UPSERT,
                 'collection' => 'shops',
@@ -121,6 +129,8 @@ class InfoService extends ShopContentAbstractService implements ShopContentServi
                 ],
             ],
         ];
+
+        return ['rows' => $rows, 'lastSeekKey' => 'DONE'];
     }
 
     /**
@@ -137,13 +147,12 @@ class InfoService extends ShopContentAbstractService implements ShopContentServi
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
      */
-    public function getFullSyncContentLeft($offset, $limit, $langIso)
+    public function getFullSyncContentLeft($lastSeekKey, $langIso)
     {
         return 0;
     }

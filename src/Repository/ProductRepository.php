@@ -119,6 +119,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
                 ->select("CONCAT(p.id_product, '-', IFNULL(pas.id_product_attribute, 0), '-', '" . pSQL($langIso) . "') AS unique_product_id")
                 ->select("CONCAT(p.id_product, '-', IFNULL(pas.id_product_attribute, 0)) AS id_product_attribute")
                 ->select("'" . pSQL($langIso) . "' as iso_code")
+                ->orderBy('p.id_product ASC, IFNULL(pas.id_product_attribute, 0) ASC')
             ;
 
             if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>=')) {
@@ -142,7 +143,12 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
     }
 
     /**
-     * @param int $offset
+     * Seek-based page: returns rows strictly after $lastSeekKey, ordered by
+     * (p.id_product, IFNULL(pas.id_product_attribute, 0)). The seek key encodes
+     * the composite (id_product, id_product_attribute) pair as 'pad(11)-pad(11)',
+     * matching the outbox id_object shape ("{id_product}-{id_product_attribute}").
+     *
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
@@ -151,11 +157,22 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso)
+    public function retrieveContentsForFull($lastSeekKey, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
 
-        $this->query->limit((int) $limit, (int) $offset);
+        if ($lastSeekKey !== null) {
+            list($lastA, $lastB) = $this->decodeCompositeSeekKey($lastSeekKey);
+            // Explicit OR form keeps the (id_product, id_product_attribute)
+            // composite key index usable for seek pages.
+            $this->query->where(
+                '(p.id_product > ' . $lastA
+                . ' OR (p.id_product = ' . $lastA
+                . ' AND IFNULL(pas.id_product_attribute, 0) > ' . $lastB . '))'
+            );
+        }
+
+        $this->query->limit((int) $limit);
 
         return $this->runQuery();
     }
@@ -183,8 +200,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
@@ -192,15 +208,24 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    public function countFullSyncContentLeft($lastSeekKey, $langIso)
     {
         $this->generateFullQuery($langIso, false);
 
-        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+        if ($lastSeekKey !== null) {
+            list($lastA, $lastB) = $this->decodeCompositeSeekKey($lastSeekKey);
+            $this->query->where(
+                '(p.id_product > ' . $lastA
+                . ' OR (p.id_product = ' . $lastA
+                . ' AND IFNULL(pas.id_product_attribute, 0) > ' . $lastB . '))'
+            );
+        }
+
+        $this->query->select('COUNT(*) as count');
 
         $result = $this->runQuery(true);
 
-        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
+        return !empty($result[0]['count']) ? (int) $result[0]['count'] : 0;
     }
 
     /**
@@ -355,6 +380,7 @@ class ProductRepository extends AbstractRepository implements RepositoryInterfac
                 ->select('IFNULL(pas.id_product_attribute,0) id_product_attribute')
                 ->select('pas.`price` AS attribute_price')
                 ->select('pas.default_on')
+                ->orderBy('p.id_product ASC, IFNULL(pas.id_product_attribute, 0) ASC')
             ;
         } else {
             $this->query->select('0 as id_product_attribute');

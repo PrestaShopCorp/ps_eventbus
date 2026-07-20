@@ -78,7 +78,6 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
                 ->select('o.date_add as created_at')
                 ->select('o.date_upd as updated_at')
                 ->select('o.id_carrier')
-                ->select('o.payment as payment_name')
                 ->select('o.valid as is_validated')
                 ->select('ost.paid as is_paid')
                 ->select('ost.shipped as is_shipped')
@@ -112,12 +111,15 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
                 ->select('SUM(os.total_products_tax_excl + os.total_shipping_tax_excl) as refund_tax_excl')
                 ->select('CONCAT(CONCAT("delivery", ":", cntd.iso_code), ",", CONCAT("invoice", ":", cnti.iso_code)) as address_iso')
                 ->select('IF((SELECT so.id_order FROM `' . _DB_PREFIX_ . 'orders` so WHERE so.id_customer = o.id_customer AND so.id_order < o.id_order LIMIT 1) > 0, 0, 1) as new_customer')
+                ->orderBy('o.id_order ASC')
             ;
         }
     }
 
     /**
-     * @param int $offset
+     * Seek-based page: returns rows strictly after $lastSeekKey, ordered by o.id_order.
+     *
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
@@ -126,11 +128,15 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso)
+    public function retrieveContentsForFull($lastSeekKey, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
 
-        $this->query->limit((int) $limit, (int) $offset);
+        if ($lastSeekKey !== null) {
+            $this->query->where('o.id_order > ' . (int) $lastSeekKey);
+        }
+
+        $this->query->limit((int) $limit);
 
         return $this->runQuery();
     }
@@ -158,8 +164,9 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * Count rows with o.id_order > cursor.
+     *
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
@@ -167,15 +174,19 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    public function countFullSyncContentLeft($lastSeekKey, $langIso)
     {
-        $this->generateFullQuery($langIso, false);
+        $this->generateFullQuery($langIso, true);
+
+        if ($lastSeekKey !== null) {
+            $this->query->where('o.id_order > ' . (int) $lastSeekKey);
+        }
 
         $result = $this->db->executeS('
-            SELECT COUNT(*) - ' . (int) $offset . ' AS count
-            FROM (' . $this->query->build() . ') as subquery;
+            SELECT COUNT(*) AS count
+                FROM (' . $this->query->build() . ') as subquery;
         ');
 
-        return is_array($result) ? $result[0]['count'] : 0;
+        return is_array($result) && isset($result[0]['count']) ? (int) $result[0]['count'] : 0;
     }
 }

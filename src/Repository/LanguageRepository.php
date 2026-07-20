@@ -59,6 +59,7 @@ class LanguageRepository extends AbstractRepository implements RepositoryInterfa
                 ->select('la.date_format_full')
                 ->select('la.is_rtl')
                 ->select('las.id_shop')
+                ->orderBy('la.id_lang ASC')
             ;
 
             // https://github.com/PrestaShop/PrestaShop/commit/481111b8274ed005e1c4a8ce2cf2b3ebbeb9a270#diff-c123d3d30d9c9e012a826a21887fccce6600a2f2a848a58d5910e55f0f8f5093R41
@@ -69,7 +70,9 @@ class LanguageRepository extends AbstractRepository implements RepositoryInterfa
     }
 
     /**
-     * @param int $offset
+     * Seek-based page: returns rows strictly after $lastSeekKey, ordered by la.id_lang.
+     *
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
@@ -78,11 +81,15 @@ class LanguageRepository extends AbstractRepository implements RepositoryInterfa
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso)
+    public function retrieveContentsForFull($lastSeekKey, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
 
-        $this->query->limit((int) $limit, (int) $offset);
+        if ($lastSeekKey !== null) {
+            $this->query->where('la.id_lang > ' . (int) $lastSeekKey);
+        }
+
+        $this->query->limit((int) $limit);
 
         return $this->runQuery();
     }
@@ -110,8 +117,9 @@ class LanguageRepository extends AbstractRepository implements RepositoryInterfa
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * Count rows with la.id_lang > cursor.
+     *
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
@@ -119,14 +127,18 @@ class LanguageRepository extends AbstractRepository implements RepositoryInterfa
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    public function countFullSyncContentLeft($lastSeekKey, $langIso)
     {
         $this->generateFullQuery($langIso, false);
 
-        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+        if ($lastSeekKey !== null) {
+            $this->query->where('la.id_lang > ' . (int) $lastSeekKey);
+        }
+
+        $this->query->select('COUNT(*) as count');
 
         $result = $this->runQuery(true);
 
-        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
+        return !empty($result[0]['count']) ? (int) $result[0]['count'] : 0;
     }
 }

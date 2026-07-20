@@ -162,4 +162,18 @@ abstract class AbstractRepository
 
         CommonService::exitWithResponse($response);
     }
+
+    /**
+     * Split a composite seek key "a-b" into its two int components.
+     *
+     * @param string $seekKey
+     *
+     * @return array{0: int, 1: int}
+     */
+    protected function decodeCompositeSeekKey($seekKey)
+    {
+        $parts = explode('-', $seekKey, 2);
+
+        return [(int) $parts[0], isset($parts[1]) ? (int) $parts[1] : 0];
+    }
 }

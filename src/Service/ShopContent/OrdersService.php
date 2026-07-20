@@ -57,29 +57,38 @@ class OrdersService extends ShopContentAbstractService implements ShopContentSer
     }
 
     /**
-     * @param int $offset
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
-     * @return array<mixed>
+     * @return array{rows: array<mixed>, lastSeekKey: ?string}
      */
-    public function getContentsForFull($offset, $limit, $langIso)
+    public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $result = $this->orderRepository->retrieveContentsForFull($offset, $limit, $langIso);
+        $result = $this->orderRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
-        if (empty($result)) {
-            return [];
+        $newSeekKey = $lastSeekKey;
+        $rows = [];
+
+        if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = (string) (int) $lastRow['id_order'];
+
+            $this->castOrders($result, $langIso);
+
+            $rows = array_map(function ($item) {
+                return [
+                    'action' => Config::INCREMENTAL_TYPE_UPSERT,
+                    'collection' => Config::COLLECTION_ORDERS,
+                    'properties' => $item,
+                ];
+            }, $result);
         }
 
-        $this->castOrders($result, $langIso);
-
-        return array_map(function ($item) {
-            return [
-                'action' => Config::INCREMENTAL_TYPE_UPSERT,
-                'collection' => Config::COLLECTION_ORDERS,
-                'properties' => $item,
-            ];
-        }, $result);
+        return [
+            'rows' => $rows,
+            'lastSeekKey' => $newSeekKey,
+        ];
     }
 
     /**
@@ -102,15 +111,14 @@ class OrdersService extends ShopContentAbstractService implements ShopContentSer
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
      */
-    public function getFullSyncContentLeft($offset, $limit, $langIso)
+    public function getFullSyncContentLeft($lastSeekKey, $langIso)
     {
-        return $this->orderRepository->countFullSyncContentLeft($offset, $limit, $langIso);
+        return $this->orderRepository->countFullSyncContentLeft($lastSeekKey, $langIso);
     }
 
     /**

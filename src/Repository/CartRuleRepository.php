@@ -80,6 +80,7 @@ class CartRuleRepository extends AbstractRepository implements RepositoryInterfa
                 ->select('cr.active')
                 ->select('cr.date_add AS created_at')
                 ->select('cr.date_upd AS updated_at')
+                ->orderBy('cr.id_cart_rule ASC')
             ;
 
             if (defined('_PS_VERSION_') && version_compare(_PS_VERSION_, '1.7', '>=')) {
@@ -89,7 +90,9 @@ class CartRuleRepository extends AbstractRepository implements RepositoryInterfa
     }
 
     /**
-     * @param int $offset
+     * Seek-based page: returns rows strictly after $lastSeekKey, ordered by cr.id_cart_rule.
+     *
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
@@ -98,11 +101,15 @@ class CartRuleRepository extends AbstractRepository implements RepositoryInterfa
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso)
+    public function retrieveContentsForFull($lastSeekKey, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
 
-        $this->query->limit((int) $limit, (int) $offset);
+        if ($lastSeekKey !== null) {
+            $this->query->where('cr.id_cart_rule > ' . (int) $lastSeekKey);
+        }
+
+        $this->query->limit((int) $limit);
 
         return $this->runQuery();
     }
@@ -130,8 +137,9 @@ class CartRuleRepository extends AbstractRepository implements RepositoryInterfa
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * Count rows with cr.id_cart_rule > cursor.
+     *
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
@@ -139,14 +147,18 @@ class CartRuleRepository extends AbstractRepository implements RepositoryInterfa
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    public function countFullSyncContentLeft($lastSeekKey, $langIso)
     {
         $this->generateFullQuery($langIso, false);
 
-        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+        if ($lastSeekKey !== null) {
+            $this->query->where('cr.id_cart_rule > ' . (int) $lastSeekKey);
+        }
+
+        $this->query->select('COUNT(*) as count');
 
         $result = $this->runQuery(true);
 
-        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
+        return !empty($result[0]['count']) ? (int) $result[0]['count'] : 0;
     }
 }

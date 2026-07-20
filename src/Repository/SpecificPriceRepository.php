@@ -73,12 +73,15 @@ class SpecificPriceRepository extends AbstractRepository implements RepositoryIn
                 ->select('sp.reduction_type')
                 ->select('c.iso_code as country') // different
                 ->select('cur.iso_code as currency') // different
+                ->orderBy('sp.id_specific_price ASC')
             ;
         }
     }
 
     /**
-     * @param int $offset
+     * Seek-based page: returns rows strictly after $lastSeekKey, ordered by sp.id_specific_price.
+     *
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
@@ -87,11 +90,15 @@ class SpecificPriceRepository extends AbstractRepository implements RepositoryIn
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso)
+    public function retrieveContentsForFull($lastSeekKey, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
 
-        $this->query->limit((int) $limit, (int) $offset);
+        if ($lastSeekKey !== null) {
+            $this->query->where('sp.id_specific_price > ' . (int) $lastSeekKey);
+        }
+
+        $this->query->limit((int) $limit);
 
         return $this->runQuery();
     }
@@ -119,8 +126,9 @@ class SpecificPriceRepository extends AbstractRepository implements RepositoryIn
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * Count rows with sp.id_specific_price > cursor.
+     *
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
@@ -128,15 +136,19 @@ class SpecificPriceRepository extends AbstractRepository implements RepositoryIn
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $limit, $langIso)
+    public function countFullSyncContentLeft($lastSeekKey, $langIso)
     {
         $this->generateFullQuery($langIso, false);
 
-        $this->query->select('(COUNT(*) - ' . (int) $offset . ') as count');
+        if ($lastSeekKey !== null) {
+            $this->query->where('sp.id_specific_price > ' . (int) $lastSeekKey);
+        }
+
+        $this->query->select('COUNT(*) as count');
 
         $result = $this->runQuery(true);
 
-        return !empty($result[0]['count']) ? $result[0]['count'] : 0;
+        return !empty($result[0]['count']) ? (int) $result[0]['count'] : 0;
     }
 
     /**

@@ -44,13 +44,16 @@ interface RepositoryInterface
     public function generateFullQuery($langIso, $withSelecParameters);
 
     /**
-     * @param int $offset
+     * Seek-based page: returns rows strictly after $lastSeekKey, ordered by
+     * the table's monotonic seek column.
+     *
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
      * @return array<mixed>
      */
-    public function retrieveContentsForFull($offset, $limit, $langIso);
+    public function retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
     /**
      * @param int $limit
@@ -62,8 +65,9 @@ interface RepositoryInterface
     public function retrieveContentsForIncremental($limit, $contentIds, $langIso);
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * Count rows still to send after the cursor.
+     *
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
@@ -71,5 +75,5 @@ interface RepositoryInterface
      * @throws \PrestaShopException
      * @throws \PrestaShopDatabaseException
      */
-    public function countFullSyncContentLeft($offset, $limit, $langIso);
+    public function countFullSyncContentLeft($lastSeekKey, $langIso);
 }

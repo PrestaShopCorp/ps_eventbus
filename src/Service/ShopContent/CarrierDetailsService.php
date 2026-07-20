@@ -44,29 +44,35 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
     }
 
     /**
-     * @param int $offset
+     * @param string|null $lastSeekKey
      * @param int $limit
      * @param string $langIso
      *
-     * @return array<mixed>
+     * @return array{rows: array<mixed>, lastSeekKey: ?string}
      */
-    public function getContentsForFull($offset, $limit, $langIso)
+    public function getContentsForFull($lastSeekKey, $limit, $langIso)
     {
-        $result = $this->carrierDetailRepository->retrieveContentsForFull($offset, $limit, $langIso);
+        $result = $this->carrierDetailRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
-        if (empty($result)) {
-            return [];
+        $newSeekKey = (string) ((int) $lastSeekKey + count($result));
+        $rows = [];
+
+        if (!empty($result)) {
+            $this->castCarrierDetails($result);
+
+            $rows = array_map(function ($item) {
+                return [
+                    'action' => Config::INCREMENTAL_TYPE_UPSERT,
+                    'collection' => Config::COLLECTION_CARRIER_DETAILS,
+                    'properties' => $item,
+                ];
+            }, $result);
         }
 
-        $this->castCarrierDetails($result);
-
-        return array_map(function ($item) {
-            return [
-                'action' => Config::INCREMENTAL_TYPE_UPSERT,
-                'collection' => Config::COLLECTION_CARRIER_DETAILS,
-                'properties' => $item,
-            ];
-        }, $result);
+        return [
+            'rows' => $rows,
+            'lastSeekKey' => $newSeekKey,
+        ];
     }
 
     /**
@@ -89,15 +95,27 @@ class CarrierDetailsService extends ShopContentAbstractService implements ShopCo
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * @param string|null $lastSeekKey
      * @param string $langIso
      *
      * @return int
      */
-    public function getFullSyncContentLeft($offset, $limit, $langIso)
+    public function getFullSyncContentLeft($lastSeekKey, $langIso)
     {
-        return $this->carrierDetailRepository->countFullSyncContentLeft($offset, $limit, $langIso);
+        return $this->carrierDetailRepository->countFullSyncContentLeft($lastSeekKey, $langIso);
+    }
+
+    /**
+     * Cursor is a row offset, not a content id — a numeric compare against
+     * id_carrier would be misleading. Always record: over-recording during
+     * full sync is safe (incremental sync will re-upload extra rows), while
+     * under-recording could drop a mutation to an already-uploaded carrier.
+     *
+     * {@inheritdoc}
+     */
+    public function isAtOrBehindSeekKey($id, $cursor)
+    {
+        return true;
     }
 
     /**
