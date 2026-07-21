@@ -1,0 +1,11 @@
+{
+  "header": {
+    "title": "PrestaShop EventBus"
+  },
+  "pages": {
+    "home": {
+      "title": "EventBus Configuration",
+      "description": "This page is under construction."
+    }
+  }
+}
