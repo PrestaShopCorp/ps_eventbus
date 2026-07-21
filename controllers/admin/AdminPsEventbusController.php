@@ -53,7 +53,9 @@ class AdminPsEventbusController extends ModuleAdminController
             'eventbus_preload_urls' => $assets['preload'],
         ]);
 
-        $this->setTemplate('module:ps_eventbus/views/templates/admin/config.tpl');
+        $templatePath = _PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/config.tpl';
+        $this->content = $this->context->smarty->fetch($templatePath);
+        $this->context->smarty->assign('content', $this->content);
     }
 
     /**
