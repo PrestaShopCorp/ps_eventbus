@@ -46,21 +46,14 @@ class AdminPsEventbusController extends ModuleAdminController
 
         $assets = $this->getAssets();
 
-        try {
-            /** @var \Twig\Environment $twig */
-            $twig = $this->get('twig');
+        $this->context->smarty->assign([
+            'LIVE_MODE_VUEJS' => $liveModeVuejs,
+            'eventbus_js_url' => $assets['js'],
+            'eventbus_css_url' => $assets['css'],
+            'eventbus_preload_urls' => $assets['preload'],
+        ]);
 
-            $html = $twig->render('@Modules/ps_eventbus/views/templates/admin/config.html.twig', [
-                'LIVE_MODE_VUEJS' => $liveModeVuejs,
-                'eventbus_js_url' => $assets['js'],
-                'eventbus_css_url' => $assets['css'],
-                'eventbus_preload_urls' => $assets['preload'],
-            ]);
-
-            $this->context->smarty->assign('content', $html);
-        } catch (\Exception $e) {
-            $this->errors[] = $e->getMessage();
-        }
+        $this->setTemplate('module:ps_eventbus/views/templates/admin/config.tpl');
     }
 
     /**
