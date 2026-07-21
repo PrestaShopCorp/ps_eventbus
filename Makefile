@@ -18,7 +18,23 @@ default: build
 
 # target: build                                                - Setup PHP & Node.js locally
 .PHONY: build
-build: vendor tools/vendor
+build: vendor tools/vendor frontend-build
+
+
+# target: frontend-install                                      - Install frontend dependencies
+.PHONY: frontend-install
+frontend-install:
+	corepack enable && pnpm install --frozen-lockfile
+
+# target: frontend-build                                        - Build frontend assets
+.PHONY: frontend-build
+frontend-build: frontend-install
+	pnpm run build
+
+# target: frontend-lint                                         - Lint frontend code
+.PHONY: frontend-lint
+frontend-lint: frontend-install
+	pnpm run lint
 
 # target: help                                                 - Get help on this file
 .PHONY: help
@@ -37,22 +53,22 @@ zip: zip-prod zip-inte zip-e2e
 
 # target: zip-e2e                                              - Bundle a local E2E integrable zip
 .PHONY: zip-e2e
-zip-e2e: vendor tools/vendor dist
+zip-e2e: vendor tools/vendor dist frontend-build
 	@$(call zip_it,./config.php,${PACKAGE}_e2e.zip)
 
 # target: zip-inte                                             - Bundle an integration zip
 .PHONY: zip-inte
-zip-inte: vendor tools/vendor dist
+zip-inte: vendor tools/vendor dist frontend-build
 	@$(call zip_it,.config.inte.php,${PACKAGE}_integration.zip)
 
 # target: zip-prod                                             - Bundle a production zip
 .PHONY: zip-prod
-zip-prod: vendor tools/vendor dist
+zip-prod: vendor tools/vendor dist frontend-build
 	@$(call zip_it,.config.prod.php,${PACKAGE}.zip)
 
 # target: zip-unzipped                                          - Bundle a production module, but without zip step (only to check sources)
 .PHONY: zip-unzipped
-zip-unzipped: vendor tools/vendor dist
+zip-unzipped: vendor tools/vendor dist frontend-build
 	@$(call no_zip_it,.config.prod.php)
 
 dist:
@@ -82,7 +98,7 @@ prestashop/prestashop-${PS_VERSION}: prestashop composer.phar
 
 # target: test                                                 - Static and unit testing
 .PHONY: test
-test: composer-validate lint php-lint phpstan phpunit translation-validate
+test: composer-validate lint php-lint phpstan phpunit translation-validate frontend-lint
 
 # target: docker-test                                          - Static and unit testing in docker
 .PHONY: docker-test

@@ -4,6 +4,7 @@ sql
 src
 upgrade
 vendor
+views
 ps_eventbus.php
 config.php
 logo.png
