@@ -34,7 +34,7 @@ class AdminPsEventbusController extends ModuleAdminController
     {
         parent::initContent();
 
-        $liveModeVuejs = (bool) getenv('LIVE_MODE_VUEJS');
+        $liveModeVuejs = (bool) $this->module->getServiceContainer()->getParameterWithDefault('ps_eventbus.live_mode_vuejs', false);
         $isoCode = $this->context->language ? $this->context->language->iso_code : 'en';
 
         Media::addJsDef([

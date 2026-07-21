@@ -24,4 +24,5 @@ return [
     'ps_eventbus.live_sync_api_url' => 'https://api.cloudsync-integration.prestashop.com/live-sync/v1',
     'ps_eventbus.sentry_dsn' => 'https://457f191226df4b8f9a0d7bf6f250bab2@o298402.ingest.sentry.io/6066714',
     'ps_eventbus.sentry_env' => 'integration',
+    'ps_eventbus.live_mode_vuejs' => false,
 ];

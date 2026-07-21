@@ -1,3 +1,7 @@
+minimumReleaseAge: 0
 onlyBuiltDependencies:
   - '@parcel/watcher'
-minimumReleaseAge: 0
+  - 'vue-demi'
+allowBuilds:
+  '@parcel/watcher': true
+  vue-demi: true
