@@ -8,14 +8,15 @@ export async function loadLocaleMessages(i18n, locale) {
       const messages = await import(`../translations/${locale}.json`)
       i18n.global.setLocaleMessage(locale, messages.default)
     }
+    i18n.global.locale = locale
+    return
   } catch {
     if (!i18n.global.availableLocales.includes('en')) {
       const messages = await import('../translations/en.json')
       i18n.global.setLocaleMessage('en', messages.default)
     }
+    i18n.global.locale = 'en'
   }
-
-  i18n.global.locale = locale
 }
 
 const i18n = createI18n({

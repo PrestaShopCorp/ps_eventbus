@@ -180,9 +180,23 @@ class Ps_eventbus extends Module
     {
         $uninstaller = new PrestaShop\Module\PsEventbus\Module\Uninstall($this, Db::getInstance());
 
-        return $uninstaller->uninstallMenu()
+        return $this->uninstallTab()
+            && $uninstaller->uninstallMenu()
             && $uninstaller->uninstallDatabaseTables()
             && parent::uninstall();
+    }
+
+    /**
+     * @return bool
+     */
+    private function uninstallTab()
+    {
+        $tabId = (int) Tab::getIdFromClassName('AdminPsEventbus');
+        if (!$tabId) {
+            return true;
+        }
+
+        return (new Tab($tabId))->delete();
     }
 
     /**
