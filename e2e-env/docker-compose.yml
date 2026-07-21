@@ -109,6 +109,19 @@ services:
     ports:
       - ${HOST_PORT_BIND_CLOUDSYNC_REVERSE_PROXY:?See e2e-env/.env.dist}:80
 
+  vite-dev:
+    image: node:22-alpine
+    working_dir: /app
+    environment:
+      - CI=true
+    volumes:
+      - ..:/app:rw
+      - /app/node_modules
+    command: sh -c "corepack enable && pnpm install --frozen-lockfile && pnpm run dev"
+    ports:
+      - '5173:5173'
+    profiles: [localhost, cloudflared]
+
   cloudflared:
     image: cloudflare/cloudflared:latest
     command: tunnel run $${TUNNEL_NAME}
