@@ -15,6 +15,7 @@ export default defineConfig({
     emptyOutDir: false,
     cssCodeSplit: false,
     assetsInlineLimit: 100 * 1024,
+    minify: false,
     rollupOptions: {
       input: path.resolve(__dirname, 'frontend/js/main.js'),
       output: {
