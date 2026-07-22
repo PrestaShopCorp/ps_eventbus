@@ -18,10 +18,14 @@ class AdminPsEventbusController extends ModuleAdminController
         $liveModeVuejs = (bool) $this->module->getServiceContainer()->getParameterWithDefault('ps_eventbus.live_mode_vuejs', false);
         $isoCode = $this->context->language ? $this->context->language->iso_code : 'en';
 
+        $moduleBaseUrl = $this->context->link->getBaseLink() . 'modules/' . $this->module->name . '/';
+
         Media::addJsDef([
             'eventbusConfig' => [
                 'isoCode' => $isoCode,
                 'eventbusAjaxPath' => $this->context->link->getAdminLink('AdminPsEventbus'),
+                'logoUrl' => $moduleBaseUrl . 'logo.png',
+                'moduleVersion' => $this->module->version,
             ],
         ]);
 
