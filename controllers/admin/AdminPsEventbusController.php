@@ -22,9 +22,10 @@ class AdminPsEventbusController extends ModuleAdminController
         $link = $this->context->link;
 
         $liveModeVuejs = (bool) $this->module->getServiceContainer()->getParameterWithDefault('ps_eventbus.live_mode_vuejs', 'false');
+        /** @phpstan-ignore ternary.alwaysTrue */
         $isoCode = $this->context->language ? $this->context->language->iso_code : 'en';
 
-        $moduleBaseUrl = $link->getBaseLink() . 'modules/' . $this->module->name . '/';
+        $moduleBaseUrl = $this->getModuleBaseUrl();
 
         Media::addJsDef([
             'eventbusConfig' => [
@@ -53,6 +54,21 @@ class AdminPsEventbusController extends ModuleAdminController
     }
 
     /**
+     * Build the module base URL without using Link::getBaseLink() which is protected in PS 1.6.
+     *
+     * @return string
+     */
+    private function getModuleBaseUrl()
+    {
+        $ssl = Tools::usingSecureMode();
+        /** @var Shop $shop */
+        $shop = $this->context->shop;
+        $domain = $ssl ? $shop->domain_ssl : $shop->domain;
+
+        return ($ssl ? 'https://' : 'http://') . $domain . $shop->getBaseURI() . 'modules/' . $this->module->name . '/';
+    }
+
+    /**
      * Read the Vite manifest and return asset URLs.
      *
      * @return array{js: string, css: string, preload: array<array{rel: string, as: string, href: string}>}
@@ -76,9 +92,7 @@ class AdminPsEventbusController extends ModuleAdminController
             return $result;
         }
 
-        /** @var Link $link */
-        $link = $this->context->link;
-        $baseUrl = $link->getBaseLink() . 'modules/' . $this->module->name . '/views/';
+        $baseUrl = $this->getModuleBaseUrl() . 'views/';
 
         // Main entry point
         if (isset($manifest['js/main.js'])) {
@@ -99,6 +113,7 @@ class AdminPsEventbusController extends ModuleAdminController
             }
 
             // Preload dynamic imports (translations)
+            /** @phpstan-ignore ternary.alwaysTrue */
             $isoCode = $this->context->language ? $this->context->language->iso_code : 'en';
             if (isset($entry['dynamicImports'])) {
                 foreach ($entry['dynamicImports'] as $dynamicKey) {

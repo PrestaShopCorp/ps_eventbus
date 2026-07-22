@@ -4,7 +4,7 @@
   "private": true,
   "description": "PrestaShop EventBus module frontend",
   "engines": {
-    "node": ">=24",
+    "node": ">=22",
     "pnpm": ">=10",
     "yarn": "please use pnpm",
     "npm": "please use pnpm"

@@ -178,7 +178,7 @@ class Ps_eventbus extends Module
         $tab->id_parent = -1; // Hidden tab (accessible via getContent redirect)
         $tab->module = $this->name;
 
-        return $tab->add();
+        return (bool) $tab->add();
     }
 
     /**
