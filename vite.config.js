@@ -21,7 +21,12 @@ export default defineConfig({
       output: {
         format: 'es',
         entryFileNames: 'js/[name]-[hash].js',
-        chunkFileNames: 'js/[name]-[hash].js',
+        chunkFileNames: (chunkInfo) => {
+          if (chunkInfo.facadeModuleId && chunkInfo.facadeModuleId.includes('/translations/')) {
+            return 'js/translations/[name]-[hash].js'
+          }
+          return 'js/[name]-[hash].js'
+        },
         assetFileNames: (info) => {
           if (info?.name?.match(/\.woff2?$/)) {
             return 'css/fonts/[name]-[hash][extname]'
