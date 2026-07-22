@@ -130,10 +130,15 @@ class Ps_eventbus extends Module
         return $this->adminControllers;
     }
 
+    /**
+     * @return void
+     */
     public function getContent()
     {
+        /** @var \Link $link */
+        $link = $this->context->link;
         Tools::redirectAdmin(
-            $this->context->link->getAdminLink('AdminPsEventbus')
+            $link->getAdminLink('AdminPsEventbus')
         );
     }
 
@@ -158,10 +163,13 @@ class Ps_eventbus extends Module
             && $this->installTab();
     }
 
+    /**
+     * @return bool
+     */
     private function installTab()
     {
         $tab = new Tab();
-        $tab->active = 1;
+        $tab->active = true;
         $tab->class_name = 'AdminPsEventbus';
         $tab->name = array_fill_keys(
             array_column(Language::getLanguages(false), 'id_lang'),

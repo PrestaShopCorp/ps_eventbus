@@ -11,19 +11,25 @@ class AdminPsEventbusController extends ModuleAdminController
         $this->bootstrap = true;
     }
 
+    /**
+     * @return void
+     */
     public function initContent()
     {
         parent::initContent();
 
-        $liveModeVuejs = (bool) $this->module->getServiceContainer()->getParameterWithDefault('ps_eventbus.live_mode_vuejs', false);
+        /** @var \Link $link */
+        $link = $this->context->link;
+
+        $liveModeVuejs = (bool) $this->module->getServiceContainer()->getParameterWithDefault('ps_eventbus.live_mode_vuejs', 'false');
         $isoCode = $this->context->language ? $this->context->language->iso_code : 'en';
 
-        $moduleBaseUrl = $this->context->link->getBaseLink() . 'modules/' . $this->module->name . '/';
+        $moduleBaseUrl = $link->getBaseLink() . 'modules/' . $this->module->name . '/';
 
         Media::addJsDef([
             'eventbusConfig' => [
                 'isoCode' => $isoCode,
-                'eventbusAjaxPath' => $this->context->link->getAdminLink('AdminPsEventbus'),
+                'eventbusAjaxPath' => $link->getAdminLink('AdminPsEventbus'),
                 'logoUrl' => $moduleBaseUrl . 'logo.png',
                 'moduleVersion' => $this->module->version,
             ],
@@ -31,7 +37,10 @@ class AdminPsEventbusController extends ModuleAdminController
 
         $assets = $this->getAssets();
 
-        $this->context->smarty->assign([
+        /** @var \Smarty $smarty */
+        $smarty = $this->context->smarty;
+
+        $smarty->assign([
             'LIVE_MODE_VUEJS' => $liveModeVuejs,
             'eventbus_js_url' => $assets['js'],
             'eventbus_css_url' => $assets['css'],
@@ -39,8 +48,8 @@ class AdminPsEventbusController extends ModuleAdminController
         ]);
 
         $templatePath = _PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/config.tpl';
-        $this->content = $this->context->smarty->fetch($templatePath);
-        $this->context->smarty->assign('content', $this->content);
+        $this->content = $smarty->fetch($templatePath);
+        $smarty->assign('content', $this->content);
     }
 
     /**
@@ -57,12 +66,19 @@ class AdminPsEventbusController extends ModuleAdminController
             return $result;
         }
 
-        $manifest = json_decode(file_get_contents($manifestPath), true);
+        $manifestContent = file_get_contents($manifestPath);
+        if ($manifestContent === false) {
+            return $result;
+        }
+
+        $manifest = json_decode($manifestContent, true);
         if (!$manifest) {
             return $result;
         }
 
-        $baseUrl = $this->context->link->getBaseLink() . 'modules/' . $this->module->name . '/views/';
+        /** @var \Link $link */
+        $link = $this->context->link;
+        $baseUrl = $link->getBaseLink() . 'modules/' . $this->module->name . '/views/';
 
         // Main entry point
         if (isset($manifest['js/main.js'])) {
