@@ -2,6 +2,11 @@
   "header": {
     "title": "PrestaShop EventBus"
   },
+  "tabs": {
+    "dashboard": "Tableau de bord",
+    "connections": "Connexions",
+    "supportDebug": "Support & Débogage"
+  },
   "pages": {
     "dashboard": {
       "title": "Tableau de bord"
