@@ -135,7 +135,7 @@ class Ps_eventbus extends Module
      */
     public function getContent()
     {
-        /** @var \Link $link */
+        /** @var Link $link */
         $link = $this->context->link;
         Tools::redirectAdmin(
             $link->getAdminLink('AdminPsEventbus')

@@ -18,7 +18,7 @@ class AdminPsEventbusController extends ModuleAdminController
     {
         parent::initContent();
 
-        /** @var \Link $link */
+        /** @var Link $link */
         $link = $this->context->link;
 
         $liveModeVuejs = (bool) $this->module->getServiceContainer()->getParameterWithDefault('ps_eventbus.live_mode_vuejs', 'false');
@@ -37,7 +37,7 @@ class AdminPsEventbusController extends ModuleAdminController
 
         $assets = $this->getAssets();
 
-        /** @var \Smarty $smarty */
+        /** @var Smarty $smarty */
         $smarty = $this->context->smarty;
 
         $smarty->assign([
@@ -76,7 +76,7 @@ class AdminPsEventbusController extends ModuleAdminController
             return $result;
         }
 
-        /** @var \Link $link */
+        /** @var Link $link */
         $link = $this->context->link;
         $baseUrl = $link->getBaseLink() . 'modules/' . $this->module->name . '/views/';
 
