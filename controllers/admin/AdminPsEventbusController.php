@@ -22,7 +22,7 @@ class AdminPsEventbusController extends ModuleAdminController
         $link = $this->context->link;
 
         $liveModeVuejs = (bool) $this->module->getServiceContainer()->getParameterWithDefault('ps_eventbus.live_mode_vuejs', 'false');
-        /** @phpstan-ignore ternary.alwaysTrue */
+        /** @phpstan-ignore-next-line */
         $isoCode = $this->context->language ? $this->context->language->iso_code : 'en';
 
         $moduleBaseUrl = $this->getModuleBaseUrl();
@@ -113,7 +113,7 @@ class AdminPsEventbusController extends ModuleAdminController
             }
 
             // Preload dynamic imports (translations)
-            /** @phpstan-ignore ternary.alwaysTrue */
+            /** @phpstan-ignore-next-line */
             $isoCode = $this->context->language ? $this->context->language->iso_code : 'en';
             if (isset($entry['dynamicImports'])) {
                 foreach ($entry['dynamicImports'] as $dynamicKey) {
