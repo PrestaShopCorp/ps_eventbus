@@ -1,11 +1,11 @@
 <template>
   <div class="eventbus-page">
-    <h2>{{ $t('pages.dashboard.title') }}</h2>
+    <h2>{{ $t('pages.supportDebug.title') }}</h2>
   </div>
 </template>
 
 <script setup>
-  // Dashboard page
+  // Support & Debug page
 </script>
 
 <style lang="scss" scoped>

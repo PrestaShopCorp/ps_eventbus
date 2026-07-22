@@ -1,11 +1,11 @@
 <template>
   <div class="eventbus-page">
-    <h2>{{ $t('pages.dashboard.title') }}</h2>
+    <h2>{{ $t('pages.connections.title') }}</h2>
   </div>
 </template>
 
 <script setup>
-  // Dashboard page
+  // Connections page
 </script>
 
 <style lang="scss" scoped>

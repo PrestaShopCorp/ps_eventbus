@@ -3,9 +3,14 @@
     "title": "PrestaShop EventBus"
   },
   "pages": {
-    "home": {
-      "title": "EventBus Configuration",
-      "description": "This page is under construction."
+    "dashboard": {
+      "title": "Dashboard"
+    },
+    "connections": {
+      "title": "Connections"
+    },
+    "supportDebug": {
+      "title": "Support & Debug"
     }
   }
 }
