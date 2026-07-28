@@ -47,4 +47,5 @@ views/css/
 views/.vite/
 auto-imports.d.ts
 components.d.ts
+pnpm-workspace.yaml
 .pnpm-store/

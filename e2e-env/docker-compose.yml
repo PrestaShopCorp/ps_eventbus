@@ -117,7 +117,13 @@ services:
     volumes:
       - ..:/app:rw
       - /app/node_modules
-    command: sh -c "corepack enable && pnpm install && pnpm run dev"
+    command: >-
+      sh -c "corepack enable &&
+      echo 'allowBuilds:' > pnpm-workspace.yaml &&
+      echo '  \"@parcel/watcher\": true' >> pnpm-workspace.yaml &&
+      echo '  vue-demi: true' >> pnpm-workspace.yaml &&
+      pnpm install &&
+      pnpm run dev"
     ports:
       - '5173:5173'
     profiles: [localhost, cloudflared]
