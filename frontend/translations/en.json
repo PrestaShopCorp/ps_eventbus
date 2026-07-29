@@ -1,0 +1,21 @@
+{
+  "header": {
+    "title": "PrestaShop EventBus"
+  },
+  "tabs": {
+    "dashboard": "Dashboard",
+    "connections": "Connections",
+    "supportDebug": "Support & Debug"
+  },
+  "pages": {
+    "dashboard": {
+      "title": "Dashboard"
+    },
+    "connections": {
+      "title": "Connections"
+    },
+    "supportDebug": {
+      "title": "Support & Debug"
+    }
+  }
+}
