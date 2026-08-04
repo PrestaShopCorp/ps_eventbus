@@ -1,15 +1,21 @@
 <template>
   <div class="eventbus-page">
-    <h2>{{ $t('pages.dashboard.title') }}</h2>
+    <SyncStatusCard />
+    <HealthCheckSection />
+    <SyncStatusTable />
   </div>
 </template>
 
 <script setup>
-  // Dashboard page
-</script>
+  import { onMounted } from 'vue'
+  import { useDashboardStore } from '../../stores/dashboard-store'
+  import SyncStatusCard from '../../components/dashboard/sync-status-card.vue'
+  import HealthCheckSection from '../../components/dashboard/health-check-section.vue'
+  import SyncStatusTable from '../../components/dashboard/sync-status-table.vue'
 
-<style lang="scss" scoped>
-  .eventbus-page {
-    padding: 24px;
-  }
-</style>
+  const dashboardStore = useDashboardStore()
+
+  onMounted(() => {
+    dashboardStore.loadDashboard()
+  })
+</script>
