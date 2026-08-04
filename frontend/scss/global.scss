@@ -4,6 +4,48 @@ $background-secondary: #f7f7f7;
 $text-primary: black;
 $text-secondary: #5e5e5e;
 
+// Dashboard layout tokens
+$page-background: #fafafa;
+$card-background: #ffffff;
+$card-border: #e7e7e7;
+$card-radius: 8px;
+$card-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+$row-border: #ededed;
+
+$status-ok: #2fa84f;
+$status-warning: #f5a623;
+$status-error: #e4553a;
+
+$accent-soft: #cfeef5;
+$accent: #1c9ab5;
+
+$content-max-width: 860px;
+
+@mixin dashboard-card {
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  background-color: $card-background;
+  border: 1px solid $card-border;
+  border-radius: $card-radius;
+  box-shadow: $card-shadow;
+}
+
+@mixin dashboard-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: $text-primary;
+}
+
 label {
   margin-bottom: 0px;
+}
+
+.puik-tag__content {
+  p {
+    margin: 0;
+  }
 }

@@ -1,5 +1,5 @@
 <script setup>
-  import { PuikTabNavigation, PuikTabNavigationGroupTitles, PuikTabNavigationTitle } from '@prestashopcorp/puik-components'
+  import { PuikTabNavigation, PuikTabNavigationGroupTitles, PuikTabNavigationTitle, PuikIcon } from '@prestashopcorp/puik-components'
   import { computed } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
 
@@ -8,13 +8,19 @@
 
   const navigationOrder = ['dashboard', 'connections', 'supportDebug']
 
+  const navigationIcons = {
+    dashboard: 'dashboard',
+    connections: 'handyman',
+    supportDebug: 'bug_report',
+  }
+
   const visibleRoutes = computed(() => {
     const allRoutes = router.getRoutes()
 
     return navigationOrder
       .map((name) => allRoutes.find((r) => r.name === name))
       .filter(Boolean)
-      .map((r, index) => ({ ...r, position: index }))
+      .map((r, index) => ({ ...r, position: index, icon: navigationIcons[r.name] }))
   })
 
   const currentRoutePosition = computed(() => {
@@ -39,7 +45,10 @@
   >
     <PuikTabNavigationGroupTitles aria-label="navigation">
       <PuikTabNavigationTitle v-for="r in visibleRoutes" :key="r.path" :position="r.position">
-        {{ $t(`tabs.${r.name}`) }}
+        <span class="eventbus-tab">
+          <PuikIcon v-if="r.icon" :icon="r.icon" class="eventbus-tab__icon" />
+          {{ $t(`tabs.${r.name}`) }}
+        </span>
       </PuikTabNavigationTitle>
     </PuikTabNavigationGroupTitles>
   </PuikTabNavigation>
@@ -48,6 +57,16 @@
 <style lang="scss" scoped>
   #eventbus-tabs {
     background-color: $background-primary;
-    padding-left: 14px;
+    padding-left: 10px;
+  }
+
+  .eventbus-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    &__icon {
+      font-size: 20px;
+    }
   }
 </style>
