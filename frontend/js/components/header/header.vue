@@ -65,5 +65,10 @@
       color: $text-secondary;
       line-height: 1.2;
     }
+
+    &__separator {
+      height: 1px;
+      background-color: $card-border;
+    }
   }
 </style>
