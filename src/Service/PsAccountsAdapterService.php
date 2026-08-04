@@ -119,6 +119,34 @@ class PsAccountsAdapterService
     }
 
     /**
+     * Get the shop front URL as psAccounts knows it, or an empty string if
+     * psAccounts isn't ready. This is the URL registered against the account,
+     * which the dashboard compares to the one CloudSync synchronizes with.
+     *
+     * @return string
+     */
+    public function getShopUrl()
+    {
+        if (!$this->moduleHelper->isInstalledAndActive('ps_accounts') || !$this->psAccountModule) {
+            return '';
+        }
+
+        try {
+            $shopProvider = $this->psAccountModule->getService('PrestaShop\Module\PsAccounts\Provider\ShopProvider');
+            $shop = (array) $shopProvider->getCurrentShop();
+
+            return isset($shop['frontUrl']) ? (string) $shop['frontUrl'] : '';
+        } catch (\Exception $e) {
+            $this->errorHandler->handle(
+                new \PrestaShopException('Failed to get shop url from ps_account', 0, $e),
+                true
+            );
+
+            return '';
+        }
+    }
+
+    /**
      * Get refreshToken from psAccounts, or null if module is'nt ready
      *
      * @return string
