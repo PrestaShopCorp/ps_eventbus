@@ -17,6 +17,7 @@ class AdminPsEventbusController extends ModuleAdminController
         parent::__construct();
         $this->bootstrap = true;
 
+        /** @phpstan-ignore ternary.alwaysTrue */
         $this->isoCode = $this->context->language ? $this->context->language->iso_code : 'en';
     }
 
@@ -43,6 +44,8 @@ class AdminPsEventbusController extends ModuleAdminController
                 'healthCheckUrl' => $link->getModuleLink('ps_eventbus', 'apiHealthCheck'),
                 'shopContents' => Config::SHOP_CONTENTS,
                 'shopId' => $this->getShopId(),
+                'mockMode' => true,
+                'cloudsyncApiUrl' => 'https://api.cloudsync.prestashop.com',
             ],
         ]);
 
