@@ -297,12 +297,8 @@ class ApiHealthCheckService
                 return $unknown;
             }
 
+            /** @var \PrestaShop\PrestaShop\Core\Module\ModuleRepository $repo */
             $repo = $container->get('PrestaShop\PrestaShop\Core\Module\ModuleRepository');
-
-            if ($repo === null) {
-                return $unknown;
-            }
-
             $module = $repo->getModule($moduleName);
 
             $latestVersion = $module->attributes->get('version_available');
