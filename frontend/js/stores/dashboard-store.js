@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import i18n from '../i18n'
 import { useAppStore } from './app-store'
 import { fetchSyncSummary, fetchCloudsyncStatus, requestServerAccessCheck } from '../api/mock-interceptor'
 
@@ -8,7 +9,7 @@ import { fetchSyncSummary, fetchCloudsyncStatus, requestServerAccessCheck } from
  * when the latest version could not be determined, in which case no claim is
  * made about it.
  */
-function buildModuleCheck(id, { installed, ready, version, latestVersion, upToDate }) {
+function buildModuleCheck(id, { installed, ready, readyIssue, version, latestVersion, upToDate }) {
   const detail = version ? `v${version}` : ''
 
   if (!installed) {
@@ -16,7 +17,7 @@ function buildModuleCheck(id, { installed, ready, version, latestVersion, upToDa
   }
 
   if (!ready) {
-    return { id, status: 'error', badge: 'ko', detail }
+    return { id, status: 'error', badge: 'ko', detail: readyIssue || detail }
   }
 
   if (upToDate === false) {
@@ -131,16 +132,16 @@ export const useDashboardStore = defineStore('dashboard', {
       return [
         buildModuleCheck('psAccount', {
           installed: psAccount.installed,
-          // ps_accounts is only useful once the shop is linked to an account
           ready: psAccount.linked,
+          readyIssue: i18n.global.t('dashboard.healthCheck.issues.psAccountNotLinked'),
           version: psAccount.version,
           latestVersion: psAccount.latestVersion,
           upToDate: psAccount.upToDate,
         }),
         buildModuleCheck('psEventbus', {
           installed: true,
-          // Its own tables are what make the module operational
           ready: psEventbus.tablesInstalled,
+          readyIssue: i18n.global.t('dashboard.healthCheck.issues.psEventbusTablesMissing'),
           version: psEventbus.version,
           latestVersion: psEventbus.latestVersion,
           upToDate: psEventbus.upToDate,

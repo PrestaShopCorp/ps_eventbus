@@ -69,6 +69,10 @@
         "blocked": "Blocked",
         "installed": "Installed"
       },
+      "issues": {
+        "psAccountNotLinked": "Shop is not linked to a PrestaShop Account",
+        "psEventbusTablesMissing": "Required database tables are missing — try reinstalling the module"
+      },
       "checks": {
         "psAccount": {
           "label": "PS Account module"

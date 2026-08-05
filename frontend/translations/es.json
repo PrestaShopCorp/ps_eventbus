@@ -69,6 +69,10 @@
         "blocked": "Bloqueado",
         "installed": "Instalado"
       },
+      "issues": {
+        "psAccountNotLinked": "La tienda no está vinculada a una cuenta PrestaShop",
+        "psEventbusTablesMissing": "Faltan las tablas necesarias — intente reinstalar el módulo"
+      },
       "checks": {
         "psAccount": {
           "label": "Módulo PS Account"
