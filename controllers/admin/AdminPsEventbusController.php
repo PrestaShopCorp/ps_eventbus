@@ -5,6 +5,7 @@ class AdminPsEventbusController extends ModuleAdminController
     /** @var Ps_eventbus */
     public $module;
 
+
     public $isoCode;
 
     public function __construct()
