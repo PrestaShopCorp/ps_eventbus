@@ -49,3 +49,16 @@ label {
     margin: 0;
   }
 }
+
+.puik-tab-navigation__title {
+  border-bottom: 0;
+}
+
+.adminpseventbus #content.bootstrap {
+  padding-right: 0;
+  padding-left: var(--cdk-sidebar-width);
+}
+
+.adminpseventbus.page-sidebar-closed #content.bootstrap {
+  padding-left: 52px;
+}
