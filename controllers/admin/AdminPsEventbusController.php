@@ -5,10 +5,15 @@ class AdminPsEventbusController extends ModuleAdminController
     /** @var Ps_eventbus */
     public $module;
 
+
+    public $isoCode;
+
     public function __construct()
     {
         parent::__construct();
         $this->bootstrap = true;
+
+        $this->isoCode = $this->context->language ? $this->context->language->iso_code : 'en';
     }
 
     /**
@@ -22,14 +27,12 @@ class AdminPsEventbusController extends ModuleAdminController
         $link = $this->context->link;
 
         $liveModeVuejs = (bool) $this->module->getServiceContainer()->getParameterWithDefault('ps_eventbus.live_mode_vuejs', 'false');
-        /** @phpstan-ignore-next-line */
-        $isoCode = $this->context->language ? $this->context->language->iso_code : 'en';
-
+        
         $moduleBaseUrl = $this->getModuleBaseUrl();
 
         Media::addJsDef([
             'eventbusConfig' => [
-                'isoCode' => $isoCode,
+                'isoCode' => $this->isoCode,
                 'eventbusAjaxPath' => $link->getAdminLink('AdminPsEventbus'),
                 'logoUrl' => $moduleBaseUrl . 'logo.png',
                 'moduleVersion' => $this->module->version,
@@ -113,15 +116,13 @@ class AdminPsEventbusController extends ModuleAdminController
             }
 
             // Preload dynamic imports (translations)
-            /** @phpstan-ignore-next-line */
-            $isoCode = $this->context->language ? $this->context->language->iso_code : 'en';
             if (isset($entry['dynamicImports'])) {
                 foreach ($entry['dynamicImports'] as $dynamicKey) {
                     if (isset($manifest[$dynamicKey])) {
                         // Only preload the current locale translation
                         if (strpos($dynamicKey, 'translations/') === 0) {
                             $lang = str_replace(['translations/', '.json'], '', $dynamicKey);
-                            if ($lang !== $isoCode) {
+                            if ($lang !== $this->isoCode) {
                                 continue;
                             }
                         }
