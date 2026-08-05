@@ -66,7 +66,8 @@
         "check": "Da verificare",
         "running": "Verifica in corso…",
         "reachable": "Raggiungibile",
-        "blocked": "Bloccato"
+        "blocked": "Bloccato",
+        "installed": "Installato"
       },
       "checks": {
         "psAccount": {

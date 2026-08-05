@@ -14,9 +14,9 @@
     </div>
     <ul v-else class="sync-status-table__list">
       <li
-        v-for="item in dashboardStore.syncSummary"
+        v-for="item in dashboardStore.requestedSyncSummary"
         :key="item.shopContent"
-        :class="['sync-status-table__row', { 'sync-status-table__row--muted': item.requested === false }]"
+        class="sync-status-table__row"
       >
         <span class="sync-status-table__content-type">{{ item.shopContent }}</span>
         <PuikTag :content="getStatusLabel(item)" :variant="getStatusVariant(item)" class="sync-status-table__badge" />
@@ -34,7 +34,6 @@
   const dashboardStore = useDashboardStore()
 
   function getStatusVariant(item) {
-    if (item.requested === false) return 'neutral'
     if (!item.httpStatus) return 'neutral'
     if (item.httpStatus >= 400) return 'yellow'
 
@@ -42,8 +41,6 @@
   }
 
   function getStatusLabel(item) {
-    // Nothing was ever collected: no third-party module subscribed to it
-    if (item.requested === false) return t('dashboard.syncTable.notRequested')
     if (!item.httpStatus) return t('dashboard.syncStatus.pending')
 
     return `${item.httpStatus} — ${item.httpStatusText}`
@@ -92,10 +89,6 @@
         border-bottom: none;
       }
 
-      // Nothing is expected from these, so they recede
-      &--muted .sync-status-table__content-type {
-        color: $text-secondary;
-      }
     }
 
     &__content-type {

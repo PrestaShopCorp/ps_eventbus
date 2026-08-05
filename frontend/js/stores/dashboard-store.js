@@ -1,95 +1,6 @@
 import { defineStore } from 'pinia'
 import { useAppStore } from './app-store'
-
-/**
- * Contents no third-party module asked for, so CloudSync never collects them.
- * Mocked selection, for the sake of the example.
- */
-const MOCK_NOT_REQUESTED = ['wishlists', 'wishlist_products', 'employees', 'translations', 'taxonomies', 'stock_movements']
-
-/**
- * Contents whose last upload failed. Mocked selection, for the sake of the
- * example.
- */
-const MOCK_FAILED = {
-  images: { httpStatus: 504, httpStatusText: 'Gateway Timeout' },
-  stocks: { httpStatus: 500, httpStatusText: 'Internal Server Error' },
-  bundles: { httpStatus: 403, httpStatusText: 'Forbidden' },
-}
-
-/**
- * Mock sync summary matching the Reporting API schema:
- * GET /v1/reporting/shop-sync-summary/{shopId}
- *
- * Each item: { shopContent, requested, firstSyncFinishedAt, lastSyncFinishedAt,
- * httpStatus, httpStatusText }. The HTTP status is the result of the last upload
- * to the CloudSync cloud. `requested` is false when no third-party module
- * subscribed to that content, in which case it is never synchronized at all.
- *
- * @see https://docs.cloudsync.prestashop.com/api-doc/reporting-api
- */
-function getMockSyncSummary(shopContents) {
-  const now = Date.now()
-  const day = 86400000
-
-  return shopContents.map((shopContent, index) => {
-    if (MOCK_NOT_REQUESTED.includes(shopContent)) {
-      return {
-        shopContent,
-        requested: false,
-        firstSyncFinishedAt: null,
-        lastSyncFinishedAt: null,
-        httpStatus: null,
-        httpStatusText: null,
-      }
-    }
-
-    const failure = MOCK_FAILED[shopContent]
-
-    return {
-      shopContent,
-      requested: true,
-      firstSyncFinishedAt: failure ? null : new Date(now - day * 3).toISOString(),
-      lastSyncFinishedAt: new Date(now - 60000 * (index + 1)).toISOString(),
-      httpStatus: failure ? failure.httpStatus : 200,
-      httpStatusText: failure ? failure.httpStatusText : 'OK',
-    }
-  })
-}
-
-/**
- * Mock of the shop URL CloudSync actually synchronizes with, compared against
- * the one registered in PrestaShop Account to detect a mismatch. No endpoint
- * serves it yet.
- */
-function getMockCloudsyncStatus(accountsShopUrl) {
-  return {
-    // Mirrors the Account URL so the check reads "Match" until a real endpoint
-    // provides the URL CloudSync is actually configured with.
-    shopUrl: accountsShopUrl,
-  }
-}
-
-/**
- * Mock of the round trip that asks CloudSync to call the shop's health check
- * front controller from the outside and report back whether it got through.
- *
- * This has to be triggered from CloudSync rather than from the browser: only a
- * request coming from CloudSync's own network can reveal that a WAF, a firewall
- * or a Cloudflare challenge stands between the two. The endpoint does not exist
- * yet, so the shape of the request and of the answer below is provisional.
- */
-async function requestMockServerAccessCheck(healthCheckUrl) {
-  await new Promise((resolve) => setTimeout(resolve, 1200))
-
-  return {
-    // Echoed back so the UI can show which URL was probed
-    probedUrl: healthCheckUrl,
-    reachable: false,
-    httpStatus: 403,
-    blockedBy: 'Cloudflare',
-  }
-}
+import { fetchSyncSummary, fetchCloudsyncStatus, requestServerAccessCheck } from '../api/mock-interceptor'
 
 /**
  * A module row, resolved in order of severity: not installed at all, then not
@@ -113,7 +24,7 @@ function buildModuleCheck(id, { installed, ready, version, latestVersion, upToDa
   }
 
   if (upToDate === null) {
-    return { id, status: 'ok', badge: 'ok', detail }
+    return { id, status: 'ok', badge: 'installed', detail }
   }
 
   return { id, status: 'ok', badge: 'upToDate', detail }
@@ -296,7 +207,7 @@ export const useDashboardStore = defineStore('dashboard', {
       this.syncSummaryError = null
 
       try {
-        this.syncSummary = getMockSyncSummary(appStore.shopContents)
+        this.syncSummary = await fetchSyncSummary(appStore.cloudsyncApiUrl, appStore.shopId)
       } catch (e) {
         this.syncSummaryError = e.message
       } finally {
@@ -305,9 +216,19 @@ export const useDashboardStore = defineStore('dashboard', {
     },
 
     async fetchCloudsyncStatus() {
-      const status = getMockCloudsyncStatus(this.healthCheck ? this.healthCheck.accountsShopUrl : '')
+      const appStore = useAppStore()
 
-      this.cloudsyncShopUrl = status.shopUrl
+      try {
+        const status = await fetchCloudsyncStatus(
+          appStore.cloudsyncApiUrl,
+          appStore.shopId,
+          this.healthCheck ? this.healthCheck.accountsShopUrl : '',
+        )
+
+        this.cloudsyncShopUrl = status.shopUrl
+      } catch (e) {
+        this.cloudsyncShopUrl = ''
+      }
     },
 
     /**
@@ -323,7 +244,7 @@ export const useDashboardStore = defineStore('dashboard', {
       this.serverAccess = { status: 'running', message: '' }
 
       try {
-        const result = await requestMockServerAccessCheck(appStore.healthCheckUrl)
+        const result = await requestServerAccessCheck(appStore.cloudsyncApiUrl, appStore.shopId, appStore.healthCheckUrl)
 
         this.serverAccess = result.reachable
           ? { status: 'reachable', message: result.probedUrl }

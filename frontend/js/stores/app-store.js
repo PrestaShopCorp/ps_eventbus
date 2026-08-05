@@ -13,5 +13,8 @@ export const useAppStore = defineStore('app', {
     // Canonical list from Config::SHOP_CONTENTS, so the dashboard never has to
     // maintain its own copy
     shopContents: config.shopContents ?? [],
+    // When true, API calls return canned mock data instead of hitting CloudSync
+    mockMode: config.mockMode ?? true,
+    cloudsyncApiUrl: config.cloudsyncApiUrl ?? '',
   }),
 })
