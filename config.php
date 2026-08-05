@@ -24,5 +24,4 @@ return [
     'ps_eventbus.live_sync_api_url' => 'http://reverse-proxy/live-sync-api/v1',
     'ps_eventbus.sentry_dsn' => 'https://sentry-id@stuff.ingest.sentry.io/stuff',
     'ps_eventbus.sentry_env' => 'development',
-    'ps_eventbus.live_mode_vuejs' => true,
 ];

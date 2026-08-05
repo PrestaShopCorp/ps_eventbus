@@ -131,18 +131,6 @@ class Ps_eventbus extends Module
     }
 
     /**
-     * @return void
-     */
-    public function getContent()
-    {
-        /** @var Link $link */
-        $link = $this->context->link;
-        Tools::redirectAdmin(
-            $link->getAdminLink('AdminPsEventbus')
-        );
-    }
-
-    /**
      * @return bool
      */
     public function install()
@@ -159,26 +147,7 @@ class Ps_eventbus extends Module
 
         return $installer->installDatabaseTables()
             && parent::install()
-            && $this->registerHook($this->getHooks())
-            && $this->installTab();
-    }
-
-    /**
-     * @return bool
-     */
-    private function installTab()
-    {
-        $tab = new Tab();
-        $tab->active = true;
-        $tab->class_name = 'AdminPsEventbus';
-        $tab->name = array_fill_keys(
-            array_column(Language::getLanguages(false), 'id_lang'),
-            'EventBus'
-        );
-        $tab->id_parent = -1; // Hidden tab (accessible via getContent redirect)
-        $tab->module = $this->name;
-
-        return (bool) $tab->add();
+            && $this->registerHook($this->getHooks());
     }
 
     /**
@@ -188,23 +157,9 @@ class Ps_eventbus extends Module
     {
         $uninstaller = new PrestaShop\Module\PsEventbus\Module\Uninstall($this, Db::getInstance());
 
-        return $this->uninstallTab()
-            && $uninstaller->uninstallMenu()
+        return $uninstaller->uninstallMenu()
             && $uninstaller->uninstallDatabaseTables()
             && parent::uninstall();
-    }
-
-    /**
-     * @return bool
-     */
-    private function uninstallTab()
-    {
-        $tabId = (int) Tab::getIdFromClassName('AdminPsEventbus');
-        if (!$tabId) {
-            return true;
-        }
-
-        return (new Tab($tabId))->delete();
     }
 
     /**
