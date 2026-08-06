@@ -71,7 +71,8 @@
       },
       "issues": {
         "psAccountNotLinked": "Il negozio non è collegato a un account PrestaShop",
-        "psEventbusTablesMissing": "Le tabelle richieste mancano — provare a reinstallare il modulo"
+        "psEventbusTablesMissing": "Le tabelle richieste mancano — provare a reinstallare il modulo",
+        "urlMatchingRequiresAccount": "Richiede che PS Account sia installato e collegato"
       },
       "checks": {
         "psAccount": {

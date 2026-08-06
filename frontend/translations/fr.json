@@ -71,7 +71,8 @@
       },
       "issues": {
         "psAccountNotLinked": "La boutique n'est pas liée à un compte PrestaShop",
-        "psEventbusTablesMissing": "Les tables requises sont manquantes — essayez de réinstaller le module"
+        "psEventbusTablesMissing": "Les tables requises sont manquantes — essayez de réinstaller le module",
+        "urlMatchingRequiresAccount": "Nécessite que PS Account soit installé et lié"
       },
       "checks": {
         "psAccount": {

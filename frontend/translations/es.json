@@ -71,7 +71,8 @@
       },
       "issues": {
         "psAccountNotLinked": "La tienda no está vinculada a una cuenta PrestaShop",
-        "psEventbusTablesMissing": "Faltan las tablas necesarias — intente reinstalar el módulo"
+        "psEventbusTablesMissing": "Faltan las tablas necesarias — intente reinstalar el módulo",
+        "urlMatchingRequiresAccount": "Requiere que PS Account esté instalado y vinculado"
       },
       "checks": {
         "psAccount": {

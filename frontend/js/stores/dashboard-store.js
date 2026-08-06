@@ -148,9 +148,11 @@ export const useDashboardStore = defineStore('dashboard', {
         }),
         {
           id: 'urlMatching',
-          status: urlsMatch ? 'ok' : 'warning',
-          badge: urlsMatch ? 'match' : 'mismatch',
-          detail: urlsMatch ? '' : `${accountsShopUrl || '—'} ≠ ${this.cloudsyncShopUrl || '—'}`,
+          status: !psAccount.linked ? 'idle' : urlsMatch ? 'ok' : 'warning',
+          badge: !psAccount.linked ? '' : urlsMatch ? 'match' : 'mismatch',
+          detail: !psAccount.linked
+            ? i18n.global.t('dashboard.healthCheck.issues.urlMatchingRequiresAccount')
+            : urlsMatch ? '' : `${accountsShopUrl || '—'} ≠ ${this.cloudsyncShopUrl || '—'}`,
         },
         {
           id: 'phpCompatibility',
