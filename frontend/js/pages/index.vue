@@ -19,16 +19,11 @@
 
   .eventbus-app {
     min-height: 200px;
+    background: $page-background;
   }
 
   #router-view {
     padding: 32px;
-    background: $page-background;
-    border-top: 1px solid $card-border;
-  }
-
-  #vue-app {
-    margin-left: -15px;
-    margin-top: -15px;
+    max-width: 60%;
   }
 </style>

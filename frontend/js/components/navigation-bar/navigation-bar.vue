@@ -57,6 +57,8 @@
 <style lang="scss" scoped>
   #eventbus-tabs {
     background-color: $background-primary;
+    border-bottom: 1px solid $card-border;
+    border-top: 1px solid $card-border;
     padding-left: 10px;
   }
 
