@@ -136,4 +136,16 @@ class Config
         self::COLLECTION_WISHLISTS,
         self::COLLECTION_WISHLIST_PRODUCTS,
     ];
+
+    /**
+     * Shop contents CloudSync always collects to keep the shop connected,
+     * whatever consents third-party modules were granted. Listed as-is in the
+     * Connections page banner.
+     */
+    const DEFAULT_SYNCED_SHOP_CONTENTS = [
+        self::COLLECTION_INFO,
+        self::COLLECTION_MODULES,
+        self::COLLECTION_THEMES,
+        self::COLLECTION_ORDERS,
+    ];
 }

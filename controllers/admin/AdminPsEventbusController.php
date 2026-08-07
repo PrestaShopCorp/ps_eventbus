@@ -1,7 +1,9 @@
 <?php
 
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Helper\ModuleHelper;
 use PrestaShop\Module\PsEventbus\Service\ApiHealthCheckService;
+use PrestaShop\Module\PsEventbus\Service\ConnectionsService;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 
 class AdminPsEventbusController extends ModuleAdminController
@@ -43,7 +45,9 @@ class AdminPsEventbusController extends ModuleAdminController
                 'moduleVersion' => $this->module->version,
                 'healthCheckUrl' => $link->getModuleLink('ps_eventbus', 'apiHealthCheck'),
                 'shopContents' => Config::SHOP_CONTENTS,
+                'defaultSyncedShopContents' => Config::DEFAULT_SYNCED_SHOP_CONTENTS,
                 'shopId' => $this->getShopId(),
+                'psAccountsInstalled' => $this->isPsAccountsInstalled(),
                 'mockMode' => true,
                 'cloudsyncApiUrl' => $this->module->getServiceContainer()->getParameter('ps_eventbus.cloudsync_api_url'),
             ],
@@ -98,6 +102,18 @@ class AdminPsEventbusController extends ModuleAdminController
     }
 
     /**
+     * @return bool
+     */
+    private function isPsAccountsInstalled()
+    {
+        try {
+            return $this->module->getService(ModuleHelper::class)->isInstalledAndActive('ps_accounts');
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
      * AJAX action: return the health check data.
      *
      * @return void
@@ -126,6 +142,40 @@ class AdminPsEventbusController extends ModuleAdminController
 
         // Not ajaxDie(): it was removed in PrestaShop 9, and ajaxRender() does not
         // exist in 1.6, which this module still supports.
+        if (!headers_sent()) {
+            header('Content-Type: application/json');
+            header('Cache-Control: no-store, no-cache, must-revalidate');
+        }
+
+        echo (string) json_encode($response);
+
+        exit;
+    }
+
+    /**
+     * AJAX action: return the services connected to the shop and the data they receive.
+     *
+     * @return void
+     */
+    public function ajaxProcessGetConnections()
+    {
+        $displayErrors = ini_get('display_errors');
+        ini_set('display_errors', '0');
+        ob_start();
+
+        try {
+            $connectionsService = $this->module->getService(ConnectionsService::class);
+            $response = ['services' => $connectionsService->getConnections()];
+        } catch (Exception $e) {
+            $response = [
+                'error' => true,
+                'message' => $e->getMessage(),
+            ];
+        }
+
+        ob_end_clean();
+        ini_set('display_errors', (string) $displayErrors);
+
         if (!headers_sent()) {
             header('Content-Type: application/json');
             header('Cache-Control: no-store, no-cache, must-revalidate');
