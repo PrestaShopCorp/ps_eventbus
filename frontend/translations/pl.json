@@ -5,7 +5,11 @@
   "tabs": {
     "dashboard": "Panel",
     "connections": "Połączenia",
-    "supportDebug": "Wsparcie i debugowanie"
+    "supportDebug": "Wsparcie i debugowanie",
+    "disabled": {
+      "noAccountModule": "Zainstaluj i aktywuj moduł PS Account, aby zobaczyć swoje połączenia",
+      "shopNotLinked": "Połącz swój sklep z kontem PrestaShop, aby zobaczyć swoje połączenia"
+    }
   },
   "pages": {
     "dashboard": {
@@ -100,6 +104,18 @@
       "subtitle": "Status każdego typu zawartości synchronizowanego z chmurą CloudSync",
       "empty": "Brak dostępnych danych synchronizacji.",
       "notRequested": "Nie zamówiono"
+    }
+  },
+  "connections": {
+    "title": "Zgody na udostępnianie danych",
+    "intro": "Te usługi są połączone z Twoim sklepem i otrzymują dane wymienione poniżej. Aby zarządzać udostępnianiem danych, przejdź do strony konfiguracji każdego modułu:",
+    "moduleId": "ID modułu: {moduleName}",
+    "revoked": "Cofnięta",
+    "revokedOn": "Zgoda cofnięta {date}",
+    "empty": "Żadna usługa nie jest jeszcze połączona z Twoim sklepem.",
+    "defaultSync": {
+      "title": "Synchronizacja domyślna:",
+      "description": "Aby utrzymać połączenie sklepu, następujące treści są synchronizowane domyślnie: {contents}."
     }
   }
 }

@@ -5,7 +5,11 @@
   "tabs": {
     "dashboard": "Tableau de bord",
     "connections": "Connexions",
-    "supportDebug": "Support & débogage"
+    "supportDebug": "Support & débogage",
+    "disabled": {
+      "noAccountModule": "Installez et activez le module PS Account pour voir vos connexions",
+      "shopNotLinked": "Liez votre boutique à un compte PrestaShop pour voir vos connexions"
+    }
   },
   "pages": {
     "dashboard": {
@@ -100,6 +104,18 @@
       "subtitle": "Statut de chaque type de contenu synchronisé vers le cloud CloudSync",
       "empty": "Aucune donnée de synchronisation disponible pour le moment.",
       "notRequested": "Non demandé"
+    }
+  },
+  "connections": {
+    "title": "Consentements de partage de données",
+    "intro": "Ces services sont connectés à votre boutique et reçoivent les données listées ci-dessous. Pour gérer le partage de données, rendez-vous sur la page de configuration de chaque module :",
+    "moduleId": "ID du module : {moduleName}",
+    "revoked": "Révoqué",
+    "revokedOn": "Consentement révoqué le {date}",
+    "empty": "Aucun service n'est encore connecté à votre boutique.",
+    "defaultSync": {
+      "title": "Synchronisation par défaut :",
+      "description": "Pour maintenir votre boutique connectée, les contenus suivants sont synchronisés par défaut : {contents}."
     }
   }
 }
