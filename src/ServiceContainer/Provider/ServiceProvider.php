@@ -23,6 +23,7 @@ namespace PrestaShop\Module\PsEventbus\ServiceContainer\Provider;
 use PrestaShop\Module\PsEventbus\Api\CloudSyncClient;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
+use PrestaShop\Module\PsEventbus\Helper\ModuleHelper;
 use PrestaShop\Module\PsEventbus\Repository\BundleRepository;
 use PrestaShop\Module\PsEventbus\Repository\CarrierDetailRepository;
 use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
@@ -63,6 +64,7 @@ use PrestaShop\Module\PsEventbus\Repository\WishlistRepository;
 use PrestaShop\Module\PsEventbus\Service\ApiAuthorizationService;
 use PrestaShop\Module\PsEventbus\Service\ApiHealthCheckService;
 use PrestaShop\Module\PsEventbus\Service\ApiShopContentService;
+use PrestaShop\Module\PsEventbus\Service\ConnectionsService;
 use PrestaShop\Module\PsEventbus\Service\PresenterService;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\BundlesService;
@@ -193,6 +195,13 @@ class ServiceProvider implements IServiceProvider
         $container->registerProvider(CurrenciesService::class, static function () use ($container) {
             return new CurrenciesService(
                 $container->get(CurrencyRepository::class)
+            );
+        });
+        $container->registerProvider(ConnectionsService::class, static function () use ($container) {
+            return new ConnectionsService(
+                $container->get(CloudSyncClient::class),
+                $container->get(ModuleHelper::class),
+                \Tools::getShopDomainSsl(true, true) . __PS_BASE_URI__ . 'modules/'
             );
         });
         $container->registerProvider(EmployeesService::class, static function () use ($container) {
