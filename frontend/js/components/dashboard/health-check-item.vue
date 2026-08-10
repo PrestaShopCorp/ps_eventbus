@@ -64,7 +64,7 @@
   .health-check-item {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: $row-gap;
     padding: 14px 0;
     border-bottom: 1px solid $row-border;
 
@@ -119,7 +119,7 @@
     &__aside {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: $row-gap;
       margin-left: auto;
       flex-shrink: 0;
     }

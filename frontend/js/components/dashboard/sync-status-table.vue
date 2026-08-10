@@ -81,14 +81,13 @@
     &__row {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: $row-gap;
       padding: 14px 0;
       border-bottom: 1px solid $row-border;
 
       &:last-child {
         border-bottom: none;
       }
-
     }
 
     &__content-type {

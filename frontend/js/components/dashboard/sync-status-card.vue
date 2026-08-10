@@ -20,7 +20,7 @@
   import { computed } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { PuikIcon, PuikProgressBar, PuikSpinnerLoader, PuikAlert } from '@prestashopcorp/puik-components'
-  import { useDashboardStore } from '../../stores/dashboard-store'
+  import { useDashboardStore, SYNC_STATUS } from '../../stores/dashboard-store'
 
   const { t } = useI18n()
   const dashboardStore = useDashboardStore()
@@ -49,7 +49,7 @@
   const state = computed(() => {
     const status = dashboardStore.globalSyncStatus
 
-    if (status === 'syncing') {
+    if (status === SYNC_STATUS.syncing) {
       return {
         icon: 'rocket_launch',
         tone: 'accent',
@@ -59,7 +59,7 @@
       }
     }
 
-    if (status === 'synced') {
+    if (status === SYNC_STATUS.synced) {
       return {
         icon: 'cloud_done',
         tone: 'ok',
@@ -71,7 +71,7 @@
       }
     }
 
-    if (status === 'failed') {
+    if (status === SYNC_STATUS.failed) {
       return {
         icon: 'error',
         tone: 'error',
