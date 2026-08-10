@@ -1,11 +1,11 @@
 {
   "header": {
-    "title": "PrestaShop EventBus"
+    "title": "PS EventBus"
   },
   "tabs": {
     "dashboard": "Dashboard",
     "connections": "Connections",
-    "supportDebug": "Support & Debug"
+    "supportDebug": "Support & debug"
   },
   "pages": {
     "dashboard": {
@@ -15,7 +15,91 @@
       "title": "Connections"
     },
     "supportDebug": {
-      "title": "Support & Debug"
+      "title": "Support & debug"
+    }
+  },
+  "dashboard": {
+    "syncStatus": {
+      "synced": "Synced",
+      "syncing": "Syncing",
+      "failed": "Failed",
+      "offboarded": "Not configured",
+      "pending": "Pending",
+      "lastSynced": "Last synced"
+    },
+    "timeAgo": {
+      "justNow": "Just now",
+      "minutesAgo": "{n} min ago",
+      "hoursAgo": "{n}h ago",
+      "daysAgo": "{n}d ago"
+    },
+    "syncCard": {
+      "initial": {
+        "title": "Initial synchronization in progress",
+        "description": "CloudSync is importing your catalog and order data for the first time. This may take a few minutes depending on your store size."
+      },
+      "incremental": {
+        "title": "Synchronization up to date",
+        "description": "CloudSync is streaming your shop changes continuously.",
+        "descriptionWithTime": "CloudSync is streaming your shop changes continuously. Last update {time}."
+      },
+      "failed": {
+        "title": "Synchronization failed",
+        "description": "Some shop content could not be sent to CloudSync. Check the health check below for details."
+      },
+      "offboarded": {
+        "title": "Synchronization not started",
+        "description": "Link your PrestaShop Account and connect a service to start synchronizing your shop data."
+      }
+    },
+    "healthCheck": {
+      "title": "Sync health check",
+      "badges": {
+        "ok": "OK",
+        "ko": "KO",
+        "notInstalled": "Not installed",
+        "upToDate": "Up to date",
+        "outdated": "Update available",
+        "match": "Match",
+        "mismatch": "Mismatch",
+        "compatible": "Compatible",
+        "check": "Check",
+        "running": "Checking…",
+        "reachable": "Reachable",
+        "blocked": "Blocked",
+        "installed": "Installed"
+      },
+      "issues": {
+        "psAccountNotLinked": "Shop is not linked to a PrestaShop Account",
+        "psEventbusTablesMissing": "Required database tables are missing — try reinstalling the module",
+        "urlMatchingRequiresAccount": "Requires PS Account to be installed and linked"
+      },
+      "checks": {
+        "psAccount": {
+          "label": "PS Account module"
+        },
+        "psEventbus": {
+          "label": "PS EventBus module"
+        },
+        "urlMatching": {
+          "label": "URL matching",
+          "hint": "between Account and PS EventBus"
+        },
+        "phpCompatibility": {
+          "label": "PHP & PrestaShop compatibility"
+        },
+        "serverAccess": {
+          "label": "Server access check",
+          "hint": "asks CloudSync to call your shop back",
+          "action": "Run check"
+        }
+      }
+    },
+    "syncTable": {
+      "title": "Shop contents sync status",
+      "subtitle": "Status of each content type being synchronized to the CloudSync cloud",
+      "empty": "No synchronization data available yet.",
+      "notRequested": "Not requested"
     }
   }
 }

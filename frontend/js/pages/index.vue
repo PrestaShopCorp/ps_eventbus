@@ -18,11 +18,12 @@
   }
 
   .eventbus-app {
-    background: $background-primary;
     min-height: 200px;
+    background: $page-background;
   }
 
   #router-view {
-    padding: 24px;
+    padding: 32px;
+    max-width: 60%;
   }
 </style>

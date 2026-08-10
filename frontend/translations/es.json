@@ -1,0 +1,105 @@
+{
+  "header": {
+    "title": "PS EventBus"
+  },
+  "tabs": {
+    "dashboard": "Panel de control",
+    "connections": "Conexiones",
+    "supportDebug": "Soporte y depuración"
+  },
+  "pages": {
+    "dashboard": {
+      "title": "Panel de control"
+    },
+    "connections": {
+      "title": "Conexiones"
+    },
+    "supportDebug": {
+      "title": "Soporte y depuración"
+    }
+  },
+  "dashboard": {
+    "syncStatus": {
+      "synced": "Sincronizado",
+      "syncing": "Sincronizando",
+      "failed": "Fallido",
+      "offboarded": "No configurado",
+      "pending": "Pendiente",
+      "lastSynced": "Última sincronización"
+    },
+    "timeAgo": {
+      "justNow": "Ahora mismo",
+      "minutesAgo": "Hace {n} min",
+      "hoursAgo": "Hace {n}h",
+      "daysAgo": "Hace {n}d"
+    },
+    "syncCard": {
+      "initial": {
+        "title": "Sincronización inicial en curso",
+        "description": "CloudSync está importando por primera vez los datos de tu catálogo y tus pedidos. Esto puede tardar unos minutos según el tamaño de tu tienda."
+      },
+      "incremental": {
+        "title": "Sincronización al día",
+        "description": "CloudSync transmite continuamente los cambios de tu tienda.",
+        "descriptionWithTime": "CloudSync transmite continuamente los cambios de tu tienda. Última actualización {time}."
+      },
+      "failed": {
+        "title": "Error de sincronización",
+        "description": "Algunos contenidos de la tienda no se pudieron enviar a CloudSync. Consulta la verificación de estado a continuación."
+      },
+      "offboarded": {
+        "title": "Sincronización no iniciada",
+        "description": "Vincula tu cuenta PrestaShop y conecta un servicio para empezar a sincronizar tu tienda."
+      }
+    },
+    "healthCheck": {
+      "title": "Verificación de la sincronización",
+      "badges": {
+        "ok": "OK",
+        "ko": "KO",
+        "notInstalled": "No instalado",
+        "upToDate": "Actualizado",
+        "outdated": "Actualización disponible",
+        "match": "Coincide",
+        "mismatch": "No coincide",
+        "compatible": "Compatible",
+        "check": "Revisar",
+        "running": "Comprobando…",
+        "reachable": "Accesible",
+        "blocked": "Bloqueado",
+        "installed": "Instalado"
+      },
+      "issues": {
+        "psAccountNotLinked": "La tienda no está vinculada a una cuenta PrestaShop",
+        "psEventbusTablesMissing": "Faltan las tablas necesarias — intente reinstalar el módulo",
+        "urlMatchingRequiresAccount": "Requiere que PS Account esté instalado y vinculado"
+      },
+      "checks": {
+        "psAccount": {
+          "label": "Módulo PS Account"
+        },
+        "psEventbus": {
+          "label": "Módulo PS EventBus"
+        },
+        "urlMatching": {
+          "label": "Coincidencia de URL",
+          "hint": "entre Account y PS EventBus"
+        },
+        "phpCompatibility": {
+          "label": "Compatibilidad PHP y PrestaShop"
+        },
+        "serverAccess": {
+          "label": "Verificación de acceso al servidor",
+          "hint": "pide a CloudSync que contacte tu tienda",
+          "action": "Ejecutar prueba"
+        }
+      }
+    },
+    "syncTable": {
+      "title": "Estado de sincronización de los contenidos",
+      "subtitle": "Estado de cada tipo de contenido sincronizado con la nube de CloudSync",
+      "empty": "No hay datos de sincronización disponibles aún.",
+      "notRequested": "No solicitado"
+    }
+  }
+}

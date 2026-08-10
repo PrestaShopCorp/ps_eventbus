@@ -1,0 +1,105 @@
+{
+  "header": {
+    "title": "PS EventBus"
+  },
+  "tabs": {
+    "dashboard": "Pannello di controllo",
+    "connections": "Connessioni",
+    "supportDebug": "Supporto e debug"
+  },
+  "pages": {
+    "dashboard": {
+      "title": "Pannello di controllo"
+    },
+    "connections": {
+      "title": "Connessioni"
+    },
+    "supportDebug": {
+      "title": "Supporto e debug"
+    }
+  },
+  "dashboard": {
+    "syncStatus": {
+      "synced": "Sincronizzato",
+      "syncing": "Sincronizzazione",
+      "failed": "Fallito",
+      "offboarded": "Non configurato",
+      "pending": "In attesa",
+      "lastSynced": "Ultima sincronizzazione"
+    },
+    "timeAgo": {
+      "justNow": "Adesso",
+      "minutesAgo": "{n} min fa",
+      "hoursAgo": "{n}h fa",
+      "daysAgo": "{n}g fa"
+    },
+    "syncCard": {
+      "initial": {
+        "title": "Sincronizzazione iniziale in corso",
+        "description": "CloudSync sta importando per la prima volta i dati del tuo catalogo e dei tuoi ordini. Potrebbe richiedere qualche minuto a seconda della dimensione del negozio."
+      },
+      "incremental": {
+        "title": "Sincronizzazione aggiornata",
+        "description": "CloudSync trasmette in continuo le modifiche del tuo negozio.",
+        "descriptionWithTime": "CloudSync trasmette in continuo le modifiche del tuo negozio. Ultimo aggiornamento {time}."
+      },
+      "failed": {
+        "title": "Sincronizzazione non riuscita",
+        "description": "Alcuni contenuti del negozio non sono stati inviati a CloudSync. Consulta il controllo dello stato qui sotto."
+      },
+      "offboarded": {
+        "title": "Sincronizzazione non avviata",
+        "description": "Collega il tuo account PrestaShop e connetti un servizio per avviare la sincronizzazione del negozio."
+      }
+    },
+    "healthCheck": {
+      "title": "Controllo della sincronizzazione",
+      "badges": {
+        "ok": "OK",
+        "ko": "KO",
+        "notInstalled": "Non installato",
+        "upToDate": "Aggiornato",
+        "outdated": "Aggiornamento disponibile",
+        "match": "Corrisponde",
+        "mismatch": "Non corrisponde",
+        "compatible": "Compatibile",
+        "check": "Da verificare",
+        "running": "Verifica in corso…",
+        "reachable": "Raggiungibile",
+        "blocked": "Bloccato",
+        "installed": "Installato"
+      },
+      "issues": {
+        "psAccountNotLinked": "Il negozio non è collegato a un account PrestaShop",
+        "psEventbusTablesMissing": "Le tabelle richieste mancano — provare a reinstallare il modulo",
+        "urlMatchingRequiresAccount": "Richiede che PS Account sia installato e collegato"
+      },
+      "checks": {
+        "psAccount": {
+          "label": "Modulo PS Account"
+        },
+        "psEventbus": {
+          "label": "Modulo PS EventBus"
+        },
+        "urlMatching": {
+          "label": "Corrispondenza degli URL",
+          "hint": "tra Account e PS EventBus"
+        },
+        "phpCompatibility": {
+          "label": "Compatibilità PHP e PrestaShop"
+        },
+        "serverAccess": {
+          "label": "Controllo dell'accesso al server",
+          "hint": "chiede a CloudSync di richiamare il tuo negozio",
+          "action": "Avvia il test"
+        }
+      }
+    },
+    "syncTable": {
+      "title": "Stato di sincronizzazione dei contenuti",
+      "subtitle": "Stato di ogni tipo di contenuto sincronizzato con il cloud CloudSync",
+      "empty": "Nessun dato di sincronizzazione disponibile al momento.",
+      "notRequested": "Non richiesto"
+    }
+  }
+}

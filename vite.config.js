@@ -16,6 +16,7 @@ export default defineConfig({
     cssCodeSplit: false,
     assetsInlineLimit: 100 * 1024,
     minify: true,
+    cssMinify: true,
     rollupOptions: {
       input: path.resolve(__dirname, 'frontend/js/main.js'),
       output: {
@@ -79,6 +80,12 @@ export default defineConfig({
     },
   },
   css: {
+    // puik-theme ships `@media (max-width: var(--screen-xs))`, and var() is not
+    // valid in a media query. Without error recovery lightningcss aborts the
+    // whole CSS minification instead of leaving that one rule alone.
+    lightningcss: {
+      errorRecovery: true,
+    },
     preprocessorOptions: {
       scss: {
         additionalData: `

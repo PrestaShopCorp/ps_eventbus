@@ -1,11 +1,15 @@
 <?php
 
+use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Service\ApiHealthCheckService;
+use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
+
 class AdminPsEventbusController extends ModuleAdminController
 {
     /** @var Ps_eventbus */
     public $module;
 
-
+    /** @var string */
     public $isoCode;
 
     public function __construct()
@@ -13,6 +17,7 @@ class AdminPsEventbusController extends ModuleAdminController
         parent::__construct();
         $this->bootstrap = true;
 
+        // @phpstan-ignore-next-line — defensive fallback for PS 1.6 where language may not be set
         $this->isoCode = $this->context->language ? $this->context->language->iso_code : 'en';
     }
 
@@ -27,7 +32,7 @@ class AdminPsEventbusController extends ModuleAdminController
         $link = $this->context->link;
 
         $liveModeVuejs = (bool) $this->module->getServiceContainer()->getParameterWithDefault('ps_eventbus.live_mode_vuejs', 'false');
-        
+
         $moduleBaseUrl = $this->getModuleBaseUrl();
 
         Media::addJsDef([
@@ -36,6 +41,11 @@ class AdminPsEventbusController extends ModuleAdminController
                 'eventbusAjaxPath' => $link->getAdminLink('AdminPsEventbus'),
                 'logoUrl' => $moduleBaseUrl . 'logo.png',
                 'moduleVersion' => $this->module->version,
+                'healthCheckUrl' => $link->getModuleLink('ps_eventbus', 'apiHealthCheck'),
+                'shopContents' => Config::SHOP_CONTENTS,
+                'shopId' => $this->getShopId(),
+                'mockMode' => true,
+                'cloudsyncApiUrl' => $this->module->getServiceContainer()->getParameter('ps_eventbus.cloudsync_api_url'),
             ],
         ]);
 
@@ -69,6 +79,61 @@ class AdminPsEventbusController extends ModuleAdminController
         $domain = $ssl ? $shop->domain_ssl : $shop->domain;
 
         return ($ssl ? 'https://' : 'http://') . $domain . $shop->getBaseURI() . 'modules/' . $this->module->name . '/';
+    }
+
+    /**
+     * @return string|null
+     */
+    private function getShopId()
+    {
+        try {
+            /** @var PsAccountsAdapterService $psAccounts */
+            $psAccounts = $this->module->getService(PsAccountsAdapterService::class);
+            $uuid = $psAccounts->getShopUuid();
+
+            return $uuid !== '' ? $uuid : null;
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * AJAX action: return the health check data.
+     *
+     * @return void
+     */
+    public function ajaxProcessGetHealthCheck()
+    {
+        // With display_errors on (dev mode), PHP notices raised while building the
+        // service are written to the response body and corrupt the JSON payload.
+        $displayErrors = ini_get('display_errors');
+        ini_set('display_errors', '0');
+        ob_start();
+
+        try {
+            /** @var ApiHealthCheckService $healthCheckService */
+            $healthCheckService = $this->module->getService(ApiHealthCheckService::class);
+            $response = $healthCheckService->getDashboardHealthCheck();
+        } catch (Exception $e) {
+            $response = [
+                'error' => true,
+                'message' => $e->getMessage(),
+            ];
+        }
+
+        ob_end_clean();
+        ini_set('display_errors', (string) $displayErrors);
+
+        // Not ajaxDie(): it was removed in PrestaShop 9, and ajaxRender() does not
+        // exist in 1.6, which this module still supports.
+        if (!headers_sent()) {
+            header('Content-Type: application/json');
+            header('Cache-Control: no-store, no-cache, must-revalidate');
+        }
+
+        echo (string) json_encode($response);
+
+        exit;
     }
 
     /**

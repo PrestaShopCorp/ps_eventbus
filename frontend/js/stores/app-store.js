@@ -8,5 +8,10 @@ export const useAppStore = defineStore('app', {
     eventbusAjaxPath: config.eventbusAjaxPath ?? '',
     logoUrl: config.logoUrl ?? '',
     moduleVersion: config.moduleVersion ?? '0.0.0',
+    healthCheckUrl: config.healthCheckUrl ?? '',
+    shopId: config.shopId ?? null,
+    shopContents: config.shopContents ?? [],
+    mockMode: config.mockMode ?? true,
+    cloudsyncApiUrl: config.cloudsyncApiUrl ?? '',
   }),
 })

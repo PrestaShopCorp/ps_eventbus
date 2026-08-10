@@ -1,14 +1,16 @@
 <template>
-  <div class="eventbus-header">
+  <header class="eventbus-header">
     <div class="eventbus-header__content">
-      <img :src="appStore.logoUrl" alt="ps_eventbus" class="eventbus-header__logo" />
+      <span class="eventbus-header__logo-wrapper">
+        <img :src="appStore.logoUrl" alt="ps_eventbus" class="eventbus-header__logo" />
+      </span>
       <div class="eventbus-header__info">
-        <span class="eventbus-header__name">ps_eventbus</span>
+        <span class="eventbus-header__name">{{ $t('header.title') }}</span>
         <span class="eventbus-header__version">v{{ appStore.moduleVersion }}</span>
       </div>
     </div>
     <div class="eventbus-header__separator" />
-  </div>
+  </header>
 </template>
 
 <script setup>
@@ -22,24 +24,38 @@
     &__content {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 20px 24px 16px;
+      gap: 16px;
+      padding: 24px 32px 20px;
+    }
+
+    &__logo-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background-color: $accent-soft;
     }
 
     &__logo {
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       object-fit: contain;
     }
 
     &__info {
       display: flex;
       flex-direction: column;
+      gap: 4px;
     }
 
     &__name {
-      font-size: 16px;
-      font-weight: 600;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
       color: $text-primary;
       line-height: 1.2;
     }
@@ -48,11 +64,6 @@
       font-size: 12px;
       color: $text-secondary;
       line-height: 1.2;
-    }
-
-    &__separator {
-      height: 1px;
-      background-color: #e0e0e0;
     }
   }
 </style>
