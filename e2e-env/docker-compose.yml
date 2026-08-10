@@ -31,6 +31,7 @@ services:
       - PS_DOMAIN=localhost:${HOST_PORT_BIND_PRESTASHOP}
     volumes:
       - ..:/var/www/html/modules/ps_eventbus:rw
+      - ../.config.e2e.php:/var/www/html/modules/ps_eventbus/config.php:ro
       - ./init-scripts/install-ps-accounts-mock.sh:/tmp/init-scripts/install-ps-accounts-mock.sh:ro
       - ./init-scripts/install-ps-eventbus.sh:/tmp/init-scripts/install-ps-eventbus.sh:ro
       # Notice: you might enable this if your uid is not 1000, or encounter permission issues

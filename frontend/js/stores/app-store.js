@@ -14,7 +14,8 @@ export const useAppStore = defineStore('app', {
     defaultSyncedShopContents: config.defaultSyncedShopContents ?? [],
     psAccountsInstalled: config.psAccountsInstalled ?? false,
     mockMode: config.mockMode ?? true,
-    cloudsyncApiUrl: config.cloudsyncApiUrl ?? '',
+    cloudsyncSyncApiUrl: config.cloudsyncSyncApiUrl ?? '',
+    cloudsyncReportingApiUrl: config.cloudsyncReportingApiUrl ?? '',
   }),
 
   getters: {

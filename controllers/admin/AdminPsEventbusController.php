@@ -49,7 +49,8 @@ class AdminPsEventbusController extends ModuleAdminController
                 'shopId' => $this->getShopId(),
                 'psAccountsInstalled' => $this->isPsAccountsInstalled(),
                 'mockMode' => true,
-                'cloudsyncApiUrl' => $this->module->getServiceContainer()->getParameter('ps_eventbus.cloudsync_api_url'),
+                'cloudsyncSyncApiUrl' => $this->module->getServiceContainer()->getParameter('ps_eventbus.cloudsync_sync_api_url'),
+                'cloudsyncReportingApiUrl' => $this->module->getServiceContainer()->getParameter('ps_eventbus.cloudsync_reporting_api_url'),
             ],
         ]);
 

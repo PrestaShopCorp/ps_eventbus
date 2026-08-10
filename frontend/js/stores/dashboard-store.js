@@ -224,7 +224,7 @@ export const useDashboardStore = defineStore('dashboard', {
       this.syncSummaryError = null
 
       try {
-        this.syncSummary = await fetchSyncSummary(appStore.cloudsyncApiUrl, appStore.shopId)
+        this.syncSummary = await fetchSyncSummary(appStore.cloudsyncReportingApiUrl, appStore.shopId)
       } catch (e) {
         this.syncSummaryError = e.message
       } finally {
@@ -236,7 +236,7 @@ export const useDashboardStore = defineStore('dashboard', {
       const appStore = useAppStore()
 
       try {
-        const status = await fetchCloudsyncStatus(appStore.cloudsyncApiUrl, appStore.shopId)
+        const status = await fetchCloudsyncStatus(appStore.cloudsyncSyncApiUrl, appStore.shopId)
 
         this.cloudsyncShopUrl = status.shopUrl
       } catch (e) {
@@ -257,7 +257,7 @@ export const useDashboardStore = defineStore('dashboard', {
       this.serverAccess = { status: SERVER_ACCESS.running, message: '' }
 
       try {
-        const result = await requestServerAccessCheck(appStore.cloudsyncApiUrl, appStore.shopId, appStore.healthCheckUrl)
+        const result = await requestServerAccessCheck(appStore.cloudsyncSyncApiUrl, appStore.shopId, appStore.healthCheckUrl)
 
         this.serverAccess = result.reachable
           ? { status: SERVER_ACCESS.reachable, message: result.probedUrl }
