@@ -19,8 +19,9 @@ class AdminPsEventbusController extends ModuleAdminController
         parent::__construct();
         $this->bootstrap = true;
 
-        // @phpstan-ignore-next-line — $this->context->language can be null on PS 1.6
-        $this->isoCode = $this->context->language ? $this->context->language->iso_code : 'en';
+        /** @var \Language|null $language */
+        $language = $this->context->language;
+        $this->isoCode = $language ? $language->iso_code : 'en';
     }
 
     /**

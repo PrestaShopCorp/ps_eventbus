@@ -297,17 +297,17 @@ class ApiHealthCheckService
                 return $unknown;
             }
 
-            // @phpstan-ignore-next-line — ModuleRepository only exists from PS 1.7.4+
             $repo = $container->get('PrestaShop\PrestaShop\Core\Module\ModuleRepository');
-            // @phpstan-ignore-next-line
-            $module = $repo->getModule($moduleName);
+            $module = is_object($repo) ? call_user_func([$repo, 'getModule'], $moduleName) : null;
 
-            // @phpstan-ignore-next-line — getModule() returns non-nullable on PS 8 but can be null on older versions
-            if ($module === null) {
+            if (!is_object($module)) {
                 return $unknown;
             }
 
-            $latestVersion = $module->attributes->get('version_available');
+            /** @var string|null $latestVersion */
+            $latestVersion = isset($module->attributes) && is_object($module->attributes)
+                ? call_user_func([$module->attributes, 'get'], 'version_available')
+                : null;
 
             if (empty($latestVersion)) {
                 // No published version known: canBeUpgraded() would compare
