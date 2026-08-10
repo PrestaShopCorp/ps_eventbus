@@ -297,11 +297,12 @@ class ApiHealthCheckService
                 return $unknown;
             }
 
-            /** @var \PrestaShop\PrestaShop\Core\Module\ModuleRepository $repo */
+            // @phpstan-ignore-next-line — ModuleRepository only exists from PS 1.7.4+
             $repo = $container->get('PrestaShop\PrestaShop\Core\Module\ModuleRepository');
+            // @phpstan-ignore-next-line
             $module = $repo->getModule($moduleName);
 
-            if ($module === null) {
+            if ($module === null) { // @phpstan-ignore identical.alwaysFalse
                 return $unknown;
             }
 
