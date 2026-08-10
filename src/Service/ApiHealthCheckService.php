@@ -302,7 +302,8 @@ class ApiHealthCheckService
             // @phpstan-ignore-next-line
             $module = $repo->getModule($moduleName);
 
-            if ($module === null) { // @phpstan-ignore identical.alwaysFalse
+            // @phpstan-ignore-next-line — getModule() returns non-nullable on PS 8 but can be null on older versions
+            if ($module === null) {
                 return $unknown;
             }
 
