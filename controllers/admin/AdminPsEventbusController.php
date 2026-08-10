@@ -45,7 +45,7 @@ class AdminPsEventbusController extends ModuleAdminController
                 'shopContents' => Config::SHOP_CONTENTS,
                 'shopId' => $this->getShopId(),
                 'mockMode' => true,
-                'cloudsyncApiUrl' => 'https://api.cloudsync.prestashop.com',
+                'cloudsyncApiUrl' => $this->module->getServiceContainer()->getParameter('ps_eventbus.cloudsync_api_url'),
             ],
         ]);
 
@@ -82,17 +82,18 @@ class AdminPsEventbusController extends ModuleAdminController
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     private function getShopId()
     {
         try {
             /** @var PsAccountsAdapterService $psAccounts */
             $psAccounts = $this->module->getService(PsAccountsAdapterService::class);
+            $uuid = $psAccounts->getShopUuid();
 
-            return $psAccounts->getShopUuid();
+            return $uuid !== '' ? $uuid : null;
         } catch (Exception $e) {
-            return '';
+            return null;
         }
     }
 
