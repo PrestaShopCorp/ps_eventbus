@@ -88,6 +88,7 @@
     border-bottom: 1px solid $card-border;
     border-top: 1px solid $card-border;
     padding-left: 10px;
+    overflow: visible;
   }
 
   .eventbus-tab {
