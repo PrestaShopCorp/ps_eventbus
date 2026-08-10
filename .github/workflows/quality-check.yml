@@ -142,7 +142,7 @@ jobs:
       - name: More logs on failure
         if: failure()
         run: |
-          docker compose logs cloudsync-mock prestashop
+          docker compose logs cloudsync-mock prestashop-local
           docker compose --profile cicd down -v
         working-directory: e2e-env
 

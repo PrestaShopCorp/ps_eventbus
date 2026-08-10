@@ -54,7 +54,7 @@ zip: zip-prod zip-inte zip-e2e
 # target: zip-e2e                                              - Bundle a local E2E integrable zip
 .PHONY: zip-e2e
 zip-e2e: vendor tools/vendor dist frontend-build
-	@$(call zip_it,./.config.e2e.php,${PACKAGE}_e2e.zip)
+	@$(call zip_it,./config.php,${PACKAGE}_e2e.zip)
 
 # target: zip-inte                                             - Bundle an integration zip
 .PHONY: zip-inte
