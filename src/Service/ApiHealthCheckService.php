@@ -300,6 +300,10 @@ class ApiHealthCheckService
             // @phpstan-ignore-next-line — getModule() exists at runtime; class unknown on PS 1.6/1.7
             $module = $container->get('PrestaShop\PrestaShop\Core\Module\ModuleRepository')->getModule($moduleName);
 
+            if ($module === null) {
+                return $unknown;
+            }
+
             $latestVersion = $module->attributes->get('version_available');
 
             if (empty($latestVersion)) {
