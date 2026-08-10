@@ -9,11 +9,8 @@ export const useAppStore = defineStore('app', {
     logoUrl: config.logoUrl ?? '',
     moduleVersion: config.moduleVersion ?? '0.0.0',
     healthCheckUrl: config.healthCheckUrl ?? '',
-    shopId: config.shopId ?? '',
-    // Canonical list from Config::SHOP_CONTENTS, so the dashboard never has to
-    // maintain its own copy
+    shopId: config.shopId ?? null,
     shopContents: config.shopContents ?? [],
-    // When true, API calls return canned mock data instead of hitting CloudSync
     mockMode: config.mockMode ?? true,
     cloudsyncApiUrl: config.cloudsyncApiUrl ?? '',
   }),
