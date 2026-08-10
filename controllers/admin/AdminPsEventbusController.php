@@ -19,7 +19,7 @@ class AdminPsEventbusController extends ModuleAdminController
         parent::__construct();
         $this->bootstrap = true;
 
-        /** @var \Language|null $language */
+        /** @var Language|null $language */
         $language = $this->context->language;
         $this->isoCode = $language ? $language->iso_code : 'en';
     }
