@@ -12,6 +12,25 @@ import * as mockData from './mock-data'
 import { useAppStore } from '../stores/app-store'
 
 /**
+ * Always uses the real Sync API — the backend proxies the call and
+ * authenticates with the merchant's Accounts token.
+ *
+ * @returns {Promise<Array>}
+ */
+export async function fetchConnections() {
+  const app = useAppStore()
+  const query = new URLSearchParams({ action: 'getConnections', ajax: '1' })
+  const response = await fetch(`${app.eventbusAjaxPath}&${query.toString()}`)
+  const data = await response.json()
+
+  if (data && data.error) {
+    throw new Error(data.message)
+  }
+
+  return data.services
+}
+
+/**
  * @param {string} baseUrl
  * @param {string} shopId
  * @returns {Promise<Array>}
