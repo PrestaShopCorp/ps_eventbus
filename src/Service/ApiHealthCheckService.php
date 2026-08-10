@@ -298,16 +298,19 @@ class ApiHealthCheckService
             }
 
             $repo = $container->get('PrestaShop\PrestaShop\Core\Module\ModuleRepository');
-            $module = is_object($repo) ? call_user_func([$repo, 'getModule'], $moduleName) : null;
 
-            if (!is_object($module)) {
+            if (!is_object($repo) || !method_exists($repo, 'getModule')) {
+                return $unknown;
+            }
+
+            $module = $repo->getModule($moduleName);
+
+            if (!is_object($module) || !isset($module->attributes) || !method_exists($module->attributes, 'get')) {
                 return $unknown;
             }
 
             /** @var string|null $latestVersion */
-            $latestVersion = isset($module->attributes) && is_object($module->attributes)
-                ? call_user_func([$module->attributes, 'get'], 'version_available')
-                : null;
+            $latestVersion = $module->attributes->get('version_available');
 
             if (empty($latestVersion)) {
                 // No published version known: canBeUpgraded() would compare
