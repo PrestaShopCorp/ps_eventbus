@@ -305,12 +305,18 @@ class ApiHealthCheckService
 
             $module = $repo->getModule($moduleName);
 
-            if (!is_object($module) || !isset($module->attributes) || !method_exists($module->attributes, 'get')) {
+            if (!is_object($module) || !isset($module->attributes)) {
+                return $unknown;
+            }
+
+            $attributes = $module->attributes;
+
+            if (!is_object($attributes) || !method_exists($attributes, 'get')) {
                 return $unknown;
             }
 
             /** @var string|null $latestVersion */
-            $latestVersion = $module->attributes->get('version_available');
+            $latestVersion = $attributes->get('version_available');
 
             if (empty($latestVersion)) {
                 // No published version known: canBeUpgraded() would compare
