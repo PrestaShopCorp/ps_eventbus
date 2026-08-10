@@ -25,19 +25,26 @@ export async function fetchSyncSummary(baseUrl, shopId) {
 }
 
 /**
+ * Retrieve the shop URL registered in CloudSync so the dashboard can compare
+ * it with the one from ps_accounts.
+ *
+ * Uses the shop-sync-setup endpoint which returns a `targetUrl` attribute.
+ *
  * @param {string} baseUrl  CloudSync API root (no trailing slash)
  * @param {string} shopId   Shop UUID from ps_accounts
  *
  * @returns {Promise<{shopUrl: string}>}
  */
 export async function fetchCloudsyncStatus(baseUrl, shopId) {
-  const response = await fetch(`${baseUrl}/v1/reporting/shop-status/${encodeURIComponent(shopId)}`)
+  const response = await fetch(`${baseUrl}/v1/shop-sync-setup/${encodeURIComponent(shopId)}`)
 
   if (!response.ok) {
-    throw new Error(`CloudSync API error: GET shop-status returned HTTP ${response.status}`)
+    throw new Error(`CloudSync API error: GET shop-sync-setup returned HTTP ${response.status}`)
   }
 
-  return response.json()
+  const data = await response.json()
+
+  return { shopUrl: data.targetUrl || '' }
 }
 
 /**

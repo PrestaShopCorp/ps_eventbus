@@ -5,12 +5,6 @@
 const MOCK_NOT_REQUESTED = ['wishlists', 'wishlist_products', 'employees', 'translations', 'taxonomies', 'stock_movements']
 
 /**
- * Contents whose last upload failed. Mocked selection, for the sake of the
- * example.
- */
-const MOCK_FAILED = {}
-
-/**
  * Mock sync summary matching the Reporting API schema:
  * GET /v1/reporting/shop-sync-summary/{shopId}
  *
@@ -37,8 +31,6 @@ export function getMockSyncSummary(shopContents) {
       }
     }
 
-    const failure = MOCK_FAILED[shopContent]
-
     // First half of requested contents have finished their initial sync,
     // the rest have not yet — this puts globalSyncStatus into 'syncing'.
     const finished = index < shopContents.length / 2
@@ -52,38 +44,4 @@ export function getMockSyncSummary(shopContents) {
       httpStatusText: finished ? 'OK' : null,
     }
   })
-}
-
-/**
- * Mock of the shop URL CloudSync actually synchronizes with, compared against
- * the one registered in PrestaShop Account to detect a mismatch. No endpoint
- * serves it yet.
- */
-export function getMockCloudsyncStatus(accountsShopUrl) {
-  return {
-    // Mirrors the Account URL so the check reads "Match" until a real endpoint
-    // provides the URL CloudSync is actually configured with.
-    shopUrl: accountsShopUrl,
-  }
-}
-
-/**
- * Mock of the round trip that asks CloudSync to call the shop's health check
- * front controller from the outside and report back whether it got through.
- *
- * This has to be triggered from CloudSync rather than from the browser: only a
- * request coming from CloudSync's own network can reveal that a WAF, a firewall
- * or a Cloudflare challenge stands between the two. The endpoint does not exist
- * yet, so the shape of the request and of the answer below is provisional.
- */
-export async function requestMockServerAccessCheck(healthCheckUrl) {
-  await new Promise((resolve) => setTimeout(resolve, 1200))
-
-  return {
-    // Echoed back so the UI can show which URL was probed
-    probedUrl: healthCheckUrl,
-    reachable: false,
-    httpStatus: 403,
-    blockedBy: 'Cloudflare',
-  }
 }

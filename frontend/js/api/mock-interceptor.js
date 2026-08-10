@@ -3,7 +3,9 @@
  * mock data. The store always calls these functions; the `mockMode` flag in
  * appStore decides which path runs.
  *
- * To go live, set `mockMode: false` in the PHP eventbusConfig.
+ * Connections and CloudSync status always hit the real Sync API (authenticated
+ * with the Accounts token server-side). The Reporting API endpoints remain
+ * mocked until they are deployed.
  */
 import * as realApi from './cloudsync-api'
 import * as mockData from './mock-data'
@@ -25,18 +27,14 @@ export async function fetchSyncSummary(baseUrl, shopId) {
 }
 
 /**
+ * Always uses the real Sync API — the shop-sync-setup endpoint returns the
+ * targetUrl attribute that CloudSync synchronizes with.
+ *
  * @param {string} baseUrl
  * @param {string} shopId
- * @param {string} accountsShopUrl  Needed by the mock to mirror the Account URL
  * @returns {Promise<{shopUrl: string}>}
  */
-export async function fetchCloudsyncStatus(baseUrl, shopId, accountsShopUrl) {
-  const app = useAppStore()
-
-  if (app.mockMode) {
-    return mockData.getMockCloudsyncStatus(accountsShopUrl)
-  }
-
+export async function fetchCloudsyncStatus(baseUrl, shopId) {
   return realApi.fetchCloudsyncStatus(baseUrl, shopId)
 }
 
@@ -47,11 +45,5 @@ export async function fetchCloudsyncStatus(baseUrl, shopId, accountsShopUrl) {
  * @returns {Promise<{probedUrl: string, reachable: boolean, httpStatus: number|null, blockedBy: string|null}>}
  */
 export async function requestServerAccessCheck(baseUrl, shopId, healthCheckUrl) {
-  const app = useAppStore()
-
-  if (app.mockMode) {
-    return mockData.requestMockServerAccessCheck(healthCheckUrl)
-  }
-
   return realApi.requestServerAccessCheck(baseUrl, shopId, healthCheckUrl)
 }

@@ -3,6 +3,20 @@ import i18n from '../i18n'
 import { useAppStore } from './app-store'
 import { fetchSyncSummary, fetchCloudsyncStatus, requestServerAccessCheck } from '../api/mock-interceptor'
 
+export const SYNC_STATUS = {
+  offboarded: 'offboarded',
+  syncing: 'syncing',
+  synced: 'synced',
+  failed: 'failed',
+}
+
+export const SERVER_ACCESS = {
+  idle: 'idle',
+  running: 'running',
+  reachable: 'reachable',
+  blocked: 'blocked',
+}
+
 /**
  * A module row, resolved in order of severity: not installed at all, then not
  * operational, then behind the latest release, then fine. `upToDate` is null
@@ -31,11 +45,11 @@ function buildModuleCheck(id, { installed, ready, readyIssue, version, latestVer
   return { id, status: 'ok', badge: 'upToDate', detail }
 }
 
-const SERVER_ACCESS_STATUS = {
-  idle: 'idle',
-  running: 'idle',
-  reachable: 'ok',
-  blocked: 'warning',
+const SERVER_ACCESS_STATUS_MAP = {
+  [SERVER_ACCESS.idle]: 'idle',
+  [SERVER_ACCESS.running]: 'idle',
+  [SERVER_ACCESS.reachable]: 'ok',
+  [SERVER_ACCESS.blocked]: 'warning',
 }
 
 function formatCompatibilityDetail(compatibility) {
@@ -80,18 +94,18 @@ export const useDashboardStore = defineStore('dashboard', {
       const requested = this.requestedSyncSummary
 
       if (requested.length === 0) {
-        return 'offboarded'
+        return SYNC_STATUS.offboarded
       }
 
-      if (this.failedSyncSummary.length > 0) return 'failed'
+      if (this.failedSyncSummary.length > 0) return SYNC_STATUS.failed
 
       const allFinished = requested.every((item) => item.firstSyncFinishedAt)
       const anyFinished = requested.some((item) => item.firstSyncFinishedAt)
 
-      if (allFinished) return 'synced'
-      if (anyFinished) return 'syncing'
+      if (allFinished) return SYNC_STATUS.synced
+      if (anyFinished) return SYNC_STATUS.syncing
 
-      return 'offboarded'
+      return SYNC_STATUS.offboarded
     },
 
     lastSyncedAt() {
@@ -162,8 +176,8 @@ export const useDashboardStore = defineStore('dashboard', {
         },
         {
           id: 'serverAccess',
-          status: SERVER_ACCESS_STATUS[this.serverAccess.status] ?? 'warning',
-          badge: this.serverAccess.status === 'idle' ? '' : this.serverAccess.status,
+          status: SERVER_ACCESS_STATUS_MAP[this.serverAccess.status] ?? 'warning',
+          badge: this.serverAccess.status === SERVER_ACCESS.idle ? '' : this.serverAccess.status,
           detail: this.serverAccess.message,
           // Rendered as a button on the row: nothing is probed until asked
           action: 'runServerAccessCheck',
@@ -222,11 +236,7 @@ export const useDashboardStore = defineStore('dashboard', {
       const appStore = useAppStore()
 
       try {
-        const status = await fetchCloudsyncStatus(
-          appStore.cloudsyncApiUrl,
-          appStore.shopId,
-          this.healthCheck ? this.healthCheck.accountsShopUrl : '',
-        )
+        const status = await fetchCloudsyncStatus(appStore.cloudsyncApiUrl, appStore.shopId)
 
         this.cloudsyncShopUrl = status.shopUrl
       } catch (e) {
@@ -242,21 +252,21 @@ export const useDashboardStore = defineStore('dashboard', {
     async runServerAccessCheck() {
       const appStore = useAppStore()
 
-      if (this.serverAccess.status === 'running') return
+      if (this.serverAccess.status === SERVER_ACCESS.running) return
 
-      this.serverAccess = { status: 'running', message: '' }
+      this.serverAccess = { status: SERVER_ACCESS.running, message: '' }
 
       try {
         const result = await requestServerAccessCheck(appStore.cloudsyncApiUrl, appStore.shopId, appStore.healthCheckUrl)
 
         this.serverAccess = result.reachable
-          ? { status: 'reachable', message: result.probedUrl }
+          ? { status: SERVER_ACCESS.reachable, message: result.probedUrl }
           : {
-              status: 'blocked',
+              status: SERVER_ACCESS.blocked,
               message: [result.blockedBy, result.httpStatus].filter(Boolean).join(' · HTTP '),
             }
       } catch (e) {
-        this.serverAccess = { status: 'blocked', message: e.message }
+        this.serverAccess = { status: SERVER_ACCESS.blocked, message: e.message }
       }
     },
 
