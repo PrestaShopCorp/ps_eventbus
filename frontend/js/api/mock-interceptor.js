@@ -8,23 +8,16 @@
  */
 import * as realApi from './cloudsync-api'
 import * as mockData from './mock-data'
+import { callAjax } from './eventbus-ajax'
 import { useAppStore } from '../stores/app-store'
 
 /**
- * Always uses the real Sync API — the backend proxies the call and
- * authenticates with the merchant's Accounts token.
+ * Always uses the real admin AJAX endpoint.
  *
  * @returns {Promise<Array>}
  */
 export async function fetchConnections() {
-  const app = useAppStore()
-  const query = new URLSearchParams({ action: 'getConnections', ajax: '1' })
-  const response = await fetch(`${app.eventbusAjaxPath}&${query.toString()}`)
-  const data = await response.json()
-
-  if (data && data.error) {
-    throw new Error(data.message)
-  }
+  const data = await callAjax('getConnections')
 
   return data.services
 }
