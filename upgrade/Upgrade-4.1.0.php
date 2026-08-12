@@ -40,7 +40,7 @@ function upgrade_module_4_1_0()
 
     $db->execute(
         'ALTER TABLE `' . _DB_PREFIX_ . 'eventbus_type_sync`
-          ADD COLUMN `last_seek_key` VARCHAR(190) DEFAULT NULL
+          ADD COLUMN `last_seek_key` VARCHAR(190) DEFAULT NULL,
           DROP COLUMN `offset`'
     );
 
