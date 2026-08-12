@@ -8,16 +8,6 @@ class AdminPsEventbusAjaxController extends ModuleAdminController
     /** @var Ps_eventbus */
     public $module;
 
-    /**
-     * AJAX actions allowed to be dispatched.
-     *
-     * @var string[]
-     */
-    private static $allowedActions = [
-        'getHealthCheck',
-        'getConnections',
-    ];
-
     public function __construct()
     {
         parent::__construct();
@@ -46,18 +36,18 @@ class AdminPsEventbusAjaxController extends ModuleAdminController
             $this->jsonResponse(['error' => true, 'message' => 'Missing action parameter'], 400);
         }
 
-        if (!in_array($action, self::$allowedActions, true)) {
-            $this->jsonResponse(['error' => true, 'message' => 'Unknown action: ' . $action], 400);
-        }
-
         try {
-            $reflection = new ReflectionMethod($this, $action);
-            $parameters = $reflection->getParameters();
+            switch ($action) {
+                case 'getHealthCheck':
+                    $response = $this->getHealthCheck();
+                    break;
+                case 'getConnections':
+                    $response = $this->getConnections();
+                    break;
+                default:
+                    $this->jsonResponse(['error' => true, 'message' => 'Unknown action: ' . $action], 400);
 
-            if (!empty($parameters)) {
-                $response = $this->$action($data);
-            } else {
-                $response = $this->$action();
+                    return;
             }
 
             $this->jsonResponse($response);
