@@ -24,7 +24,7 @@ class AdminPsEventbusAjaxController extends ModuleAdminController
      */
     public function ajaxProcessDispatch()
     {
-        if (!$this->access('view')) {
+        if (method_exists($this, 'access') && !$this->access('view')) {
             $this->jsonResponse(['error' => true, 'message' => 'Access denied'], 403);
         }
 

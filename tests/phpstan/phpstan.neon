@@ -51,4 +51,5 @@ parameters:
     - '#Constant PS_EVENTBUS_VERBOSE_ENABLED not found.#'
     - '#Constant PS_EVENTBUS_EXPLAIN_SQL_ENABLED not found.#'
     - '#Constant REQUEST_START_TIME not found.#'
+    - '#Call to function method_exists\(\) with \$this\(AdminPsEventbusAjaxController\) and .access. will always evaluate to true\.#'
   level: 8
