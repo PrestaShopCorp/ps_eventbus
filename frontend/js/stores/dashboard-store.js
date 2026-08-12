@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import i18n from '../i18n'
 import { useAppStore } from './app-store'
+import { callAjax } from '../api/eventbus-ajax'
 import { fetchSyncSummary, fetchCloudsyncStatus, requestServerAccessCheck } from '../api/mock-interceptor'
 
 export const SYNC_STATUS = {
@@ -189,28 +190,11 @@ export const useDashboardStore = defineStore('dashboard', {
 
   actions: {
     async fetchHealthCheck() {
-      const appStore = useAppStore()
       this.healthCheckLoading = true
       this.healthCheckError = null
 
       try {
-        const url = appStore.eventbusAjaxPath + '&action=getHealthCheck&ajax=1'
-        const response = await fetch(url)
-        const body = await response.text()
-        let data
-
-        try {
-          data = JSON.parse(body)
-        } catch {
-          // A PHP notice, a redirect to the login page or a WAF page ends up here
-          throw new Error(`Unexpected response from the health check endpoint (HTTP ${response.status}): ${body.slice(0, 200)}`)
-        }
-
-        if (data.error) {
-          this.healthCheckError = data.message
-        } else {
-          this.healthCheck = data
-        }
+        this.healthCheck = await callAjax('getHealthCheck')
       } catch (e) {
         this.healthCheckError = e.message
       } finally {
@@ -224,7 +208,7 @@ export const useDashboardStore = defineStore('dashboard', {
       this.syncSummaryError = null
 
       try {
-        this.syncSummary = await fetchSyncSummary(appStore.cloudsyncApiUrl, appStore.shopId)
+        this.syncSummary = await fetchSyncSummary(appStore.cloudsyncReportingApiUrl, appStore.shopId)
       } catch (e) {
         this.syncSummaryError = e.message
       } finally {
@@ -236,7 +220,7 @@ export const useDashboardStore = defineStore('dashboard', {
       const appStore = useAppStore()
 
       try {
-        const status = await fetchCloudsyncStatus(appStore.cloudsyncApiUrl, appStore.shopId)
+        const status = await fetchCloudsyncStatus(appStore.cloudsyncSyncApiUrl, appStore.shopId)
 
         this.cloudsyncShopUrl = status.shopUrl
       } catch (e) {
@@ -257,7 +241,7 @@ export const useDashboardStore = defineStore('dashboard', {
       this.serverAccess = { status: SERVER_ACCESS.running, message: '' }
 
       try {
-        const result = await requestServerAccessCheck(appStore.cloudsyncApiUrl, appStore.shopId, appStore.healthCheckUrl)
+        const result = await requestServerAccessCheck(appStore.cloudsyncSyncApiUrl, appStore.shopId, appStore.healthCheckUrl)
 
         this.serverAccess = result.reachable
           ? { status: SERVER_ACCESS.reachable, message: result.probedUrl }

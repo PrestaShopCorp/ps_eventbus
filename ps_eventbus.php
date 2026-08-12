@@ -168,17 +168,22 @@ class Ps_eventbus extends Module
      */
     private function installTab()
     {
-        $tab = new Tab();
-        $tab->active = true;
-        $tab->class_name = 'AdminPsEventbus';
-        $tab->name = array_fill_keys(
-            array_column(Language::getLanguages(false), 'id_lang'),
-            'EventBus'
-        );
-        $tab->id_parent = -1; // Hidden tab (accessible via getContent redirect)
-        $tab->module = $this->name;
+        $langIds = array_column(Language::getLanguages(false), 'id_lang');
 
-        return (bool) $tab->add();
+        foreach (['AdminPsEventbus', 'AdminPsEventbusAjax'] as $className) {
+            $tab = new Tab();
+            $tab->active = true;
+            $tab->class_name = $className;
+            $tab->name = array_fill_keys($langIds, $this->displayName);
+            $tab->id_parent = -1;
+            $tab->module = $this->name;
+
+            if (!(bool) $tab->add()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -199,12 +204,14 @@ class Ps_eventbus extends Module
      */
     private function uninstallTab()
     {
-        $tabId = (int) Tab::getIdFromClassName('AdminPsEventbus');
-        if (!$tabId) {
-            return true;
+        foreach (['AdminPsEventbus', 'AdminPsEventbusAjax'] as $className) {
+            $tabId = (int) Tab::getIdFromClassName($className);
+            if ($tabId && !(new Tab($tabId))->delete()) {
+                return false;
+            }
         }
 
-        return (new Tab($tabId))->delete();
+        return true;
     }
 
     /**

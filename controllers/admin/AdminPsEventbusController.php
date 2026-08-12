@@ -1,7 +1,7 @@
 <?php
 
 use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Service\ApiHealthCheckService;
+use PrestaShop\Module\PsEventbus\Helper\ModuleHelper;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 
 class AdminPsEventbusController extends ModuleAdminController
@@ -17,8 +17,9 @@ class AdminPsEventbusController extends ModuleAdminController
         parent::__construct();
         $this->bootstrap = true;
 
-        // @phpstan-ignore-next-line — defensive fallback for PS 1.6 where language may not be set
-        $this->isoCode = $this->context->language ? $this->context->language->iso_code : 'en';
+        /** @var Language|null $language */
+        $language = $this->context->language;
+        $this->isoCode = $language ? $language->iso_code : 'en';
     }
 
     /**
@@ -38,14 +39,17 @@ class AdminPsEventbusController extends ModuleAdminController
         Media::addJsDef([
             'eventbusConfig' => [
                 'isoCode' => $this->isoCode,
-                'eventbusAjaxPath' => $link->getAdminLink('AdminPsEventbus'),
+                'eventbusAjaxPath' => $link->getAdminLink('AdminPsEventbusAjax'),
                 'logoUrl' => $moduleBaseUrl . 'logo.png',
                 'moduleVersion' => $this->module->version,
                 'healthCheckUrl' => $link->getModuleLink('ps_eventbus', 'apiHealthCheck'),
                 'shopContents' => Config::SHOP_CONTENTS,
+                'defaultSyncedShopContents' => Config::DEFAULT_SYNCED_SHOP_CONTENTS,
                 'shopId' => $this->getShopId(),
+                'psAccountsInstalled' => $this->isPsAccountsInstalled(),
                 'mockMode' => true,
-                'cloudsyncApiUrl' => $this->module->getServiceContainer()->getParameter('ps_eventbus.cloudsync_api_url'),
+                'cloudsyncSyncApiUrl' => $this->module->getServiceContainer()->getParameter('ps_eventbus.cloudsync_sync_api_url'),
+                'cloudsyncReportingApiUrl' => $this->module->getServiceContainer()->getParameter('ps_eventbus.cloudsync_reporting_api_url'),
             ],
         ]);
 
@@ -98,42 +102,15 @@ class AdminPsEventbusController extends ModuleAdminController
     }
 
     /**
-     * AJAX action: return the health check data.
-     *
-     * @return void
+     * @return bool
      */
-    public function ajaxProcessGetHealthCheck()
+    private function isPsAccountsInstalled()
     {
-        // With display_errors on (dev mode), PHP notices raised while building the
-        // service are written to the response body and corrupt the JSON payload.
-        $displayErrors = ini_get('display_errors');
-        ini_set('display_errors', '0');
-        ob_start();
-
         try {
-            /** @var ApiHealthCheckService $healthCheckService */
-            $healthCheckService = $this->module->getService(ApiHealthCheckService::class);
-            $response = $healthCheckService->getDashboardHealthCheck();
+            return $this->module->getService(ModuleHelper::class)->isInstalledAndActive('ps_accounts');
         } catch (Exception $e) {
-            $response = [
-                'error' => true,
-                'message' => $e->getMessage(),
-            ];
+            return false;
         }
-
-        ob_end_clean();
-        ini_set('display_errors', (string) $displayErrors);
-
-        // Not ajaxDie(): it was removed in PrestaShop 9, and ajaxRender() does not
-        // exist in 1.6, which this module still supports.
-        if (!headers_sent()) {
-            header('Content-Type: application/json');
-            header('Cache-Control: no-store, no-cache, must-revalidate');
-        }
-
-        echo (string) json_encode($response);
-
-        exit;
     }
 
     /**

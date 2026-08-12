@@ -200,6 +200,41 @@ class CloudSyncClient
     }
 
     /**
+     * Get the data sharing consents granted by the shop to third-party modules.
+     *
+     * @see https://docs.cloudsync.prestashop.com/api-doc/sync-api
+     *
+     * @return array<mixed> the `items` of the ModulesShopConsentsDto payload
+     *
+     * @throws \Exception
+     */
+    public function getShopConsents()
+    {
+        $request = $this->client->get(
+            $this->syncApiUrl . '/consents/store/' . $this->shopId,
+            [
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer ' . $this->jwt,
+                'User-Agent' => 'ps-eventbus/' . $this->module->version,
+            ]
+        );
+
+        $httpStatus = $request->getHttpStatus();
+
+        if (substr((string) $httpStatus, 0, 1) !== '2') {
+            throw new \Exception('CloudSync API error: GET /consents/store returned HTTP ' . $httpStatus);
+        }
+
+        $payload = json_decode((string) $request->getResponse(), true);
+
+        if (!is_array($payload) || !isset($payload['items']) || !is_array($payload['items'])) {
+            throw new \Exception('CloudSync API error: unexpected payload from GET /consents/store');
+        }
+
+        return $payload['items'];
+    }
+
+    /**
      * Get the remaining time of execution for the request. We keep a margin
      * of 1.5s to parse and answser our own client
      *

@@ -297,14 +297,26 @@ class ApiHealthCheckService
                 return $unknown;
             }
 
-            // @phpstan-ignore-next-line — getModule() exists at runtime; class unknown on PS 1.6/1.7
-            $module = $container->get('PrestaShop\PrestaShop\Core\Module\ModuleRepository')->getModule($moduleName);
+            $repo = $container->get('PrestaShop\PrestaShop\Core\Module\ModuleRepository');
 
-            if ($module === null) {
+            if (!is_object($repo) || !method_exists($repo, 'getModule')) {
                 return $unknown;
             }
 
-            $latestVersion = $module->attributes->get('version_available');
+            $module = $repo->getModule($moduleName);
+
+            if (!is_object($module) || !isset($module->attributes)) {
+                return $unknown;
+            }
+
+            $attributes = $module->attributes;
+
+            if (!is_object($attributes) || !method_exists($attributes, 'get')) {
+                return $unknown;
+            }
+
+            /** @var string|null $latestVersion */
+            $latestVersion = $attributes->get('version_available');
 
             if (empty($latestVersion)) {
                 // No published version known: canBeUpgraded() would compare

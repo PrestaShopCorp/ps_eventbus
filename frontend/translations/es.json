@@ -5,7 +5,11 @@
   "tabs": {
     "dashboard": "Panel de control",
     "connections": "Conexiones",
-    "supportDebug": "Soporte y depuración"
+    "supportDebug": "Soporte y depuración",
+    "disabled": {
+      "noAccountModule": "Instale y active el módulo PS Account para ver sus conexiones",
+      "shopNotLinked": "Vincule su tienda a una cuenta PrestaShop para ver sus conexiones"
+    }
   },
   "pages": {
     "dashboard": {
@@ -100,6 +104,18 @@
       "subtitle": "Estado de cada tipo de contenido sincronizado con la nube de CloudSync",
       "empty": "No hay datos de sincronización disponibles aún.",
       "notRequested": "No solicitado"
+    }
+  },
+  "connections": {
+    "title": "Consentimientos de intercambio de datos",
+    "intro": "Estos servicios están conectados a su tienda y reciben los datos indicados a continuación. Para gestionar el intercambio de datos, vaya a la página de configuración de cada módulo:",
+    "moduleId": "ID del módulo: {moduleName}",
+    "revoked": "Revocado",
+    "revokedOn": "Consentimiento revocado el {date}",
+    "empty": "Todavía no hay ningún servicio conectado a su tienda.",
+    "defaultSync": {
+      "title": "Sincronización predeterminada:",
+      "description": "Para mantener su tienda conectada, los siguientes contenidos se sincronizan de forma predeterminada: {contents}."
     }
   }
 }

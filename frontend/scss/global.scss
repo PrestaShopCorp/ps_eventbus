@@ -55,6 +55,24 @@ label {
   border-bottom: 0;
 }
 
+// Allow tooltips on disabled tabs to overflow the navigation bar
+.puik-tab-navigation,
+.puik-tab-navigation__group-titles {
+  overflow: visible;
+}
+
+.puik-tab-navigation__group-titles {
+  margin-left: 20px;
+}
+
+.puik-tooltip__tip {
+  z-index: 1050;
+}
+
+.puik-alert__content {
+  align-items: center;
+}
+
 .adminpseventbus #content.bootstrap {
   padding-right: 0;
   padding-top: 0;

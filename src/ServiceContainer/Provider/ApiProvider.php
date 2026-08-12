@@ -37,8 +37,8 @@ class ApiProvider implements IServiceProvider
         $container->registerProvider(CloudSyncClient::class, static function () use ($container) {
             return new CloudSyncClient(
                 $container->getParameter('ps_eventbus.proxy_api_url'),
-                $container->getParameter('ps_eventbus.live_sync_api_url'),
-                $container->getParameter('ps_eventbus.sync_api_url'),
+                $container->getParameter('ps_eventbus.cloudsync_live_sync_api_url'),
+                $container->getParameter('ps_eventbus.eventbus_sync_api_url'),
                 $container->get('ps_eventbus.module'),
                 $container->get(PsAccountsAdapterService::class)
             );

@@ -11,7 +11,16 @@ export const useAppStore = defineStore('app', {
     healthCheckUrl: config.healthCheckUrl ?? '',
     shopId: config.shopId ?? null,
     shopContents: config.shopContents ?? [],
+    defaultSyncedShopContents: config.defaultSyncedShopContents ?? [],
+    psAccountsInstalled: config.psAccountsInstalled ?? false,
     mockMode: config.mockMode ?? true,
-    cloudsyncApiUrl: config.cloudsyncApiUrl ?? '',
+    cloudsyncSyncApiUrl: config.cloudsyncSyncApiUrl ?? '',
+    cloudsyncReportingApiUrl: config.cloudsyncReportingApiUrl ?? '',
   }),
+
+  getters: {
+    connectionsAvailable() {
+      return this.psAccountsInstalled && !!this.shopId
+    },
+  },
 })

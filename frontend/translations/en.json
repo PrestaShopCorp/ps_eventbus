@@ -5,7 +5,11 @@
   "tabs": {
     "dashboard": "Dashboard",
     "connections": "Connections",
-    "supportDebug": "Support & debug"
+    "supportDebug": "Support & debug",
+    "disabled": {
+      "noAccountModule": "Install and activate the PS Account module to see your connections",
+      "shopNotLinked": "Link your store to a PrestaShop Account to see your connections"
+    }
   },
   "pages": {
     "dashboard": {
@@ -100,6 +104,18 @@
       "subtitle": "Status of each content type being synchronized to the CloudSync cloud",
       "empty": "No synchronization data available yet.",
       "notRequested": "Not requested"
+    }
+  },
+  "connections": {
+    "title": "Merchant data sharing consents",
+    "intro": "These services are connected to your store and receive the data listed below. To manage data sharing, go to each module's configuration page:",
+    "moduleId": "Module ID: {moduleName}",
+    "revoked": "Revoked",
+    "revokedOn": "Consent revoked on {date}",
+    "empty": "No service is connected to your store yet.",
+    "defaultSync": {
+      "title": "Default synchronization:",
+      "description": "To keep your store connected, the following store contents are synced by default: {contents}."
     }
   }
 }
