@@ -176,16 +176,22 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
      */
     public function countFullSyncContentLeft($lastSeekKey, $langIso)
     {
-        $this->generateFullQuery($langIso, true);
+        // full query only LEFT-joins and filters on o.*, grouping by the PK, so
+        // none of its joins/aggregates change the set of counted orders. Count
+        // the table directly (id_shop index + PK) instead of materializing the
+        // joins and per-row aggregates for every remaining order.
+        $this->generateMinimalQuery(self::TABLE_NAME, 'o');
+
+        $this->query
+            ->select('COUNT(*) AS count')
+            ->where('o.id_shop = ' . (int) parent::getShopContext()->id)
+        ;
 
         if ($lastSeekKey !== null) {
             $this->query->where('o.id_order > ' . (int) $lastSeekKey);
         }
 
-        $result = $this->db->executeS('
-            SELECT COUNT(*) AS count
-                FROM (' . $this->query->build() . ') as subquery;
-        ');
+        $result = $this->db->executeS($this->query->build());
 
         return is_array($result) && isset($result[0]['count']) ? (int) $result[0]['count'] : 0;
     }
