@@ -117,5 +117,62 @@
       "title": "Synchronisation par défaut :",
       "description": "Pour maintenir votre boutique connectée, les contenus suivants sont synchronisés par défaut : {contents}."
     }
+  },
+  "supportDebug": {
+    "diagnostic": {
+      "title": "Diagnostic système",
+      "subtitle": "Basé sur l'endpoint apiHealthCheck de PS EventBus",
+      "copy": "Copier le diagnostic système",
+      "copied": "Copié",
+      "copyFailed": "Le diagnostic n'a pas pu être copié. Sélectionnez les valeurs ci-dessus et copiez-les manuellement."
+    },
+    "rows": {
+      "moduleVersion": "Version de {module}",
+      "prestashopVersion": {
+        "label": "Version de PrestaShop"
+      },
+      "phpVersion": {
+        "label": "Version de PHP",
+        "minimum": "minimum {version}"
+      },
+      "cloudApi": {
+        "label": "Point d'accès de l'API Cloud",
+        "hint": "Healthcheck Sync API"
+      },
+      "ssl": {
+        "label": "Certificat SSL",
+        "hint": "(HTTPS)",
+        "expiresAt": "expire le {date}"
+      },
+      "cloudsyncTargetUrl": {
+        "label": "URL cible de CloudSync"
+      },
+      "accountsShopUrl": {
+        "label": "URL liée au compte"
+      }
+    },
+    "badges": {
+      "compatible": "Compatible",
+      "incompatible": "Non compatible",
+      "reachable": "Joignable",
+      "unreachable": "Injoignable",
+      "valid": "Valide",
+      "invalid": "Invalide",
+      "notEnabled": "Non activé",
+      "unknown": "Inconnu",
+      "notInstalled": "Non installé"
+    },
+    "copy": {
+      "heading": "Diagnostic système CloudSync",
+      "generatedAt": "Généré le :",
+      "shopId": "Identifiant de boutique :",
+      "item": "Élément",
+      "value": "Valeur",
+      "status": "Statut"
+    },
+    "help": {
+      "description": "Besoin d'aide ? Contactez l'équipe support en cliquant sur ce lien.",
+      "linkLabel": "Contacter le support"
+    }
   }
 }

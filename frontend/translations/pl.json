@@ -117,5 +117,62 @@
       "title": "Synchronizacja domyślna:",
       "description": "Aby utrzymać połączenie sklepu, następujące treści są synchronizowane domyślnie: {contents}."
     }
+  },
+  "supportDebug": {
+    "diagnostic": {
+      "title": "Diagnostyka systemu",
+      "subtitle": "Na podstawie punktu końcowego apiHealthCheck modułu PS EventBus",
+      "copy": "Skopiuj diagnostykę systemu",
+      "copied": "Skopiowano",
+      "copyFailed": "Nie udało się skopiować diagnostyki. Zaznacz powyższe wartości i skopiuj je ręcznie."
+    },
+    "rows": {
+      "moduleVersion": "Wersja {module}",
+      "prestashopVersion": {
+        "label": "Wersja PrestaShop"
+      },
+      "phpVersion": {
+        "label": "Wersja PHP",
+        "minimum": "minimum {version}"
+      },
+      "cloudApi": {
+        "label": "Punkt końcowy Cloud API",
+        "hint": "Healthcheck Sync API"
+      },
+      "ssl": {
+        "label": "Certyfikat SSL",
+        "hint": "(HTTPS)",
+        "expiresAt": "wygasa {date}"
+      },
+      "cloudsyncTargetUrl": {
+        "label": "Docelowy adres URL CloudSync"
+      },
+      "accountsShopUrl": {
+        "label": "Adres URL powiązany z kontem"
+      }
+    },
+    "badges": {
+      "compatible": "Zgodna",
+      "incompatible": "Niezgodna",
+      "reachable": "Osiągalny",
+      "unreachable": "Nieosiągalny",
+      "valid": "Prawidłowy",
+      "invalid": "Nieprawidłowy",
+      "notEnabled": "Nieaktywne",
+      "unknown": "Nieznany",
+      "notInstalled": "Nie zainstalowano"
+    },
+    "copy": {
+      "heading": "Diagnostyka systemu CloudSync",
+      "generatedAt": "Wygenerowano:",
+      "shopId": "Identyfikator sklepu:",
+      "item": "Element",
+      "value": "Wartość",
+      "status": "Status"
+    },
+    "help": {
+      "description": "Potrzebujesz pomocy? Skontaktuj się z zespołem wsparcia, klikając ten link.",
+      "linkLabel": "Skontaktuj się ze wsparciem"
+    }
   }
 }
