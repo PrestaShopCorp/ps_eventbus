@@ -26,6 +26,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use PrestaShop\Module\PsEventbus\Helper\DateHelper;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -54,7 +56,7 @@ class SyncRepository extends AbstractRepository
                 'id_shop' => parent::getShopContext()->id,
                 'lang_iso' => pSQL((string) $langIso),
                 'full_sync_finished' => (int) $fullSyncFinished,
-                'last_sync_date' => pSQL($date),
+                'last_sync_date' => pSQL(DateHelper::toMySqlDateTime($date)),
             ],
             false,
             true,
@@ -102,7 +104,7 @@ class SyncRepository extends AbstractRepository
             self::JOB_TABLE_NAME,
             [
                 'job_id' => pSQL($jobId),
-                'created_at' => pSQL($date),
+                'created_at' => pSQL(DateHelper::toMySqlDateTime($date)),
             ]
         );
     }

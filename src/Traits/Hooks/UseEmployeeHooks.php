@@ -55,7 +55,7 @@ trait UseEmployeeHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_EMPLOYEES => $employee->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 false
             );
@@ -81,7 +81,7 @@ trait UseEmployeeHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_EMPLOYEES => $employee->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 false
             );
@@ -107,7 +107,7 @@ trait UseEmployeeHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_EMPLOYEES => $employee->id],
                 Config::INCREMENTAL_TYPE_DELETE,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 false
             );

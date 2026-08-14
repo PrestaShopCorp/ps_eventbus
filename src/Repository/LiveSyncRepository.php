@@ -26,6 +26,8 @@
 
 namespace PrestaShop\Module\PsEventbus\Repository;
 
+use PrestaShop\Module\PsEventbus\Helper\DateHelper;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -78,10 +80,12 @@ class LiveSyncRepository
      */
     public function upsertDebounce($shopContent, $lastChangeAt)
     {
+        $lastChangeAt = pSQL(DateHelper::toMySqlDateTime($lastChangeAt));
+
         $query = '
             INSERT INTO `' . _DB_PREFIX_ . 'eventbus_live_sync` (`shop_content`, `last_change_at`)
-            VALUES ("' . pSQL($shopContent) . '", "' . pSQL($lastChangeAt) . '")
-            ON DUPLICATE KEY UPDATE `last_change_at` = "' . pSQL($lastChangeAt) . '";
+            VALUES ("' . pSQL($shopContent) . '", "' . $lastChangeAt . '")
+            ON DUPLICATE KEY UPDATE `last_change_at` = "' . $lastChangeAt . '";
         ';
 
         return $this->db->execute($query);

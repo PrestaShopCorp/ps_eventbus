@@ -53,7 +53,7 @@ trait UseStockHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STOCKS => $stockAvailable->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 true
             );
@@ -78,7 +78,7 @@ trait UseStockHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STOCKS => $stockAvailable->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 true
             );

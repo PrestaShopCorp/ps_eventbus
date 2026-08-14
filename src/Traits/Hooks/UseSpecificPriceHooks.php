@@ -53,7 +53,7 @@ trait UseSpecificPriceHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 false
             );
@@ -78,7 +78,7 @@ trait UseSpecificPriceHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 false
             );
@@ -103,7 +103,7 @@ trait UseSpecificPriceHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_SPECIFIC_PRICES => $specificPrice->id],
                 Config::INCREMENTAL_TYPE_DELETE,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 false
             );

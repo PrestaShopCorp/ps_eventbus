@@ -65,7 +65,7 @@ trait UseCarrierHooks
                     Config::COLLECTION_CARRIER_TAXES => $carrier->id,
                 ],
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 false
             );
@@ -102,7 +102,7 @@ trait UseCarrierHooks
                     Config::COLLECTION_CARRIER_TAXES => $carrier->id,
                 ],
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 false
             );
@@ -127,7 +127,7 @@ trait UseCarrierHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CARRIERS => $carrier->id],
                 Config::INCREMENTAL_TYPE_DELETE,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 false
             );

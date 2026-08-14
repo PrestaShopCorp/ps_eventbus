@@ -23,42 +23,41 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-
-namespace PrestaShop\Module\PsEventbus\Traits\Hooks;
-
-use PrestaShop\Module\PsEventbus\Config\Config;
-use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-trait UseStockMvtHooks
+/**
+ * Repairs the `DATETIME` columns that could have been filled with an ISO 8601
+ * value before the module started normalizing dates.
+ *
+ * On a permissive `sql_mode` MySQL truncated `2026-08-13T11:26:59+02:00` to a
+ * valid datetime and only raised a warning, but depending on the server the
+ * same insert could also land as a zero date, which then breaks every read
+ * that hydrates a \DateTime from it.
+ *
+ * @return bool
+ */
+function upgrade_module_4_1_1()
 {
-    /**
-     * Work Only on 1.6
-     *
-     * @param array<mixed> $parameters
-     *
-     * @return void
-     */
-    public function hookActionObjectStockMvtAddAfter($parameters)
-    {
-        /** @var SynchronizationService $synchronizationService * */
-        $synchronizationService = $this->getService(Config::SYNC_SERVICE_NAME);
+    $db = Db::getInstance();
 
-        /** @var \StockMvt $stockMvt */
-        $stockMvt = $parameters['object'];
+    $tables = [
+        'eventbus_job' => 'created_at',
+        'eventbus_incremental_sync' => 'created_at',
+        'eventbus_type_sync' => 'last_sync_date',
+        'eventbus_live_sync' => 'last_change_at',
+    ];
 
-        if (isset($stockMvt->id)) {
-            $synchronizationService->sendLiveSync(Config::COLLECTION_STOCK_MOVEMENTS, Config::INCREMENTAL_TYPE_UPSERT);
-            $synchronizationService->insertContentIntoIncremental(
-                [Config::COLLECTION_STOCK_MOVEMENTS => $stockMvt->id],
-                Config::INCREMENTAL_TYPE_UPSERT,
-                date(Config::MYSQL_DATE_FORMAT),
-                $this->shopId,
-                true
-            );
-        }
+    foreach ($tables as $table => $column) {
+        // a zero date cannot be compared with a literal in strict mode, hence YEAR()
+        $db->execute(
+            'UPDATE `' . _DB_PREFIX_ . $table . '`
+              SET `' . $column . '` = NOW()
+              WHERE `' . $column . '` IS NULL
+                 OR YEAR(`' . $column . '`) < 1000'
+        );
     }
+
+    return true;
 }

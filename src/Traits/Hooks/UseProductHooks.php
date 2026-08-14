@@ -81,7 +81,7 @@ trait UseProductHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_PRODUCTS => $product->id],
                 Config::INCREMENTAL_TYPE_DELETE,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 false
             );
@@ -158,7 +158,7 @@ trait UseProductHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $productCarrierIds],
                 Config::INCREMENTAL_TYPE_DELETE,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 true
             );
@@ -166,7 +166,7 @@ trait UseProductHooks
             $synchronizationService->insertContentIntoIncremental(
                 $incrementalSyncItems,
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 true
             );
@@ -178,7 +178,7 @@ trait UseProductHooks
                 $synchronizationService->insertContentIntoIncremental(
                     [Config::COLLECTION_CUSTOM_PRODUCT_CARRIERS => $customProductCarrierIds],
                     Config::INCREMENTAL_TYPE_DELETE,
-                    date(DATE_ATOM),
+                    date(Config::MYSQL_DATE_FORMAT),
                     $this->shopId,
                     true
                 );
@@ -188,7 +188,7 @@ trait UseProductHooks
                 $synchronizationService->insertContentIntoIncremental(
                     $incrementalSyncItems,
                     Config::INCREMENTAL_TYPE_UPSERT,
-                    date(DATE_ATOM),
+                    date(Config::MYSQL_DATE_FORMAT),
                     $this->shopId,
                     true
                 );
