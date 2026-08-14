@@ -31,9 +31,28 @@ export const router = createRouter({
   routes,
 })
 
-// The tab is already disabled, but the hash URL can still be typed by hand.
 router.beforeEach((to) => {
-  if (to.name !== 'connections') return true
+  const appStore = useAppStore()
 
-  return useAppStore().connectionsAvailable ? true : { name: 'dashboard' }
+  // `&debug=1` on the admin URL sends the merchant straight to Support & debug,
+  // whatever route the hash asked for. Only on the first navigation: the tab is
+  // unlocked from then on, and must stay navigable away from.
+  if (appStore.consumeSupportDebugRedirect() && to.name !== 'supportDebug') {
+    return { name: 'supportDebug', query: { debug: '1' } }
+  }
+
+  // The tab is already disabled, but the hash URL can still be typed by hand.
+  if (to.name === 'connections') {
+    return appStore.connectionsAvailable ? true : { name: 'dashboard' }
+  }
+
+  // Support & debug has no tab until it is unlocked. `?debug=1` in the hash
+  // works too, and is deliberately left in the URL so it stays copyable.
+  if (to.name === 'supportDebug') {
+    if (to.query.debug === '1') appStore.unlockSupportDebug()
+
+    return appStore.supportDebugUnlocked ? true : { name: 'dashboard' }
+  }
+
+  return true
 })
