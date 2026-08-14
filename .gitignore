@@ -49,3 +49,7 @@ auto-imports.d.ts
 components.d.ts
 pnpm-workspace.yaml
 .pnpm-store/
+
+# Superpowers (local artifacts)
+.superpowers/
+docs/superpowers/

@@ -28,10 +28,16 @@
     return appStore.psAccountsInstalled ? t('tabs.disabled.shopNotLinked') : t('tabs.disabled.noAccountModule')
   }
 
+  /**
+   * Support & debug is not part of the merchant's navigation: it has no tab at
+   * all until `#/support-debug?debug=1` unlocks it, unlike Connections which
+   * stays visible but disabled with an explanation.
+   */
   const visibleRoutes = computed(() => {
     const allRoutes = router.getRoutes()
 
     return navigationOrder
+      .filter((name) => name !== 'supportDebug' || appStore.supportDebugUnlocked)
       .map((name) => allRoutes.find((r) => r.name === name))
       .filter(Boolean)
       .map((r, index) => ({

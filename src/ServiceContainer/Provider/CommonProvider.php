@@ -23,6 +23,7 @@ namespace PrestaShop\Module\PsEventbus\ServiceContainer\Provider;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Helper\ModuleHelper;
+use PrestaShop\Module\PsEventbus\Helper\NetworkProbe;
 use PrestaShop\Module\PsEventbus\Service\PresenterService;
 use PrestaShop\Module\PsEventbus\Service\PsAccountsAdapterService;
 use PrestaShop\Module\PsEventbus\ServiceContainer\Contract\IServiceProvider;
@@ -45,6 +46,9 @@ class CommonProvider implements IServiceProvider
         });
         $container->registerProvider(ModuleHelper::class, static function () {
             return new ModuleHelper();
+        });
+        $container->registerProvider(NetworkProbe::class, static function () {
+            return new NetworkProbe();
         });
         $container->registerProvider(PsAccountsAdapterService::class, static function () use ($container) {
             return new PsAccountsAdapterService(
