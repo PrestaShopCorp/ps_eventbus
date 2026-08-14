@@ -24,6 +24,7 @@ use PrestaShop\Module\PsEventbus\Api\CloudSyncClient;
 use PrestaShop\Module\PsEventbus\Formatter\ArrayFormatter;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Helper\ModuleHelper;
+use PrestaShop\Module\PsEventbus\Helper\NetworkProbe;
 use PrestaShop\Module\PsEventbus\Repository\BundleRepository;
 use PrestaShop\Module\PsEventbus\Repository\CarrierDetailRepository;
 use PrestaShop\Module\PsEventbus\Repository\CarrierRepository;
@@ -103,6 +104,7 @@ use PrestaShop\Module\PsEventbus\Service\ShopContent\TranslationsService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\WishlistProductsService;
 use PrestaShop\Module\PsEventbus\Service\ShopContent\WishlistsService;
 use PrestaShop\Module\PsEventbus\Service\SynchronizationService;
+use PrestaShop\Module\PsEventbus\Service\SystemDiagnosticService;
 use PrestaShop\Module\PsEventbus\ServiceContainer\Contract\IServiceProvider;
 use PrestaShop\Module\PsEventbus\ServiceContainer\ServiceContainer;
 
@@ -315,6 +317,20 @@ class ServiceProvider implements IServiceProvider
         $container->registerProvider(StoresService::class, static function () use ($container) {
             return new StoresService(
                 $container->get(StoreRepository::class)
+            );
+        });
+        $container->registerProvider(SystemDiagnosticService::class, static function () use ($container) {
+            return new SystemDiagnosticService(
+                $container->get(PsAccountsAdapterService::class),
+                $container->get(ModuleHelper::class),
+                $container->get(NetworkProbe::class),
+                $container->get(ErrorHandler::class),
+                $container->getParameter('ps_eventbus.proxy_api_url'),
+                $container->getParameter('ps_eventbus.eventbus_sync_api_url'),
+                $container->getParameter('ps_eventbus.cloudsync_live_sync_api_url'),
+                $container->getParameter('ps_eventbus.cloudsync_sync_api_url'),
+                \Tools::getShopDomainSsl(),
+                (bool) \Configuration::get('PS_SSL_ENABLED')
             );
         });
         $container->registerProvider(SuppliersService::class, static function () use ($container) {
