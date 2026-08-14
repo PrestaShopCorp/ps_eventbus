@@ -2,6 +2,7 @@
 
 use PrestaShop\Module\PsEventbus\Service\ApiHealthCheckService;
 use PrestaShop\Module\PsEventbus\Service\ConnectionsService;
+use PrestaShop\Module\PsEventbus\Service\SystemDiagnosticService;
 
 class AdminPsEventbusAjaxController extends ModuleAdminController
 {
@@ -44,6 +45,9 @@ class AdminPsEventbusAjaxController extends ModuleAdminController
                 case 'getConnections':
                     $response = $this->getConnections();
                     break;
+                case 'getSystemDiagnostic':
+                    $response = $this->getSystemDiagnostic();
+                    break;
                 default:
                     $this->jsonResponse(['error' => true, 'message' => 'Unknown action: ' . $action], 400);
 
@@ -79,6 +83,17 @@ class AdminPsEventbusAjaxController extends ModuleAdminController
         $connectionsService = $this->module->getService(ConnectionsService::class);
 
         return ['services' => $connectionsService->getConnections()];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getSystemDiagnostic()
+    {
+        /** @var SystemDiagnosticService $systemDiagnosticService */
+        $systemDiagnosticService = $this->module->getService(SystemDiagnosticService::class);
+
+        return $systemDiagnosticService->getDiagnostic();
     }
 
     /**
