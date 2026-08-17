@@ -27,6 +27,7 @@
 namespace PrestaShop\Module\PsEventbus\Repository;
 
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
+use PrestaShop\Module\PsEventbus\Helper\DateHelper;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -68,8 +69,7 @@ class IncrementalSyncRepository extends AbstractRepository
             $query = 'INSERT INTO `' . _DB_PREFIX_ . self::TABLE_NAME . '` (type, id_object, id_shop, lang_iso, action, created_at) VALUES ';
 
             foreach ($arrayOfData as $currenData) {
-                $dateTime = new \DateTime($currenData['created_at']);
-                $date = $dateTime->format('Y-m-d H:i:s');
+                $date = DateHelper::toMySqlDateTime($currenData['created_at']);
 
                 $query .= "(
                     '{$this->db->escape($currenData['type'])}',

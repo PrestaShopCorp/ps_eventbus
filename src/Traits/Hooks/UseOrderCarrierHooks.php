@@ -53,7 +53,7 @@ trait UseOrderCarrierHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_ORDER_CARRIERS => $orderCarrier->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 false
             );
@@ -78,7 +78,7 @@ trait UseOrderCarrierHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_ORDER_CARRIERS => $orderCarrier->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 false
             );

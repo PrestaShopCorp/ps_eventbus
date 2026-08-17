@@ -62,7 +62,7 @@ trait UseWishlistHooks
                     Config::COLLECTION_WISHLIST_PRODUCTS => $wishlist->id,
                 ],
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 true
             );
@@ -95,7 +95,7 @@ trait UseWishlistHooks
                     Config::COLLECTION_WISHLIST_PRODUCTS => $wishlist->id,
                 ],
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 true
             );
@@ -119,7 +119,7 @@ trait UseWishlistHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_WISHLISTS => $wishlist->id],
                 Config::INCREMENTAL_TYPE_DELETE,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 false
             );

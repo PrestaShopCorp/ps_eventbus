@@ -53,7 +53,7 @@ trait UseCategoryHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CATEGORIES => $category->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 true
             );
@@ -78,7 +78,7 @@ trait UseCategoryHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CATEGORIES => $category->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 true
             );
@@ -103,7 +103,7 @@ trait UseCategoryHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_CATEGORIES => $category->id],
                 Config::INCREMENTAL_TYPE_DELETE,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 false
             );

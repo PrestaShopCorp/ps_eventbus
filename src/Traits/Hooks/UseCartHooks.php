@@ -62,7 +62,7 @@ trait UseCartHooks
                     Config::COLLECTION_CART_PRODUCTS => $cart->id,
                 ],
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 true
             );
@@ -96,7 +96,7 @@ trait UseCartHooks
                     Config::COLLECTION_CART_PRODUCTS => $cart->id,
                 ],
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 true
             );

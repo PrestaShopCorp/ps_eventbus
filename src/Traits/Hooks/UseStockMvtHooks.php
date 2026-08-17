@@ -55,7 +55,7 @@ trait UseStockMvtHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STOCK_MOVEMENTS => $stockMvt->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 true
             );

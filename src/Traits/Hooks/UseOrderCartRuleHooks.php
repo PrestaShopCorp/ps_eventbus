@@ -53,7 +53,7 @@ trait UseOrderCartRuleHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_ORDER_CART_RULES => $orderCartRule->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 false
             );
@@ -78,7 +78,7 @@ trait UseOrderCartRuleHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_ORDER_CART_RULES => $orderCartRule->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 false
             );

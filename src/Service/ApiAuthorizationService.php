@@ -28,6 +28,7 @@
 namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Api\CloudSyncClient;
+use PrestaShop\Module\PsEventbus\Config\Config;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
@@ -133,6 +134,6 @@ class ApiAuthorizationService
         $jobValidationResponse = $this->cloudSyncClient->validateJobId($jobId);
 
         return (int) $jobValidationResponse['httpCode'] === 201
-            && $this->syncRepository->insertJob($jobId, date(DATE_ATOM));
+            && $this->syncRepository->insertJob($jobId, date(Config::MYSQL_DATE_FORMAT));
     }
 }

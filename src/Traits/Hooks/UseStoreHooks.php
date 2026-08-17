@@ -55,7 +55,7 @@ trait UseStoreHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STORES => $store->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 true
             );
@@ -81,7 +81,7 @@ trait UseStoreHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STORES => $store->id],
                 Config::INCREMENTAL_TYPE_UPSERT,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 true
             );
@@ -107,7 +107,7 @@ trait UseStoreHooks
             $synchronizationService->insertContentIntoIncremental(
                 [Config::COLLECTION_STORES => $store->id],
                 Config::INCREMENTAL_TYPE_DELETE,
-                date(DATE_ATOM),
+                date(Config::MYSQL_DATE_FORMAT),
                 $this->shopId,
                 false
             );
