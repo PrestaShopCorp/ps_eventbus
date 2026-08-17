@@ -55,17 +55,23 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
                 ->select('cp.id_product_attribute')
                 ->select('cp.quantity')
                 ->select('cp.date_add as created_at')
-                ->orderBy('cp.id_cart ASC')
+                // Ordered by the (id_cart, id_product, id_product_attribute)
+                // triple, a prefix of the PK, so seek pages stay index-ordered.
+                ->orderBy('cp.id_cart ASC, cp.id_product ASC, cp.id_product_attribute ASC')
             ;
         }
     }
 
     /**
-     * Offset-based page. $lastSeekKey is the row count emitted so far.
-     * SQL LIMIT/OFFSET is stable because generateFullQuery adds
-     * ORDER BY cp.id_cart ASC.
+     * Seek-based page: returns rows strictly after the (id_cart, id_product,
+     * id_product_attribute) triple encoded in $lastSeekKey.
      *
-     * @param string|null $lastSeekKey row offset emitted so far
+     * Was offset-based (LIMIT n OFFSET k), which scans and discards k rows on
+     * every page: O(offset) cost that degrades to a timeout on shops with a
+     * large cart_product table (abandoned/guest carts). Seek on the PK-prefix
+     * triple instead so each page is an index range scan bounded to n rows.
+     *
+     * @param string|null $lastSeekKey "{id_cart}-{id_product}-{id_product_attribute}"
      * @param int $limit
      * @param string $langIso
      *
@@ -77,9 +83,50 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
     public function retrieveContentsForFull($lastSeekKey, $limit, $langIso)
     {
         $this->generateFullQuery($langIso, true);
-        $this->query->limit((int) $limit, (int) $lastSeekKey);
+
+        if ($lastSeekKey !== null && $lastSeekKey !== '') {
+            $this->query->where($this->buildSeekWhere($lastSeekKey));
+        }
+
+        $this->query->limit((int) $limit);
 
         return $this->runQuery();
+    }
+
+    /**
+     * Explicit OR form of the composite-key comparison, kept so the PK prefix
+     * (id_cart, id_product, id_product_attribute) stays usable for the seek.
+     *
+     * @param string $lastSeekKey
+     *
+     * @return string
+     */
+    private function buildSeekWhere($lastSeekKey)
+    {
+        list($lastCart, $lastProduct, $lastAttribute) = $this->decodeTripleSeekKey($lastSeekKey);
+
+        return '('
+            . 'cp.id_cart > ' . $lastCart
+            . ' OR (cp.id_cart = ' . $lastCart . ' AND cp.id_product > ' . $lastProduct . ')'
+            . ' OR (cp.id_cart = ' . $lastCart . ' AND cp.id_product = ' . $lastProduct
+                . ' AND cp.id_product_attribute > ' . $lastAttribute . ')'
+            . ')';
+    }
+
+    /**
+     * @param string $seekKey "{id_cart}-{id_product}-{id_product_attribute}"
+     *
+     * @return array{0: int, 1: int, 2: int}
+     */
+    private function decodeTripleSeekKey($seekKey)
+    {
+        $parts = explode('-', $seekKey, 3);
+
+        return [
+            (int) $parts[0],
+            isset($parts[1]) ? (int) $parts[1] : 0,
+            isset($parts[2]) ? (int) $parts[2] : 0,
+        ];
     }
 
     /**
@@ -105,9 +152,9 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
     }
 
     /**
-     * Remaining row count = total rows for this shop - offset already emitted.
+     * Count rows strictly after the seek-key triple.
      *
-     * @param string|null $lastSeekKey row offset emitted so far
+     * @param string|null $lastSeekKey "{id_cart}-{id_product}-{id_product_attribute}"
      * @param string $langIso
      *
      * @return int
@@ -119,12 +166,15 @@ class CartProductRepository extends AbstractRepository implements RepositoryInte
     {
         $shopId = (int) parent::getShopContext()->id;
 
-        $total = (int) $this->db->getValue('
+        $sql = '
             SELECT COUNT(*)
               FROM ' . _DB_PREFIX_ . self::TABLE_NAME . ' cp
-             WHERE cp.id_shop = ' . $shopId . '
-        ');
+             WHERE cp.id_shop = ' . $shopId;
 
-        return max(0, $total - (int) $lastSeekKey);
+        if ($lastSeekKey !== null && $lastSeekKey !== '') {
+            $sql .= ' AND ' . $this->buildSeekWhere($lastSeekKey);
+        }
+
+        return (int) $this->db->getValue($sql);
     }
 }
