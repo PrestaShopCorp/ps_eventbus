@@ -35,14 +35,16 @@ class DateHelper
             return date(Config::MYSQL_DATE_FORMAT);
         }
 
-        try {
-            $dateTime = new \DateTime($date);
-        } catch (\Exception $exception) {
+        // date_create() returns false on an unparseable string where the
+        // \DateTime constructor throws, which keeps this helper exception-free
+        $dateTime = date_create($date);
+
+        if ($dateTime === false) {
             return date(Config::MYSQL_DATE_FORMAT);
         }
 
-        // zero dates ('0000-00-00 00:00:00') are parsed by \DateTime but stay
-        // out of the range MySQL accepts in strict mode
+        // zero dates ('0000-00-00 00:00:00') are parsed but stay out of the
+        // range MySQL accepts in strict mode
         if ((int) $dateTime->format('Y') < 1000) {
             return date(Config::MYSQL_DATE_FORMAT);
         }
