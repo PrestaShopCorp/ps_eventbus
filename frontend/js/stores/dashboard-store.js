@@ -84,11 +84,11 @@ export const useDashboardStore = defineStore('dashboard', {
      * progress below 100% and the card in "syncing" state forever.
      */
     requestedSyncSummary() {
-      return this.syncSummary.filter((item) => item.requested !== false)
+      return this.syncSummary.filter((content) => content.requested !== false)
     },
 
     failedSyncSummary() {
-      return this.requestedSyncSummary.filter((item) => item.httpStatus && item.httpStatus >= 400)
+      return this.requestedSyncSummary.filter((content) => content.httpStatus && content.httpStatus >= 400)
     },
 
     globalSyncStatus() {
@@ -100,8 +100,8 @@ export const useDashboardStore = defineStore('dashboard', {
 
       if (this.failedSyncSummary.length > 0) return SYNC_STATUS.failed
 
-      const allFinished = requested.every((item) => item.firstSyncFinishedAt)
-      const anyFinished = requested.some((item) => item.firstSyncFinishedAt)
+      const allFinished = requested.every((content) => content.firstSyncFinishedAt)
+      const anyFinished = requested.some((content) => content.firstSyncFinishedAt)
 
       if (allFinished) return SYNC_STATUS.synced
       if (anyFinished) return SYNC_STATUS.syncing
@@ -110,7 +110,9 @@ export const useDashboardStore = defineStore('dashboard', {
     },
 
     lastSyncedAt() {
-      const timestamps = this.requestedSyncSummary.filter((item) => item.lastSyncFinishedAt).map((item) => new Date(item.lastSyncFinishedAt).getTime())
+      const timestamps = this.requestedSyncSummary
+        .filter((content) => content.lastSyncFinishedAt)
+        .map((content) => new Date(content.lastSyncFinishedAt).getTime())
 
       return timestamps.length > 0 ? Math.max(...timestamps) : null
     },
@@ -120,7 +122,7 @@ export const useDashboardStore = defineStore('dashboard', {
 
       if (requested.length === 0) return 0
 
-      const completed = requested.filter((item) => item.firstSyncFinishedAt).length
+      const completed = requested.filter((content) => content.firstSyncFinishedAt).length
 
       return Math.round((completed / requested.length) * 100)
     },
@@ -195,8 +197,8 @@ export const useDashboardStore = defineStore('dashboard', {
 
       try {
         this.healthCheck = await callAjax('getHealthCheck')
-      } catch (e) {
-        this.healthCheckError = e.message
+      } catch (error) {
+        this.healthCheckError = error.message
       } finally {
         this.healthCheckLoading = false
       }
@@ -209,8 +211,8 @@ export const useDashboardStore = defineStore('dashboard', {
 
       try {
         this.syncSummary = await fetchSyncSummary(appStore.cloudsyncReportingApiUrl, appStore.shopId)
-      } catch (e) {
-        this.syncSummaryError = e.message
+      } catch (error) {
+        this.syncSummaryError = error.message
       } finally {
         this.syncSummaryLoading = false
       }
@@ -223,7 +225,7 @@ export const useDashboardStore = defineStore('dashboard', {
         const status = await fetchCloudsyncStatus(appStore.cloudsyncSyncApiUrl, appStore.shopId)
 
         this.cloudsyncShopUrl = status.shopUrl
-      } catch (e) {
+      } catch {
         this.cloudsyncShopUrl = ''
       }
     },
@@ -249,8 +251,8 @@ export const useDashboardStore = defineStore('dashboard', {
               status: SERVER_ACCESS.blocked,
               message: [result.blockedBy, result.httpStatus].filter(Boolean).join(' · HTTP '),
             }
-      } catch (e) {
-        this.serverAccess = { status: SERVER_ACCESS.blocked, message: e.message }
+      } catch (error) {
+        this.serverAccess = { status: SERVER_ACCESS.blocked, message: error.message }
       }
     },
 

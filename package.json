@@ -12,6 +12,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
+    "test:unit": "node --test \"frontend/js/**/*.test.js\"",
     "lint": "eslint --ext .js,.vue frontend/js",
     "lint:fix": "eslint --ext .js,.vue frontend/js --fix",
     "format": "prettier --check \"frontend/**/*.{js,vue,scss}\"",

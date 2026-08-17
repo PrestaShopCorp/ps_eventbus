@@ -8,15 +8,12 @@
 import { useAppStore } from '../stores/app-store'
 
 /**
- * Call an admin AJAX action on the EventBus controller.
- *
- * @param {string} action  Action name (must be in the controller's allowlist)
- * @param {object} [data]  Optional extra payload merged into the request body
- * @returns {Promise<any>}  Parsed JSON response
+ * @param {string} action  Must be in the controller's allowlist
+ * @param {object} [data]  Extra payload merged into the request body
  */
 export async function callAjax(action, data) {
-  const app = useAppStore()
-  const url = app.eventbusAjaxPath + '&action=dispatch&ajax=1'
+  const appStore = useAppStore()
+  const url = appStore.eventbusAjaxPath + '&action=dispatch&ajax=1'
 
   const response = await fetch(url, {
     method: 'POST',
