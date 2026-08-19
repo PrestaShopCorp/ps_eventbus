@@ -54,10 +54,15 @@ class CartProductsService extends ShopContentAbstractService implements ShopCont
     {
         $result = $this->cartProductRepository->retrieveContentsForFull($lastSeekKey, $limit, $langIso);
 
-        $newSeekKey = (string) ((int) $lastSeekKey + count($result));
+        $newSeekKey = $lastSeekKey;
         $rows = [];
 
         if (!empty($result)) {
+            $lastRow = end($result);
+            $newSeekKey = ((int) $lastRow['id_cart'])
+                . '-' . ((int) $lastRow['id_product'])
+                . '-' . ((int) $lastRow['id_product_attribute']);
+
             $this->castCartProducts($result);
 
             $rows = array_map(function ($item) {
@@ -106,10 +111,11 @@ class CartProductsService extends ShopContentAbstractService implements ShopCont
     }
 
     /**
-     * Cursor is a row offset, not a content id — a numeric compare against
-     * id_cart would be misleading. Always record: over-recording during full
-     * sync is safe (incremental sync will re-upload extra rows), while under-
-     * recording could drop a mutation to an already-uploaded cart.
+     * The cursor is a composite "{id_cart}-{id_product}-{id_product_attribute}"
+     * triple while the outbox records mutations per id_cart, so the two are not
+     * directly comparable. Always record: over-recording during full sync is
+     * safe (incremental sync re-uploads the extra rows), while under-recording
+     * could drop a mutation to an already-uploaded cart.
      *
      * {@inheritdoc}
      */
