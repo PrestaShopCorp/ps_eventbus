@@ -44,6 +44,8 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
      */
     public function generateFullQuery($langIso, $withSelecParameters)
     {
+        $langId = (int) \Language::getIdByIso($langIso);
+
         $this->generateMinimalQuery(self::TABLE_NAME, 'o');
 
         // minimal query for countable query
@@ -54,13 +56,12 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
             ->leftJoin('address', 'ai', 'ai.id_address = o.id_address_invoice')
             ->leftJoin('country', 'cntd', 'cntd.id_country = ad.id_country')
             ->leftJoin('country', 'cnti', 'cnti.id_country = ai.id_country')
-            // FIXME: join is not filtered by language ($langIso is ignored here).
-            // order_state_lang has one row per installed language, so on multi-lang
-            // shops this fans out; combined with the 1:n order_slip join it multiplies
-            // the refund SUM by the language count and makes status_label arbitrary.
-            // Fix: "AND osl.id_lang = <id from $langIso>" (per-language sync, like the
-            // other *_lang joins), collapsing osl to one row.
-            ->leftJoin('order_state_lang', 'osl', 'o.current_state = osl.id_order_state')
+            // Filter order_state_lang by the synced language, like the other *_lang
+            // joins. order_state_lang has one row per installed language; without this
+            // filter the join fans out on multi-lang shops and, combined with the 1:n
+            // order_slip join, multiplies the refund SUM by the language count and
+            // makes status_label arbitrary.
+            ->leftJoin('order_state_lang', 'osl', 'o.current_state = osl.id_order_state AND osl.id_lang = ' . $langId)
             ->leftJoin('order_state', 'ost', 'o.current_state = ost.id_order_state')
             ->where('o.id_shop = ' . (int) parent::getShopContext()->id)
             ->select('o.id_order')
@@ -136,15 +137,66 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
      */
     public function retrieveContentsForFull($lastSeekKey, $limit, $langIso)
     {
+        // Two-step (deferred join) pagination.
+        //
+        // The full query LEFT-joins 8 tables, aggregates (SUM over order_slip)
+        // and runs a correlated subquery (new_customer) per row. If we paginate
+        // it directly with "id_order > seek ... LIMIT n", the optimizer sees a
+        // range estimate of ~all orders in the shop and can pick a plan with
+        // "Using filesort"/temp table that materializes the whole range BEFORE
+        // applying LIMIT. Cost then scales with total orders, not the page size,
+        // so even limit=1 times out on shops with >1M orders.
+        //
+        // Instead: first pick the page's ids with a bare, covering index range
+        // scan (id_shop index = (id_shop, id_order)) that LIMIT bounds to n rows,
+        // then run the heavy query filtered on those ids. The joins/aggregate/
+        // subquery then run for exactly n rows whatever plan the optimizer picks.
+        $pageIds = $this->getFullSyncPageIds($lastSeekKey, (int) $limit);
+
+        if (empty($pageIds)) {
+            return [];
+        }
+
         $this->generateFullQuery($langIso, true);
+
+        $this->query->where('o.id_order IN (' . implode(',', $pageIds) . ')');
+
+        return $this->runQuery();
+    }
+
+    /**
+     * Bare, covering index range scan to select the next page of order ids.
+     *
+     * @param string|null $lastSeekKey
+     * @param int $limit
+     *
+     * @return array<int>
+     *
+     * @throws \PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     */
+    private function getFullSyncPageIds($lastSeekKey, $limit)
+    {
+        $this->generateMinimalQuery(self::TABLE_NAME, 'o');
+
+        $this->query
+            ->select('o.id_order')
+            ->where('o.id_shop = ' . (int) parent::getShopContext()->id)
+            ->orderBy('o.id_order ASC')
+            ->limit($limit)
+        ;
 
         if ($lastSeekKey !== null) {
             $this->query->where('o.id_order > ' . (int) $lastSeekKey);
         }
 
-        $this->query->limit((int) $limit);
+        $result = $this->db->executeS($this->query->build());
 
-        return $this->runQuery();
+        if (!is_array($result)) {
+            return [];
+        }
+
+        return array_map('intval', array_column($result, 'id_order'));
     }
 
     /**
