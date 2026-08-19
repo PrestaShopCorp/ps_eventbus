@@ -44,6 +44,8 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
      */
     public function generateFullQuery($langIso, $withSelecParameters)
     {
+        $langId = (int) \Language::getIdByIso($langIso);
+
         $this->generateMinimalQuery(self::TABLE_NAME, 'o');
 
         // minimal query for countable query
@@ -54,13 +56,12 @@ class OrderRepository extends AbstractRepository implements RepositoryInterface
             ->leftJoin('address', 'ai', 'ai.id_address = o.id_address_invoice')
             ->leftJoin('country', 'cntd', 'cntd.id_country = ad.id_country')
             ->leftJoin('country', 'cnti', 'cnti.id_country = ai.id_country')
-            // FIXME: join is not filtered by language ($langIso is ignored here).
-            // order_state_lang has one row per installed language, so on multi-lang
-            // shops this fans out; combined with the 1:n order_slip join it multiplies
-            // the refund SUM by the language count and makes status_label arbitrary.
-            // Fix: "AND osl.id_lang = <id from $langIso>" (per-language sync, like the
-            // other *_lang joins), collapsing osl to one row.
-            ->leftJoin('order_state_lang', 'osl', 'o.current_state = osl.id_order_state')
+            // Filter order_state_lang by the synced language, like the other *_lang
+            // joins. order_state_lang has one row per installed language; without this
+            // filter the join fans out on multi-lang shops and, combined with the 1:n
+            // order_slip join, multiplies the refund SUM by the language count and
+            // makes status_label arbitrary.
+            ->leftJoin('order_state_lang', 'osl', 'o.current_state = osl.id_order_state AND osl.id_lang = ' . $langId)
             ->leftJoin('order_state', 'ost', 'o.current_state = ost.id_order_state')
             ->where('o.id_shop = ' . (int) parent::getShopContext()->id)
             ->select('o.id_order')
