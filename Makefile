@@ -36,6 +36,11 @@ frontend-build: frontend-install
 frontend-lint: frontend-install
 	pnpm run lint
 
+# target: frontend-test                                         - Unit test frontend code
+.PHONY: frontend-test
+frontend-test:
+	node --test "frontend/js/**/*.test.js"
+
 # target: help                                                 - Get help on this file
 .PHONY: help
 help:
@@ -98,7 +103,7 @@ prestashop/prestashop-${PS_VERSION}: prestashop composer.phar
 
 # target: test                                                 - Static and unit testing
 .PHONY: test
-test: composer-validate lint php-lint phpstan phpunit translation-validate frontend-lint
+test: composer-validate lint php-lint phpstan phpunit translation-validate frontend-lint frontend-test
 
 # target: docker-test                                          - Static and unit testing in docker
 .PHONY: docker-test

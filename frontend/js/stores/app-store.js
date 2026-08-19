@@ -1,11 +1,13 @@
 import { defineStore } from 'pinia'
+import { debugRequestedInSearch } from '../navigation'
 
 const config = globalThis.eventbusConfig ?? {}
 
 /**
  * The Support & debug page is not advertised to merchants. It is opened by
  * appending `&debug=1` to the module's admin URL — a single link the support
- * team can hand over, which both unlocks the page and lands on it.
+ * team can hand over, which both unlocks the page and lands on it. `debug=1` in
+ * the hash does the same, see `resolveNavigation`.
  *
  * Once unlocked, the flag lives in sessionStorage so the page survives a reload
  * and a round trip through the other tabs, and closes again when the browser
@@ -28,7 +30,7 @@ function readSupportDebugUnlocked() {
  */
 function supportDebugRequestedInUrl() {
   try {
-    return new URLSearchParams(globalThis.location?.search ?? '').get('debug') === '1'
+    return debugRequestedInSearch(globalThis.location?.search)
   } catch {
     return false
   }
@@ -65,8 +67,6 @@ export const useAppStore = defineStore('app', {
      * Answers once whether to send the merchant to the Support & debug page,
      * and unlocks it on the way. Later calls answer false, so the other tabs
      * stay reachable.
-     *
-     * @returns {boolean}
      */
     consumeSupportDebugRedirect() {
       if (!this.supportDebugRedirectPending) return false

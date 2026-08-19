@@ -22,8 +22,8 @@ export const useConnectionsStore = defineStore('connections', {
 
       try {
         this.services = await fetchConnections()
-      } catch (e) {
-        this.error = e.message
+      } catch (error) {
+        this.error = error.message
       } finally {
         this.loading = false
       }
