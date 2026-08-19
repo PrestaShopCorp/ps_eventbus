@@ -65,28 +65,30 @@ class OrderDetailRepository extends AbstractRepository implements RepositoryInte
             ->select('od.id_order_detail')
         ;
 
-        $refundRequest = '(SELECT osd.total_price_tax_incl
-            FROM ' . _DB_PREFIX_ . 'order_slip_detail osd
-            WHERE osd.id_order_detail = od.id_order_detail) AS refund';
-
-        $refundTaxExclRequest = '(SELECT osd.total_price_tax_excl
-            FROM ' . _DB_PREFIX_ . 'order_slip_detail osd
-            WHERE osd.id_order_detail = od.id_order_detail) AS refund_tax_excl';
-
         if ($withSelecParameters) {
+            // Refunds are aggregated with a plain LEFT JOIN + GROUP BY rather
+            // than the previous two correlated subqueries. Those subqueries sat
+            // in the SELECT list and were re-run once per output row, each a
+            // full scan of order_slip_detail (no index on id_order_detail: it
+            // is the 2nd column of the composite PK). The join runs once per
+            // page instead, and SUM handles details refunded across several
+            // slips (the scalar subquery errored on >1 row). GROUP BY on the
+            // id_order_detail PK keeps one row per detail.
             $this->query
+                ->leftJoin('order_slip_detail', 'osd', 'osd.id_order_detail = od.id_order_detail')
                 ->select('od.id_order')
                 ->select('od.product_id')
                 ->select('od.product_attribute_id')
                 ->select('od.product_quantity')
                 ->select('od.unit_price_tax_incl')
                 ->select('od.unit_price_tax_excl')
-                ->select($refundRequest)
-                ->select($refundTaxExclRequest)
+                ->select('SUM(osd.total_price_tax_incl) as refund')
+                ->select('SUM(osd.total_price_tax_excl) as refund_tax_excl')
                 ->select('c.iso_code as currency')
                 ->select('ps.id_category_default as category')
                 ->select('l.iso_code')
                 ->select('o.conversion_rate as conversion_rate')
+                ->groupBy('od.id_order_detail')
                 ->orderBy('od.id_order_detail ASC')
             ;
         }
