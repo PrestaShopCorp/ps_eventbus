@@ -129,6 +129,13 @@ class OrdersService extends ShopContentAbstractService implements ShopContentSer
      */
     private function castOrders(&$orders, $langIso)
     {
+        // Compute the latest paid-state per order ONCE for the whole page.
+        // Previously castIsPaidValue() was called inside the loop below, and each
+        // call re-ran the full order_history JOIN for every id in the page: O(n)
+        // identical queries + O(n^2) PHP scan per page. On shops with >1M orders
+        // that blew the request timeout and full sync never progressed.
+        $isPaidByOrderId = $this->buildIsPaidMap($orders, $langIso);
+
         foreach ($orders as &$order) {
             $order['id_order'] = (int) $order['id_order'];
             $order['id_cart'] = (string) $order['id_cart'];
@@ -140,7 +147,9 @@ class OrdersService extends ShopContentAbstractService implements ShopContentSer
             $order['refund'] = (float) $order['refund'];
             $order['refund_tax_excl'] = (float) $order['refund_tax_excl'];
             $order['new_customer'] = $order['new_customer'] == 1;
-            $order['is_paid'] = $this->castIsPaidValue($orders, $order, $langIso);
+            $order['is_paid'] = isset($isPaidByOrderId[(int) $order['id_order']])
+                ? $isPaidByOrderId[(int) $order['id_order']]
+                : false;
             $order['shipping_cost'] = (float) $order['shipping_cost'];
             $order['total_paid_tax'] = $order['total_paid_tax_incl'] - $order['total_paid_tax_excl'];
             $order['id_carrier'] = (int) $order['id_carrier'];
@@ -181,29 +190,44 @@ class OrdersService extends ShopContentAbstractService implements ShopContentSer
     }
 
     /**
+     * Build a map id_order => is_paid for the whole page in a single query.
+     *
+     * is_paid reflects the most recent status in order_history (max date_add).
+     * Tie-break preserves the previous behavior: rows arrive ordered by
+     * id_order_history ASC and the first row reaching the max date wins.
+     *
      * @param array<mixed> $orders
-     * @param array<mixed> $order
      * @param string $langIso
      *
-     * @return bool
+     * @return array<int, bool>
      *
      * @@throws \PrestaShopDatabaseException
      */
-    private function castIsPaidValue($orders, $order, $langIso)
+    private function buildIsPaidMap($orders, $langIso)
     {
-        $isPaid = $dateAdd = 0;
         $orderIds = $this->arrayFormatter->formatValueArray($orders, 'id_order');
+
+        if (empty($orderIds)) {
+            return [];
+        }
+
         /** @var array<mixed> $orderStatusHistories */
         $orderStatusHistories = $this->orderStatusHistoryRepository->getOrderStatusHistoriesByOrderIds($orderIds, $langIso);
 
-        foreach ($orderStatusHistories as &$orderStatusHistory) {
-            if ($order['id_order'] == $orderStatusHistory['id_order'] && $dateAdd < $orderStatusHistory['date_add']) {
-                $isPaid = (bool) $orderStatusHistory['is_paid'];
-                $dateAdd = $orderStatusHistory['date_add'];
+        $isPaidByOrderId = [];
+        $latestDateByOrderId = [];
+
+        foreach ($orderStatusHistories as $history) {
+            $orderId = (int) $history['id_order'];
+            $dateAdd = $history['date_add'];
+
+            if (!isset($latestDateByOrderId[$orderId]) || $latestDateByOrderId[$orderId] < $dateAdd) {
+                $latestDateByOrderId[$orderId] = $dateAdd;
+                $isPaidByOrderId[$orderId] = (bool) $history['is_paid'];
             }
         }
 
-        return (bool) $isPaid;
+        return $isPaidByOrderId;
     }
 
     /**
