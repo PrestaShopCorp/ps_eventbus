@@ -73,12 +73,15 @@ label {
   align-items: center;
 }
 
+// The --cdk-* custom properties only exist in the PrestaShop 9 admin theme.
+// On PrestaShop 8 they are undefined, so the fallbacks mirror the .nav-bar
+// widths of the 8.x theme (13.13rem open / 3.125rem collapsed).
 .adminpseventbus #content.bootstrap {
   padding-right: 0;
   padding-top: 0;
-  padding-left: var(--cdk-sidebar-width);
+  padding-left: var(--cdk-sidebar-width, 13.13rem);
 }
 
 .adminpseventbus.page-sidebar-closed #content.bootstrap {
-  padding-left: 52px;
+  padding-left: var(--cdk-sidebar-width-collapse, 3.125rem);
 }

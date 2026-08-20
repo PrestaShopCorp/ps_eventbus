@@ -106,7 +106,7 @@
 
     &__icon {
       font-size: 32px;
-      margin-bottom: 12px;
+      margin-bottom: 30px;
 
       &--accent {
         color: $accent;
