@@ -7,12 +7,12 @@ x-service:
     healthcheck:
       test:
         [
-          "CMD",
-          "curl",
-          "-sI",
-          "-H",
-          "Host: localhost:${HOST_PORT_BIND_PRESTASHOP:?See e2e-env/.env.dist}",
-          "http://localhost:80/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck",
+          'CMD',
+          'curl',
+          '-sI',
+          '-H',
+          'Host: localhost:${HOST_PORT_BIND_PRESTASHOP:?See e2e-env/.env.dist}',
+          'http://localhost:80/index.php?fc=module&module=ps_eventbus&controller=apiHealthCheck',
         ]
       interval: 30s
     environment:
@@ -54,10 +54,29 @@ services:
       # - /var/www/html/modules/ps_eventbus/tools/vendor
     profiles: [cloudflared]
 
+  # Real ps-accounts (via cloudflared tunnel) + real CloudSync prod URLs
+  # (mounts .config.prod.php over the module config.php, bypassing cloudsync-mock/reverse-proxy)
+  prestashop-prod:
+    <<: *prestashop-base
+    environment:
+      - PS_DOMAIN=${TUNNEL_NAME}
+      - PS_PROTOCOL=https
+      - DEBUG_MODE=true
+    ports:
+      - ${HOST_PORT_BIND_PRESTASHOP:?See e2e-env/.env.dist}:80
+    volumes:
+      - ..:/var/www/html/modules/ps_eventbus:rw
+      - ../.config.prod.php:/var/www/html/modules/ps_eventbus/config.php:ro
+      - ./init-scripts/install-ps-eventbus.sh:/tmp/init-scripts/install-ps-eventbus.sh:ro
+      # Notice: you might enable this if your uid is not 1000, or encounter permission issues
+      # - /var/www/html/modules/ps_eventbus/vendor
+      # - /var/www/html/modules/ps_eventbus/tools/vendor
+    profiles: [production]
+
   mysql:
     image: mariadb:${DOCKER_VERSION_MARIADB:?See e2e-env/.env.dist}
     healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect"]
+      test: ['CMD', 'healthcheck.sh', '--connect']
     environment:
       - MYSQL_HOST=mysql
       - MYSQL_USER=prestashop
@@ -90,7 +109,7 @@ services:
     environment:
       - RUN_IN_DOCKER=1
     healthcheck:
-      test: ["CMD", "curl", "-sI", "http://localhost:8080"]
+      test: ['CMD', 'curl', '-sI', 'http://localhost:8080']
     volumes:
       - ./cloudsync-mock/src:/home/node/src:ro
     ports:
@@ -98,16 +117,18 @@ services:
       - ${COLLECTOR_API_PORT:?See e2e-env/.env.dist}:3333
       - ${LIVE_SYNC_API_PORT:?See e2e-env/.env.dist}:3434
       - ${WS_PORT:?See e2e-env/.env.dist}:8080
+    profiles: [localhost, cloudflared, cicd]
 
   reverse-proxy:
     image: nginx:stable-alpine
     healthcheck:
-      test: ["CMD", "curl", "-sI", "http://localhost:80/nginx_status"]
+      test: ['CMD', 'curl', '-sI', 'http://localhost:80/nginx_status']
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro,cached
-    command: [nginx-debug, "-g", "daemon off;"]
+    command: [nginx-debug, '-g', 'daemon off;']
     ports:
       - ${HOST_PORT_BIND_CLOUDSYNC_REVERSE_PROXY:?See e2e-env/.env.dist}:80
+    profiles: [localhost, cloudflared, cicd]
 
   cloudflared:
     image: cloudflare/cloudflared:latest
@@ -119,3 +140,15 @@ services:
     volumes:
       - ./credentials.json:/credentials.json
     profiles: [cloudflared]
+
+  # Same as cloudflared, but routes to prestashop-prod (production profile)
+  cloudflared-prod:
+    image: cloudflare/cloudflared:latest
+    command: tunnel run $${TUNNEL_NAME}
+    environment:
+      - TUNNEL_CRED_FILE=/credentials.json
+      - TUNNEL_URL=http://prestashop-prod:80
+      - TUNNEL_HTTP_HOST_HEADER=${TUNNEL_NAME}
+    volumes:
+      - ./credentials.json:/credentials.json
+    profiles: [production]

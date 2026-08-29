@@ -265,6 +265,9 @@ class HttpClient
      */
     protected function exec()
     {
+        $url = curl_getinfo($this->curl, CURLINFO_EFFECTIVE_URL);
+        self::traceLog('→ ' . $url);
+
         $this->response_headers = [];
         $this->response = curl_exec($this->curl);
         $this->curl_error_code = curl_errno($this->curl);
@@ -278,7 +281,82 @@ class HttpClient
         $this->http_error_message = $this->error ? (isset($this->response_headers['0']) ? $this->response_headers['0'] : '') : '';
         $this->error_message = $this->curl_error ? $this->getErrorMessage() : $this->http_error_message;
 
+        self::traceLog(sprintf(
+            '← %d %s%s body=%s',
+            $this->http_status_code,
+            $url,
+            $this->curl_error ? ' curl_err=' . $this->curl_error_message : '',
+            substr((string) $this->response, 0, 500)
+        ));
+
         return $this->error_code;
+    }
+
+    /**
+     * Append a trace line to the ps_eventbus log file.
+     * File path overridable via env var PS_EVENTBUS_TRACE_FILE (default: /var/log/ps_eventbus/trace.log).
+     * Host-mountable via docker-compose volume.
+     *
+     * @param string $message
+     *
+     * @return void
+     */
+    public static function traceLog($message)
+    {
+        if (!self::isTraceEnabled()) {
+            return;
+        }
+        $file = getenv('PS_EVENTBUS_TRACE_FILE')
+            ?: dirname(dirname(__DIR__)) . '/trace-' . date('Y-m-d') . '.log';
+        $line = '[' . date('Y-m-d H:i:s') . '] [ps_eventbus] ' . $message . "\n";
+        @file_put_contents($file, $line, FILE_APPEND);
+    }
+
+    /**
+     * @return bool
+     */
+    private static function isTraceEnabled()
+    {
+        return defined('_PS_MODE_DEV_') && _PS_MODE_DEV_;
+    }
+
+    /**
+     * Log an inbound HTTP request hitting one of the ps_eventbus controllers.
+     * Reads $_SERVER / $_GET / $_POST / php://input.
+     *
+     * @param string $controller short controller name (e.g. 'apiShopContent')
+     *
+     * @return void
+     */
+    public static function traceIncoming($controller)
+    {
+        if (!self::isTraceEnabled()) {
+            return;
+        }
+        $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : '?';
+        $uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '?';
+        $remote = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '?';
+        $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+        $authPresent = !empty($_SERVER['HTTP_AUTHORIZATION']) ? 'yes' : 'no';
+        $ctype = isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : '';
+        $body = '';
+        if ($method !== 'GET') {
+            $raw = @file_get_contents('php://input');
+            if ($raw !== false) {
+                $body = substr($raw, 0, 500);
+            }
+        }
+        self::traceLog(sprintf(
+            '⇆ inbound %s %s %s remote=%s auth=%s ctype=%s ua=%s body=%s',
+            $controller,
+            $method,
+            $uri,
+            $remote,
+            $authPresent,
+            $ctype,
+            substr($ua, 0, 80),
+            $body
+        ));
     }
 
     /**

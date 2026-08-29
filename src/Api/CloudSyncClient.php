@@ -125,6 +125,15 @@ class CloudSyncClient
 
         $url = $this->collectorApiUrl . '/upload/' . $jobId;
 
+        HttpClient::traceLog(sprintf(
+            'upload jobId=%s shopId=%s items=%d fullSync=%s url=%s',
+            $jobId,
+            $this->shopId,
+            count($data),
+            $fullSyncRequested ? '1' : '0',
+            $url
+        ));
+
         $request = $this->client->post(
             $url,
             [
