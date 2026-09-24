@@ -28,8 +28,10 @@
 namespace PrestaShop\Module\PsEventbus\Handler\ErrorHandler;
 
 use PrestaShop\Module\PsEventbus\Api\HttpClient;
+use PrestaShop\Module\PsEventbus\Exception\CloudSyncUnreachableException;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
+use PrestaShop\Module\PsEventbus\Exception\JobIdValidationException;
 use PrestaShop\Module\PsEventbus\Service\CommonService;
 
 if (!defined('_PS_VERSION_')) {
@@ -140,10 +142,6 @@ class ErrorHandler
     }
 
     /**
-     * No native type hint: `\Throwable` does not exist before PHP 7, so on the
-     * PHP 5.6 shops we still support the hint matches nothing and every call
-     * raises a catchable fatal error, masking the exception being reported.
-     *
      * @param \Exception|\Throwable $exception
      *
      * @return void
@@ -208,9 +206,12 @@ class ErrorHandler
         switch ($e) {
             case $e instanceof \PrestaShopDatabaseException:
                 return 'fatal';
+            case $e instanceof CloudSyncUnreachableException:
+                return 'error';
             case $e instanceof EnvVarException:
                 return 'error';
             case $e instanceof FirebaseException:
+            case $e instanceof JobIdValidationException:
                 return 'warning';
         }
 

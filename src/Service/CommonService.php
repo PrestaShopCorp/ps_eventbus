@@ -27,8 +27,10 @@
 namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Exception\CloudSyncUnreachableException;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
+use PrestaShop\Module\PsEventbus\Exception\JobIdValidationException;
 use PrestaShop\Module\PsEventbus\Exception\QueryParamsException;
 
 if (!defined('_PS_VERSION_')) {
@@ -62,6 +64,8 @@ class CommonService
     {
         switch ($exception) {
             case $exception instanceof \PrestaShopDatabaseException:
+            case $exception instanceof CloudSyncUnreachableException:
+            case $exception instanceof JobIdValidationException:
                 $code = Config::DATABASE_QUERY_ERROR_CODE;
                 break;
             case $exception instanceof EnvVarException:
@@ -77,12 +81,8 @@ class CommonService
                 $code = 500;
         }
 
-        // the query parameter is `shop_content`; `shopContent` never matched, so
-        // every error response reported object_type as false. Dashes are
-        // normalized the way apiShopContent does it, to keep the error and
-        // success payloads consistent (`cart-products` -> `cart_products`)
         $response = [
-            'object_type' => str_replace('-', '_', (string) \Tools::getValue('shop_content')),
+            'object_type' => \Tools::getValue('shopContent'),
             'status' => false,
             'httpCode' => $code,
             'message' => $code == 500 ? 'Server error' : $exception->getMessage(),
