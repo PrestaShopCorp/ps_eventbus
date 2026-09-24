@@ -115,14 +115,22 @@ class ApiAuthorizationService
     /**
      * Authorizes and cache job ids
      *
+     * Each failure raises its own message: they used to share the single
+     * `Failed saving job id to database` wording of the caller, which named a
+     * database write whatever had really gone wrong. The exception type stays
+     * \PrestaShopDatabaseException throughout, so the response code remains
+     * Config::DATABASE_QUERY_ERROR_CODE as the collector expects.
+     *
      * @param string $jobId
      *
      * @return bool
+     *
+     * @throws \PrestaShopDatabaseException
      */
     private function authorizeCall($jobId)
     {
         if (empty($jobId)) {
-            return false;
+            throw new \PrestaShopDatabaseException('Missing or empty job_id query parameter');
         }
 
         // Check if the job already exists
@@ -132,8 +140,18 @@ class ApiAuthorizationService
 
         // Check the jobId validity to avoid Denial Of Service
         $jobValidationResponse = $this->cloudSyncClient->validateJobId($jobId);
+        $httpCode = (int) $jobValidationResponse['httpCode'];
 
-        return (int) $jobValidationResponse['httpCode'] === 201
-            && $this->syncRepository->insertJob($jobId, date(Config::MYSQL_DATE_FORMAT));
+        if ($httpCode !== 201) {
+            // getHttpStatus() reports 0 when the request never completed, which
+            // is a connectivity problem on our side, not a refusal by CloudSync
+            throw new \PrestaShopDatabaseException($httpCode === 0 ? 'Could not reach CloudSync to validate the job id' : sprintf('CloudSync refused the job id (sync-api answered HTTP %d)', $httpCode));
+        }
+
+        if (!$this->syncRepository->insertJob($jobId, date(Config::MYSQL_DATE_FORMAT))) {
+            throw new \PrestaShopDatabaseException('Failed saving job id to database');
+        }
+
+        return true;
     }
 }

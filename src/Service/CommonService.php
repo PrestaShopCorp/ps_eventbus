@@ -77,8 +77,12 @@ class CommonService
                 $code = 500;
         }
 
+        // the query parameter is `shop_content`; `shopContent` never matched, so
+        // every error response reported object_type as false. Dashes are
+        // normalized the way apiShopContent does it, to keep the error and
+        // success payloads consistent (`cart-products` -> `cart_products`)
         $response = [
-            'object_type' => \Tools::getValue('shopContent'),
+            'object_type' => str_replace('-', '_', (string) \Tools::getValue('shop_content')),
             'status' => false,
             'httpCode' => $code,
             'message' => $code == 500 ? 'Server error' : $exception->getMessage(),
