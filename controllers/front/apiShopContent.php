@@ -50,7 +50,7 @@ class ps_EventbusApiShopContentModuleFrontController extends ModuleFrontControll
         $langIso = Tools::getValue('lang_iso');
 
         /** @var int $limit */
-        $limit = Tools::getValue('limit', 50);
+        $limit = (int) Tools::getValue('limit', 50);
 
         /** @var bool $fullSyncRequested */
         $fullSyncRequested = Tools::getValue('full', 0) == 1;

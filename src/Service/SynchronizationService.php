@@ -101,12 +101,12 @@ class SynchronizationService
      * @@throws PrestaShopDatabaseException|EnvVarException|ApiException
      */
     public function sendFullSync(
-        string $shopContent,
-        string $jobId,
-        string $langIso,
-        int $limit,
-        int $startTime,
-        string $dateNow
+        $shopContent,
+        $jobId,
+        $langIso,
+        $limit,
+        $startTime,
+        $dateNow
     ) {
         $response = [];
 
@@ -163,11 +163,11 @@ class SynchronizationService
      * @@throws PrestaShopDatabaseException|EnvVarException
      */
     public function sendIncrementalSync(
-        string $shopContent,
-        string $jobId,
-        string $langIso,
-        int $limit,
-        int $startTime
+        $shopContent,
+        $jobId,
+        $langIso,
+        $limit,
+        $startTime
     ) {
         $response = [];
 

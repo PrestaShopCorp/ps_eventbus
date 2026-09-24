@@ -29,8 +29,10 @@ namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Api\CloudSyncClient;
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Exception\CloudSyncUnreachableException;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
+use PrestaShop\Module\PsEventbus\Exception\JobIdValidationException;
 use PrestaShop\Module\PsEventbus\Handler\ErrorHandler\ErrorHandler;
 use PrestaShop\Module\PsEventbus\Repository\SyncRepository;
 
@@ -100,8 +102,10 @@ class ApiAuthorizationService
 
             switch ($exception) {
                 case $exception instanceof \PrestaShopDatabaseException:
+                case $exception instanceof CloudSyncUnreachableException:
                 case $exception instanceof EnvVarException:
                 case $exception instanceof FirebaseException:
+                case $exception instanceof JobIdValidationException:
                     $this->errorHandler->handle($exception);
                     break;
                 default:
@@ -118,11 +122,15 @@ class ApiAuthorizationService
      * @param string $jobId
      *
      * @return bool
+     *
+     * @throws \PrestaShopDatabaseException
+     * @throws CloudSyncUnreachableException
+     * @throws JobIdValidationException
      */
     private function authorizeCall($jobId)
     {
         if (empty($jobId)) {
-            return false;
+            throw new JobIdValidationException('Missing or empty job_id query parameter');
         }
 
         // Check if the job already exists
@@ -132,8 +140,20 @@ class ApiAuthorizationService
 
         // Check the jobId validity to avoid Denial Of Service
         $jobValidationResponse = $this->cloudSyncClient->validateJobId($jobId);
+        $httpCode = (int) $jobValidationResponse['httpCode'];
 
-        return (int) $jobValidationResponse['httpCode'] === 201
-            && $this->syncRepository->insertJob($jobId, date(Config::MYSQL_DATE_FORMAT));
+        if ($httpCode === 0) {
+            throw new CloudSyncUnreachableException('Could not reach CloudSync to validate the job id');
+        }
+
+        if ($httpCode !== 201) {
+            throw new JobIdValidationException(sprintf('CloudSync refused the job id (sync-api answered HTTP %d)', $httpCode));
+        }
+
+        if (!$this->syncRepository->insertJob($jobId, date(Config::MYSQL_DATE_FORMAT))) {
+            throw new \PrestaShopDatabaseException('Failed saving job id to database');
+        }
+
+        return true;
     }
 }

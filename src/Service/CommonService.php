@@ -27,8 +27,10 @@
 namespace PrestaShop\Module\PsEventbus\Service;
 
 use PrestaShop\Module\PsEventbus\Config\Config;
+use PrestaShop\Module\PsEventbus\Exception\CloudSyncUnreachableException;
 use PrestaShop\Module\PsEventbus\Exception\EnvVarException;
 use PrestaShop\Module\PsEventbus\Exception\FirebaseException;
+use PrestaShop\Module\PsEventbus\Exception\JobIdValidationException;
 use PrestaShop\Module\PsEventbus\Exception\QueryParamsException;
 
 if (!defined('_PS_VERSION_')) {
@@ -62,6 +64,8 @@ class CommonService
     {
         switch ($exception) {
             case $exception instanceof \PrestaShopDatabaseException:
+            case $exception instanceof CloudSyncUnreachableException:
+            case $exception instanceof JobIdValidationException:
                 $code = Config::DATABASE_QUERY_ERROR_CODE;
                 break;
             case $exception instanceof EnvVarException:
