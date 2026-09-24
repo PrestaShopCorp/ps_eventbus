@@ -49,8 +49,10 @@ class ps_EventbusApiShopContentModuleFrontController extends ModuleFrontControll
         /** @var string $langIso */
         $langIso = Tools::getValue('lang_iso');
 
+        // cast here rather than through a `int $limit` parameter hint: scalar
+        // hints are class hints on PHP 5.6, which the module still supports
         /** @var int $limit */
-        $limit = Tools::getValue('limit', 50);
+        $limit = (int) Tools::getValue('limit', 50);
 
         /** @var bool $fullSyncRequested */
         $fullSyncRequested = Tools::getValue('full', 0) == 1;
