@@ -140,11 +140,15 @@ class ErrorHandler
     }
 
     /**
-     * @param \Throwable $exception
+     * No native type hint: `\Throwable` does not exist before PHP 7, so on the
+     * PHP 5.6 shops we still support the hint matches nothing and every call
+     * raises a catchable fatal error, masking the exception being reported.
+     *
+     * @param \Exception|\Throwable $exception
      *
      * @return void
      */
-    private function sendToSentry(\Throwable $exception)
+    private function sendToSentry($exception)
     {
         $level = $this->mapExceptionToCategory($exception);
         $configurationPsShopEmail = \Configuration::get('PS_SHOP_EMAIL');
@@ -195,11 +199,11 @@ class ErrorHandler
     /**
      * Determines a Sentry level from PrestaShop/Symfony exception types
      *
-     * @param \Throwable $e
+     * @param \Exception|\Throwable $e
      *
      * @return string
      */
-    private function mapExceptionToCategory(\Throwable $e)
+    private function mapExceptionToCategory($e)
     {
         switch ($e) {
             case $e instanceof \PrestaShopDatabaseException:
@@ -287,7 +291,7 @@ class ErrorHandler
      *
      * @return bool
      */
-    private function isInApp(string $file)
+    private function isInApp($file)
     {
         if (!$file) {
             return false;
@@ -306,7 +310,7 @@ class ErrorHandler
      *
      * @return array<mixed>
      */
-    private function getCodeContext(string $file, int $line, int $radius)
+    private function getCodeContext($file, $line, $radius)
     {
         if (!$radius) {
             $radius = 3; // Default radius if not specified
@@ -350,7 +354,7 @@ class ErrorHandler
      *
      * @return mixed
      */
-    private function scrubAndNormalize($value, int $depth)
+    private function scrubAndNormalize($value, $depth)
     {
         if ($depth > 3) { // avoid giant structures
             return '/* depth limit */';
@@ -372,7 +376,7 @@ class ErrorHandler
         // Objets
         if (is_object($value)) {
             // Do not serialize PDO, cURL, etc. resources
-            if ($value instanceof \Throwable) {
+            if ($value instanceof \Exception || $value instanceof \Throwable) {
                 return sprintf('Throwable(%s): %s', get_class($value), $value->getMessage());
             }
             // Simple representation of objects
