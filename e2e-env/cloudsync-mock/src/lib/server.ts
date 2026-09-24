@@ -13,10 +13,18 @@ export class Server {
     });
 
     this.api.use((req: Request, res: Response, next: NextFunction) => {
-      // send data to probe after parsing params
-      req.on('close', () => {
+      // Send data to probe once the response is done: route handlers enrich
+      // req.body while running (multer's uploaded file, for instance), so
+      // probing on the request 'close' event races them and can report an
+      // empty body.
+      let sentToProbe = false;
+      const sendToProbe = () => {
+        if (sentToProbe) return;
+        sentToProbe = true;
         probe.sendDataToWS(this.constructor.name, req);
-      })
+      };
+      res.on('finish', sendToProbe);
+      res.on('close', sendToProbe);
       req.on('data', buf => console.log(buf.toString('utf8')));
       next();
     });
