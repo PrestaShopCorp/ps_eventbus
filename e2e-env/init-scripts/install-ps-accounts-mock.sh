@@ -13,7 +13,7 @@ error() {
 }
 
 ps_accounts_mock_install() {
-  PS_ACCOUNTS_MOCK_VERSION="v8.0.17"
+  PS_ACCOUNTS_MOCK_VERSION="v8.0.18"
   echo "* [ps_accounts_mock] downloading ${PS_ACCOUNTS_MOCK_VERSION}..."
   wget -q -O /tmp/ps_accounts.zip "https://github.com/PrestaShopCorp/ps_accounts_mock/releases/download/${PS_ACCOUNTS_MOCK_VERSION}/ps_accounts_mock-${PS_ACCOUNTS_MOCK_VERSION}.zip"
   cd "$PS_FOLDER"
