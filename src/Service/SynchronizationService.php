@@ -256,11 +256,11 @@ class SynchronizationService
         }
 
         /*
-         * randomly check if outbox for this shop-content contain more of 100k entries.
-         * When random number == 10, we count number of entry exist in database for this specific shop content
-         * If count > 100 000, we removed all entry corresponding to this shop content, and we enable full sync for this
+         * Once in INCREMENTAL_SYNC_TABLE_SIZE_CHECK_MOD calls, count the outbox entries of the first shop content.
+         * Above INCREMENTAL_SYNC_MAX_TABLE_SIZE, purge them and reset the full sync of that content for the current
+         * shop and default language, so the event is not recorded for that pair. It is still recorded for the rest.
          */
-        if (mt_rand() % Config::INCREMENTAL_SYNC_TABLE_SIZE_CHECK_MOD == 0) {
+        if ($this->shouldCheckOutboxSize()) {
             foreach ($contentTypesWithIds as $contentType => $contentIds) {
                 $count = $this->incrementalSyncRepository->getIncrementalSyncObjectCountByType($contentType);
 
@@ -278,7 +278,7 @@ class SynchronizationService
                     }
                 }
 
-                return;
+                break;
             }
         }
 
@@ -319,6 +319,17 @@ class SynchronizationService
         if (!empty($contentToInsert)) {
             $this->incrementalSyncRepository->insertIncrementalObject($contentToInsert);
         }
+    }
+
+    /**
+     * Samples the calls that check the outbox size: counting it on every event would be too costly.
+     * Not security-sensitive.
+     *
+     * @return bool
+     */
+    protected function shouldCheckOutboxSize()
+    {
+        return mt_rand() % Config::INCREMENTAL_SYNC_TABLE_SIZE_CHECK_MOD == 0;
     }
 
     /**
