@@ -65,6 +65,50 @@ class SyncRepository extends AbstractRepository
     }
 
     /**
+     * Moves the full sync cursor of the current shop, only if it still is where the page was read from: a purge of
+     * the outbox may have restarted the full sync meanwhile, and that restart must not be overwritten.
+     *
+     * @param string $type
+     * @param string $langIso
+     * @param string|null $readSeekKey cursor the page was read from
+     * @param string|null $newSeekKey
+     * @param bool $fullSyncFinished
+     * @param string $date
+     *
+     * @return bool whether the cursor now is the one written: false when the full sync was restarted meanwhile
+     */
+    public function moveFullSyncCursor($type, $langIso, $readSeekKey, $newSeekKey, $fullSyncFinished, $date)
+    {
+        $pairCondition = 'type = "' . pSQL((string) $type) . '"
+            AND id_shop = ' . (int) parent::getShopContext()->id . '
+            AND lang_iso = "' . pSQL((string) $langIso) . '"';
+        $readSeekKeyCondition = $readSeekKey === null || $readSeekKey === ''
+            ? '(last_seek_key IS NULL OR last_seek_key = "")'
+            : 'last_seek_key = "' . pSQL((string) $readSeekKey) . '"';
+
+        $this->db->execute(
+            'UPDATE `' . _DB_PREFIX_ . self::TYPE_SYNC_TABLE_NAME . '`
+            SET last_seek_key = ' . ($newSeekKey === null ? 'NULL' : '"' . pSQL((string) $newSeekKey) . '"') . ',
+                full_sync_finished = ' . (int) $fullSyncFinished . ',
+                last_sync_date = "' . pSQL(DateHelper::toMySqlDateTime($date)) . '"
+            WHERE ' . $pairCondition . '
+            AND full_sync_finished = 0
+            AND ' . $readSeekKeyCondition
+        );
+
+        // read back rather than count affected rows: an update writing the same values affects none
+        $cursor = $this->db->getRow(
+            'SELECT last_seek_key, full_sync_finished
+            FROM `' . _DB_PREFIX_ . self::TYPE_SYNC_TABLE_NAME . '`
+            WHERE ' . $pairCondition
+        );
+
+        return is_array($cursor)
+            && (bool) $cursor['full_sync_finished'] === (bool) $fullSyncFinished
+            && (string) $cursor['last_seek_key'] === (string) $newSeekKey;
+    }
+
+    /**
      * Returns the last emitted seek key for the (type, lang, shop) cursor,
      * or null when full sync has not started or no row was emitted yet.
      *

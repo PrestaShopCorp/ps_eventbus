@@ -110,17 +110,12 @@ class SynchronizationService
     ) {
         $response = [];
 
-        $serviceName = str_replace('_', '', ucwords($shopContent, '_'));
-        $serviceId = 'PrestaShop\Module\PsEventbus\Service\ShopContent\\' . $serviceName . 'Service'; // faire un mapping entre le service et le nom du shopcontent
+        $shopContentApiService = $this->getShopContentService($shopContent);
 
-        /** @var \Ps_eventbus */
-        $module = \Module::getInstanceByName('ps_eventbus');
+        if ($shopContentApiService === null) {
+            $serviceName = str_replace('_', '', ucwords($shopContent, '_'));
 
-        try {
-            /** @var ShopContentServiceInterface $shopContentApiService */
-            $shopContentApiService = $module->getService($serviceId);
-        } catch (ServiceNotFoundException $e) {
-            throw new ServiceNotFoundException($serviceId);
+            throw new ServiceNotFoundException('PrestaShop\Module\PsEventbus\Service\ShopContent\\' . $serviceName . 'Service');
         }
 
         $lastSeekKey = $this->syncRepository->getLastSeekKey($shopContent, $langIso);
@@ -143,7 +138,21 @@ class SynchronizationService
 
         $fullSyncFinished = $remainingObjects <= 0;
 
-        $this->syncRepository->upsertTypeSync($shopContent, $fullSyncFinished ? null : $newSeekKey, $dateNow, $fullSyncFinished, $langIso);
+        $cursorMoved = $this->syncRepository->moveFullSyncCursor(
+            $shopContent,
+            $langIso,
+            $lastSeekKey,
+            $fullSyncFinished ? null : $newSeekKey,
+            $fullSyncFinished,
+            $dateNow
+        );
+
+        if (!$cursorMoved) {
+            // the full sync was restarted meanwhile (outbox purged): the whole content is left again, and CloudSync
+            // must ask for the next page even if this one looked like the last
+            $fullSyncFinished = false;
+            $remainingObjects = max((int) $shopContentApiService->getFullSyncContentLeft(null, $langIso), 1);
+        }
 
         $reportedRemaining = $fullSyncFinished ? 0 : $remainingObjects;
         $reportedRemaining += $this->incrementalSyncRepository->getRemainingIncrementalObjects($shopContent, $langIso);
@@ -256,29 +265,22 @@ class SynchronizationService
         }
 
         /*
-         * Once in INCREMENTAL_SYNC_TABLE_SIZE_CHECK_MOD calls, count the outbox entries of the first shop content.
-         * Above INCREMENTAL_SYNC_MAX_TABLE_SIZE, purge them and reset the full sync of that content for the current
-         * shop and default language, so the event is not recorded for that pair. It is still recorded for the rest.
+         * Once in INCREMENTAL_SYNC_TABLE_SIZE_CHECK_MOD calls, check the outbox size of each shop content, per language
+         * of the current shop: CloudSync reads it per (content, shop, language). The outbox of a pair above
+         * INCREMENTAL_SYNC_MAX_TABLE_SIZE is purged, then its full sync restarts, which stops recording into it.
+         * In that order, an event recorded in between is kept: at worst it is sent twice. The other pairs are left alone.
          */
         if ($this->shouldCheckOutboxSize()) {
-            foreach ($contentTypesWithIds as $contentType => $contentIds) {
-                $count = $this->incrementalSyncRepository->getIncrementalSyncObjectCountByType($contentType);
+            foreach (array_keys($contentTypesWithIds) as $contentType) {
+                $oversizedLangIsos = $this->incrementalSyncRepository->getLangIsosOverSizeForCurrentShop(
+                    $contentType,
+                    Config::INCREMENTAL_SYNC_MAX_TABLE_SIZE
+                );
 
-                if ($count > Config::INCREMENTAL_SYNC_MAX_TABLE_SIZE) {
-                    $hasDeleted = $this->incrementalSyncRepository->removeIncrementaSyncObjectByType($contentType);
-
-                    if ($hasDeleted) {
-                        $this->syncRepository->upsertTypeSync(
-                            $contentType,
-                            null,
-                            $createdAt,
-                            false,
-                            $this->languagesService->getDefaultLanguageIsoCode()
-                        );
-                    }
+                foreach ($oversizedLangIsos as $langIso) {
+                    $this->incrementalSyncRepository->removeIncrementalSyncObjectsForCurrentShop($contentType, $langIso);
+                    $this->syncRepository->upsertTypeSync($contentType, null, $createdAt, false, $langIso);
                 }
-
-                break;
             }
         }
 
@@ -406,7 +408,7 @@ class SynchronizationService
      *
      * @return ShopContentServiceInterface|null
      */
-    private function getShopContentService($contentType)
+    protected function getShopContentService($contentType)
     {
         $serviceName = str_replace('_', '', ucwords($contentType, '_'));
         $serviceId = 'PrestaShop\\Module\\PsEventbus\\Service\\ShopContent\\' . $serviceName . 'Service';

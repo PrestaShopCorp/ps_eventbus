@@ -190,30 +190,42 @@ class IncrementalSyncRepository extends AbstractRepository
     }
 
     /**
-     * @param string $type
+     * Returns the languages whose outbox, for a shop content and the current shop, holds more than $maxSize entries.
      *
-     * @return int
+     * @param string $type
+     * @param int $maxSize
+     *
+     * @return string[]
      */
-    public function getIncrementalSyncObjectCountByType($type)
+    public function getLangIsosOverSizeForCurrentShop($type, $maxSize)
     {
-        $this->generateMinimalQuery(self::TABLE_NAME, 'eis');
+        $rows = $this->db->executeS(
+            'SELECT eis.lang_iso
+            FROM `' . _DB_PREFIX_ . self::TABLE_NAME . '` eis
+            WHERE eis.type = "' . pSQL($type) . '"
+            AND eis.id_shop = ' . (int) parent::getShopContext()->id . '
+            GROUP BY eis.lang_iso
+            HAVING COUNT(*) > ' . (int) $maxSize
+        );
 
-        $this->query->where('eis.type = "' . psql($type) . '"');
-        $this->query->select('COUNT(eis.type) as count');
-
-        return (int) $this->db->getValue($this->query);
+        return is_array($rows) ? array_column($rows, 'lang_iso') : [];
     }
 
     /**
+     * Removes the outbox entries of a shop content for the current shop and one language only.
+     *
      * @param string $type
+     * @param string $langIso
      *
      * @return bool
      */
-    public function removeIncrementaSyncObjectByType($type)
+    public function removeIncrementalSyncObjectsForCurrentShop($type, $langIso)
     {
         return $this->db->delete(
             self::TABLE_NAME,
-            'type = "' . pSQL($type) . '"'
+            'type = "' . pSQL($type) . '"
+            AND id_shop = ' . (int) parent::getShopContext()->id . '
+            AND lang_iso = "' . pSQL($langIso) . '"'
         );
     }
 }
