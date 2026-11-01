@@ -114,7 +114,7 @@ class ApiShopContentService
                 if ($typeSync) {
                     /** @var IncrementalSyncRepository $incrementalSyncRepository */
                     $incrementalSyncRepository = $this->module->getService(IncrementalSyncRepository::class);
-                    $incrementalSyncRepository->removeIncrementaSyncObjectByType($shopContent);
+                    $incrementalSyncRepository->removeIncrementalSyncObjectsForCurrentShop($shopContent, $langIso);
                 }
 
                 $this->syncRepository->upsertTypeSync(
