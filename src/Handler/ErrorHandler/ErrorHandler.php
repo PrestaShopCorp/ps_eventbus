@@ -47,8 +47,8 @@ class ErrorHandler
     /** @var string */
     private $sentryEnv;
 
-    /** @var array<mixed> */
-    private $tags = [];
+    /** @var array<mixed>|null built on the first report: it boots ps_accounts */
+    private $tags;
 
     // Disable cloning
     private function __clone()
@@ -76,7 +76,17 @@ class ErrorHandler
             $this->sentryKey = $parts['user'];
             $this->sentryUrl = sprintf('https://%s/api/%s/store/', $parts['host'], $projectId);
             $this->sentryEnv = $sentryEnv;
+        } catch (\Exception $e) {
+            $this->sentryUrl = null;
+        }
+    }
 
+    /**
+     * @return array<mixed>
+     */
+    private function getTags()
+    {
+        if ($this->tags === null) {
             $accountsModule = \Module::getInstanceByName('ps_accounts');
             $eventbusModule = \Module::getInstanceByName('ps_eventbus');
 
@@ -99,9 +109,27 @@ class ErrorHandler
                 'ps_eventbus_is_enabled' => \Module::isEnabled('ps_eventbus'),
                 'ps_eventbus_is_installed' => \Module::isInstalled('ps_eventbus'),
             ];
-        } catch (\Exception $e) {
-            $this->sentryUrl = null;
         }
+
+        return $this->tags;
+    }
+
+    /**
+     * Tags that need neither the database nor other modules. Not kept: the next report tries the full tags again.
+     *
+     * @return array<mixed>
+     */
+    private function getFallbackTags()
+    {
+        return [
+            'shop_id' => null,
+            'ps_eventbus_version' => null,
+            'ps_accounts_version' => null,
+            'php_version' => phpversion(),
+            'prestashop_version' => _PS_VERSION_,
+            'ps_eventbus_is_enabled' => null,
+            'ps_eventbus_is_installed' => null,
+        ];
     }
 
     /**
@@ -146,6 +174,15 @@ class ErrorHandler
      */
     private function sendToSentry(\Throwable $exception)
     {
+        // the error being reported may come from what the tags read (database, ps_accounts): still report it
+        try {
+            $tags = $this->getTags();
+        } catch (\Exception $e) {
+            $tags = $this->getFallbackTags();
+        } catch (\Throwable $e) {
+            $tags = $this->getFallbackTags();
+        }
+
         $level = $this->mapExceptionToCategory($exception);
         $configurationPsShopEmail = \Configuration::get('PS_SHOP_EMAIL');
 
@@ -160,9 +197,9 @@ class ErrorHandler
             'logger' => 'ps_eventbus',
             'platform' => 'php',
             'environment' => $this->sentryEnv,
-            'tags' => array_merge($this->tags, $exceptionTags),
+            'tags' => array_merge($tags, $exceptionTags),
             'user' => [
-                'id' => $this->tags['shop_id'] ? $this->tags['shop_id'] : null,
+                'id' => $tags['shop_id'] ? $tags['shop_id'] : null,
                 'email' => $configurationPsShopEmail,
             ],
             'exception' => [
