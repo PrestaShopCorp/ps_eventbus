@@ -91,34 +91,19 @@ class SynchronizationServiceTest extends TestCase
     }
 
     /**
-     * Runs insertContentIntoIncremental() with mt_rand() seeded so that the outbox size check runs.
-     * The service is built first: creating mocks consumes mt_rand() values.
+     * Runs insertContentIntoIncremental() on a call sampled for the outbox size check.
      *
      * @param array<string, mixed> $contentTypesWithIds
      */
     private function insertWhileTheSizeCheckRuns(array $contentTypesWithIds)
     {
-        $service = $this->createService();
-
-        for ($seed = 0;; ++$seed) {
-            mt_srand($seed);
-            if (mt_rand() % Config::INCREMENTAL_SYNC_TABLE_SIZE_CHECK_MOD == 0) {
-                break;
-            }
-        }
-
-        mt_srand($seed);
-        try {
-            $service->insertContentIntoIncremental(
-                $contentTypesWithIds,
-                Config::INCREMENTAL_TYPE_UPSERT,
-                '2026-11-01 12:00:00',
-                1,
-                false
-            );
-        } finally {
-            mt_srand();
-        }
+        $this->createService()->insertContentIntoIncremental(
+            $contentTypesWithIds,
+            Config::INCREMENTAL_TYPE_UPSERT,
+            '2026-11-01 12:00:00',
+            1,
+            false
+        );
     }
 
     /**
@@ -161,13 +146,19 @@ class SynchronizationServiceTest extends TestCase
         $languagesService->method('getDefaultLanguageIsoCode')->willReturn('en');
         $languagesService->method('getLanguagesIsoCodes')->willReturn(['en']);
 
-        return new SynchronizationService(
-            $this->createMock(CloudSyncClient::class),
-            $syncRepository,
-            $incrementalSyncRepository,
-            $this->createMock(LiveSyncRepository::class),
-            $languagesService,
-            $this->createMock(ErrorHandler::class)
-        );
+        $service = $this->getMockBuilder(SynchronizationService::class)
+            ->setConstructorArgs([
+                $this->createMock(CloudSyncClient::class),
+                $syncRepository,
+                $incrementalSyncRepository,
+                $this->createMock(LiveSyncRepository::class),
+                $languagesService,
+                $this->createMock(ErrorHandler::class),
+            ])
+            ->onlyMethods(['shouldCheckOutboxSize'])
+            ->getMock();
+        $service->method('shouldCheckOutboxSize')->willReturn(true);
+
+        return $service;
     }
 }

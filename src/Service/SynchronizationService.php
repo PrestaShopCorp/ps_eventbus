@@ -260,7 +260,7 @@ class SynchronizationService
          * Above INCREMENTAL_SYNC_MAX_TABLE_SIZE, purge them and reset the full sync of that content for the current
          * shop and default language, so the event is not recorded for that pair. It is still recorded for the rest.
          */
-        if (mt_rand() % Config::INCREMENTAL_SYNC_TABLE_SIZE_CHECK_MOD == 0) {
+        if ($this->shouldCheckOutboxSize()) {
             foreach ($contentTypesWithIds as $contentType => $contentIds) {
                 $count = $this->incrementalSyncRepository->getIncrementalSyncObjectCountByType($contentType);
 
@@ -319,6 +319,17 @@ class SynchronizationService
         if (!empty($contentToInsert)) {
             $this->incrementalSyncRepository->insertIncrementalObject($contentToInsert);
         }
+    }
+
+    /**
+     * Samples the calls that check the outbox size: counting it on every event would be too costly.
+     * Not security-sensitive.
+     *
+     * @return bool
+     */
+    protected function shouldCheckOutboxSize()
+    {
+        return mt_rand() % Config::INCREMENTAL_SYNC_TABLE_SIZE_CHECK_MOD == 0;
     }
 
     /**
