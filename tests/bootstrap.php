@@ -5,3 +5,4 @@ if (!defined('_PS_VERSION_')) {
 }
 
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/unit/Stub/ModuleDouble.php';

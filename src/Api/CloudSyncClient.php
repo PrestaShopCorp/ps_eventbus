@@ -61,16 +61,28 @@ class CloudSyncClient
     private $module;
 
     /**
+     * @var PsAccountsAdapterService
+     */
+    private $psAccountsAdapterService;
+
+    /**
+     * Whether the Accounts token and shop UUID were read: they are read on the first call to CloudSync
+     *
+     * @var bool
+     */
+    private $credentialsLoaded = false;
+
+    /**
      * Accounts JSON Web token
      *
-     * @var string
+     * @var string|null
      */
     private $jwt;
 
     /**
      * Accounts Shop UUID
      *
-     * @var string
+     * @var string|null
      */
     private $shopId;
 
@@ -98,15 +110,11 @@ class CloudSyncClient
         PsAccountsAdapterService $psAccountsAdapterService
     ) {
         $this->module = $module;
-        $this->jwt = $psAccountsAdapterService->getShopToken();
-        $this->shopId = $psAccountsAdapterService->getShopUuid();
+        $this->psAccountsAdapterService = $psAccountsAdapterService;
 
         $this->collectorApiUrl = $collectorApiUrl;
         $this->liveSyncApiUrl = $liveSyncApiUrl;
         $this->syncApiUrl = $syncApiUrl;
-
-        $this->client = HttpClient::getInstance();
-        $this->client->setTimeout(3);
     }
 
     /**
@@ -121,6 +129,7 @@ class CloudSyncClient
      */
     public function upload($jobId, $data, $startTime, $fullSyncRequested = null)
     {
+        $this->loadCredentials();
         $this->client->setTimeout($this->getRemainingTime($startTime));
 
         $url = $this->collectorApiUrl . '/upload/' . $jobId;
@@ -156,6 +165,8 @@ class CloudSyncClient
         // shop content send to the API must be in kebab-case
         $kebabCasedShopContent = str_replace('_', '-', $shopContent);
 
+        $this->loadCredentials();
+
         $request = $this->client->post(
             $this->liveSyncApiUrl . '/notify/' . $this->shopId,
             [
@@ -184,6 +195,7 @@ class CloudSyncClient
      */
     public function validateJobId($jobId)
     {
+        $this->loadCredentials();
         $request = $this->client->get(
             $this->syncApiUrl . '/job/' . $jobId,
             [
@@ -197,6 +209,28 @@ class CloudSyncClient
             'status' => substr((string) $request->getHttpStatus(), 0, 1) === '2',
             'httpCode' => $request->getHttpStatus(),
         ];
+    }
+
+    /**
+     * Reads the Accounts token and shop UUID once, when CloudSync is called for the first time, then sets up the
+     * shared HTTP client: most processes that build this client never call CloudSync, and reading the credentials
+     * boots ps_accounts. The client is set up afterwards because a failure to read them is reported to Sentry
+     * through the same shared client, which resets it.
+     *
+     * @return void
+     */
+    private function loadCredentials()
+    {
+        if ($this->credentialsLoaded) {
+            return;
+        }
+
+        $this->jwt = $this->psAccountsAdapterService->getShopToken();
+        $this->shopId = $this->psAccountsAdapterService->getShopUuid();
+
+        $this->client = HttpClient::getInstance();
+        $this->client->setTimeout(3);
+        $this->credentialsLoaded = true;
     }
 
     /**
